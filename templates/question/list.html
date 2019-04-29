@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+
+{% load staticfiles %}
+
+{% load web_filters %}
+
+{% block content %}
+
+<head>
+    <style>
+        body{
+        background: url({% static "images/background.jpg" %});
+        background-size: cover;
+        }
+
+        #pt {
+            margin: 2px;
+            height: 29px;
+            border: none;
+            background: transparent;
+            line-height: 29px;
+        }
+        .bm{
+            margin-bottom: 5px;
+            border: 1px solid #CDCDCD;
+            background: #FFF;
+        }
+        #pt .z{
+            padding-right: 10px;
+            float: left;
+        }
+    </style>
+</head>
+
+<body>
+<section class="row align-items-center">
+    <section class="col-auto mr-auto">
+        <div id="pt" class="bm c1">
+            <div class="z">
+                <a class="fa fa-home fa-2x" href="/" ></a>
+                <a class="fa fa-angle-right fa-lg box"></a>
+                <a href="#" style="font-size: 18px">題目列表</a>
+            </div>
+            <div style="padding-right: 10px"></div>
+        </div>
+        <h1 style="display: inline;">題目列表</h1>
+    </section>
+
+    <div class="w-100 my-3"></div>
+
+    <section class="col">
+        <div class="card">
+            <div class="card-body">
+                <form action="/question" method="get">
+                    <div class="row">
+                        <div class="col-auto">
+                            <select class="custom-select" name="source">
+                                <option value="0">所有出處</option>
+                                {% for source in sources %}
+                                <option value="{{ source.id }}" {% if source.id == keywords.source_id %} selected {% endif %}>{{ source.year }} - {{ source.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col">
+                            <input type="text" class="form-control" name="description" value="{{ keywords.description }}" placeholder="輸入欲搜尋的題目內容">
+                        </div>
+                        <div class="col-auto">
+                            <select class="custom-select" name="question_type">
+                                <option value="0">全部類型</option>
+                                {% for type in num_types %}
+                                <option value="{{ type }}" {% if type == keywords.question_type %} selected {% endif %}>{{ type|readable_question_type }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-auto">
+                            <button type="submit" class="btn btn-primary" style="background-color: #1b98e0; color: white">搜尋</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <div class="w-100 my-3"></div>
+
+    <section class="col">
+    {% if questions %}
+        <div class="card-columns">
+            {% for question in questions %}
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-title h5">
+                        <span>{{ question.type|readable_question_type }}</span>
+                        <div class="float-right">
+                            <a class="btn dropdown-toggle" style="padding: 0;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="h5">#{{ question.id }}</span></a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="/question/{{ question.id }}/edit">編輯</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item text-danger" href="/question/{{ question.id }}/delete">刪除</a>
+                            </div>
+                        </div>
+                    </div>
+                {% if question.source %}
+                    <h6 class="card-subtitle text-muted mb-2">{{ question.source.year }} 年 - {{ question.source.name }}</h6>
+                {% endif %}
+                {% if question.type is 1 %}
+                    {% include 'management/question/qa/display_alone.html' with question=question show_answer=True %}
+                {% elif question.type is 2 %}
+                    {% include 'management/question/short_conversation/display_alone.html' with question=question show_answer=True %}
+                {% elif question.type is 3 %}
+                    {% include 'management/question/grammar/display_alone.html' with question=question show_answer=True %}
+                {% elif question.type is 4 %}
+                    {% include 'management/question/phrase/display_alone.html' with question=question show_answer=True %}
+                {% elif question.type is 5 %}
+                    {% include 'management/question/paragraph_understanding/display_alone.html' with question=question show_answer=True %}
+                {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <nav>
+            <ul class="pagination justify-content-end">
+                {% for page_index in page_range %}
+                <li class="page-item">
+                    <a class="page-link" {% if page_index != page %} href="{{ request.get_full_path|replace_page:page_index }}" {% endif %}>{{ page_index|add:1 }}</a>
+                </li>
+                {% endfor %}
+            </ul>
+        </nav>
+    {% else %}
+        <h2>目前暫無資料！</h2>
+    {% endif %}
+    </section>
+</section>
+</body>
+
+{% endblock %}

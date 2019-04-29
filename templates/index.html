@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+
+{% load web_filters %}
+
+{% block scripts %}
+    <script src="/static/scripts/index.js?{{ request.js_version }}" defer></script>
+{% endblock %}
+
+{% block content %}
+{#<section class="row">#}
+{#    {% if request.user|has_permission:user_types.SystemManager %}#}
+{#    <section class="col-3 p-3">#}
+{#        <a href="#" class="col-12 btn btn-sq-lg btn-danger p-3">#}
+{#            <i class="fa fa-server fa-5x mb-2"></i>#}
+{#            <br>#}
+{#            系統操作#}
+{#        </a>#}
+{#    </section>#}
+{#    {% endif %}#}
+{##}
+{#    {% if request.user|has_permission:user_types.UserManager %}#}
+{#    <section class="col-3 p-3">#}
+{#        <a href="/user" class="col-12 btn btn-sq-lg btn-warning p-3">#}
+{#            <i class="fa fa-users fa-5x mb-2"></i>#}
+{#            <br>#}
+{#            使用者管理#}
+{#        </a>#}
+{#    </section>#}
+{#    {% endif %}#}
+{##}
+{#    {% if request.user|has_permission:user_types.ExamManager %}#}
+{#    <section class="col-3 p-3">#}
+{#        <a href="/exam" class="col-12 btn btn-sq-lg btn-warning p-3">#}
+{#            <i class="fa fa-trophy fa-5x mb-2"></i>#}
+{#            <br>#}
+{#            考試管理#}
+{#        </a>#}
+{#    </section>#}
+{#    {% endif %}#}
+{##}
+{#    {% if request.user|has_permission:user_types.QuestionManager %}#}
+{#    <section class="col-3 p-3">#}
+{#        <a href="/question" class="col-12 btn btn-sq-lg btn-warning p-3">#}
+{#            <i class="fa fa-archive fa-5x mb-2"></i>#}
+{#            <br>#}
+{#            試題管理#}
+{#        </a>#}
+{#    </section>#}
+{#    {% endif %}#}
+{##}
+{#    {% if request.user|has_permission:user_types.ScoreViewer %}#}
+{#    <section class="col-3 p-3">#}
+{#        <a href="#" class="col-12 btn btn-sq-lg btn-dark p-3">#}
+{#            <i class="fa fa-pie-chart fa-5x mb-2"></i>#}
+{#            <br>#}
+{#            統計資料#}
+{#        </a>#}
+{#    </section>#}
+{#    {% endif %}#}
+{##}
+{#    {% if request.user|has_permission:user_types.Student %}#}
+{#    <section class="col-3 p-3">#}
+{#        <a href="/practice/listening" class="col-12 btn btn-sq-lg btn-primary p-3">#}
+{#            <i class="fa fa-headphones fa-5x mb-2"></i>#}
+{#            <br>#}
+{#            聽力練習#}
+{#        </a>#}
+{#    </section>#}
+{#    <section class="col-3 p-3">#}
+{#        <a href="/practice/reading" class="col-12 btn btn-sq-lg btn-primary p-3">#}
+{#            <i class="fa fa-newspaper-o fa-5x mb-2"></i>#}
+{#            <br>#}
+{#            閱讀練習#}
+{#        </a>#}
+{#    </section>#}
+{#    <section class="col-3 p-3">#}
+{#        <a href="/simulation-exam" class="col-12 btn btn-sq-lg btn-success p-3">#}
+{#            <i class="fa fa-shield fa-5x mb-2"></i>#}
+{#            <br>#}
+{#            模擬鑑測#}
+{#        </a>#}
+{#    </section>#}
+{#    <section class="col-3 p-3">#}
+{#        <a href="/score" class="col-12 btn btn-sq-lg btn-secondary p-3">#}
+{#            <i class="fa fa-line-chart fa-5x mb-2"></i>#}
+{#            <br>#}
+{#            成績檢閱#}
+{#        </a>#}
+{#    </section>#}
+{#    {% endif %}#}
+{#</section>#}
+    <section class="col-auto mr-auto" style="height: 100px">
+        <h1 style="display: inline;">系統公告</h1>
+    </section>
+
+
+<div class="container w3-myfont">
+    <div class="row1">
+        <div class="col">
+            <div class="panel panel-default">
+                 <div class="container">
+                                <table class="table table-striped table-hover" style="width:80%; height: 80%" border="0" align="center">
+                                    <thead>
+                                      <tr class="w3-light-grey w3-center w3-card-4">
+                                        <th style=" width:400px"><h4>公告標題</h4></th>
+                                        <th><h4>公告人</h4></th>
+                                        <th><h4>公告時間</h4></th>
+                                      </tr>
+                                    </thead>
+                                        {% for Post in Post %}
+                                    <tr class="w3-hover-green w3-center">
+                                        <td>{{ Post.id }}</td>
+                                        <td>{{ Post.created }}</td>
+                                        <td>{{ Post.text }}</td>
+                                        <td>{{ Post.user }}</td>
+                                    </tr>
+                                        {% endfor %}
+                                    <tr style='cursor: pointer' onclick="window.location.href='/details'">
+                                        <td>用DIV 的属性onclick 进行点击,怎么样弄出鼠标放上去有手的</td>
+                                        <td>tim87</td>
+                                        <td>2019-03-28</td>
+                                    </tr>
+                                    <tr>
+                                        <td>44444</td>
+                                        <td>tim87</td>
+                                        <td>2019-03-20</td>
+                                    </tr>
+                                    <tr>
+                                        <td>55555</td>
+                                        <td>tim87</td>
+                                        <td>2019-03-21</td>
+                                    </tr>
+
+
+
+                                </table>
+                                 </br></br>
+                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

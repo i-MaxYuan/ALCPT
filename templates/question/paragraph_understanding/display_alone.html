@@ -1,0 +1,21 @@
+<span>{{ question.description|safe }}</span>
+<section id="options" class="pt-2">
+    {% for option in question.options %}
+    <div class="custom-control custom-radio">
+        <input class="custom-control-input" type="radio" id="option-{{ question.id }}-{{ forloop.counter0 }}" name="answer-{{ question.id }}" value="{{ forloop.counter0 }}"
+               {% if show_answer %}
+                    {% if highlight and forloop.counter0 == question.user_answer %}
+                        checked
+                    {% elif not highlight and forloop.counter0 == question.answer %}
+                        checked
+                    {% endif %}
+                    disabled
+               {% elif forloop.counter0 == selected_answer %}
+                    checked
+               {% endif %} required>
+        <label class="custom-control-label {% if highlight and question.answer == forloop.counter0 %}text-success {% if question.answer == question.user_answer %}font-weight-bold{% endif %}{% elif highlight and question.user_answer == forloop.counter0 %}text-danger{% endif %}" for="option-{{ question.id }}-{{ forloop.counter0 }}">
+            {{ option }}
+        </label>
+    </div>
+    {% endfor %}
+</section>

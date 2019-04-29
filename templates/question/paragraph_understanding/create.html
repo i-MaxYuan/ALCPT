@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block scripts %}
+<script src="/static/scripts/question.js?{{ request.static_file_version }}" defer></script>
+<script type="text/javascript" defer>
+$(function() {
+    {% if question %}
+    let options = {{ question.options|safe }};
+    for (let i = 0; i < options.length; ++i) {
+        $("#add-option").trigger("click");
+        $("#option-" + i).val(options[i]);
+        update_option(i);
+    }
+    $("input[type=radio][name=answer][value={{ question.answer }}]").trigger("click");
+    {% else %}
+    for (let i = 0; i < 4; ++i) {
+        $("#add-option").trigger("click");
+    }
+    $("input[type=radio][name=answer][value=0]").trigger("click");
+    {% endif %}
+});
+</script>
+{% endblock %}
+
+{% block content %}
+<section class="row">
+    <section class="col mb-3">
+        <h1 style="display: inline;">{% if question %}編輯{% else %}新增{% endif %}題目：閱讀／段落理解</h1>
+        {% if source %}
+        <span class="badge badge-secondary">{{ source.year }} 年 - {{ source.name }}</span>
+        {% endif %}
+    </section>
+
+    <form class="col-12 row mt-3" enctype="multipart/form-data" action="/question/{% if question %}{{ question.id }}/edit{% else %}new{% endif %}" method="post" autocomplete="off">
+        {% csrf_token %}
+
+        {% if question %}
+        <input type="hidden" name="next" value="{{ next }}" />
+        {% else %}
+        <input type="hidden" name="type" value="{{ question_type }}" />
+        <input type="hidden" name="source" value="{{ source.id }}" />
+        {% endif %}
+
+        <h3 class="col-12"><i class="fa fa-clipboard fa-fw mb-2"></i> 編輯問題</h3>
+
+        <div class="col-12 py-2 form-group">
+            <textarea class="form-control" id="description" name="description" rows="3" required>{{ question.description }}</textarea>
+            <small class="form-text text-muted">底線部分請用 &lt;u&gt;需要標示的文字&lt;/u&gt; 包起來，結果請見下方預覽。</small>
+        </div>
+
+        <h3 class="col-12"><i class="fa  fa-tasks fa-fw mb-2"></i> 難易度</h3>
+        <div class="col-12 py-2 form-group">
+            <select class="custom-select" name="question_type">
+                <option value="1">簡單</option>
+                <option value="2">中等</option>
+                <option value="2">困難</option>
+    {#            {% for type in num_types %}#}
+    {#            <option value="{{ type }}" {% if type == keywords.question_type %} selected {% endif %}>{{ type|readable_question_type }}</option>#}
+    {#            {% endfor %}#}
+            </select>
+        </div>
+
+        <section class="col-12 py-2">
+            <section class="row align-items-center">
+                <div class="col-auto mr-auto">
+                    <h3 style="display: inline;"><i class="fa fa-th-list fa-fw"></i> 編輯選項</h3>
+                </div>
+                <div class="col-auto">
+                    <a href="#" id="add-option" class="btn btn-success"><i class="fa fa-plus"></i> 新增選項</a>
+                </div>
+            </section>
+        </section>
+
+        <section id="options" class="col-12 pt-2"></section>
+
+        <section class="col-12 pt-3">
+            <section class="row">
+                <h3 class="col"><i class="fa fa-eye fa-fw mb-2"></i> 預覽</h3>
+                <div class="w-100 mt-2"></div>
+
+                <section class="col-12">
+                    <section class="card">
+                        <section class="card-body">
+                            <span id="preview-description"></span>
+                            <section id="answers" class="pt-2"></section>
+                        </section>
+                    </section>
+                </section>
+            </section>
+        </section>
+
+        <section class="col text-center pt-3">
+            <button class="btn btn-primary" type="submit">{% if question %}編輯{% else %}新增{% endif %}題目</button>
+        </section>
+    </form>
+</section>
+{% endblock %}

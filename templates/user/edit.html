@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+
+{% load staticfiles %}
+
+{% load web_filters %}
+
+{% block content %}
+
+<link rel="stylesheet" type="text/css" href={% static "css/magic_check.css" %}>
+
+<section class="row align-items-center">
+    <section class="col-auto mr-auto">
+        <h1 style="display: inline;">
+        {% if request.user.serial_number == user.serial_number %}
+            編輯個人資料
+        {% else %}
+            編輯使用者
+        {% endif %}
+        </h1>
+    </section>
+
+    <div class="w-100 my-3"></div>
+
+    <form class="col-12" action="/user/{{ user.serial_number }}" method="post">
+        {% csrf_token %}
+        <div class="form-row">
+            <div class="form-group col-3">
+                <label for="serial-number">帳號 (學號)</label>
+                <input type="text" id="serial-number" class="form-control" value="{{ user.serial_number }}" readonly disabled>
+            </div>
+        </div>
+        {% if user|is_student %}
+            <div class="form-row">
+                <div class="form-group col-auto">
+                    <label for="department">學系</label>
+                    <select id="department" class="custom-select" name="department">
+                        {% for dept in departments %}
+                        <option value="{{ dept.id }}" {% if dept.id == student.department.id %} selected {% endif %}>{{ dept.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group col-auto">
+                    <label for="grade">年班</label>
+                    <input type="number" id="grade" class="form-control" name="grade" value="{{ student.grade }}" min="100">
+                </div>
+                <div class="form-group col-auto">
+                    <label for="team">中隊</label>
+                    <select id="department" class="custom-select" name="squadron">
+                        {% for squa in squadrons %}
+                        <option value="{{ squa.id }}" {% if squa.id == student.squadron.id %} selected {% endif %}>{{ squa.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        {% endif %}
+        <div class="form-row">
+            <div class="form-group col-3">
+                <label for="name">姓名</label>
+                <input type="text" id="name" class="form-control" name="name" value="{{ user.name|default_if_none:'' }}" required>
+            </div>
+            <div class="form-group col-2"></div>
+
+            <div class="form-group col-6">
+                <label for="name">性別</label><br>
+                <input class="magic-radio" type="radio" name="gender" value="0" id="ch1" checked="checked" size=""><label for="ch1">男</label>
+                <input class="magic-radio" type="radio" name="gender" value="1"id="ch2"><label for="ch2">女</label>
+            </div>
+        </div>
+        {% if request.user.serial_number == user.serial_number %}
+        <div class="form-row">
+            <div class="form-group col-3">
+                <label for="password">密碼</label>
+                <input type="password" id="password" class="form-control" name="password" pattern="{{ password_pattern }}" aria-describedby="password-help" placeholder="至少 8 位英文數字">
+                <small id="password-help" class="form-text text-muted">欲重新設定密碼才需填寫</small>
+            </div>
+            <div class="form-group col-2"></div>
+            <div class="form-group col-3">
+                <label for="check-password">確認密碼</label>
+                <input type="password" id="password-confirm" class="form-control" name="check-password" pattern="{{ password_pattern }}" placeholder="至少 8 位英文數字">
+            </div>
+        </div>
+        {% endif %}
+        {% if request.user|has_perm:user_types.SystemManager %}
+            {% if not user|has_perm:user_types.SystemManager %}
+            <div class="form-group mb-3">
+                <label>特殊權限</label>
+                {% for user_type in user_types.values %}
+                {% if user_type != user_types.SystemManager %}
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="{{ user_type.value.0 }}" name="user_type_{{ forloop.counter0 }}" {% if user|has_perm:user_type %} checked {% endif %}>
+                    <label class="custom-control-label" for="{{ user_type.value.0 }}">{{ user_type.value.1 }}</label>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+            {% endif %}
+        {% else %}
+            <div class="form-group mb-3">
+                <label>特殊權限</label>
+                <div>
+                {% if user|has_perm:user_types.SystemManager %}
+                <span class="badge badge-dark">{{ user_types.SystemManager.value.1 }}</span>
+                {% else %}
+                    {% if user|has_perm:user_types.ExamManager %}
+                    <span class="badge badge-danger">{{ user_types.ExamManager.value.1 }}</span>
+                    {% endif %}
+                    {% if user|has_perm:user_types.QuestionManager %}
+                    <span class="badge badge-warning">{{ user_types.QuestionManager.value.1 }}</span>
+                    {% endif %}
+                    {% if user|has_perm:user_types.QuestionOperator %}
+                    <span class="badge badge-primary">{{ user_types.QuestionOperator.value.1 }}</span>
+                    {% endif %}
+                    {% if user|has_perm:user_types.ScoreViewer %}
+                    <span class="badge badge-success">{{ user_types.ScoreViewer.value.1 }}</span>
+                    {% endif %}
+                    {% if user|has_perm:user_types.Tester %}
+                    <span class="badge badge-info">{{ user_types.Tester.value.1 }}</span>
+                    {% endif %}
+                {% endif %}
+                </div>
+            </div>
+        {% endif %}
+        {% if request.user|has_perm:user_types.SystemManager %}
+        <div class="form-group">
+            <label for="last-login">上次登入時間</label>
+            <input type="text" id="last-login" class="form-control" value="{{ user.last_login|date:'Y/n/d H:i' }}" readonly disabled>
+        </div>
+        <div class="form-group">
+            <label for="updated-at">更新時間</label>
+            <input type="text" id="updated-at" class="form-control" value="{{ user.update_time|date:'Y/n/d H:i' }}" readonly disabled>
+        </div>
+        <div class="form-group">
+            <label for="created-at">註冊時間</label>
+            <input type="text" id="created-at" class="form-control" value="{{ user.create_time|date:'Y/n/d H:i' }}" readonly disabled>
+        </div>
+        {% endif %}
+        <div class="text-center pt-3">
+            {% if request.user|has_perm:user_types.SystemManager and request.user.serial_number != user.serial_number %}
+            <a class="btn btn-warning" href="/user/{{ user.serial_number }}?reset-password=true">重設密碼為學號</a>
+            {% endif %}
+            <button type="submit" class="btn btn-primary" style="background-color: #1b98e0; color: white">
+            {% if request.user.serial_number == user.serial_number %}
+                更新個人資料
+            {% else %}
+                更新使用者
+            {% endif %}
+            </button>
+        </div>
+    </form>
+</section>
+{% endblock %}

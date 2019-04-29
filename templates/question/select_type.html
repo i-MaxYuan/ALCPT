@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<head>
+    <style>
+        #pt {
+            margin: 2px;
+            height: 29px;
+            border: none;
+            background: transparent;
+            line-height: 29px;
+        }
+        .bm{
+            margin-bottom: 5px;
+            border: 1px solid #CDCDCD;
+            background: #FFF;
+        }
+        .cl{
+            zoom: 1;
+        }
+        #pt .z{
+            padding-right: 10px;
+            float: left;
+        }
+        #container {
+            width: 70%;
+            min-width: 310px;
+            max-width: 70%;
+            height: 400px;
+            margin: 0 auto
+        }
+    </style>
+</head>
+
+<section class="row">
+    <section class="col-auto mr-auto">
+        <div id="pt" class="bm c1">
+            <div class="z">
+                <a class="fa fa-home fa-2x" href="http://127.0.0.1:8000/" ></a>
+                <a class="fa fa-angle-double-right fa-lg box"></a>
+                <a href="#" style="font-size: 18px">題庫管理員</a>
+                <a class="fa fa-angle-right fa-lg"></a>
+                <a href="#" style="font-size: 18px">新增試題</a>
+            </div>
+            <div style="padding-right: 10px"></div>
+        </div>
+        <h1 style="display: inline;">選擇題目型態</h1>
+        {% if source %}
+        <span class="badge badge-secondary">{{ source.year }} 年 - {{ source.name }}</span>
+        {% endif %}
+    </section>
+
+    <section class="col-12 row mt-3">
+        <h3 class="col"><i class="fa fa-headphones fa-fw mb-2"></i> 聽力</h3>
+        <div class="w-100"></div>
+
+        <section class="col-3 p-3">
+            <a href="{{ request.path }}?source={{ source.id }}&type=1" class="col-12 btn btn-sq-lg btn-info p-3">
+                <i class="fa fa-quora fa-5x mb-2"></i>
+                <br>
+                問答
+            </a>
+        </section>
+        <section class="col-3 p-3">
+            <a href="{{ request.path }}?source={{ source.id }}&type=2" class="col-12 btn btn-sq-lg btn-info p-3">
+                <i class="fa fa-comments fa-5x mb-2"></i>
+                <br>
+                短篇對話
+            </a>
+        </section>
+    </section>
+
+    <section class="col-12 row mt-3">
+        <h3 class="col"><i class="fa fa-newspaper-o fa-fw mb-2"></i> 閱讀</h3>
+        <div class="w-100"></div>
+
+        <section class="col-3 p-3">
+            <a href="{{ request.path }}?source={{ source.id }}&type=3" class="col-12 btn btn-sq-lg btn-secondary p-3">
+                <i class="fa fa-pencil-square-o fa-5x mb-2"></i>
+                <br>
+                文法
+            </a>
+        </section>
+        <section class="col-3 p-3">
+            <a href="{{ request.path }}?source={{ source.id }}&type=4" class="col-12 btn btn-sq-lg btn-secondary p-3">
+                <i class="fa fa-language fa-5x mb-2"></i>
+                <br>
+                名詞／片語
+            </a>
+        </section>
+        <section class="col-3 p-3">
+            <a href="{{ request.path }}?source={{ source.id }}&type=5" class="col-12 btn btn-sq-lg btn-secondary p-3">
+                <i class="fa fa-book fa-5x mb-2"></i>
+                <br>
+                段落理解
+            </a>
+        </section>
+    </section>
+</section>
+{% endblock %}
