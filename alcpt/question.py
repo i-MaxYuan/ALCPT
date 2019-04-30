@@ -1,5 +1,4 @@
 import json
-from math import ceil
 
 from django.shortcuts import render, redirect
 from django.contrib import messages
@@ -22,26 +21,55 @@ def index(request):
     except ValueError:
         page = 0
 
-    questions = Question.objects
+    keywords = {
+        'description': request.GET.get('description', ''),
+        'question_type': int(request.GET.get('question_type', 0)),
+    }
 
-    if page >= 0:
-        num_pages = ceil(questions.count() / 10)
-        questions = questions[page * 10: page * 10 + 10]
-
-    else:
-        num_pages = 1
+    num_pages, questions = questionmanager.query_question(**keywords, enable=True, page=page)
 
     for question in questions:
-        question.option = json.loads(question.option)
+        question.options = json.loads(question.options)
 
     data = {
         'questions': questions,
         'num_types': range(1, len(QuestionType.__members__) + 1),
+        'keywords': keywords,
         'page': page,
         'page_range': range(num_pages),
     }
 
-    return render(request, 'management/question/list.html', data)
+    return render(request, 'question/list.html', data)
+
+
+@permission_check(UserType.QuestionManager)
+@require_http_methods(["GET"])
+def review_question_index(request):
+    try:
+        page = int(request.GET.get('page', 0))
+
+    except ValueError:
+        page = 0
+
+    keywords = {
+        'created_by': request.GET.get('created_by', ''),
+        'question_type': int(request.GET.get('question_type', 0)),
+    }
+
+    num_pages, questions = questionmanager.query_question(**keywords, page=page)
+
+    for question in questions:
+        question.options = json.loads(question.options)
+
+    data = {
+        'questions': questions,
+        'num_types': range(1, len(QuestionType.__members__) + 1),
+        'keywords': keywords,
+        'page': page,
+        'page_range': range(num_pages),
+    }
+
+    return render(request, 'question/review.html', data)
 
 
 @permission_check(UserType.QuestionManager)
@@ -62,7 +90,7 @@ def create_questioon(request):
 
         if question_type is QuestionType.QA.value[0]:
             question_type = QuestionType.QA
-            template = 'management/question/qa/display.html'
+            template = 'question/qa/display.html'
             if 'audio' not in request.FILES:
                 raise ArgumentError(message='Missing file field "audio".')
 
@@ -71,7 +99,7 @@ def create_questioon(request):
 
         elif question_type is QuestionType.ShortConversation.value[0]:
             question_type = QuestionType.ShortConversation
-            template = 'management/question/short_conversation/display.html'
+            template = 'question/short_conversation/display.html'
             question = request.POST.get('question')
             if 'audio' not in request.FILES:
                 raise ArgumentError(message='Missing file field "audio".')
@@ -81,17 +109,17 @@ def create_questioon(request):
 
         elif question_type is QuestionType.Grammar.value[0]:
             question_type = QuestionType.Grammar
-            template = 'management/question/grammar/display.html'
+            template = 'question/grammar/display.html'
             question = request.POST.get('question')
 
         elif question_type is QuestionType.Phrase.value[0]:
             question_type = QuestionType.Grammar
-            template = 'management/question/phrase/display.html'
+            template = 'question/phrase/display.html'
             question = request.POST.get('question')
 
         elif question_type is QuestionType.ParagraphUnderstanding.value[0]:
             question_type = QuestionType.Grammar
-            template = 'management/question/paragraph_understanding/display.html'
+            template = 'question/paragraph_understanding/display.html'
             question = request.POST.get('question')
 
         else:
@@ -124,7 +152,8 @@ def create_questioon(request):
                                                        question=question,
                                                        options=options,
                                                        answer_index=answer_index,
-                                                       file=file)
+                                                       file=file,
+                                                       created_by=request.user)
 
         messages.success(request, "Create question successfully.")
 
@@ -134,7 +163,7 @@ def create_questioon(request):
 
     else:
         if 'type' not in request.GET:
-            return render(request, 'management/question/select_type.html')
+            return render(request, 'question/select_type.html')
 
         try:
             question_type = int(request.GET.get('type'))
@@ -143,24 +172,138 @@ def create_questioon(request):
             raise IllegalArgumentError(message='Question type must be an integer.')
 
         if question_type is QuestionType.QA.value[0]:
-            template = 'management/question/qa/display.html'
+            template = 'question/qa/create.html'
 
         elif question_type is QuestionType.ShortConversation.value[0]:
-            template = 'management/question/short_conversation/display.html'
+            template = 'question/short_conversation/create.html'
 
         elif question_type is QuestionType.Grammar.value[0]:
-            template = 'management/question/grammar/display.html'
+            template = 'question/grammar/create.html'
 
         elif question_type is QuestionType.Phrase.value[0]:
-            template = 'management/question/phrase/display.html'
+            template = 'question/phrase/create.html'
 
         elif question_type is QuestionType.ParagraphUnderstanding.value[0]:
-            template = 'management/question/paragraph_understanding/display.html'
+            template = 'question/paragraph_understanding/create.html'
 
         else:
             raise IllegalArgumentError(message='The question type not in "definitions.py".')
 
         return render(request, template, {'question_type': question_type})
+
+
+@permission_check(UserType.QuestionManager)
+@require_http_methods(["GET", "POST"])
+def edit_question(request, question_id):
+    try:
+        question = Question.objects.get(id=question_id)
+        question.option = json.loads(question.option)
+
+    except ObjectDoesNotExist:
+        raise ResourceNotFoundError('Can\'t find question id={}'.format(question_id))
+
+    if request.method == 'POST':
+        description = None
+        file = None
+
+        if question.question_type is QuestionType.QA.value[0]:
+            question.question_type = QuestionType.QA
+            try:
+                if 'audio' not in request.FILES:
+                    raise ArgumentError(message='Missing file field "audio".')
+
+                else:
+                    file = request.FILES.get('audio')
+
+            except ArgumentError:
+                pass
+
+        elif question.question_type is QuestionType.ShortConversation.value[0]:
+            question.question_type = QuestionType.ShortConversation
+            description = request.POST.get('description')
+            try:
+                if 'audio' not in request.FILES:
+                    raise ArgumentError(message='Missing file field "audio".')
+
+                else:
+                    file = request.FILES.get('audio')
+
+            except ArgumentError:
+                pass
+
+        elif question.question_type is QuestionType.Grammar.value[0]:
+            question.question_type = QuestionType.Grammar
+            description = request.POST.get('description')
+
+        elif question.question_type is QuestionType.Phrase.value[0]:
+            question.question_type = QuestionType.Phrase
+            description = request.POST.get('description')
+
+        elif question.question_type is QuestionType.ParagraphUnderstanding.value[0]:
+            question.question_type = QuestionType.ParagraphUnderstanding
+            description = request.POST.get('description')
+
+        else:
+            raise IllegalArgumentError('The question type not in "definitions.py".')
+
+        try:
+            answer_index = int(request.POST.get('answer'))
+
+        except TypeError:
+            raise ArgumentError(message='Missing answer argument.')
+
+        except ValueError:
+            raise IllegalArgumentError(message='Choosing an answer from options.')
+
+        options = []
+
+        for cnt in range(0, 4):
+            option = request.POST.get('option-{}'.format(cnt))
+
+            if option:
+                options.append(option)
+
+                if cnt is answer_index:
+                    answer_index = len(options) - 1
+
+        if len(options) < 4:
+            raise ArgumentError(message='Options must have 4.')
+
+        question = questionmanager.update_question(question=question,
+                                                   description=description,
+                                                   options=options,
+                                                   answer_index=answer_index,
+                                                   file=file)
+
+        messages.success(request, 'Update question id={}'.format(question.id))
+
+        return redirect(request.POST.get('next', '/question'))
+
+    else:
+        if question.type is QuestionType.QA.value[0]:
+            template_name = 'question/qa/create.html'
+
+        elif question.type is QuestionType.ShortConversation.value[0]:
+            template_name = 'question/short_conversation/create.html'
+
+        elif question.type is QuestionType.Grammar.value[0]:
+            template_name = 'question/grammar/create.html'
+
+        elif question.type is QuestionType.Phrase.value[0]:
+            template_name = 'question/phrase/create.html'
+
+        elif question.type is QuestionType.ParagraphUnderstanding.value[0]:
+            template_name = 'question/paragraph_understanding/create.html'
+
+        else:
+            raise IllegalArgumentError('The question type not in "definitions.py".')
+
+        data = {
+            'question': question,
+            'next': request.META.get('HTTP_REFERER', '/question'),
+        }
+
+        return render(request, template_name, data)
 
 
 @permission_check(UserType.QuestionManager)
@@ -178,3 +321,20 @@ def delete_question(request, question_id):
     messages.success(request, 'Delete question id={}.'.format(question_id))
 
     return redirect(request.META.get('HTTP_REFERER', '/question'))
+
+
+@permission_check(UserType.QuestionManager)
+@require_http_methods(["GET"])
+def delete_question(request, question_id):
+    try:
+        question = Question.objects.get(id=question_id)
+
+    except ObjectDoesNotExist:
+        raise ResourceNotFoundError('Cannot find question id = {}.'.format(question_id))
+
+    question.enable = True
+    question.save()
+
+    messages.success(request, 'Enable question id={}.'.format(question_id))
+
+    return redirect(request.META.get('HTTP_REFERER', '/question/review'))

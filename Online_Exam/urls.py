@@ -16,7 +16,7 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
-from alcpt import views, exam, scores, systemmanage
+from alcpt import views, question, exam, scores, systemmanage
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
@@ -25,6 +25,16 @@ urlpatterns = [
 
     url(r'^login$', views.login),
     url(r'^logout$', views.logout),
+
+    url(r'^question$', question.index),
+    url(r'^question/', include([
+        url(r'^create$', question.create_questioon),
+        url(r'^review$', question.review_question_index),
+        url(r'^(?P<question_id>[0-9]+)/', include([
+            url(r'^edit$', question.edit_question),
+            url(r'^delete$', question.delete_question),
+        ]))
+    ])),
 
     url(r'^exam$', exam.index),
     url(r'^exam/', include([

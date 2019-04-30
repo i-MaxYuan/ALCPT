@@ -1,14 +1,60 @@
 import json
 
+from django.db.models import Q
+from math import ceil
+
 from alcpt.definitions import QuestionType
-from alcpt.models import Question
+from alcpt.models import Question, TestPaper, User
+from alcpt.utility import save_file
 
 
-def create_question(question_type: QuestionType, question: str, options: list, answer_index: int, file):
+def query_question(description: str=None, question_type: int=None, page: int=0, enable: bool=False,
+                   testpaper: TestPaper=None, created_by: User=None):
+    queries = Q()
+    if enable:
+        queries = Q(enable=True)
+
+    if description:
+        queries &= Q(description__icontains=description)
+
+    if question_type:
+        queries &= Q(type=question_type)
+
+    if created_by:
+        created_by = User.objects.get(serial_number=created_by)
+        queries &= Q(created_by=created_by)
+
+    if testpaper:
+        questions = testpaper.question_set
+
+    else:
+        questions = Question.objects
+
+    questions = questions.filter(queries)
+
+    if page >= 0:
+        num_pages = ceil(questions.count() / 10)
+        questions = questions[page * 10: page * 10 + 10]
+
+    else:  # page < 0 -> all
+        num_pages = 1
+
+    return num_pages, questions
+
+
+def review_question(question: Question, last_updated_by: User):
+    question.enable = True
+    question.last_updated_by = last_updated_by
+
+    return question
+
+
+def create_question(question_type: QuestionType, question: str, options: list, answer_index: int, created_by: User, file):
     question = Question.objects.create(type=question_type.value[0],
                                        question=question,
                                        option=json.dumps(options),
-                                       answer=answer_index)
+                                       answer=answer_index,
+                                       created_by=created_by)
 
     if question.question_type is QuestionType.QA:
         if file:
@@ -42,11 +88,11 @@ def update_question(question: Question, description: str, options: list, answer_
 
     if question.question_type is QuestionType.QA:
         if file:
-            question.question_file = file
+            question.question_file = save_file(file=file, path='question_{}'.format(question.id))
 
     elif question.question_type is QuestionType.ShortConversation:
         if file:
-            question.question_file = file
+            question.question_file = save_file(file=file, path='question_{}'.format(question.id))
 
     elif question.question_type is QuestionType.ParagraphUnderstanding:
         pass

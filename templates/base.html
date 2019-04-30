@@ -245,7 +245,7 @@ ul.bar li ul li a:hover { color: #48dbfb;}
                 {% if request.user.user_type >= 15 %}
                 <li><a style=" text-decoration:none;" href="/question">題庫管理員</a>
                     <ul>
-                        <li><a style=" text-decoration:none;" href="/question/new">新增試題</a> </li>
+                        <li><a style=" text-decoration:none;" href="/question/create">新增試題</a> </li>
                         <li><a style=" text-decoration:none;" href="/question/review">審核試題</a> </li>
                         <li><a style=" text-decoration:none;" href="/question">修改試題</a> </li>
                     </ul>
@@ -254,7 +254,7 @@ ul.bar li ul li a:hover { color: #48dbfb;}
                 {% if request.user.user_type >= 7%}
                 <li><a style=" text-decoration:none;" href="/question">題庫操作員</a>
                     <ul>
-                        <li><a style=" text-decoration:none;" href="/question/new">新增試題</a> </li>
+                        <li><a style=" text-decoration:none;" href="/question/create">新增試題</a> </li>
                         <li><a style=" text-decoration:none;" href="/question">修改試題</a> </li>
                         <li><a style=" text-decoration:none;" href="/question">查看試題</a> </li>
                     </ul>

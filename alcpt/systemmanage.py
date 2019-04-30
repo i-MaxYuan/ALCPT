@@ -112,7 +112,7 @@ def create_user(request):
         return render(request, 'user/create.html', data)
 
 
-# 系統管理員修改使用者資料頁面(修改使用者資料)
+# 系統管理員＆使用者修改使用者資料頁面
 @login_required
 @require_http_methods(["GET", "POST"])
 def edit_user(request, serial_number: str):
@@ -159,6 +159,7 @@ def edit_user(request, serial_number: str):
             data['department'] = Department.objects.get(id=data['department'])
         except ObjectDoesNotExist:
             pass
+            # 非學生的使用者因為沒科系跟中隊能選所以用pass不然會一直出錯
             # raise ResourceNotFoundError("Cannot find department id={}".format(data['department']))
 
         try:
@@ -214,7 +215,8 @@ def edit_user(request, serial_number: str):
             'squadrons': Squadron.objects.all(),
             'user_types': UserType.__members__,
             'num_types': range(1, len(UserType.__members__) + 1),
-            'password_pattern': '^(?!.*[^\x21-\x7e])[A-Za-z\d]{6,32}$'
+            # 'password_pattern': '^(?!.*[^\x21-\x7e])[A-Za-z\d]{6,32}$',
+            'password_pattern': '^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$',
         }
 
         return render(request, 'user/edit.html', data)
