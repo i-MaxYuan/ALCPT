@@ -1,7 +1,7 @@
 {% extends "base.html" %}
-
+{% load staticfiles %}
 {% block scripts %}
-<script src="/static/scripts/question.js?{{ request.static_file_version }}" defer></script>
+<script src="{% static "scripts/question.js" %}" defer></script>
 <script type="text/javascript" defer>
 $(function() {
     {% if question %}
@@ -26,19 +26,15 @@ $(function() {
 <section class="row">
     <section class="col mb-3">
         <h1 style="display: inline;">{% if question %}編輯{% else %}新增{% endif %}題目：閱讀／段落理解</h1>
-        {% if source %}
-        <span class="badge badge-secondary">{{ source.year }} 年 - {{ source.name }}</span>
-        {% endif %}
     </section>
 
-    <form class="col-12 row mt-3" enctype="multipart/form-data" action="/question/{% if question %}{{ question.id }}/edit{% else %}new{% endif %}" method="post" autocomplete="off">
+    <form class="col-12 row mt-3" enctype="multipart/form-data" action="/question/{% if question %}{{ question.id }}/edit{% else %}create{% endif %}" method="post" autocomplete="off">
         {% csrf_token %}
 
         {% if question %}
         <input type="hidden" name="next" value="{{ next }}" />
         {% else %}
         <input type="hidden" name="type" value="{{ question_type }}" />
-        <input type="hidden" name="source" value="{{ source.id }}" />
         {% endif %}
 
         <h3 class="col-12"><i class="fa fa-clipboard fa-fw mb-2"></i> 編輯問題</h3>
@@ -53,7 +49,7 @@ $(function() {
             <select class="custom-select" name="question_type">
                 <option value="1">簡單</option>
                 <option value="2">中等</option>
-                <option value="2">困難</option>
+                <option value="3">困難</option>
     {#            {% for type in num_types %}#}
     {#            <option value="{{ type }}" {% if type == keywords.question_type %} selected {% endif %}>{{ type|readable_question_type }}</option>#}
     {#            {% endfor %}#}

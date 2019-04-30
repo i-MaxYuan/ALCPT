@@ -16,7 +16,7 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
-from alcpt import views, question, exam, scores, systemmanage
+from alcpt import views, question, exam, scores, system
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
@@ -28,7 +28,7 @@ urlpatterns = [
 
     url(r'^question$', question.index),
     url(r'^question/', include([
-        url(r'^create$', question.create_questioon),
+        url(r'^create$', question.create_question),
         url(r'^review$', question.review_question_index),
         url(r'^(?P<question_id>[0-9]+)/', include([
             url(r'^edit$', question.edit_question),
@@ -46,10 +46,10 @@ urlpatterns = [
         url(r'^(?P<exam_id>[0-9]+)$', scores.sheet_detail),
     ])),
 
-    url(r'^user$', systemmanage.index),
+    url(r'^user$', system.index),
     url(r'^user/', include([
-        url(r'^create$', systemmanage.create_user),
-        url(r'^(?P<serial_number>[0-9]+)$', systemmanage.edit_user),
+        url(r'^create$', system.create_user),
+        url(r'^(?P<serial_number>[0-9]+)$', system.edit_user),
     ]))
 ]
 

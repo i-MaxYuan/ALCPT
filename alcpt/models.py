@@ -125,10 +125,11 @@ class Exam(models.Model):
 # 題目
 class Question(models.Model):
     question_type = models.PositiveSmallIntegerField()
-    question_file = models.FileField(upload_to='listening/', blank=True, null=True)
-    question = models.TextField()
+    question_file = models.TextField(blank=True, null=True)
+    question = models.TextField(blank=True, null=True)
     option = models.TextField()
     answer = models.PositiveSmallIntegerField()
+    difficult = models.PositiveSmallIntegerField(default=0)
     use_time = models.IntegerField(default=0)
     correct_time = models.IntegerField(default=0)
     create_time = models.DateTimeField(auto_now_add=True)

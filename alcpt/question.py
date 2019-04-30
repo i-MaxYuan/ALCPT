@@ -74,7 +74,7 @@ def review_question_index(request):
 
 @permission_check(UserType.QuestionManager)
 @require_http_methods(["GET", "POST"])
-def create_questioon(request):
+def create_question(request):
     if request.method == 'POST':
         try:
             question_type = int(request.POST.get('type'))
@@ -281,19 +281,19 @@ def edit_question(request, question_id):
 
     else:
         if question.type is QuestionType.QA.value[0]:
-            template_name = 'question/qa/create.html'
+            template = 'question/qa/create.html'
 
         elif question.type is QuestionType.ShortConversation.value[0]:
-            template_name = 'question/short_conversation/create.html'
+            template = 'question/short_conversation/create.html'
 
         elif question.type is QuestionType.Grammar.value[0]:
-            template_name = 'question/grammar/create.html'
+            template = 'question/grammar/create.html'
 
         elif question.type is QuestionType.Phrase.value[0]:
-            template_name = 'question/phrase/create.html'
+            template = 'question/phrase/create.html'
 
         elif question.type is QuestionType.ParagraphUnderstanding.value[0]:
-            template_name = 'question/paragraph_understanding/create.html'
+            template = 'question/paragraph_understanding/create.html'
 
         else:
             raise IllegalArgumentError('The question type not in "definitions.py".')
@@ -303,7 +303,7 @@ def edit_question(request, question_id):
             'next': request.META.get('HTTP_REFERER', '/question'),
         }
 
-        return render(request, template_name, data)
+        return render(request, template, data)
 
 
 @permission_check(UserType.QuestionManager)
@@ -325,7 +325,7 @@ def delete_question(request, question_id):
 
 @permission_check(UserType.QuestionManager)
 @require_http_methods(["GET"])
-def delete_question(request, question_id):
+def enable_question(request, question_id):
     try:
         question = Question.objects.get(id=question_id)
 

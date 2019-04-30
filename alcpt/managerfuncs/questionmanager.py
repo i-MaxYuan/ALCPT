@@ -18,7 +18,7 @@ def query_question(description: str=None, question_type: int=None, page: int=0, 
         queries &= Q(description__icontains=description)
 
     if question_type:
-        queries &= Q(type=question_type)
+        queries &= Q(question_type=question_type)
 
     if created_by:
         created_by = User.objects.get(serial_number=created_by)
@@ -50,31 +50,31 @@ def review_question(question: Question, last_updated_by: User):
 
 
 def create_question(question_type: QuestionType, question: str, options: list, answer_index: int, created_by: User, file):
-    question = Question.objects.create(type=question_type.value[0],
+    question = Question.objects.create(question_type=question_type.value[0],
                                        question=question,
                                        option=json.dumps(options),
                                        answer=answer_index,
                                        created_by=created_by)
 
-    if question.question_type is QuestionType.QA:
+    if question_type is QuestionType.QA:
         if file:
-            question.question_file = file
-
-    elif question.question_type is QuestionType.ShortConversation:
+            question.question_file = save_file(file=file, path='question_{}'.format(question.id))
+            # question.question_file = file
+    elif question_type is QuestionType.ShortConversation:
         if file:
-            question.question_file = file
+            question.question_file = save_file(file=file, path='question_{}'.format(question.id))
 
-    elif question.question_type is QuestionType.ParagraphUnderstanding:
+    elif question_type is QuestionType.ParagraphUnderstanding:
         pass
 
-    elif question.question_type is QuestionType.Phrase:
+    elif question_type is QuestionType.Phrase:
         pass
 
-    elif question.question_type is QuestionType.Grammar:
+    elif question_type is QuestionType.Grammar:
         pass
 
     else:
-        raise RuntimeError('Question type "{}"'.format(question.question_type.name))
+        raise RuntimeError('Question type "{}"'.format(question_type.name))
 
     question.save()
 

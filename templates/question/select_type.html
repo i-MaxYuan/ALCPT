@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load staticfiles %}
 {% block content %}
 
 <head>
@@ -46,9 +46,6 @@
             <div style="padding-right: 10px"></div>
         </div>
         <h1 style="display: inline;">選擇題目型態</h1>
-        {% if source %}
-        <span class="badge badge-secondary">{{ source.year }} 年 - {{ source.name }}</span>
-        {% endif %}
     </section>
 
     <section class="col-12 row mt-3">
@@ -56,14 +53,14 @@
         <div class="w-100"></div>
 
         <section class="col-3 p-3">
-            <a href="{{ request.path }}?source={{ source.id }}&type=1" class="col-12 btn btn-sq-lg btn-info p-3">
+            <a href="{{ request.path }}?type=1" class="col-12 btn btn-sq-lg btn-info p-3">
                 <i class="fa fa-quora fa-5x mb-2"></i>
                 <br>
                 問答
             </a>
         </section>
         <section class="col-3 p-3">
-            <a href="{{ request.path }}?source={{ source.id }}&type=2" class="col-12 btn btn-sq-lg btn-info p-3">
+            <a href="{{ request.path }}?type=2" class="col-12 btn btn-sq-lg btn-info p-3">
                 <i class="fa fa-comments fa-5x mb-2"></i>
                 <br>
                 短篇對話
@@ -76,21 +73,21 @@
         <div class="w-100"></div>
 
         <section class="col-3 p-3">
-            <a href="{{ request.path }}?source={{ source.id }}&type=3" class="col-12 btn btn-sq-lg btn-secondary p-3">
+            <a href="{{ request.path }}?type=3" class="col-12 btn btn-sq-lg btn-secondary p-3">
                 <i class="fa fa-pencil-square-o fa-5x mb-2"></i>
                 <br>
                 文法
             </a>
         </section>
         <section class="col-3 p-3">
-            <a href="{{ request.path }}?source={{ source.id }}&type=4" class="col-12 btn btn-sq-lg btn-secondary p-3">
+            <a href="{{ request.path }}?type=4" class="col-12 btn btn-sq-lg btn-secondary p-3">
                 <i class="fa fa-language fa-5x mb-2"></i>
                 <br>
                 名詞／片語
             </a>
         </section>
         <section class="col-3 p-3">
-            <a href="{{ request.path }}?source={{ source.id }}&type=5" class="col-12 btn btn-sq-lg btn-secondary p-3">
+            <a href="{{ request.path }}?type=5" class="col-12 btn btn-sq-lg btn-secondary p-3">
                 <i class="fa fa-book fa-5x mb-2"></i>
                 <br>
                 段落理解

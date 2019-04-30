@@ -1,7 +1,7 @@
 {% extends "base.html" %}
-
+{% load staticfiles %}
 {% block scripts %}
-<script src="/static/scripts/question.js?{{ request.static_file_version }}" defer></script>
+<script src="{% static "scripts/question.js" %}" defer></script>
 <script type="text/javascript" defer>
 $(function() {
     {% if question %}
@@ -30,19 +30,15 @@ $(function() {
 <section class="row">
     <section class="col mb-3">
         <h1 style="display: inline;">{% if question %}編輯{% else %}新增{% endif %}題目：聽力／簡短對話</h1>
-        {% if source %}
-        <span class="badge badge-secondary">{{ source.year }} 年 - {{ source.name }}</span>
-        {% endif %}
     </section>
 
-    <form class="col-12 row mt-3" enctype="multipart/form-data" action="/question/{% if question %}{{ question.id }}/edit{% else %}new{% endif %}" method="post" autocomplete="off">
+    <form class="col-12 row mt-3" enctype="multipart/form-data" action="/question/{% if question %}{{ question.id }}/edit{% else %}create{% endif %}" method="post" autocomplete="off">
         {% csrf_token %}
 
         {% if question %}
         <input type="hidden" name="next" value="{{ next }}" />
         {% else %}
         <input type="hidden" name="type" value="{{ question_type }}" />
-        <input type="hidden" name="source" value="{{ source.id }}" />
         {% endif %}
 
         <h3 class="col-12"><i class="fa fa-upload fa-fw mb-2"></i> 上傳音訊檔案</h3>
@@ -56,10 +52,10 @@ $(function() {
 
         <h3 class="col-12"><i class="fa  fa-tasks fa-fw mb-2"></i> 難易度</h3>
         <div class="col-12 py-2 form-group">
-            <select class="custom-select" name="question_type">
+            <select class="custom-select" name="difficult">
                 <option value="1">簡單</option>
                 <option value="2">中等</option>
-                <option value="2">困難</option>
+                <option value="3">困難</option>
     {#            {% for type in num_types %}#}
     {#            <option value="{{ type }}" {% if type == keywords.question_type %} selected {% endif %}>{{ type|readable_question_type }}</option>#}
     {#            {% endfor %}#}
