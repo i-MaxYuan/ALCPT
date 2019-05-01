@@ -5,7 +5,7 @@
 <script type="text/javascript" defer>
 $(function() {
     {% if question %}
-    let options = {{ question.options|safe }};
+    let options = {{ question.option|safe }};
     for (let i = 0; i < options.length; ++i) {
         $("#add-option").trigger("click");
         $("#option-" + i).val(options[i]);
@@ -13,8 +13,8 @@ $(function() {
     }
     $("input[type=radio][name=answer][value={{ question.answer }}]").trigger("click");
 
-    $(".custom-file-label").html("{{ question.file_path }}");
-    $("#preview-audio-source").attr("src", "{{ question.file_path }}");
+    $(".custom-file-label").html("{{ question.question_file }}");
+    $("#preview-audio-source").attr("src", "{{ question.question_file }}");
     document.getElementById("preview-audio").load();
     {% else %}
     for (let i = 0; i < 4; ++i) {
@@ -53,9 +53,9 @@ $(function() {
         <h3 class="col-12"><i class="fa  fa-tasks fa-fw mb-2"></i> 難易度</h3>
         <div class="col-12 py-2 form-group">
             <select class="custom-select" name="difficult">
-                <option value="1">簡單</option>
-                <option value="2">中等</option>
-                <option value="3">困難</option>
+                <option value="1" {% if question.difficult is 1 %} selected {% endif %}>簡單</option>
+                <option value="2" {% if question.difficult is 2 %} selected {% endif %}>中等</option>
+                <option value="3" {% if question.difficult is 3 %} selected {% endif %}>困難</option>
     {#            {% for type in num_types %}#}
     {#            <option value="{{ type }}" {% if type == keywords.question_type %} selected {% endif %}>{{ type|readable_question_type }}</option>#}
     {#            {% endfor %}#}

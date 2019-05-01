@@ -1,6 +1,6 @@
-<span>{{ question.description }}</span>
+<span>{{ question.question }}</span>
 <section id="options" class="pt-2">
-    {% for option in question.options %}
+    {% for option in question.option %}
     <div class="custom-control custom-radio">
         <input class="custom-control-input" type="radio" id="option-{{ question.id }}-{{ forloop.counter0 }}" name="answer-{{ question.id }}" value="{{ forloop.counter0 }}"
                {% if show_answer %}

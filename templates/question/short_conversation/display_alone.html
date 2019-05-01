@@ -1,12 +1,12 @@
 <audio id="preview-audio" controls preload="none">
-    <source src="{{ question.file_path }}" type="audio/mpeg">
+    <source src="{{ question.question_file }}" type="audio/mpeg">
     Your browser does not support the audio tag.
 </audio>
 <section class="pt-2">
-    <span>{{ question.description }}</span>
+    <span>{{ question.question }}</span>
 </section>
 <section id="options" class="pt-2">
-    {% for option in question.options %}
+    {% for option in question.option %}
     <div class="custom-control custom-radio">
         <input class="custom-control-input" type="radio" id="option-{{ question.id }}-{{ forloop.counter0 }}" name="answer-{{ question.id }}" value="{{ forloop.counter0 }}"
                {% if show_answer %}

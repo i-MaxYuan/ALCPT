@@ -2,7 +2,7 @@ import json
 
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.views.decorators.http import require_http_methods
 
 from .models import Question
@@ -29,7 +29,7 @@ def index(request):
     num_pages, questions = questionmanager.query_question(**keywords, enable=True, page=page)
 
     for question in questions:
-        question.options = json.loads(question.options)
+        question.option = json.loads(question.option)
 
     data = {
         'questions': questions,
@@ -59,7 +59,7 @@ def review_question_index(request):
     num_pages, questions = questionmanager.query_question(**keywords, page=page)
 
     for question in questions:
-        question.options = json.loads(question.options)
+        question.option = json.loads(question.option)
 
     data = {
         'questions': questions,
@@ -85,6 +85,7 @@ def create_question(request):
         except ValueError:
             raise IllegalArgumentError(message='Question type must be int.')
 
+        difficult = request.POST.get('difficult')
         question = None
         file = None
 
@@ -100,7 +101,7 @@ def create_question(request):
         elif question_type is QuestionType.ShortConversation.value[0]:
             question_type = QuestionType.ShortConversation
             template = 'question/short_conversation/display.html'
-            question = request.POST.get('question')
+            question = request.POST.get('description')
             if 'audio' not in request.FILES:
                 raise ArgumentError(message='Missing file field "audio".')
 
@@ -110,17 +111,17 @@ def create_question(request):
         elif question_type is QuestionType.Grammar.value[0]:
             question_type = QuestionType.Grammar
             template = 'question/grammar/display.html'
-            question = request.POST.get('question')
+            question = request.POST.get('description')
 
         elif question_type is QuestionType.Phrase.value[0]:
             question_type = QuestionType.Grammar
             template = 'question/phrase/display.html'
-            question = request.POST.get('question')
+            question = request.POST.get('description')
 
         elif question_type is QuestionType.ParagraphUnderstanding.value[0]:
             question_type = QuestionType.Grammar
             template = 'question/paragraph_understanding/display.html'
-            question = request.POST.get('question')
+            question = request.POST.get('description')
 
         else:
             raise IllegalArgumentError(message='The question type not in "definitions.py".')
@@ -148,12 +149,20 @@ def create_question(request):
         if len(options) < 4:
             raise ArgumentError(message='Options must have 4.')
 
+        try:
+            if Question.objects.get(question=question):
+                raise MultipleObjectsReturned('Question has existed.')
+
+        except ObjectDoesNotExist:
+            pass
+
         new_question = questionmanager.create_question(question_type=question_type,
                                                        question=question,
                                                        options=options,
                                                        answer_index=answer_index,
                                                        file=file,
-                                                       created_by=request.user)
+                                                       created_by=request.user,
+                                                       difficult=difficult)
 
         messages.success(request, "Create question successfully.")
 
@@ -203,6 +212,7 @@ def edit_question(request, question_id):
         raise ResourceNotFoundError('Can\'t find question id={}'.format(question_id))
 
     if request.method == 'POST':
+        difficult = request.POST.get('difficult')
         description = None
         file = None
 
@@ -273,26 +283,28 @@ def edit_question(request, question_id):
                                                    description=description,
                                                    options=options,
                                                    answer_index=answer_index,
-                                                   file=file)
+                                                   file=file,
+                                                   difficult=difficult,
+                                                   last_updated=request.user)
 
         messages.success(request, 'Update question id={}'.format(question.id))
 
         return redirect(request.POST.get('next', '/question'))
 
     else:
-        if question.type is QuestionType.QA.value[0]:
+        if question.question_type is QuestionType.QA.value[0]:
             template = 'question/qa/create.html'
 
-        elif question.type is QuestionType.ShortConversation.value[0]:
+        elif question.question_type is QuestionType.ShortConversation.value[0]:
             template = 'question/short_conversation/create.html'
 
-        elif question.type is QuestionType.Grammar.value[0]:
+        elif question.question_type is QuestionType.Grammar.value[0]:
             template = 'question/grammar/create.html'
 
-        elif question.type is QuestionType.Phrase.value[0]:
+        elif question.question_type is QuestionType.Phrase.value[0]:
             template = 'question/phrase/create.html'
 
-        elif question.type is QuestionType.ParagraphUnderstanding.value[0]:
+        elif question.question_type is QuestionType.ParagraphUnderstanding.value[0]:
             template = 'question/paragraph_understanding/create.html'
 
         else:
@@ -316,6 +328,7 @@ def delete_question(request, question_id):
         raise ResourceNotFoundError('Cannot find question id = {}.'.format(question_id))
 
     question.enable = False
+    question.last_updated_by = request.user
     question.save()
 
     messages.success(request, 'Delete question id={}.'.format(question_id))
@@ -333,6 +346,7 @@ def enable_question(request, question_id):
         raise ResourceNotFoundError('Cannot find question id = {}.'.format(question_id))
 
     question.enable = True
+    question.last_updated_by = request.user
     question.save()
 
     messages.success(request, 'Enable question id={}.'.format(question_id))

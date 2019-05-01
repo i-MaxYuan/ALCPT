@@ -4,9 +4,6 @@
 <section class="row">
     <section class="col mb-3">
         <h1 style="display: inline;">預覽：閱讀／名詞片語</h1>
-        {% if question.source %}
-        <span class="badge badge-secondary">{{ question.source.year }} 年 - {{ question.source.name }}</span>
-        {% endif %}
     </section>
 
     <section class="col-12">
@@ -19,7 +16,7 @@
 
     <section class="col text-center pt-3">
         <a class="btn btn-secondary" href="/question">返回題目列表</a>
-        <a class="btn btn-primary" href="/question/select-question-source">繼續新增題目</a>
+        <a class="btn btn-primary" href="/question/create">繼續新增題目</a>
     </section>
 </section>
 {% endblock %}

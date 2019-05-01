@@ -38,12 +38,12 @@
                                         <th><h4>審核結果</h4></th>
                                       </tr>
                                     </thead>
-                                        {% for Post in Post %}
+                                        {% for question in questions %}
                                     <tr class="w3-hover-green w3-center">
-                                        <td>{{ Post.created }}</td>
-                                        <td>{{ Post.text }}</td>
-                                        <td>{{ Post.user }}</td>
-                                        <td>{{ Post.user }}</td>
+                                        <td>{{ question.id }}</td>
+                                        <td>{{ question.question_type|readable_question_type }}</td>
+                                        <td>{{ question.created_by }}</td>
+                                        <td>{{ question.enable }}</td>
                                     </tr>
                                         {% endfor %}
                                     <tr>

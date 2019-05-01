@@ -5,7 +5,7 @@
 <script type="text/javascript" defer>
 $(function() {
     {% if question %}
-    let options = {{ question.options|safe }};
+    let options = {{ question.option|safe }};
     for (let i = 0; i < options.length; ++i) {
         $("#add-option").trigger("click");
         $("#option-" + i).val(options[i]);
@@ -40,7 +40,7 @@ $(function() {
         <h3 class="col-12"><i class="fa fa-clipboard fa-fw mb-2"></i> 編輯問題</h3>
 
         <div class="col-12 py-2 form-group">
-            <textarea class="form-control" id="description" name="description" rows="3" required>{{ question.description }}</textarea>
+            <textarea class="form-control" id="description" name="description" rows="3" required>{{ question.question }}</textarea>
             <small class="form-text text-muted">底線部分請用 &lt;u&gt;需要標示的文字&lt;/u&gt; 包起來，結果請見下方預覽。</small>
         </div>
 
@@ -53,9 +53,9 @@ $(function() {
                         <h3 class="col-12"><i class="fa  fa-tasks fa-fw mb-2"></i> 難易度</h3>
                 <div class="col-12 py-2 form-group">
                     <select class="custom-select" name="difficult">
-                        <option value="1">簡單</option>
-                        <option value="2">中等</option>
-                        <option value="3">困難</option>
+                        <option value="1" {% if question.difficult is 1 %} selected {% endif %}>簡單</option>
+                        <option value="2" {% if question.difficult is 2 %} selected {% endif %}>中等</option>
+                        <option value="3" {% if question.difficult is 3 %} selected {% endif %}>困難</option>
             {#            {% for type in num_types %}#}
             {#            <option value="{{ type }}" {% if type == keywords.question_type %} selected {% endif %}>{{ type|readable_question_type }}</option>#}
             {#            {% endfor %}#}

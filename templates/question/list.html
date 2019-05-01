@@ -53,14 +53,6 @@
             <div class="card-body">
                 <form action="/question" method="get">
                     <div class="row">
-{#                        <div class="col-auto">#}
-{#                            <select class="custom-select" name="source">#}
-{#                                <option value="0">所有出處</option>#}
-{#                                {% for num_type in num_types %}#}
-{#                                <option value="{{ num_type.value.0 }}" {% if num_type.value.0 == keywords.question_type %} selected {% endif %}>{{ num_type.value.1 }}</option>#}
-{#                                {% endfor %}#}
-{#                            </select>#}
-{#                        </div>#}
                         <div class="col">
                             <input type="text" class="form-control" name="description" value="{{ keywords.description }}" placeholder="輸入欲搜尋的題目內容">
                         </div>
@@ -90,7 +82,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="card-title h5">
-                        <span>{{ question.type|readable_question_type }}</span>
+                        <span>{{ question.question_type|readable_question_type }}</span>
                         <div class="float-right">
                             <a class="btn dropdown-toggle" style="padding: 0;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="h5">#{{ question.id }}</span></a>
                             <div class="dropdown-menu">
@@ -100,18 +92,15 @@
                             </div>
                         </div>
                     </div>
-                {% if question.source %}
-                    <h6 class="card-subtitle text-muted mb-2">{{ question.source.year }} 年 - {{ question.source.name }}</h6>
-                {% endif %}
-                {% if question.type is 1 %}
+                {% if question.question_type is 1 %}
                     {% include 'question/qa/display_alone.html' with question=question show_answer=True %}
-                {% elif question.type is 2 %}
+                {% elif question.question_type is 2 %}
                     {% include 'question/short_conversation/display_alone.html' with question=question show_answer=True %}
-                {% elif question.type is 3 %}
+                {% elif question.question_type is 3 %}
                     {% include 'question/grammar/display_alone.html' with question=question show_answer=True %}
-                {% elif question.type is 4 %}
+                {% elif question.question_type is 4 %}
                     {% include 'question/phrase/display_alone.html' with question=question show_answer=True %}
-                {% elif question.type is 5 %}
+                {% elif question.question_type is 5 %}
                     {% include 'question/paragraph_understanding/display_alone.html' with question=question show_answer=True %}
                 {% endif %}
                 </div>
