@@ -1,9 +1,9 @@
 {% extends "base.html" %}
-{% load staticfiles %}
+
 {% load web_filters %}
 
 {% block stylesheets %}
-<link rel="stylesheet" href="{% static "css/datetimepicker.min.css" %}">
+<link rel="stylesheet" href="/static/stylesheets/datetimepicker.min.css?{{ request.static_file_version }}">
 {% endblock %}
 
 {% block scripts %}
@@ -68,10 +68,11 @@
         <h1 style="display: inline;">管理考卷</h1>
     </section>
 
-    <form class="col-12 row mt-3" enctype="multipart/form-data" action="/testpaper/create" method="post" autocomplete="off">
+    <form class="col-12 row mt-3" enctype="multipart/form-data" action="/exam/new" method="post" autocomplete="off">
         {% csrf_token %}
 
         <input type="hidden" name="type" value="{{ question_type }}" />
+        <input type="hidden" name="source" value="{{ source.id }}" />
 
         <h3 class="col-12"><i class="fa fa-sticky-note fa-fw mb-2"></i> 基本資料</h3>
 

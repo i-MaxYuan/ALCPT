@@ -1,17 +1,15 @@
-import json
-from math import ceil
-
 from django.shortcuts import render
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.decorators.http import require_http_methods
 
-from .models import Question, AnswerSheet
+from .models import User, AnswerSheet
 from .exceptions import *
 from .decorators import permission_check
 from .definitions import UserType
+from .managerfuncs import scoreviewer
 
 
-@permission_check(UserType.Tester)
+@permission_check(UserType.ScoreViewer)
 @require_http_methods(["GET"])
 def index(request):
     try:
@@ -20,21 +18,18 @@ def index(request):
     except ValueError:
         page = 0
 
-    answer_sheets = AnswerSheet.objects.filter(user=request.user).order_by('-create_time')
+    keywords = {
+        'name': request.GET.get('name', ''),
+        'start_time': request.GET.get('start_time'),
+        'end_time': request.GET.get('end_time'),
+    }
 
-    pages = ceil(len(answer_sheets / 10))
-
-    if page and page >= 0:
-        answer_sheets = answer_sheets[page * 10: page * 10 + 10]  # page * 10: (page + 1) * 10
-
-    for sheet in answer_sheets:
-        sheet.answer = json.loads(sheet.answer)
-        sheet.questions = json.loads(sheet.questions)
+    num_pages, answer_sheets = scoreviewer.query_answer_sheet(**keywords, page=page)
 
     data = {
         'answer_sheets': answer_sheets,
         'page': page,
-        'page_range': range(pages)
+        'page_range': range(num_pages),
     }
 
     return render(request, 'score_list.html', data)

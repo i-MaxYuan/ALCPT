@@ -41,7 +41,7 @@ def index(request):
         'page_range': range(num_pages),
     }
 
-    return render(request, 'exam_list.html', data)
+    return render(request, 'exam/exam_list.html', data)
 
 
 @permission_check(UserType.ExamManager)
@@ -78,7 +78,7 @@ def create_exam(request):
 
         if existence:
             messages.error('The Exam\'s name has been used.Please change the name.')
-            return render(request, 'exam_create.html')
+            return render(request, 'exam/exam_create.html')
 
         else:
             exam = Exam.objects.create(name=name,
@@ -90,7 +90,7 @@ def create_exam(request):
         return redirect('/exam/{}/edit'.format(exam.id))
 
     else:
-        return render(request, 'exam_create.html')
+        return render(request, 'exam/exam_create.html')
 
 
 @permission_check(UserType.ExamManager)

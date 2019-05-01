@@ -38,6 +38,7 @@ class UserManager(BaseUserManager):
         return user
 
 
+# 使用者
 class User(AbstractBaseUser):
     serial_number = models.CharField(max_length=10, unique=True)
     name = models.CharField(max_length=20, blank=True, null=True)
@@ -65,22 +66,20 @@ class User(AbstractBaseUser):
         return (self.user_type & require_user_type.value[0]) > 0
 
 
+# 學系
 class Department(models.Model):
     name = models.CharField(max_length=10, unique=True)
 
 
+# 中隊
 class Squadron(models.Model):
     name = models.CharField(max_length=10, unique=True)
 
 
-# class Grade(models.Model):
-#     name = models.CharField(max_length=10, primary_key=True)
-
-
+# 學生
 class Student(models.Model):
     user = models.OneToOneField("User", on_delete=models.CASCADE)
     department = models.ForeignKey("Department", on_delete=models.PROTECT, blank=True, null=True)
-    # grade = models.ForeignKey("Grade", on_delete=models.PROTECT, blank=True)
     grade = models.PositiveSmallIntegerField(default=time.localtime().tm_year - 1911)
     squadron = models.ForeignKey("Squadron", on_delete=models.PROTECT, blank=True, null=True)
 

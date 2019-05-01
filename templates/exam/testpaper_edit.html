@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% load web_filters %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="/static/stylesheets/datetimepicker.min.css?{{ request.static_file_version }}">
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js" defer></script>
+<script src="/static/scripts/datetimepicker.min.js?{{ request.static_file_version }}" defer></script>
+<script src="/static/scripts/exam.js?{{ request.static_file_version }}" defer></script>
+<script>
+    $(function() {
+        $('#start-time').datetimepicker({
+            format: 'YYYY/MM/DD HH:mm',
+        });
+    });
+</script>
+{% endblock %}
+
+{% block content %}
+<section class="row">
+    <section class="col mb-3">
+        <h1 style="display: inline;">編輯考卷</h1>
+    </section>
+
+    <form class="col-12 row mt-3" enctype="multipart/form-data" action="/exam/{{ exam.id }}/edit" method="post" autocomplete="off">
+        {% csrf_token %}
+
+        <input type="hidden" name="type" value="{{ question_type }}" />
+        <input type="hidden" name="source" value="{{ source.id }}" />
+
+        <h3 class="col-12"><i class="fa fa-sticky-note fa-fw mb-2"></i> 基本資料</h3>
+
+        <div class="col-12 py-2 form-group">
+            <label for="name">考卷名稱</label>
+            <input type="text" class="form-control" id="name" name="name" value="{{ exam.name }}" required>
+        </div>
+
+{#        <div class="col-auto py-2 form-group">#}
+{#           <label for="start-time">開始時間</label>#}
+            <input type="text" class="form-control" id="start-time" name="start_time" value="{{ exam.start_time|date:'Y/n/d H:i' }}" required hidden>
+{#        </div>#}
+
+        <div class="col-auto py-2 form-group">
+            <label for="duration">使用時間</label>
+            <div class="input-group">
+                <input type="number" class="form-control" id="duration" name="duration" value="{{ exam.duration }}" min="1" required>
+                <div class="input-group-append">
+                    <span class="input-group-text">分鐘</span>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="col-12"><i class="fa fa-folder-open fa-fw mb-2"></i> 選擇題目</h3>
+
+        <div class="col-12 card-columns">
+            {% for x in num_types %}
+            <div class="card {% if reach_limit|lookup:x %} border-success {% endif %}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ x|readable_question_type }}</h5>
+                    <p class="card-text">共 {{ exam.question_type_counts|lookup:x }} 題，已選擇 {{ selected_counts|lookup:x }} 題</p>
+                    <a href="/exam/{{ exam.id }}/pick-question/{{ x }}" class="btn btn-success mt-1  ">重新選擇</a>
+                    <a href="/exam/{{ exam.id }}/auto-pick-question/{{ x }}" class="btn btn-secondary mt-1 {% if selected_counts|lookup:x >= exam.question_type_counts|lookup:x %} disabled {% endif %}">備用按鈕</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="w-100"></div>
+
+        <section class="col text-center pt-3">
+            <button class="btn btn-primary" type="submit">完成</button>
+        </section>
+    </form>
+</section>
+{% endblock %}

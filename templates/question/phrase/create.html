@@ -56,9 +56,6 @@ $(function() {
                         <option value="1" {% if question.difficult is 1 %} selected {% endif %}>簡單</option>
                         <option value="2" {% if question.difficult is 2 %} selected {% endif %}>中等</option>
                         <option value="3" {% if question.difficult is 3 %} selected {% endif %}>困難</option>
-            {#            {% for type in num_types %}#}
-            {#            <option value="{{ type }}" {% if type == keywords.question_type %} selected {% endif %}>{{ type|readable_question_type }}</option>#}
-            {#            {% endfor %}#}
                     </select>
                 </div>
 

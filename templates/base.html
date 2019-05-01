@@ -261,7 +261,7 @@ ul.bar li ul li a:hover { color: #48dbfb;}
                 </li>
                 {% endif %}
                 {% if request.user|has_perm:'ScoreViewer' %}
-                <li><a style=" text-decoration:none;" href="#">成績檢閱者</a>
+                <li><a style=" text-decoration:none;" href="/score">成績檢閱者</a>
                     <ul>
                         <li><a style=" text-decoration:none;" href="/score">檢閱成績</a> </li>
                     </ul>
@@ -273,6 +273,7 @@ ul.bar li ul li a:hover { color: #48dbfb;}
                         <li><a style=" text-decoration:none;" href="/practice/score">檢閱成績</a> </li>
                         <li><a style=" text-decoration:none;" href="/practice/reading">閱讀練習</a> </li>
                         <li><a style=" text-decoration:none;" href="/practice/listening">聽力練習</a> </li>
+                        <li><a style=" text-decoration:none;" href="/practice/complex">綜合練習</a> </li>
                         <li><a style=" text-decoration:none;" href="#">模擬鑑測</a> </li>
                     </ul>
                 </li>

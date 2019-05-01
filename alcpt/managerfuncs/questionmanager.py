@@ -21,7 +21,6 @@ def query_question(description: str=None, question_type: int=None, page: int=0, 
         queries &= Q(question_type=question_type)
 
     if created_by:
-        created_by = User.objects.get(serial_number=created_by)
         queries &= Q(created_by=created_by)
 
     if testpaper:
