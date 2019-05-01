@@ -1,12 +1,23 @@
 {% extends "base.html" %}
-
+{% load staticfiles %}
 {% load web_filters %}
 
 {% block scripts %}
-    <script src="/static/scripts/index.js?{{ request.js_version }}" defer></script>
+    <script src="{% static "scripts/question.js" %}" defer></script>
 {% endblock %}
 
 {% block content %}
+
+    <style>
+        button:active{
+            background-color: greenyellow;
+        }
+
+        button#two:active{
+            background-color: orangered;
+        }
+
+    </style>
 
     <section class="col-auto mr-auto" style="height: 100px">
         <div id="pt" class="bm c1">
@@ -39,39 +50,26 @@
                                       </tr>
                                     </thead>
                                         {% for question in questions %}
-                                    <tr class="w3-hover-green w3-center">
+                                    <tr class="w3-hover-green w3-center" id="btn{{ question.id }}">
                                         <td>{{ question.id }}</td>
-                                        <td>{{ question.question_type|readable_question_type }}</td>
+                                        <td>{{ question.question_type }}</td>
                                         <td>{{ question.created_by }}</td>
-                                        <td>{{ question.enable }}</td>
+                                        <td><input type="button" class="btn btn-default" style="vertical-align:middle;" value="通過" onclick="btn{{ question.id }}.style.backgroundColor='greenyellow'">
+                                            <input type="button" class="btn btn-default" id="btn2" style="vertical-align:middle;" value="刪除" onclick="btn{{ question.id }}.style.backgroundColor='orangered'"></td>
                                     </tr>
                                         {% endfor %}
-                                    <tr>
-                                        <td>#1</td>
-                                        <td>聽力</td>
-                                        <td>tim87</td>
-                                        <td><input type="checkbox" style="vertical-align:middle ;zoom: 150% ">
-                                            <i class="fa fa-trash fa-fw mb-2" title="刪除題目"></i></td>
-                                    </tr>
-                                    <tr>
-                                        <td>#2</td>
-                                        <td>聽力</td>
-                                        <td>tim87</td>
-                                        <td><input type="checkbox" style="vertical-align:middle ;zoom: 150% ">
-                                            <i class="fa fa-trash fa-fw mb-2" title="刪除題目"></i></td>
-                                    </tr>
-
                                 </table>
 
-                                <section class="text-center pt-3">
-                                    <button class="btn btn-primary" style="background-color: #1b98e0; color: white;" type="submit">核可已勾選的題目</button>
-                                    <button class="btn btn-primary" style="background-color: lightgray;border: lightgray ; color: black;" type="submit">取消</button>
-                                </section>
-
-                                 </br></br>
+                        <section class="text-center pt-3">
+                            <button class="btn btn-primary" style="background-color: #1b98e0; color: white;" type="submit">送出</button>
+                            <button class="btn btn-primary" style="background-color: lightgray;border: lightgray ; color: black;" type="submit">取消</button>
+                        </section>
+                        </br></br>
                  </div>
             </div>
         </div>
     </div>
 </div>
 {% endblock %}
+
+{#$(':radio').click(function(){if(this.checked)$(this).next().css('color','red')});#}

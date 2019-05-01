@@ -26,7 +26,7 @@ urlpatterns = [
     url(r'^login$', views.login),
     url(r'^logout$', views.logout),
 
-    url(r'^question$', question.index),
+    url(r'^question$', question.manager_index),
     url(r'^question/', include([
         url(r'^create$', question.create_question),
         url(r'^review$', question.review_question_index),
@@ -39,6 +39,7 @@ urlpatterns = [
     url(r'^exam$', exam.index),
     url(r'^exam/', include([
         url(r'^create$', exam.create_exam),
+        url(r'^testpaper$', exam.testerpaper_index)
     ])),
 
     url(r'^score$', scores.index),

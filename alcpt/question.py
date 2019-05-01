@@ -14,7 +14,7 @@ from .managerfuncs import questionmanager
 
 @permission_check(UserType.QuestionManager)
 @require_http_methods(["GET"])
-def index(request):
+def manager_index(request):
     try:
         page = int(request.GET.get('page', 0))
 
@@ -84,7 +84,7 @@ def create_question(request):
 
         except ValueError:
             raise IllegalArgumentError(message='Question type must be int.')
-
+        print(question_type)
         difficult = request.POST.get('difficult')
         question = None
         file = None
@@ -114,12 +114,12 @@ def create_question(request):
             question = request.POST.get('description')
 
         elif question_type is QuestionType.Phrase.value[0]:
-            question_type = QuestionType.Grammar
+            question_type = QuestionType.Phrase
             template = 'question/phrase/display.html'
             question = request.POST.get('description')
 
         elif question_type is QuestionType.ParagraphUnderstanding.value[0]:
-            question_type = QuestionType.Grammar
+            question_type = QuestionType.ParagraphUnderstanding
             template = 'question/paragraph_understanding/display.html'
             question = request.POST.get('description')
 
@@ -352,3 +352,33 @@ def enable_question(request, question_id):
     messages.success(request, 'Enable question id={}.'.format(question_id))
 
     return redirect(request.META.get('HTTP_REFERER', '/question/review'))
+
+
+@permission_check(UserType.QuestionOperator)
+@require_http_methods(["GET"])
+def manager_index(request):
+    try:
+        page = int(request.GET.get('page', 0))
+
+    except ValueError:
+        page = 0
+
+    keywords = {
+        'description': request.GET.get('description', ''),
+        'question_type': int(request.GET.get('question_type', 0)),
+    }
+
+    num_pages, questions = questionmanager.query_question(**keywords, enable=True, created_by=request.user, page=page)
+
+    for question in questions:
+        question.option = json.loads(question.option)
+
+    data = {
+        'questions': questions,
+        'num_types': range(1, len(QuestionType.__members__) + 1),
+        'keywords': keywords,
+        'page': page,
+        'page_range': range(num_pages),
+    }
+
+    return render(request, 'question/list.html', data)

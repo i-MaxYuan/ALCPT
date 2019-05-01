@@ -15,7 +15,7 @@ def query_question(description: str=None, question_type: int=None, page: int=0, 
         queries = Q(enable=True)
 
     if description:
-        queries &= Q(description__icontains=description)
+        queries &= Q(question__icontains=description)
 
     if question_type:
         queries &= Q(question_type=question_type)

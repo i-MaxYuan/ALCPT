@@ -1,4 +1,6 @@
 {% load staticfiles %}
+
+{% load web_filters %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -223,7 +225,7 @@ ul.bar li ul li a:hover { color: #48dbfb;}
 </style>
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav bar" >
-                {% if request.user.user_type == 63 %}
+                {% if request.user|has_perm:'SystemManager' %}
                 <li><a style=" text-decoration:none;" href="/user">系統管理員</a>
                     <ul>
                         <li><a href="/user">使用者列表</a> </li>
@@ -231,7 +233,7 @@ ul.bar li ul li a:hover { color: #48dbfb;}
                     </ul>
                 </li>
                 {% endif %}
-                {% if request.user.user_type >= 31 %}
+                {% if request.user|has_perm:'ExamManager' %}
                 <li><a style=" text-decoration:none;" href="/exam">考試管理員</a>
                     <ul>
                         <li><a href="/exam">考試列表</a> </li>
@@ -241,32 +243,31 @@ ul.bar li ul li a:hover { color: #48dbfb;}
                     </ul>
                 </li>
                 {% endif %}
-                {% if request.user.user_type >= 15 %}
+                {% if request.user|has_perm:'QuestionManager' %}
                 <li><a style=" text-decoration:none;" href="/question">題庫管理員</a>
                     <ul>
                         <li><a style=" text-decoration:none;" href="/question/create">新增試題</a> </li>
                         <li><a style=" text-decoration:none;" href="/question/review">審核試題</a> </li>
-                        <li><a style=" text-decoration:none;" href="/question">修改試題</a> </li>
                     </ul>
                 </li>
                 {% endif %}
-                {% if request.user.user_type >= 7%}
+                {% if request.user|has_perm:'QuestionOperator' %}
                 <li><a style=" text-decoration:none;" href="/question">題庫操作員</a>
                     <ul>
                         <li><a style=" text-decoration:none;" href="/question/create">新增試題</a> </li>
-                        <li><a style=" text-decoration:none;" href="/question">修改試題</a> </li>
+
                         <li><a style=" text-decoration:none;" href="/question">查看試題</a> </li>
                     </ul>
                 </li>
                 {% endif %}
-                {% if request.user.user_type >= 3 %}
+                {% if request.user|has_perm:'ScoreViewer' %}
                 <li><a style=" text-decoration:none;" href="#">成績檢閱者</a>
                     <ul>
                         <li><a style=" text-decoration:none;" href="/score">檢閱成績</a> </li>
                     </ul>
                 </li>
                 {% endif %}
-                {% if request.user.user_type >= 1 %}
+                {% if request.user|has_perm:'Tester' %}
                 <li><a style=" text-decoration:none;" href="#">受測者</a>
                     <ul>
                         <li><a style=" text-decoration:none;" href="/practice/score">檢閱成績</a> </li>

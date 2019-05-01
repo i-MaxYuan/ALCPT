@@ -112,22 +112,22 @@
                     {% endif %}
                     <td class="align-middle">{{ user.name }}</td>
                     <td class="align-middle">
-                        {% if user|has_perm:user_types.SystemManager %}
+                        {% if user|has_perms:user_types.SystemManager %}
                         <span class="badge badge-danger">{{ user_types.SystemManager.value.1 }}</span>
                         {% endif %}
-                        {% if user|has_perm:user_types.ExamManager %}
+                        {% if user|has_perms:user_types.ExamManager %}
                         <span class="badge badge-warning">{{ user_types.ExamManager.value.1 }}</span>
                         {% endif %}
-                        {% if user|has_perm:user_types.QuestionManager %}
+                        {% if user|has_perms:user_types.QuestionManager %}
                         <span class="badge badge-primary">{{ user_types.QuestionManager.value.1 }}</span>
                         {% endif %}
-                        {% if user|has_perm:user_types.QuestionOperator %}
+                        {% if user|has_perms:user_types.QuestionOperator %}
                         <span class="badge badge-success">{{ user_types.QuestionOperator.value.1 }}</span>
                         {% endif %}
-                        {% if user|has_perm:user_types.ScoreViewer %}
+                        {% if user|has_perms:user_types.ScoreViewer %}
                         <span class="badge badge-info">{{ user_types.ScoreViewer.value.1 }}</span>
                         {% endif %}
-                        {% if user|has_perm:user_types.Tester %}
+                        {% if user|has_perms:user_types.Tester %}
                         <span class="badge badge-dark">{{ user_types.Tester.value.1 }}</span>
                         {% endif %}
                     </td>

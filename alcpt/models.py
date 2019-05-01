@@ -57,11 +57,12 @@ class User(AbstractBaseUser):
         return self.serial_number
 
     def has_perm(self, require_user_type: UserType):
-        if require_user_type is UserType.SystemManager:
-            return self.user_type & UserType.SystemManager.value[0]
-
-        else:
-            return (self.user_type & require_user_type.value[0]) > 0
+        # if require_user_type is UserType.SystemManager:
+        #     return self.user_type & UserType.SystemManager.value[0]
+        #
+        # else:
+        #     return (self.user_type & require_user_type.value[0]) > 0
+        return (self.user_type & require_user_type.value[0]) > 0
 
 
 class Department(models.Model):

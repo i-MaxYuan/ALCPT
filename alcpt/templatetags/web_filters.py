@@ -10,6 +10,11 @@ register = template.Library()
 
 @register.filter(name='has_perm')
 def has_perm(user: User, required_user_type: UserType):
+    return user.has_perm(UserType[required_user_type])
+
+
+@register.filter(name='has_perms')
+def has_perms(user: User, required_user_type: UserType):
     return user.has_perm(required_user_type)
 
 

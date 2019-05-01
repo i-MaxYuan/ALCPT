@@ -2,24 +2,22 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4e1b44ae-5c91-4afc-a12a-ddde1c778a29" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change beforePath="$PROJECT_DIR$/Online_Exam/urls.py" afterPath="$PROJECT_DIR$/Online_Exam/urls.py" />
+      <change beforePath="$PROJECT_DIR$/alcpt/exam.py" afterPath="$PROJECT_DIR$/alcpt/exam.py" />
+      <change beforePath="$PROJECT_DIR$/alcpt/managerfuncs/exammanager.py" afterPath="$PROJECT_DIR$/alcpt/managerfuncs/exammanager.py" />
       <change beforePath="$PROJECT_DIR$/alcpt/managerfuncs/questionmanager.py" afterPath="$PROJECT_DIR$/alcpt/managerfuncs/questionmanager.py" />
+      <change beforePath="$PROJECT_DIR$/alcpt/models.py" afterPath="$PROJECT_DIR$/alcpt/models.py" />
       <change beforePath="$PROJECT_DIR$/alcpt/question.py" afterPath="$PROJECT_DIR$/alcpt/question.py" />
+      <change beforePath="$PROJECT_DIR$/alcpt/templatetags/web_filters.py" afterPath="$PROJECT_DIR$/alcpt/templatetags/web_filters.py" />
       <change beforePath="$PROJECT_DIR$/db.sqlite3" afterPath="$PROJECT_DIR$/db.sqlite3" />
-      <change beforePath="$PROJECT_DIR$/templates/question/grammar/create.html" afterPath="$PROJECT_DIR$/templates/question/grammar/create.html" />
-      <change beforePath="$PROJECT_DIR$/templates/question/grammar/display.html" afterPath="$PROJECT_DIR$/templates/question/grammar/display.html" />
-      <change beforePath="$PROJECT_DIR$/templates/question/grammar/display_alone.html" afterPath="$PROJECT_DIR$/templates/question/grammar/display_alone.html" />
+      <change beforePath="$PROJECT_DIR$/templates/base.html" afterPath="$PROJECT_DIR$/templates/base.html" />
+      <change beforePath="$PROJECT_DIR$/templates/exam/create_testpaper.html" afterPath="$PROJECT_DIR$/templates/exam/create_testpaper.html" />
       <change beforePath="$PROJECT_DIR$/templates/question/list.html" afterPath="$PROJECT_DIR$/templates/question/list.html" />
-      <change beforePath="$PROJECT_DIR$/templates/question/paragraph_understanding/create.html" afterPath="$PROJECT_DIR$/templates/question/paragraph_understanding/create.html" />
-      <change beforePath="$PROJECT_DIR$/templates/question/paragraph_understanding/display.html" afterPath="$PROJECT_DIR$/templates/question/paragraph_understanding/display.html" />
-      <change beforePath="$PROJECT_DIR$/templates/question/paragraph_understanding/display_alone.html" afterPath="$PROJECT_DIR$/templates/question/paragraph_understanding/display_alone.html" />
-      <change beforePath="$PROJECT_DIR$/templates/question/phrase/create.html" afterPath="$PROJECT_DIR$/templates/question/phrase/create.html" />
-      <change beforePath="$PROJECT_DIR$/templates/question/phrase/display.html" afterPath="$PROJECT_DIR$/templates/question/phrase/display.html" />
-      <change beforePath="$PROJECT_DIR$/templates/question/phrase/display_alone.html" afterPath="$PROJECT_DIR$/templates/question/phrase/display_alone.html" />
-      <change beforePath="$PROJECT_DIR$/templates/question/qa/create.html" afterPath="$PROJECT_DIR$/templates/question/qa/create.html" />
       <change beforePath="$PROJECT_DIR$/templates/question/review.html" afterPath="$PROJECT_DIR$/templates/question/review.html" />
-      <change beforePath="$PROJECT_DIR$/templates/question/short_conversation/create.html" afterPath="$PROJECT_DIR$/templates/question/short_conversation/create.html" />
-      <change beforePath="$PROJECT_DIR$/templates/question/short_conversation/display.html" afterPath="$PROJECT_DIR$/templates/question/short_conversation/display.html" />
-      <change beforePath="$PROJECT_DIR$/templates/question/short_conversation/display_alone.html" afterPath="$PROJECT_DIR$/templates/question/short_conversation/display_alone.html" />
+      <change beforePath="$PROJECT_DIR$/templates/question/select_type.html" afterPath="$PROJECT_DIR$/templates/question/select_type.html" />
+      <change beforePath="$PROJECT_DIR$/templates/user/edit.html" afterPath="$PROJECT_DIR$/templates/user/edit.html" />
+      <change beforePath="$PROJECT_DIR$/templates/user/list.html" afterPath="$PROJECT_DIR$/templates/user/list.html" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -68,36 +66,117 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="urls.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/Online_Exam/urls.py">
+      <file leaf-file-name="question.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/alcpt/question.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="158">
-              <caret line="12" column="31" lean-forward="false" selection-start-line="12" selection-start-column="31" selection-end-line="12" selection-end-column="31" />
+            <state relative-caret-position="225">
+              <caret line="366" column="10" lean-forward="true" selection-start-line="366" selection-start-column="10" selection-end-line="366" selection-end-column="10" />
+              <folding>
+                <element signature="e#0#11#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="base.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/templates/base.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="234">
+              <caret line="226" column="40" lean-forward="false" selection-start-line="226" selection-start-column="40" selection-end-line="226" selection-end-column="40" />
+              <folding>
+                <element signature="n#style#0;n#a#0;n#li#0;n#ul#0;n#div#1;n#div#0;n#nav#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#a#0;n#li#1;n#ul#0;n#div#1;n#div#0;n#nav#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#a#0;n#li#3;n#ul#0;n#div#1;n#div#0;n#nav#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="edit.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/templates/user/edit.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="152">
+              <caret line="83" column="39" lean-forward="false" selection-start-line="83" selection-start-column="39" selection-end-line="83" selection-end-column="39" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="exam.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/alcpt/exam.py">
+      <file leaf-file-name="system.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/alcpt/system.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state relative-caret-position="364">
+              <caret line="63" column="30" lean-forward="true" selection-start-line="63" selection-start-column="30" selection-end-line="63" selection-end-column="42" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="systemmanager.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/alcpt/managerfuncs/systemmanager.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="294">
+              <caret line="29" column="0" lean-forward="true" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="list.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/templates/user/list.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="63">
+              <caret line="107" column="30" lean-forward="true" selection-start-line="107" selection-start-column="30" selection-end-line="107" selection-end-column="30" />
               <folding>
-                <element signature="e#0#11#0" expanded="true" />
+                <element signature="n#style#0;n#a#2;n#div#0;n#div#0;n#section#0;n#section#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#1;n#div#0;n#section#0;n#section#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#h1#0;n#section#0;n#section#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#a#0;n#section#1;n#section#0;n#!!top" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="exammanager.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/alcpt/managerfuncs/exammanager.py">
+      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/alcpt/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state relative-caret-position="94">
+              <caret line="34" column="0" lean-forward="true" selection-start-line="34" selection-start-column="0" selection-end-line="34" selection-end-column="0" />
               <folding>
-                <element signature="e#0#11#0" expanded="true" />
+                <element signature="e#0#9#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="decorators.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/alcpt/decorators.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="140">
+              <caret line="12" column="59" lean-forward="false" selection-start-line="12" selection-start-column="59" selection-end-line="12" selection-end-column="59" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="web_filters.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/alcpt/templatetags/web_filters.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="134">
+              <caret line="11" column="12" lean-forward="true" selection-start-line="11" selection-start-column="12" selection-end-line="11" selection-end-column="12" />
+              <folding>
+                <element signature="e#0#27#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="models.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/alcpt/models.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="416">
+              <caret line="63" column="64" lean-forward="false" selection-start-line="63" selection-start-column="64" selection-end-line="63" selection-end-column="64" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -131,6 +210,8 @@
       <find>name</find>
       <find>options</find>
       <find>type</find>
+      <find>index</find>
+      <find>has_perm</find>
     </findStrings>
     <replaceStrings>
       <replace>==</replace>
@@ -139,6 +220,7 @@
       <replace>SystemManager</replace>
       <replace>field_value</replace>
       <replace>user_type</replace>
+      <replace>has_perms</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -148,7 +230,6 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/alcpt/urls.py" />
-        <option value="$PROJECT_DIR$/alcpt/decorators.py" />
         <option value="$PROJECT_DIR$/Online_Exam/settings.py" />
         <option value="$PROJECT_DIR$/alcpt/middleware.py" />
         <option value="$PROJECT_DIR$/templates/templatetags/web_filters.py" />
@@ -161,22 +242,13 @@
         <option value="$PROJECT_DIR$/templates/login_base.html" />
         <option value="$PROJECT_DIR$/alcpt/practice.py" />
         <option value="$PROJECT_DIR$/alcpt/managerfuncs/practice.py" />
-        <option value="$PROJECT_DIR$/alcpt/managerfuncs/exammanager.py" />
-        <option value="$PROJECT_DIR$/alcpt/exam.py" />
         <option value="$PROJECT_DIR$/alcpt/views.py" />
-        <option value="$PROJECT_DIR$/alcpt/templatetags/web_filters.py" />
         <option value="$PROJECT_DIR$/alcpt/managerfuncs/systemmanager.py" />
-        <option value="$PROJECT_DIR$/templates/user/edit.html" />
         <option value="$PROJECT_DIR$/alcpt/definitions.py" />
-        <option value="$PROJECT_DIR$/templates/user/list.html" />
         <option value="$PROJECT_DIR$/alcpt/systemmanage.py" />
         <option value="$PROJECT_DIR$/templates/index.html" />
-        <option value="$PROJECT_DIR$/Online_Exam/urls.py" />
-        <option value="$PROJECT_DIR$/alcpt/models.py" />
-        <option value="$PROJECT_DIR$/templates/question/select_type.html" />
         <option value="$PROJECT_DIR$/templates/question/qa/display.html" />
         <option value="$PROJECT_DIR$/templates/question/qa/display_alone.html" />
-        <option value="$PROJECT_DIR$/templates/base.html" />
         <option value="$PROJECT_DIR$/templates/question/short_conversation/display.html" />
         <option value="$PROJECT_DIR$/templates/question/short_conversation/display_alone.html" />
         <option value="$PROJECT_DIR$/templates/question/grammar/display.html" />
@@ -185,15 +257,27 @@
         <option value="$PROJECT_DIR$/templates/question/phrase/display_alone.html" />
         <option value="$PROJECT_DIR$/templates/question/paragraph_understanding/display.html" />
         <option value="$PROJECT_DIR$/templates/question/paragraph_understanding/display_alone.html" />
-        <option value="$PROJECT_DIR$/templates/question/review.html" />
-        <option value="$PROJECT_DIR$/alcpt/managerfuncs/questionmanager.py" />
-        <option value="$PROJECT_DIR$/templates/question/list.html" />
-        <option value="$PROJECT_DIR$/alcpt/question.py" />
         <option value="$PROJECT_DIR$/templates/question/qa/create.html" />
         <option value="$PROJECT_DIR$/templates/question/short_conversation/create.html" />
         <option value="$PROJECT_DIR$/templates/question/phrase/create.html" />
         <option value="$PROJECT_DIR$/templates/question/paragraph_understanding/create.html" />
         <option value="$PROJECT_DIR$/templates/question/grammar/create.html" />
+        <option value="$PROJECT_DIR$/templates/exam/create_testpaper.html" />
+        <option value="$PROJECT_DIR$/alcpt/exam.py" />
+        <option value="$PROJECT_DIR$/alcpt/managerfuncs/exammanager.py" />
+        <option value="$PROJECT_DIR$/Online_Exam/urls.py" />
+        <option value="$PROJECT_DIR$/templates/question/review.html" />
+        <option value="$PROJECT_DIR$/alcpt/managerfuncs/questionmanager.py" />
+        <option value="$PROJECT_DIR$/templates/question/list.html" />
+        <option value="$PROJECT_DIR$/templates/question/select_type.html" />
+        <option value="$PROJECT_DIR$/alcpt/question.py" />
+        <option value="$PROJECT_DIR$/alcpt/models.py" />
+        <option value="$PROJECT_DIR$/alcpt/decorators.py" />
+        <option value="$PROJECT_DIR$/alcpt/system.py" />
+        <option value="$PROJECT_DIR$/templates/base.html" />
+        <option value="$PROJECT_DIR$/templates/user/edit.html" />
+        <option value="$PROJECT_DIR$/templates/user/list.html" />
+        <option value="$PROJECT_DIR$/alcpt/templatetags/web_filters.py" />
       </list>
     </option>
   </component>
@@ -204,7 +288,7 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds" fullScreen="true">
-    <option name="y" value="24" />
+    <option name="y" value="23" />
     <option name="width" value="714" />
     <option name="height" value="877" />
   </component>
@@ -234,7 +318,30 @@
             <path>
               <item name="Online_Exam" type="b2602c69:ProjectViewProjectNode" />
               <item name="Online_Exam" type="462c0819:PsiDirectoryNode" />
+              <item name="alcpt" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Online_Exam" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Online_Exam" type="462c0819:PsiDirectoryNode" />
+              <item name="alcpt" type="462c0819:PsiDirectoryNode" />
+              <item name="managerfuncs" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Online_Exam" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Online_Exam" type="462c0819:PsiDirectoryNode" />
               <item name="templates" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Online_Exam" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Online_Exam" type="462c0819:PsiDirectoryNode" />
+              <item name="templates" type="462c0819:PsiDirectoryNode" />
+              <item name="question" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Online_Exam" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Online_Exam" type="462c0819:PsiDirectoryNode" />
+              <item name="templates" type="462c0819:PsiDirectoryNode" />
+              <item name="user" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -256,10 +363,10 @@
       <recent name="$PROJECT_DIR$/alcpt/static/scripts" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/templates/question" />
       <recent name="$PROJECT_DIR$/alcpt/static/scripts" />
       <recent name="$PROJECT_DIR$/templates" />
       <recent name="$PROJECT_DIR$/templates/exam" />
-      <recent name="$PROJECT_DIR$/templates/question" />
       <recent name="$PROJECT_DIR$/templates/user" />
     </key>
   </component>
@@ -320,16 +427,16 @@
     <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
-      <window_info id="manage.py@Online_Exam" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31801692" sideWeight="0.49487555" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="manage.py@Online_Exam" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2986699" sideWeight="0.49487555" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.35989717" sideWeight="0.50512445" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32904884" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33933163" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32889965" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33857316" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32904884" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21459228" sideWeight="0.5" order="1" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.43919885" sideWeight="0.5" order="1" side_tool="false" content_ui="combo" />
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.6702432" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3277635" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32769045" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="SciView" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32904148" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
@@ -344,7 +451,7 @@
     <layout-to-restore>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="manage.py@Online_Exam" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.31801692" sideWeight="0.49487555" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="manage.py@Online_Exam" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2986699" sideWeight="0.49487555" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.35989717" sideWeight="0.50512445" order="1" side_tool="true" content_ui="tabs" />
@@ -353,11 +460,11 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32904884" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33933163" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32904884" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21459228" sideWeight="0.5" order="1" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.43919885" sideWeight="0.5" order="1" side_tool="false" content_ui="combo" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="combo" />
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.6702432" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3277635" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32769045" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="SciView" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32904148" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -411,34 +518,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="das://table:/506d3b2e/a9e3b718-505f-4e96-a810-182b2961b25e/main.alcpt_department">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="das://table:/506d3b2e/a9e3b718-505f-4e96-a810-182b2961b25e/main.alcpt_department">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="das://table:/506d3b2e/a9e3b718-505f-4e96-a810-182b2961b25e/main.alcpt_department">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="das://table:/506d3b2e/a9e3b718-505f-4e96-a810-182b2961b25e/main.alcpt_department">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
     <entry file="das://table:/506d3b2e/a9e3b718-505f-4e96-a810-182b2961b25e/main.alcpt_squadron">
       <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
         <state>
@@ -446,34 +525,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/alcpt/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="378">
-          <caret line="35" column="22" lean-forward="true" selection-start-line="35" selection-start-column="22" selection-end-line="36" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/alcpt/middleware.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="70">
           <caret line="8" column="28" lean-forward="false" selection-start-line="8" selection-start-column="28" selection-end-line="8" selection-end-column="28" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/user/list.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="379">
-          <caret line="110" column="57" lean-forward="false" selection-start-line="110" selection-start-column="57" selection-end-line="110" selection-end-column="57" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/alcpt/managerfuncs/systemmanager.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="512">
-          <caret line="48" column="31" lean-forward="false" selection-start-line="48" selection-start-column="31" selection-end-line="48" selection-end-column="31" />
           <folding />
         </state>
       </provider>
@@ -494,41 +549,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/alcpt/system.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
-          <caret line="170" column="23" lean-forward="false" selection-start-line="170" selection-start-column="11" selection-end-line="170" selection-end-column="23" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="112">
-          <caret line="8" column="19" lean-forward="false" selection-start-line="8" selection-start-column="19" selection-end-line="8" selection-end-column="19" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="das://table:/506d3b2e/a9e3b718-505f-4e96-a810-182b2961b25e/main.alcpt_user">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
     <entry file="das://table:/506d3b2e/a9e3b718-505f-4e96-a810-182b2961b25e/main.alcpt_student">
       <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
         <state>
           <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/alcpt/definitions.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="84">
-          <caret line="6" column="33" lean-forward="false" selection-start-line="6" selection-start-column="33" selection-end-line="6" selection-end-column="33" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -558,26 +582,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/question/select_type.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="14">
-          <caret line="1" column="22" lean-forward="false" selection-start-line="1" selection-start-column="22" selection-end-line="1" selection-end-column="22" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/templates/details.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/user/edit.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="28">
-          <caret line="2" column="22" lean-forward="true" selection-start-line="2" selection-start-column="22" selection-end-line="2" selection-end-column="22" />
           <folding />
         </state>
       </provider>
@@ -670,65 +678,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/alcpt/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="279">
-          <caret line="127" column="59" lean-forward="false" selection-start-line="127" selection-start-column="59" selection-end-line="127" selection-end-column="59" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/question/review.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-70">
-          <caret line="43" column="92" lean-forward="false" selection-start-line="43" selection-start-column="92" selection-end-line="43" selection-end-column="92" />
-          <folding>
-            <element signature="n#style#0;n#section#0;n#!!top" expanded="false" />
-            <element signature="n#style#0;n#a#2;n#div#0;n#div#0;n#section#0;n#!!top" expanded="false" />
-            <element signature="n#style#0;n#a#4;n#div#0;n#div#0;n#section#0;n#!!top" expanded="false" />
-            <element signature="n#style#0;n#div#1;n#div#0;n#section#0;n#!!top" expanded="false" />
-            <element signature="n#style#0;n#h1#0;n#section#0;n#!!top" expanded="false" />
-            <element signature="n#style#0;n#table#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/base.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="129">
-          <caret line="244" column="30" lean-forward="true" selection-start-line="244" selection-start-column="30" selection-end-line="244" selection-end-column="30" />
-          <folding>
-            <element signature="n#style#0;n#a#0;n#li#2;n#ul#0;n#div#1;n#div#0;n#nav#0;n#body#0;n#html#0;n#!!top" expanded="false" />
-            <element signature="n#style#0;n#a#0;n#li#0;n#ul#0;n#li#2;n#ul#0;n#div#1;n#div#0;n#nav#0;n#body#0;n#html#0;n#!!top" expanded="false" />
-            <element signature="n#style#0;n#a#0;n#li#1;n#ul#0;n#li#2;n#ul#0;n#div#1;n#div#0;n#nav#0;n#body#0;n#html#0;n#!!top" expanded="false" />
-            <element signature="n#style#0;n#a#0;n#li#2;n#ul#0;n#li#2;n#ul#0;n#div#1;n#div#0;n#nav#0;n#body#0;n#html#0;n#!!top" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/alcpt/templatetags/web_filters.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="994">
-          <caret line="76" column="44" lean-forward="false" selection-start-line="76" selection-start-column="44" selection-end-line="76" selection-end-column="44" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/question/list.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="251">
-          <caret line="56" column="39" lean-forward="false" selection-start-line="56" selection-start-column="35" selection-end-line="56" selection-end-column="39" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="das://table:/506d3b2e/a9e3b718-505f-4e96-a810-182b2961b25e/main.alcpt_question">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/templates/question/grammar/create.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="454">
@@ -742,7 +691,7 @@
         <state relative-caret-position="690">
           <caret line="51" column="63" lean-forward="false" selection-start-line="51" selection-start-column="63" selection-end-line="51" selection-end-column="63" />
           <folding>
-            <element signature="n#style#0;n#h3#0;n#div#0;n#section#0;n#section#0;n#form#0;n#section#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#h3#0;n#div#0;n#section#0;n#section#0;n#form#0;n#section#0;n#!!top" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -763,36 +712,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/question/qa/create.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="219">
-          <caret line="57" column="63" lean-forward="false" selection-start-line="57" selection-start-column="63" selection-end-line="57" selection-end-column="63" />
-          <folding>
-            <element signature="n#style#0;n#h3#0;n#div#0;n#section#0;n#section#0;n#form#0;n#section#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/alcpt/question.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="287">
-          <caret line="306" column="31" lean-forward="false" selection-start-line="306" selection-start-column="31" selection-end-line="306" selection-end-column="31" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/alcpt/managerfuncs/questionmanager.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="556">
-          <caret line="91" column="43" lean-forward="false" selection-start-line="91" selection-start-column="43" selection-end-line="91" selection-end-column="43" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/alcpt/exceptions.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -801,31 +720,237 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/alcpt/exam.py">
+    <entry file="file://$PROJECT_DIR$/templates/exam_create.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Online_Exam/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="337">
+          <caret line="41" column="50" lean-forward="false" selection-start-line="41" selection-start-column="50" selection-end-line="41" selection-end-column="50" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/alcpt/exam.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="41" column="5" lean-forward="true" selection-start-line="41" selection-start-column="5" selection-end-line="41" selection-end-column="5" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/exam/create_testpaper.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1133">
+          <caret line="152" column="51" lean-forward="true" selection-start-line="152" selection-start-column="51" selection-end-line="152" selection-end-column="51" />
+          <folding>
+            <element signature="n#style#0;n#button#0;n#section#0;n#form#0;n#section#0;n#!!top" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/alcpt/managerfuncs/exammanager.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        <state relative-caret-position="381">
+          <caret line="71" column="20" lean-forward="false" selection-start-line="71" selection-start-column="20" selection-end-line="71" selection-end-column="20" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Online_Exam/urls.py">
+    <entry file="file://$PROJECT_DIR$/templates/question/qa/create.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="158">
-          <caret line="12" column="31" lean-forward="false" selection-start-line="12" selection-start-column="31" selection-end-line="12" selection-end-column="31" />
+        <state relative-caret-position="-406">
+          <caret line="3" column="13" lean-forward="true" selection-start-line="3" selection-start-column="13" selection-end-line="3" selection-end-column="47" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/question/select_type.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="574">
+          <caret line="41" column="34" lean-forward="false" selection-start-line="41" selection-start-column="34" selection-end-line="41" selection-end-column="34" />
+          <folding>
+            <element signature="n#style#0;n#a#2;n#div#0;n#div#0;n#section#0;n#section#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/506d3b2e/a9e3b718-505f-4e96-a810-182b2961b25e/main.alcpt_question">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/login.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="40" column="99" lean-forward="false" selection-start-line="40" selection-start-column="94" selection-end-line="40" selection-end-column="99" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/question/review.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="248">
+          <caret line="42" column="135" lean-forward="false" selection-start-line="42" selection-start-column="135" selection-end-line="42" selection-end-column="135" />
+          <folding>
+            <element signature="e#868#895#0#HTML" expanded="true" />
+            <element signature="e#931#955#0#HTML" expanded="true" />
+            <element signature="e#1246#1276#0#HTML" expanded="true" />
+            <element signature="e#2250#2280#0#HTML" expanded="true" />
+            <element signature="e#2459#2489#0#HTML" expanded="true" />
+            <element signature="e#2828#2876#0#HTML" expanded="true" />
+            <element signature="e#2963#3032#0#HTML" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/506d3b2e/a9e3b718-505f-4e96-a810-182b2961b25e/main.alcpt_user">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/alcpt/managerfuncs/questionmanager.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="266">
+          <caret line="19" column="21" lean-forward="true" selection-start-line="19" selection-start-column="21" selection-end-line="19" selection-end-column="21" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="490">
+          <caret line="35" column="47" lean-forward="true" selection-start-line="35" selection-start-column="47" selection-end-line="35" selection-end-column="47" />
+          <folding>
+            <element signature="n#style#0;n#table#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#tr#1;n#table#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/question/list.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="560">
+          <caret line="40" column="44" lean-forward="false" selection-start-line="40" selection-start-column="44" selection-end-line="40" selection-end-column="44" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/alcpt/decorators.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="140">
+          <caret line="12" column="59" lean-forward="false" selection-start-line="12" selection-start-column="59" selection-end-line="12" selection-end-column="59" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/alcpt/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="416">
+          <caret line="63" column="64" lean-forward="false" selection-start-line="63" selection-start-column="64" selection-end-line="63" selection-end-column="64" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/alcpt/definitions.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="79">
+          <caret line="6" column="33" lean-forward="false" selection-start-line="6" selection-start-column="33" selection-end-line="6" selection-end-column="33" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/alcpt/question.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="366" column="10" lean-forward="true" selection-start-line="366" selection-start-column="10" selection-end-line="366" selection-end-column="10" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/alcpt/managerfuncs/systemmanager.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="294">
+          <caret line="29" column="0" lean-forward="true" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/alcpt/system.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="364">
+          <caret line="63" column="30" lean-forward="true" selection-start-line="63" selection-start-column="30" selection-end-line="63" selection-end-column="42" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/alcpt/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="94">
+          <caret line="34" column="0" lean-forward="true" selection-start-line="34" selection-start-column="0" selection-end-line="34" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/base.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="234">
+          <caret line="226" column="40" lean-forward="false" selection-start-line="226" selection-start-column="40" selection-end-line="226" selection-end-column="40" />
+          <folding>
+            <element signature="n#style#0;n#a#0;n#li#0;n#ul#0;n#div#1;n#div#0;n#nav#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#a#0;n#li#1;n#ul#0;n#div#1;n#div#0;n#nav#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#a#0;n#li#3;n#ul#0;n#div#1;n#div#0;n#nav#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/user/edit.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="152">
+          <caret line="83" column="39" lean-forward="false" selection-start-line="83" selection-start-column="39" selection-end-line="83" selection-end-column="39" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/user/list.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="63">
+          <caret line="107" column="30" lean-forward="true" selection-start-line="107" selection-start-column="30" selection-end-line="107" selection-end-column="30" />
+          <folding>
+            <element signature="n#style#0;n#a#2;n#div#0;n#div#0;n#section#0;n#section#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#1;n#div#0;n#section#0;n#section#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#h1#0;n#section#0;n#section#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#a#0;n#section#1;n#section#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/alcpt/templatetags/web_filters.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="134">
+          <caret line="11" column="12" lean-forward="true" selection-start-line="11" selection-start-column="12" selection-end-line="11" selection-end-column="12" />
+          <folding>
+            <element signature="e#0#27#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

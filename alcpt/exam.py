@@ -144,6 +144,12 @@ def edit_exam(request, exam_id: int):
 
 
 @permission_check(UserType.ExamManager)
+@require_http_methods(["GET"])
+def testerpaper_index(request):
+    return render(request, 'exam/test')
+
+
+@permission_check(UserType.ExamManager)
 @require_http_methods(["GET", "POST"])
 def create_paper(request):
     if request.method == 'POST':
