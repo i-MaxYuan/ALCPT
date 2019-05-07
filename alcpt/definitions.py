@@ -27,7 +27,7 @@ class QuestionTypeCounts(Enum):
 
 
 class ExamType(Enum):
-    Exam = (1, '模擬考')
-    Practice = (2, '模擬鑑測')
+    Exam = (1, '模擬鑑測')
+    Practice = (2, '綜合練習')
     Listening = (3, '聽力練習')
     Reading = (4, '閱讀練習')

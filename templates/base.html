@@ -236,10 +236,10 @@ ul.bar li ul li a:hover { color: #48dbfb;}
                 {% if request.user|has_perm:'ExamManager' %}
                 <li><a style=" text-decoration:none;" href="/exam">考試管理員</a>
                     <ul>
+                        <li><a href="/exam/testpaper">考卷列表</a> </li>
+                        <li><a href="/exam/testpaper/create">管理考卷</a> </li>
                         <li><a href="/exam">考試列表</a> </li>
-                        <li><a href="/exam/new">管理考卷</a> </li>
-                        <li><a href="/exam/create_exam">管理考試</a> </li>
-                        <li><a href="/exam/announcement">公告考試</a> </li>
+                        <li><a href="/exam/create">管理考試</a> </li>
                     </ul>
                 </li>
                 {% endif %}
@@ -252,11 +252,11 @@ ul.bar li ul li a:hover { color: #48dbfb;}
                 </li>
                 {% endif %}
                 {% if request.user|has_perm:'QuestionOperator' %}
-                <li><a style=" text-decoration:none;" href="/question">題庫操作員</a>
+                <li><a style=" text-decoration:none;" href="/question_operator">題庫操作員</a>
                     <ul>
-                        <li><a style=" text-decoration:none;" href="/question/create">新增試題</a> </li>
+                        <li><a style=" text-decoration:none;" href="/question_operator/create">新增試題</a> </li>
 
-                        <li><a style=" text-decoration:none;" href="/question">查看試題</a> </li>
+                        <li><a style=" text-decoration:none;" href="/question_operator">查看試題</a> </li>
                     </ul>
                 </li>
                 {% endif %}

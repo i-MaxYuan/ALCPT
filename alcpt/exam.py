@@ -5,7 +5,7 @@ from random import sample
 
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.views.decorators.http import require_http_methods
 from django.utils import timezone
 
@@ -13,7 +13,7 @@ from .models import Exam, TestPaper, Question
 from .exceptions import *
 from .decorators import permission_check
 from .definitions import UserType, QuestionTypeCounts, QuestionType, ExamType
-from .managerfuncs import exammanager
+from .managerfuncs import exammanager, questionmanager
 
 
 @permission_check(UserType.ExamManager)
@@ -25,15 +25,11 @@ def index(request):
     except ValueError:
         page = 0
 
-    exams = Exam.objects.filter(type=ExamType.Exam.value[0]).order_by('-create_time')
+    keywords = {
+        'name': request.GET.get('name', ''),
+    }
 
-    for exam in exams:
-        exam.start_time = timezone.localtime(exam.start_time)
-
-    num_pages = ceil(len(exams) / 10)
-
-    if page and page >= 0:
-        exams = exams[page * 10: page * 10 + 10]
+    num_pages, exams = exammanager.query_exams(**keywords, page=page)
 
     data = {
         'exam': exams,
@@ -74,18 +70,18 @@ def create_exam(request):
         except TypeError:
             raise ArgumentError('Missing duration')
 
-        existence = Exam.objects.get(name=name)
+        try:
+            if Exam.objects.get(name=name):
+                raise MultipleObjectsReturned('Question has existed.')
 
-        if existence:
-            messages.error('The Exam\'s name has been used.Please change the name.')
-            return render(request, 'exam/exam_create.html')
+        except ObjectDoesNotExist:
+            pass
 
-        else:
-            exam = Exam.objects.create(name=name,
-                                       type=ExamType.Exam.value[0],
-                                       testpaper=testpaper,
-                                       start_time=start_time,
-                                       duration=duration)
+        exam = Exam.objects.create(name=name,
+                                   type=ExamType.Exam.value[0],
+                                   testpaper=testpaper,
+                                   start_time=start_time,
+                                   duration=duration)
 
         return redirect('/exam/{}/edit'.format(exam.id))
 
@@ -118,7 +114,7 @@ def edit_exam(request, exam_id: int):
             duration = request.POST.get('duration')
 
         except TypeError:
-            raise ArgumentError('Missing duration')
+            raise ArgumentError('Missing duration.')
 
         except ValueError:
             raise IllegalArgumentError('The "duration" must be an integer.')
@@ -127,7 +123,7 @@ def edit_exam(request, exam_id: int):
             testpaper = TestPaper.objects.get(name=request.POST.get('testpaper'))
 
         except TypeError:
-            raise ArgumentError('Missing duration')
+            raise ArgumentError('Missing testpaper.')
 
         exam.name = name
         exam.start_time = start_time
@@ -140,158 +136,22 @@ def edit_exam(request, exam_id: int):
         return redirect('/exam')
 
     else:
-        return render(request, 'manager/exam/edit_exam.html', locals())
+        return render(request, 'exam/exam_edit.html', locals())
 
 
 @permission_check(UserType.ExamManager)
 @require_http_methods(["GET"])
-def testerpaper_index(request):
-    return render(request, 'exam/test')
-
-
-@permission_check(UserType.ExamManager)
-@require_http_methods(["GET", "POST"])
-def create_paper(request):
-    if request.method == 'POST':
-        name = request.POST.get('name')
-
-        try:
-            questions = request.POST.get('questions')
-
-        except TypeError:
-            raise ArgumentError('No any question in testpaper')
-
-        existence = TestPaper.objects.get(name=name)
-
-        if existence:
-            messages.error('The Exam\'s name has been used.Please change the name.')
-            return render(request, 'paper_create.html')
-
-        else:
-            testpaper = TestPaper.objects.create(name=name,
-                                                 questions=questions)
-
-        return redirect('/exam/{}/paper_edit'.format(testpaper.id))
-
-    else:
-        return render(request, 'manager/exam/create_paper.html')
-
-
-@permission_check(UserType.ExamManager)
-@require_http_methods(["GET", "POST"])
-def pick_question(request, testpaper_id: int, question_type: int):
+def delete_exam(request, exam_id):
     try:
-        testpaper = TestPaper.objects.get(id=testpaper_id)
-        testpaper.questions = json.loads(testpaper.questions)
+        exam = Exam.objects.get(id=exam_id)
 
     except ObjectDoesNotExist:
-        raise ObjectNotFoundError('Cannot find testpaper {}'.format(testpaper_id))
+        raise ResourceNotFoundError('Cannot find question id = {}.'.format(exam_id))
 
-    selected_questions = testpaper.question_set.filter(question_type=question_type)
-    reach_limit = selected_questions.count() >= QuestionTypeCounts.Exam.value[0][question_type - 1]
+    exam.public = False
+    exam.last_updated_by = request.user
+    exam.save()
 
-    if request.method == 'POST':
-        try:
-            question = Question.objects.get(id=request.POST.get('question_id'), enable=True)
+    messages.success(request, 'Delete exam name={}.'.format(exam.name))
 
-        except TypeError:
-            raise ArgumentError('Missing question_id')
-
-        except ValueError:
-            raise IllegalArgumentError('question_id is not int')
-
-        except ObjectDoesNotExist:
-            raise ObjectNotFoundError('Cannot find question')
-
-        if question.question_type != question_type:
-            raise IllegalArgumentError('question_type does match category.')
-
-        try:
-            testpaper.question_set.get(id=question.id)
-            testpaper.question_set.remove(question)
-            messages.success('Remove question id={} sucessfully.'.format(question.id))
-
-        except ObjectDoesNotExist:
-            if reach_limit:
-                raise IllegalArgumentError('Reach the limit num of this type:{} in this exam.'.format(question.question_type))
-
-            testpaper.qusetion_set.add(question)
-            messages.success(request, 'Select question id={} sucessfully.'.format(question.id))
-
-    selected_questions = testpaper.question_set.filter(question_type=question_type)
-    reach_limit = selected_questions.count() >= QuestionTypeCounts.Exam.value[0][question_type - 1]
-
-    testpaper.enable = testpaper.question_set.count() >= sum(QuestionTypeCounts.Exam.value[0])
-    testpaper.save()
-
-    request.DATA = (request.GET if request.method == 'GET' else request.POST)
-
-    try:
-        page = int(request.DATA.get('page', 0))
-
-    except ValueError:
-        page = 0
-
-    try:
-        status = int(request.DATA.get('status', 0))
-
-    except ValueError:
-        status = 0
-
-    exam = testpaper if status is 1 else None
-
-    if exam:
-        questions = exam.question_set
-
-    else:
-        questions = Question.objects.filter(question_type=question_type)
-
-    if page >= 0:
-        num_pages = ceil(questions.count() / 10)
-        questions = questions[page * 10: page * 10 + 10]
-
-    else:
-        num_pages = 1
-
-    for question in questions:
-        question.selected = question in selected_questions
-        question.option = json.loads(question.option)
-
-    data = {
-        'testpaper': testpaper,
-        'question_type': question_type,
-        'reach_limit': reach_limit,
-        'page': page,
-        'page_range': range(num_pages),
-    }
-
-    return render(request, 'manager/exam/pick_question.html', data)
-
-
-@permission_check(UserType.ExamManager)
-@require_http_methods(["GET"])
-def auto_pick_question(request, testpaper_id: int, question_type: int):
-    try:
-        testpaper = TestPaper.objects.get(id=testpaper_id)
-
-    except ObjectDoesNotExist:
-        raise ObjectNotFoundError('Cannot find testpaper {}'.format(testpaper_id))
-
-    for q_type in QuestionType.__members__.values():
-        if q_type.value[0] == question_type:
-            question_type = q_type
-
-    if type(question_type) is int:
-        raise IllegalArgumentError('question_type does match category.')
-
-    selected_num = exammanager.random_select(types_counts=QuestionTypeCounts.Exam.value[0],
-                                             question_type=question_type,
-                                             testpaper=testpaper)
-
-    if selected_num:
-        messages.success(request, 'Auto picked questions successfully.')
-
-    else:
-        messages.warning(request, 'Auto pick failed.')
-
-    return redirect('manager/exam/{}/edit'.format(testpaper_id))
+    return redirect(request.META.get('HTTP_REFERER', '/exam'))

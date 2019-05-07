@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load web_filters %}
 {% block content %}
 <section class="row">
     <section class="col mb-3">
@@ -15,8 +15,13 @@
     </section>
 
     <section class="col text-center pt-3">
+        {% if request.user|has_perm:'QuestionManager' %}
         <a class="btn btn-secondary" href="/question">返回題目列表</a>
         <a class="btn btn-primary" href="/question/create">繼續新增題目</a>
+        {% else %}
+        <a class="btn btn-secondary" href="/question_operator">返回題目列表</a>
+        <a class="btn btn-primary" href="/question_operator/create">繼續新增題目</a>
+        {% endif %}
     </section>
 </section>
 {% endblock %}

@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load staticfiles %}
+{% load web_filters %}
 {% block scripts %}
 <script src="{% static "scripts/question.js" %}" defer></script>
 <script type="text/javascript" defer>
@@ -27,8 +28,11 @@ $(function() {
     <section class="col mb-3">
         <h1 style="display: inline;">{% if question %}編輯{% else %}新增{% endif %}題目：閱讀／名詞片語</h1>
     </section>
-
+    {% if request.user|has_perm:'QuestionManager' %}
     <form class="col-12 row mt-3" enctype="multipart/form-data" action="/question/{% if question %}{{ question.id }}/edit{% else %}create{% endif %}" method="post" autocomplete="off">
+    {% else %}
+    <form class="col-12 row mt-3" enctype="multipart/form-data" action="/question_operator/{% if question %}{{ question.id }}/edit{% else %}create{% endif %}" method="post" autocomplete="off">
+    {% endif %}
         {% csrf_token %}
 
         {% if question %}
@@ -44,19 +48,19 @@ $(function() {
             <small class="form-text text-muted">底線部分請用 &lt;u&gt;需要標示的文字&lt;/u&gt; 包起來，結果請見下方預覽。</small>
         </div>
 
+        <h3 class="col-12"><i class="fa  fa-tasks fa-fw mb-2"></i> 難易度</h3>
+        <div class="col-12 py-2 form-group">
+            <select class="custom-select" name="difficult">
+                <option value="1" {% if question.difficult is 1 %} selected {% endif %}>簡單</option>
+                <option value="2" {% if question.difficult is 2 %} selected {% endif %}>中等</option>
+                <option value="3" {% if question.difficult is 3 %} selected {% endif %}>困難</option>
+            </select>
+        </div>
+
         <section class="col-12 py-2">
             <section class="row align-items-center">
                 <div class="col-auto mr-auto">
                     <h3 style="display: inline;"><i class="fa fa-th-list fa-fw"></i> 編輯選項</h3>
-                </div>
-
-                        <h3 class="col-12"><i class="fa  fa-tasks fa-fw mb-2"></i> 難易度</h3>
-                <div class="col-12 py-2 form-group">
-                    <select class="custom-select" name="difficult">
-                        <option value="1" {% if question.difficult is 1 %} selected {% endif %}>簡單</option>
-                        <option value="2" {% if question.difficult is 2 %} selected {% endif %}>中等</option>
-                        <option value="3" {% if question.difficult is 3 %} selected {% endif %}>困難</option>
-                    </select>
                 </div>
 
                 <div class="col-auto">

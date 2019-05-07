@@ -16,7 +16,7 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
-from alcpt import views, question, exam, scores, system
+from alcpt import views, question, exam, scores, system, testpaper, group
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
@@ -36,10 +36,38 @@ urlpatterns = [
         ]))
     ])),
 
+    url(r'^question_operator$', question.operator_index),
+    url(r'^question_operator/', include([
+        url(r'^create$', question.operator_create_question),
+        url(r'^(?P<question_id>[0-9]+)/', include([
+            url(r'^edit$', question.operator_edit_question),
+            url(r'^delete$', question.operator_delete_question),
+        ]))
+    ])),
+
     url(r'^exam$', exam.index),
     url(r'^exam/', include([
         url(r'^create$', exam.create_exam),
-        url(r'^testpaper$', exam.testerpaper_index)
+        url(r'^(?P<exam_id>[0-9]+)/', include([
+            url(r'^edit$', exam.edit_exam),
+            url(r'^delete$', exam.delete_exam)
+            ])),
+        url(r'^testpaper$', testpaper.testpaper_index),
+        url(r'^testpaper/', include([
+            url(r'^create$', testpaper.create_testpaper),
+            url(r'^(?P<testpaper_id>[0-9]+)/', include([
+                url(r'^edit$', testpaper.edit_testpaper),
+                url(r'^delete$', testpaper.delete_testpaper)
+            ]))
+        ])),
+        url(r'^group$', group.group_index),
+        url(r'^group/', include([
+            url(r'^create$', group.create_group),
+            url(r'^(?P<group_id>[0-9]+)/', include([
+                url(r'^edit$', group.edit_group),
+                url(r'^delete$', group.delete_group)
+            ]))
+        ]))
     ])),
 
     url(r'^score$', scores.index),

@@ -7,19 +7,17 @@ from django.utils import timezone
 from math import ceil
 
 from alcpt.definitions import ExamType, QuestionType
-from alcpt.models import Exam, Question, User, AnswerSheet, TestPaper
+from alcpt.models import Exam, Question, User, TestPaper, Group
 
 
 def query_exams(*, exam_type: ExamType, name: str=None, page: int=None, filter_func=None):
     queries = Q()
-
-    if exam_type:
-        queries &= Q(type=exam_type.value[0])
+    queries &= Q(type=exam_type.value[0])
 
     if name:
-        queries &= Q(name__=name)
+        queries &= Q(name=name)
 
-    exams = Exam.objects.filter(queries).order_by('-created_at')
+    exams = Exam.objects.filter(queries).order_by('-create_time')
 
     for exam in exams:
         exam.start_time = timezone.localtime(exam.start_time)
@@ -35,16 +33,13 @@ def query_exams(*, exam_type: ExamType, name: str=None, page: int=None, filter_f
     return num_pages, exams
 
 
-def query_testpapers(*, name: str=None, page: int=None, filter_func=None):
+def query_testpapers(*, name: str=None, page: int=None):
     queries = Q()
 
     if name:
-        queries &= Q(name__=name)
+        queries &= Q(name=name)
 
-    testpapers = TestPaper.objects.filter(queries).order_by('-created_at')
-
-    if filter_func:
-        testpapers = list(filter(filter_func, testpapers))
+    testpapers = TestPaper.objects.filter(queries).order_by('-create_time')
 
     num_pages = ceil(len(testpapers) / 10)
 
@@ -54,11 +49,27 @@ def query_testpapers(*, name: str=None, page: int=None, filter_func=None):
     return num_pages, testpapers
 
 
+def query_groups(*, name: str=None, page: int=None):
+    queries = Q()
+
+    if name:
+        queries &= Q(name=name)
+
+    groups = Group.objects.filter(queries).order_by('-name')
+
+    num_pages = ceil(len(groups) / 10)
+
+    if page and page >= 0:
+        groups = groups[page * 10: page * 10 + 10]
+
+    return num_pages, groups
+
+
 def create_testpaper(name: str, questions: list, created_by: User):
     testpaper = TestPaper.objects.create(name=name,
                                          questions=json.dumps(questions),
                                          created_by=created_by)
-    testpaper.enable = True
+    testpaper.enable = False
     testpaper.save()
 
     return testpaper
@@ -72,7 +83,7 @@ def edit_testpaper(testpaper: TestPaper, name: str, questions: list):
     return testpaper
 
 
-def random_select(types_counts: list, question_type:QuestionType, testpaper: TestPaper):
+def random_select(types_counts: list, question_type: QuestionType, testpaper: TestPaper):
     reach_limit = types_counts[question_type.value[0] - 1]
     selected_questions = testpaper.question_set.filter(question_type=question_type.value[0])
 

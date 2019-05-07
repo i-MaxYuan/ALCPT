@@ -68,11 +68,8 @@
         <h1 style="display: inline;">管理考卷</h1>
     </section>
 
-    <form class="col-12 row mt-3" enctype="multipart/form-data" action="/exam/new" method="post" autocomplete="off">
+    <form class="col-12 row mt-3" enctype="multipart/form-data" action="/exam/testpaper/create" method="post" autocomplete="off">
         {% csrf_token %}
-
-        <input type="hidden" name="type" value="{{ question_type }}" />
-        <input type="hidden" name="source" value="{{ source.id }}" />
 
         <h3 class="col-12"><i class="fa fa-sticky-note fa-fw mb-2"></i> 基本資料</h3>
 
@@ -90,63 +87,6 @@
                 </div>
             </div>
         </div>
-
-    {#        <div class="col-auto py-2 form-group">#}
-    {#            <label for="start-time">開始時間</label>#}
-                <input type="text" class="form-control" id="start-time" name="start_time" value="9999" required hidden>
-    {#        </div>#}
-
-{#        <h3 class="col-12"><i class="fa fa-sliders fa-fw mb-2"></i> 題型分配</h3>#}
-
-{#        <div class="col-12 alert alert-danger alert-dismissible fade show" role="alert">#}
-{#            各題型的題數配當皆為固定，無法修改！#}
-{#            <button type="button" class="close" data-dismiss="alert" aria-label="Close">#}
-{#                <span aria-hidden="true">&times;</span>#}
-{#            </button>#}
-{#        </div>#}
-
-        {% for x in 1|range_to:2 %}
-        <div class="col-auto py-2 form- group">
-{#            <label for="type-{{ x }}">{{ x|readable_question_type }}</label>#}
-            <div class="input-group">
-                <input type="text" onfocus="blur()" class="form-control" id="type-{{ x }}" name="type_{{ x }}" value="25" min="0" required hidden>
-{#                <div class="input-group-append">#}
-{#                    <span class="input-group-text">題</span>#}
-{#                </div>#}
-            </div>
-        </div>
-        {% endfor %}
-
-        <div class="w-100"></div>
-        <div class="col-auto py-2 form-group " >
-{#            <label for="type-{{ 3 }}">{{ 3|readable_question_type }}</label>#}
-            <div class="input-group">
-                <input type="text" onfocus="blur()" class="form-control" id="type-{{ 3 }}" name="type_{{ 3 }}" value="20" min="0" required hidden>
-{#                <div class="input-group-append">#}
-{#                    <span class="input-group-text">題</span>#}
-{#                </div>#}
-            </div>
-        </div>
-        <div class="col-auto py-2 form-group " >
-{#            <label for="type-{{ 4 }}">{{ 4|readable_question_type }}</label>#}
-            <div class="input-group">
-                <input type="text" onfocus="blur()" class="form-control" id="type-{{ 4 }}" name="type_{{ 4 }}" value="20" min="0" required hidden>
-{#                <div class="input-group-append">#}
-{#                    <span class="input-group-text">題</span>#}
-{#                </div>#}
-            </div>
-        </div>
-        <div class="col-auto py-2 form-group " >
-{#            <label for="type-{{ 5 }}">{{ 5|readable_question_type }}</label>#}
-            <div class="input-group">
-                <input type="text" onfocus="blur()" class="form-control" id="type-{{ 5 }}" name="type_{{ 5 }}" value="10" min="0" required hidden>
-{#                <div class="input-group-append">#}
-{#                    <span class="input-group-text">題</span>#}
-{#                </div>#}
-            </div>
-        </div>
-
-
 
         <div class="w-100"></div>
 

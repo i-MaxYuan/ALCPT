@@ -13,6 +13,7 @@
     <section class="col">
         <div class="card">
             <div class="card-body">
+                <button class="btn btn" style="float: right ;background-color: indianred; color: white">暫停練習</button>
                 <form class="pt-2" action="/practice/{{ practice.id }}/take/{{ index }}" method="post">
                     {% csrf_token %}
                 {% if question.type is 1 %}
@@ -30,6 +31,7 @@
 
                     <section class="row mt-3">
                         <div class="col">
+
                         {% if has_next and not all_answered %}
                             <button class="btn btn-primary">下一題</button>
                         {% else %}
@@ -48,7 +50,9 @@
                                 {% endif %}
                                 {% endif %}
                                     <li class="page-item {% if forloop.counter0 == index %}active{% endif %}">
-                                        <a class="page-link {% if answer >= 0 and forloop.counter0 != index %}bg-success text-light{% endif %}" href="/practice/{{ practice.id }}/take/{{ forloop.counter0 }}">
+
+                                        <a class="page-link {% if answer >= 0 and forloop.counter0 != index %}bg-success text-light
+                                                            {% elif answer < 0 and forloop.counter0 < index %}bg-warning text-light{% endif %}" href="/practice/{{ practice.id }}/take/{{ forloop.counter0 }}">
                                             {{ forloop.counter }}
                                         </a>
                                     </li>

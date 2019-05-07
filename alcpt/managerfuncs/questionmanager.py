@@ -60,7 +60,7 @@ def create_question(question_type: QuestionType, question: str, options: list, a
     if question_type is QuestionType.QA:
         if file:
             question.question_file = save_file(file=file, path='question_{}'.format(question.id))
-            # question.question_file = file
+
     elif question_type is QuestionType.ShortConversation:
         if file:
             question.question_file = save_file(file=file, path='question_{}'.format(question.id))
