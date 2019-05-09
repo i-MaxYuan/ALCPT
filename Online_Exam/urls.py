@@ -23,6 +23,10 @@ urlpatterns = [
 
     url(r'^$', views.index),
 
+    url(r'^proclamation/(?P<proclamation_id>[0-9]+)/', include([
+            url(r'^detail$', views.proclamation_detail),
+    ])),
+
     url(r'^login$', views.login),
     url(r'^logout$', views.logout),
 
@@ -47,11 +51,17 @@ urlpatterns = [
 
     url(r'^exam$', exam.index),
     url(r'^exam/', include([
+        url(r'^proclamation$', views.index),
+        url(r'^proclamation/', include([
+            url(r'^create$', exam.create_proclamation),
+        ])),
+
         url(r'^create$', exam.create_exam),
         url(r'^(?P<exam_id>[0-9]+)/', include([
             url(r'^edit$', exam.edit_exam),
             url(r'^delete$', exam.delete_exam)
             ])),
+
         url(r'^testpaper$', testpaper.testpaper_index),
         url(r'^testpaper/', include([
             url(r'^create$', testpaper.create_testpaper),
@@ -60,6 +70,7 @@ urlpatterns = [
                 url(r'^delete$', testpaper.delete_testpaper)
             ]))
         ])),
+
         url(r'^group$', group.group_index),
         url(r'^group/', include([
             url(r'^create$', group.create_group),
@@ -78,7 +89,7 @@ urlpatterns = [
     url(r'^user$', system.index),
     url(r'^user/', include([
         url(r'^create$', system.create_user),
-        url(r'^(?P<serial_number>[0-9]+)$', system.edit_user),
+        url(r'^(?P<serial_number>[a-zA-Z0-9]+)$', system.edit_user),
     ]))
 ]
 

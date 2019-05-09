@@ -6,8 +6,6 @@
 
 {% block content %}
 
-<link rel="stylesheet" type="text/css" href={% static "css/magic_check.css" %}>
-
 <section class="row align-items-center">
     <section class="col-auto mr-auto">
         <h1 style="display: inline;">
@@ -62,8 +60,12 @@
 
             <div class="form-group col-6">
                 <label for="name">性別</label><br>
-                <input class="magic-radio" type="radio" name="gender" value="0" id="ch1" checked="checked" size=""><label for="ch1">男</label>
-                <input class="magic-radio" type="radio" name="gender" value="1"id="ch2"><label for="ch2">女</label>
+                <div>
+                    <input class="magic-radio" type="radio" name="gender" value="0" id="ch1" checked="checked" size=""><label for="ch1">男</label>
+                </div>
+                <div>
+                    <input class="magic-radio" type="radio" name="gender" value="1"id="ch2"><label for="ch2">女</label>
+                </div>
             </div>
         </div>
         {% if request.user.serial_number == user.serial_number %}

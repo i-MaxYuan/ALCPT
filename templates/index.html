@@ -25,29 +25,13 @@
                                 <th><h4>公告時間</h4></th>
                               </tr>
                             </thead>
-                                {% for Post in Post %}
-                            <tr class="w3-hover-green w3-center">
-                                <td>{{ Post.id }}</td>
-                                <td>{{ Post.created }}</td>
-                                <td>{{ Post.text }}</td>
-                                <td>{{ Post.user }}</td>
+                                {% for proclamation in proclamations %}
+                            <tr class="w3-hover-green w3-center" style='cursor: pointer' onclick="window.location.href='/details'">
+                                <td>{{ proclamation.title }}</td>
+                                <td>{{ proclamation.created_by.name}}</td>
+                                <td>{{ proclamation.user }}</td>
                             </tr>
                                 {% endfor %}
-                            <tr style='cursor: pointer' onclick="window.location.href='/details'">
-                                <td>用DIV 的属性onclick 进行点击,怎么样弄出鼠标放上去有手的</td>
-                                <td>tim87</td>
-                                <td>2019-03-28</td>
-                            </tr>
-                            <tr>
-                                <td>44444</td>
-                                <td>tim87</td>
-                                <td>2019-03-20</td>
-                            </tr>
-                            <tr>
-                                <td>55555</td>
-                                <td>tim87</td>
-                                <td>2019-03-21</td>
-                            </tr>
                         </table>
                  </div>
             </div>

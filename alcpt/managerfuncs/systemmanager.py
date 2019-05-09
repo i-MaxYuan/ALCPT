@@ -9,23 +9,22 @@ from alcpt.definitions import UserType
 from alcpt.exceptions import IllegalArgumentError
 
 
-def query_users(*, department: Department, grade: int, squadron: int, name: str, page: int=None, filter_func=None):
+def query_users(*, department: Department, grade: int, squadron: Squadron, name: str, page: int=None, filter_func=None):
     queries = Q()
 
     if department:
-        queries &= Q(department=department)
+        queries &= Q(student__department=department)
 
     if grade is not None:
-        queries &= Q(grade=grade)
+        queries &= Q(student__grade=grade)
 
-    if squadron is not None:
-        queries &= Q(team=squadron)
+    if squadron:
+        queries &= Q(student__squadron=squadron)
 
     if name is not None:
         queries &= Q(serial_number__icontains=name) | Q(name__icontains=name)
 
     users = User.objects.filter(queries)
-
     users = users.order_by('-create_time')
 
     for user in users:

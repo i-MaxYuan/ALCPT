@@ -215,7 +215,7 @@ ul.bar li ul {
 ul.bar li ul li {
   background: #3c6382;
   display: block;
-
+    width: 200px;
 }
 ul.bar li ul li a {display:block !important; text-decoration: none; color: white;}
 ul.bar li ul li:hover {background: #0a3d62; border-radius: 0px;}
@@ -228,18 +228,17 @@ ul.bar li ul li a:hover { color: #48dbfb;}
                 {% if request.user|has_perm:'SystemManager' %}
                 <li><a style=" text-decoration:none;" href="/user">系統管理員</a>
                     <ul>
-                        <li><a href="/user">使用者列表</a> </li>
-                        <li><a href="/user/create">新增使用者</a> </li>
+                        <li><a href="/user">新增/修改使用者</a> </li>
                     </ul>
                 </li>
                 {% endif %}
                 {% if request.user|has_perm:'ExamManager' %}
                 <li><a style=" text-decoration:none;" href="/exam">考試管理員</a>
                     <ul>
-                        <li><a href="/exam/testpaper">考卷列表</a> </li>
-                        <li><a href="/exam/testpaper/create">管理考卷</a> </li>
-                        <li><a href="/exam">考試列表</a> </li>
-                        <li><a href="/exam/create">管理考試</a> </li>
+                        <li><a href="/exam/group">管理受測者群組列表</a> </li>
+                        <li><a href="/exam/testpaper">管理考卷列表</a> </li>
+                        <li><a href="/exam">管理考試</a> </li>
+                        <li><a href="/exam/proclamation/create">公告考試</a> </li>
                     </ul>
                 </li>
                 {% endif %}

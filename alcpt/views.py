@@ -2,11 +2,13 @@ import re
 
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
 from Online_Exam.settings import LOGIN_REDIRECT_URL, LOGIN_URL
-from django.contrib import auth, messages
+from django.contrib import auth
 
 from .definitions import UserType
-from .exceptions import IllegalArgumentError
+from .exceptions import IllegalArgumentError, ResourceNotFoundError
+from .models import Proclamation
 
 PATTERNS = {
     "serial_number": "[a-zA-Z0-9\._-]+",
@@ -55,4 +57,19 @@ def logout(request):
 
 @login_required
 def index(request):
-    return render(request, 'index.html', {"user_types": UserType.__members__})
+    data = {
+        "user_types": UserType.__members__,
+        "proclamations": Proclamation.objects.filter(enable=True)
+    }
+    return render(request, 'index.html', data)
+
+
+@login_required
+def proclamation_detail(request, proclamation_id):
+    try:
+        proclamation = Proclamation.objects.get(id=proclamation_id)
+
+    except ObjectDoesNotExist:
+        raise ResourceNotFoundError('Cannot find proclamation id = {}.'.format(proclamation_id))
+
+    return render(request, 'proclamation_details.html', {'proclamation': proclamation})

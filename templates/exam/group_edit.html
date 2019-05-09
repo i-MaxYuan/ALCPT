@@ -1,0 +1,190 @@
+{% extends "base.html" %}
+
+{% load web_filters %}
+
+{% block content %}
+
+<script type="text/javascript">
+    function check_all(obj,cName)
+    {
+        var checkboxs = document.getElementsByName(cName);
+        for(var i=0;i<checkboxs.length;i++){checkboxs[i].checked = obj.checked;}
+    }
+</script>
+
+
+<section class="row align-items-center">
+    <section class="col-auto mr-auto">
+        <div id="pt" class="bm c1">
+            <div class="z">
+                <a class="fa fa-home fa-2x" href="http://127.0.0.1:8000/" ></a>
+                <a class="fa fa-angle-double-right fa-lg box"></a>
+                <a href="/exam/group_list" style="font-size: 18px">群組列表</a>
+                <a class="fa fa-angle-right fa-lg"></a>
+                <a href="#" style="font-size: 18px">第一次模擬鑑測</a>
+            </div>
+            <div style="padding-right: 10px"></div>
+        </div>
+        <h1 style="display: inline;">第一次模擬鑑測</h1>
+    </section>
+
+    <div class="w-100 my-3"></div>
+
+    <div class="w-100 my-3"></div>
+
+    <section class="col">
+        <div class="card">
+            <div class="card-body">
+                <form action="/score" method="get">
+                    <div class="row">
+                        <select class="custom-select col-2" name="department">
+                                <option value="0">全部（系所）</option>
+                                <option value="1">法律學系</option>
+                                <option value="2">資訊管理學系</option>
+                                <option value="3">運籌管理學系</option>
+                                <option value="4">財務管理學系</option>
+
+                                {% for dept in departments %}
+                                <option value="{{ dept.id }}" {% if dept.id == keywords.dept_id %} selected {% endif %}>{{ dept.name }}</option>
+                                {% endfor %}
+                        </select>
+                        <div class="col-2">
+                            <select class="custom-select" name="grade">
+                                <option value="0">全部（年班別）</option>
+                                <option value="108">108年班</option>
+                                <option value="109">109年班</option>
+                                <option value="110">110年班</option>
+                                <option value="111">111年班</option>
+                            </select>
+                        </div>
+                        <div class="col-2">
+                            <select class="custom-select" name="group">
+                                <option value="0">全部（中隊）</option>
+                                <option value="1">學生一中隊</option>
+                                <option value="2">學生二中隊</option>
+                                <option value="3">學生三中隊</option>
+                                <option value="4">學生四中隊</option>
+                            </select>
+                        </div>
+                        <div class="col">
+                            <input type="text" class="form-control" name="name" value="{{ keywords.name }}" placeholder="學號/姓名">
+                        </div>
+                        <div class="col-auto">
+                            <button type="submit" class="btn btn-primary" style="background-color: #1b98e0; color: white">搜尋</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <div class="w-100 my-3"></div>
+
+    <section class="col-12">
+
+        <table class="table table-striped table-hover table-responsive-lg">
+            <thead>
+                <tr>
+                    <th class="align-middle text-center col-xs-1"><input type="checkbox" name="all" onclick="check_all(this,'c')" /> 全選</th>
+                    <th class="align-middle text-center col-xs-3">#</th>
+                    <th class="align-middle text-center col-xs-2">學生名稱</th>
+                    <th class="align-middle text-center col-xs-3">系別</th>
+                    <th class="align-middle text-center col-xs-2">中隊</th>
+                    <th class="align-middle text-center col-xs-1">年班</th>
+
+            </thead>
+            {% if Students %}
+                {% for user in Students %}
+                <tr>
+                    <th class="align-middle text-center"><input type="checkbox" name="c" value="{{ user.id }}"></th>
+                    <td scope="row" class="align-middle text-center">{{ user.id }}</td>
+                    <td class="align-middle text-center">{{ user.name }}</td>
+                    <td class="align-middle text-center">{{ user.department }}</td>
+                    <td class="align-middle text-center">{{ user.squadron }}</td>
+                    <td class="align-middle text-center">{{ user.grade }}</td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <h2>目前暫無資料！</h2>
+            {% endif %}
+                <tr>
+                    <th class="align-middle text-center"><input type="checkbox" name="c" value="{{ User1.Username }}" checked></th>
+                    <td scope="row" class="align-middle text-center">1</td>
+                    <td class="align-middle text-center">王泓勛</td>
+                    <td class="align-middle text-center">資管系</td>
+                    <td class="align-middle text-center">三中隊</td>
+                    <td class="align-middle text-center">108</td>
+                </tr>
+                <tr>
+                    <th class="align-middle text-center"><input type="checkbox" name="c" value="{{ User1.Username }}" checked></th>
+                    <td scope="row" class="align-middle text-center">2</td>
+                    <td class="align-middle text-center">蘇震</td>
+                    <td class="align-middle text-center">法律系</td>
+                    <td class="align-middle text-center">四中隊</td>
+                    <td class="align-middle text-center">108</td>
+                </tr>
+                <tr>
+                    <th class="align-middle text-center"><input type="checkbox" name="c" value="{{ User1.Username }}"></th>
+                    <td scope="row" class="align-middle text-center">3</td>
+                    <td class="align-middle text-center">翁璿順</td>
+                    <td class="align-middle text-center">財管系</td>
+                    <td class="align-middle text-center">一中隊</td>
+                    <td class="align-middle text-center">108</td>
+                </tr>
+                <tr>
+                    <th class="align-middle text-center"><input type="checkbox" name="c" value="{{ User1.Username }}" checked></th>
+                    <td scope="row" class="align-middle text-center">4</td>
+                    <td class="align-middle text-center">黃仲蔚</td>
+                    <td class="align-middle text-center">運管系</td>
+                    <td class="align-middle text-center">二中隊</td>
+                    <td class="align-middle text-center">108</td>
+                </tr>
+                <tr>
+                    <th class="align-middle text-center"><input type="checkbox" name="c" value="{{ User1.Username }}" checked></th>
+                    <td scope="row" class="align-middle text-center">5</td>
+                    <td class="align-middle text-center">官華偉</td>
+                    <td class="align-middle text-center">資管系</td>
+                    <td class="align-middle text-center">三中隊</td>
+                    <td class="align-middle text-center">111</td>
+                </tr>
+        </table>
+
+        <div style="text-align: center">
+            <a class="btn btn-primary" style=" color: white" href="/exam/group_list">建立</a>
+            <a class="btn btn-basic"  style="background-color: lightgray" href="/exam/group_list">取消</a>
+        </div>
+
+{#                {% if exams %}#}
+{#                        {% for exam in exams %}#}
+{#                    <th scope="row" class="align-middle text-center">{{ exam.name }}</th>#}
+{#                    <td class="align-middle text-center">{{ exam.type|readable_exam_type }}</td>#}
+{#                    <td class="align-middle text-center"> {% for sheet in Answerheets%}{{ sheet.score }}/{{ sheet.num_questions }}</td>#}
+{#                    <td class="align-middle text-center">{{ sheet.created_at|date:'Y/n/d H:i' }}</td>#}
+{#                    <td class="align-middle text-center">#}
+{#                        <a href="/score/{{ sheet.exam.id }}"><i class="fa fa-search fa-fw mb-2"></i></a>#}
+{#                    </td>#}
+{#                </tr>#}
+{#            {% endfor %}#}
+{#        <nav>#}
+{#            <ul class="pagination justify-content-end">#}
+{#                {% for page_index in page_range %}#}
+{#                <li class="page-item">#}
+{#                    <a class="page-link" {% if page_index != page %} href="{{ request.get_full_path|replace_page:page_index }}" {% endif %}>{{ page_index|add:1 }}</a>#}
+{#                </li>#}
+{#                {% endfor %}#}
+{#            </ul>#}
+{#        </nav>#}
+{#    {% else %}#}
+{#        <h2>目前暫無資料！</h2>#}
+{#    {% endif %}#}
+
+</section>
+
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+
+<div id="container" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
+<div id="container"></div>
+</section>
+{% endblock %}

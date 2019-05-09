@@ -1,19 +1,15 @@
-import json
 from datetime import datetime
-from math import ceil
-from random import sample
 
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.views.decorators.http import require_http_methods
-from django.utils import timezone
 
-from .models import Exam, TestPaper, Question
+from .models import Exam, TestPaper, Proclamation, Group
 from .exceptions import *
 from .decorators import permission_check
-from .definitions import UserType, QuestionTypeCounts, QuestionType, ExamType
-from .managerfuncs import exammanager, questionmanager
+from .definitions import UserType, ExamType
+from .managerfuncs import exammanager
 
 
 @permission_check(UserType.ExamManager)
@@ -27,6 +23,7 @@ def index(request):
 
     keywords = {
         'name': request.GET.get('name', ''),
+        'exam_type':ExamType.Exam,
     }
 
     num_pages, exams = exammanager.query_exams(**keywords, page=page)
@@ -125,10 +122,17 @@ def edit_exam(request, exam_id: int):
         except TypeError:
             raise ArgumentError('Missing testpaper.')
 
+        try:
+            group = Group.objects.get(name=request.POST.get('group'))
+
+        except TypeError:
+            raise ArgumentError('Missing group.')
+
         exam.name = name
         exam.start_time = start_time
         exam.duration = duration
         exam.testpaper = testpaper
+        exam.group = group
         exam.save()
 
         messages.success(request, "Successfully update exam :{}.".format(exam.name))
@@ -136,7 +140,13 @@ def edit_exam(request, exam_id: int):
         return redirect('/exam')
 
     else:
-        return render(request, 'exam/exam_edit.html', locals())
+        data = {
+            'exam': exam,
+            'testpaper': TestPaper.objects.filter(enable=True),
+            'group': Group.objects.all(),
+        }
+
+        return render(request, 'exam/exam_edit.html', data)
 
 
 @permission_check(UserType.ExamManager)
@@ -153,5 +163,35 @@ def delete_exam(request, exam_id):
     exam.save()
 
     messages.success(request, 'Delete exam name={}.'.format(exam.name))
+
+    return redirect(request.META.get('HTTP_REFERER', '/exam'))
+
+
+@permission_check(UserType.ExamManager)
+@require_http_methods(["GET", "POST"])
+def create_proclamation(request):
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        text = request.POST.get('text')
+        Proclamation.objects.create(title=title, text=text, enable=True)
+
+        return redirect('index')
+
+    else:
+        return render(request, 'exam/proclamation_create.html')
+
+
+@permission_check(UserType.ExamManager)
+@require_http_methods(["GET"])
+def delete_proclamation(request, proclamation_id):
+    try:
+        proclamation = Proclamation.objects.get(id=proclamation_id)
+
+    except ObjectDoesNotExist:
+        raise ResourceNotFoundError('Cannot find proclamation id = {}.'.format(proclamation_id))
+
+    proclamation.delete()
+
+    messages.success(request, 'Delete proclamation title={}.'.format(proclamation.title))
 
     return redirect(request.META.get('HTTP_REFERER', '/exam'))

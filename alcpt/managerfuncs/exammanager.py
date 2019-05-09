@@ -1,13 +1,12 @@
 import json
-from datetime import datetime
-from random import sample, Random
+from random import sample
 
 from django.db.models import Q
 from django.utils import timezone
 from math import ceil
 
 from alcpt.definitions import ExamType, QuestionType
-from alcpt.models import Exam, Question, User, TestPaper, Group
+from alcpt.models import Exam, Question, Student, TestPaper, Group, User
 
 
 def query_exams(*, exam_type: ExamType, name: str=None, page: int=None, filter_func=None):
@@ -81,6 +80,29 @@ def edit_testpaper(testpaper: TestPaper, name: str, questions: list):
     testpaper.save()
 
     return testpaper
+
+
+def create_group(name: str, members: list):
+    group = Group.objects.create(name=name)
+
+    for member in members:
+        student = Student.objects.get(id=member)
+        group.member.add(student)
+
+    group.save()
+
+    return group
+
+
+def edit_group(group: Group, name: str, members: list):
+    for member in members:
+        student = Student.objects.get(id=member)
+        group.member.add(student)
+
+    group.name = name
+    group.save()
+
+    return group
 
 
 def random_select(types_counts: list, question_type: QuestionType, testpaper: TestPaper):

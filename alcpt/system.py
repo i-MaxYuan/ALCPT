@@ -49,12 +49,6 @@ def index(request):
         except ObjectDoesNotExist:
             keywords['squadron'] = None
 
-    if keywords['grade']:
-        try:
-            keywords['grade'] = Squadron.objects.get(id=keywords['grade'])
-        except ObjectDoesNotExist:
-            keywords['grade'] = None
-
     num_pages, users = systemmanager.query_users(**keywords, page=page)
 
     data = {

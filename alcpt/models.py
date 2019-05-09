@@ -101,7 +101,8 @@ class TestPaper(models.Model):
 class Exam(models.Model):
     name = models.CharField(max_length=100, primary_key=True)
     type = models.PositiveSmallIntegerField(default=2)
-    testpaper = models.ForeignKey('TestPaper', on_delete=models.CASCADE)
+    testpaper = models.ForeignKey('TestPaper', on_delete=models.CASCADE, null=True)
+    group = models.ForeignKey('Group', on_delete=models.CASCADE, null=True)
     usetimes = models.IntegerField(default=0)
     correcttimes = models.IntegerField(default=0)
     start_time = models.DateTimeField(blank=True, null=True)
@@ -154,6 +155,7 @@ class AnswerSheet(models.Model):
     questions = models.TextField(blank=False, null=True)
     answers = models.TextField(blank=True, null=True)
     create_time = models.DateTimeField(auto_now_add=True)
+    finish = models.BooleanField(default=False)
     score = models.PositiveSmallIntegerField()
 
     def __str__(self):

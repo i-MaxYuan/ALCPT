@@ -55,7 +55,9 @@ def create_testpaper(request):
         except ObjectDoesNotExist:
             pass
 
-        testpaper = TestPaper.objects.create(name=name, questions=json.dumps(questions))
+        testpaper = exammanager.create_testpaper(name=name,
+                                                 questions=questions,
+                                                 created_by=request.user)
 
         return redirect('/exam/testpaper/{}/edit'.format(testpaper.id))
 
@@ -81,15 +83,18 @@ def edit_testpaper(request, testpaper_id: int):
         except TypeError:
             raise ArgumentError('Missing question')
 
-        testpaper.name = name
-        testpaper.questions = json.dumps(questions)
-        testpaper.save()
+        testpaper = exammanager.edit_testpaper(testpaper=testpaper,
+                                               name=name,
+                                               questions=questions)
 
         messages.success(request, "Successfully update testpaper :{}.".format(testpaper.name))
 
         return redirect('/exam')
 
     else:
+        data = {
+            'testpaper': testpaper
+        }
         return render(request, 'exam/testpaper_edit.html', locals())
 
 
@@ -190,7 +195,7 @@ def pick_question(request, testpaper_id: int, question_type: int):
         'page_range': range(num_pages),
     }
 
-    return render(request, '/exam/pick_question.html', data)
+    return render(request, 'exam/pick_question.html', data)
 
 
 @permission_check(UserType.ExamManager)
@@ -219,4 +224,4 @@ def auto_pick_question(request, testpaper_id: int, question_type: int):
     else:
         messages.warning(request, 'Auto pick failed.')
 
-    return redirect('manager/exam/{}/edit'.format(testpaper_id))
+    return redirect('exam/{}/edit'.format(testpaper_id))

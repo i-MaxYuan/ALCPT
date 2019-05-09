@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.views.decorators.http import require_http_methods
 
-from .models import TestPaper, Group
+from .models import TestPaper, Group, Department, Squadron, Student
 from .exceptions import *
 from .decorators import permission_check
 from .definitions import UserType
@@ -43,24 +43,30 @@ def create_group(request):
         name = request.POST.get('name')
 
         try:
-            member = request.POST.get('member')
+            members = request.POST.get('members')
 
         except ValueError:
-            raise ArgumentError('No any member in group')
+            raise ArgumentError('No any members in group')
 
         try:
-            if TestPaper.objects.get(name=name):
-                raise MultipleObjectsReturned('Question has existed.')
+            if Group.objects.get(name=name):
+                raise MultipleObjectsReturned('Group has existed.')
 
         except ObjectDoesNotExist:
             pass
 
-        group = Group.objects.create(name=name, member=member)
+        group = exammanager.create_group(name=name,
+                                         members=members)
 
         return redirect('/exam/{}/group_edit'.format(group.id))
 
     else:
-        return render(request, 'exam/group_create.html')
+        data = {
+            'students': Student.objects.all(),
+            'departments': Department.objects.all(),
+            'squadrons': Squadron.objects.all(),
+        }
+        return render(request, 'exam/group_create.html', data)
 
 
 @permission_check(UserType.ExamManager)
@@ -76,21 +82,21 @@ def edit_group(request, group_id: int):
         name = request.POST.get('name')
 
         try:
-            member = request.POST.get('member')
+            members = request.POST.get('members')
 
         except ValueError:
-            raise ArgumentError('Missing member')
+            raise ArgumentError('Missing members')
 
-        group.name = name
-        group.member = member
-        group.save()
+        group = exammanager.edit_group(group=group,
+                                       name=name,
+                                       members=members)
 
         messages.success(request, "Successfully update group :{}.".format(group.name))
 
         return redirect('/exam')
 
     else:
-        return render(request, 'exam/exam_edit.html', locals())
+        return render(request, 'exam/group_edit.html', locals())
 
 
 @permission_check(UserType.ExamManager)
