@@ -26,10 +26,10 @@
                               </tr>
                             </thead>
                                 {% for proclamation in proclamations %}
-                            <tr class="w3-hover-green w3-center" style='cursor: pointer' onclick="window.location.href='/details'">
+                            <tr class="w3-hover-green w3-center" style='cursor: pointer' onclick="window.location.href='proclamation/{{ proclamation.id }}/detail'">
                                 <td>{{ proclamation.title }}</td>
                                 <td>{{ proclamation.created_by.name}}</td>
-                                <td>{{ proclamation.user }}</td>
+                                <td>{{ proclamation.create }}</td>
                             </tr>
                                 {% endfor %}
                         </table>

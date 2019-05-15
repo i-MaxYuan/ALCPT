@@ -7,90 +7,8 @@
 {% endblock %}
 
 {% block content %}
-{#<section class="row">#}
-{#    {% if request.user|has_permission:user_types.SystemManager %}#}
-{#    <section class="col-3 p-3">#}
-{#        <a href="#" class="col-12 btn btn-sq-lg btn-danger p-3">#}
-{#            <i class="fa fa-server fa-5x mb-2"></i>#}
-{#            <br>#}
-{#            系統操作#}
-{#        </a>#}
-{#    </section>#}
-{#    {% endif %}#}
-{##}
-{#    {% if request.user|has_permission:user_types.UserManager %}#}
-{#    <section class="col-3 p-3">#}
-{#        <a href="/user" class="col-12 btn btn-sq-lg btn-warning p-3">#}
-{#            <i class="fa fa-users fa-5x mb-2"></i>#}
-{#            <br>#}
-{#            使用者管理#}
-{#        </a>#}
-{#    </section>#}
-{#    {% endif %}#}
-{##}
-{#    {% if request.user|has_permission:user_types.ExamManager %}#}
-{#    <section class="col-3 p-3">#}
-{#        <a href="/exam" class="col-12 btn btn-sq-lg btn-warning p-3">#}
-{#            <i class="fa fa-trophy fa-5x mb-2"></i>#}
-{#            <br>#}
-{#            考試管理#}
-{#        </a>#}
-{#    </section>#}
-{#    {% endif %}#}
-{##}
-{#    {% if request.user|has_permission:user_types.QuestionManager %}#}
-{#    <section class="col-3 p-3">#}
-{#        <a href="/question" class="col-12 btn btn-sq-lg btn-warning p-3">#}
-{#            <i class="fa fa-archive fa-5x mb-2"></i>#}
-{#            <br>#}
-{#            試題管理#}
-{#        </a>#}
-{#    </section>#}
-{#    {% endif %}#}
-{##}
-{#    {% if request.user|has_permission:user_types.ScoreViewer %}#}
-{#    <section class="col-3 p-3">#}
-{#        <a href="#" class="col-12 btn btn-sq-lg btn-dark p-3">#}
-{#            <i class="fa fa-pie-chart fa-5x mb-2"></i>#}
-{#            <br>#}
-{#            統計資料#}
-{#        </a>#}
-{#    </section>#}
-{#    {% endif %}#}
-{##}
-{#    {% if request.user|has_permission:user_types.Student %}#}
-{#    <section class="col-3 p-3">#}
-{#        <a href="/practice/listening" class="col-12 btn btn-sq-lg btn-primary p-3">#}
-{#            <i class="fa fa-headphones fa-5x mb-2"></i>#}
-{#            <br>#}
-{#            聽力練習#}
-{#        </a>#}
-{#    </section>#}
-{#    <section class="col-3 p-3">#}
-{#        <a href="/practice/reading" class="col-12 btn btn-sq-lg btn-primary p-3">#}
-{#            <i class="fa fa-newspaper-o fa-5x mb-2"></i>#}
-{#            <br>#}
-{#            閱讀練習#}
-{#        </a>#}
-{#    </section>#}
-{#    <section class="col-3 p-3">#}
-{#        <a href="/simulation-exam" class="col-12 btn btn-sq-lg btn-success p-3">#}
-{#            <i class="fa fa-shield fa-5x mb-2"></i>#}
-{#            <br>#}
-{#            模擬鑑測#}
-{#        </a>#}
-{#    </section>#}
-{#    <section class="col-3 p-3">#}
-{#        <a href="/score" class="col-12 btn btn-sq-lg btn-secondary p-3">#}
-{#            <i class="fa fa-line-chart fa-5x mb-2"></i>#}
-{#            <br>#}
-{#            成績檢閱#}
-{#        </a>#}
-{#    </section>#}
-{#    {% endif %}#}
-{#</section>#}
     <section class="col-auto mr-auto" style="height: 100px">
-        <h1 style="display: inline;">用DIV 的属性onclick 进行点击,怎么样弄出鼠标放上去有手的{{ Proclamation.title }}</h1>
+        <h1 style="display: inline;">公告名稱:{{ proclamation.title }}</h1>
     </section>
 
     <p></p>
@@ -100,55 +18,17 @@
             <div class="panel panel-default">
                  <div class="container">
                     <table class="table table-striped table-hover" style="width:95%; height: 80%" border="0" align="center">
-                        <thead>
-                          <tr class="w3-light-grey w3-center w3-card-4">
-                            <th width="150" style="vertical-align: top"><h4>公告內容</h4></th>
-                            <th col-auto style="font-size: 20px; text-align: left">
-                                {{ Post.text }}
-                                變態是一個從日語中直接借用過來的用詞，通常是用來形容帶有色情或者是情色內容的動畫和漫畫上；
-                                有時候也可以用來形容具有相似意義或者行為的一個動漫詞彙總稱，特別是指那些出自於日本的動畫、
-                                漫畫以及遊戲的內容。不少來自歐美國家的御宅族也會使用相關單字，來形容那些含有色情含意的日本
-                                動漫風格商品。變態其發展與日本自身的美學與人類的性歷史以及文化發展有所關係，同時也影響到不
-                                少相關法律條文的制定，甚至還跟日本經濟的成長有一定程度上的關聯。在西方世界國家中，大多是將
-                                「變態」翻譯成為單字「Hentai」或其他相近發音的詞語，不過日本本身也有許多類似意思的詞語被使
-                                用中。例如另一個同樣指色情內容或者性行為、但語氣較為委婉的「エッチ」，則多會直接翻譯成「H」
-                                或者是「Ecchi」。「H」與「變態」相比，其所指的動漫作品稍微減少了對非正常性向之色情文化的注
-                                重，但所指的動畫或漫畫作品仍然會帶有大量的色情暗示，並藉由人物的對話或者情境的表達加以呈現。
-                                「變態」一詞在日本是由「變」（「變異」以及「怪異」等義）和「態」（「狀態」以及「樣貌」等義）
-                                兩個日本漢字所混合而成，而這一詞語同時也是將「變態性慾」（変態性欲）加以縮寫而成的字詞。在日
-                                本俚語之中，「變態」是一個同時含有「色狼」以及「怪胎」等等充滿負面意義的汙辱性詞語，因此絕
-                                大多數日本人並不會直接將「變態」拿來形容日本色情業；而較常見的「變態」用法則多是拿來形容人
-                                們所進行的色情行為，以及與其相關的動漫產品等。此外變態也常會跟另一個詞彙「十八禁」有所關聯
-                                ，後者就其字面意思是指「尚未十八歲者禁止」之意，這一字眼常會用於具有情色內容的成人漫畫以及
-                                成人動畫之中。另一方面一些成人影片則是使用「AV」一詞，不過該字則是來自於英文「成人視訊」（
-                                Adult Video）的縮寫。絕大多數變態商品都是以動漫畫的型式呈現，也就是以所謂「卡通色情」為基
-                                礎而創作的漫畫、動畫以及電子遊戲。他們通常都擁有以下的特點：平庸的劇情但多樣的虛構角色設計
-                                、以動畫或圖形創作的角色往往仍帶有些許孩子氣，且以這些角色為主角而呈現出各式各樣具有高度想
-                                像力的性變態劇情，特別是那些以強姦或其他性暴力等禁忌元素為場景內容的作品十分常見。關於變態
-                                情節的產品，其故事內容可以十分簡單明瞭，也可以將背景設定成十分的多樣複雜。但隨著政府容許作
-                                者在創作時作品內容得以自由發展，也開始有些作品類型在接受價值觀的檢驗時，陸陸續續有人提出是
-                                否觸犯相關法律的疑慮；其中包括蘿莉控類型的作品便被懷疑是兒童色情的一種，也出現作品中的暴力
-                                行為是否會對現實生活以及觀看者產生影響等種種的質疑。由於絕大多數的變態動畫不能直接提供給一
-                                般家庭觀賞，所以這些成人商品便不能以電視作為媒介來播出，而必須改以OVA的方式作為主要的獲益
-                                手段。此外變態除了當作成人漫畫與動畫的情節之外，亦會拿來形容同樣具有色情內容的日本成人遊戲
-                                ，以及業餘創作者自己創作並出版的同人誌之中。而除了發源地日本之外，變態產品已藉由網際網路這
-                                一媒介陸續將漫畫與動畫作品傳播至世界各國，而形成一種獨特的流行文化。
-{#                                            {{ Post.text }}#}
-                            </th>
-
-                          </tr>
-                        </thead>
+                        <tr style="font-size: 20px">
+                            <td>公告內容</td>
+                            <td><pre>{{ proclamation.text }}</pre></td>
+                        </tr>
                         <tr style="font-size: 20px">
                             <td>公告人</td>
-                            <td>tim87
-{#                                            {{ Post.user }}#}
-                            </td>
+                            <td>{{ proclamation.created_by.name }}</td>
                         </tr>
                         <tr style="font-size: 20px">
                             <td>公告時間</td>
-                            <td>
-{#                                            {{ Post.time }}#}
-                                2019-03-28</td>
+                            <td>{{ proclamation.create }}</td>
                         </tr>
                     </table>
                  </div>

@@ -103,11 +103,11 @@ class Exam(models.Model):
     type = models.PositiveSmallIntegerField(default=2)
     testpaper = models.ForeignKey('TestPaper', on_delete=models.CASCADE, null=True)
     group = models.ForeignKey('Group', on_delete=models.CASCADE, null=True)
-    usetimes = models.IntegerField(default=0)
-    correcttimes = models.IntegerField(default=0)
+    used_times = models.IntegerField(default=0)
+    correct_times = models.IntegerField(default=0)
     start_time = models.DateTimeField(blank=True, null=True)
     create_time = models.DateTimeField(auto_now_add=True)
-    duration = models.PositiveSmallIntegerField()
+    duration = models.PositiveSmallIntegerField(default=-1)
     created_by = models.ForeignKey('User', on_delete=models.PROTECT, related_name='exam_created')
     update_time = models.DateTimeField(auto_now=True)
     public = models.BooleanField(default=False)
@@ -119,8 +119,8 @@ class Exam(models.Model):
         return self.name
 
     @property
-    def correctrate(self):
-        return self.correcttimes / self.usetimes * 100
+    def correct_rate(self):
+        return self.correct_times / self.used_times * 100
 
 
 # 題目
@@ -152,7 +152,7 @@ class Question(models.Model):
 class AnswerSheet(models.Model):
     exam = models.ForeignKey('Exam', on_delete=models.CASCADE, blank=True)
     user = models.ForeignKey('Student', on_delete=models.CASCADE)
-    questions = models.TextField(blank=False, null=True)
+    questions = models.TextField(blank=True, null=True)
     answers = models.TextField(blank=True, null=True)
     create_time = models.DateTimeField(auto_now_add=True)
     finish = models.BooleanField(default=False)

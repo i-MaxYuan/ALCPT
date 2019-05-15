@@ -11,7 +11,7 @@ from .exceptions import IllegalArgumentError, ArgumentError, ObjectNotFoundError
 from .decorators import permission_check
 from .definitions import UserType, QuestionType, ExamType
 from .models import Exam, AnswerSheet, Question, Student
-from .managerfuncs import practice
+from .managerfuncs import practicemanager
 
 
 @permission_check(UserType.Tester)
@@ -45,9 +45,10 @@ def create(request, practice_type):
             raise IllegalArgumentError('Question amount must be integer.')
 
         practice_type = ExamType.Listening if practice_type == 'listening' else ExamType.Reading
-        practice =
+        practice, selected_questions = practicemanager.create_practice(user=request.uesr, practice_type=practice_type,
+                                                                       question_types=question_types, num_questions=num_questions)
 
-        return redirect('/practice/{}/take'.format(practice.id))
+        return redirect('/practice/{}/take'.format(practice.id), selected_questions=selected_questions)
 
     else:
         question_types = []
@@ -74,7 +75,7 @@ def create(request, practice_type):
 
 @permission_check(UserType.Tester)
 @require_http_methods(["GET", "POST"])
-def take_practice(request, practice_id, question_index):
+def take_practice(request, practice_id, question_index, selected_questions):
     try:
         question_index = int(question_index)
 
@@ -82,7 +83,7 @@ def take_practice(request, practice_id, question_index):
         question_index = 0
 
     try:
-        answer_sheet = AnswerSheet.objects.get(exam_id=practice_id,user=Student.objects.get(user=request.user))
+        answer_sheet = AnswerSheet.objects.get(exam_id=practice_id, user=Student.objects.get(user=request.user))
         answers = json.loads(answer_sheet.answers)
         questions = json.loads(answer_sheet.questions)
 
@@ -90,7 +91,11 @@ def take_practice(request, practice_id, question_index):
             raise IllegalArgumentError('This answer_sheet is finished.')
 
     except ObjectDoesNotExist:
-        raise ObjectNotFoundError('Can\'t find answer_sheet {}'.format(practice_id))
+        answers = [-1 for _ in range(sum(selected_questions))]
+        answer_sheet = AnswerSheet.objects.create(student=request.user,
+                                                  exam_id=practice_id,
+                                                  answers=json.dumps(answers),
+                                                  score=0)
 
     answer_num = 0
     for question_type in answers:
@@ -138,7 +143,7 @@ def take_practice(request, practice_id, question_index):
                 raise IllegalArgumentError('The following questions have not been answered: {}.'.format(
                     ', '.join(not_answered)))
 
-            practice.evaluate_score(student=request.user, answer_sheet=answer_sheet)
+            practicemanager.evaluate_score(student=request.user, answer_sheet=answer_sheet)
 
             answer_sheet.finish = True
             answer_sheet.save()

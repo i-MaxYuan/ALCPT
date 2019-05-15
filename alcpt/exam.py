@@ -173,9 +173,12 @@ def create_proclamation(request):
     if request.method == 'POST':
         title = request.POST.get('title')
         text = request.POST.get('text')
-        Proclamation.objects.create(title=title, text=text, enable=True)
+        Proclamation.objects.create(title=title,
+                                    text=text,
+                                    enable=True,
+                                    created_by=request.user)
 
-        return redirect('index')
+        return redirect('/')
 
     else:
         return render(request, 'exam/proclamation_create.html')

@@ -105,20 +105,29 @@ def edit_group(group: Group, name: str, members: list):
     return group
 
 
-def random_select(types_counts: list, question_type: QuestionType, testpaper: TestPaper):
+def random_select(types_counts: list, question_type: QuestionType, testpaper: TestPaper=None):
     reach_limit = types_counts[question_type.value[0] - 1]
-    selected_questions = testpaper.question_set.filter(question_type=question_type.value[0])
+    if testpaper:
+        selected_questions = testpaper.question_set.filter(question_type=question_type.value[0])
 
-    selected_num = reach_limit - selected_questions.count()
+        selected_num = reach_limit - selected_questions.count()
 
-    if selected_num:
-        questions = Question.objects.filter(type=question_type.value[0], enable=True).exclude(id__in=selected_questions)
+        if selected_num:
+            questions = Question.objects.filter(question_type=question_type.value[0], enable=True).exclude(id__in=selected_questions)
 
-        if questions:
-            questions = sample(list(questions), min(len(questions), selected_num))
-            for question in questions:
-                testpaper.question_set.add(question)
+            if questions:
+                questions = sample(list(questions), min(len(questions), selected_num))
+                for question in questions:
+                    testpaper.question_set.add(question)
 
-            selected_num = len(questions)
+                selected_num = len(questions)
 
-    return selected_num
+        return selected_num
+
+    else:
+        selected_questions = Question.objects.filter(question_type=question_type.value[0], enable=True)
+
+        if selected_questions:
+            selected_questions = sample(list(selected_questions), reach_limit)
+
+        return selected_questions
