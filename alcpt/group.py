@@ -43,7 +43,7 @@ def create_group(request):
         name = request.POST.get('name')
 
         try:
-            members = request.POST.get('members')
+            members = request.POST.getlist('student_id')
 
         except ValueError:
             raise ArgumentError('No any members in group')

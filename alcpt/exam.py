@@ -23,7 +23,7 @@ def index(request):
 
     keywords = {
         'name': request.GET.get('name', ''),
-        'exam_type':ExamType.Exam,
+        'exam_type': ExamType.Exam,
     }
 
     num_pages, exams = exammanager.query_exams(**keywords, page=page)
@@ -78,7 +78,8 @@ def create_exam(request):
                                    type=ExamType.Exam.value[0],
                                    testpaper=testpaper,
                                    start_time=start_time,
-                                   duration=duration)
+                                   duration=duration,
+                                   public=True if testpaper.enable else False)
 
         return redirect('/exam/{}/edit'.format(exam.id))
 
@@ -133,6 +134,7 @@ def edit_exam(request, exam_id: int):
         exam.duration = duration
         exam.testpaper = testpaper
         exam.group = group
+        exam.public = True if testpaper.enable else False
         exam.save()
 
         messages.success(request, "Successfully update exam :{}.".format(exam.name))

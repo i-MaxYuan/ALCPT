@@ -1,16 +1,15 @@
 import json
-from datetime import timedelta
+import random
 
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, redirect
-from django.utils import timezone
 from django.views.decorators.http import require_http_methods
 
-from .exceptions import IllegalArgumentError, ArgumentError, ObjectNotFoundError
+from .exceptions import IllegalArgumentError, ArgumentError
 from .decorators import permission_check
 from .definitions import UserType, QuestionType, ExamType
-from .models import Exam, AnswerSheet, Question, Student
+from .models import AnswerSheet, Question, Student
 from .managerfuncs import practicemanager
 
 
@@ -91,9 +90,13 @@ def take_practice(request, practice_id, question_index, selected_questions):
             raise IllegalArgumentError('This answer_sheet is finished.')
 
     except ObjectDoesNotExist:
-        answers = [-1 for _ in range(sum(selected_questions))]
+        answers = {str(question_type.value[0]): {} for question_type in QuestionType.__members__.values()}
+        questions = {str(selected_questions.index(question)): {str(question.id): random.sample(range(4), 4)} for question in selected_questions}
+        for question in selected_questions:
+            answers[str(question.question_type)][str(question.id)] = -1
         answer_sheet = AnswerSheet.objects.create(student=request.user,
                                                   exam_id=practice_id,
+                                                  questions=json.dumps(questions),
                                                   answers=json.dumps(answers),
                                                   score=0)
 

@@ -41,6 +41,18 @@
         var checkboxs = document.getElementsByName(cName);
         for(var i=0;i<checkboxs.length;i++){checkboxs[i].checked = obj.checked;}
     }
+
+    function getbox() {
+        var boxvalue = document.getElementsByName("c");
+        var str="";
+
+        for(var i = 0; i < boxvalue.length; i++){
+            if(boxvalue[i].checked){
+                str = str + boxvalue[i].value+ ",";
+            }
+        }
+        alert(str);
+    }
 </script>
 
 
@@ -115,7 +127,7 @@
             {% if students %}
                 {% for student in students %}
                 <tr>
-                    <th class="align-middle text-center"><input type="checkbox" name="c" value="{{ student.id }}"></th>
+                    <th class="align-middle text-center"><input type="checkbox" name="student_id" value="{{ student.id }}"></th>
                     <td scope="row" class="align-middle text-center">{{ student.id }}</td>
                     <td class="align-middle text-center">{{ student.user.name }}</td>
                     <td class="align-middle text-center">{{ student.department.name }}</td>

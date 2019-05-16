@@ -9,12 +9,15 @@ from alcpt.definitions import ExamType, QuestionType
 from alcpt.models import Exam, Question, Student, TestPaper, Group, User
 
 
-def query_exams(*, exam_type: ExamType, name: str=None, page: int=None, filter_func=None):
+def query_exams(*, exam_type: ExamType, student: Student=None, name: str=None, page: int=None, filter_func=None):
     queries = Q()
     queries &= Q(type=exam_type.value[0])
 
     if name:
         queries &= Q(name=name)
+
+    if student:
+        queries &= Q(group__member__user=student)
 
     exams = Exam.objects.filter(queries).order_by('-create_time')
 

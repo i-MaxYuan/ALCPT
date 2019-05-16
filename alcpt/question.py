@@ -337,16 +337,17 @@ def delete_question(request, question_id):
 
 @permission_check(UserType.QuestionManager)
 @require_http_methods(["GET"])
-def enable_question(request, question_id):
-    try:
-        question = Question.objects.get(id=question_id)
+def enable_question(request, question_id_list):
+    for question_id in question_id_list:
+        try:
+            question = Question.objects.get(id=question_id)
 
-    except ObjectDoesNotExist:
-        raise ResourceNotFoundError('Cannot find question id = {}.'.format(question_id))
+        except ObjectDoesNotExist:
+            raise ResourceNotFoundError('Cannot find question id = {}.'.format(question_id))
 
-    question.enable = True
-    question.last_updated_by = request.user
-    question.save()
+        question.enable = True
+        question.last_updated_by = request.user
+        question.save()
 
     messages.success(request, 'Enable question id={}.'.format(question_id))
 
