@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% load web_filters %}
+
+{% block content %}
+<section class="row align-items-center">
+    <section class="col-auto mr-auto">
+        <h1 style="display: inline;">模擬鑑測列表</h1>
+    </section>
+
+    <div class="w-100 my-3"></div>
+
+    <section class="col">
+    {% if exams %}
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">名稱</th>
+                    <th scope="col">開始時間</th>
+                    <th scope="col">時間</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for exam in exams %}
+                <tr>
+                    <th scope="row" class="align-middle">{{ exam.id }}</th>
+                    <td class="align-middle">{{ exam.name }}</td>
+                    <td class="align-middle">{{ exam.start_time|date:'Y/n/d H:i' }}</td>
+                    <td class="align-middle">{{ exam.duration }} 分鐘</td>
+                    <td class="align-middle">
+{#                    {% if exam.status is 0 %}#}
+{#                        <span class="text-muted">尚未開始</span>#}
+{#                    {% elif exam.status is 1 %}#}
+                        <a class="btn btn-primary" href="/simulation-exam/{{ exam.id }}/take">開始作答</a>
+{#                    {% elif exam.status is 2 %}#}
+{#                        <a class="btn btn-success" href="/simulation-exam/{{ exam.id }}/take">繼續作答</a>#}
+{#                    {% elif exam.status is 3 %}#}
+{#                        <span class="text-muted">已完成作答</span>#}
+{#                    {% endif %}#}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <nav>
+            <ul class="pagination justify-content-end">
+                {% for page_index in page_range %}
+                <li class="page-item">
+                    <a class="page-link" {% if page_index != page %} href="{{ request.get_full_path|replace_page:page_index }}" {% endif %}>{{ page_index|add:1 }}</a>
+                </li>
+                {% endfor %}
+            </ul>
+        </nav>
+    {% else %}
+        <h2>目前暫無資料！</h2>
+    {% endif %}
+    </section>
+</section>
+{% endblock %}

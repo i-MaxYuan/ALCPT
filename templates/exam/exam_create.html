@@ -109,12 +109,15 @@
 
                             </div>
                             <div class="col">
-                                <input type="text" class="form-control" name="name" value="{{ keywords.name }}" placeholder="考卷名稱">
+                                <select class="custom-select" name="department">
+                                    <option value="0">考卷名稱</option>
+                                    {% for test_paper in test_papers %}
+                                        <option value="{{ test_paper.id }}" {% if test_paper.id == keywords.test_paper_id %} selected {% endif %}>{{ test_paper.name }}</option>
+                                    {% endfor %}
+                                </select>
                             </div>
 
-                            <div class="col-auto">
-                                <button type="submit" class="btn btn-primary" style="background-color: #1b98e0; color: white;">搜尋</button>
-                            </div>
+
                         </div>
                     </form>
                 </div>
@@ -132,12 +135,16 @@
 
                             </div>
                             <div class="col">
-                                <input type="text" class="form-control" name="name" value="{{ keywords.name }}" placeholder="受測者名稱">
+{#                                <input type="text" class="form-control" name="name" value="{{ keywords.name }}" placeholder="受測者名稱">#}
+                                <select class="custom-select" name="department">
+                                    <option value="0">受測者群組名稱</option>
+                                    {% for user_group in user_groups %}
+                                        <option value="{{ user_group.id }}" {% if user_group.id == keywords.user_group_id %} selected {% endif %}>{{ user_group.name }}</option>
+                                    {% endfor %}
+                                </select>
                             </div>
 
-                            <div class="col-auto">
-                                <button type="submit" class="btn btn-primary" style="background-color: #1b98e0; color: white;">搜尋</button>
-                            </div>
+
                         </div>
                     </form>
                 </div>

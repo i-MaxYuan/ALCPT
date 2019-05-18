@@ -16,7 +16,7 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
-from alcpt import views, question, exam, scores, system, testpaper, group
+from alcpt import views, question, exam, scores, system, testpaper, group, practice
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
@@ -85,6 +85,18 @@ urlpatterns = [
     url(r'^score/', include([
         url(r'^(?P<exam_id>[0-9]+)$', scores.sheet_detail),
     ])),
+
+    url(r'^tester$', scores.tester_index),
+    url(r'^tester/', include([
+        url(r'^practice/', include([
+            url(r'^(?P<practice_type>(listening|reading))$', practice.create),
+            url(r'^integration$', practice.create_integration),
+            url(r'^(?P<practice_id>[0-9]+)/', include([
+                url(r'^take/(?P<question_index>[0-9]*)$', practice.take_practice),
+            ]))
+        ]))
+    ])),
+
 
     url(r'^user$', system.index),
     url(r'^user/', include([

@@ -3,19 +3,22 @@ from django.utils.timezone import localtime, timedelta
 from math import ceil
 
 from alcpt.definitions import QuestionType
-from alcpt.models import AnswerSheet, User
+from alcpt.models import AnswerSheet, Student
 from alcpt.utility import save_file
 
 
-def query_answer_sheet(name: str=None, start_time: str=None, end_time: str=None, page: int=0):
+def query_answer_sheet(name: str=None, start_time: str=None, end_time: str=None, page: int=0, user: Student=None):
     queries = Q()
 
     if name:
         queries &= Q(exam__name=name)
 
     if start_time or end_time:
-        queries &= Q(create_time__range=[start_time if start_time else localtime().date() + timedelta(days=-1),
-                                         end_time if end_time else localtime().date() + timedelta(days=1)])
+        queries &= Q(exam__create_time__range=[start_time if start_time else localtime().date() + timedelta(days=-1),
+                                               end_time if end_time else localtime().date() + timedelta(days=1)])
+
+    if user:
+        queries &= Q(user=user)
 
     else:
         answer_sheets = AnswerSheet.objects

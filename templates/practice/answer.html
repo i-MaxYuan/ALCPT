@@ -17,15 +17,15 @@
                 <form class="pt-2" action="/practice/{{ practice.id }}/take/{{ index }}" method="post">
                     {% csrf_token %}
                 {% if question.type is 1 %}
-                    {% include 'management/question/qa/display_alone.html' with question=question show_answer=False selected_answer=selected_answer %}
+                    {% include 'question/qa/display_alone.html' with question=question show_answer=False selected_answer=selected_answer %}
                 {% elif question.type is 2 %}
-                    {% include 'management/question/short_conversation/display_alone.html' with question=question show_answer=False selected_answer=selected_answer %}
+                    {% include 'question/short_conversation/display_alone.html' with question=question show_answer=False selected_answer=selected_answer %}
                 {% elif question.type is 3 %}
-                    {% include 'management/question/grammar/display_alone.html' with question=question show_answer=False selected_answer=selected_answer %}
+                    {% include 'question/grammar/display_alone.html' with question=question show_answer=False selected_answer=selected_answer %}
                 {% elif question.type is 4 %}
-                    {% include 'management/question/phrase/display_alone.html' with question=question show_answer=False selected_answer=selected_answer %}
+                    {% include 'question/phrase/display_alone.html' with question=question show_answer=False selected_answer=selected_answer %}
                 {% elif question.type is 5 %}
-                    {% include 'management/question/paragraph_understanding/display_alone.html' with question=question show_answer=False selected_answer=selected_answer %}
+                    {% include 'question/paragraph_understanding/display_alone.html' with question=question show_answer=False selected_answer=selected_answer %}
                 {% endif %}
                     <input type="hidden" name="id" value="{{ index }}" />
 

@@ -57,7 +57,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
 
 /* The Close Button */
 .close {
-  color: white;
+  color: black;
   float: right;
   font-size: 28px;
   font-weight: bold;
@@ -72,8 +72,6 @@ body {font-family: Arial, Helvetica, sans-serif;}
 </style>
 
 <body>
-    <form action="/question/review" method="POST">
-            {% csrf_token %}
                 <table class="table table-striped table-hover" style="width:80%; height: 80%" border="0" align="center">
                     <thead>
                       <tr class="w3-light-grey w3-center w3-card-4">
@@ -90,10 +88,13 @@ body {font-family: Arial, Helvetica, sans-serif;}
                         <td>{{ question.question_type }}</td>
                         <td>{{ question.created_by }}</td>
                         <td>
-                            <input type="radio" class="btn btn-default" style="vertical-align:middle;" value="通過" onclick="btn{{ question.id }}.style.backgroundColor='greenyellow'">通過
-                            <input type="radio" class="btn btn-default" id="btn2" style="vertical-align:middle;" value="刪除" onclick="btn{{ question.id }}.style.backgroundColor='orangered'">刪除
+                            <input type="radio" class="btn btn-default"  style="vertical-align:middle;" value="通過" onclick="btn{{ question.id }}.style.backgroundColor='greenyellow'">通過
+                            <input type="radio" class="btn btn-default" id="btn0" style="vertical-align:middle;" value="刪除" onclick="btn{{ question.id }}.style.backgroundColor='orangered'">刪除
                         </td>
-                        <td><button id="myBtn" class="open-button btn btn-default">詳細資訊</button></td>
+                        <td><button id="myBtn{{ question.id }}" class="open-button btn btn-default" onclick="getID({{ question.id }})">詳細資訊</button></td>
+
+
+
                     {% endfor %}
                 </table>
         <section class="text-center pt-3">
@@ -102,7 +103,6 @@ body {font-family: Arial, Helvetica, sans-serif;}
         </section>
         </br></br>
 
-    </form>
 
 
 
@@ -114,32 +114,38 @@ body {font-family: Arial, Helvetica, sans-serif;}
         <section class="col-12">
             <section class="card">
                 <section class="card-body">
-                    {% if question.type <= 2 %}
-                        <audio id="preview-audio" controls>
-                            <source id="preview-audio-source" type="audio/mpeg">
-                            Your browser does not support the audio tag.
-                        </audio>
-                    {% else %}
-                        <span id="question">{{ question.question }}</span>
-                    {% endif %}
 
-                    <section id="answers" class="pt-2"></section>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="answer" id="answer" disabled checked="checked">
-                            <label class="form-check-label" for="answer">{{ question.answer }}</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="option1" id="option1" disabled>
-                            <label class="form-check-label" for="answer">{{ question.option1 }}</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="option2" id="option2" disabled>
-                            <label class="form-check-label" for="answer">{{ question.option2 }}</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="option3" id="option3" disabled>
-                            <label class="form-check-label" for="answer">{{ question.option3 }}</label>
-                        </div>
+                    {% for question in questions %}
+
+                        {% if question.id == q_id %}
+                            <span>#{{ question.id }}. </span>
+
+                            {% if question.type <= 2 %}
+                                <audio id="preview-audio" controls>
+                                    <source id="preview-audio-source" type="audio/mpeg">
+                                    Your browser does not support the audio tag.
+                                </audio>
+                            {% else %}
+                                <span id="question">{{ question.question }}</span>
+                            {% endif %}
+
+                            <section id="answers" class="pt-2"></section>
+                                {% for i in option_dic %}
+                                        {% if i == answer %}
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="option{{ i }}" id="option{{ i }}" disabled checked="checked">
+                                                <label class="form-check-label" for="answer">{{ i }}</label>
+                                            </div>
+                                        {% else %}
+                                           <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="option{{ i }}" id="option{{ i }}" disabled>
+                                                <label class="form-check-label" for="answer">{{ i }}</label>
+                                            </div>
+                                        {% endif %}
+                                {% endfor %}
+                        {% endif %}
+
+                    {% endfor %}
                 </section>
             </section>
         </section>
@@ -147,12 +153,23 @@ body {font-family: Arial, Helvetica, sans-serif;}
 </div>
 
 <script>
+var q_id = {{ q_id | safe }};
+var q_option = {{ option_dic | safe }};
+var ans = {{ answer | safe }}
+var qid_dic = {{ qid_dic | safe }};
+
+function getID(obj) {
+   {#document.write("myBtn"+ obj.toString());#}
+    return "myBtn" + obj.toString()
+}
+
 // Get the modal
 var modal = document.getElementById('myModal');
 
 // Get the button that opens the modal
-var btn = document.getElementById("myBtn");
 
+var btn = document.getElementById("myBtn"+ q_id);
+{#var btn = document.getElementById("myBtn10");#}
 // Get the <span> element that closes the modal
 var span = document.getElementsByClassName("close")[0];
 

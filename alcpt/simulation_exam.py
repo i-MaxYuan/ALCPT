@@ -10,7 +10,7 @@ from django.utils import timezone
 from .managerfuncs import exammanager
 from .decorators import permission_check
 from .definitions import UserType, ExamType, QuestionType
-from .models import AnswerSheet, Exam, TestPaper
+from .models import AnswerSheet, Exam, TestPaper, Student
 from .exceptions import ResourceNotFoundError, ArgumentError, IllegalArgumentError
 
 
@@ -33,7 +33,7 @@ def index(request):
             continue
 
         try:
-            answer_sheet = AnswerSheet.objects.get(user=request.user, exam=exam)
+            answer_sheet = AnswerSheet.objects.get(user=Student.objects.get(user=request.user), exam=exam)
             answer_sheet.answers = json.loads(answer_sheet.answers)
 
             for ans in answer_sheet.answers:
@@ -52,7 +52,7 @@ def index(request):
         'page_range': range(num_pages),
     }
 
-    return render(request, 'simulation/list.html', data)
+    return render(request, 'simulation_exam/simulation_list.html', data)
 
 
 @permission_check(UserType.Student)
@@ -93,7 +93,7 @@ def take_exam(request, exam_id):
                      question in shuffled_questions}
         for question in shuffled_questions:
             answers[str(question.question_type)][str(question.id)] = -1
-        answer_sheet = AnswerSheet.objects.create(student=request.user,
+        answer_sheet = AnswerSheet.objects.create(user=request.user,
                                                   exam_id=exam_id,
                                                   questions=json.dumps(questions),
                                                   answers=json.dumps(answers),
@@ -115,7 +115,7 @@ def take_exam(request, exam_id):
             'has_next': question_index + 1 < len(shuffled_questions),
         }
 
-        return render(request, 'exam/answer.html', data)
+        return render(request, 'simulation_exam/simulation_answer.html', data)
     else:
         try:
             answer = int(request.POST.get('answer-{}'.format(question.id)))

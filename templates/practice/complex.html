@@ -68,27 +68,8 @@
 
     </section>
 
-    <form class="col-12 row mt-3" id="practice" action="/practice/{{ practice_type }}" method="post" autocomplete="off">
-
+    <form class="col-12 row mt-3" id="practice" action="/practice/complex" method="post" autocomplete="off">
         {% csrf_token %}
-
-{#        <h3 class="col-12"><i class="fa fa-toggle-on fa-fw mb-2"></i> 題型</h3>#}
-
-{#        <input id="question_type"  type="hidden" name="question_type" />#}
-
-{#        <section class="col-12 row">#}
-{#        {% for question_type in question_types %}#}
-{#            <section class="col-3 p-3">#}
-{#                <button id="question-type-{{ question_type.0 }}" class="col-12 btn btn-sq-lg p-3 {% if practice_type == 'listening' %} btn-info {% elif practice_type == 'reading' %} btn-secondary {% endif %}" data-toggle="button">#}
-{#                    <i class="fa fa-{{ question_type.1 }} fa-5x mb-2"></i>#}
-{#                    <br>#}
-{#                    {{ question_type.0|readable_question_type }}#}
-{#                </button>#}
-{#            </section>#}
-{#        {% endfor %}#}
-{#        </section>#}
-
-
         <div class="col-12 py-2 form-group">
             <input class="form-control" name="num_questions" value="100" hidden>
         </div>

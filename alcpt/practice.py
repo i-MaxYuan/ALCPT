@@ -1,5 +1,6 @@
 import json
 import random
+from collections import OrderedDict
 
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
@@ -8,7 +9,7 @@ from django.views.decorators.http import require_http_methods
 
 from .exceptions import IllegalArgumentError, ArgumentError
 from .decorators import permission_check
-from .definitions import UserType, QuestionType, ExamType
+from .definitions import UserType, QuestionType, ExamType, QuestionTypeCounts
 from .models import AnswerSheet, Question, Student
 from .managerfuncs import practicemanager
 
@@ -74,6 +75,20 @@ def create(request, practice_type):
 
 @permission_check(UserType.Tester)
 @require_http_methods(["GET", "POST"])
+def create_integration(request):
+    practice_type = ExamType.Practice
+    question_types = [question_type.value[0] for question_type in QuestionType.__members__.values()]
+    num_questions = sum(QuestionTypeCounts.Exam.value[0])
+    practice, selected_questions = practicemanager.create_practice(user=request.uesr, practice_type=practice_type,
+                                                                   question_types=question_types,
+                                                                   num_questions=num_questions,
+                                                                   integration=True)
+
+    return redirect('/practice/{}/take'.format(practice.id), selected_questions=selected_questions)
+
+
+@permission_check(UserType.Tester)
+@require_http_methods(["GET", "POST"])
 def take_practice(request, practice_id, question_index, selected_questions):
     try:
         question_index = int(question_index)
@@ -90,32 +105,33 @@ def take_practice(request, practice_id, question_index, selected_questions):
             raise IllegalArgumentError('This answer_sheet is finished.')
 
     except ObjectDoesNotExist:
-        answers = {str(question_type.value[0]): {} for question_type in QuestionType.__members__.values()}
-        questions = {str(selected_questions.index(question)): {str(question.id): random.sample(range(4), 4)} for question in selected_questions}
-        for question in selected_questions:
-            answers[str(question.question_type)][str(question.id)] = -1
-        answer_sheet = AnswerSheet.objects.create(student=request.user,
+        # answers = {str(question_type.value[0]): {} for question_type in QuestionType.__members__.values()}
+        # questions = {str(selected_questions.index(question)): {str(question.id): random.sample(range(4), 4)} for question in selected_questions}
+        answers = OrderedDict((question.id, -1) for question in selected_questions)
+        questions = OrderedDict((selected_questions.index(question), (question.id, random.sample(range(4), 4))) for question in selected_questions)
+        # for question in selected_questions:
+        #     answers[str(question.question_type)][str(question.id)] = -1
+        answer_sheet = AnswerSheet.objects.create(student=Student.objects.get(user=request.user),
                                                   exam_id=practice_id,
                                                   questions=json.dumps(questions),
                                                   answers=json.dumps(answers),
                                                   score=0)
 
     answer_num = 0
-    for question_type in answers:
-        for q_id in answers[question_type]:
-            answer_num += 1
-            if answers[question_type][q_id] < 0:
-                all_answered = False
+    for question_id in answers:
+        answer_num += 1
+        if answers[question_id] < 0:
+            all_answered = False
 
-            else:
-                all_answered = True
+        else:
+            all_answered = True
 
     if question_index >= answer_num:
         raise IllegalArgumentError('Question index out of range.')
 
     else:
-        question_id, options = list(questions[str(question_index)].items())[0]
-        question = Question.objects.get(id=int(question_id))
+        question_id, options = questions[question_index][0]
+        question = Question.objects.get(id=question_id)
         question.option = json.loads(question.option)
 
     if request.method == 'POST':
@@ -128,7 +144,7 @@ def take_practice(request, practice_id, question_index, selected_questions):
         except TypeError:
             raise IllegalArgumentError(message='At least one option needs to be selected.')
 
-        answers[str(question.question_type)][str(question_id)] = answer
+        answers[question_id] = answer
         answer_sheet.answers = json.dumps(answers)
         answer_sheet.save()
 
@@ -146,7 +162,7 @@ def take_practice(request, practice_id, question_index, selected_questions):
                 raise IllegalArgumentError('The following questions have not been answered: {}.'.format(
                     ', '.join(not_answered)))
 
-            practicemanager.evaluate_score(student=request.user, answer_sheet=answer_sheet)
+            practicemanager.evaluate_score(answer_sheet=answer_sheet)
 
             answer_sheet.finish = True
             answer_sheet.save()
@@ -168,3 +184,45 @@ def take_practice(request, practice_id, question_index, selected_questions):
         }
 
         return render(request, 'practice/answer.html', data)
+
+
+@permission_check(UserType.Tester)
+@require_http_methods(["POST"])
+def stop_practice(request, question_index, answer_sheet_id):
+    try:
+        question_index = int(question_index)
+
+    except ValueError:
+        question_index = 0
+
+    answer_sheet = AnswerSheet.objects.get(id=answer_sheet_id)
+    answers = json.loads(answer_sheet.answers)
+    questions = json.loads(answer_sheet.questions)
+    answer_num = 0
+    for question_id in answers:
+        answer_num += 1
+
+    if question_index >= answer_num:
+        raise IllegalArgumentError('Question index out of range.')
+
+    else:
+        question_id, options = questions[question_index][0]
+        question = Question.objects.get(id=question_id)
+        question.option = json.loads(question.option)
+
+    try:
+        answer = int(request.POST.get('answer-{}'.format(question.id)))
+
+        if answer not in range(len(question.options)):
+            raise IllegalArgumentError(message='Invalid answer.')
+
+    except TypeError:
+        raise IllegalArgumentError(message='At least one option needs to be selected.')
+
+    answers[question_id] = answer
+    answer_sheet.answers = json.dumps(answers)
+    answer_sheet.save()
+
+    messages.success(request, "Stop the practice.")
+
+    return redirect('/')
