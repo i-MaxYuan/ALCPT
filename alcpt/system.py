@@ -6,7 +6,6 @@ from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.hashers import make_password
 
 from .models import *
 from .exceptions import *
@@ -176,7 +175,8 @@ def edit_user(request, serial_number: str):
             if new_password != request.POST.get('check-password'):
                 raise IllegalArgumentError('Password not equal.')
 
-            elif not re.match('^[a-z0-9]{32}$', new_password):
+            elif not re.match('^[a-z0-9]{8,}$', new_password):
+                print(bool(re.match('^[a-z0-9]{8,}$', new_password)))
                 raise IllegalArgumentError('Password context is illegal.')
 
             systemmanager.update_password(edited_user, new_password)

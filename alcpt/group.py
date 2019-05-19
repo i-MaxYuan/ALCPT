@@ -1,4 +1,5 @@
 import json
+from string import punctuation
 
 from django.shortcuts import render, redirect
 from django.contrib import messages
@@ -39,7 +40,13 @@ def group_index(request):
 @permission_check(UserType.ExamManager)
 @require_http_methods(["GET", "POST"])
 def create_group(request):
+    try:
+        page = int(request.GET.get('page', 0))
+    except ValueError:
+        page = 0
+
     if request.method == 'POST':
+        print(request.POST.get('name'))
         name = request.POST.get('name')
 
         try:
@@ -58,11 +65,42 @@ def create_group(request):
         group = exammanager.create_group(name=name,
                                          members=members)
 
-        return redirect('/exam/{}/group_edit'.format(group.id))
+        return redirect('/exam/group'.format(group.name))
 
     else:
+        keywords = {
+            'name': request.GET.get('name')
+        }
+
+        if keywords['name'] and any(char in punctuation for char in keywords['name']):
+            keywords['name'] = None
+            messages.warning(request, "Name cannot contains any special character.")
+
+        for keyword in ['department', 'grade', 'squadron']:
+            try:
+                keywords[keyword] = int(request.GET.get(keyword))
+            except (KeyError, TypeError, ValueError):
+                keywords[keyword] = None
+
+        if keywords['department']:
+            try:
+                keywords['department'] = Department.objects.get(id=keywords['department'])
+            except ObjectDoesNotExist:
+                keywords['department'] = None
+
+        if keywords['squadron']:
+            try:
+                keywords['squadron'] = Squadron.objects.get(id=keywords['squadron'])
+            except ObjectDoesNotExist:
+                keywords['squadron'] = None
+
+        num_pages, students = exammanager.query_students(**keywords, page=page)
+
         data = {
-            'students': Student.objects.all(),
+            'students': students,
+            'keywords': keywords,
+            'page_range': range(num_pages),
+            'page': page,
             'departments': Department.objects.all(),
             'squadrons': Squadron.objects.all(),
         }
@@ -71,21 +109,28 @@ def create_group(request):
 
 @permission_check(UserType.ExamManager)
 @require_http_methods(["GET", "POST"])
-def edit_group(request, group_id: int):
+def edit_group(request, group_name: str):
     try:
-        group = Group.objects.get(id=group_id)
+        group = Group.objects.get(name=group_name)
 
     except ObjectDoesNotExist:
-        raise ObjectNotFoundError('Cannot find group id={}'.format(group_id))
+        raise ObjectNotFoundError('Cannot find group id={}'.format(group_name))
+
+    try:
+        page = int(request.GET.get('page', 0))
+    except ValueError:
+        page = 0
 
     if request.method == 'POST':
         name = request.POST.get('name')
 
         try:
-            members = request.POST.get('members')
+            members = request.POST.getlist('student_id')
 
         except ValueError:
             raise ArgumentError('Missing members')
+
+        print(members)
 
         group = exammanager.edit_group(group=group,
                                        name=name,
@@ -93,20 +138,57 @@ def edit_group(request, group_id: int):
 
         messages.success(request, "Successfully update group :{}.".format(group.name))
 
-        return redirect('/exam')
+        return redirect('/exam/group')
 
     else:
-        return render(request, 'exam/group_edit.html', locals())
+        keywords = {
+            'name': request.GET.get('name')
+        }
+
+        if keywords['name'] and any(char in punctuation for char in keywords['name']):
+            keywords['name'] = None
+            messages.warning(request, "Name cannot contains any special character.")
+
+        for keyword in ['department', 'grade', 'squadron']:
+            try:
+                keywords[keyword] = int(request.GET.get(keyword))
+            except (KeyError, TypeError, ValueError):
+                keywords[keyword] = None
+
+        if keywords['department']:
+            try:
+                keywords['department'] = Department.objects.get(id=keywords['department'])
+            except ObjectDoesNotExist:
+                keywords['department'] = None
+
+        if keywords['squadron']:
+            try:
+                keywords['squadron'] = Squadron.objects.get(id=keywords['squadron'])
+            except ObjectDoesNotExist:
+                keywords['squadron'] = None
+
+        num_pages, students = exammanager.query_students(**keywords, page=page)
+
+        data = {
+            'group': group,
+            'students': students,
+            'keywords': keywords,
+            'page_range': range(num_pages),
+            'page': page,
+            'departments': Department.objects.all(),
+            'squadrons': Squadron.objects.all(),
+        }
+        return render(request, 'exam/group_edit.html', data)
 
 
 @permission_check(UserType.ExamManager)
 @require_http_methods(["GET"])
-def delete_group(request, group_id):
+def delete_group(request, group_name: str):
     try:
-        group = TestPaper.objects.get(id=group_id)
+        group = Group.objects.get(name=group_name)
 
     except ObjectDoesNotExist:
-        raise ResourceNotFoundError('Cannot find group id = {}.'.format(group_id))
+        raise ResourceNotFoundError('Cannot find group name = {}.'.format(group_name))
 
     group.delete()
 

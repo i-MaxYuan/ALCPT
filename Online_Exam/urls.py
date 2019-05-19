@@ -76,7 +76,7 @@ urlpatterns = [
         url(r'^group$', group.group_index),
         url(r'^group/', include([
             url(r'^create$', group.create_group),
-            url(r'^(?P<group_id>[0-9]+)/', include([
+            url(r'^(?P<group_name>[%\w\d]+)/', include([
                 url(r'^edit$', group.edit_group),
                 url(r'^delete$', group.delete_group)
             ]))

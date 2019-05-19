@@ -98,7 +98,7 @@ class TestPaper(models.Model):
 
 # 模擬考
 class Exam(models.Model):
-    name = models.CharField(max_length=100, primary_key=True)
+    name = models.CharField(max_length=100, unique=True)
     type = models.PositiveSmallIntegerField(default=2)
     testpaper = models.ForeignKey('TestPaper', on_delete=models.CASCADE, null=True)
     group = models.ForeignKey('Group', on_delete=models.CASCADE, null=True)
@@ -163,8 +163,11 @@ class AnswerSheet(models.Model):
 
 # 受測名單
 class Group(models.Model):
-    name = models.CharField(max_length=255, primary_key=True)
+    name = models.CharField(max_length=255, unique=True)
     member = models.ManyToManyField('Student', blank=True)
+    created_by = models.ForeignKey("User", on_delete=models.PROTECT, related_name='group_created')
+    update_time = models.DateTimeField(auto_now=True)
+    create_time = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ('-name',)

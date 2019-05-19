@@ -6,7 +6,7 @@ from django.utils import timezone
 from math import ceil
 
 from alcpt.definitions import ExamType, QuestionType
-from alcpt.models import Exam, Question, Student, TestPaper, Group, User
+from alcpt.models import Exam, Question, Student, TestPaper, Group, User, Department, Squadron
 
 
 def query_exams(*, exam_type: ExamType, student: Student=None, name: str=None, page: int=None, filter_func=None):
@@ -67,6 +67,32 @@ def query_groups(*, name: str=None, page: int=None):
     return num_pages, groups
 
 
+def query_students(*, department: Department, grade: int, squadron: Squadron, name: str, page: int=None):
+    queries = Q()
+
+    if department:
+        queries &= Q(department=department)
+
+    if grade is not None:
+        queries &= Q(grade=grade)
+
+    if squadron:
+        queries &= Q(squadron=squadron)
+
+    if name is not None:
+        queries &= Q(user__serial_number__icontains=name) | Q(user__name__icontains=name)
+
+    users = Student.objects.filter(queries)
+    users = users.order_by('-grade')
+
+    num_pages = ceil(len(users) / 10)
+
+    if page and page >= 0:
+        users = users[page * 10: page * 10 + 10]
+
+    return num_pages, users
+
+
 def create_testpaper(name: str, created_by: User):
     testpaper = TestPaper.objects.create(name=name,
                                          created_by=created_by)
@@ -97,6 +123,7 @@ def create_group(name: str, members: list):
 
 
 def edit_group(group: Group, name: str, members: list):
+    group.member.clear()
     for member in members:
         student = Student.objects.get(id=member)
         group.member.add(student)
