@@ -206,7 +206,7 @@ ul.bar li:hover {background: #3c6382;   border-radius: 10px; }
 ul.bar li:hover ul {display: block;}
 ul.bar li ul {
   position: absolute;
-  width: 200px;
+  width: 220px;
   display: none;
   color: white;
 
@@ -239,7 +239,7 @@ ul.bar li ul li a:hover { color: #48dbfb;}
                         <li><a href="/exam">考試列表</a> </li>
                         <li><a href="/exam/testpaper">考卷列表</a> </li>
                         <li><a href="/exam/testpaper/create">管理考卷</a> </li>
-                        <li><a href="/exam">考試列表</a> </li>
+                        <li><a href="/exam/group">受測者群組列表</a> </li>
                         <li><a href="/exam/create">管理考試</a> </li>
                     </ul>
                 </li>
@@ -269,12 +269,12 @@ ul.bar li ul li a:hover { color: #48dbfb;}
                 </li>
                 {% endif %}
                 {% if request.user|has_perm:'Tester' %}
-                <li><a style=" text-decoration:none;" href="/practice/score">受測者</a>
+                <li><a style=" text-decoration:none;" href="/tester">受測者</a>
                     <ul>
-                        <li><a style=" text-decoration:none;" href="/practice/score">檢閱成績</a> </li>
-                        <li><a style=" text-decoration:none;" href="/practice/reading">閱讀練習</a> </li>
-                        <li><a style=" text-decoration:none;" href="/practice/listening">聽力練習</a> </li>
-                        <li><a style=" text-decoration:none;" href="/practice/complex">綜合練習</a> </li>
+                        <li><a style=" text-decoration:none;" href="/tester">檢閱成績</a> </li>
+                        <li><a style=" text-decoration:none;" href="/tester/practice/reading">閱讀練習</a> </li>
+                        <li><a style=" text-decoration:none;" href="/tester/practice/listening">聽力練習</a> </li>
+                        <li><a style=" text-decoration:none;" href="/tester/practice/integration">綜合練習</a> </li>
                         <li><a style=" text-decoration:none;" href="#">模擬鑑測</a> </li>
                     </ul>
                 </li>

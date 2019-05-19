@@ -87,7 +87,6 @@ class Student(models.Model):
 # 試卷
 class TestPaper(models.Model):
     name = models.CharField(max_length=100, primary_key=True)
-    questions = models.TextField(max_length=255, blank=True)
     create_time = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey("User", on_delete=models.PROTECT, related_name='tester_created')
     update_time = models.DateTimeField(auto_now=True)

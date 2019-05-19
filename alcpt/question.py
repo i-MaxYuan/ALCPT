@@ -56,7 +56,7 @@ def review_question_index(request):
         'question_type': int(request.GET.get('question_type', 0)),
     }
 
-    num_pages, questions = questionmanager.query_question(**keywords, page=page)
+    num_pages, questions = questionmanager.query_question(**keywords, enable=False, page=page)
 
     for question in questions:
         question.option = json.loads(question.option)
@@ -148,12 +148,15 @@ def create_question(request):
         if len(options) < 4:
             raise ArgumentError(message='Options must have 4.')
 
-        try:
-            if Question.objects.get(question=question):
+        if question is True:
+            try:
+                Question.objects.get(question=question)
+
+            except MultipleObjectsReturned:
                 raise MultipleObjectsReturned('Question has existed.')
 
-        except ObjectDoesNotExist:
-            pass
+            except ObjectDoesNotExist:
+                pass
 
         new_question = questionmanager.create_question(question_type=question_type,
                                                        question=question,
@@ -336,8 +339,9 @@ def delete_question(request, question_id):
 
 
 @permission_check(UserType.QuestionManager)
-@require_http_methods(["GET"])
-def enable_question(request, question_id_list):
+@require_http_methods(["POST"])
+def enable_question(request):
+    question_id_list = request.POST.get('question_id_list')
     for question_id in question_id_list:
         try:
             question = Question.objects.get(id=question_id)
@@ -369,7 +373,7 @@ def operator_index(request):
         'question_type': int(request.GET.get('question_type', 0)),
     }
 
-    num_pages, questions = questionmanager.query_question(**keywords, created_by=request.user, page=page)
+    num_pages, questions = questionmanager.query_question(**keywords, created_by=request.user, enable=False, page=page)
 
     for question in questions:
         question.option = json.loads(question.option)
@@ -462,7 +466,7 @@ def operator_create_question(request):
         if len(options) < 4:
             raise ArgumentError(message='Options must have 4.')
 
-        if question is not None:
+        if question is True:
             try:
                 Question.objects.get(question=question)
 

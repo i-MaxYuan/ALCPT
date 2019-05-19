@@ -67,9 +67,8 @@ def query_groups(*, name: str=None, page: int=None):
     return num_pages, groups
 
 
-def create_testpaper(name: str, questions: list, created_by: User):
+def create_testpaper(name: str, created_by: User):
     testpaper = TestPaper.objects.create(name=name,
-                                         questions=json.dumps(questions),
                                          created_by=created_by)
     testpaper.enable = False
     testpaper.save()

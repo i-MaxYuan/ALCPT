@@ -1,7 +1,7 @@
 from django import template
 
 from alcpt.definitions import UserType, QuestionType
-from alcpt.models import User, Student
+from alcpt.models import User, Student, Question
 from alcpt.utility import set_query_parameter
 from alcpt.exceptions import IllegalArgumentError, ObjectNotFoundError
 
@@ -81,3 +81,12 @@ def student_data(user: User):
     except Exception:
         data = ['None', student.grade, 'None']
         return data
+
+
+@register.filter(name='check_correct')
+def check_correct(option: str, question: Question):
+    if question.option.index(option) == question.answer:
+        return True
+
+    else:
+        return False

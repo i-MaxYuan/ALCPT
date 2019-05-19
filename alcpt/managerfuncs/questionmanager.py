@@ -8,11 +8,9 @@ from alcpt.models import Question, TestPaper, User
 from alcpt.utility import save_file
 
 
-def query_question(description: str=None, question_type: int=None, page: int=0, enable: bool=False,
+def query_question(*, description: str=None, question_type: int=None, page: int=0, enable: bool,
                    testpaper: TestPaper=None, created_by: User=None):
-    queries = Q()
-    if enable:
-        queries = Q(enable=True)
+    queries = Q(enable=enable)
 
     if description:
         queries &= Q(question__icontains=description)

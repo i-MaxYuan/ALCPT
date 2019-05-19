@@ -65,7 +65,9 @@ urlpatterns = [
         url(r'^testpaper$', testpaper.testpaper_index),
         url(r'^testpaper/', include([
             url(r'^create$', testpaper.create_testpaper),
-            url(r'^(?P<testpaper_id>[0-9]+)/', include([
+            url(r'^(?P<testpaper_name>[%\w\d]+)/', include([
+                url(r'^pick-question/(?P<question_type>[0-9]+)$', testpaper.pick_question),
+                url(r'^auto-pick-question/(?P<question_type>[0-9]+)$', testpaper.auto_pick_question),
                 url(r'^edit$', testpaper.edit_testpaper),
                 url(r'^delete$', testpaper.delete_testpaper)
             ]))
