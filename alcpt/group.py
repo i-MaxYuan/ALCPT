@@ -63,7 +63,8 @@ def create_group(request):
             pass
 
         group = exammanager.create_group(name=name,
-                                         members=members)
+                                         members=members,
+                                         created_by=request.user)
 
         return redirect('/exam/group'.format(group.name))
 

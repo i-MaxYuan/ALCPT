@@ -110,8 +110,9 @@ def edit_testpaper(testpaper: TestPaper, name: str, questions: list):
     return testpaper
 
 
-def create_group(name: str, members: list):
-    group = Group.objects.create(name=name)
+def create_group(name: str, members: list, created_by: User):
+    group = Group.objects.create(name=name,
+                                 created_by=created_by)
 
     for member in members:
         student = Student.objects.get(id=member)
