@@ -33,7 +33,7 @@ def create_practice(*, user: User, practice_type: ExamType, question_types: list
         raise IllegalArgumentError(message="There is too few questions in the database.")
 
     practice = Exam.objects.create(name=name,
-                                   type=practice_type,
+                                   type=practice_type.value[0],
                                    start_time=now,
                                    created_by=user)
 

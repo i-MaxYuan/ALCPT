@@ -39,6 +39,9 @@ def query_users(*, department: Department, grade: int, squadron: Squadron, name:
     if page and page >= 0:
         users = users[page * 10: page * 10 + 10]
 
+    elif page == 0:
+        users = users[0: 10]
+
     return num_pages, users
 
 

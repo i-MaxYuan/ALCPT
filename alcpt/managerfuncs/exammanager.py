@@ -9,7 +9,7 @@ from alcpt.definitions import ExamType, QuestionType
 from alcpt.models import Exam, Question, Student, TestPaper, Group, User, Department, Squadron
 
 
-def query_exams(*, exam_type: ExamType, student: Student=None, name: str=None, page: int=None, filter_func=None):
+def query_exams(*, exam_type: ExamType, public: bool, student: User=None, name: str=None, page: int=None, filter_func=None):
     queries = Q()
     queries &= Q(type=exam_type.value[0])
 
@@ -18,6 +18,9 @@ def query_exams(*, exam_type: ExamType, student: Student=None, name: str=None, p
 
     if student:
         queries &= Q(group__member__user=student)
+
+    if public:
+        queries &= Q(public=public)
 
     exams = Exam.objects.filter(queries).order_by('-create_time')
 
@@ -90,6 +93,9 @@ def query_students(*, department: Department, grade: int, squadron: Squadron, na
     if page and page >= 0:
         users = users[page * 10: page * 10 + 10]
 
+    elif page == 0:
+        users = users[0: 10]
+
     return num_pages, users
 
 
@@ -102,9 +108,8 @@ def create_testpaper(name: str, created_by: User):
     return testpaper
 
 
-def edit_testpaper(testpaper: TestPaper, name: str, questions: list):
+def edit_testpaper(testpaper: TestPaper, name: str):
     testpaper.name = name
-    testpaper.questions = json.dumps(questions)
     testpaper.save()
 
     return testpaper

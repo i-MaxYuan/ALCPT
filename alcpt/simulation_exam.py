@@ -1,6 +1,7 @@
 import json
 from datetime import timedelta
 from random import Random
+from collections import OrderedDict
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, redirect
@@ -14,7 +15,7 @@ from .models import AnswerSheet, Exam, TestPaper, Student
 from .exceptions import ResourceNotFoundError, ArgumentError, IllegalArgumentError
 
 
-@permission_check(UserType.Student)
+@permission_check(UserType.Tester)
 @require_http_methods(["GET"])
 def index(request):
     try:
@@ -36,11 +37,10 @@ def index(request):
             answer_sheet = AnswerSheet.objects.get(user=Student.objects.get(user=request.user), exam=exam)
             answer_sheet.answers = json.loads(answer_sheet.answers)
 
-            for ans in answer_sheet.answers:
-                for q_id in answer_sheet.answers[ans]:
-                    if answer_sheet.answers[ans][q_id] < 0:
-                        exam.status = 2  # the student does not complete this exam yet
-                        break
+            for q_id in answer_sheet.answers:
+                if answer_sheet.answers[q_id] < 0:
+                    exam.status = 2  # the student does not complete this exam yet
+                    break
             else:
                 exam.status = 3  # all question had been answered
         except ObjectDoesNotExist:
@@ -55,7 +55,7 @@ def index(request):
     return render(request, 'simulation_exam/simulation_list.html', data)
 
 
-@permission_check(UserType.Student)
+@permission_check(UserType.Tester)
 @require_http_methods(["GET", "POST"])
 def take_exam(request, exam_id):
     try:
@@ -70,7 +70,7 @@ def take_exam(request, exam_id):
         raise ResourceNotFoundError(message='Cannot find exam {}'.format(exam_id))
 
     try:
-        testpaper = TestPaper.objects.get(id=exam.testpaper)
+        testpaper = TestPaper.objects.get(id=exam.testpaper.id)
 
     except ObjectDoesNotExist:
         raise ResourceNotFoundError(message='Cannot find exam\'s testpaper {}'.format(exam.testpaper))
@@ -79,29 +79,36 @@ def take_exam(request, exam_id):
     random = Random(request.user.id)
 
     for question_type in QuestionType.__members__.values():
-        questions = list(testpaper.question_set.filter(type=question_type.value[0]))
+        questions = list(testpaper.question_set.filter(question_type=question_type.value[0]).order_by('?'))
 
         random.shuffle(questions)
         shuffled_questions.extend(questions)
 
     try:
-        answer_sheet = AnswerSheet.objects.get(user=request.user, exam=exam)
+        answer_sheet = AnswerSheet.objects.get(user=Student.objects.get(user=request.user), exam=exam)
         answers = json.loads(answer_sheet.answers)
     except ObjectDoesNotExist:
-        answers = {str(question_type.value[0]): {} for question_type in QuestionType.__members__.values()}
-        questions = {str(shuffled_questions.index(question)): {str(question.id): random.sample(range(4), 4)} for
-                     question in shuffled_questions}
-        for question in shuffled_questions:
-            answers[str(question.question_type)][str(question.id)] = -1
-        answer_sheet = AnswerSheet.objects.create(user=request.user,
+        # answers = {str(question_type.value[0]): {} for question_type in QuestionType.__members__.values()}
+        # questions = {str(shuffled_questions.index(question)): {str(question.id): random.sample(range(4), 4)} for
+        #              question in shuffled_questions}
+        answers = OrderedDict((question.id, -1) for question in shuffled_questions)
+        questions = OrderedDict(
+            (shuffled_questions.index(question), (question.id, random.sample(range(4), 4))) for question in
+            shuffled_questions)
+        # for question in shuffled_questions:
+        #     answers[str(question.question_type)][str(question.id)] = -1
+
+        answer_sheet = AnswerSheet.objects.create(user=Student.objects.get(user=request.user),
                                                   exam_id=exam_id,
                                                   questions=json.dumps(questions),
                                                   answers=json.dumps(answers),
                                                   score=0)
 
     for question in shuffled_questions:
-        if answers[str(question.question_type)][str(question.id)] < 0:
-            question.options = json.loads(question.options)
+        if answers[question.id] < 0:
+            print('hi111111111111111111')
+            question.option = json.loads(question.option)
+            print('hi222222222222222222')
             question_index = shuffled_questions.index(question)
             break
     else:
@@ -120,12 +127,12 @@ def take_exam(request, exam_id):
         try:
             answer = int(request.POST.get('answer-{}'.format(question.id)))
 
-            if answer not in range(len(question.options)):
+            if answer not in range(len(question.option)):
                 raise IllegalArgumentError(message='Invalid answer.')
         except TypeError:
             raise ArgumentError(message='At least one option needs to be selected.')
 
-        answers[question_index] = answer
+        answers[question.id] = answer
         answer_sheet.answers = json.dumps(answers)
         answer_sheet.save()
 

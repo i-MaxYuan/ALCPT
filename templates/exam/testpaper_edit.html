@@ -46,7 +46,7 @@
                     <h5 class="card-title">{{ x|readable_question_type }}</h5>
                     <p class="card-text">共 {{ question_types|lookup:x }} 題，已選擇 {{ selected_num|lookup:x }} 題</p>
                     <a href="/exam/testpaper/{{ testpaper.name }}/pick-question/{{ x }}" class="btn btn-success mt-1  ">重新選擇</a>
-                    <a href="/exam/testpaper/{{ testpaper.name }}/auto-pick-question/{{ x }}" class="btn btn-secondary mt-1 {% if selected_num|lookup:x >= question_types|lookup:x %} disabled {% endif %}">備用按鈕</a>
+                    <a href="/exam/testpaper/{{ testpaper.name }}/auto-pick-question/{{ x }}" class="btn btn-secondary mt-1 {% if selected_num|lookup:x >= question_types|lookup:x %} disabled {% endif %}">自動選題</a>
                 </div>
             </div>
             {% endfor %}

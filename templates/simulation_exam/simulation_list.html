@@ -30,15 +30,15 @@
                     <td class="align-middle">{{ exam.start_time|date:'Y/n/d H:i' }}</td>
                     <td class="align-middle">{{ exam.duration }} 分鐘</td>
                     <td class="align-middle">
-{#                    {% if exam.status is 0 %}#}
-{#                        <span class="text-muted">尚未開始</span>#}
-{#                    {% elif exam.status is 1 %}#}
-                        <a class="btn btn-primary" href="/simulation-exam/{{ exam.id }}/take">開始作答</a>
-{#                    {% elif exam.status is 2 %}#}
-{#                        <a class="btn btn-success" href="/simulation-exam/{{ exam.id }}/take">繼續作答</a>#}
-{#                    {% elif exam.status is 3 %}#}
-{#                        <span class="text-muted">已完成作答</span>#}
-{#                    {% endif %}#}
+                    {% if exam.status is 0 %}
+                        <span class="text-muted">尚未開始</span>
+                    {% elif exam.status is 1 %}
+                        <a class="btn btn-primary" href="/tester/simulation-exam/{{ exam.id }}/take">開始作答</a>
+                    {% elif exam.status is 2 %}
+                        <a class="btn btn-success" href="/tester/simulation-exam/{{ exam.id }}/take">繼續作答</a>
+                    {% elif exam.status is 3 %}
+                        <span class="text-muted">已完成作答</span>
+                    {% endif %}
                     </td>
                 </tr>
                 {% endfor %}

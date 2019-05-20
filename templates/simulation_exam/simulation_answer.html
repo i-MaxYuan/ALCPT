@@ -16,15 +16,15 @@
                 <form class="pt-2" action="/simulation-exam/{{ exam.id }}/take" method="post">
                     {% csrf_token %}
             {% if question.type is 1 %}
-                {% include 'management/question/qa/display_alone.html' with question=question show_answer=False %}
+                {% include 'question/qa/display_alone.html' with question=question show_answer=False %}
             {% elif question.type is 2 %}
-                {% include 'management/question/short_conversation/display_alone.html' with question=question show_answer=False %}
+                {% include 'question/short_conversation/display_alone.html' with question=question show_answer=False %}
             {% elif question.type is 3 %}
-                {% include 'management/question/grammar/display_alone.html' with question=question show_answer=False %}
+                {% include 'question/grammar/display_alone.html' with question=question show_answer=False %}
             {% elif question.type is 4 %}
-                {% include 'management/question/phrase/display_alone.html' with question=question show_answer=False %}
+                {% include 'question/phrase/display_alone.html' with question=question show_answer=False %}
             {% elif question.type is 5 %}
-                {% include 'management/question/paragraph_understanding/display_alone.html' with question=question show_answer=False %}
+                {% include 'question/paragraph_understanding/display_alone.html' with question=question show_answer=False %}
             {% endif %}
                     <input type="hidden" name="id" value="{{ index }}" />
                     {% if has_next %}

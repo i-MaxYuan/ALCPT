@@ -8,9 +8,9 @@ from django.shortcuts import render, redirect
 from django.views.decorators.http import require_http_methods
 
 from .exceptions import IllegalArgumentError, ArgumentError
-from .decorators import permission_check
+from .decorators import permission_check, custom_redirect
 from .definitions import UserType, QuestionType, ExamType, QuestionTypeCounts
-from .models import AnswerSheet, Question, Student
+from .models import AnswerSheet, Question, Student, User
 from .managerfuncs import practicemanager
 
 
@@ -43,12 +43,13 @@ def create(request, practice_type):
 
         except ValueError:
             raise IllegalArgumentError('Question amount must be integer.')
-
+        user = User.objects.get(serial_number=request.user.serial_number)
         practice_type = ExamType.Listening if practice_type == 'listening' else ExamType.Reading
-        practice, selected_questions = practicemanager.create_practice(user=request.uesr, practice_type=practice_type,
+        practice, selected_questions = practicemanager.create_practice(user=user, practice_type=practice_type,
                                                                        question_types=question_types, num_questions=num_questions)
 
-        return redirect('/practice/{}/take'.format(practice.id), selected_questions=selected_questions)
+        # return redirect('/tester/practice/{}/take'.format(practice.id), selected_questions=selected_questions)
+        return custom_redirect('/tester/practice/{}/take'.format(practice.id), selected_questions=selected_questions)
 
     else:
         question_types = []

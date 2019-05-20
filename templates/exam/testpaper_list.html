@@ -49,9 +49,9 @@
         </div>
         <h1 style="display: inline;">考卷列表</h1>
     </section>
-{#    <section class="col-auto">#}
-{#        <a class="btn btn-sq-lg" style="background-color: #1b98e0; color: white" href="/exam/new">新增考卷</a>#}
-{#    </section>#}
+    <section class="col-auto">
+        <a class="btn btn-sq-lg" style="background-color: #1b98e0; color: white" href="/exam/testpaper/create">新增考卷</a>
+    </section>
 
     <div class="w-100 my-3"></div>
 
@@ -73,7 +73,7 @@
                     <td>{{ testpaper.name }}</td>
                     <td>{{ testpaper.create_time|date:'Y/n/d H:i' }}</td>
                     <td>{{ testpaper.update_time|date:'Y/n/d H:i' }}</td>
-                    <td>{{ testpaper.created_by }}</td>
+                    <td>{{ testpaper.created_by.name }}</td>
                     <td>
                         <a href="/exam/testpaper/{{ testpaper.name }}/edit"><i class="fa fa-pencil fa-fw mb-2"></i></a>
                         &nbsp;
