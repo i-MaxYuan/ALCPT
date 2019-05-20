@@ -24,12 +24,13 @@ def index(request):
     keywords = {
         'name': request.GET.get('name', ''),
         'exam_type': ExamType.Exam,
+        'public': True
     }
 
     num_pages, exams = exammanager.query_exams(**keywords, page=page)
 
     data = {
-        'exam': exams,
+        'exams': exams,
         'page': page,
         'page_range': range(num_pages),
     }
@@ -62,10 +63,16 @@ def create_exam(request):
             raise IllegalArgumentError('The "duration" must be an integer.')
 
         try:
-            testpaper = request.POST.get('testpaper')
+            testpaper = TestPaper.objects.get(id=request.POST.get('testpaper'))
 
         except TypeError:
-            raise ArgumentError('Missing duration')
+            raise ArgumentError('Missing testpaper')
+
+        try:
+            group = Group.objects.get(id=request.POST.get('group'))
+
+        except TypeError:
+            raise ArgumentError('Missing testpaper')
 
         try:
             if Exam.objects.get(name=name):
@@ -77,14 +84,20 @@ def create_exam(request):
         exam = Exam.objects.create(name=name,
                                    type=ExamType.Exam.value[0],
                                    testpaper=testpaper,
+                                   group=group,
                                    start_time=start_time,
                                    duration=duration,
+                                   created_by=request.user,
                                    public=True if testpaper.enable else False)
 
         return redirect('/exam/{}/edit'.format(exam.id))
 
     else:
-        return render(request, 'exam/exam_create.html')
+        data = {
+            'testpapers': TestPaper.objects.filter(enable=True),
+            'groups': Group.objects.all(),
+        }
+        return render(request, 'exam/exam_create.html', data)
 
 
 @permission_check(UserType.ExamManager)
@@ -118,7 +131,7 @@ def edit_exam(request, exam_id: int):
             raise IllegalArgumentError('The "duration" must be an integer.')
 
         try:
-            testpaper = TestPaper.objects.get(name=request.POST.get('testpaper'))
+            testpaper = TestPaper.objects.get(id=request.POST.get('testpaper'))
 
         except TypeError:
             raise ArgumentError('Missing testpaper.')
@@ -144,8 +157,8 @@ def edit_exam(request, exam_id: int):
     else:
         data = {
             'exam': exam,
-            'testpaper': TestPaper.objects.filter(enable=True),
-            'group': Group.objects.all(),
+            'testpapers': TestPaper.objects.filter(enable=True),
+            'groups': Group.objects.all(),
         }
 
         return render(request, 'exam/exam_edit.html', data)

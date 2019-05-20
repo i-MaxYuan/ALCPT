@@ -21,11 +21,11 @@
                 <a class="fa fa-angle-double-right fa-lg box"></a>
                 <a href="/exam/group" style="font-size: 18px">群組列表</a>
                 <a class="fa fa-angle-right fa-lg"></a>
-                <a href="#" style="font-size: 18px">第一次模擬鑑測</a>
+                <a href="#" style="font-size: 18px">修改受測者群組</a>
             </div>
             <div style="padding-right: 10px"></div>
         </div>
-        <h1 style="display: inline;">第一次模擬鑑測</h1>
+        <h1 style="display: inline;">{{ group.name }}</h1>
     </section>
 
     <div class="w-100 my-3"></div>
@@ -35,7 +35,7 @@
     <section class="col">
         <div class="card">
             <div class="card-body">
-                <form action="/exam/group/create" method="get">
+                <form action="/exam/group/{{ group.name }}/edit" method="get">
                     <div class="row">
                         <select class="custom-select col-2" name="department">
                             <option value="0">所有學系</option>

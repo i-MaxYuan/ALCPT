@@ -72,6 +72,8 @@ def edit_testpaper(request, testpaper_name: str):
 
         testpaper = exammanager.edit_testpaper(testpaper=testpaper,
                                                name=name,)
+        testpaper.enable = testpaper.question_set.count() >= sum(QuestionTypeCounts.Exam.value[0])
+        testpaper.save()
 
         messages.success(request, "Successfully update testpaper :{}.".format(testpaper.name))
 
@@ -211,10 +213,10 @@ def auto_pick_question(request, testpaper_name: str, question_type: int):
 
     except ObjectDoesNotExist:
         raise ObjectNotFoundError('Cannot find testpaper {}'.format(testpaper_name))
-
     for q_type in QuestionType.__members__.values():
-        if q_type.value[0] == question_type:
+        if q_type.value[0] == int(question_type):
             question_type = q_type
+            break
 
     if type(question_type) is int:
         raise IllegalArgumentError('question_type does match category.')
@@ -229,4 +231,4 @@ def auto_pick_question(request, testpaper_name: str, question_type: int):
     else:
         messages.warning(request, 'Auto pick failed.')
 
-    return redirect('exam/{}/edit'.format(testpaper_name))
+    return redirect('/exam/testpaper/{}/edit'.format(testpaper_name))

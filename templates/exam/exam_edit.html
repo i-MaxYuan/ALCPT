@@ -28,8 +28,6 @@
     <form class="col-12 row mt-3" enctype="multipart/form-data" action="/exam/{{ exam.id }}/edit" method="post" autocomplete="off">
         {% csrf_token %}
 
-        <input type="hidden" name="type" value="{{ question_type }}" />
-
         <h3 class="col-12"><i class="fa fa-sticky-note fa-fw mb-2"></i> 基本資料</h3>
 
         <div class="col-12 py-2 form-group">
@@ -37,10 +35,10 @@
             <input type="text" class="form-control" id="name" name="name" value="{{ exam.name }}" required>
         </div>
 
-{#        <div class="col-auto py-2 form-group">#}
+        <div class="col-auto py-2 form-group">
            <label for="start-time">開始時間</label>
-            <input type="text" class="form-control" id="start-time" name="start_time" value="{{ exam.start_time|date:'Y/n/d H:i' }}" required hidden>
-{#        </div>#}
+            <input type="text" class="form-control" id="start-time" name="start_time" value="{{ exam.start_time|date:'Y/n/d H:i' }}" required>
+        </div>
 
         <div class="col-auto py-2 form-group">
             <label for="duration">使用時間</label>
@@ -53,51 +51,24 @@
         </div>
 
         <h3 class="col-12"><i class="fa fa-sliders fa-fw mb-2"></i> 選擇考卷</h3>
-        <section class="col">
-            <div class="card">
-                <div class="card-body">
-                    <form action="/user" method="get">
-                        <div class="row">
-                            <div class="col-auto">
-
-                            </div>
-                            <div class="col">
-                                <input type="text" class="form-control" name="name" value="{{ keywords.name }}" placeholder="考卷名稱">
-                            </div>
-
-                            <div class="col-auto">
-                                <button type="submit" class="btn btn-primary" style="background-color: #1b98e0; color: white;">搜尋</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </section>
-        </br></br>
+        <div class="col">
+            <select class="custom-select" name="testpaper">
+                <option value="0">考卷名稱</option>
+                {% for testpaper in testpapers %}
+                    <option value="{{ testpaper.id }}" {% if testpaper.id == exam.testpaper.id %} selected {% endif %}>{{ testpaper.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
         <h3 class="col-12"><i class="fa fa-id-card" aria-hidden="true"></i> 選擇受測者</h3>
-        <section class="col">
-            <div class="card">
-                <div class="card-body">
-                    <form action="/user" method="get">
-                        <div class="row">
-                            <div class="col-auto">
-
-                            </div>
-                            <div class="col">
-                                <input type="text" class="form-control" name="name" value="{{ keywords.name }}" placeholder="受測者名稱">
-                            </div>
-
-                            <div class="col-auto">
-                                <button type="submit" class="btn btn-primary" style="background-color: #1b98e0; color: white;">搜尋</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </section>
-
+        <div class="col">
+            <select class="custom-select" name="group">
+                <option value="0">受測者群組名稱</option>
+                {% for group in groups %}
+                    <option value="{{ group.id }}" {% if group.id == exam.group.id %} selected {% endif %}>{{ group.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
         <div class="w-100"></div>
-
         <section class="col text-center pt-3">
             <button class="btn btn-primary" type="submit">完成</button>
         </section>
