@@ -100,7 +100,7 @@ urlpatterns = [
         url(r'^simulation-exam$', simulation_exam.index),
         url(r'^simulation-exam/', include([
             url(r'^(?P<exam_id>[0-9]+)/', include([
-                url(r'^take$', simulation_exam.take_exam),
+                url(r'^take/(?P<question_index>[0-9]*)$', simulation_exam.take_exam),
             ])),
         ])),
     ])),

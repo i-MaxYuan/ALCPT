@@ -48,8 +48,8 @@ def create(request, practice_type):
         practice, selected_questions = practicemanager.create_practice(user=user, practice_type=practice_type,
                                                                        question_types=question_types, num_questions=num_questions)
 
-        # return redirect('/tester/practice/{}/take'.format(practice.id), selected_questions=selected_questions)
-        return custom_redirect('/tester/practice/{}/take'.format(practice.id), selected_questions=selected_questions)
+        return redirect('/tester/practice/{}/take'.format(practice.id), selected_questions=selected_questions)
+        # return custom_redirect('/tester/practice/{}/take'.format(practice.id), selected_questions=selected_questions)
 
     else:
         question_types = []
@@ -80,7 +80,8 @@ def create_integration(request):
     practice_type = ExamType.Practice
     question_types = [question_type.value[0] for question_type in QuestionType.__members__.values()]
     num_questions = sum(QuestionTypeCounts.Exam.value[0])
-    practice, selected_questions = practicemanager.create_practice(user=request.uesr, practice_type=practice_type,
+    user = User.objects.get(serial_number=request.user.serial_number)
+    practice, selected_questions = practicemanager.create_practice(user=user, practice_type=practice_type,
                                                                    question_types=question_types,
                                                                    num_questions=num_questions,
                                                                    integration=True)
@@ -139,7 +140,7 @@ def take_practice(request, practice_id, question_index, selected_questions):
         try:
             answer = int(request.POST.get('answer-{}'.format(question.id)))
 
-            if answer not in range(len(question.options)):
+            if answer not in range(len(question.option)):
                 raise IllegalArgumentError(message='Invalid answer.')
 
         except TypeError:

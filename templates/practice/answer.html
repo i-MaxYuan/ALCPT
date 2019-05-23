@@ -5,7 +5,7 @@
 {% block content %}
 <section class="row align-items-center">
     <section class="col-auto mr-auto">
-        <h1 style="display: inline;">第 {{ index|add:1 }} 題 - {{ question.type|readable_question_type }}</h1>
+        <h1 style="display: inline;">第 {{ index|add:1 }} 題 - {{ question.question_type|readable_question_type }}</h1>
     </section>
 
     <div class="w-100 my-3"></div>
@@ -14,17 +14,17 @@
         <div class="card">
             <div class="card-body">
                 <button class="btn btn" style="float: right ;background-color: indianred; color: white">暫停練習</button>
-                <form class="pt-2" action="/practice/{{ practice.id }}/take/{{ index }}" method="post">
+                <form class="pt-2" action="tester/practice/{{ practice.id }}/take/{{ index }}" method="post">
                     {% csrf_token %}
-                {% if question.type is 1 %}
+                {% if question.question_type is 1 %}
                     {% include 'question/qa/display_alone.html' with question=question show_answer=False selected_answer=selected_answer %}
-                {% elif question.type is 2 %}
+                {% elif question.question_type is 2 %}
                     {% include 'question/short_conversation/display_alone.html' with question=question show_answer=False selected_answer=selected_answer %}
-                {% elif question.type is 3 %}
+                {% elif question.question_type is 3 %}
                     {% include 'question/grammar/display_alone.html' with question=question show_answer=False selected_answer=selected_answer %}
-                {% elif question.type is 4 %}
+                {% elif question.question_type is 4 %}
                     {% include 'question/phrase/display_alone.html' with question=question show_answer=False selected_answer=selected_answer %}
-                {% elif question.type is 5 %}
+                {% elif question.question_type is 5 %}
                     {% include 'question/paragraph_understanding/display_alone.html' with question=question show_answer=False selected_answer=selected_answer %}
                 {% endif %}
                     <input type="hidden" name="id" value="{{ index }}" />
@@ -52,7 +52,7 @@
                                     <li class="page-item {% if forloop.counter0 == index %}active{% endif %}">
 
                                         <a class="page-link {% if answer >= 0 and forloop.counter0 != index %}bg-success text-light
-                                                            {% elif answer < 0 and forloop.counter0 < index %}bg-warning text-light{% endif %}" href="/practice/{{ practice.id }}/take/{{ forloop.counter0 }}">
+                                                            {% elif answer < 0 and forloop.counter0 < index %}bg-warning text-light{% endif %}" href="/tester/practice/{{ practice.id }}/take/{{ forloop.counter0 }}">
                                             {{ forloop.counter }}
                                         </a>
                                     </li>

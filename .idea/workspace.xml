@@ -2,37 +2,25 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4e1b44ae-5c91-4afc-a12a-ddde1c778a29" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/dataSources/e656d12d-d96d-4824-b5d9-beb4e728bcc6.xml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/dataSources/e656d12d-d96d-4824-b5d9-beb4e728bcc6/storage_v2/_src_/schema/main.uQUzAA.meta" />
       <change beforePath="$PROJECT_DIR$/.idea/Online_Exam.iml" afterPath="$PROJECT_DIR$/.idea/Online_Exam.iml" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/19bc8d04-7ccd-4d0b-ba32-184f43279004.xml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/1c3e1401-3f94-4147-a114-39f415d2d0b3.xml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/8abedc98-5d37-4f20-95e6-ef6b7545fc47.xml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/a9e3b718-505f-4e96-a810-182b2961b25e.xml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/e3395ffd-47be-440c-9bf5-d23031f9f1f2.xml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/e656d12d-d96d-4824-b5d9-beb4e728bcc6.xml" afterPath="" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/Online_Exam/settings.py" afterPath="$PROJECT_DIR$/Online_Exam/settings.py" />
       <change beforePath="$PROJECT_DIR$/Online_Exam/urls.py" afterPath="$PROJECT_DIR$/Online_Exam/urls.py" />
-      <change beforePath="$PROJECT_DIR$/alcpt/decorators.py" afterPath="$PROJECT_DIR$/alcpt/decorators.py" />
       <change beforePath="$PROJECT_DIR$/alcpt/exam.py" afterPath="$PROJECT_DIR$/alcpt/exam.py" />
-      <change beforePath="$PROJECT_DIR$/alcpt/managerfuncs/exammanager.py" afterPath="$PROJECT_DIR$/alcpt/managerfuncs/exammanager.py" />
       <change beforePath="$PROJECT_DIR$/alcpt/managerfuncs/practicemanager.py" afterPath="$PROJECT_DIR$/alcpt/managerfuncs/practicemanager.py" />
-      <change beforePath="$PROJECT_DIR$/alcpt/managerfuncs/systemmanager.py" afterPath="$PROJECT_DIR$/alcpt/managerfuncs/systemmanager.py" />
-      <change beforePath="$PROJECT_DIR$/alcpt/migrations/0001_initial.py" afterPath="$PROJECT_DIR$/alcpt/migrations/0001_initial.py" />
-      <change beforePath="$PROJECT_DIR$/alcpt/models.py" afterPath="$PROJECT_DIR$/alcpt/models.py" />
       <change beforePath="$PROJECT_DIR$/alcpt/practice.py" afterPath="$PROJECT_DIR$/alcpt/practice.py" />
       <change beforePath="$PROJECT_DIR$/alcpt/simulation_exam.py" afterPath="$PROJECT_DIR$/alcpt/simulation_exam.py" />
-      <change beforePath="$PROJECT_DIR$/alcpt/testpaper.py" afterPath="$PROJECT_DIR$/alcpt/testpaper.py" />
       <change beforePath="$PROJECT_DIR$/db.sqlite3" afterPath="$PROJECT_DIR$/db.sqlite3" />
-      <change beforePath="$PROJECT_DIR$/templates/base.html" afterPath="$PROJECT_DIR$/templates/base.html" />
-      <change beforePath="$PROJECT_DIR$/templates/exam/exam_create.html" afterPath="$PROJECT_DIR$/templates/exam/exam_create.html" />
-      <change beforePath="$PROJECT_DIR$/templates/exam/exam_edit.html" afterPath="$PROJECT_DIR$/templates/exam/exam_edit.html" />
-      <change beforePath="$PROJECT_DIR$/templates/exam/exam_list.html" afterPath="$PROJECT_DIR$/templates/exam/exam_list.html" />
-      <change beforePath="$PROJECT_DIR$/templates/exam/group_edit.html" afterPath="$PROJECT_DIR$/templates/exam/group_edit.html" />
-      <change beforePath="$PROJECT_DIR$/templates/exam/group_list.html" afterPath="$PROJECT_DIR$/templates/exam/group_list.html" />
-      <change beforePath="$PROJECT_DIR$/templates/exam/testpaper_edit.html" afterPath="$PROJECT_DIR$/templates/exam/testpaper_edit.html" />
-      <change beforePath="$PROJECT_DIR$/templates/exam/testpaper_list.html" afterPath="$PROJECT_DIR$/templates/exam/testpaper_list.html" />
-      <change beforePath="$PROJECT_DIR$/templates/index.html" afterPath="$PROJECT_DIR$/templates/index.html" />
-      <change beforePath="$PROJECT_DIR$/templates/practice/create.html" afterPath="$PROJECT_DIR$/templates/practice/create.html" />
+      <change beforePath="$PROJECT_DIR$/templates/practice/answer.html" afterPath="$PROJECT_DIR$/templates/practice/answer.html" />
+      <change beforePath="$PROJECT_DIR$/templates/practice/complex.html" afterPath="$PROJECT_DIR$/templates/practice/complex.html" />
       <change beforePath="$PROJECT_DIR$/templates/simulation_exam/simulation_answer.html" afterPath="$PROJECT_DIR$/templates/simulation_exam/simulation_answer.html" />
-      <change beforePath="$PROJECT_DIR$/templates/simulation_exam/simulation_list.html" afterPath="$PROJECT_DIR$/templates/simulation_exam/simulation_list.html" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -69,6 +57,13 @@
         <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
         <item name="main: schema" type="90513b60:SqliteImplModel$Schema" />
       </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="db.sqlite3" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+        <item name="main: schema" type="90513b60:SqliteImplModel$Schema" />
+        <item name="alcpt_answersheet: table" type="ffe0bd85:SqliteImplModel$Table" />
+      </path>
     </expand>
     <select />
   </component>
@@ -80,8 +75,8 @@
       <file leaf-file-name="urls.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Online_Exam/urls.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="693">
-              <caret line="99" column="8" lean-forward="false" selection-start-line="99" selection-start-column="8" selection-end-line="99" selection-end-column="8" />
+            <state relative-caret-position="345">
+              <caret line="102" column="28" lean-forward="false" selection-start-line="102" selection-start-column="28" selection-end-line="102" selection-end-column="28" />
               <folding>
                 <element signature="e#565#606#0" expanded="true" />
               </folding>
@@ -89,72 +84,36 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="practicemanager.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/alcpt/managerfuncs/practicemanager.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="168">
-              <caret line="18" column="71" lean-forward="true" selection-start-line="18" selection-start-column="71" selection-end-line="18" selection-end-column="71" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="practice.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/alcpt/practice.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-197">
-              <caret line="10" column="57" lean-forward="false" selection-start-line="10" selection-start-column="57" selection-end-line="10" selection-end-column="57" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="exam_list.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/templates/exam/exam_list.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="430">
-              <caret line="79" column="49" lean-forward="false" selection-start-line="79" selection-start-column="49" selection-end-line="79" selection-end-column="49" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="exam.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="exam.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/alcpt/exam.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1278">
-              <caret line="26" column="15" lean-forward="false" selection-start-line="26" selection-start-column="15" selection-end-line="26" selection-end-column="15" />
+            <state relative-caret-position="322">
+              <caret line="34" column="13" lean-forward="true" selection-start-line="34" selection-start-column="13" selection-end-line="34" selection-end-column="13" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="exam_edit.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/templates/exam/exam_edit.html">
+      <file leaf-file-name="practice.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/alcpt/practice.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="198">
-              <caret line="28" column="24" lean-forward="false" selection-start-line="28" selection-start-column="24" selection-end-line="28" selection-end-column="24" />
-              <folding />
+            <state relative-caret-position="650">
+              <caret line="78" column="22" lean-forward="false" selection-start-line="78" selection-start-column="4" selection-end-line="78" selection-end-column="22" />
+              <folding>
+                <element signature="e#0#11#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="exammanager.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/alcpt/managerfuncs/exammanager.py">
+      <file leaf-file-name="complex.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/templates/practice/complex.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1730">
-              <caret line="11" column="52" lean-forward="false" selection-start-line="11" selection-start-column="52" selection-end-line="11" selection-end-column="52" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="simulation_list.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/templates/simulation_exam/simulation_list.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="476">
-              <caret line="41" column="25" lean-forward="false" selection-start-line="41" selection-start-column="25" selection-end-line="41" selection-end-column="25" />
-              <folding />
+            <state relative-caret-position="255">
+              <caret line="70" column="73" lean-forward="false" selection-start-line="70" selection-start-column="73" selection-end-line="70" selection-end-column="73" />
+              <folding>
+                <element signature="n#style#0;n#button#0;n#section#0;n#form#0;n#section#0;n#!!top" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -162,11 +121,33 @@
       <file leaf-file-name="simulation_exam.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/alcpt/simulation_exam.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1242">
-              <caret line="19" column="19" lean-forward="true" selection-start-line="19" selection-start-column="19" selection-end-line="19" selection-end-column="19" />
+            <state relative-caret-position="536">
+              <caret line="138" column="24" lean-forward="false" selection-start-line="138" selection-start-column="24" selection-end-line="138" selection-end-column="24" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="create.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/templates/practice/create.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="958">
+              <caret line="112" column="65" lean-forward="true" selection-start-line="112" selection-start-column="65" selection-end-line="112" selection-end-column="65" />
+              <folding>
+                <element signature="n#style#0;n#button#0;n#section#1;n#form#0;n#section#0;n#!!top" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="simulation_answer.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/templates/simulation_exam/simulation_answer.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="126">
+              <caret line="9" column="0" lean-forward="true" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -204,7 +185,6 @@
       <find>question_type_counts</find>
       <find>-</find>
       <find>value</find>
-      <find>type</find>
       <find>user</find>
       <find>options</find>
       <find>json</find>
@@ -212,6 +192,7 @@
       <find>int</find>
       <find>Ex</find>
       <find>question_type</find>
+      <find>type</find>
     </findStrings>
     <replaceStrings>
       <replace>==</replace>
@@ -230,6 +211,7 @@
       <replace>IllegalArgumentError</replace>
       <replace>ArgumentError</replace>
       <replace>name</replace>
+      <replace>question_type</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -253,8 +235,6 @@
         <option value="$PROJECT_DIR$/templates/exam/proclamation_create.html" />
         <option value="$PROJECT_DIR$/templates/proclamation_details.html" />
         <option value="$PROJECT_DIR$/alcpt/managerfuncs/practice.py" />
-        <option value="$PROJECT_DIR$/templates/practice/answer.html" />
-        <option value="$PROJECT_DIR$/templates/practice/complex.html" />
         <option value="$PROJECT_DIR$/alcpt/scores.py" />
         <option value="$PROJECT_DIR$/templates/question/review.html" />
         <option value="$PROJECT_DIR$/alcpt/managerfuncs/questionmanager.py" />
@@ -278,17 +258,19 @@
         <option value="$PROJECT_DIR$/Online_Exam/settings.py" />
         <option value="$PROJECT_DIR$/templates/base.html" />
         <option value="$PROJECT_DIR$/templates/simulation_exam/simulation_list.html" />
-        <option value="$PROJECT_DIR$/templates/simulation_exam/simulation_answer.html" />
         <option value="$PROJECT_DIR$/templates/practice/create.html" />
-        <option value="$PROJECT_DIR$/alcpt/managerfuncs/practicemanager.py" />
-        <option value="$PROJECT_DIR$/alcpt/simulation_exam.py" />
         <option value="$PROJECT_DIR$/alcpt/decorators.py" />
-        <option value="$PROJECT_DIR$/alcpt/practice.py" />
-        <option value="$PROJECT_DIR$/Online_Exam/urls.py" />
         <option value="$PROJECT_DIR$/templates/exam/exam_list.html" />
-        <option value="$PROJECT_DIR$/alcpt/exam.py" />
         <option value="$PROJECT_DIR$/alcpt/managerfuncs/exammanager.py" />
         <option value="$PROJECT_DIR$/templates/exam/exam_edit.html" />
+        <option value="$PROJECT_DIR$/alcpt/exam.py" />
+        <option value="$PROJECT_DIR$/Online_Exam/urls.py" />
+        <option value="$PROJECT_DIR$/templates/simulation_exam/simulation_answer.html" />
+        <option value="$PROJECT_DIR$/alcpt/practice.py" />
+        <option value="$PROJECT_DIR$/alcpt/simulation_exam.py" />
+        <option value="$PROJECT_DIR$/alcpt/managerfuncs/practicemanager.py" />
+        <option value="$PROJECT_DIR$/templates/practice/complex.html" />
+        <option value="$PROJECT_DIR$/templates/practice/answer.html" />
       </list>
     </option>
   </component>
@@ -299,9 +281,10 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds" fullScreen="true">
+    <option name="x" value="715" />
     <option name="y" value="23" />
-    <option name="width" value="714" />
-    <option name="height" value="877" />
+    <option name="width" value="708" />
+    <option name="height" value="873" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -319,6 +302,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -346,14 +330,26 @@
               <item name="Online_Exam" type="b2602c69:ProjectViewProjectNode" />
               <item name="Online_Exam" type="462c0819:PsiDirectoryNode" />
               <item name="templates" type="462c0819:PsiDirectoryNode" />
-              <item name="exam" type="462c0819:PsiDirectoryNode" />
+              <item name="practice" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Online_Exam" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Online_Exam" type="462c0819:PsiDirectoryNode" />
+              <item name="templates" type="462c0819:PsiDirectoryNode" />
+              <item name="question" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Online_Exam" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Online_Exam" type="462c0819:PsiDirectoryNode" />
+              <item name="templates" type="462c0819:PsiDirectoryNode" />
+              <item name="question" type="462c0819:PsiDirectoryNode" />
+              <item name="qa" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
       <pane id="Scratches" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -361,18 +357,19 @@
     <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="com.intellij.database.dataSource.DataSourceTemplate" value="Sqlite (Xerial)" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/alcpt/static/css" />
-      <recent name="$PROJECT_DIR$/alcpt/static/scripts" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/templates/exam" />
       <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/templates/exam" />
       <recent name="$PROJECT_DIR$/alcpt" />
       <recent name="$PROJECT_DIR$/templates/question" />
       <recent name="$PROJECT_DIR$/templates" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/alcpt/static/css" />
+      <recent name="$PROJECT_DIR$/alcpt/static/scripts" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -460,16 +457,15 @@
     <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
-      <window_info id="manage.py@Online_Exam" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27811366" sideWeight="0.49487555" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="manage.py@Online_Exam" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2623942" sideWeight="0.49487555" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.314578" sideWeight="0.5080527" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32904884" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32736573" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.29383314" sideWeight="0.4919473" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32904884" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.10300429" sideWeight="0.5" order="1" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.10586552" sideWeight="0.5" order="1" side_tool="false" content_ui="combo" />
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5722461" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30229747" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.57081544" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="SciView" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32761088" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
@@ -479,6 +475,7 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30229747" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
@@ -539,80 +536,16 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="4" />
+      <option name="time" value="5" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/19bc8d04-7ccd-4d0b-ba32-184f43279004/console.sql">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/question/qa/create.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="944">
-          <caret line="98" column="72" lean-forward="false" selection-start-line="98" selection-start-column="64" selection-end-line="98" selection-end-column="72" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="das://table:/506d3b2e/19bc8d04-7ccd-4d0b-ba32-184f43279004/main.alcpt_student">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/user/list.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-711">
-          <caret line="73" column="30" lean-forward="true" selection-start-line="73" selection-start-column="30" selection-end-line="73" selection-end-column="30" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/alcpt/system.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-482">
-          <caret line="22" column="16" lean-forward="true" selection-start-line="22" selection-start-column="16" selection-end-line="22" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/alcpt/managerfuncs/scoreviewer.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="364">
-          <caret line="26" column="0" lean-forward="true" selection-start-line="26" selection-start-column="0" selection-end-line="26" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#30#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/alcpt/managerfuncs/questionmanager.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="56">
-          <caret line="11" column="19" lean-forward="false" selection-start-line="11" selection-start-column="19" selection-end-line="11" selection-end-column="44" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="das://table:/506d3b2e/19bc8d04-7ccd-4d0b-ba32-184f43279004/main.alcpt_user">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="das://table:/506d3b2e/19bc8d04-7ccd-4d0b-ba32-184f43279004/main.alcpt_user" />
     <entry file="file://$PROJECT_DIR$/alcpt/managerfuncs/systemmanager.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="391">
           <caret line="41" column="4" lean-forward="true" selection-start-line="41" selection-start-column="4" selection-end-line="42" selection-end-column="28" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -620,37 +553,22 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="251">
           <caret line="27" column="53" lean-forward="false" selection-start-line="27" selection-start-column="53" selection-end-line="27" selection-end-column="53" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="das://table:/506d3b2e/19bc8d04-7ccd-4d0b-ba32-184f43279004/main.alcpt_question">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="das://table:/506d3b2e/19bc8d04-7ccd-4d0b-ba32-184f43279004/main.alcpt_question" />
     <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/e656d12d-d96d-4824-b5d9-beb4e728bcc6/console.sql">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="das://table:/506d3b2e/e656d12d-d96d-4824-b5d9-beb4e728bcc6/main.alcpt_question">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="das://table:/506d3b2e/e656d12d-d96d-4824-b5d9-beb4e728bcc6/main.alcpt_question" />
     <entry file="file://$PROJECT_DIR$/templates/exam/testpaper_edit.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="147">
           <caret line="34" column="44" lean-forward="false" selection-start-line="34" selection-start-column="44" selection-end-line="34" selection-end-column="44" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -658,36 +576,16 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="54">
           <caret line="28" column="92" lean-forward="false" selection-start-line="28" selection-start-column="87" selection-end-line="28" selection-end-column="92" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="das://table:/506d3b2e/e656d12d-d96d-4824-b5d9-beb4e728bcc6/main.auth_group">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="das://table:/506d3b2e/e656d12d-d96d-4824-b5d9-beb4e728bcc6/main.alcpt_testpaper">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="das://table:/506d3b2e/e656d12d-d96d-4824-b5d9-beb4e728bcc6/main.alcpt_group">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="das://table:/506d3b2e/e656d12d-d96d-4824-b5d9-beb4e728bcc6/main.auth_group" />
+    <entry file="das://table:/506d3b2e/e656d12d-d96d-4824-b5d9-beb4e728bcc6/main.alcpt_testpaper" />
+    <entry file="das://table:/506d3b2e/e656d12d-d96d-4824-b5d9-beb4e728bcc6/main.alcpt_group" />
     <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/e3395ffd-47be-440c-9bf5-d23031f9f1f2/console.sql">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -695,7 +593,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="185">
           <caret line="52" column="102" lean-forward="false" selection-start-line="52" selection-start-column="102" selection-end-line="52" selection-end-column="102" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -703,7 +600,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="819">
           <caret line="125" column="83" lean-forward="false" selection-start-line="125" selection-start-column="83" selection-end-line="125" selection-end-column="83" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -711,9 +607,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="166">
           <caret line="98" column="57" lean-forward="false" selection-start-line="98" selection-start-column="57" selection-end-line="98" selection-end-column="57" />
-          <folding>
-            <element signature="n#style#0;n#button#0;n#section#0;n#form#0;n#section#0;n#!!top" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -721,24 +614,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="320">
           <caret line="81" column="9" lean-forward="true" selection-start-line="81" selection-start-column="9" selection-end-line="81" selection-end-column="9" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="das://table:/506d3b2e/e3395ffd-47be-440c-9bf5-d23031f9f1f2/main.alcpt_testpaper">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="das://table:/506d3b2e/e3395ffd-47be-440c-9bf5-d23031f9f1f2/main.alcpt_testpaper" />
     <entry file="file://$PROJECT_DIR$/templates/exam/group_list.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="223">
           <caret line="81" column="122" lean-forward="true" selection-start-line="80" selection-start-column="24" selection-end-line="81" selection-end-column="122" />
-          <folding>
-            <element signature="e#2541#2547#0#HTML" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -746,9 +629,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="168">
           <caret line="12" column="69" lean-forward="false" selection-start-line="12" selection-start-column="69" selection-end-line="12" selection-end-column="69" />
-          <folding>
-            <element signature="n#style#0;n#a#0;n#section#0;n#section#0;n#!!top" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -756,19 +636,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#35#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="das://table:/506d3b2e/e3395ffd-47be-440c-9bf5-d23031f9f1f2/main.alcpt_exam">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="das://table:/506d3b2e/e3395ffd-47be-440c-9bf5-d23031f9f1f2/main.alcpt_exam" />
     <entry file="file://$PROJECT_DIR$/Online_Exam/settings.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="352">
@@ -781,44 +652,15 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="350">
           <caret line="25" column="23" lean-forward="false" selection-start-line="25" selection-start-column="23" selection-end-line="25" selection-end-column="23" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="das://table:/506d3b2e/e3395ffd-47be-440c-9bf5-d23031f9f1f2/main.alcpt_answersheet">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="das://table:/506d3b2e/e3395ffd-47be-440c-9bf5-d23031f9f1f2/main.alcpt_question">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="das://table:/506d3b2e/e3395ffd-47be-440c-9bf5-d23031f9f1f2/main.alcpt_answersheet" />
+    <entry file="das://table:/506d3b2e/e3395ffd-47be-440c-9bf5-d23031f9f1f2/main.alcpt_question" />
     <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/fbe74979-90dd-4dc0-b017-b1a718073615/console.sql">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="das://table:/506d3b2e/fbe74979-90dd-4dc0-b017-b1a718073615/main.alcpt_question">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/simulation_exam/simulation_answer.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4">
-          <caret line="7" column="19" lean-forward="true" selection-start-line="7" selection-start-column="19" selection-end-line="7" selection-end-column="19" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -829,57 +671,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/practice/complex.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="396">
-          <caret line="81" column="65" lean-forward="true" selection-start-line="81" selection-start-column="65" selection-end-line="81" selection-end-column="65" />
-          <folding>
-            <element signature="n#style#0;n#button#0;n#section#0;n#form#0;n#section#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/question/qa/display_alone.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="70">
-          <caret line="5" column="32" lean-forward="true" selection-start-line="5" selection-start-column="32" selection-end-line="5" selection-end-column="32" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/practice/create.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="203">
-          <caret line="87" column="40" lean-forward="false" selection-start-line="87" selection-start-column="40" selection-end-line="87" selection-end-column="40" />
-          <folding>
-            <element signature="n#style#0;n#button#0;n#section#1;n#form#0;n#section#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/templates/base.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1667">
           <caret line="276" column="75" lean-forward="false" selection-start-line="276" selection-start-column="68" selection-end-line="276" selection-end-column="75" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/simulation_exam/simulation_list.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="476">
-          <caret line="41" column="25" lean-forward="false" selection-start-line="41" selection-start-column="25" selection-end-line="41" selection-end-column="25" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/alcpt/simulation_exam.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1242">
-          <caret line="19" column="19" lean-forward="true" selection-start-line="19" selection-start-column="19" selection-end-line="19" selection-end-column="19" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -887,35 +682,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="322">
           <caret line="23" column="33" lean-forward="false" selection-start-line="23" selection-start-column="33" selection-end-line="23" selection-end-column="33" />
-          <folding>
-            <element signature="e#0#57#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Online_Exam/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="693">
-          <caret line="99" column="8" lean-forward="false" selection-start-line="99" selection-start-column="8" selection-end-line="99" selection-end-column="8" />
-          <folding>
-            <element signature="e#565#606#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/exam/exam_list.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="430">
-          <caret line="79" column="49" lean-forward="false" selection-start-line="79" selection-start-column="49" selection-end-line="79" selection-end-column="49" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/exam/exam_edit.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="28" column="24" lean-forward="false" selection-start-line="28" selection-start-column="24" selection-end-line="28" selection-end-column="24" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -923,39 +689,177 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1360">
           <caret line="176" column="0" lean-forward="false" selection-start-line="176" selection-start-column="0" selection-end-line="176" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/exam/exam_edit.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="392">
+          <caret line="28" column="24" lean-forward="false" selection-start-line="28" selection-start-column="24" selection-end-line="28" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/exam/exam_list.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="430">
+          <caret line="79" column="49" lean-forward="false" selection-start-line="79" selection-start-column="49" selection-end-line="79" selection-end-column="49" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/506d3b2e/fbe74979-90dd-4dc0-b017-b1a718073615/main.alcpt_question">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/f0d8c3fa-b176-48e8-bdbc-52d1e0c4a227/console.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/simulation_exam/simulation_list.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="535">
+          <caret line="41" column="25" lean-forward="false" selection-start-line="41" selection-start-column="25" selection-end-line="41" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/506d3b2e/f0d8c3fa-b176-48e8-bdbc-52d1e0c4a227/main.alcpt_question_used_to">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/506d3b2e/f0d8c3fa-b176-48e8-bdbc-52d1e0c4a227/main.alcpt_testpaper">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/506d3b2e/f0d8c3fa-b176-48e8-bdbc-52d1e0c4a227/main.alcpt_exam">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/506d3b2e/f0d8c3fa-b176-48e8-bdbc-52d1e0c4a227/main.alcpt_question">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/alcpt/managerfuncs/exammanager.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1719">
+          <caret line="11" column="52" lean-forward="false" selection-start-line="11" selection-start-column="52" selection-end-line="11" selection-end-column="52" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/alcpt/managerfuncs/practicemanager.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="168">
-          <caret line="18" column="71" lean-forward="true" selection-start-line="18" selection-start-column="71" selection-end-line="18" selection-end-column="71" />
+        <state relative-caret-position="139">
+          <caret line="48" column="0" lean-forward="true" selection-start-line="48" selection-start-column="0" selection-end-line="48" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/alcpt/practice.py">
+    <entry file="file://$PROJECT_DIR$/templates/question/qa/display_alone.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-197">
-          <caret line="10" column="57" lean-forward="false" selection-start-line="10" selection-start-column="57" selection-end-line="10" selection-end-column="57" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/alcpt/managerfuncs/exammanager.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1730">
-          <caret line="11" column="52" lean-forward="false" selection-start-line="11" selection-start-column="52" selection-end-line="11" selection-end-column="52" />
+        <state relative-caret-position="126">
+          <caret line="9" column="56" lean-forward="false" selection-start-line="9" selection-start-column="56" selection-end-line="9" selection-end-column="56" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/alcpt/exam.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1278">
-          <caret line="26" column="15" lean-forward="false" selection-start-line="26" selection-start-column="15" selection-end-line="26" selection-end-column="15" />
+        <state relative-caret-position="322">
+          <caret line="34" column="13" lean-forward="true" selection-start-line="34" selection-start-column="13" selection-end-line="34" selection-end-column="13" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/506d3b2e/f0d8c3fa-b176-48e8-bdbc-52d1e0c4a227/main.alcpt_answersheet">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/practice/complex.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="70" column="73" lean-forward="false" selection-start-line="70" selection-start-column="73" selection-end-line="70" selection-end-column="73" />
+          <folding>
+            <element signature="n#style#0;n#button#0;n#section#0;n#form#0;n#section#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Online_Exam/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="345">
+          <caret line="102" column="28" lean-forward="false" selection-start-line="102" selection-start-column="28" selection-end-line="102" selection-end-column="28" />
+          <folding>
+            <element signature="e#565#606#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/alcpt/simulation_exam.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="536">
+          <caret line="138" column="24" lean-forward="false" selection-start-line="138" selection-start-column="24" selection-end-line="138" selection-end-column="24" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/practice/create.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="958">
+          <caret line="112" column="65" lean-forward="true" selection-start-line="112" selection-start-column="65" selection-end-line="112" selection-end-column="65" />
+          <folding>
+            <element signature="n#style#0;n#button#0;n#section#1;n#form#0;n#section#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/simulation_exam/simulation_answer.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="126">
+          <caret line="9" column="0" lean-forward="true" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/practice/answer.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="266">
+          <caret line="19" column="102" lean-forward="false" selection-start-line="19" selection-start-column="102" selection-end-line="19" selection-end-column="102" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/alcpt/practice.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="650">
+          <caret line="78" column="22" lean-forward="false" selection-start-line="78" selection-start-column="4" selection-end-line="78" selection-end-column="22" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
