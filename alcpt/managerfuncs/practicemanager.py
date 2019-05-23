@@ -51,9 +51,24 @@ def evaluate_score(*, answer_sheet: AnswerSheet):
     for index in questions:
         question_id = questions[index][0]
         user_ans = answers[question_id]
-        correct_ans = Question.objects.get(id=question_id).answer
+        question = Question.objects.get(id=question_id)
+        correct_ans = question.answer
+        question.use_time += 1
         if user_ans == correct_ans:
             num_correct += 1
+            question.correct_time += 1
+
+        if question.use_time >= 30:
+            if question.correct_rate > 66:
+                question.difficult = 3
+
+            elif question.correct_rate < 33:
+                question.difficult = 1
+
+            else:
+                question.difficult = 2
+
+        question.save()
 
     answer_sheet.score = num_correct
     answer_sheet.save()

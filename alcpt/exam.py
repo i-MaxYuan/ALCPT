@@ -137,7 +137,7 @@ def edit_exam(request, exam_id: int):
             raise ArgumentError('Missing testpaper.')
 
         try:
-            group = Group.objects.get(name=request.POST.get('group'))
+            group = Group.objects.get(id=request.POST.get('group'))
 
         except TypeError:
             raise ArgumentError('Missing group.')

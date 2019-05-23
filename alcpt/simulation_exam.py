@@ -26,7 +26,8 @@ def index(request):
     now = timezone.localtime(timezone.now())
     num_pages, exams = exammanager.query_exams(exam_type=ExamType.Exam,
                                                student=request.user,
-                                               filter_func=lambda e: now <= e.start_time + timedelta(minutes=e.duration))
+                                               filter_func=lambda e: now <= e.start_time + timedelta(minutes=e.duration),
+                                               public=True)
 
     for exam in exams:
         if now < exam.start_time:
@@ -57,7 +58,13 @@ def index(request):
 
 @permission_check(UserType.Tester)
 @require_http_methods(["GET", "POST"])
-def take_exam(request, exam_id):
+def take_exam(request, exam_id, question_index):
+    try:
+        question_index = int(question_index)
+
+    except ValueError:
+        question_index = 0
+
     try:
         exam = Exam.objects.get(id=exam_id)
 
@@ -105,10 +112,8 @@ def take_exam(request, exam_id):
                                                   score=0)
 
     for question in shuffled_questions:
-        if answers[question.id] < 0:
-            print('hi111111111111111111')
+        if answers[str(question.id)] < 0:
             question.option = json.loads(question.option)
-            print('hi222222222222222222')
             question_index = shuffled_questions.index(question)
             break
     else:
@@ -117,6 +122,7 @@ def take_exam(request, exam_id):
     if request.method == "GET":
         data = {
             'exam': exam,
+            'answers': answers,
             'question': question,
             'index': question_index,
             'has_next': question_index + 1 < len(shuffled_questions),
@@ -126,6 +132,7 @@ def take_exam(request, exam_id):
     else:
         try:
             answer = int(request.POST.get('answer-{}'.format(question.id)))
+            print(type(answer))
 
             if answer not in range(len(question.option)):
                 raise IllegalArgumentError(message='Invalid answer.')
@@ -137,6 +144,6 @@ def take_exam(request, exam_id):
         answer_sheet.save()
 
         if question_index + 1 < len(shuffled_questions):
-            return redirect('/simulation-exam/{}/take'.format(exam_id))
+            return redirect('/tester/simulation-exam/{}/take/{}'.format(exam_id, question_index + 1))
         else:
             return redirect('/simulation-exam')
