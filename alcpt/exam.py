@@ -200,6 +200,31 @@ def create_proclamation(request):
 
 
 @permission_check(UserType.ExamManager)
+@require_http_methods(["GET", "POST"])
+def edit_proclamation(request, proclamation_id: int):
+    try:
+        proclamation = Proclamation.objects.get(id=proclamation_id)
+
+    except ObjectDoesNotExist:
+        raise ResourceNotFoundError('Cannot find proclamation id = {}.'.format(proclamation_id))
+
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        text = request.POST.get('text')
+
+        proclamation.title=title
+        proclamation.text=text
+        proclamation.enable=True
+        proclamation.save()
+
+        messages.success(request, "Successfully update proclamation :{}.".format(proclamation.title))
+
+        return redirect('/exam/proclamation')
+    else:
+        return render(request, 'exam/proclamation_edit.html', {'proclamation':proclamation})
+
+
+@permission_check(UserType.ExamManager)
 @require_http_methods(["GET"])
 def delete_proclamation(request, proclamation_id):
     try:

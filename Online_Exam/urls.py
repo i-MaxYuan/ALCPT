@@ -24,7 +24,9 @@ urlpatterns = [
     url(r'^$', views.index),
 
     url(r'^exam/proclamation/(?P<proclamation_id>[0-9]+)/', include([
-            url(r'^detail$', views.proclamation_detail),
+        url(r'^detail$', views.proclamation_detail),
+        url(r'^edit$', exam.edit_proclamation),
+        url(r'^delete', exam.delete_proclamation),
     ])),
 
     url(r'^login$', views.login),
