@@ -214,3 +214,19 @@ def edit_user(request, serial_number: str):
         }
 
         return render(request, 'user/edit.html', data)
+
+
+@login_required
+@require_http_methods(["GET", "POST"])
+def delete_user(request, serial_number: str):
+    try:
+        user = User.objects.get(serial_number=serial_number)
+
+    except ObjectDoesNotExist:
+        raise ResourceNotFoundError('Cannot find user serial number = {}.'.format(user.serial_number))
+
+    user.delete()
+
+    messages.success(request, 'Delete user={}.'.format(user.name))
+
+    return redirect(request.META.get('HTTP_REFERER', '/user'))

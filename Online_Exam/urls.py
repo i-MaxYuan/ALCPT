@@ -113,6 +113,7 @@ urlpatterns = [
     url(r'^user/', include([
         url(r'^create$', system.create_user),
         url(r'^(?P<serial_number>[a-zA-Z0-9]+)$', system.edit_user),
+        url(r'^(?P<serial_number>[a-zA-Z0-9]+)/delete', system.delete_user),
     ]))
 ]
 
