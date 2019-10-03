@@ -52,8 +52,10 @@ def tester_index(request):
         'end_time': request.GET.get('end_time'),
     }
 
-    num_pages, answer_sheets = scoreviewer.query_answer_sheet(**keywords, user=Student.objects.get(user=request.user),
-                                                              page=page)
+    # num_pages, answer_sheets = scoreviewer.query_answer_sheet(**keywords, user=Student.objects.get(
+    # user=request.user),page=page)
+
+    num_pages, answer_sheets = scoreviewer.query_answer_sheet(**keywords, page=page)
 
     data = {
         'answer_sheets': answer_sheets,
@@ -61,7 +63,7 @@ def tester_index(request):
         'page_range': range(num_pages),
     }
 
-    return render(request, 'practice/score.html', data)
+    return render(request, 'score_tester.html', data)
 
 
 @permission_check(UserType.Tester)
