@@ -36,6 +36,12 @@ urlpatterns = [
     url(r'^question/', include([
         url(r'^create$', question.create_question),
         url(r'^review$', question.review_question_index),
+        url(r'^review/', include([
+            url(r'^(?P<question_id>[0-9]+)/', include([
+                url(r'^enable$', question.enable_question),
+                url(r'^unable$', question.unable_question),
+            ]))
+        ])),
         url(r'^(?P<question_id>[0-9]+)/', include([
             url(r'^edit$', question.edit_question),
             url(r'^delete$', question.delete_question),
