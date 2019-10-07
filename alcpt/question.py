@@ -339,23 +339,59 @@ def delete_question(request, question_id):
 
 
 @permission_check(UserType.QuestionManager)
-@require_http_methods(["POST"])
-def enable_question(request):
-    question_id_list = request.POST.get('question_id_list')
-    for question_id in question_id_list:
-        try:
-            question = Question.objects.get(id=question_id)
+@require_http_methods(["GET"])
+def unable_question(request, question_id):
+    try:
+        question = Question.objects.get(id=question_id)
 
-        except ObjectDoesNotExist:
-            raise ResourceNotFoundError('Cannot find question id = {}.'.format(question_id))
+    except ObjectDoesNotExist:
+        raise ResourceNotFoundError('Cannot find question id = {}.'.format(question_id))
 
-        question.enable = True
-        question.last_updated_by = request.user
-        question.save()
+    question.enable = False
+    question.last_updated_by = request.user
+    question.delete()
+
+    messages.success(request, 'Delete question id={}.'.format(question_id))
+
+    return redirect(request.META.get('HTTP_REFERER', '/question/review'))
+
+
+@permission_check(UserType.QuestionManager)
+@require_http_methods(["GET"])
+def enable_question(request, question_id):
+    try:
+        question = Question.objects.get(id=question_id)
+
+    except ObjectDoesNotExist:
+        raise ResourceNotFoundError('Cannot find question id = {}.'.format(question_id))
+
+    question.enable=True
+    question.last_updated_by=request.user
+    question.save()
 
     messages.success(request, 'Enable question id={}.'.format(question_id))
 
     return redirect(request.META.get('HTTP_REFERER', '/question/review'))
+
+
+# @permission_check(UserType.QuestionManager)
+# @require_http_methods(["POST"])
+# def enable_question(request):
+#     question_id_list = request.POST.get('question_id_list')
+#     for question_id in question_id_list:
+#         try:
+#             question = Question.objects.get(id=question_id)
+#
+#         except ObjectDoesNotExist:
+#             raise ResourceNotFoundError('Cannot find question id = {}.'.format(question_id))
+#
+#         question.enable = True
+#         question.last_updated_by = request.user
+#         question.save()
+#
+#     messages.success(request, 'Enable question id={}.'.format(question_id))
+#
+#     return redirect(request.META.get('HTTP_REFERER', '/question/review'))
 
 
 # 以下都是題目操作員
