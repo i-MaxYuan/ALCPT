@@ -60,8 +60,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/alcpt/question.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-8148">
-              <caret line="106" selection-start-line="106" selection-end-line="106" />
+            <state relative-caret-position="178">
+              <caret line="27" column="5" lean-forward="true" selection-start-line="27" selection-start-column="5" selection-end-line="27" selection-end-column="5" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
               </folding>
@@ -110,11 +110,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/alcpt/managerfuncs/questionmanager.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
-              <caret line="19" lean-forward="true" selection-start-line="19" selection-end-line="19" />
+            <state relative-caret-position="3">
+              <caret line="10" column="69" selection-start-line="10" selection-start-column="69" selection-end-line="10" selection-end-column="69" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
               </folding>
@@ -122,7 +122,7 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/templates/question/list.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="391">
@@ -238,11 +238,11 @@
         <option value="$PROJECT_DIR$/alcpt/views.py" />
         <option value="$PROJECT_DIR$/Online_Exam/settings.py" />
         <option value="$PROJECT_DIR$/templates/index.html" />
-        <option value="$PROJECT_DIR$/alcpt/question.py" />
         <option value="$PROJECT_DIR$/templates/question/short_conversation/create.html" />
         <option value="$APPLICATION_CONFIG_DIR$/consoles/.datagrid/cell" />
-        <option value="$PROJECT_DIR$/alcpt/managerfuncs/questionmanager.py" />
         <option value="$PROJECT_DIR$/templates/question/list.html" />
+        <option value="$PROJECT_DIR$/alcpt/question.py" />
+        <option value="$PROJECT_DIR$/alcpt/managerfuncs/questionmanager.py" />
       </list>
     </option>
   </component>
@@ -456,12 +456,12 @@
       <workItem from="1570429225263" duration="5346000" />
       <workItem from="1570693911198" duration="6991000" />
       <workItem from="1570884934197" duration="480000" />
-      <workItem from="1570933980553" duration="15223000" />
+      <workItem from="1570933980553" duration="15452000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="28040000" />
+    <option name="totallyTimeSpent" value="28269000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -474,6 +474,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.26037195" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -852,16 +853,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/alcpt/question.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-8148">
-          <caret line="106" selection-start-line="106" selection-end-line="106" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="das://f0d8c3fa-b176-48e8-bdbc-52d1e0c4a227/schema/main/table/alcpt_question">
       <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
         <state>
@@ -889,20 +880,30 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/question/list.html">
+    <entry file="file://$PROJECT_DIR$/alcpt/question.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="59" column="34" lean-forward="true" selection-start-line="59" selection-start-column="34" selection-end-line="59" selection-end-column="34" />
+        <state relative-caret-position="178">
+          <caret line="27" column="5" lean-forward="true" selection-start-line="27" selection-start-column="5" selection-end-line="27" selection-end-column="5" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/alcpt/managerfuncs/questionmanager.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="19" lean-forward="true" selection-start-line="19" selection-end-line="19" />
+        <state relative-caret-position="3">
+          <caret line="10" column="69" selection-start-line="10" selection-start-column="69" selection-end-line="10" selection-end-column="69" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/question/list.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="391">
+          <caret line="59" column="34" lean-forward="true" selection-start-line="59" selection-start-column="34" selection-end-line="59" selection-end-column="34" />
         </state>
       </provider>
     </entry>
