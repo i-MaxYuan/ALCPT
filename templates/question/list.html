@@ -55,6 +55,9 @@
             <div class="card-body">
                 <form action="/question" method="get">
                     <div class="row">
+                        <div>
+                            <input type="number" class="form-control" name="id" value="{{ keywords.question_id }}" placeholder="輸入題目編號">
+                        </div>
                         <div class="col">
                             <input type="text" class="form-control" name="description" value="{{ keywords.description }}" placeholder="輸入欲搜尋的題目內容">
                         </div>
@@ -62,7 +65,7 @@
                             <select class="custom-select" name="question_type">
                                 <option value="0">全部類型</option>
                                 {% for type in num_types %}
-                                <option value="{{ type }}" {% if type == keywords.question_type %} selected {% endif %}>{{ type|readable_question_type }}</option>
+                                    <option value="{{ type }}" {% if type == keywords.question_type %} selected {% endif %}>{{ type|readable_question_type }}</option>
                                 {% endfor %}
                             </select>
                         </div>
