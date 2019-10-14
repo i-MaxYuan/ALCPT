@@ -8,15 +8,15 @@ from alcpt.models import Question, TestPaper, User
 from alcpt.utility import save_file
 
 
-def query_question(*, description: str=None, question_type: int=None, question_id: int, page: int=0, enable: bool,
+def query_question(*, description: str=None, question_type: int=None, page: int=0, enable: bool,
                    testpaper: TestPaper=None, created_by: User=None):
     queries = Q(enable=enable)
 
     if description:
         queries &= Q(question__icontains=description)
 
-    if question_id:
-        queries &= Q(id=question_id)
+    # if question_id:
+    #     queries &= Q(id=question_id)
 
 
     if question_type:
