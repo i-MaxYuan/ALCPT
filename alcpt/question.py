@@ -24,7 +24,7 @@ def manager_index(request):
     keywords = {
         'description': request.GET.get('description', ''),
         'question_type': int(request.GET.get('question_type', 0)),
-        'question_id':   int(request.GET.get('id', 0)),
+        # 'question_id':   int(request.GET.get('id', 0)),
     }
 
     num_pages, questions = questionmanager.query_question(**keywords, enable=True, page=page)
@@ -408,7 +408,7 @@ def operator_index(request):
     keywords = {
         'description': request.GET.get('description', ''),
         'question_type': int(request.GET.get('question_type', 0)),
-        'question_id': int(request.GET.get('id', 0)),
+        # 'question_id': int(request.GET.get('id', 0)),
     }
 
     num_pages, questions = questionmanager.query_question(**keywords, created_by=request.user, enable=False, page=page)
