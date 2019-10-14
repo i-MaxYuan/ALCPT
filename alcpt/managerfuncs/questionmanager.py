@@ -8,12 +8,16 @@ from alcpt.models import Question, TestPaper, User
 from alcpt.utility import save_file
 
 
-def query_question(*, description: str=None, question_type: int=None, page: int=0, enable: bool,
+def query_question(*, description: str=None, question_type: int=None, question_id: int, page: int=0, enable: bool,
                    testpaper: TestPaper=None, created_by: User=None):
     queries = Q(enable=enable)
 
     if description:
         queries &= Q(question__icontains=description)
+
+    if question_id:
+        queries &= Q(id=question_id)
+
 
     if question_type:
         queries &= Q(question_type=question_type)
@@ -36,7 +40,7 @@ def query_question(*, description: str=None, question_type: int=None, page: int=
     else:  # page < 0 -> all
         num_pages = 1
 
-    return num_pages, questions
+    return num_pages, questions,
 
 
 def review_question(question: Question, last_updated_by: User):
@@ -57,11 +61,11 @@ def create_question(question_type: QuestionType, question: str, options: list, a
 
     if question_type is QuestionType.QA:
         if file:
-            question.question_file = save_file(file=file, path='question_{}'.format(question.id))
+            question.question_file = save_file(file=file, path='question_{}.mp3'.format(question.id))
 
     elif question_type is QuestionType.ShortConversation:
         if file:
-            question.question_file = save_file(file=file, path='question_{}'.format(question.id))
+            question.question_file = save_file(file=file, path='question_{}.mp3'.format(question.id))
 
     elif question_type is QuestionType.ParagraphUnderstanding:
         pass
@@ -90,11 +94,11 @@ def update_question(question: Question, description: str, options: list, answer_
 
     if question.question_type is QuestionType.QA:
         if file:
-            question.question_file = save_file(file=file, path='question_{}'.format(question.id))
+            question.question_file = save_file(file=file, path='question_{}.mp3'.format(question.id))
 
     elif question.question_type is QuestionType.ShortConversation:
         if file:
-            question.question_file = save_file(file=file, path='question_{}'.format(question.id))
+            question.question_file = save_file(file=file, path='question_{}.mp3'.format(question.id))
 
     elif question.question_type is QuestionType.ParagraphUnderstanding:
         pass
