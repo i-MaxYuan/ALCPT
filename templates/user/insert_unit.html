@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% load web_filters %}
+
+{% block content %}
+<h2> {{hint}} </h2>
+<section class="row">
+    <section class="col-auto mr-auto">
+        <div id="pt" class="bm c1">
+            <div class="z">
+                <a class="fa fa-home fa-2x" href="/" ></a>
+                <a class="fa fa-angle-double-right fa-lg box"></a>
+                <a href="/user" style="font-size: 18px">系統管理員</a>
+                <a class="fa fa-angle-right fa-lg"></a>
+                <a href="/user/unit_list" style="font-size: 18px">單位列表</a>
+                <a class="fa fa-angle-right fa-lg"></a>
+                <a href="/user/unit_list/insert" style="font-size: 18px">新增單位</a>
+            </div>
+            <div style="padding-right: 10px"></div>
+        </div>
+        <div class="w-100 my-3"></div>
+        <h1 style="display: inline;">新增單位</h1>
+    </section>
+
+    <form class="col-12 row mt-3" enctype="multipart/form-data" action="/user/unit_list/insert" method="post" autocomplete="off">
+        {% csrf_token %}
+
+        <h3 class="col-12">單位</h3><br/>
+
+        <div class="col-12 py-2 form-group">
+            <select id='unit' name='unit'>
+                <option value='' selected disabled hidden>選擇要新增單位</option>
+                <option value='department'> 科系 </option>
+                <option value='squadron'> 中隊 </option>
+            </select>
+        </div>
+
+
+        <h3 class="col-12">單位名稱 </h3><br/>
+
+        <div class="col-12 py-2 form-group">
+            <textarea class="form-control" id="unit_name" name="unit_name" rows="6" placeholder="輸入要新增的單位名稱" required></textarea>
+        </div>
+
+
+        <div class="w-100"></div>
+
+        <section class="col text-center pt-3">
+            <button class="btn btn-primary" type="submit">新增</button>
+        </section>
+    </form>
+</section>
+
+
+{% endblock %}

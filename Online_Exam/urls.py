@@ -120,6 +120,16 @@ urlpatterns = [
         url(r'^create$', system.create_user),
         url(r'^(?P<serial_number>[a-zA-Z0-9]+)$', system.edit_user),
         url(r'^(?P<serial_number>[a-zA-Z0-9]+)/delete', system.delete_user),
+
+        # 單位刪除跟編輯 還沒好
+        url(r'^unit_list/$', system.unit),
+        url(r'^unit_list/', include([
+            # url(r'^(?P<department_name>[\w]+)/edit', system.edit_unit),
+            # url(r'^(?P<squadron_name>[\w]+)/edit', system.edit_unit),
+            url(r'^insert$', system.insert_unit),
+            # url(r'^(?P<department_name>[\w]+)/delete', system.delete_unit),
+            # url(r'^(?P<squadron_name>[\w]+)/delete', system.delete_unit),
+        ]))
     ]))
 ]
 
