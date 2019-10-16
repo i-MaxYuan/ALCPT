@@ -243,9 +243,50 @@ def unit(request):
     return render(request, 'user/unit.html', locals())
 
 
-# 編輯所選單位（學系、中隊）
-# def edit_unit(request, department_name: str):
-#     return render(request, 'user/edit_unit.html', locals())
+# 編輯學系
+@permission_check(UserType.SystemManager)
+@require_http_methods(["GET", "POST"])
+def edit_department(request, department_id):
+    try:
+        department = Department.objects.get(id = department_id)
+
+    except ObjectDoesNotExist:
+        raise ResourceNotFoundError('Cannot find department id = {}.'.format(department_id))
+
+    if request.method == 'POST':
+        name = request.POST.get('name')
+
+        department.name = name
+        department.save()
+
+        messages.success(request, "Successfully update department :{}.".format(department.name))
+
+        return redirect('/user/unit_list')
+    else:
+        return render(request, 'user/edit_department.html', {'department':department})
+
+
+# 編輯中隊
+@permission_check(UserType.SystemManager)
+@require_http_methods(["GET", "POST"])
+def edit_squadron(request, squadron_name):
+    try:
+        squadron = Squadron.objects.get(name = squadron_name)
+
+    except ObjectDoesNotExist:
+        raise ResourceNotFoundError('Cannot find department id = {}.'.format(squadron_name))
+
+    if request.method == 'POST':
+        name = request.POST.get('name')
+
+        squadron.name = name
+        squadron.save()
+
+        messages.success(request, "Successfully update squadron :{}.".format(squadron.name))
+
+        return redirect('/user/unit_list')
+    else:
+        return render(request, 'user/edit_squadron.html', {'squadron':squadron})
 
 
 # 新增單位（學系、中隊）
@@ -271,19 +312,35 @@ def insert_unit(request):
         return render(request, 'user/insert_unit.html')
 
 
-# 尚未完成的單位刪除部分
+# 刪除學系
 @permission_check(UserType.ExamManager)
 @require_http_methods(["GET"])
-def delete_unit(request, unit_name):
+def delete_department(request, department_id):
     try:
-        unit = Squadron.objects.get(name = unit_name)
-        unit = Department.objects.get(name = unit_name)
+        department = Department.objects.get(id = department_id)
     
     except ObjectDoesNotExist:
-        raise ResourceNotFoundError('Cannot find object name = {}.'.format(unit_name))
+        raise ResourceNotFoundError('Cannot find object id = {}.'.format(department.name))
 
-        unit.delete()
+    department.delete()
 
-    messages.success(request, 'Delete unit name = {}.'.format(unit.name))
+    messages.success(request, 'Delete unit name = {}.'.format(department.name))
+
+    return redirect(request.META.get('HTTP_REFERER', '/user/unit_list'))
+
+
+# 刪除中隊
+@permission_check(UserType.ExamManager)
+@require_http_methods(["GET"])
+def delete_squadron(request, squadron_name):
+    try:
+        squadron = Squadron.objects.get(name = squadron_name)
+    
+    except ObjectDoesNotExist:
+        raise ResourceNotFoundError('Cannot find object id = {}.'.format(squadron_name))
+
+    squadron.delete()
+
+    messages.success(request, 'Delete unit name = {}.'.format(squadron.name))
 
     return redirect(request.META.get('HTTP_REFERER', '/user/unit_list'))
