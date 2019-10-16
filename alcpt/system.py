@@ -1,6 +1,7 @@
 import re
 from string import punctuation
 
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
@@ -230,3 +231,59 @@ def delete_user(request, serial_number: str):
     messages.success(request, 'Delete user={}.'.format(user.name))
 
     return redirect(request.META.get('HTTP_REFERER', '/user'))
+
+
+# 蘇典煒
+# 顯示所有單位
+@permission_check(UserType.SystemManager)
+@require_http_methods(["GET"])
+def unit(request):
+    departments = Department.objects.all()
+    squadrons = Squadron.objects.all()
+    return render(request, 'user/unit.html', locals())
+
+
+# 編輯所選單位（學系、中隊）
+# def edit_unit(request, department_name: str):
+#     return render(request, 'user/edit_unit.html', locals())
+
+
+# 新增單位（學系、中隊）
+@permission_check(UserType.SystemManager)
+@require_http_methods(["GET", "POST"])
+def insert_unit(request):
+    name = request.POST.get('unit_name')
+    if request.method == 'POST':
+        if request.POST.get('unit') == 'department':
+            Department.objects.create(name = name)
+
+        elif request.POST.get('unit') == 'squadron':
+            Squadron.objects.create(name = name)
+        
+        else:
+            messages.error(request, 'Choose the unit which you want to insert.')
+            return HttpResponseRedirect('/user/unit_list/insert')
+        
+        messages.success(request, 'Success insert new unit: {}.'.format(name))
+
+        return HttpResponseRedirect('/user/unit_list')
+    else:
+        return render(request, 'user/insert_unit.html')
+
+
+# 尚未完成的單位刪除部分
+@permission_check(UserType.ExamManager)
+@require_http_methods(["GET"])
+def delete_unit(request, unit_name):
+    try:
+        unit = Squadron.objects.get(name = unit_name)
+        unit = Department.objects.get(name = unit_name)
+    
+    except ObjectDoesNotExist:
+        raise ResourceNotFoundError('Cannot find object name = {}.'.format(unit_name))
+
+        unit.delete()
+
+    messages.success(request, 'Delete unit name = {}.'.format(unit.name))
+
+    return redirect(request.META.get('HTTP_REFERER', '/user/unit_list'))
