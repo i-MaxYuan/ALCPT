@@ -65,18 +65,10 @@
 
             <ol class="ddm">
                 {% if request.user|has_perm:'SystemManager' %}
-<<<<<<< HEAD
-                <li><a style=" text-decoration:none;" href="/user">系統管理員</a>
-                    <ul>
-                        <li><a href="/user">使用者列表</a></li>
-                        <li><a href="/user/create">新增使用者</a></li>
-                        <li><a href="/user/unit_list">單位列表</a></li>
-=======
                 <li class="manager"><a style=" text-decoration:none;" href="/user">系統管理員</a>
                     <ul class="lay1">
                         <li><a href="/user">使用者列表</a></li>
                         <li><a href="/user/create">新增使用者</a></li>
->>>>>>> fish
                     </ul>
                 </li>
                 {% endif %}
