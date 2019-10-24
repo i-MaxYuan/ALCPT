@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from Online_Exam.settings import LOGIN_REDIRECT_URL, LOGIN_URL
 from django.contrib import auth
+from django.views.decorators.http import require_http_methods
 
 from .definitions import UserType
 from .exceptions import IllegalArgumentError, ResourceNotFoundError
@@ -73,3 +74,19 @@ def proclamation_detail(request, proclamation_id):
         raise ResourceNotFoundError('Cannot find proclamation id = {}.'.format(proclamation_id))
 
     return render(request, 'proclamation_details.html', {'proclamation': proclamation})
+
+
+@login_required
+@require_http_methods(["GET"])
+def pie(request):
+    from .models import AnswerSheet
+    answer_sheets = AnswerSheet.objects.all()
+    over60 = 0
+    under60 = 0
+    for sheet in answer_sheets:
+        if sheet.score >= 60:
+            over60 += 1
+        else:
+            under60 += 1
+
+    return render(request, 'pie_for_tester.html', {'pass': over60, 'fail': under60})

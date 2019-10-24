@@ -43,7 +43,7 @@
                 <a class="fa fa-angle-double-right fa-lg box"></a>
                 <a href="/tester" style="font-size: 18px">受測者</a>
                 <a class="fa fa-angle-right fa-lg"></a>
-                <a href="/tester" style="font-size: 18px">檢閱成績</a>
+                <a href="/tester" style="font-size: 18px">檢閱成績(非圖表)</a>
             </div>
             <div style="padding-right: 10px"></div>
         </div>
@@ -61,32 +61,9 @@
                     <th scope="col" class="text-center">名稱</th>
                     <th scope="col" class="text-center">分數</th>
                     <th scope="col" class="text-center">考試時間</th>
-                    <th scope="col"><a href="/tester/pie" style="background-color: #007bff"><i class="fa fa-line-chart fa-fw mb-2" title="查看圖表"></i></a></th>
+                    <th scope="col"><a href="/tester" style="background-color: #007bff"><i class="fa fa-line-chart fa-fw mb-2" title="查看資料"></i></a></th>
                 </tr>
             </thead>
-            {% if answer_sheets %}
-                {% for sheet in answer_sheets %}
-                    <tr>
-                        <th scope="row" class="align-middle text-center">{{ sheet.exam.id }}</th>
-                        <td class="align-middle">{{ sheet.exam.name }}</td>
-                        <td class="align-middle text-center">{{ sheet.exam.type }}</td>
-                        <td class="align-middle text-center">{{ sheet.score }}/{{ sheet.num_questions }}</td>
-                        <td class="align-middle text-center">{{ sheet.created_at|date:'Y/n/d H:i' }}</td>
-                        <td class="align-middle text-center">
-                            <a href="/score/{{ sheet.exam.id }}"><i class="fa fa-search fa-fw mb-2"></i></a>
-                        </td>
-                    </tr>
-                {% endfor %}
-            {% else %}
-                <tr>
-                    <th scope="row" class="align-middle text-center"></th>
-                    <td class="align-middle text-center"></td>
-                    <td class="align-middle text-center"></td>
-                    <td class="align-middle text-center">暫無考試資料</td>
-                    <td class="align-middle text-center">
-                    </td>
-                </tr>
-            {% endif %}
         </table>
         <nav>
             <ul class="pagination justify-content-end">

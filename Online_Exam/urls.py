@@ -98,7 +98,9 @@ urlpatterns = [
 
     url(r'^tester$', scores.tester_index),
     url(r'^tester/', include([
+        url(r'^pie$', views.pie),
         url(r'^practice/', include([
+            url(r'^score$', scores.tester_index),
             url(r'^(?P<practice_type>(listening|reading))$', practice.create),
             url(r'^integration$', practice.create_integration),
             url(r'^(?P<practice_id>[0-9]+)/', include([
@@ -112,7 +114,7 @@ urlpatterns = [
             ])),
         ])),
     ])),
-
+    url(r'^practice/score$', scores.tester_index),
 
 
     url(r'^user$', system.index),
