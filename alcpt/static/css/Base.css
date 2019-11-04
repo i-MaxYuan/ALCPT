@@ -13,6 +13,7 @@ html,body{
 
 .wrapper{
     height: 120%;
+	width: 120%;
 	background-color: #FCFAF2;
 }
 
@@ -40,16 +41,29 @@ html,body{
     left: 2%;
 }
 
-.indexline .navbar-brand{
+.indexline .navbar-brand a{
 	font-size: 25px;
 	color: white;
-	position: absolute;
 	top: 10%;
-	left: 4%;
+	left: 20%;
 }
 
+.ddm ul.nav-tabs {
+	height: 60px;
+	width: 100%;
+	position: absolute;
+	left: 30px;
+}
+
+.ddm li.dropdown1 a{
+	text-decoration:none;
+	font-size: 25px;
+	color: #FFFFFF;
+}
+
+
 /*標題列*/
-ol.ddm{
+/*ol.ddm{
 	width: 610px;
 	list-style-type:none;
 }
@@ -64,14 +78,11 @@ ol.ddm li{
 	right: 77%;
 	top: 36%;
 	white-space: nowrap;
-}
+}*/
 
-ol.ddm li:hover{
-	background-color: #555555;
-}
 
 /*系統管理員*/
-ol.ddm li.manager ul.lay1 a{
+/*ol.ddm li.manager ul.lay1 a{
 	display: block;
 }
 
@@ -122,6 +133,12 @@ ol.ddm li.manager ul.lay1{
 	left: 40%;
 }
 
+ol.ddm li.manager ul.lay1 li:hover{
+	background-color: #A5DEE4;
+	width: 10px;
+	height: 55px;
+}
+
 ol.ddm li.manager ul.lay1 a,ol.ddm li.manager ul.lay1 a:visited{
 	display:block;
 	color:#FFFFFF;
@@ -136,11 +153,11 @@ ol.ddm li.manager ul.lay1{
 ol.ddm li.manager:hover ul.lay1,ol.ddm li.manager a:hover ul.lay1{
 	display: block;
 
-}
+}*/
 
 
 /*考試管理員*/
-ol.ddm li.test ul.lay1 a{
+/*ol.ddm li.test ul.lay1 a{
 	display: block;
 }
 
@@ -200,6 +217,8 @@ ol.ddm li.test ul.lay1 li{
 	right: 110px;
 }
 
+
+
 ol.ddm li.test ul.lay1 a,ol.ddm li.test ul.lay1 a:visited{
 	display:block;
 	color:#FFFFFF;
@@ -214,10 +233,10 @@ ol.ddm li.test ul.lay1{
 ol.ddm li.test:hover ul.lay1,ol.ddm li.test a:hover ul.lay1{
 	display: block;
 
-}
+}*/
 
 /*題庫管理員*/
-ol.ddm li.questionManager ul.lay1 a{
+/*ol.ddm li.questionManager ul.lay1 a{
 	display: block;
 }
 
@@ -267,6 +286,12 @@ ol.ddm li.questionManager ul.lay1{
 	left: 40%;
 }
 
+ol.ddm li.questionManager ul.lay1 li:hover{
+	background-color: #A5DEE4;
+	width: 10px;
+	height: 55px;
+}
+
 ol.ddm li.questionManager ul.lay1 a,ol.ddm li.questionManager ul.lay1 a:visited{
 	display:block;
 	color:#FFFFFF;
@@ -281,10 +306,10 @@ ol.ddm li.questionManager ul.lay1{
 ol.ddm li.questionManager:hover ul.lay1,ol.ddm li.questionManager a:hover ul.lay1{
 	display: block;
 
-}
+}*/
 
 /*題庫操作員*/
-ol.ddm li.questionOperator ul.lay1 a{
+/*ol.ddm li.questionOperator ul.lay1 a{
 	display: block;
 }
 
@@ -334,6 +359,12 @@ ol.ddm li.questionOperator ul.lay1{
 	left: 40%;
 }
 
+ol.ddm li.questionOperator ul.lay1 li:hover{
+	background-color: #A5DEE4;
+	width: 10px;
+	height: 55px;
+}
+
 ol.ddm li.questionOperator ul.lay1 a,ol.ddm li.questionOperator ul.lay1 a:visited{
 	display:block;
 	color:#FFFFFF;
@@ -348,10 +379,10 @@ ol.ddm li.questionOperator ul.lay1{
 ol.ddm li.questionOperator:hover ul.lay1,ol.ddm li.questionOperator a:hover ul.lay1{
 	display: block;
 
-}
+}*/
 
 /*成績檢閱者*/
-ol.ddm li.scoreViewer ul.lay1 a{
+/*ol.ddm li.scoreViewer ul.lay1 a{
 	display: block;
 }
 
@@ -401,6 +432,12 @@ ol.ddm li.scoreViewer ul.lay1{
 	left: 40%;
 }
 
+ol.ddm li.scoreViewer ul.lay1 li:hover{
+	background-color: #A5DEE4;
+	width: 10px;
+	height: 55px;
+}
+
 ol.ddm li.scoreViewer ul.lay1 a,ol.ddm li.scoreViewer ul.lay1 a:visited{
 	display:block;
 	color:#FFFFFF;
@@ -415,10 +452,10 @@ ol.ddm li.scoreViewer ul.lay1{
 ol.ddm li.scoreViewer:hover ul.lay1,ol.ddm li.scoreViewer a:hover ul.lay1{
 	display: block;
 
-}
+}*/
 
 /*受測者*/
-ol.ddm li.tester ul.lay1 a{
+/*ol.ddm li.tester ul.lay1 a{
 	display: block;
 }
 
@@ -468,6 +505,12 @@ ol.ddm li.tester ul.lay1{
 	left: 40%;
 }
 
+ol.ddm li.tester ul.lay1 li:hover{
+	background-color: #A5DEE4;
+	width: 10px;
+	height: 55px;
+}
+
 ol.ddm li.tester ul.lay1 a,ol.ddm li.tester ul.lay1 a:visited{
 	display:block;
 	color:#FFFFFF;
@@ -482,10 +525,10 @@ ol.ddm li.tester ul.lay1{
 ol.ddm li.tester:hover ul.lay1,ol.ddm li.tester a:hover ul.lay1{
 	display: block;
 
-}
+}*/
 
 /*使用者名稱*/
-ol.ddmR{
+/*ol.ddmR{
 	width: 610px;
 	list-style-type:none;
 }
@@ -552,6 +595,12 @@ ol.ddmR li.user ul.lay1{
 	left: 40%;
 }
 
+ol.ddmR li.user ul.lay1 li:hover{
+	background-color: #A5DEE4;
+	width: 10px;
+	height: 55px;
+}
+
 ol.ddmR li.user ul.lay1 a,ol.ddmR li.user ul.lay1 a:visited{
 	display:block;
 	color:#FFFFFF;
@@ -567,10 +616,11 @@ ol.ddmR li.user:hover ul.lay1,ol.ddmR li.user a:hover ul.lay1{
 	display: block;
 
 }
+*/
 
 /*資訊*/
 .infor{
-	width: 80%;
+	width: 100px;
 
 	position: absolute;
 	top: 20%;
@@ -581,6 +631,6 @@ ol.ddmR li.user:hover ul.lay1,ol.ddmR li.user a:hover ul.lay1{
 /*版權列*/
 .foot{
 	position: absolute;
-	top: 90%;
+	top: 50%;
 	left: 35%;
 }
