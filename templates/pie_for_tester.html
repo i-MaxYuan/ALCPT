@@ -6,6 +6,10 @@
 
 <head>
     <style>
+		score {
+			font-size: 50px;
+			color: rgb(0,102,255);
+		}
         #container {
             width: 70%;
             min-width: 310px;
@@ -43,7 +47,7 @@
                 <a class="fa fa-angle-double-right fa-lg box"></a>
                 <a href="/tester" style="font-size: 18px">受測者</a>
                 <a class="fa fa-angle-right fa-lg"></a>
-                <a href="/tester" style="font-size: 18px">檢閱成績(非圖表)</a>
+                <a href="/tester" style="font-size: 18px">檢閱成績(圖表)</a>
             </div>
             <div style="padding-right: 10px"></div>
         </div>
@@ -54,17 +58,10 @@
     <div class="w-100 my-3"></div>
 
     <section class="col">
-        <table class="table table-striped table-hover table-responsive-lg">
-            <thead>
-                <tr>
-                    <th scope="col" class="text-center">#</th>
-                    <th scope="col" class="text-center">名稱</th>
-                    <th scope="col" class="text-center">分數</th>
-                    <th scope="col" class="text-center">考試時間</th>
-                    <th scope="col"><a href="/tester" style="background-color: #007bff"><i class="fa fa-line-chart fa-fw mb-2" title="查看資料"></i></a></th>
-                </tr>
-            </thead>
-        </table>
+        <div>
+			<score>及格: {{ pass }}</score>
+			<score>不及格: {{ fail }}</score>
+		</div>
         <nav>
             <ul class="pagination justify-content-end">
                 {% for page_index in page_range %}
@@ -79,3 +76,4 @@
 
 
 {% endblock %}
+
