@@ -24,7 +24,6 @@ def manager_index(request):
     keywords = {
         'description': request.GET.get('description', ''),
         'question_type': int(request.GET.get('question_type', 0)),
-        # 'question_id':   int(request.GET.get('id', 0)),
     }
 
     num_pages, questions = questionmanager.query_question(**keywords, enable=True, page=page)
@@ -340,59 +339,23 @@ def delete_question(request, question_id):
 
 
 @permission_check(UserType.QuestionManager)
-@require_http_methods(["GET"])
-def unable_question(request, question_id):
-    try:
-        question = Question.objects.get(id=question_id)
+@require_http_methods(["POST"])
+def enable_question(request):
+    question_id_list = request.POST.get('question_id_list')
+    for question_id in question_id_list:
+        try:
+            question = Question.objects.get(id=question_id)
 
-    except ObjectDoesNotExist:
-        raise ResourceNotFoundError('Cannot find question id = {}.'.format(question_id))
+        except ObjectDoesNotExist:
+            raise ResourceNotFoundError('Cannot find question id = {}.'.format(question_id))
 
-    question.enable = False
-    question.last_updated_by = request.user
-    question.delete()
-
-    messages.success(request, 'Delete question id={}.'.format(question_id))
-
-    return redirect(request.META.get('HTTP_REFERER', '/question/review'))
-
-
-@permission_check(UserType.QuestionManager)
-@require_http_methods(["GET"])
-def enable_question(request, question_id):
-    try:
-        question = Question.objects.get(id=question_id)
-
-    except ObjectDoesNotExist:
-        raise ResourceNotFoundError('Cannot find question id = {}.'.format(question_id))
-
-    question.enable=True
-    question.last_updated_by=request.user
-    question.save()
+        question.enable = True
+        question.last_updated_by = request.user
+        question.save()
 
     messages.success(request, 'Enable question id={}.'.format(question_id))
 
     return redirect(request.META.get('HTTP_REFERER', '/question/review'))
-
-
-# @permission_check(UserType.QuestionManager)
-# @require_http_methods(["POST"])
-# def enable_question(request):
-#     question_id_list = request.POST.get('question_id_list')
-#     for question_id in question_id_list:
-#         try:
-#             question = Question.objects.get(id=question_id)
-#
-#         except ObjectDoesNotExist:
-#             raise ResourceNotFoundError('Cannot find question id = {}.'.format(question_id))
-#
-#         question.enable = True
-#         question.last_updated_by = request.user
-#         question.save()
-#
-#     messages.success(request, 'Enable question id={}.'.format(question_id))
-#
-#     return redirect(request.META.get('HTTP_REFERER', '/question/review'))
 
 
 # 以下都是題目操作員
@@ -408,7 +371,6 @@ def operator_index(request):
     keywords = {
         'description': request.GET.get('description', ''),
         'question_type': int(request.GET.get('question_type', 0)),
-        # 'question_id': int(request.GET.get('id', 0)),
     }
 
     num_pages, questions = questionmanager.query_question(**keywords, created_by=request.user, enable=False, page=page)

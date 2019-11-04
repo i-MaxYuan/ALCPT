@@ -108,10 +108,8 @@ STATICFILES_DIRS = [
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'alcpt/static')
 
-# MEDIA_URL = '/media/'
-MEDIA_URL = '/media/documents/'
-# MEDIA_ROOT = os.path.join(BASE_DIR, 'alcpt/media')
-MEDIA_ROOT = os.path.join(BASE_DIR, 'alcpt/media/documents')
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'alcpt/media')
 
 LOGIN_URL = '/login'
 LOGIN_REDIRECT_URL = '/'
