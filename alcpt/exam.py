@@ -238,4 +238,3 @@ def delete_proclamation(request, proclamation_id):
     messages.success(request, 'Delete proclamation title={}.'.format(proclamation.title))
 
     return redirect(request.META.get('HTTP_REFERER', '/exam'))
-    

@@ -53,7 +53,7 @@
         <h3 class="col-12"><i class="fa fa-sliders fa-fw mb-2"></i> 選擇考卷</h3>
         <div class="col">
             <select class="custom-select" name="testpaper">
-{#               <option value="">考卷名稱</option>#}
+                <option value="0">考卷名稱</option>
                 {% for testpaper in testpapers %}
                     <option value="{{ testpaper.id }}" {% if testpaper.id == exam.testpaper.id %} selected {% endif %}>{{ testpaper.name }}</option>
                 {% endfor %}
@@ -62,7 +62,7 @@
         <h3 class="col-12"><i class="fa fa-id-card" aria-hidden="true"></i> 選擇受測者</h3>
         <div class="col">
             <select class="custom-select" name="group">
-{#                <option value="0">受測者群組名稱</option>#}
+                <option value="0">受測者群組名稱</option>
                 {% for group in groups %}
                     <option value="{{ group.id }}" {% if group.id == exam.group.id %} selected {% endif %}>{{ group.name }}</option>
                 {% endfor %}
