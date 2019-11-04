@@ -32,7 +32,6 @@
                 <div class="form-group col-auto">
                     <label for="department">學系</label>
                     <select id="department" class="custom-select" name="department">
-                        <option value='' selected disabled hidden>請選擇學系</option>
                         {% for dept in departments %}
                         <option value="{{ dept.id }}" {% if dept.id == student.department.id %} selected {% endif %}>{{ dept.name }}</option>
                         {% endfor %}
@@ -45,7 +44,6 @@
                 <div class="form-group col-auto">
                     <label for="team">中隊</label>
                     <select id="department" class="custom-select" name="squadron">
-                        <option value='' selected disabled hidden>請選擇中隊</option>
                         {% for squa in squadrons %}
                         <option value="{{ squa.id }}" {% if squa.id == student.squadron.id %} selected {% endif %}>{{ squa.name }}</option>
                         {% endfor %}
