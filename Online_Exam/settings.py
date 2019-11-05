@@ -77,10 +77,15 @@ WSGI_APPLICATION = 'Online_Exam.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
+# 更換成 mysql
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'ALCPT',
+        'USER': 'root',
+        'PASSWORD': 'root0925',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
     }
 }
 

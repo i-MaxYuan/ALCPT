@@ -3,9 +3,16 @@
   <component name="ChangeListManager">
     <list default="true" id="4e1b44ae-5c91-4afc-a12a-ddde1c778a29" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+<<<<<<< HEAD
       <change beforePath="$PROJECT_DIR$/Online_Exam/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/Online_Exam/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/alcpt/system.py" beforeDir="false" afterPath="$PROJECT_DIR$/alcpt/system.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
+=======
+      <change beforePath="$PROJECT_DIR$/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/exam/exam_list.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/exam/exam_list.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/exam/testpaper_list.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/exam/testpaper_list.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/user/list.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/user/list.html" afterDir="false" />
+>>>>>>> dian
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -117,11 +124,6 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectFrameBounds" fullScreen="true">
-    <option name="y" value="23" />
-    <option name="width" value="1402" />
-    <option name="height" value="877" />
-  </component>
   <component name="ProjectId" id="1RaIUbxR6zelGoJfTw5uNsM4UwR" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
@@ -129,6 +131,7 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="com.intellij.database.dataSource.DataSourceTemplate" value="Sqlite (Xerial)" />
     <property name="database.console.LAST_STATE" value="false" />
+    <property name="database.data.extractors.current.id" value="CSV-Groovy.csv.groovy" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
@@ -247,6 +250,7 @@
   <component name="ServiceViewManager">
     <option name="allServicesViewState">
       <serviceView>
+        <option name="contentProportion" value="0.14901388" />
         <treeState>
           <expand />
           <select />
@@ -274,7 +278,15 @@
       <workItem from="1570884934197" duration="480000" />
       <workItem from="1570933980553" duration="15452000" />
       <workItem from="1571897026153" duration="1402000" />
+<<<<<<< HEAD
       <workItem from="1572854806474" duration="285000" />
+=======
+      <workItem from="1572529139839" duration="1711000" />
+      <workItem from="1572585037395" duration="25000" />
+      <workItem from="1572585065111" duration="224000" />
+      <workItem from="1572760640069" duration="24000" />
+      <workItem from="1572849944099" duration="1419000" />
+>>>>>>> dian
     </task>
     <servers />
   </component>
