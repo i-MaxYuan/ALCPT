@@ -196,3 +196,17 @@ def delete_group(request, group_name: str):
     messages.success(request, 'Delete group name={}.'.format(group.name))
 
     return redirect(request.META.get('HTTP_REFERER', '/group'))
+
+
+@permission_check(UserType.ExamManager)
+@require_http_methods(["GET"])
+def member_list(request, group_name: str):
+    try:
+        group = Group.objects.get(name=group_name)
+
+    except ObjectDoesNotExist:
+        raise ResourceNotFoundError('Cannot find group name = {}.'.format(group_name))
+
+    members = group.member.all()
+
+    return render(request, 'exam/group_member_list.html', locals())
