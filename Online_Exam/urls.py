@@ -80,7 +80,8 @@ urlpatterns = [
             url(r'^create$', group.create_group),
             url(r'^(?P<group_name>[%\w\d]+)/', include([
                 url(r'^edit$', group.edit_group),
-                url(r'^delete$', group.delete_group)
+                url(r'^delete$', group.delete_group),
+                url(r'^detail$', group.member_list),
             ]))
         ]))
     ])),

@@ -70,7 +70,7 @@
             </thead>
             <tbody>
                 {% for group in groups %}
-                <tr style="text-align: center">
+                <tr style="text-align: center" onclick="window.location.href='/exam/group/{{ group.name }}/detail'">
                     <th scope="row">{{ group.name }}</th>
                     <td>{{ group.member.count }}</td>
                     <td>{{ group.create_time }}</td>
