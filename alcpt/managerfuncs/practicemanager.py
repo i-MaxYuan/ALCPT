@@ -4,7 +4,7 @@ from datetime import datetime
 from alcpt.definitions import ExamType, QuestionType, QuestionTypeCounts
 from alcpt.exceptions import IllegalArgumentError
 from alcpt.models import User, Exam, Student, AnswerSheet, Question
-from .exammanager import random_select
+from .testmanager import random_select
 
 
 def create_practice(*, user: User, practice_type: ExamType, question_types: list, num_questions: int, integration: bool=False):

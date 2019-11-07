@@ -8,7 +8,7 @@ from django.shortcuts import render, redirect
 from django.views.decorators.http import require_http_methods
 from django.utils import timezone
 
-from .managerfuncs import exammanager
+from .managerfuncs import testmanager
 from .decorators import permission_check
 from .definitions import UserType, ExamType, QuestionType
 from .models import AnswerSheet, Exam, TestPaper, Student
@@ -24,7 +24,7 @@ def index(request):
         page = 0
 
     now = timezone.localtime(timezone.now())
-    num_pages, exams = exammanager.query_exams(exam_type=ExamType.Exam,
+    num_pages, exams = testmanager.query_exams(exam_type=ExamType.Exam,
                                                student=request.user,
                                                filter_func=lambda e: now <= e.start_time + timedelta(minutes=e.duration),
                                                public=True)

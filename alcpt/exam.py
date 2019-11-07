@@ -9,7 +9,7 @@ from .models import Exam, TestPaper, Proclamation, Group
 from .exceptions import *
 from .decorators import permission_check
 from .definitions import UserType, ExamType
-from .managerfuncs import exammanager
+from .managerfuncs import testmanager
 
 
 @permission_check(UserType.TestManager)
@@ -27,7 +27,7 @@ def index(request):
         'public': True
     }
 
-    num_pages, exams = exammanager.query_exams(**keywords, page=page)
+    num_pages, exams = testmanager.query_exams(**keywords, page=page)
 
     data = {
         'exams': exams,

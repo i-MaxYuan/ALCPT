@@ -9,7 +9,7 @@ from .models import TestPaper, Question
 from .exceptions import *
 from .decorators import permission_check
 from .definitions import UserType, QuestionTypeCounts, QuestionType
-from .managerfuncs import exammanager, questionmanager
+from .managerfuncs import testmanager, questionmanager
 
 
 @permission_check(UserType.TestManager)
@@ -25,7 +25,7 @@ def testpaper_index(request):
         'name': request.GET.get('name', ''),
     }
 
-    num_pages, testpapers = exammanager.query_testpapers(**keywords, page=page)
+    num_pages, testpapers = testmanager.query_testpapers(**keywords, page=page)
 
     data = {
         'testpapers': testpapers,
@@ -49,7 +49,7 @@ def create_testpaper(request):
         except ObjectDoesNotExist:
             pass
 
-        testpaper = exammanager.create_testpaper(name=name,
+        testpaper = testmanager.create_testpaper(name=name,
                                                  created_by=request.user)
 
         return redirect('/exam/testpaper/{}/edit'.format(testpaper.name))
@@ -70,14 +70,14 @@ def edit_testpaper(request, testpaper_name: str):
     if request.method == 'POST':
         name = request.POST.get('name')
 
-        testpaper = exammanager.edit_testpaper(testpaper=testpaper,
-                                               name=name,)
+        testpaper = testmanager.edit_testpaper(testpaper=testpaper,
+                                               name=name, )
         testpaper.enable = testpaper.question_set.count() >= sum(QuestionTypeCounts.Exam.value[0])
         testpaper.save()
 
         messages.success(request, "Successfully update testpaper :{}.".format(testpaper.name))
 
-        return redirect('/exam')
+        return redirect('/exam/testpaper')
 
     else:
         question_types = [0] + QuestionTypeCounts.Exam.value[0]
@@ -221,7 +221,7 @@ def auto_pick_question(request, testpaper_name: str, question_type: int):
     if type(question_type) is int:
         raise IllegalArgumentError('question_type does match category.')
 
-    selected_num = exammanager.random_select(types_counts=QuestionTypeCounts.Exam.value[0],
+    selected_num = testmanager.random_select(types_counts=QuestionTypeCounts.Exam.value[0],
                                              question_type=question_type,
                                              testpaper=testpaper)
 
