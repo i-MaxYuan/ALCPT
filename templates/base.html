@@ -83,7 +83,7 @@
                     </li>
 
                     <li class="dropdown" style="left: 30.5%">
-                        {% if request.user|has_perm:'ExamManager' %}
+                        {% if request.user|has_perm:'TestManager' %}
                         <a href="/exam"  data-toggle="dropdown" style="color: #FFFFFF; font-size: 18px; top: 2px"
                            onmouseover="this.style.color='#3c6382'" onmousedown="this.style.color='#3c6382'" onmouseout="this.style.color='#fff'">考試管理員<b class="caret"></b></a>
                         <ul class="dropdown-menu" style="font-size: 16px">
@@ -183,7 +183,7 @@
                 </li>
                 {% endif %}
 
-                {% if request.user|has_perm:'ExamManager' %}
+                {% if request.user|has_perm:'TestManager' %}
                 <li class="test"><a style=" text-decoration:none;" href="/exam">考試管理員</a>
                     <ul class="lay1">
                         <li><a href="/exam">考試列表</a> </li>

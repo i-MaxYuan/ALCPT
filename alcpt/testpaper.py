@@ -12,7 +12,7 @@ from .definitions import UserType, QuestionTypeCounts, QuestionType
 from .managerfuncs import exammanager, questionmanager
 
 
-@permission_check(UserType.ExamManager)
+@permission_check(UserType.TestManager)
 @require_http_methods(["GET"])
 def testpaper_index(request):
     try:
@@ -36,7 +36,7 @@ def testpaper_index(request):
     return render(request, 'exam/testpaper_list.html', data)
 
 
-@permission_check(UserType.ExamManager)
+@permission_check(UserType.TestManager)
 @require_http_methods(["GET", "POST"])
 def create_testpaper(request):
     if request.method == 'POST':
@@ -58,7 +58,7 @@ def create_testpaper(request):
         return render(request, 'exam/testpaper_create.html')
 
 
-@permission_check(UserType.ExamManager)
+@permission_check(UserType.TestManager)
 @require_http_methods(["GET", "POST"])
 def edit_testpaper(request, testpaper_name: str):
     try:
@@ -102,7 +102,7 @@ def edit_testpaper(request, testpaper_name: str):
         return render(request, 'exam/testpaper_edit.html', data)
 
 
-@permission_check(UserType.ExamManager)
+@permission_check(UserType.TestManager)
 @require_http_methods(["GET"])
 def delete_testpaper(request, testpaper_name):
     try:
@@ -118,7 +118,7 @@ def delete_testpaper(request, testpaper_name):
     return redirect(request.META.get('HTTP_REFERER', '/testpaper'))
 
 
-@permission_check(UserType.ExamManager)
+@permission_check(UserType.TestManager)
 @require_http_methods(["GET", "POST"])
 def pick_question(request, testpaper_name: str, question_type: int):
     try:
@@ -205,7 +205,7 @@ def pick_question(request, testpaper_name: str, question_type: int):
     return render(request, 'exam/pick_question.html', data)
 
 
-@permission_check(UserType.ExamManager)
+@permission_check(UserType.TestManager)
 @require_http_methods(["GET"])
 def auto_pick_question(request, testpaper_name: str, question_type: int):
     try:

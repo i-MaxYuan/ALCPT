@@ -13,7 +13,7 @@ from .definitions import UserType
 from .managerfuncs import exammanager
 
 
-@permission_check(UserType.ExamManager)
+@permission_check(UserType.TestManager)
 @require_http_methods(["GET"])
 def group_index(request):
     try:
@@ -37,7 +37,7 @@ def group_index(request):
     return render(request, 'exam/group_list.html', data)
 
 
-@permission_check(UserType.ExamManager)
+@permission_check(UserType.TestManager)
 @require_http_methods(["GET", "POST"])
 def create_group(request):
     try:
@@ -108,7 +108,7 @@ def create_group(request):
         return render(request, 'exam/group_create.html', data)
 
 
-@permission_check(UserType.ExamManager)
+@permission_check(UserType.TestManager)
 @require_http_methods(["GET", "POST"])
 def edit_group(request, group_name: str):
     try:
@@ -182,7 +182,7 @@ def edit_group(request, group_name: str):
         return render(request, 'exam/group_edit.html', data)
 
 
-@permission_check(UserType.ExamManager)
+@permission_check(UserType.TestManager)
 @require_http_methods(["GET"])
 def delete_group(request, group_name: str):
     try:
@@ -198,7 +198,7 @@ def delete_group(request, group_name: str):
     return redirect(request.META.get('HTTP_REFERER', '/group'))
 
 
-@permission_check(UserType.ExamManager)
+@permission_check(UserType.TestManager)
 @require_http_methods(["GET"])
 def member_list(request, group_name: str):
     try:

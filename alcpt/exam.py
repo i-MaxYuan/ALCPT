@@ -12,7 +12,7 @@ from .definitions import UserType, ExamType
 from .managerfuncs import exammanager
 
 
-@permission_check(UserType.ExamManager)
+@permission_check(UserType.TestManager)
 @require_http_methods(["GET"])
 def index(request):
     try:
@@ -38,7 +38,7 @@ def index(request):
     return render(request, 'exam/exam_list.html', data)
 
 
-@permission_check(UserType.ExamManager)
+@permission_check(UserType.TestManager)
 @require_http_methods(["GET", "POST"])
 def create_exam(request):
     if request.method == 'POST':
@@ -100,7 +100,7 @@ def create_exam(request):
         return render(request, 'exam/exam_create.html', data)
 
 
-@permission_check(UserType.ExamManager)
+@permission_check(UserType.TestManager)
 @require_http_methods(["GET", "POST"])
 def edit_exam(request, exam_id: int):
     try:
@@ -164,7 +164,7 @@ def edit_exam(request, exam_id: int):
         return render(request, 'exam/exam_edit.html', data)
 
 
-@permission_check(UserType.ExamManager)
+@permission_check(UserType.TestManager)
 @require_http_methods(["GET"])
 def delete_exam(request, exam_id):
     try:
@@ -182,7 +182,7 @@ def delete_exam(request, exam_id):
     return redirect(request.META.get('HTTP_REFERER', '/exam'))
 
 
-@permission_check(UserType.ExamManager)
+@permission_check(UserType.TestManager)
 @require_http_methods(["GET", "POST"])
 def create_proclamation(request):
     if request.method == 'POST':
@@ -199,7 +199,7 @@ def create_proclamation(request):
         return render(request, 'exam/proclamation_create.html')
 
 
-@permission_check(UserType.ExamManager)
+@permission_check(UserType.TestManager)
 @require_http_methods(["GET", "POST"])
 def edit_proclamation(request, proclamation_id: int):
     try:
@@ -224,7 +224,7 @@ def edit_proclamation(request, proclamation_id: int):
         return render(request, 'exam/proclamation_edit.html', {'proclamation':proclamation})
 
 
-@permission_check(UserType.ExamManager)
+@permission_check(UserType.TestManager)
 @require_http_methods(["GET"])
 def delete_proclamation(request, proclamation_id):
     try:
