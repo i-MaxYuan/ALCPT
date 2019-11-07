@@ -190,7 +190,7 @@ def create_proclamation(request):
         text = request.POST.get('text')
         Proclamation.objects.create(title=title,
                                     text=text,
-                                    enable=True,
+                                    is_public=True,
                                     created_by=request.user)
 
         return redirect('/')
@@ -214,7 +214,7 @@ def edit_proclamation(request, proclamation_id: int):
 
         proclamation.title=title
         proclamation.text=text
-        proclamation.enable=True
+        proclamation.is_public=True
         proclamation.save()
 
         messages.success(request, "Successfully update proclamation :{}.".format(proclamation.title))
