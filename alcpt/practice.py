@@ -14,7 +14,7 @@ from .models import AnswerSheet, Question, Student, User
 from .managerfuncs import practicemanager
 
 
-@permission_check(UserType.Tester)
+@permission_check(UserType.Testee)
 @require_http_methods(["GET", "POST"])
 def create(request, practice_type):
     if request.method == 'POST':
@@ -74,7 +74,7 @@ def create(request, practice_type):
         return render(request, 'practice/create.html', data)
 
 
-@permission_check(UserType.Tester)
+@permission_check(UserType.Testee)
 @require_http_methods(["GET", "POST"])
 def create_integration(request):
     practice_type = ExamType.Practice
@@ -89,7 +89,7 @@ def create_integration(request):
     return redirect('/practice/{}/take'.format(practice.id), selected_questions=selected_questions)
 
 
-@permission_check(UserType.Tester)
+@permission_check(UserType.Testee)
 @require_http_methods(["GET", "POST"])
 def take_practice(request, practice_id, question_index, selected_questions):
     try:
@@ -188,7 +188,7 @@ def take_practice(request, practice_id, question_index, selected_questions):
         return render(request, 'practice/answer.html', data)
 
 
-@permission_check(UserType.Tester)
+@permission_check(UserType.Testee)
 @require_http_methods(["POST"])
 def stop_practice(request, question_index, answer_sheet_id):
     try:

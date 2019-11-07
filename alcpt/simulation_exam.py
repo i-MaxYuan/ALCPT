@@ -15,7 +15,7 @@ from .models import AnswerSheet, Exam, TestPaper, Student
 from .exceptions import ResourceNotFoundError, ArgumentError, IllegalArgumentError
 
 
-@permission_check(UserType.Tester)
+@permission_check(UserType.Testee)
 @require_http_methods(["GET"])
 def index(request):
     try:
@@ -56,7 +56,7 @@ def index(request):
     return render(request, 'simulation_exam/simulation_list.html', data)
 
 
-@permission_check(UserType.Tester)
+@permission_check(UserType.Testee)
 @require_http_methods(["GET", "POST"])
 def take_exam(request, exam_id, question_index):
     try:

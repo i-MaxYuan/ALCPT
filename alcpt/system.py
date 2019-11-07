@@ -87,12 +87,12 @@ def create_user(request):
                 i += 1
 
         else:
-            user_type_value = UserType.Tester.value[0]
+            user_type_value = UserType.Testee.value[0]
 
         new_users = systemmanager.create_users(serial_numbers=new_accounts,
                                                user_type=user_type_value,)
 
-        if user_type_value & UserType.Tester.value[0]:
+        if user_type_value & UserType.Testee.value[0]:
             Student.objects.bulk_create([Student(user=new_user) for new_user in new_users])
 
         messages.success(request, 'Create user "{}" successful.'.format(len(new_users)))

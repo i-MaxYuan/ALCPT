@@ -37,7 +37,7 @@ def index(request):
     return render(request, 'score_list.html', data)
 
 
-@permission_check(UserType.Tester)
+@permission_check(UserType.Testee)
 @require_http_methods(["GET"])
 def tester_index(request):
     try:
@@ -63,7 +63,7 @@ def tester_index(request):
     return render(request, 'score_tester.html', data)
 
 
-@permission_check(UserType.Tester)
+@permission_check(UserType.Testee)
 @require_http_methods(["GET"])
 def sheet_detail(request, exam_id):
     try:

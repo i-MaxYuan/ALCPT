@@ -7,7 +7,7 @@ class UserType(Enum):
     QuestionManager = (0b1000, '題庫管理員')
     QuestionOperator = (0b100, '題目操作員')
     ScoreViewer = (0b10, '成績檢閱者')
-    Tester = (0b1, '受測者')
+    Testee = (0b1, '受測者')
 
     # @staticmethod
     # def type_value(user_type: str):
