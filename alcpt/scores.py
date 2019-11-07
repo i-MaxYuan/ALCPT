@@ -8,7 +8,7 @@ from .models import Question, AnswerSheet, Student
 from .exceptions import *
 from .decorators import permission_check
 from .definitions import UserType
-from .managerfuncs import scoreviewer
+from .managerfuncs import viewer
 
 
 @permission_check(UserType.Viewer)
@@ -26,7 +26,7 @@ def index(request):
         'end_time': request.GET.get('end_time'),
     }
 
-    num_pages, answer_sheets = scoreviewer.query_answer_sheet(**keywords, page=page)
+    num_pages, answer_sheets = viewer.query_answer_sheet(**keywords, page=page)
 
     data = {
         'answer_sheets': answer_sheets,
@@ -52,7 +52,7 @@ def tester_index(request):
         'end_time': request.GET.get('end_time'),
     }
 
-    num_pages, answer_sheets = scoreviewer.query_answer_sheet(**keywords, page=page)
+    num_pages, answer_sheets = viewer.query_answer_sheet(**keywords, page=page)
 
     data = {
         'answer_sheets': answer_sheets,
