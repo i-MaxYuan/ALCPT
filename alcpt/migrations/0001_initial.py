@@ -88,12 +88,12 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('title', models.TextField(max_length=255)),
                 ('text', models.TextField(max_length=512)),
-                ('enable', models.BooleanField(default=False)),
-                ('create', models.DateTimeField(auto_now_add=True)),
+                ('is_public', models.BooleanField(default=False)),
+                ('created_time', models.DateTimeField(auto_now_add=True)),
                 ('created_by', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='proclamation_created', to=settings.AUTH_USER_MODEL)),
             ],
             options={
-                'ordering': ('-create',),
+                'ordering': ('-created_time',),
             },
         ),
         migrations.CreateModel(

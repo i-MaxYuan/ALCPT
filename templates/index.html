@@ -33,7 +33,7 @@
                                 <tr class="w3-hover-green w3-center" style='cursor: pointer; font-size: 18px' onclick="window.location.href='/exam/proclamation/{{ proclamation.id }}/detail'">
                                     <td>{{ proclamation.title }}</td>
                                     <td>{{ proclamation.created_by.name}}</td>
-                                    <td>{{ proclamation.create }}</td>
+                                    <td>{{ proclamation.created_time }}</td>
                                     <td>
                                         <a href="/exam/proclamation/{{ proclamation.id }}/edit"><i class="fa fa-pencil fa-fw mb-2"></i></a>&nbsp;
                                         <a href="/exam/proclamation/{{ proclamation.id }}/delete"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
