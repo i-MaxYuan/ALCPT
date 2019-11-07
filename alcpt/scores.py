@@ -11,7 +11,7 @@ from .definitions import UserType
 from .managerfuncs import scoreviewer
 
 
-@permission_check(UserType.ScoreViewer)
+@permission_check(UserType.Viewer)
 @require_http_methods(["GET"])
 def index(request):
     try:
