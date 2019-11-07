@@ -9,7 +9,7 @@ from .models import Question
 from .exceptions import *
 from .decorators import permission_check
 from .definitions import UserType, QuestionType
-from .managerfuncs import questionmanager
+from .managerfuncs import tbmanager
 
 
 @permission_check(UserType.TBManager)
@@ -26,7 +26,7 @@ def manager_index(request):
         'question_type': int(request.GET.get('question_type', 0)),
     }
 
-    num_pages, questions = questionmanager.query_question(**keywords, enable=True, page=page)
+    num_pages, questions = tbmanager.query_question(**keywords, enable=True, page=page)
 
     for question in questions:
         question.option = json.loads(question.option)
@@ -56,7 +56,7 @@ def review_question_index(request):
         'question_type': int(request.GET.get('question_type', 0)),
     }
 
-    num_pages, questions = questionmanager.query_question(**keywords, enable=False, page=page)
+    num_pages, questions = tbmanager.query_question(**keywords, enable=False, page=page)
 
     for question in questions:
         question.option = json.loads(question.option)
@@ -158,13 +158,13 @@ def create_question(request):
             except ObjectDoesNotExist:
                 pass
 
-        new_question = questionmanager.create_question(question_type=question_type,
-                                                       question=question,
-                                                       options=options,
-                                                       answer_index=answer_index,
-                                                       file=file,
-                                                       created_by=request.user,
-                                                       difficult=difficult)
+        new_question = tbmanager.create_question(question_type=question_type,
+                                                 question=question,
+                                                 options=options,
+                                                 answer_index=answer_index,
+                                                 file=file,
+                                                 created_by=request.user,
+                                                 difficult=difficult)
 
         messages.success(request, "Create question successfully.")
 
@@ -281,13 +281,13 @@ def edit_question(request, question_id):
         if len(options) < 4:
             raise ArgumentError(message='Options must have 4.')
 
-        question = questionmanager.update_question(question=question,
-                                                   description=description,
-                                                   options=options,
-                                                   answer_index=answer_index,
-                                                   file=file,
-                                                   difficult=difficult,
-                                                   last_updated=request.user)
+        question = tbmanager.update_question(question=question,
+                                             description=description,
+                                             options=options,
+                                             answer_index=answer_index,
+                                             file=file,
+                                             difficult=difficult,
+                                             last_updated=request.user)
 
         messages.success(request, 'Update question id={}'.format(question.id))
 
@@ -373,7 +373,7 @@ def operator_index(request):
         'question_type': int(request.GET.get('question_type', 0)),
     }
 
-    num_pages, questions = questionmanager.query_question(**keywords, created_by=request.user, enable=False, page=page)
+    num_pages, questions = tbmanager.query_question(**keywords, created_by=request.user, enable=False, page=page)
 
     for question in questions:
         question.option = json.loads(question.option)
@@ -476,13 +476,13 @@ def operator_create_question(request):
             except ObjectDoesNotExist:
                 pass
 
-        new_question = questionmanager.create_question(question_type=question_type,
-                                                       question=question,
-                                                       options=options,
-                                                       answer_index=answer_index,
-                                                       file=file,
-                                                       created_by=request.user,
-                                                       difficult=difficult)
+        new_question = tbmanager.create_question(question_type=question_type,
+                                                 question=question,
+                                                 options=options,
+                                                 answer_index=answer_index,
+                                                 file=file,
+                                                 created_by=request.user,
+                                                 difficult=difficult)
 
         messages.success(request, "Create question successfully.")
 
@@ -599,13 +599,13 @@ def operator_edit_question(request, question_id):
         if len(options) < 4:
             raise ArgumentError(message='Options must have 4.')
 
-        question = questionmanager.update_question(question=question,
-                                                   description=description,
-                                                   options=options,
-                                                   answer_index=answer_index,
-                                                   file=file,
-                                                   difficult=difficult,
-                                                   last_updated=request.user)
+        question = tbmanager.update_question(question=question,
+                                             description=description,
+                                             options=options,
+                                             answer_index=answer_index,
+                                             file=file,
+                                             difficult=difficult,
+                                             last_updated=request.user)
 
         messages.success(request, 'Update question id={}'.format(question.id))
 
