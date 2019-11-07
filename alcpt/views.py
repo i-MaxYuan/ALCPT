@@ -60,7 +60,7 @@ def logout(request):
 def index(request):
     data = {
         "user_types": UserType.__members__,
-        "proclamations": Proclamation.objects.filter(enable=True)
+        "proclamations": Proclamation.objects.filter(is_public=True)
     }
     return render(request, 'index.html', data)
 
