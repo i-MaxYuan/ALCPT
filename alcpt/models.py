@@ -167,7 +167,7 @@ class Group(models.Model):
     member = models.ManyToManyField('Student', blank=True)
     created_by = models.ForeignKey("User", on_delete=models.PROTECT, related_name='group_created')
     update_time = models.DateTimeField(auto_now=True)
-    create_time = models.DateTimeField(auto_now_add=True)
+    created_time = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ('-name',)
