@@ -9,7 +9,7 @@ from .models import TestPaper, Question
 from .exceptions import *
 from .decorators import permission_check
 from .definitions import UserType, QuestionTypeCounts, QuestionType
-from .managerfuncs import testmanager, questionmanager
+from .managerfuncs import testmanager, tbmanager
 
 
 @permission_check(UserType.TestManager)
@@ -184,7 +184,7 @@ def pick_question(request, testpaper_name: str, question_type: int):
         'testpaper': testpaper if status is 1 else None,
     }
 
-    num_pages, questions = questionmanager.query_question(**keywords, enable=True, page=page)
+    num_pages, questions = tbmanager.query_question(**keywords, enable=True, page=page)
 
     for question in questions:
         question.is_selected = question in selected_questions
