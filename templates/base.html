@@ -113,7 +113,7 @@
                     </li>
 
                     <li class="dropdown" style="left: 31.5%">
-                        {% if request.user|has_perm:'QuestionOperator' %}
+                        {% if request.user|has_perm:'TBOperator' %}
                         <a href="/question_operator"  data-toggle="dropdown" style="color: #FFFFFF; font-size: 18px; top: 2px"
                            onmouseover="this.style.color='#3c6382'" onmousedown="this.style.color='#3c6382'" onmouseout="this.style.color='#fff'">題庫操作員<b class="caret"></b></a>
                         <ul class="dropdown-menu" style="font-size: 16px">
@@ -203,7 +203,7 @@
                 </li>
                 {% endif %}
 
-                {% if request.user|has_perm:'QuestionOperator' %}
+                {% if request.user|has_perm:'TBOperator' %}
                 <li class="questionOperator"><a style=" text-decoration:none;" href="/question_operator">題庫操作員</a>
                     <ul class="lay1">
                         <li><a style=" text-decoration:none;" href="/question_operator/create">新增試題</a> </li>

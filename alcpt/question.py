@@ -359,7 +359,7 @@ def enable_question(request):
 
 
 # 以下都是題目操作員
-@permission_check(UserType.QuestionOperator)
+@permission_check(UserType.TBOperator)
 @require_http_methods(["GET"])
 def operator_index(request):
     try:
@@ -389,7 +389,7 @@ def operator_index(request):
     return render(request, 'question/list.html', data)
 
 
-@permission_check(UserType.QuestionOperator)
+@permission_check(UserType.TBOperator)
 @require_http_methods(["GET", "POST"])
 def operator_create_question(request):
     if request.method == 'POST':
@@ -521,7 +521,7 @@ def operator_create_question(request):
         return render(request, template, {'question_type': question_type})
 
 
-@permission_check(UserType.QuestionOperator)
+@permission_check(UserType.TBOperator)
 @require_http_methods(["GET", "POST"])
 def operator_edit_question(request, question_id):
     try:
@@ -638,7 +638,7 @@ def operator_edit_question(request, question_id):
         return render(request, template, data)
 
 
-@permission_check(UserType.QuestionOperator)
+@permission_check(UserType.TBOperator)
 @require_http_methods(["GET"])
 def operator_delete_question(request, question_id):
     try:
