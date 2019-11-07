@@ -10,7 +10,7 @@ from .models import TestPaper, Group, Department, Squadron, Student
 from .exceptions import *
 from .decorators import permission_check
 from .definitions import UserType
-from .managerfuncs import exammanager
+from .managerfuncs import testmanager
 
 
 @permission_check(UserType.TestManager)
@@ -26,7 +26,7 @@ def group_index(request):
         'name': request.GET.get('name', ''),
     }
 
-    num_pages, groups = exammanager.query_groups(**keywords, page=page)
+    num_pages, groups = testmanager.query_groups(**keywords, page=page)
 
     data = {
         'groups': groups,
@@ -62,7 +62,7 @@ def create_group(request):
         except ObjectDoesNotExist:
             pass
 
-        group = exammanager.create_group(name=name,
+        group = testmanager.create_group(name=name,
                                          members=members,
                                          created_by=request.user)
 
@@ -95,7 +95,7 @@ def create_group(request):
             except ObjectDoesNotExist:
                 keywords['squadron'] = None
 
-        num_pages, students = exammanager.query_students(**keywords, page=page)
+        num_pages, students = testmanager.query_students(**keywords, page=page)
 
         data = {
             'students': students,
@@ -133,7 +133,7 @@ def edit_group(request, group_name: str):
 
         print(members)
 
-        group = exammanager.edit_group(group=group,
+        group = testmanager.edit_group(group=group,
                                        name=name,
                                        members=members)
 
@@ -168,7 +168,7 @@ def edit_group(request, group_name: str):
             except ObjectDoesNotExist:
                 keywords['squadron'] = None
 
-        num_pages, students = exammanager.query_students(**keywords, page=page)
+        num_pages, students = testmanager.query_students(**keywords, page=page)
 
         data = {
             'group': group,
