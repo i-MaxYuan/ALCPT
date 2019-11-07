@@ -6,7 +6,7 @@ class UserType(Enum):
     ExamManager = (0b10000, '考試管理員')
     QuestionManager = (0b1000, '題庫管理員')
     QuestionOperator = (0b100, '題目操作員')
-    ScoreViewer = (0b10, '成績檢閱者')
+    Viewer = (0b10, '成績檢閱者')
     Testee = (0b1, '受測者')
 
     # @staticmethod
