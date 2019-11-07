@@ -118,7 +118,6 @@ urlpatterns = [
         url(r'^(?P<serial_number>[a-zA-Z0-9]+)$', system.edit_user),
         url(r'^(?P<serial_number>[a-zA-Z0-9]+)/delete', system.delete_user),
 
-        # 單位編輯 還沒好
         url(r'^unit_list/$', system.unit),
         url(r'^unit_list/', include([
             url(r'^insert$', system.insert_unit),

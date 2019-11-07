@@ -11,7 +11,7 @@ from alcpt.models import Exam, Question, Student, TestPaper, Group, User, Depart
 
 def query_exams(*, exam_type: ExamType, public: bool, student: User=None, name: str=None, page: int=None, filter_func=None):
     queries = Q()
-    queries &= Q(type=exam_type.value[0])
+    queries &= Q(exam_type=exam_type.value[0])
 
     if name:
         queries &= Q(name=name)
