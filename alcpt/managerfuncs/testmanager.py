@@ -9,7 +9,7 @@ from alcpt.definitions import ExamType, QuestionType
 from alcpt.models import Exam, Question, Student, TestPaper, Group, User, Department, Squadron
 
 
-def query_exams(*, exam_type: ExamType, public: bool, student: User=None, name: str=None, page: int=None, filter_func=None):
+def query_exams(*, exam_type: ExamType, is_public: bool, student: User=None, name: str=None, page: int=None, filter_func=None):
     queries = Q()
     queries &= Q(exam_type=exam_type.value[0])
 
@@ -19,10 +19,10 @@ def query_exams(*, exam_type: ExamType, public: bool, student: User=None, name: 
     if student:
         queries &= Q(group__member__user=student)
 
-    if public:
-        queries &= Q(public=public)
+    if is_public:
+        queries &= Q(is_public=is_public)
 
-    exams = Exam.objects.filter(queries).order_by('-create_time')
+    exams = Exam.objects.filter(queries).order_by('-created_time')
 
     for exam in exams:
         exam.start_time = timezone.localtime(exam.start_time)
