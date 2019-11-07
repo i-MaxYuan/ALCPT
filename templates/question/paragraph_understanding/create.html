@@ -28,7 +28,7 @@ $(function() {
     <section class="col mb-3">
         <h1 style="display: inline;">{% if question %}編輯{% else %}新增{% endif %}題目：閱讀／段落理解</h1>
     </section>
-    {% if request.user|has_perm:'QuestionManager' %}
+    {% if request.user|has_perm:'TBManager' %}
     <form class="col-12 row mt-3" enctype="multipart/form-data" action="/question/{% if question %}{{ question.id }}/edit{% else %}create{% endif %}" method="post" autocomplete="off">
     {% else %}
     <form class="col-12 row mt-3" enctype="multipart/form-data" action="/question_operator/{% if question %}{{ question.id }}/edit{% else %}create{% endif %}" method="post" autocomplete="off">

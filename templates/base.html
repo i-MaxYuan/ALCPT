@@ -99,7 +99,7 @@
                     </li>
 
                     <li class="dropdown" style="left: 31%">
-                        {% if request.user|has_perm:'QuestionManager' %}
+                        {% if request.user|has_perm:'TBManager' %}
                         <a href="/question"  data-toggle="dropdown" style="color: #FFFFFF; font-size: 18px; top: 2px"
                            onmouseover="this.style.color='#3c6382'" onmousedown="this.style.color='#3c6382'" onmouseout="this.style.color='#fff'">題庫管理員<b class="caret"></b></a>
                         <ul class="dropdown-menu" style="font-size: 16px">
@@ -194,7 +194,7 @@
                 </li>
                 {% endif %}
 
-                {% if request.user|has_perm:'QuestionManager' %}
+                {% if request.user|has_perm:'TBManager' %}
                 <li class="questionManager"><a style=" text-decoration:none;" href="/question">題庫管理員</a>
                     <ul class="lay1">
                         <li><a style=" text-decoration:none;" href="/question/create">新增試題</a> </li>

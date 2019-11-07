@@ -12,7 +12,7 @@ from .definitions import UserType, QuestionType
 from .managerfuncs import questionmanager
 
 
-@permission_check(UserType.QuestionManager)
+@permission_check(UserType.TBManager)
 @require_http_methods(["GET"])
 def manager_index(request):
     try:
@@ -42,7 +42,7 @@ def manager_index(request):
     return render(request, 'question/list.html', data)
 
 
-@permission_check(UserType.QuestionManager)
+@permission_check(UserType.TBManager)
 @require_http_methods(["GET"])
 def review_question_index(request):
     try:
@@ -72,7 +72,7 @@ def review_question_index(request):
     return render(request, 'question/review.html', data)
 
 
-@permission_check(UserType.QuestionManager)
+@permission_check(UserType.TBManager)
 @require_http_methods(["GET", "POST"])
 def create_question(request):
     if request.method == 'POST':
@@ -203,7 +203,7 @@ def create_question(request):
         return render(request, template, {'question_type': question_type})
 
 
-@permission_check(UserType.QuestionManager)
+@permission_check(UserType.TBManager)
 @require_http_methods(["GET", "POST"])
 def edit_question(request, question_id):
     try:
@@ -320,7 +320,7 @@ def edit_question(request, question_id):
         return render(request, template, data)
 
 
-@permission_check(UserType.QuestionManager)
+@permission_check(UserType.TBManager)
 @require_http_methods(["GET"])
 def delete_question(request, question_id):
     try:
@@ -338,7 +338,7 @@ def delete_question(request, question_id):
     return redirect(request.META.get('HTTP_REFERER', '/question'))
 
 
-@permission_check(UserType.QuestionManager)
+@permission_check(UserType.TBManager)
 @require_http_methods(["POST"])
 def enable_question(request):
     question_id_list = request.POST.get('question_id_list')
