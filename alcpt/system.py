@@ -312,7 +312,7 @@ def insert_unit(request):
 
 
 # 刪除學系
-@permission_check(UserType.ExamManager)
+@permission_check(UserType.TestManager)
 @require_http_methods(["GET"])
 def delete_department(request, department_id):
     try:
@@ -329,7 +329,7 @@ def delete_department(request, department_id):
 
 
 # 刪除中隊
-@permission_check(UserType.ExamManager)
+@permission_check(UserType.TestManager)
 @require_http_methods(["GET"])
 def delete_squadron(request, squadron_name):
     try:

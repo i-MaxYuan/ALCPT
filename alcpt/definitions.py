@@ -3,7 +3,7 @@ from enum import Enum
 
 class UserType(Enum):
     SystemManager = (0b100000, '系統管理員')
-    ExamManager = (0b10000, '考試管理員')
+    TestManager = (0b10000, '考試管理員')
     TBManager = (0b1000, '題庫管理員')
     TBOperator = (0b100, '題目操作員')
     Viewer = (0b10, '成績檢閱者')
