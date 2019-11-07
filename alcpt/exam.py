@@ -24,7 +24,7 @@ def index(request):
     keywords = {
         'name': request.GET.get('name', ''),
         'exam_type': ExamType.Exam,
-        'public': True
+        'is_public': True
     }
 
     num_pages, exams = testmanager.query_exams(**keywords, page=page)

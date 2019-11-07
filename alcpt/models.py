@@ -102,24 +102,24 @@ class Exam(models.Model):
     exam_type = models.PositiveSmallIntegerField(default=2)
     testpaper = models.ForeignKey('TestPaper', on_delete=models.CASCADE, null=True)
     group = models.ForeignKey('Group', on_delete=models.CASCADE, null=True)
-    used_times = models.IntegerField(default=0)
-    correct_times = models.IntegerField(default=0)
+    use_freq = models.IntegerField(default=0)
+    modified_times = models.IntegerField(default=0)
     start_time = models.DateTimeField(blank=True, null=True)
-    create_time = models.DateTimeField(auto_now_add=True)
+    created_time = models.DateTimeField(auto_now_add=True)
     duration = models.PositiveSmallIntegerField(default=-1)
     created_by = models.ForeignKey('User', on_delete=models.PROTECT, related_name='exam_created')
-    update_time = models.DateTimeField(auto_now=True)
-    public = models.BooleanField(default=False)
+    finish_time = models.DateTimeField(auto_now=True)
+    is_public = models.BooleanField(default=False)
 
     class Meta:
-        ordering = ('-create_time',)
+        ordering = ('-created_time',)
 
     def __str__(self):
         return self.name
 
     @property
     def correct_rate(self):
-        return self.correct_times / self.used_times * 100
+        return self.modified_times / self.use_freq * 100
 
 
 # 題目
