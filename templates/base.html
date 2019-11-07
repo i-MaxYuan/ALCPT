@@ -135,7 +135,7 @@
                     </li>
 
                     <li class="dropdown" style="left: 32.5%">
-                        {% if request.user|has_perm:'Tester' %}
+                        {% if request.user|has_perm:'Testee' %}
                         <a href="/tester"  data-toggle="dropdown" style="color: #FFFFFF; font-size: 18px; top: 2px"
                            onmouseover="this.style.color='#3c6382'" onmousedown="this.style.color='#3c6382'" onmouseout="this.style.color='#fff'">受測者<b class="caret"></b></a>
                         <ul class="dropdown-menu" style="font-size: 16px">
@@ -220,7 +220,7 @@
                 </li>
                 {% endif %}
 
-                {% if request.user|has_perm:'Tester' %}
+                {% if request.user|has_perm:'Testee' %}
                 <li class="tester"><a style=" text-decoration:none;" href="/tester">受測者</a>
                     <ul class="lay1">
                         <li><a style=" text-decoration:none;" href="/tester">檢閱成績</a> </li>

@@ -48,7 +48,7 @@ def query_users(*, department: Department, grade: int, squadron: Squadron, name:
 def updata_user(user: User, name: str, department: Department, grade: int, squadron: Squadron, user_type: int, gender: int):
     user.name = name
     user.gender = gender
-    if user.user_type & UserType.Tester.value[0]:
+    if user.user_type & UserType.Testee.value[0]:
         student = Student.objects.get(user=user.id)
         student.department = department
         student.grade = grade
