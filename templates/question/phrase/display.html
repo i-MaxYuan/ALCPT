@@ -15,7 +15,7 @@
     </section>
 
     <section class="col text-center pt-3">
-        {% if request.user|has_perm:'QuestionManager' %}
+        {% if request.user|has_perm:'TBManager' %}
         <a class="btn btn-secondary" href="/question">返回題目列表</a>
         <a class="btn btn-primary" href="/question/create">繼續新增題目</a>
         {% else %}

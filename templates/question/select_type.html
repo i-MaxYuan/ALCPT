@@ -40,7 +40,7 @@
             <div class="z">
                 <a class="fa fa-home fa-2x" href="http://127.0.0.1:8000/" ></a>
                 <a class="fa fa-angle-double-right fa-lg box"></a>
-                {% if request.user|has_perm:'QuestionManager' %}
+                {% if request.user|has_perm:'TBManager' %}
                 <a href="/question" style="font-size: 18px">題庫管理員</a>
                 {% else %}
                 <a href="/question_operator" style="font-size: 18px">題庫操作員</a>
