@@ -82,13 +82,13 @@ def create_exam(request):
             pass
 
         exam = Exam.objects.create(name=name,
-                                   type=ExamType.Exam.value[0],
+                                   exam_type=ExamType.Exam.value[0],
                                    testpaper=testpaper,
                                    group=group,
                                    start_time=start_time,
                                    duration=duration,
                                    created_by=request.user,
-                                   public=True if testpaper.enable else False)
+                                   is_public=True if testpaper.enable else False)
 
         return redirect('/exam/{}/edit'.format(exam.id))
 
@@ -147,7 +147,7 @@ def edit_exam(request, exam_id: int):
         exam.duration = duration
         exam.testpaper = testpaper
         exam.group = group
-        exam.public = True if testpaper.enable else False
+        exam.is_public = True if testpaper.enable else False
         exam.save()
 
         messages.success(request, "Successfully update exam :{}.".format(exam.name))
@@ -173,7 +173,7 @@ def delete_exam(request, exam_id):
     except ObjectDoesNotExist:
         raise ResourceNotFoundError('Cannot find question id = {}.'.format(exam_id))
 
-    exam.public = False
+    exam.is_public = False
     exam.last_updated_by = request.user
     exam.save()
 

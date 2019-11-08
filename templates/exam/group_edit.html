@@ -81,7 +81,7 @@
                     <thead>
                         <tr>
                             <th class="align-middle text-center col-xs-1"><input type="checkbox" name="all" onclick="check_all(this,'student_id')" /> 全選</th>
-                            <th class="align-middle text-center col-xs-3">#</th>
+                            <th class="align-middle text-center col-xs-3">學號</th>
                             <th class="align-middle text-center col-xs-2">學生名稱</th>
                             <th class="align-middle text-center col-xs-3">系別</th>
                             <th class="align-middle text-center col-xs-2">中隊</th>
@@ -91,7 +91,7 @@
                         {% for student in students %}
                         <tr>
                             <th class="align-middle text-center"><input type="checkbox" name="student_id" value="{{ student.id }}" {% if student in group.member.all %}checked{% endif %}></th>
-                            <td scope="row" class="align-middle text-center">{{ student.id }}</td>
+                            <td scope="row" class="align-middle text-center">{{ student.user.serial_number }}</td>
                             <td class="align-middle text-center">{{ student.user.name }}</td>
                             <td class="align-middle text-center">{{ student.department.name }}</td>
                             <td class="align-middle text-center">{{ student.squadron.name }}</td>
