@@ -26,7 +26,7 @@ def manager_index(request):
         'question_type': int(request.GET.get('question_type', 0)),
     }
 
-    num_pages, questions = tbmanager.query_question(**keywords, enable=True, page=page)
+    num_pages, questions = tbmanager.query_question(**keywords, is_valid=True, page=page)
 
     for question in questions:
         question.option = json.loads(question.option)
@@ -56,7 +56,7 @@ def review_question_index(request):
         'question_type': int(request.GET.get('question_type', 0)),
     }
 
-    num_pages, questions = tbmanager.query_question(**keywords, enable=False, page=page)
+    num_pages, questions = tbmanager.query_question(**keywords, is_valid=False, page=page)
 
     for question in questions:
         question.option = json.loads(question.option)
@@ -162,9 +162,9 @@ def create_question(request):
                                                  question=question,
                                                  options=options,
                                                  answer_index=answer_index,
-                                                 file=file,
                                                  created_by=request.user,
-                                                 difficult=difficult)
+                                                 difficult=difficult,
+                                                 file=file)
 
         messages.success(request, "Create question successfully.")
 
@@ -373,7 +373,7 @@ def operator_index(request):
         'question_type': int(request.GET.get('question_type', 0)),
     }
 
-    num_pages, questions = tbmanager.query_question(**keywords, created_by=request.user, enable=False, page=page)
+    num_pages, questions = tbmanager.query_question(**keywords, created_by=request.user, is_valid=False, page=page)
 
     for question in questions:
         question.option = json.loads(question.option)

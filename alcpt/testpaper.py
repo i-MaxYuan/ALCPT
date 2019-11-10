@@ -132,7 +132,7 @@ def pick_question(request, testpaper_name: str, question_type: int):
 
     if request.method == 'POST':
         try:
-            question = Question.objects.get(id=request.POST.get('question_id'), enable=True)
+            question = Question.objects.get(id=request.POST.get('question_id'), is_valid=True)
 
         except TypeError:
             raise ArgumentError('Missing question_name')
@@ -184,7 +184,7 @@ def pick_question(request, testpaper_name: str, question_type: int):
         'testpaper': testpaper if status is 1 else None,
     }
 
-    num_pages, questions = tbmanager.query_question(**keywords, enable=True, page=page)
+    num_pages, questions = tbmanager.query_question(**keywords, is_valid=True, page=page)
 
     for question in questions:
         question.is_selected = question in selected_questions
