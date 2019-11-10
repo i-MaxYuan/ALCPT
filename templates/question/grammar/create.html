@@ -49,10 +49,10 @@ $(function() {
 
         <h3 class="col-12"><i class="fa  fa-tasks fa-fw mb-2"></i> 難易度</h3>
         <div class="col-12 py-2 form-group">
-            <select class="custom-select" name="difficult">
-                <option value="1" {% if question.difficult is 1 %} selected {% endif %}>簡單</option>
-                <option value="2" {% if question.difficult is 2 %} selected {% endif %}>中等</option>
-                <option value="3" {% if question.difficult is 3 %} selected {% endif %}>困難</option>
+            <select class="custom-select" name="difficulty">
+                <option value="1" {% if question.difficulty is 1 %} selected {% endif %}>簡單</option>
+                <option value="2" {% if question.difficulty is 2 %} selected {% endif %}>中等</option>
+                <option value="3" {% if question.difficulty is 3 %} selected {% endif %}>困難</option>
             </select>
         </div>
 

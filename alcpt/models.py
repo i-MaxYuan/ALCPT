@@ -129,10 +129,10 @@ class Question(models.Model):
     question = models.TextField(blank=True, null=True)
     option = models.TextField()
     answer = models.PositiveSmallIntegerField()
-    difficult = models.PositiveSmallIntegerField(default=0)
-    use_time = models.IntegerField(default=0)
-    correct_time = models.IntegerField(default=0)
-    create_time = models.DateTimeField(auto_now_add=True)
+    difficulty = models.PositiveSmallIntegerField(default=0)
+    issued_freq = models.IntegerField(default=0)
+    correct_freq = models.IntegerField(default=0)
+    created_time = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey('User', on_delete=models.PROTECT, related_name='question_created')
     update_time = models.DateTimeField(auto_now=True)
     last_updated_by = models.ForeignKey('User', on_delete=models.SET_NULL, blank=True, null=True, related_name='last_updated')
@@ -144,7 +144,7 @@ class Question(models.Model):
 
     @property
     def correct_rate(self):
-        return self.correct_time / self.use_time * 100
+        return self.correct_freq / self.issued_freq * 100
 
 
 # 答案卷

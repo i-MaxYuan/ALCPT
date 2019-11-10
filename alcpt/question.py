@@ -84,7 +84,7 @@ def create_question(request):
 
         except ValueError:
             raise IllegalArgumentError(message='Question type must be int.')
-        difficult = request.POST.get('difficult')
+        difficulty = request.POST.get('difficulty')
         question = None
         file = None
 
@@ -163,7 +163,7 @@ def create_question(request):
                                                  options=options,
                                                  answer_index=answer_index,
                                                  created_by=request.user,
-                                                 difficult=difficult,
+                                                 difficulty=difficulty,
                                                  file=file)
 
         messages.success(request, "Create question successfully.")
@@ -214,7 +214,7 @@ def edit_question(request, question_id):
         raise ResourceNotFoundError('Can\'t find question id={}'.format(question_id))
 
     if request.method == 'POST':
-        difficult = request.POST.get('difficult')
+        difficulty = request.POST.get('difficulty')
         description = None
         file = None
 
@@ -286,7 +286,7 @@ def edit_question(request, question_id):
                                              options=options,
                                              answer_index=answer_index,
                                              file=file,
-                                             difficult=difficult,
+                                             difficulty=difficulty,
                                              last_updated=request.user)
 
         messages.success(request, 'Update question id={}'.format(question.id))
@@ -402,7 +402,7 @@ def operator_create_question(request):
         except ValueError:
             raise IllegalArgumentError(message='Question type must be int.')
         print(question_type)
-        difficult = request.POST.get('difficult')
+        difficulty = request.POST.get('difficulty')
         question = None
         file = None
 
@@ -482,7 +482,7 @@ def operator_create_question(request):
                                                  answer_index=answer_index,
                                                  file=file,
                                                  created_by=request.user,
-                                                 difficult=difficult)
+                                                 difficulty=difficulty)
 
         messages.success(request, "Create question successfully.")
 
@@ -532,7 +532,7 @@ def operator_edit_question(request, question_id):
         raise ResourceNotFoundError('Can\'t find question id={}'.format(question_id))
 
     if request.method == 'POST':
-        difficult = request.POST.get('difficult')
+        difficulty = request.POST.get('difficulty')
         description = None
         file = None
 
@@ -604,7 +604,7 @@ def operator_edit_question(request, question_id):
                                              options=options,
                                              answer_index=answer_index,
                                              file=file,
-                                             difficult=difficult,
+                                             difficulty=difficulty,
                                              last_updated=request.user)
 
         messages.success(request, 'Update question id={}'.format(question.id))
