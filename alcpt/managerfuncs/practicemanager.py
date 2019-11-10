@@ -33,7 +33,7 @@ def create_practice(*, user: User, practice_type: ExamType, question_types: list
         raise IllegalArgumentError(message="There is too few questions in the database.")
 
     practice = Exam.objects.create(name=name,
-                                   type=practice_type.value[0],
+                                   exam_type=practice_type.value[0],
                                    start_time=now,
                                    created_by=user)
 
@@ -53,20 +53,20 @@ def evaluate_score(*, answer_sheet: AnswerSheet):
         user_ans = answers[question_id]
         question = Question.objects.get(id=question_id)
         correct_ans = question.answer
-        question.use_time += 1
+        question.issued_freq += 1
         if user_ans == correct_ans:
             num_correct += 1
-            question.correct_time += 1
+            question.correct_freq += 1
 
         if question.use_time >= 30:
             if question.correct_rate > 66:
-                question.difficult = 3
+                question.difficulty = 3
 
             elif question.correct_rate < 33:
-                question.difficult = 1
+                question.difficulty = 1
 
             else:
-                question.difficult = 2
+                question.difficulty = 2
 
         question.save()
 

@@ -47,13 +47,13 @@ def review_question(question: Question, last_updated_by: User):
 
 
 def create_question(question_type: QuestionType, question: str, options: list, answer_index: int, created_by: User,
-                    difficult: int, file):
+                    difficulty: int, file):
     question = Question.objects.create(question_type=question_type.value[0],
                                        question=question,
                                        option=json.dumps(options),
                                        answer=answer_index,
                                        created_by=created_by,
-                                       difficult=difficult)
+                                       difficulty=difficulty)
 
     if question_type is QuestionType.QA:
         if file:
@@ -80,12 +80,12 @@ def create_question(question_type: QuestionType, question: str, options: list, a
     return question
 
 
-def update_question(question: Question, description: str, options: list, answer_index: int, difficult: int,
+def update_question(question: Question, description: str, options: list, answer_index: int, difficulty: int,
                     last_updated: User, file):
     question.question = description
     question.option = json.dumps(options)
     question.answer = answer_index
-    question.difficult = difficult
+    question.difficulty = difficulty
     question.last_updated_by = last_updated
 
     if question.question_type is QuestionType.QA:

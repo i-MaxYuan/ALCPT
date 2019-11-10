@@ -27,7 +27,7 @@ def index(request):
     num_pages, exams = testmanager.query_exams(exam_type=ExamType.Exam,
                                                student=request.user,
                                                filter_func=lambda e: now <= e.start_time + timedelta(minutes=e.duration),
-                                               public=True)
+                                               is_public=True)
 
     for exam in exams:
         if now < exam.start_time:
