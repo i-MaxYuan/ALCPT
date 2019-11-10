@@ -116,20 +116,20 @@
                         {% if user|has_perms:user_types.SystemManager %}
                         <span class="badge badge-danger">{{ user_types.SystemManager.value.1 }}</span>
                         {% endif %}
-                        {% if user|has_perms:user_types.ExamManager %}
-                        <span class="badge badge-warning">{{ user_types.ExamManager.value.1 }}</span>
+                        {% if user|has_perms:user_types.TestManager %}
+                        <span class="badge badge-warning">{{ user_types.TestManager.value.1 }}</span>
                         {% endif %}
-                        {% if user|has_perms:user_types.QuestionManager %}
-                        <span class="badge badge-primary">{{ user_types.QuestionManager.value.1 }}</span>
+                        {% if user|has_perms:user_types.TBManager %}
+                        <span class="badge badge-primary">{{ user_types.TBManager.value.1 }}</span>
                         {% endif %}
-                        {% if user|has_perms:user_types.QuestionOperator %}
-                        <span class="badge badge-success">{{ user_types.QuestionOperator.value.1 }}</span>
+                        {% if user|has_perms:user_types.TBOperator %}
+                        <span class="badge badge-success">{{ user_types.TBOperator.value.1 }}</span>
                         {% endif %}
-                        {% if user|has_perms:user_types.ScoreViewer %}
-                        <span class="badge badge-info">{{ user_types.ScoreViewer.value.1 }}</span>
+                        {% if user|has_perms:user_types.Viewer %}
+                        <span class="badge badge-info">{{ user_types.Viewer.value.1 }}</span>
                         {% endif %}
-                        {% if user|has_perms:user_types.Tester %}
-                        <span class="badge badge-dark">{{ user_types.Tester.value.1 }}</span>
+                        {% if user|has_perms:user_types.Testee %}
+                        <span class="badge badge-dark">{{ user_types.Testee.value.1 }}</span>
                         {% endif %}
                     </td>
                     <td class="align-middle">{{ user.last_login|date:'Y/n/d H:i' }}</td>

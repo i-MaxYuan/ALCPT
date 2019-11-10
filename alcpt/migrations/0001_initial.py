@@ -110,7 +110,7 @@ class Migration(migrations.Migration):
                 ('correct_time', models.IntegerField(default=0)),
                 ('create_time', models.DateTimeField(auto_now_add=True)),
                 ('update_time', models.DateTimeField(auto_now=True)),
-                ('enable', models.BooleanField(default=False)),
+                ('is_valid', models.BooleanField(default=False)),
                 ('created_by', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='question_created', to=settings.AUTH_USER_MODEL)),
                 ('last_updated_by', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='last_updated', to=settings.AUTH_USER_MODEL)),
             ],

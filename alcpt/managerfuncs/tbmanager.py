@@ -8,9 +8,9 @@ from alcpt.models import Question, TestPaper, User
 from alcpt.utility import save_file
 
 
-def query_question(*, description: str=None, question_type: int=None, page: int=0, enable: bool,
+def query_question(*, description: str=None, question_type: int=None, page: int=0, is_valid: bool,
                    testpaper: TestPaper=None, created_by: User=None):
-    queries = Q(enable=enable)
+    queries = Q(is_valid=is_valid)
 
     if description:
         queries &= Q(question__icontains=description)
@@ -40,7 +40,7 @@ def query_question(*, description: str=None, question_type: int=None, page: int=
 
 
 def review_question(question: Question, last_updated_by: User):
-    question.enable = True
+    question.is_valid = True
     question.last_updated_by = last_updated_by
 
     return question

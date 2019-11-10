@@ -148,7 +148,7 @@ def random_select(types_counts: list, question_type: QuestionType, testpaper: Te
         selected_num = reach_limit - selected_questions.count()
 
         if selected_num:
-            questions = Question.objects.filter(question_type=question_type.value[0], enable=True).exclude(id__in=selected_questions)
+            questions = Question.objects.filter(question_type=question_type.value[0], is_valid=True).exclude(id__in=selected_questions)
 
             if questions:
                 questions = sample(list(questions), min(len(questions), selected_num))

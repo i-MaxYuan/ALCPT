@@ -136,7 +136,7 @@ class Question(models.Model):
     created_by = models.ForeignKey('User', on_delete=models.PROTECT, related_name='question_created')
     update_time = models.DateTimeField(auto_now=True)
     last_updated_by = models.ForeignKey('User', on_delete=models.SET_NULL, blank=True, null=True, related_name='last_updated')
-    enable = models.BooleanField(default=False)
+    is_valid = models.BooleanField(default=False)
     used_to = models.ManyToManyField(TestPaper)
     
     class Meta:
