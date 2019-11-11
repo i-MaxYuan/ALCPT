@@ -69,12 +69,11 @@
                     <tr>
                         <th scope="row" class="align-middle text-center">{{ sheet.exam.id }}</th>
                         <td class="align-middle">{{ sheet.exam.name }}</td>
-                        <td class="align-middle text-center">{{ sheet.exam.type }}</td>
-                        <td class="align-middle text-center">{{ sheet.score }}/{{ sheet.num_questions }}</td>
+                        <td class="align-middle text-center">{{ sheet.score }}</td>
                         <td class="align-middle text-center">{{ sheet.created_at|date:'Y/n/d H:i' }}</td>
-                        <td class="align-middle text-center">
-                            <a href="/score/{{ sheet.exam.id }}"><i class="fa fa-search fa-fw mb-2"></i></a>
-                        </td>
+{#                        <td class="align-middle text-center">   這是為了看那次考試的詳細情形#}
+{#                            <a href="/tester/{{ sheet.exam.id }}"><i class="fa fa-search fa-fw mb-2"></i></a>#}
+{#                        </td>#}
                     </tr>
                 {% endfor %}
             {% else %}

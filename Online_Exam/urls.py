@@ -26,7 +26,7 @@ urlpatterns = [
     url(r'^exam/proclamation/(?P<proclamation_id>[0-9]+)/', include([
         url(r'^detail$', views.proclamation_detail),
         url(r'^edit$', exam.edit_proclamation),
-        url(r'^delete', exam.delete_proclamation),
+        url(r'^delete$', exam.delete_proclamation),
     ])),
 
     url(r'^login$', views.login),
@@ -88,7 +88,7 @@ urlpatterns = [
 
     url(r'^score$', scores.index),
     url(r'^score/', include([
-        url(r'^(?P<exam_id>[0-9]+)$', scores.sheet_detail),
+        url(r'^pie$', views.pie_viewer),
     ])),
 
     url(r'^tester$', scores.tester_index),
@@ -116,7 +116,7 @@ urlpatterns = [
     url(r'^user/', include([
         url(r'^create$', system.create_user),
         url(r'^(?P<reg_id>[a-zA-Z0-9]+)$', system.edit_user),
-        url(r'^(?P<reg_id>[a-zA-Z0-9]+)/delete', system.delete_user),
+        url(r'^(?P<reg_id>[a-zA-Z0-9]+)/delete$', system.delete_user),
 
         url(r'^unit_list/$', system.unit),
         url(r'^unit_list/', include([
