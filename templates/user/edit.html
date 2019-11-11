@@ -9,7 +9,7 @@
 <section class="row align-items-center">
     <section class="col-auto mr-auto">
         <h1 style="display: inline;">
-        {% if request.user.serial_number == user.serial_number %}
+        {% if request.user.reg_id == user.reg_id %}
             編輯個人資料
         {% else %}
             編輯使用者
@@ -19,12 +19,12 @@
 
     <div class="w-100 my-3"></div>
 
-    <form class="col-12" action="/user/{{ user.serial_number }}" method="post">
+    <form class="col-12" action="/user/{{ user.reg_id }}" method="post">
         {% csrf_token %}
         <div class="form-row">
             <div class="form-group col-3">
                 <label for="serial-number">帳號 (學號)</label>
-                <input type="text" id="serial-number" class="form-control" value="{{ user.serial_number }}" readonly disabled>
+                <input type="text" id="serial-number" class="form-control" value="{{ user.reg_id }}" readonly disabled>
             </div>
         </div>
         {% if user|is_student %}
@@ -68,7 +68,7 @@
                 </div>
             </div>
         </div>
-        {% if request.user.serial_number == user.serial_number %}
+        {% if request.user.reg_id == user.reg_id %}
         <div class="form-row">
             <div class="form-group col-3">
                 <label for="password">密碼</label>
@@ -82,15 +82,15 @@
             </div>
         </div>
         {% endif %}
-        {% if request.user|has_perms:user_types.SystemManager %}
-            {% if not user|has_perms:user_types.SystemManager %}
+        {% if request.user|has_perms:priviledges.SystemManager %}
+            {% if not user|has_perms:priviledges.SystemManager %}
             <div class="form-group mb-3">
                 <label>特殊權限</label>
-                {% for user_type in user_types.values %}
-                {% if user_type != user_types.SystemManager %}
+                {% for priviledge in priviledges.values %}
+                {% if priviledge != priviledges.SystemManager %}
                 <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" id="{{ user_type.value.0 }}" name="user_type_{{ forloop.counter0 }}" {% if user|has_perms:user_type %} checked {% endif %}>
-                    <label class="custom-control-label" for="{{ user_type.value.0 }}">{{ user_type.value.1 }}</label>
+                    <input type="checkbox" class="custom-control-input" id="{{ priviledge.value.0 }}" name="priviledge_{{ forloop.counter0 }}" {% if user|has_perms:priviledge %} checked {% endif %}>
+                    <label class="custom-control-label" for="{{ priviledge.value.0 }}">{{ priviledge.value.1 }}</label>
                 </div>
                 {% endif %}
                 {% endfor %}
@@ -100,29 +100,29 @@
             <div class="form-group mb-3">
                 <label>特殊權限</label>
                 <div>
-                {% if user|has_perms:user_types.SystemManager %}
-                <span class="badge badge-dark">{{ user_types.SystemManager.value.1 }}</span>
+                {% if user|has_perms:priviledges.SystemManager %}
+                <span class="badge badge-dark">{{ priviledges.SystemManager.value.1 }}</span>
                 {% else %}
-                    {% if user|has_perms:user_types.ExamManager %}
-                    <span class="badge badge-danger">{{ user_types.ExamManager.value.1 }}</span>
+                    {% if user|has_perms:priviledges.ExamManager %}
+                    <span class="badge badge-danger">{{ priviledges.ExamManager.value.1 }}</span>
                     {% endif %}
-                    {% if user|has_perms:user_types.QuestionManager %}
-                    <span class="badge badge-warning">{{ user_types.QuestionManager.value.1 }}</span>
+                    {% if user|has_perms:priviledges.QuestionManager %}
+                    <span class="badge badge-warning">{{ priviledges.QuestionManager.value.1 }}</span>
                     {% endif %}
-                    {% if user|has_perms:user_types.QuestionOperator %}
-                    <span class="badge badge-primary">{{ user_types.QuestionOperator.value.1 }}</span>
+                    {% if user|has_perms:priviledges.QuestionOperator %}
+                    <span class="badge badge-primary">{{ priviledges.QuestionOperator.value.1 }}</span>
                     {% endif %}
-                    {% if user|has_perms:user_types.ScoreViewer %}
-                    <span class="badge badge-success">{{ user_types.ScoreViewer.value.1 }}</span>
+                    {% if user|has_perms:priviledges.ScoreViewer %}
+                    <span class="badge badge-success">{{ priviledges.ScoreViewer.value.1 }}</span>
                     {% endif %}
-                    {% if user|has_perms:user_types.Tester %}
-                    <span class="badge badge-info">{{ user_types.Tester.value.1 }}</span>
+                    {% if user|has_perms:priviledges.Tester %}
+                    <span class="badge badge-info">{{ priviledges.Tester.value.1 }}</span>
                     {% endif %}
                 {% endif %}
                 </div>
             </div>
         {% endif %}
-        {% if request.user|has_perms:user_types.SystemManager %}
+        {% if request.user|has_perms:priviledges.SystemManager %}
         <div class="form-group">
             <label for="last-login">上次登入時間</label>
             <input type="text" id="last-login" class="form-control" value="{{ user.last_login|date:'Y/n/d H:i' }}" readonly disabled>
@@ -133,15 +133,15 @@
         </div>
         <div class="form-group">
             <label for="created-at">註冊時間</label>
-            <input type="text" id="created-at" class="form-control" value="{{ user.create_time|date:'Y/n/d H:i' }}" readonly disabled>
+            <input type="text" id="created-at" class="form-control" value="{{ user.created_time|date:'Y/n/d H:i' }}" readonly disabled>
         </div>
         {% endif %}
         <div class="text-center pt-3">
-            {% if request.user|has_perms:user_types.SystemManager and request.user.serial_number != user.serial_number %}
-            <a class="btn btn-warning" href="/user/{{ user.serial_number }}?reset-password=true">重設密碼為學號</a>
+            {% if request.user|has_perms:priviledges.SystemManager and request.user.reg_id != user.reg_id %}
+            <a class="btn btn-warning" href="/user/{{ user.reg_id }}?reset-password=true">重設密碼為學號</a>
             {% endif %}
             <button type="submit" class="btn btn-primary" style="background-color: #1b98e0; color: white">
-            {% if request.user.serial_number == user.serial_number %}
+            {% if request.user.reg_id == user.reg_id %}
                 更新個人資料
             {% else %}
                 更新使用者

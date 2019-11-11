@@ -155,9 +155,9 @@
                      <li class="dropdown" style="left: 33%">
                         {% if request.user.is_authenticated %}
                         <a href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" style="color: #FFFFFF; font-size: 18px; top: 2px; right: -30% "
-                           onmouseover="this.style.color='#3c6382'" onmousedown="this.style.color='#3c6382'" onmouseout="this.style.color='#fff'" aria-expanded="false"  data-toggle="dropdown">{{ request.user.name }} ({{ request.user.serial_number }})<b class="caret"></b></a>
+                           onmouseover="this.style.color='#3c6382'" onmousedown="this.style.color='#3c6382'" onmouseout="this.style.color='#fff'" aria-expanded="false"  data-toggle="dropdown">{{ request.user.name }} ({{ request.user.reg_id }})<b class="caret"></b></a>
                         <ul class="dropdown-menu" style="font-size: 16px">
-                            <li><a href="/user/{{ request.user.serial_number }}">修改個人資料</a></li>
+                            <li><a href="/user/{{ request.user.reg_id }}">修改個人資料</a></li>
                             <li class="divider"></li>
                             <li><a href="/logout"><i class="fa fa-sign-out"></i> 登出系統</a></li>
                         </ul>
@@ -236,9 +236,9 @@
             <ol class="ddmR">
                 {% if request.user.is_authenticated %}
                 <li class="user">
-                    <a style=" text-decoration:none;" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-expanded="false">{{ request.user.name }} ({{ request.user.serial_number }})</a>
+                    <a style=" text-decoration:none;" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-expanded="false">{{ request.user.name }} ({{ request.user.reg_id }})</a>
                         <ul class="lay1">
-                            <li><a style=" text-decoration:none;" href="/user/{{ request.user.serial_number }}"> 修改個人資料</a> </li>
+                            <li><a style=" text-decoration:none;" href="/user/{{ request.user.reg_id }}"> 修改個人資料</a> </li>
                             <li><a style=" text-decoration:none;" href="/logout"><i class="fa fa-sign-out"></i> 登出系統</a> </li>
                         </ul>
                 </li>

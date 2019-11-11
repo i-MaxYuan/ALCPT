@@ -83,7 +83,7 @@ def query_students(*, department: Department, grade: int, squadron: Squadron, na
         queries &= Q(squadron=squadron)
 
     if name is not None:
-        queries &= Q(user__serial_number__icontains=name) | Q(user__name__icontains=name)
+        queries &= Q(user__reg_id__icontains=name) | Q(user__name__icontains=name)
 
     users = Student.objects.filter(queries)
     users = users.order_by('-grade')

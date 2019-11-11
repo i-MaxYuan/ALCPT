@@ -22,14 +22,14 @@ def query_users(*, department: Department, grade: int, squadron: Squadron, name:
         queries &= Q(student__squadron=squadron)
 
     if name is not None:
-        queries &= Q(serial_number__icontains=name) | Q(name__icontains=name)
+        queries &= Q(reg_id__icontains=name) | Q(name__icontains=name)
 
     users = User.objects.filter(queries)
-    users = users.order_by('-create_time')
+    users = users.order_by('-created_time')
 
     for user in users:
         user.update_time = timezone.localtime(user.update_time)
-        user.create_time = timezone.localtime(user.create_time)
+        user.created_time = timezone.localtime(user.created_time)
 
     if filter_func:
         users = list(filter(filter_func, users))
@@ -45,18 +45,18 @@ def query_users(*, department: Department, grade: int, squadron: Squadron, name:
     return num_pages, users
 
 
-def updata_user(user: User, name: str, department: Department, grade: int, squadron: Squadron, user_type: int, gender: int):
+def updata_user(user: User, name: str, department: Department, grade: int, squadron: Squadron, priviledge: int, gender: int):
     user.name = name
     user.gender = gender
-    if user.user_type & UserType.Testee.value[0]:
+    if user.priviledge & UserType.Testee.value[0]:
         student = Student.objects.get(user=user.id)
         student.department = department
         student.grade = grade
         student.squadron = squadron
         student.save()
 
-    if user_type:
-        user.user_type = user_type
+    if priviledge:
+        user.priviledge = priviledge
 
     user.save()
 
@@ -66,24 +66,24 @@ def update_password(user: User, password: str=None):
         user.set_password(password)
 
     else:
-        user.set_password(user.serial_number)
+        user.set_password(user.reg_id)
 
     user.save()
 
 
-def create_users(serial_numbers: list, user_type: int):
+def create_users(reg_ids: list, priviledge: int):
     queries = Q()
 
-    for serial_number in serial_numbers:
-        queries |= Q(serial_number=serial_number)
+    for reg_id in reg_ids:
+        queries |= Q(reg_id=reg_id)
 
     existed_users = User.objects.filter(queries)
 
     if existed_users:
-        raise IllegalArgumentError("Existed user: {}".format(', '.join([user.serial_number for user in existed_users])))
+        raise IllegalArgumentError("Existed user: {}".format(', '.join([user.reg_id for user in existed_users])))
 
-    User.objects.bulk_create([User(serial_number=serial_number,
-                                   user_type=user_type,
-                                   password=make_password(serial_number)) for serial_number in serial_numbers])
+    User.objects.bulk_create([User(reg_id=reg_id,
+                                   priviledge=priviledge,
+                                   password=make_password(reg_id)) for reg_id in reg_ids])
 
     return User.objects.filter(queries)

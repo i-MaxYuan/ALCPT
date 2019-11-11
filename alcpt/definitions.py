@@ -10,8 +10,8 @@ class UserType(Enum):
     Testee = (0b1, '受測者')
 
     # @staticmethod
-    # def type_value(user_type: str):
-    #     return UserType.__members__.get(user_type).value[0]
+    # def type_value(priviledge: str):
+    #     return UserType.__members__.get(priviledge).value[0]
 
 
 class QuestionType(Enum):

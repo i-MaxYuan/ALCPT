@@ -12,7 +12,7 @@ from .exceptions import IllegalArgumentError, ResourceNotFoundError
 from .models import Proclamation
 
 PATTERNS = {
-    "serial_number": "[a-zA-Z0-9\._-]+",
+    "reg_id": "[a-zA-Z0-9\._-]+",
     "password": "[a-zA-Z0-9\.!@#\$%\^&\*]+"
 }
 
@@ -20,16 +20,16 @@ PATTERNS = {
 # 登入
 def login(request):
     if request.method == 'POST':
-        serial_number = request.POST.get('serial_number', '')
+        reg_id = request.POST.get('reg_id', '')
         password = request.POST.get('password', '')
         next_page = request.GET.get('next', LOGIN_REDIRECT_URL)
 
         try:
-            for field in ['serial_number', 'password']:
+            for field in ['reg_id', 'password']:
                 if not re.match(PATTERNS[field], eval(field)):
                     raise IllegalArgumentError()
 
-            user = auth.authenticate(serial_number=serial_number, password=password)
+            user = auth.authenticate(reg_id=reg_id, password=password)
 
             if user is None or not user.is_active:
                 raise IllegalArgumentError('')
@@ -59,7 +59,7 @@ def logout(request):
 @login_required
 def index(request):
     data = {
-        "user_types": UserType.__members__,
+        "priviledges": UserType.__members__,
         "proclamations": Proclamation.objects.filter(is_public=True)
     }
     return render(request, 'index.html', data)

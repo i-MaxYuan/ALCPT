@@ -14,7 +14,7 @@ def query_answer_sheet(name: str=None, start_time: str=None, end_time: str=None,
         queries &= Q(exam__name=name)
 
     if start_time or end_time:
-        queries &= Q(exam__create_time__range=[start_time if start_time else localtime().date() + timedelta(days=-1),
+        queries &= Q(exam__created_time__range=[start_time if start_time else localtime().date() + timedelta(days=-1),
                                                end_time if end_time else localtime().date() + timedelta(days=1)])
 
     if user:
