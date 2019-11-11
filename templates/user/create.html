@@ -66,11 +66,11 @@
         <div class="form-group">
             <label>權限</label>
 
-            {% for user_type in user_types.values %}
+            {% for priviledge in priviledges.values %}
 
             <div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" id="{{ user_type.value.0 }}" name="user_type_{{ forloop.counter0 }}" {% if user_type == user_types.Tester %} checked {% endif %}>
-                <label class="custom-control-label" for="{{ user_type.value.0 }}">{{ user_type.value.1 }}</label>
+                <input type="checkbox" class="custom-control-input" id="{{ priviledge.value.0 }}" name="priviledge_{{ forloop.counter0 }}" {% if priviledge == priviledges.Tester %} checked {% endif %}>
+                <label class="custom-control-label" for="{{ priviledge.value.0 }}">{{ priviledge.value.1 }}</label>
             </div>
             {% endfor %}
         </div>

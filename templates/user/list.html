@@ -101,7 +101,7 @@
             </thead>
             {% for user in users %}
                 <tr style="font-size: 15px">
-                    <th scope="row" class="align-middle">{{ user.serial_number }}</th>
+                    <th scope="row" class="align-middle">{{ user.reg_id }}</th>
                     {% if user|is_student %}
                         {% for data in user|student_data %}
                             <td class="align-middle">{{ data }}</td>
@@ -113,29 +113,29 @@
                     {% endif %}
                     <td class="align-middle">{{ user.name }}</td>
                     <td class="align-middle">
-                        {% if user|has_perms:user_types.SystemManager %}
-                        <span class="badge badge-danger">{{ user_types.SystemManager.value.1 }}</span>
+                        {% if user|has_perms:priviledges.SystemManager %}
+                        <span class="badge badge-danger">{{ priviledges.SystemManager.value.1 }}</span>
                         {% endif %}
-                        {% if user|has_perms:user_types.TestManager %}
-                        <span class="badge badge-warning">{{ user_types.TestManager.value.1 }}</span>
+                        {% if user|has_perms:priviledges.TestManager %}
+                        <span class="badge badge-warning">{{ priviledges.TestManager.value.1 }}</span>
                         {% endif %}
-                        {% if user|has_perms:user_types.TBManager %}
-                        <span class="badge badge-primary">{{ user_types.TBManager.value.1 }}</span>
+                        {% if user|has_perms:priviledges.TBManager %}
+                        <span class="badge badge-primary">{{ priviledges.TBManager.value.1 }}</span>
                         {% endif %}
-                        {% if user|has_perms:user_types.TBOperator %}
-                        <span class="badge badge-success">{{ user_types.TBOperator.value.1 }}</span>
+                        {% if user|has_perms:priviledges.TBOperator %}
+                        <span class="badge badge-success">{{ priviledges.TBOperator.value.1 }}</span>
                         {% endif %}
-                        {% if user|has_perms:user_types.Viewer %}
-                        <span class="badge badge-info">{{ user_types.Viewer.value.1 }}</span>
+                        {% if user|has_perms:priviledges.Viewer %}
+                        <span class="badge badge-info">{{ priviledges.Viewer.value.1 }}</span>
                         {% endif %}
-                        {% if user|has_perms:user_types.Testee %}
-                        <span class="badge badge-dark">{{ user_types.Testee.value.1 }}</span>
+                        {% if user|has_perms:priviledges.Testee %}
+                        <span class="badge badge-dark">{{ priviledges.Testee.value.1 }}</span>
                         {% endif %}
                     </td>
                     <td class="align-middle">{{ user.last_login|date:'Y/n/d H:i' }}</td>
                     <td class="align-middle">
-                        <a href="/user/{{ user.serial_number }}"><i class="fa fa-pencil fa-fw mb-2"></i></a>
-                        <a href="/user/{{ user.serial_number }}/delete"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                        <a href="/user/{{ user.reg_id }}"><i class="fa fa-pencil fa-fw mb-2"></i></a>
+                        <a href="/user/{{ user.reg_id }}/delete"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                     </td>
                 </tr>
             {% endfor %}

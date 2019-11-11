@@ -91,7 +91,7 @@
                         {% for student in students %}
                         <tr>
                             <th class="align-middle text-center"><input type="checkbox" name="student_id" value="{{ student.id }}" {% if student in group.member.all %}checked{% endif %}></th>
-                            <td scope="row" class="align-middle text-center">{{ student.user.serial_number }}</td>
+                            <td scope="row" class="align-middle text-center">{{ student.user.reg_id }}</td>
                             <td class="align-middle text-center">{{ student.user.name }}</td>
                             <td class="align-middle text-center">{{ student.department.name }}</td>
                             <td class="align-middle text-center">{{ student.squadron.name }}</td>

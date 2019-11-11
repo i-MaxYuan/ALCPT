@@ -236,10 +236,10 @@ ul.bar li ul li a:hover { color: #48dbfb;}
             <ul class="nav navbar-nav navbar-right bar" >
                 <li class="nav-item dropdown active">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-expanded="false">
-                        <i class="fa fa-user"></i> {{ request.user.name }} ({{ request.user.serial_number }})
+                        <i class="fa fa-user"></i> {{ request.user.name }} ({{ request.user.reg_id }})
                     </a>
                     <div class="dropdown-menu dropdown-menu-right float-right" aria-labelledby="navbarDropdownMenuLink" >
-                        <a class="dropdown-item" href="/user/{{ request.user.serial_number }}"><i class="fa fa-cog"></i> 修改個人資料</a>
+                        <a class="dropdown-item" href="/user/{{ request.user.reg_id }}"><i class="fa fa-cog"></i> 修改個人資料</a>
                         <a class="dropdown-item" href="/logout"><i class="fa fa-sign-out"></i> 登出系統</a>
                     </div>
                 </li>

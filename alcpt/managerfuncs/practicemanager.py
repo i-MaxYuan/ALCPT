@@ -10,7 +10,7 @@ from .testmanager import random_select
 def create_practice(*, user: User, practice_type: ExamType, question_types: list, num_questions: int, integration: bool=False):
 
     now = datetime.now()
-    name = "{}-practice-{}-{}".format(practice_type.value[1], user.serial_number, now)
+    name = "{}-practice-{}-{}".format(practice_type.value[1], user.reg_id, now)
     question_type_counts = QuestionTypeCounts.Exam.value[0] if integration else []
 
     if not integration:

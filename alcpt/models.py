@@ -9,13 +9,13 @@ from alcpt.definitions import UserType
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, serial_number, password=None):
+    def create_user(self, reg_id, password=None):
         """
         Creates and saves a user with the given serial number.
         """
 
         user = self.model(
-            serial_number=serial_number,
+            reg_id=reg_id,
         )
 
         user.set_password(password)
@@ -23,13 +23,13 @@ class UserManager(BaseUserManager):
 
         return user
 
-    def create_superuser(self, serial_number, password):
+    def create_superuser(self, reg_id, password):
         """
         Creates and saves a superuser with the given serial number, password.
         """
 
         user = self.model(
-            serial_number=serial_number,
+            reg_id=reg_id,
         )
         user.set_password(password)
         user.is_admin = True
@@ -40,30 +40,30 @@ class UserManager(BaseUserManager):
 
 # 使用者
 class User(AbstractBaseUser):
-    serial_number = models.CharField(max_length=10, unique=True)
+    reg_id = models.CharField(max_length=10, unique=True)
     name = models.CharField(max_length=20, blank=True, null=True)
     gender = models.PositiveSmallIntegerField(blank=True, null=True)
-    user_type = models.PositiveSmallIntegerField(default=0)
-    create_time = models.DateTimeField(auto_now_add=True)
+    priviledge = models.PositiveSmallIntegerField(default=0)
+    created_time = models.DateTimeField(auto_now_add=True)
     update_time = models.DateTimeField(auto_now=True)
 
     objects = UserManager()
 
-    USERNAME_FIELD = 'serial_number'
+    USERNAME_FIELD = 'reg_id'
 
     def get_short_name(self):
-        return self.serial_number
+        return self.reg_id
 
     def get_full_name(self):
-        return self.serial_number
+        return self.reg_id
 
-    def has_perm(self, require_user_type: UserType):
-        # if require_user_type is UserType.SystemManager:
-        #     return self.user_type & UserType.SystemManager.value[0]
+    def has_perm(self, require_priviledge: UserType):
+        # if require_priviledge is UserType.SystemManager:
+        #     return self.priviledge & UserType.SystemManager.value[0]
         #
         # else:
-        #     return (self.user_type & require_user_type.value[0]) > 0
-        return (self.user_type & require_user_type.value[0]) > 0
+        #     return (self.priviledge & require_priviledge.value[0]) > 0
+        return (self.priviledge & require_priviledge.value[0]) > 0
 
 
 # 學系

@@ -43,7 +43,7 @@ def create(request, practice_type):
 
         except ValueError:
             raise IllegalArgumentError('Question amount must be integer.')
-        user = User.objects.get(serial_number=request.user.serial_number)
+        user = User.objects.get(reg_id=request.user.reg_id)
         practice_type = ExamType.Listening if practice_type == 'listening' else ExamType.Reading
         practice, selected_questions = practicemanager.create_practice(user=user, practice_type=practice_type,
                                                                        question_types=question_types, num_questions=num_questions)
@@ -80,7 +80,7 @@ def create_integration(request):
     practice_type = ExamType.Practice
     question_types = [question_type.value[0] for question_type in QuestionType.__members__.values()]
     num_questions = sum(QuestionTypeCounts.Exam.value[0])
-    user = User.objects.get(serial_number=request.user.serial_number)
+    user = User.objects.get(reg_id=request.user.reg_id)
     practice, selected_questions = practicemanager.create_practice(user=user, practice_type=practice_type,
                                                                    question_types=question_types,
                                                                    num_questions=num_questions,

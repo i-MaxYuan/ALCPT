@@ -3,14 +3,14 @@ from django.http import HttpResponseRedirect
 from .exceptions import PermissionWrongError
 
 
-def permission_check(required_user_type):
+def permission_check(required_priviledge):
     def decorator(view):
         @login_required
         def check(request, *args, **kwargs):
-            if not required_user_type:
-                raise ValueError("Loss argument 'required_user_type'")
+            if not required_priviledge:
+                raise ValueError("Loss argument 'required_priviledge'")
 
-            if not request.user.has_perm(required_user_type):
+            if not request.user.has_perm(required_priviledge):
                 raise PermissionWrongError()
 
             return view(request, *args, **kwargs)

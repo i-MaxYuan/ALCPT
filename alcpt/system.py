@@ -54,7 +54,7 @@ def index(request):
         'users': users,
         'departments': Department.objects.all(),
         'squadrons': Squadron.objects.all(),
-        'user_types': UserType.__members__,
+        'priviledges': UserType.__members__,
         'num_types': range(1, len(UserType.__members__) + 1),
         'keywords': keywords,
         'page': page,
@@ -77,22 +77,22 @@ def create_user(request):
 
             new_accounts.append(account)
 
-        user_type_value = 0
+        priviledge_value = 0
         if request.user.has_perm(UserType.SystemManager):
             i = 0
-            for user_type in UserType.__members__.values():
-                if user_type and request.POST.get('user_type_{}'.format(i)):
-                    user_type_value |= user_type.value[0]
+            for priviledge in UserType.__members__.values():
+                if priviledge and request.POST.get('priviledge_{}'.format(i)):
+                    priviledge_value |= priviledge.value[0]
 
                 i += 1
 
         else:
-            user_type_value = UserType.Testee.value[0]
+            priviledge_value = UserType.Testee.value[0]
 
-        new_users = systemmanager.create_users(serial_numbers=new_accounts,
-                                               user_type=user_type_value,)
+        new_users = systemmanager.create_users(reg_ids=new_accounts,
+                                               priviledge=priviledge_value,)
 
-        if user_type_value & UserType.Testee.value[0]:
+        if priviledge_value & UserType.Testee.value[0]:
             Student.objects.bulk_create([Student(user=new_user) for new_user in new_users])
 
         messages.success(request, 'Create user "{}" successful.'.format(len(new_users)))
@@ -100,7 +100,7 @@ def create_user(request):
         return redirect('/user')
 
     else:
-        data = {'user_types': UserType.__members__}
+        data = {'priviledges': UserType.__members__}
 
         return render(request, 'user/create.html', data)
 
@@ -108,14 +108,14 @@ def create_user(request):
 # 系統管理員＆使用者修改使用者資料頁面
 @login_required
 @require_http_methods(["GET", "POST"])
-def edit_user(request, serial_number: str):
-    if request.user.serial_number != serial_number:
+def edit_user(request, reg_id: str):
+    if request.user.reg_id != reg_id:
         if request.user.has_perm(UserType.SystemManager):
             try:
-                edited_user = User.objects.get(serial_number=serial_number)
+                edited_user = User.objects.get(reg_id=reg_id)
 
             except ObjectDoesNotExist:
-                raise ObjectNotFoundError('Can\'t find user whose serial number:{}'.format(serial_number))
+                raise ObjectNotFoundError('Can\'t find user whose serial number:{}'.format(reg_id))
 
         else:
             raise PermissionWrongError()
@@ -132,7 +132,7 @@ def edit_user(request, serial_number: str):
     if request.method == 'POST':
         data = {
             'name': request.POST.get('name'),
-            'user_type': None,
+            'priviledge': None,
         }
 
         if any(char in punctuation for char in data['name']):
@@ -162,11 +162,11 @@ def edit_user(request, serial_number: str):
             # raise ResourceNotFoundError("Cannot find squadron id={}".format(data['squadron']))
 
         if request.user.has_perm(UserType.SystemManager):
-            data['user_type'] = 0
+            data['priviledge'] = 0
             i = 0
-            for user_type in UserType.__members__.values():
-                if user_type is not UserType.SystemManager and request.POST.get('user_type_{}'.format(i)):
-                    data['user_type'] |= user_type.value[0]
+            for priviledge in UserType.__members__.values():
+                if priviledge is not UserType.SystemManager and request.POST.get('priviledge_{}'.format(i)):
+                    data['priviledge'] |= priviledge.value[0]
 
                 i += 1
 
@@ -183,10 +183,10 @@ def edit_user(request, serial_number: str):
 
         systemmanager.updata_user(edited_user, **data)
 
-        messages.success(request, 'Updated user: {}'.format(edited_user.serial_number))
+        messages.success(request, 'Updated user: {}'.format(edited_user.reg_id))
 
-        if request.user.serial_number is edited_user.serial_number:
-            return redirect('/user/{}'.format(serial_number))
+        if request.user.reg_id is edited_user.reg_id:
+            return redirect('/user/{}'.format(reg_id))
 
         else:
             return redirect('/user')
@@ -207,7 +207,7 @@ def edit_user(request, serial_number: str):
             'student': student,
             'departments': Department.objects.all(),
             'squadrons': Squadron.objects.all(),
-            'user_types': UserType.__members__,
+            'priviledges': UserType.__members__,
             'num_types': range(1, len(UserType.__members__) + 1),
             # 'password_pattern': '^(?!.*[^\x21-\x7e])[A-Za-z\d]{6,32}$',
             'password_pattern': '^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$',
@@ -218,12 +218,12 @@ def edit_user(request, serial_number: str):
 
 @login_required
 @require_http_methods(["GET", "POST"])
-def delete_user(request, serial_number: str):
+def delete_user(request, reg_id: str):
     try:
-        user = User.objects.get(serial_number=serial_number)
+        user = User.objects.get(reg_id=reg_id)
 
     except ObjectDoesNotExist:
-        raise ResourceNotFoundError('Cannot find user serial number = {}.'.format(user.serial_number))
+        raise ResourceNotFoundError('Cannot find user serial number = {}.'.format(user.reg_id))
 
     user.delete()
 
