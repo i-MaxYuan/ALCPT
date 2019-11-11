@@ -72,7 +72,7 @@ def edit_testpaper(request, testpaper_name: str):
 
         testpaper = testmanager.edit_testpaper(testpaper=testpaper,
                                                name=name, )
-        testpaper.enable = testpaper.question_set.count() >= sum(QuestionTypeCounts.Exam.value[0])
+        testpaper.valid = testpaper.question_set.count() >= sum(QuestionTypeCounts.Exam.value[0])
         testpaper.save()
 
         messages.success(request, "Successfully update testpaper :{}.".format(testpaper.name))
@@ -161,7 +161,7 @@ def pick_question(request, testpaper_name: str, question_type: int):
     selected_questions = testpaper.question_set.filter(question_type=int(question_type))
     reach_limit = selected_questions.count() >= QuestionTypeCounts.Exam.value[0][int(question_type) - 1]
 
-    testpaper.enable = testpaper.question_set.count() >= sum(QuestionTypeCounts.Exam.value[0])
+    testpaper.valid = testpaper.question_set.count() >= sum(QuestionTypeCounts.Exam.value[0])
     testpaper.save()
 
     request.DATA = (request.GET if request.method == 'GET' else request.POST)

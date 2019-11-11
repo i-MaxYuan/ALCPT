@@ -329,7 +329,7 @@ def delete_question(request, question_id):
     except ObjectDoesNotExist:
         raise ResourceNotFoundError('Cannot find question id = {}.'.format(question_id))
 
-    question.enable = False
+    question.is_valid = False
     question.last_updated_by = request.user
     question.save()
 
@@ -349,7 +349,7 @@ def enable_question(request):
         except ObjectDoesNotExist:
             raise ResourceNotFoundError('Cannot find question id = {}.'.format(question_id))
 
-        question.enable = True
+        question.is_valid = True
         question.last_updated_by = request.user
         question.save()
 

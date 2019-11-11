@@ -44,7 +44,7 @@ def query_testpapers(*, name: str=None, page: int=None):
     if name:
         queries &= Q(name=name)
 
-    testpapers = TestPaper.objects.filter(queries).order_by('-create_time')
+    testpapers = TestPaper.objects.filter(queries).order_by('-created_time')
 
     num_pages = ceil(len(testpapers) / 10)
 
@@ -102,7 +102,7 @@ def query_students(*, department: Department, grade: int, squadron: Squadron, na
 def create_testpaper(name: str, created_by: User):
     testpaper = TestPaper.objects.create(name=name,
                                          created_by=created_by)
-    testpaper.enable = False
+    testpaper.valid = False
     testpaper.save()
 
     return testpaper
@@ -160,7 +160,7 @@ def random_select(types_counts: list, question_type: QuestionType, testpaper: Te
         return selected_num
 
     else:
-        selected_questions = Question.objects.filter(question_type=question_type.value[0], enable=True)
+        selected_questions = Question.objects.filter(question_type=question_type.value[0], is_valid=True)
 
         if selected_questions:
             selected_questions = sample(list(selected_questions), reach_limit)
