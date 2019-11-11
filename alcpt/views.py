@@ -7,6 +7,7 @@ from Online_Exam.settings import LOGIN_REDIRECT_URL, LOGIN_URL
 from django.contrib import auth
 from django.views.decorators.http import require_http_methods
 
+from .decorators import permission_check
 from .definitions import UserType
 from .exceptions import IllegalArgumentError, ResourceNotFoundError
 from .models import Proclamation
@@ -80,7 +81,13 @@ def proclamation_detail(request, proclamation_id):
 @require_http_methods(["GET"])
 def pie(request):
     from .models import AnswerSheet
-    answer_sheets = AnswerSheet.objects.all()
+    answer_sheets_all = AnswerSheet.objects.all()
+
+    answer_sheets = []
+    for sheet in answer_sheets_all:
+        if sheet.user.id == request.user.id:
+            answer_sheets.append(sheet)
+
     over60 = 0
     under60 = 0
     for sheet in answer_sheets:
@@ -90,3 +97,22 @@ def pie(request):
             under60 += 1
 
     return render(request, 'pie_for_tester.html', {'pass': over60, 'fail': under60})
+
+
+@login_required
+@permission_check(UserType.Viewer)
+@require_http_methods(["GET"])
+def pie_viewer(request):
+    from .models import AnswerSheet
+    answer_sheets_all = AnswerSheet.objects.all()
+
+    over60 = 0
+    under60 = 0
+
+    for sheet in answer_sheets_all:
+        if sheet.score >= 60:
+            over60 += 1
+        else:
+            under60 += 1
+
+    return render(request, 'pie_for_viewer.html', {'pass': over60, 'fail': under60})

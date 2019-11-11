@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.decorators.http import require_http_methods
 
-from .models import Question, AnswerSheet, Student
+from .models import Question, AnswerSheet, Student, User
 from .exceptions import *
 from .decorators import permission_check
 from .definitions import UserType
@@ -27,6 +27,12 @@ def index(request):
     }
 
     num_pages, answer_sheets = viewer.query_answer_sheet(**keywords, page=page)
+
+    for sheet in answer_sheets:
+        users = User.objects.all()
+        for user in users:
+            if sheet.user_id == user.id:
+                sheet.testee_name = user.name
 
     data = {
         'answer_sheets': answer_sheets,
@@ -52,7 +58,11 @@ def tester_index(request):
         'end_time': request.GET.get('end_time'),
     }
 
-    num_pages, answer_sheets = viewer.query_answer_sheet(**keywords, page=page)
+    num_pages, answer_sheets_all = viewer.query_answer_sheet(**keywords, page=page)
+    answer_sheets = []
+    for sheet in answer_sheets_all:
+        if sheet.user_id == request.user.id:
+            answer_sheets.append(sheet)
 
     data = {
         'answer_sheets': answer_sheets,
