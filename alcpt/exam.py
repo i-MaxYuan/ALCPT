@@ -88,13 +88,13 @@ def create_exam(request):
                                    start_time=start_time,
                                    duration=duration,
                                    created_by=request.user,
-                                   is_public=True if testpaper.enable else False)
+                                   is_public=True if testpaper.valid else False)
 
         return redirect('/exam/{}/edit'.format(exam.id))
 
     else:
         data = {
-            'testpapers': TestPaper.objects.filter(enable=True),
+            'testpapers': TestPaper.objects.filter(valid=True),
             'groups': Group.objects.all(),
         }
         return render(request, 'exam/exam_create.html', data)
@@ -147,7 +147,7 @@ def edit_exam(request, exam_id: int):
         exam.duration = duration
         exam.testpaper = testpaper
         exam.group = group
-        exam.is_public = True if testpaper.enable else False
+        exam.is_public = True if testpaper.valid else False
         exam.save()
 
         messages.success(request, "Successfully update exam :{}.".format(exam.name))
@@ -157,7 +157,7 @@ def edit_exam(request, exam_id: int):
     else:
         data = {
             'exam': exam,
-            'testpapers': TestPaper.objects.filter(enable=True),
+            'testpapers': TestPaper.objects.filter(valid=True),
             'groups': Group.objects.all(),
         }
 

@@ -71,7 +71,7 @@
                 {% for testpaper in testpapers %}
                 <tr>
                     <td>{{ testpaper.name }}</td>
-                    <td>{{ testpaper.create_time|date:'Y/n/d H:i' }}</td>
+                    <td>{{ testpaper.created_time|date:'Y/n/d H:i' }}</td>
                     <td>{{ testpaper.update_time|date:'Y/n/d H:i' }}</td>
                     <td>{{ testpaper.created_by.name }}</td>
                     <td>
