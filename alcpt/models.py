@@ -138,6 +138,15 @@ class Question(models.Model):
     last_updated_by = models.ForeignKey('User', on_delete=models.SET_NULL, blank=True, null=True, related_name='last_updated')
     is_valid = models.BooleanField(default=False)
     used_to = models.ManyToManyField(TestPaper)
+    STATES_CHOICES = (
+        (0, '暫存'),
+        (1, '審核通過'),
+        (2, '審核未通過'),
+        (3, '等待審核'),
+        (4, '被回報錯誤'),
+        (5, '被回報錯誤，已處理'),
+    )
+    state = models.SmallIntegerField(choices=STATES_CHOICES, default=0)
     
     class Meta:
         ordering = ('-question',)
