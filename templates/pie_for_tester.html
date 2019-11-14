@@ -39,6 +39,7 @@
     </style>
 </head>
 
+
 <section class="row align-items-center">
     <section class="col-auto mr-auto">
         <div id="pt" class="bm c1">
@@ -51,16 +52,20 @@
             </div>
             <div style="padding-right: 10px"></div>
         </div>
-        <h1 style="display: inline;">檢閱成績</h1>
+        <h1 style="display: inline;font-size: 30px">檢閱成績</h1>
     </section>
 
 
     <div class="w-100 my-3"></div>
-
+    <div style="top: 30px;">
+        {% include 'pie-chart.html' %}
+    </div>
     <section class="col">
-        <div>
-			<score>及格: {{ pass }}</score>
-			<score>不及格: {{ fail }}</score>
+         <div class="show-form">
+            <h1>合格次數統計資料</h1>
+            <score style="font-size: 25px; color:#555555;  top:30%; left: 40px">及格次數: {{ pass }} 次</score>
+            <br>
+            <score style="font-size: 25px;color:#555555; top:35%; left: 40px"" >不及格次數: {{ fail }} 次</score>
 		</div>
         <nav>
             <ul class="pagination justify-content-end">
@@ -73,6 +78,29 @@
         </nav>
     </section>
 </section>
+
+    <style>
+        .show-form{
+            font-family: 微軟正黑體;
+            width: 300px;
+            height: 350px;
+            background-color: #FFFFFF;
+            border-radius: 10px;
+            box-shadow:4px 4px 20px rgba(20%,20%,40%,0.2);
+            opacity: 0.7;
+
+            right: 10%;
+        }
+
+        .show-form h1{
+            color: #555555;
+            font-size: 30px;
+            opacity: 1.0;
+            position: absolute;
+            top: 25px;
+            left: 25px;
+        }
+    </style>
 
 
 {% endblock %}

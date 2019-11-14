@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>及格人數統計圖表</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+</head>
+
+<body>
+    <canvas id="chart" width="800" height="600"></canvas>
+    <script>
+        var ctx = document.getElementById('chart').getContext('2d');
+        var chart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ["及格", "不及格"],
+                datasets: [{
+                    label: '# of Votes',
+                    data: [70,30],
+
+                    backgroundColor: [
+                        'rgba(120, 194, 196, 1)',
+                        'rgba(219, 77, 109, 1)'
+                    ],
+                    borderColor: [
+                        'rgba(255,255,255,1)',
+                        'rgba(255, 255, 255, 1)'
+                    ],
+                    borderWidth: 6
+
+                }]
+            }
+
+        });
+    </script>
+
+
+</body>
+
+</html>

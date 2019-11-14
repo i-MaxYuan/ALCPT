@@ -47,10 +47,11 @@
             </div>
             <div style="padding-right: 10px"></div>
         </div>
-        <h1 style="display: inline;">考卷列表</h1>
+        <h1 style="display: inline; font-size: 30px">考卷列表</h1>
     </section>
     <section class="col-auto">
-        <a class="btn btn-sq-lg" style="background-color: #1b98e0; color: white" href="/exam/testpaper/create">新增考卷</a>
+        <a class="btn btn-sq-lg" style="background-color: #1b98e0; color: white;
+            width: 115px; height: 44px; font-size: 20px; font-family: 微軟正黑體; align-content: center;" href="/exam/testpaper/create">新增考卷</a>
     </section>
 
     <div class="w-100 my-3"></div>
@@ -60,16 +61,16 @@
         <table class="table table-striped table-hover">
             <thead>
                 <tr>
-                    <th scope="col">名稱</th>
-                    <th scope="col">建立時間</th>
-                    <th scope="col">最後更新時間</th>
-                    <th scope="col">建立者</th>
-                    <th scope="col"></th>
+                    <th scope="col" style="font-size: 20px">名稱</th>
+                    <th scope="col" style="font-size: 20px">建立時間</th>
+                    <th scope="col" style="font-size: 20px">最後更新時間</th>
+                    <th scope="col" style="font-size: 20px">建立者</th>
+                    <th scope="col" style="font-size: 20px"></th>
                 </tr>
             </thead>
             <tbody>
                 {% for testpaper in testpapers %}
-                <tr>
+                <tr style="font-size: 15px">
                     <td>{{ testpaper.name }}</td>
                     <td>{{ testpaper.created_time|date:'Y/n/d H:i' }}</td>
                     <td>{{ testpaper.update_time|date:'Y/n/d H:i' }}</td>

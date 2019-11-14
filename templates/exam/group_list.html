@@ -47,10 +47,11 @@
             </div>
             <div style="padding-right: 10px"></div>
         </div>
-        <h1 style="display: inline;">受測者群組列表</h1>
+        <h1 style="display: inline; font-size: 30px">受測者群組列表</h1>
     </section>
     <section class="col-auto">
-        <a class="btn btn-primary" style="background-color: #1b98e0; color: white" href="/exam/group/create">建立群組</a>
+         <a class="btn btn-primary" style="background-color: #1b98e0; color: white;
+            width: 115px; height: 44px; font-size: 20px; font-family: 微軟正黑體; align-content: center;" href="/exam/group/create">建立群組</a>
     </section>
 
     <div class="w-100 my-3"></div>
@@ -59,18 +60,18 @@
     {% if groups %}
         <table class="table table-striped table-hover">
             <thead>
-                <tr class="text-center">
-                    <th class="col-xs-3">群組名稱</th>
+                <tr class="text-center" style="font-size: 20px">
+                    <th class="col-xs-2">群組名稱</th>
                     <th class="col-xs-2">人數</th>
-                    <th class="col-xs-5">建立時間</th>
-                    <th class="col-xs-5">最後更新時間</th>
-                    <th class="col-xs-2">建立者</th>
+                    <th class="col-xs-3">建立時間</th>
+                    <th class="col-xs-3">最後更新時間</th>
+                    <th class="col-xs-1">建立者</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
                 {% for group in groups %}
-                <tr style="text-align: center" onclick="window.location.href='/exam/group/{{ group.name }}/detail'">
+                <tr style="text-align: center; font-size: 15px" onclick="window.location.href='/exam/group/{{ group.name }}/detail'">
                     <th scope="row">{{ group.name }}</th>
                     <td>{{ group.member.count }}</td>
                     <td>{{ group.created_time }}</td>
