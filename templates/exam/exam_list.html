@@ -47,10 +47,11 @@
             </div>
             <div style="padding-right: 10px"></div>
         </div>
-        <h1 style="display: inline;">考試列表</h1>
+        <h1 style="display: inline; font-size: 30px">考試列表</h1>
     </section>
     <section class="col-auto">
-        <a class="btn btn-sq-lg" style="background-color: #1b98e0; color: white" href="/exam/create">新增考試</a>
+        <a class="btn btn-sq-lg" style="background-color: #1b98e0; color: white;
+            width: 115px; height: 44px; font-size: 20px; font-family: 微軟正黑體; align-content: center;" href="/exam/create">新增考試</a>
     </section>
 
     <div class="w-100 my-3"></div>
@@ -60,16 +61,16 @@
         <table class="table table-striped table-hover" style="text-align: center">
             <thead>
                 <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">名稱</th>
-                    <th scope="col">開始時間</th>
-                    <th scope="col">考試時間</th>
-                    <th scope="col"></th>
+                    <th scope="col" style="font-size: 20px" >#</th>
+                    <th scope="col" style="font-size: 20px">名稱</th>
+                    <th scope="col" style="font-size: 20px">開始時間</th>
+                    <th scope="col" style="font-size: 20px">考試時間</th>
+                    <th scope="col" style="font-size: 20px"></th>
                 </tr>
             </thead>
             <tbody>
                 {% for exam in exams %}
-                <tr>
+                <tr style="font-size: 15px">
                     <th scope="row">{{ exam.id }}</th>
                     <td>{{ exam.name }}</td>
                     <td>{{ exam.start_time|date:'Y/n/d H:i' }}</td>

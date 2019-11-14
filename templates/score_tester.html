@@ -47,7 +47,11 @@
             </div>
             <div style="padding-right: 10px"></div>
         </div>
-        <h1 style="display: inline;">檢閱成績</h1>
+        <h1 style="display: inline; font-size: 30px ">檢閱成績</h1>
+    </section>
+    <section class="col-auto float-right">
+        <a class="btn btn-sq-lg " href="/tester/pie" style="background-color: #1b98e0; color: white;
+            width: 115px; height: 44px; font-size: 20px; font-family: 微軟正黑體; align-content: center;" >查看圖表</a>
     </section>
 
 
@@ -57,11 +61,10 @@
         <table class="table table-striped table-hover table-responsive-lg">
             <thead>
                 <tr>
-                    <th scope="col" class="text-center">#</th>
-                    <th scope="col" class="text-center">名稱</th>
-                    <th scope="col" class="text-center">分數</th>
-                    <th scope="col" class="text-center">考試時間</th>
-                    <th scope="col"><a href="/tester/pie" style="background-color: #007bff"><i class="fa fa-line-chart fa-fw mb-2" title="查看圖表"></i></a></th>
+                    <th scope="col" class="text-center" style="font-size: 20px">#</th>
+                    <th scope="col" class="text-center" style="font-size: 20px">名稱</th>
+                    <th scope="col" class="text-center" style="font-size: 20px">分數</th>
+                    <th scope="col" class="text-center" style="font-size: 20px">考試時間</th>
                 </tr>
             </thead>
             {% if answer_sheets %}
@@ -81,7 +84,7 @@
                     <th scope="row" class="align-middle text-center"></th>
                     <td class="align-middle text-center"></td>
                     <td class="align-middle text-center"></td>
-                    <td class="align-middle text-center">暫無考試資料</td>
+                    <td class="align-middle text-center" style="font-size: 15px">暫無考試資料</td>
                     <td class="align-middle text-center">
                     </td>
                 </tr>
