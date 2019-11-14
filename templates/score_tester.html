@@ -69,7 +69,7 @@
             </thead>
             {% if answer_sheets %}
                 {% for sheet in answer_sheets %}
-                    <tr>
+                    <tr style="font-size: 15px">
                         <th scope="row" class="align-middle text-center">{{ sheet.exam.id }}</th>
                         <td class="align-middle">{{ sheet.exam.name }}</td>
                         <td class="align-middle text-center">{{ sheet.score }}</td>
@@ -80,7 +80,7 @@
                     </tr>
                 {% endfor %}
             {% else %}
-                <tr>
+                <tr style="font-size: 15px">
                     <th scope="row" class="align-middle text-center"></th>
                     <td class="align-middle text-center"></td>
                     <td class="align-middle text-center"></td>
