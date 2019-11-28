@@ -24,9 +24,9 @@ urlpatterns = [
     url(r'^$', views.index),
 
     url(r'^exam/proclamation/(?P<proclamation_id>[0-9]+)/', include([
-        url(r'^detail$', views.proclamation_detail),
-        url(r'^edit$', exam.edit_proclamation),
-        url(r'^delete$', exam.delete_proclamation),
+        url(r'^detail$', views.proclamation_detail, name='proclamation_detail'),
+        url(r'^edit$', exam.edit_proclamation, name='proclamation_edit'),
+        url(r'^delete$', exam.delete_proclamation, name='proclamation_delete'),
     ])),
 
     url(r'^login$', views.login),
@@ -51,37 +51,37 @@ urlpatterns = [
         ]))
     ])),
 
-    url(r'^exam$', exam.index),
+    url(r'^exam$', exam.index, name='exam_list'),
     url(r'^exam/', include([
-        url(r'^proclamation$', views.index),
+        url(r'^proclamation$', views.index, name='proclamation_list'),
         url(r'^proclamation/', include([
-            url(r'^create$', exam.create_proclamation),
+            url(r'^create$', exam.create_proclamation, name='proclamation_create'),
         ])),
 
-        url(r'^create$', exam.create_exam),
+        url(r'^create$', exam.create_exam, name='exam_create'),
         url(r'^(?P<exam_id>[0-9]+)/', include([
-            url(r'^edit$', exam.edit_exam),
-            url(r'^delete$', exam.delete_exam)
+            url(r'^edit$', exam.edit_exam, name='exam_edit'),
+            url(r'^delete$', exam.delete_exam, name='exam_delete')
             ])),
 
-        url(r'^testpaper$', testpaper.testpaper_index),
+        url(r'^testpaper$', testpaper.testpaper_index, name='testpaper_list'),
         url(r'^testpaper/', include([
-            url(r'^create$', testpaper.create_testpaper),
+            url(r'^create$', testpaper.create_testpaper, name='testpaper_create'),
             url(r'^(?P<testpaper_name>[%\w\d]+)/', include([
-                url(r'^pick-question/(?P<question_type>[0-9]+)$', testpaper.pick_question),
-                url(r'^auto-pick-question/(?P<question_type>[0-9]+)$', testpaper.auto_pick_question),
-                url(r'^edit$', testpaper.edit_testpaper),
-                url(r'^delete$', testpaper.delete_testpaper)
+                url(r'^pick-question/(?P<question_type>[0-9]+)$', testpaper.pick_question, name='pick_question'),
+                url(r'^auto-pick-question/(?P<question_type>[0-9]+)$', testpaper.auto_pick_question, name='auto_pick'),
+                url(r'^edit$', testpaper.edit_testpaper, name='testpaper_edit'),
+                url(r'^delete$', testpaper.delete_testpaper, name='testpaper_delete')
             ]))
         ])),
 
-        url(r'^group$', group.group_index),
+        url(r'^group$', group.group_index, name='testee_group_list'),
         url(r'^group/', include([
-            url(r'^create$', group.create_group),
+            url(r'^create$', group.create_group, name='testee_group_create'),
             url(r'^(?P<group_name>[%\w\d]+)/', include([
-                url(r'^edit$', group.edit_group),
-                url(r'^delete$', group.delete_group),
-                url(r'^detail$', group.member_list),
+                url(r'^edit$', group.edit_group, name='testee_group_edit'),
+                url(r'^delete$', group.delete_group, name='testee_group_delete'),
+                url(r'^detail$', group.member_list, name='testee_group_detail'),
             ]))
         ]))
     ])),
@@ -91,9 +91,9 @@ urlpatterns = [
         url(r'^pie$', views.pie_viewer),
     ])),
 
-    url(r'^tester$', scores.tester_index),
+    url(r'^tester$', scores.tester_index, name='testee_exam_score'),
     url(r'^tester/', include([
-        url(r'^pie$', views.pie),
+        url(r'^pie$', views.pie, name='testee_score_pie'),
         url(r'^practice/', include([
             url(r'^score$', scores.tester_index),
             url(r'^(?P<practice_type>(listening|reading))$', practice.create),
@@ -102,33 +102,33 @@ urlpatterns = [
                 url(r'^take/(?P<question_index>[0-9]*)$', practice.take_practice),
             ])),
         ])),
-        url(r'^simulation-exam$', simulation_exam.index),
+        url(r'^simulation-exam$', simulation_exam.index, name='testee_sim_exam_list'),
         url(r'^simulation-exam/', include([
             url(r'^(?P<exam_id>[0-9]+)/', include([
-                url(r'^take/(?P<question_index>[0-9]*)$', simulation_exam.take_exam),
+                url(r'^take/(?P<question_index>[0-9]*)$', simulation_exam.take_exam, name='testee_sim_exam_take'),
             ])),
         ])),
     ])),
     url(r'^practice/score$', scores.tester_index),
 
 
-    url(r'^user$', system.index),
+    url(r'^user$', system.index, name='user_list'),
     url(r'^user/', include([
-        url(r'^create$', system.create_user),
-        url(r'^(?P<reg_id>[a-zA-Z0-9]+)$', system.edit_user),
-        url(r'^(?P<reg_id>[a-zA-Z0-9]+)/delete$', system.delete_user),
+        url(r'^create$', system.create_user, name='user_create'),
+        url(r'^(?P<reg_id>[a-zA-Z0-9]+)$', system.edit_user, name='user_edit'),
+        url(r'^(?P<reg_id>[a-zA-Z0-9]+)/delete$', system.delete_user, name='user_delete'),
 
-        url(r'^unit_list/$', system.unit),
+        url(r'^unit_list/$', system.unit, name='unit_list'),
         url(r'^unit_list/', include([
-            url(r'^insert$', system.insert_unit),
+            url(r'^create$', system.insert_unit, name='unit_create'),
 
             url(r'^(?P<department_id>[0-9]+)/', include([
-                url(r'^edit$', system.edit_department),
-                url(r'^delete$', system.delete_department),
+                url(r'^edit$', system.edit_department, name='department_edit'),
+                url(r'^delete$', system.delete_department, name='department_delete'),
             ])),
             url(r'^(?P<squadron_name>[\w]+)/', include([
-                url(r'^edit$', system.edit_squadron),
-                url(r'^delete$', system.delete_squadron),
+                url(r'^edit$', system.edit_squadron, name='squadron_edit'),
+                url(r'^delete$', system.delete_squadron, name='squadron_delete'),
             ])),
         ]))
     ]))
