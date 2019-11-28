@@ -21,7 +21,7 @@ from alcpt import views, question, exam, scores, system, testpaper, group, pract
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
 
-    url(r'^$', views.index),
+    url(r'^$', views.index, name='home'),
 
     url(r'^exam/proclamation/(?P<proclamation_id>[0-9]+)/', include([
         url(r'^detail$', views.proclamation_detail, name='proclamation_detail'),
@@ -29,8 +29,8 @@ urlpatterns = [
         url(r'^delete$', exam.delete_proclamation, name='proclamation_delete'),
     ])),
 
-    url(r'^login$', views.login),
-    url(r'^logout$', views.logout),
+    url(r'^login$', views.login, name='login'),
+    url(r'^logout$', views.logout, name='logout'),
 
     url(r'^question$', question.manager_index),
     url(r'^question/', include([
@@ -86,9 +86,10 @@ urlpatterns = [
         ]))
     ])),
 
-    url(r'^score$', scores.index),
+    url(r'^score$', scores.index, name='all_exam_score_list'),
     url(r'^score/', include([
         url(r'^pie$', views.pie_viewer),
+        url(r'(?P<exam_id>[0-9]+)', scores.show_exam, name='show_exam'),
     ])),
 
     url(r'^tester$', scores.tester_index, name='testee_exam_score'),
