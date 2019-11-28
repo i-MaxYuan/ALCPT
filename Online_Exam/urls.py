@@ -88,8 +88,8 @@ urlpatterns = [
 
     url(r'^score$', scores.index, name='all_exam_score_list'),
     url(r'^score/', include([
-        url(r'^pie$', views.pie_viewer),
-        url(r'(?P<exam_id>[0-9]+)', scores.show_exam, name='show_exam'),
+        url(r'^pie$', views.pie_viewer, name='score_pie'),
+        url(r'(?P<exam_id>[0-9]+)', scores.show_exam, name='show_given_exam'),
     ])),
 
     url(r'^tester$', scores.tester_index, name='testee_exam_score'),

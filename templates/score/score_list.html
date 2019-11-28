@@ -61,7 +61,7 @@
                     <th scope="col" class="text-center">名稱</th>
                     <th scope="col" class="text-center">平均分數</th>
                     <th scope="col" class="text-center">考試時間</th>
-                    <th scope="col"><a href="/score/pie" style="background-color: #007bff"><i class="fa fa-line-chart fa-fw mb-2" title="查看圖表"></i></a></th>
+                    <th scope="col"><a href="{% url 'score_pie' %}" style="background-color: #007bff"><i class="fa fa-line-chart fa-fw mb-2" title="查看圖表"></i></a></th>
                 </tr>
             </thead>
             {% if exams %}
@@ -72,7 +72,7 @@
                         <td class="align-middle text-center">{{ exam.average_score }}</td>
                         <td class="align-middle text-center">{{ exam.finish_time|date:'Y/n/d H:i' }}</td>
                         <td class="align-middle text-center">
-                            <a href="{% url 'show_exam' exam.exam_id %}"><i class="fa fa-search fa-fw mb-2"></i></a>
+                            <a href="{% url 'show_given_exam' exam.exam_id %}"><i class="fa fa-search fa-fw mb-2"></i></a>
                         </td>
                     </tr>
                 {% endfor %}
