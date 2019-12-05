@@ -35,7 +35,6 @@ def create_practice(*, user: User, practice_type: ExamType, question_types: list
 
     testpaper = testmanager.create_testpaper(name=name,
                                              created_by=user,
-                                             valid=0,
                                              is_testpaper=0)
 
     testpaper_id = testpaper.id

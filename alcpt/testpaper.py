@@ -50,7 +50,8 @@ def create_testpaper(request):
             pass
 
         testpaper = testmanager.create_testpaper(name=name,
-                                                 created_by=request.user)
+                                                 created_by=request.user,
+                                                 is_testpaper=1)
 
         return redirect('/exam/testpaper/{}/edit'.format(testpaper.name))
 
@@ -69,7 +70,7 @@ def edit_testpaper(request, testpaper_name: str):
 
     if testpaper.valid == 1:
         messages.warning(request, "This testpaper is valid, it can't not edit again.")
-        return render(request, )
+        return redirect('/exam/testpaper')
 
     if request.method == 'POST':
         name = request.POST.get('name')
