@@ -45,6 +45,7 @@ def query_testpapers(*, name: str=None, page: int=None):
         queries &= Q(name=name)
 
     testpapers = TestPaper.objects.filter(queries).order_by('-created_time')
+    testpapers = testpapers.filter(is_testpaper=1)
 
     num_pages = ceil(len(testpapers) / 10)
 

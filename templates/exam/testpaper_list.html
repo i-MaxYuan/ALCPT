@@ -62,6 +62,7 @@
             <thead>
                 <tr>
                     <th scope="col" style="font-size: 20px">名稱</th>
+                    <th scope="col" style="font-size: 20px">有效考卷</th>
                     <th scope="col" style="font-size: 20px">建立時間</th>
                     <th scope="col" style="font-size: 20px">最後更新時間</th>
                     <th scope="col" style="font-size: 20px">建立者</th>
@@ -72,12 +73,14 @@
                 {% for testpaper in testpapers %}
                 <tr style="font-size: 15px">
                     <td>{{ testpaper.name }}</td>
+                    <td>{{ testpaper.valid }}</td>
                     <td>{{ testpaper.created_time|date:'Y/n/d H:i' }}</td>
                     <td>{{ testpaper.update_time|date:'Y/n/d H:i' }}</td>
                     <td>{{ testpaper.created_by.name }}</td>
                     <td>
-                        <a href="/exam/testpaper/{{ testpaper.name }}/edit"><i class="fa fa-pencil fa-fw mb-2"></i></a>
-                        &nbsp;
+                        {% if testpaper.valid == 0 %}
+                            <a href="/exam/testpaper/{{ testpaper.name }}/edit"><i class="fa fa-pencil fa-fw mb-2"></i></a>
+                        {% endif %}
                         <a href="/exam/testpaper/{{ testpaper.name }}/delete"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                     </td>
                 </tr>

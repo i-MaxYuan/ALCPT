@@ -33,7 +33,11 @@ def create_practice(*, user: User, practice_type: ExamType, question_types: list
     if num_questions_selected < num_questions:
         raise IllegalArgumentError(message="There is too few questions in the database.")
 
-    testpaper = testmanager.create_testpaper(name=name, created_by=user)
+    testpaper = testmanager.create_testpaper(name=name,
+                                             created_by=user,
+                                             valid=0,
+                                             is_testpaper=0)
+
     testpaper_id = testpaper.id
     for question in selected_questions:
         testpaper.question_set.add(question)
@@ -43,6 +47,7 @@ def create_practice(*, user: User, practice_type: ExamType, question_types: list
                                    start_time=timezone.now(),
                                    testpaper_id=testpaper_id,
                                    duration=0,
+                                   is_public=1,
                                    created_by_id=user.id)
 
     return practice, selected_questions
