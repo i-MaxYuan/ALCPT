@@ -66,7 +66,7 @@
             <div style="padding-right: 10px"></div>
         </div>
         <div class="w-100 my-3"></div>
-        <h1 style="display: inline;">新增考試</h1>
+        <h1 style="display: inline; font-size: 30px">新增考試</h1>
     </section>
 
     <form class="col-12 row mt-3" enctype="multipart/form-data" action="/exam/create" method="post" autocomplete="off">
@@ -75,15 +75,15 @@
         <input type="hidden" name="type" value="{{ question_type }}" />
         <input type="hidden" name="source" value="{{ source.id }}" />
 
-        <h3 class="col-12"><i class="fa fa-sticky-note fa-fw mb-2"></i> 基本資料</h3>
+        <h3 class="col-12" style="font-size: 20px; top: 15px"><i class="fa fa-sticky-note fa-fw mb-2"></i> 基本資料</h3>
 
         <div class="col-12 py-2 form-group">
-            <label for="name">考試名稱</label>
-            <input type="text" class="form-control" id="name" name="name" required>
+            <label for="name" style="font-size: 17px; top: 20px; left: 40px">考試名稱</label>
+            <input type="text" class="form-control" id="name" name="name" required style="top: 20px; left: 30px">
         </div>
         <div class="col-auto py-2 form-group">
-            <label for="duration">使用時間</label>
-            <div class="input-group">
+            <label for="duration" style="font-size: 17px; top: 20px; left: 40px">使用時間</label>
+            <div class="input-group" style="top: 20px; left: 30px">
                 <input type="number" class="form-control" id="duration" name="duration" value="90" min="1" required>
                 <div class="input-group-append">
                     <span class="input-group-text">分鐘</span>
@@ -91,21 +91,21 @@
             </div>
         </div>
         <div class="col-auto py-2 form-group">
-            <label for="start-time">開始時間</label>
-            <input type="text" class="form-control" id="start-time" name="start_time" value=""  required >
+            <label for="start-time" style="font-size: 17px; top: 20px; left: 40px">開始時間</label>
+            <input type="text" class="form-control" id="start-time" name="start_time" value=""  required style="top: 20px; left: 30px">
         </div>
-        <h3 class="col-12"><i class="fa fa-sliders fa-fw mb-2"></i> 選擇考卷</h3>
+        <h3 class="col-12" style="font-size: 17px; top: 30px; left: 10px"><i class="fa fa-sliders fa-fw mb-2"></i> 選擇考卷</h3>
         <div class="col">
-            <select class="custom-select" name="testpaper">
+            <select class="custom-select" name="testpaper" style="top: 30px; left: 30px">
                 <option value="0">考卷名稱</option>
                 {% for testpaper in testpapers %}
                     <option value="{{ testpaper.id }}">{{ testpaper.name }}</option>
                 {% endfor %}
             </select>
         </div>
-        <h3 class="col-12"><i class="fa fa-id-card" aria-hidden="true"></i> 選擇受測者</h3>
+        <h3 class="col-12" style="font-size: 17px; top: 50px; left: 10px"><i class="fa fa-id-card" aria-hidden="true"></i> 選擇受測者</h3>
         <div class="col">
-            <select class="custom-select" name="group">
+            <select class="custom-select" name="group" style="top: 60px; left: 30px">
                 <option value="0">受測者群組名稱</option>
                 {% for group in groups %}
                     <option value="{{ group.id }}">{{ group.name }}</option>
@@ -116,7 +116,7 @@
         <div class="w-100"></div>
 
         <section class="col text-center pt-3">
-            <button class="btn btn-primary" style="background-color: #1b98e0; color: white" type="submit">新增並公告考試</button>
+            <button class="btn btn-primary" style="background-color: #1b98e0; color: white; font-size: 15px; top: 120px" type="submit">新增並公告考試</button>
         </section>
     </form>
 </section>

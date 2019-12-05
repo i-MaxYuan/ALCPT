@@ -1,0 +1,182 @@
+{% load staticfiles %}
+
+{% load web_filters %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>線上英文考試系統</title>
+    <link rel="stylesheet" type="text/css" href="../static/css/Base.css">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"> <!-- RWD的部分 -->
+
+    <link rel="shortcut icon" type="image/png" href="{% static "images/icon_logo.png" %}"> <!-- logo的部分 -->
+
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+	<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!-- bootstrap的部分 -->
+    {% block stylesheets %}{% endblock %}
+
+    {% block scripts %}
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+	<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-md5/2.10.0/js/md5.js" crossorigin="anonymous" defer></script>
+    <script src="/static/scripts/base.js?{{ request.static_file_version }}" defer></script>
+    {% endblock %} <!-- JS的部分 -->
+</head>
+
+<body class="bg-light">
+    {% block body%}
+    <div class="wrapper">
+        <img src="{% static "images/background.jpg" %}" style="width: 100%; height: 200%;">
+
+        <div class="infor" style="width: 40%; height: 50%; position: absolute; top: 10%; left: 17%">
+            {# 圖片按鈕#}
+
+            <section class="container" style="background-color: rgba(255,255,255,0.5)">
+                {% if messages %}
+                    {% for message in messages %}
+                        {% if message.tags == "error" %}
+                            <div class="alert alert-danger mt-3" role="alert">
+                                <i class="fa fa-window-close" aria-hidden="true"></i> {{ message }}
+                            </div>
+                        {% elif message.tags == "success" %}
+                            <div class="alert alert-success mt-3" role="alert">
+                                {{ message }}
+                            </div>
+                        {% elif message.tags == "warning" %}
+                            <div class="alert alert-warning mt-3" role="alert">
+                                <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> {{ message }}
+                            </div>
+                        {% else %}
+                            <div class="alert mt-3" role="alert">
+                                {{ message }}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                    <div style="height: 60px;"></div>
+                {% endif %}
+                {% block content %}{% endblock %}
+                <div style="height: 40px;"></div>
+            </section>
+
+        </div>
+
+        <div class="indexline" style="top: 1%"> <!-- 功能列的部分 -->
+
+            <!-- 這邊開始Bootstrap -->
+
+            <div class="ddm" style="width: 105%; height: 60px; background-color: #3c6382; position: fixed; top: 0px; ">
+                <ul class="nav nav-tabs" style="height: 58px;  top: 3%;" >
+                    <li class="dropdown" style="left: 30%">
+                        {% if request.user|has_perm:'SystemManager' %}
+                        <a href="/user"  data-toggle="dropdown" style="color: #FFFFFF; font-size: 18px; top: 2px"
+                           onmouseover="this.style.color='#3c6382'"  onmousedown="this.style.color='#3c6382'" onmouseout="this.style.color='#fff'" >系統管理員<b class="caret"></b></a>
+                        <ul class="dropdown-menu" style="font-size: 16px">
+                            <li><a href="/user" >使用者列表</a></li>
+                            <li class="divider" ></li>
+                            <li><a href="/user/unit_list">單位列表</a></li>
+                        </ul>
+                        {% endif %}
+                    </li>
+
+                    <li class="dropdown" style="left: 30.5%">
+                        {% if request.user|has_perm:'TestManager' %}
+                        <a href="/exam"  data-toggle="dropdown" style="color: #FFFFFF; font-size: 18px; top: 2px"
+                           onmouseover="this.style.color='#3c6382'" onmousedown="this.style.color='#3c6382'" onmouseout="this.style.color='#fff'">考試管理員<b class="caret"></b></a>
+                        <ul class="dropdown-menu" style="font-size: 16px">
+                            <li><a href="/exam" >考試列表</a></li>
+                            <li class="divider"></li>
+                            <li><a href="/exam/testpaper">考卷列表</a></li>
+                            <li class="divider"></li>
+                            <li><a href="/exam/group">受測者群組列表</a></li>
+                            <li class="divider"></li>
+                            <li><a href="/exam/proclamation">考試公告</a></li>
+                        </ul>
+                        {% endif %}
+                    </li>
+
+                    <li class="dropdown" style="left: 31%">
+                        {% if request.user|has_perm:'TBManager' %}
+                        <a href="/question"  data-toggle="dropdown" style="color: #FFFFFF; font-size: 18px; top: 2px"
+                           onmouseover="this.style.color='#3c6382'" onmousedown="this.style.color='#3c6382'" onmouseout="this.style.color='#fff'">題庫管理員<b class="caret"></b></a>
+                        <ul class="dropdown-menu" style="font-size: 16px">
+                            <li><a href="/question">題目列表</a></li>
+                            <li class="divider"></li>
+                            <li><a href="/question/create">新增試題</a></li>
+                            <li class="divider"></li>
+                            <li><a href="/question/review">審核試題</a></li>
+                        </ul>
+                        {% endif %}
+                    </li>
+
+                    <li class="dropdown" style="left: 31.5%">
+                        {% if request.user|has_perm:'TBOperator' %}
+                        <a href="/question_operator"  data-toggle="dropdown" style="color: #FFFFFF; font-size: 18px; top: 2px"
+                           onmouseover="this.style.color='#3c6382'" onmousedown="this.style.color='#3c6382'" onmouseout="this.style.color='#fff'">題庫操作員<b class="caret"></b></a>
+                        <ul class="dropdown-menu" style="font-size: 16px">
+                            <li><a href="/question_operator/create">新增試題</a></li>
+                            <li class="divider"></li>
+                            <li><a href="/question_operator">查看試題</a></li>
+                        </ul>
+                        {% endif %}
+                    </li>
+
+                    <li class="dropdown" style="left: 32%">
+                        {% if request.user|has_perm:'Viewer' %}
+                        <a href="/score"  data-toggle="dropdown" style="color: #FFFFFF; font-size: 18px; top: 2px"
+                           onmouseover="this.style.color='#3c6382'" onmousedown="this.style.color='#3c6382'" onmouseout="this.style.color='#fff'">成績檢閱者<b class="caret"></b></a>
+                        <ul class="dropdown-menu" style="font-size: 16px">
+                            <li><a href="/score">檢閱成績</a></li>
+                        </ul>
+                        {% endif %}
+                    </li>
+
+                    <li class="dropdown" style="left: 32.5%">
+                        {% if request.user|has_perm:'Testee' %}
+                        <a href="/tester"  data-toggle="dropdown" style="color: #FFFFFF; font-size: 18px; top: 2px"
+                           onmouseover="this.style.color='#3c6382'" onmousedown="this.style.color='#3c6382'" onmouseout="this.style.color='#fff'">受測者<b class="caret"></b></a>
+                        <ul class="dropdown-menu" style="font-size: 16px">
+                            <li><a href="/tester">檢閱成績</a></li>
+                            <li class="divider"></li>
+                            <li><a href="/tester/practice/reading">閱讀練習</a></li>
+                            <li class="divider"></li>
+                            <li><a href="/tester/practice/listening">聽力練習</a></li>
+                            <li class="divider"></li>
+                            <li><a href="/tester/practice/integration">綜合練習</a></li>
+                            <li class="divider"></li>
+                            <li><a href="/tester/simulation-exam">模擬鑑測</a></li>
+                        </ul>
+                        {% endif %}
+                    </li>
+
+                     <li class="dropdown" style="left: 33%">
+                        {% if request.user.is_authenticated %}
+                        <a href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" style="color: #FFFFFF; font-size: 18px; top: 2px; right: -30% "
+                           onmouseover="this.style.color='#3c6382'" onmousedown="this.style.color='#3c6382'" onmouseout="this.style.color='#fff'" aria-expanded="false"  data-toggle="dropdown">{{ request.user.name }} ({{ request.user.reg_id }})<b class="caret"></b></a>
+                        <ul class="dropdown-menu" style="font-size: 16px">
+                            <li><a href="/user/{{ request.user.reg_id }}">修改個人資料</a></li>
+                            <li class="divider"></li>
+                            <li><a href="/logout"><i class="fa fa-sign-out"></i> 登出系統</a></li>
+                        </ul>
+                        {% endif %}
+                    </li>
+                </ul>
+            </div>
+            <img src="{% static "images/icon_logo.png" %}" style="height: 30px; width: 30px; position: fixed; top: 10px; left: 32px">
+            <a class="navbar-brand" href="/" style="font-size: 25px; color: #FFFFFF;position: fixed; top: 0%; left: 4%">ALCPT線上練習平台</a>
+            </div>
+
+    {% endblock body%}
+</body>
+{% include "footer.html" %}
+</html>
