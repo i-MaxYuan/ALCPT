@@ -100,9 +100,10 @@ def query_students(*, department: Department, grade: int, squadron: Squadron, na
     return num_pages, users
 
 
-def create_testpaper(name: str, created_by: User):
+def create_testpaper(name: str, created_by: User, is_testpaper: int):
     testpaper = TestPaper.objects.create(name=name,
-                                         created_by_id=created_by.id)
+                                         created_by_id=created_by.id,
+                                         is_testpaper=is_testpaper)
     testpaper.valid = False
     testpaper.save()
 
