@@ -86,16 +86,34 @@
         <input id="question_type"  type="hidden" name="question_type" />
 
         <section class="col-12 row">
-        {% for question_type in question_types %}
-            <section class="col-3 p-3">
-                <button id="question-type-{{ question_type.0 }}" class="col-12 btn btn-sq-lg p-3 {% if practice_type == 'listening' %} btn-info {% elif practice_type == 'reading' %} btn-secondary {% endif %}" data-toggle="button">
-                    <i class="fa fa-{{ question_type.1 }} fa-5x mb-2"></i>
-                    <br>
-                    {{ question_type.0|readable_question_type }}
-                </button>
-            </section>
-        {% endfor %}
+            {% for question_type in question_types %}
+                <section class="col-3 p-3">
+                    <button id="question-type-{{ question_type.0 }}" name="question_type" class="col-12 btn btn-sq-lg p-3 {% if practice_type == 'listening' %} btn-info {% elif practice_type == 'reading' %} btn-secondary {% endif %}" data-toggle="button">
+                        <i class="fa fa-{{ question_type.1 }} fa-5x mb-2"></i>
+                        <br>
+                        {{ question_type.0|readable_question_type }}
+                    </button>
+                </section>
+            {% endfor %}
         </section>
+
+{#        <section class="col-12 row">#}
+{#            {% for question_type in question_types %}#}
+{#                <section class="col-3 p-3">#}
+{#                    <button id="question-type-{{ question_type.0 }}" name="question-type-{{ question_type.0 }}" class="col-12 btn btn-sq-lg p-3 {% if practice_type == 'listening' %} btn-info {% elif practice_type == 'reading' %} btn-secondary {% endif %}" data-toggle="button">#}
+{#                        <i class="fa fa-{{ question_type.1 }} fa-5x mb-2"></i>#}
+{#                        <br>#}
+{#                        {{ question_type.0|readable_question_type }}#}
+{#                    </button>#}
+{#                </section>#}
+{#            {% endfor %}#}
+{#        </section>#}
+
+{#        <form  method="post">#}
+{#            <input type="hidden" name="question_type" value="1">#}
+{#            <input type="button" name="send" value="送出表單">#}
+{#        </form>#}
+
 
         <h3 class="col-12 pt-3"><i class="fa fa-sticky-note fa-fw mb-2"></i> 題數</h3>
 
