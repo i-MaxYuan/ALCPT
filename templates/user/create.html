@@ -50,7 +50,7 @@
         </div>
         <div class="w-100 my-3"></div>
 
-        <h1 style="display: inline;">新增使用者</h1>
+        <h1 style="display: inline; font-size: 30px">新增使用者</h1>
     </section>
 
     <div class="w-100 my-3"></div>
@@ -59,24 +59,24 @@
         {% csrf_token %}
 
         <div class="form-group">
-            <label for="accounts">帳號清單</label>
-            <textarea class="form-control" id="accounts" name="accounts" rows="6" placeholder="帳號1, 帳號2, ..." required></textarea>
-            <small class="form-text text-muted">帳號即為學號，僅限英文數字，請用半形逗號區隔。<strong>預設密碼為學號。</strong></small>
+            <label for="accounts" style="font-size: 25px; left: 10px">帳號清單</label>
+            <textarea style="font-size: 15px" class="form-control" id="accounts" name="accounts" rows="6" placeholder="帳號1, 帳號2, ..." required></textarea>
+            <small style="font-size: 10px; left: 10px" class="form-text text-muted">帳號即為學號，僅限英文數字，請用半形逗號區隔。<strong>預設密碼為學號。</strong></small>
         </div>
         <div class="form-group">
-            <label>權限</label>
+            <label style="font-size: 25px; left: 10px; top: 20px">權限</label>
 
             {% for priviledge in priviledges.values %}
 
-            <div class="custom-control custom-checkbox">
+            <div class="custom-control custom-checkbox" style="top: 25px; font-size: 20px">
                 <input type="checkbox" class="custom-control-input" id="{{ priviledge.value.0 }}" name="priviledge_{{ forloop.counter0 }}" {% if priviledge == priviledges.Tester %} checked {% endif %}>
-                <label class="custom-control-label" for="{{ priviledge.value.0 }}">{{ priviledge.value.1 }}</label>
+                <label style="left: 10px" class="custom-control-label" for="{{ priviledge.value.0 }}">&nbsp;&nbsp;&nbsp;&nbsp;{{ priviledge.value.1 }}</label>
             </div>
             {% endfor %}
         </div>
 
         <section class="text-center pt-3">
-            <button class="btn btn-primary" type="submit">新增使用者</button>
+            <button style="font-size: 15px; top: 50px" class="btn btn-primary" type="submit">新增使用者</button>
         </section>
     </form>
 </section>
