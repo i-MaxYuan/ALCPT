@@ -67,6 +67,10 @@ def edit_testpaper(request, testpaper_name: str):
     except ObjectDoesNotExist:
         raise ObjectNotFoundError('Cannot find testpaper name={}'.format(testpaper_name))
 
+    if testpaper.valid == 1:
+        messages.warning(request, "This testpaper is valid, it can't not edit again.")
+        return render(request, )
+
     if request.method == 'POST':
         name = request.POST.get('name')
 
