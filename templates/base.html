@@ -129,7 +129,7 @@
                         <a href="/score"  data-toggle="dropdown" style="color: #FFFFFF; font-size: 18px; top: 2px"
                            onmouseover="this.style.color='#3c6382'" onmousedown="this.style.color='#3c6382'" onmouseout="this.style.color='#fff'">成績檢閱者<b class="caret"></b></a>
                         <ul class="dropdown-menu" style="font-size: 16px">
-                            <li><a href="/score">檢閱成績</a></li>
+                            <li><a href="{% url 'all_exam_score_list' %}">檢閱成績</a></li>
                         </ul>
                         {% endif %}
                     </li>
@@ -159,7 +159,7 @@
                         <ul class="dropdown-menu" style="font-size: 16px">
                             <li><a href="/user/{{ request.user.reg_id }}">修改個人資料</a></li>
                             <li class="divider"></li>
-                            <li><a href="/logout"><i class="fa fa-sign-out"></i> 登出系統</a></li>
+                            <li><a href="{% url 'logout' %}"><i class="fa fa-sign-out"></i> 登出系統</a></li>
                         </ul>
                         {% endif %}
                     </li>

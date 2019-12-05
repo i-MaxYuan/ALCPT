@@ -96,7 +96,7 @@ def pie(request):
         else:
             under60 += 1
 
-    return render(request, 'pie_for_tester.html', {'pass': over60, 'fail': under60})
+    return render(request, 'testee/pie_for_tester.html', {'pass': over60, 'fail': under60})
 
 
 @login_required
@@ -115,4 +115,4 @@ def pie_viewer(request):
         else:
             under60 += 1
 
-    return render(request, 'pie_for_viewer.html', {'pass': over60, 'fail': under60})
+    return render(request, 'score/pie_for_viewer.html', {'pass': over60, 'fail': under60})
