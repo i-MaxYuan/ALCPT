@@ -1,11 +1,12 @@
 import json
+from django.utils import timezone
 from datetime import datetime
 
 from alcpt.definitions import ExamType, QuestionType, QuestionTypeCounts
 from alcpt.exceptions import IllegalArgumentError
 from alcpt.models import User, Exam, Student, AnswerSheet, Question
 from .testmanager import random_select
-
+from ..managerfuncs import testmanager
 
 def create_practice(*, user: User, practice_type: ExamType, question_types: list, num_questions: int, integration: bool=False):
 
@@ -32,10 +33,17 @@ def create_practice(*, user: User, practice_type: ExamType, question_types: list
     if num_questions_selected < num_questions:
         raise IllegalArgumentError(message="There is too few questions in the database.")
 
+    testpaper = testmanager.create_testpaper(name=name, created_by=user)
+    testpaper_id = testpaper.id
+    for question in selected_questions:
+        testpaper.question_set.add(question)
+
     practice = Exam.objects.create(name=name,
                                    exam_type=practice_type.value[0],
-                                   start_time=now,
-                                   created_by=user)
+                                   start_time=timezone.now(),
+                                   testpaper_id=testpaper_id,
+                                   duration=0,
+                                   created_by_id=user.id)
 
     return practice, selected_questions
 

@@ -22,7 +22,7 @@ class QuestionType(Enum):
     ParagraphUnderstanding = (5, '閱讀／段落理解')
 
 
-class QuestionTypeCounts(Enum):
+class QuestionTypeCounts(Enum):   #模擬考各種考題的題目數量
     Exam = ([40, 20, 15, 15, 10], '模擬考')
 
 

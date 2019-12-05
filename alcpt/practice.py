@@ -47,8 +47,15 @@ def create(request, practice_type):
         practice_type = ExamType.Listening if practice_type == 'listening' else ExamType.Reading
         practice, selected_questions = practicemanager.create_practice(user=user, practice_type=practice_type,
                                                                        question_types=question_types, num_questions=num_questions)
-
-        return redirect('/tester/practice/{}/take'.format(practice.id), selected_questions=selected_questions)
+        for question in selected_questions:
+            question.option = json.loads(question.option)
+        data = {
+            "practice": practice,
+            "practice_type": practice_type.value[1],
+            "selected_questions": selected_questions,
+        }
+        # return redirect('/tester/practice/{}/take'.format(practice.id), selected_questions=selected_questions)
+        return render(request, 'practice/show.html', data)
         # return custom_redirect('/tester/practice/{}/take'.format(practice.id), selected_questions=selected_questions)
 
     else:
@@ -71,7 +78,7 @@ def create(request, practice_type):
             'question_types': question_types,
         }
 
-        return render(request, 'practice/create.html', data)
+        return render(request, 'practice/create_practice.html', data)
 
 
 @permission_check(UserType.Testee)
@@ -88,6 +95,28 @@ def create_integration(request):
 
     return redirect('/practice/{}/take'.format(practice.id), selected_questions=selected_questions)
 
+@permission_check(UserType.Testee)
+@require_http_methods(["GET", "POST"])
+def practice_go(request, practice_id, question_index):
+    try:
+        question_index = int(question_index)
+    except ValueError:
+        question_index = 0
+    try:
+        answer_sheet = AnswerSheet.objects.get(exam_id=practice_id, user_id=request.user.id)
+        answers = json.loads(answer_sheet.answers)
+        questions = json.loads(answer_sheet.questions)
+    except ObjectDoesNotExist:
+        answers = OrderedDict((question.id, -1) for question in selected_questions)
+        questions = OrderedDict(
+            (selected_questions.index(question), (question.id, random.sample(range(4), 4)))
+            for question in selected_questions)
+        answer_sheet = AnswerSheet.objects.create(exam_id=practice_id,
+                                                  user_id=request.user.id,
+                                                  questions=json.dumps(questions),
+                                                  answers=json.dumps(answers),
+                                                  is_finished=0,
+                                                  score=0)
 
 @permission_check(UserType.Testee)
 @require_http_methods(["GET", "POST"])
