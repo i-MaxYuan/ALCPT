@@ -88,16 +88,18 @@ urlpatterns = [
         ]))
     ])),
 
-    url(r'^score$', scores.index),
+    url(r'^score$', scores.index, name="all_exam_score_list"),
     url(r'^score/', include([
-        url(r'^pie$', views.pie_viewer),
+        url(r'^pie$', views.pie_viewer, name="score_pie"),
+        #url(r'^(?P<exam_id>[0-9]+)$', scores.show_given_exam, name="show_given_exam"),
+        #url(r'^testee/(?P<user_id>[0-9]+)$', scores.show_given_testee, name="show_given_testee"),
     ])),
 
-    url(r'^tester$', scores.tester_index),
+    url(r'^tester$', scores.tester_index, name="testee_exam_score"),
     url(r'^tester/', include([
-        url(r'^pie$', views.pie),
+        url(r'^pie$', views.pie, name="testee_score_pie"),
         url(r'^practice/', include([
-            url(r'^score$', scores.tester_index),
+            url(r'^score$', scores.tester_index, name="testee_practice_score"),
             url(r'^(?P<practice_type>(listening|reading))$', practice.create),
             url(r'^integration$', practice.create_integration),
             url(r'^(?P<practice_id>[0-9]+)/', include([
