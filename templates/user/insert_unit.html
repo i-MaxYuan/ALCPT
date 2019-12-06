@@ -14,7 +14,7 @@
                 <a class="fa fa-angle-right fa-lg"></a>
                 <a href="/user/unit_list" style="font-size: 18px">單位列表</a>
                 <a class="fa fa-angle-right fa-lg"></a>
-                <a href="/user/unit_list/insert" style="font-size: 18px">新增單位</a>
+                <a href="" style="font-size: 18px">新增單位</a>
             </div>
             <div style="padding-right: 10px"></div>
         </div>
@@ -22,7 +22,7 @@
         <h1 style="display: inline;">新增單位</h1>
     </section>
 
-    <form class="col-12 row mt-3" enctype="multipart/form-data" action="/user/unit_list/insert" method="post" autocomplete="off">
+    <form class="col-12 row mt-3" enctype="multipart/form-data" action="{% url 'unit_create' %}" method="post" autocomplete="off">
         {% csrf_token %}
 
         <h3 class="col-12">單位</h3><br/>
