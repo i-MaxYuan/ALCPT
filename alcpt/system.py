@@ -291,7 +291,7 @@ def edit_squadron(request, squadron_name):
 # 新增單位（學系、中隊）
 @permission_check(UserType.SystemManager)
 @require_http_methods(["GET", "POST"])
-def insert_unit(request):
+def create_unit(request):
     name = request.POST.get('unit_name')
     if request.method == 'POST':
         if request.POST.get('unit') == 'department':
@@ -299,14 +299,14 @@ def insert_unit(request):
 
         elif request.POST.get('unit') == 'squadron':
             Squadron.objects.create(name = name)
-        
+
         else:
             messages.error(request, 'Choose the unit which you want to insert.')
-            return redirect('/user/unit_list/insert')
-        
+            return redirect('unit_create')
+
         messages.success(request, 'Success insert new unit: {}.'.format(name))
 
-        return redirect('/user/unit_list')
+        return redirect('unit_list')
     else:
         return render(request, 'user/insert_unit.html')
 
@@ -317,7 +317,7 @@ def insert_unit(request):
 def delete_department(request, department_id):
     try:
         department = Department.objects.get(id = department_id)
-    
+
     except ObjectDoesNotExist:
         raise ResourceNotFoundError('Cannot find object id = {}.'.format(department.name))
 
@@ -334,7 +334,7 @@ def delete_department(request, department_id):
 def delete_squadron(request, squadron_name):
     try:
         squadron = Squadron.objects.get(name = squadron_name)
-    
+
     except ObjectDoesNotExist:
         raise ResourceNotFoundError('Cannot find object id = {}.'.format(squadron_name))
 

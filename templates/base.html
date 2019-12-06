@@ -77,7 +77,7 @@
                         <ul class="dropdown-menu" style="font-size: 16px">
                             <li><a href="/user" >使用者列表</a></li>
                             <li class="divider" ></li>
-                            <li><a href="/user/unit_list">單位列表</a></li>
+                            <li><a href="{% url 'unit_list' %}">單位列表</a></li>
                         </ul>
                         {% endif %}
                     </li>
@@ -248,7 +248,7 @@
     <!-- ----------------------------------------------- 接下來開始RWD -------------------------------------------- -->
     <style>
         @media  screen and (min-width: 800px){
-            
+
         }
     </style>
 
