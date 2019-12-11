@@ -15,17 +15,17 @@
             <div class="card-body">
                 <form class="pt-2" action="/tester/simulation-exam/{{ exam.id }}/take/" method="post">
                     {% csrf_token %}
-            {% if question.question_type is 1 %}
-                {% include 'question/qa/display_alone.html' with question=question show_answer=False %}
-            {% elif question.question_type is 2 %}
-                {% include 'question/short_conversation/display_alone.html' with question=question show_answer=False %}
-            {% elif question.question_type is 3 %}
-                {% include 'question/grammar/display_alone.html' with question=question show_answer=False %}
-            {% elif question.question_type is 4 %}
-                {% include 'question/phrase/display_alone.html' with question=question show_answer=False %}
-            {% elif question.question_type is 5 %}
-                {% include 'question/paragraph_understanding/display_alone.html' with question=question show_answer=False %}
-            {% endif %}
+                    {% if question.question_type is 1 %}
+                        {% include 'question/qa/display_alone.html' with question=question show_answer=False %}
+                    {% elif question.question_type is 2 %}
+                        {% include 'question/short_conversation/display_alone.html' with question=question show_answer=False %}
+                    {% elif question.question_type is 3 %}
+                        {% include 'question/grammar/display_alone.html' with question=question show_answer=False %}
+                    {% elif question.question_type is 4 %}
+                        {% include 'question/phrase/display_alone.html' with question=question show_answer=False %}
+                    {% elif question.question_type is 5 %}
+                        {% include 'question/paragraph_understanding/display_alone.html' with question=question show_answer=False %}
+                    {% endif %}
                     <input type="hidden" name="id" value="{{ index }}" />
 
                     <section class="row mt-3">

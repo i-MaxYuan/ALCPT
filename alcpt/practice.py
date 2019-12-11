@@ -10,7 +10,7 @@ from django.views.decorators.http import require_http_methods
 from .exceptions import IllegalArgumentError, ArgumentError
 from .decorators import permission_check, custom_redirect
 from .definitions import UserType, QuestionType, ExamType, QuestionTypeCounts
-from .models import AnswerSheet, Question, Student, User
+from .models import AnswerSheet, Question, Student, User, Exam, TestPaper
 from .managerfuncs import practicemanager
 
 
@@ -54,8 +54,9 @@ def create(request, practice_type):
             "practice_type": practice_type.value[1],
             "selected_questions": selected_questions,
         }
-        # return redirect('/tester/practice/{}/take'.format(practice.id), selected_questions=selected_questions)
-        return render(request, 'practice/show.html', data)
+
+        return redirect('/tester/practice/{}/take'.format(practice.id))
+        # return render(request, 'practice/show.html', data)
         # return custom_redirect('/tester/practice/{}/take'.format(practice.id), selected_questions=selected_questions)
 
     else:
@@ -95,18 +96,21 @@ def create_integration(request):
 
     return redirect('/practice/{}/take'.format(practice.id), selected_questions=selected_questions)
 
+
 @permission_check(UserType.Testee)
 @require_http_methods(["GET", "POST"])
-def practice_go(request, practice_id, question_index):
-    try:
-        question_index = int(question_index)
-    except ValueError:
-        question_index = 0
+def practice_go(request, practice_id, question_index: int):
+    # try:
+    question_index = int(question_index)
+    # except ValueError:
+    #     question_index = 0
     try:
         answer_sheet = AnswerSheet.objects.get(exam_id=practice_id, user_id=request.user.id)
         answers = json.loads(answer_sheet.answers)
         questions = json.loads(answer_sheet.questions)
     except ObjectDoesNotExist:
+        testpaper = TestPaper.objects.get(id=Exam.objects.get(id=practice_id).testpaper_id)
+        selected_questions = list(testpaper.question_set.all())
         answers = OrderedDict((question.id, -1) for question in selected_questions)
         questions = OrderedDict(
             (selected_questions.index(question), (question.id, random.sample(range(4), 4)))
@@ -117,6 +121,79 @@ def practice_go(request, practice_id, question_index):
                                                   answers=json.dumps(answers),
                                                   is_finished=0,
                                                   score=0)
+
+    answer_num = 0
+    # all_answered = False
+    for question_id in answers:
+        answer_num += 1
+        if answers[question_id] < 0:
+            all_answered = False
+        else:
+            all_answered = True
+
+        # if question_index >= answer_num:
+        #     raise IllegalArgumentError('Question index out of range.')
+        # else:
+            # question_id, options = questions[question_id][0] 這行會出現Error
+        question = Question.objects.get(id=question_id)
+        question_option = json.loads(question.option)
+
+        if request.method == "POST":
+            try:
+                answer = int(request.POST.get('answer-{}'.format(question.id)))
+
+                if answer not in range(len(question.option)):
+                    raise IllegalArgumentError(message='Invalid answer.')
+
+            except TypeError:
+                raise IllegalArgumentError(message='At least one option needs to be selected.')
+
+            answers[question_id] = answer
+            answer_sheet.answers = json.dumps(answers)
+            answer_sheet.save()
+
+            if question_index + 1 < answer_num and not all_answered:
+                return redirect('/practice/{}/take/{}'.format(practice_id, question_index + 1))
+
+            else:
+                answers = json.loads(answer_sheet.answers)
+                not_answered = []
+                for question_type in answers:
+                    if answers[question_type][question_index] < 0:
+                        not_answered.append(question_index)
+
+                if not_answered:
+                    raise IllegalArgumentError('The following questions have not been answered: {}.'.format(
+                        ', '.join(not_answered)))
+
+                practicemanager.evaluate_score(answer_sheet=answer_sheet)
+
+                answer_sheet.finish = True
+                answer_sheet.save()
+
+                messages.success(request, "Complete the practice.")
+
+                return redirect('/')
+        else:
+            question.option = json.loads(question.option)
+
+            data = {
+                'answer_sheet': answer_sheet,
+                'question': question,
+                'index': question_index,
+                'has_next': question_index + 1 < answer_num,
+                # 'selected_answer': answers[str(question.question_type)][str(question.id)],
+                'practice_id': practice_id,
+                'selected_answered': -1,
+                'answers': answers,
+                'num_questions': range(answer_num),
+                'all_answered': all_answered,
+            }
+
+            return render(request, 'practice/answer.html', data)
+
+
+
 
 @permission_check(UserType.Testee)
 @require_http_methods(["GET", "POST"])
@@ -149,6 +226,7 @@ def take_practice(request, practice_id, question_index, selected_questions):
                                                   score=0)
 
     answer_num = 0
+    all_answered = False
     for question_id in answers:
         answer_num += 1
         if answers[question_id] < 0:
@@ -208,7 +286,7 @@ def take_practice(request, practice_id, question_index, selected_questions):
             'question': question,
             'index': question_index,
             'has_next': question_index + 1 < answer_num,
-            'selected_answer': answers[str(question.question_type)][str(question.id)],
+            # 'selected_answer': answers[str(question.question_type)][str(question.id)], 有問題
             'answers': answers,
             'num_questions': range(answer_num),
             'all_answered': all_answered,
