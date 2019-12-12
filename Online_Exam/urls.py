@@ -103,8 +103,7 @@ urlpatterns = [
             url(r'^(?P<practice_type>(listening|reading))$', practice.create, name='testee_practice_selected'),
             url(r'^integration$', practice.create_integration, name='testee_practice_all'),
             url(r'^(?P<practice_id>[0-9]+)/', include([
-                url(r'^take/(?P<question_index>[0-9]*)$', practice.practice_go, name='testee_practice'),
-                # url(r'^take/(?P<question_index>[0-9]*)$', practice.take_practice, name='testee_practice'),
+                url(r'^take/(?P<question_index>[0-9]*)$', practice.take_practice, name='testee_practice'),
             ])),
         ])),
         url(r'^simulation-exam$', simulation_exam.index, name='testee_sim_exam_list'),
