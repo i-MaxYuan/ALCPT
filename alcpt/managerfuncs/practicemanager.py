@@ -52,7 +52,8 @@ def create_practice(*, user: User, practice_type: ExamType, question_types: list
     return practice, selected_questions
 
 
-def evaluate_score(*, answer_sheet: AnswerSheet):
+# def evaluate_score(*, answer_sheet: AnswerSheet):
+def evaluate_score(answer_sheet):
     questions = json.loads(answer_sheet.questions)
 
     answers = answer_sheet.answers
@@ -62,7 +63,7 @@ def evaluate_score(*, answer_sheet: AnswerSheet):
     num_correct = 0
     for index in questions:
         question_id = questions[index][0]
-        user_ans = answers[question_id]
+        user_ans = answers[str(question_id)]
         question = Question.objects.get(id=question_id)
         correct_ans = question.answer
         question.issued_freq += 1
@@ -70,15 +71,16 @@ def evaluate_score(*, answer_sheet: AnswerSheet):
             num_correct += 1
             question.correct_freq += 1
 
-        if question.use_time >= 30:
-            if question.correct_rate > 66:
-                question.difficulty = 3
-
-            elif question.correct_rate < 33:
-                question.difficulty = 1
-
-            else:
-                question.difficulty = 2
+        # 難易度資料統計、分析
+        # if question.use_time >= 30:
+        #     if question.correct_rate > 66:
+        #         question.difficulty = 3
+        #
+        #     elif question.correct_rate < 33:
+        #         question.difficulty = 1
+        #
+        #     else:
+        #         question.difficulty = 2
 
         question.save()
 

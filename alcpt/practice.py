@@ -141,7 +141,9 @@ def take_practice(request, practice_id, question_index: int):
         else:
             answers = json.loads(answer_sheet.answers)
             answer_sheet.finish = True
+            answer_sheet.score = practicemanager.evaluate_score(answer_sheet)
             answer_sheet.save()
+
 
             messages.success(request, "Complete the practice.")
 
