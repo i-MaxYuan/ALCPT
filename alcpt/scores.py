@@ -4,10 +4,10 @@ from django.shortcuts import render
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.decorators.http import require_http_methods
 
-from .models import Question, AnswerSheet, Student, User
+from .models import Question, AnswerSheet, Student, User, Exam, TestPaper
 from .exceptions import *
 from .decorators import permission_check
-from .definitions import UserType
+from .definitions import UserType, ExamType
 from .managerfuncs import viewer
 
 
@@ -112,3 +112,17 @@ def sheet_detail(request, exam_id):
         question_dir[que_id]['correct'] = Question.objects.get(id=que_id).correct
 
     return render(request, 'score/score_details.html', locals())
+
+
+def show_given_exam(request, exam_id:int):
+    try:
+        exam=Exam.objects.get(id=exam_id)
+    except ObjectDoesNotExist:
+        raise ObjectNotFoundError('The exam not found.')
+
+    testpaper = TestPaper.objects.get(id=exam.testpaper_id)
+    # answersheet = AnswerSheet.objects.get(exam_id=exam_id, user_id=request.user.id)
+    questions = testpaper.question_set.all()
+    for question in questions:
+        question.option = json.loads(question.option)
+    return render(request, "testee/show_given_exam.html", locals())

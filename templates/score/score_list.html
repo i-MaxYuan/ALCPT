@@ -71,9 +71,9 @@
                         <td class="align-middle">{{ exam.name }}</td>
                         <td class="align-middle text-center">{{ exam.average_score }}</td>
                         <td class="align-middle text-center">{{ exam.finish_time|date:'Y/n/d H:i' }}</td>
-                        <td class="align-middle text-center">   這是為了看那次考試的詳細情形
-                            {# <a href="{% url 'show_given_exam' exam.exam_id %}"><i class="fa fa-search fa-fw mb-2"></i></a> #}
-                        </td>
+{#                        <td class="align-middle text-center">#}
+{#                            <a href="{% url 'show_given_exam' exam.exam_id %}"><i class="fa fa-search fa-fw mb-2"></i>test</a>#}
+{#                        </td>#}
                     </tr>
                 {% endfor %}
             {% else %}

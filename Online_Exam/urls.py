@@ -98,6 +98,7 @@ urlpatterns = [
     url(r'^tester$', scores.tester_index, name='testee_exam_score'),
     url(r'^tester/', include([
         url(r'^pie$', views.pie, name='testee_score_pie'),
+        url(r'^score/(?P<exam_id>[0-9]+)$', scores.show_given_exam, name='show_given_exam'),
         url(r'^practice/', include([
             url(r'^score$', scores.tester_index, name='testee_practice_score'),
             url(r'^(?P<practice_type>(listening|reading))$', practice.create, name='testee_practice_selected'),
