@@ -71,8 +71,8 @@
             {% if answer_sheets %}
                 {% for sheet in answer_sheets %}
                     <tr style="font-size: 15px">
-                        <th scope="row" class="align-middle text-center">{{ sheet.exam.id }}</th>
-                        <td class="align-middle">{{ sheet.exam.name }}</td>
+                        <th scope="row" class="align-middle text-center">{{ sheet.id }}</th>
+                        <td class="align-middle"><a href="/tester/score/{{ sheet.exam_id }}">{{ sheet.exam.name }}</a></td>
                         <td class="align-middle text-center">{{ sheet.score }}</td>
                         <td class="align-middle text-center">{{ request.user.name }}</td>
                         <td class="align-middle text-center">{{ sheet.finish_time|date:'Y/n/d H:i' }}</td>

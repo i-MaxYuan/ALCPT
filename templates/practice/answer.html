@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base_fixed.html" %}
 
 {% load web_filters %}
 
@@ -14,7 +14,7 @@
         <div class="card">
             <div class="card-body">
                 <button class="btn btn" style="float: right ;background-color: indianred; color: white">暫停練習</button>
-                <form class="pt-2" action="tester/practice/{{ practice_id }}/take/{{ index }}" method="post">
+                <form class="pt-2" action="/tester/practice/{{ practice_id }}/take/{{ index }}" method="post">
                     {% csrf_token %}
                 {% if question.question_type is 1 %}
                     {% include 'question/qa/display_alone.html' with question=question show_answer=False selected_answer=selected_answer %}
@@ -32,10 +32,13 @@
                     <section class="row mt-3">
                         <div class="col">
 
-                        {% if has_next and not all_answered %}
-                            <button class="btn btn-primary">下一題</button>
-                        {% else %}
-                            <button class="btn btn-success">結束練習</button>
+                        {% if has_next %}
+{#                            <button class="btn btn-primary"><a href="/tester/practice/{{ practice_id }}/take/{{ next }}" style="text-decoration: none; color: #FFFFFF">下一題</a></button>#}
+                            <input type="submit" id="button" name="button" value="下一頁">
+
+                        {% else%}
+                            <input type="submit" id="button" name="button" value="結束練習">
+{#                            <button class="btn btn-success"><a href="/tester">結束練習</a></button>#}
                         {% endif %}
                         </div>
 
@@ -50,7 +53,6 @@
                                 {% endif %}
                                 {% endif %}
                                     <li class="page-item {% if forloop.counter0 == index %}active{% endif %}">
-
                                         <a class="page-link {% if answer >= 0 and forloop.counter0 != index %}bg-success text-light
                                                             {% elif answer < 0 and forloop.counter0 < index %}bg-warning text-light{% endif %}" href="/tester/practice/{{ practice_id }}/take/{{ forloop.counter0 }}">
                                             {{ forloop.counter }}
