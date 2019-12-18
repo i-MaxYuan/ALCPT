@@ -93,6 +93,7 @@ urlpatterns = [
         url(r'^pie$', views.pie_viewer, name='score_pie'),
         url(r'^exam/(?P<exam_id>[0-9]+)$', scores.show_given_exam, name='show_given_exam'),
         url(r'^testee/(?P<user_id>[0-9]+)$', scores.show_given_testee, name='show_given_testee'),
+        url(r'^search/$', scores.search, name='search_testee'),
     ])),
 
     url(r'^tester$', scores.tester_index, name='testee_exam_score'),
