@@ -3,12 +3,15 @@ import json
 from django.shortcuts import render
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.decorators.http import require_http_methods
+from .managerfuncs import systemmanager
+from string import punctuation
 
-from .models import Question, AnswerSheet, Student, User
+from .models import Question, AnswerSheet, Department, Squadron
 from .exceptions import *
 from .decorators import permission_check
 from .definitions import UserType
 from .managerfuncs import viewer
+from django.contrib import messages
 
 
 @permission_check(UserType.Viewer)
@@ -63,6 +66,9 @@ def index(request):
         'exams': exams,
         'page': page,
         'page_range': range(num_pages),
+        'departments': Department.objects.all(),
+        'squadrons': Squadron.objects.all(),
+        'num_types': range(1, len(UserType.__members__) + 1),
     }
 
     return render(request, 'score/score_list.html', data)
@@ -138,4 +144,47 @@ def show_given_exam(request, exam_id):
 @permission_check(UserType.Viewer)
 @require_http_methods(["GET"])
 def show_given_testee(request, user_id):
-    return render(request, 'score/show_given_exam.html')
+
+    return render(request, 'score/empty.html')
+
+@permission_check(UserType.Viewer)
+@require_http_methods(["GET"])
+def search(request):
+    keywords = {
+        'name': request.GET.get('name')
+    }
+
+    if keywords['name'] and any(char in punctuation for char in keywords['name']):
+        keywords['name'] = None
+        messages.warning(request, "Name cannot contains any special character.")
+
+    for keyword in ['department', 'grade', 'squadron']:
+        try:
+            keywords[keyword] = int(request.GET.get(keyword))
+        except (KeyError, TypeError, ValueError):
+            keywords[keyword] = None
+
+    if keywords['department']:
+        try:
+            keywords['department'] = Department.objects.get(id=keywords['department'])
+        except ObjectDoesNotExist:
+            keywords['department'] = None
+
+    if keywords['squadron']:
+        try:
+            keywords['squadron'] = Squadron.objects.get(id=keywords['squadron'])
+        except ObjectDoesNotExist:
+            keywords['squadron'] = None
+
+    users = systemmanager.score_query_users(**keywords, page=0)
+
+    data = {
+        'users': users,
+        'departments': Department.objects.all(),
+        'squadrons': Squadron.objects.all(),
+        'priviledges': UserType.__members__,
+        'num_types': range(1, len(UserType.__members__) + 1),
+        'keywords': keywords,
+    }
+
+    return render(request, 'score/score_list_search.html', data)
