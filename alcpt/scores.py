@@ -3,12 +3,16 @@ import json
 from django.shortcuts import render
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.decorators.http import require_http_methods
+from .managerfuncs import systemmanager
+from string import punctuation
 
-from .models import Question, AnswerSheet, Student, User, Exam, TestPaper
+from .models import *
+
 from .exceptions import *
 from .decorators import permission_check
 from .definitions import UserType, ExamType
 from .managerfuncs import viewer
+from django.contrib import messages
 
 
 @permission_check(UserType.Viewer)
@@ -27,9 +31,13 @@ def index(request):
     }
 
     num_pages, answer_sheets_all = viewer.query_answer_sheet(**keywords, page=page)
+    answer_sheets = []
+    for sheet in answer_sheets_all:
+        if sheet.exam.testpaper.is_testpaper == 1:
+            answer_sheets.append(sheet)
     exam_ids = []
     exams = []
-    for sheet in answer_sheets_all:
+    for sheet in answer_sheets:
         if exam_ids:
             is_exist = 0
             for exam_id in exam_ids:
@@ -44,7 +52,7 @@ def index(request):
         exams.append({'exam_id': exam_id, 'name': 'one_exam', 'average_score': 0, 'finish_time': '2019-05-19 22:21:43.643000',
                       'total': 0, 'frequency': 0,})
 
-    for sheet in answer_sheets_all:
+    for sheet in answer_sheets:
         for exam in exams:
             if exam['exam_id'] == sheet.exam.id:
                 exam['name'] = sheet.exam.name
@@ -59,6 +67,9 @@ def index(request):
         'exams': exams,
         'page': page,
         'page_range': range(num_pages),
+        'departments': Department.objects.all(),
+        'squadrons': Squadron.objects.all(),
+        'num_types': range(1, len(UserType.__members__) + 1),
     }
 
     return render(request, 'score/score_list.html', data)
@@ -114,18 +125,102 @@ def sheet_detail(request, exam_id):
     return render(request, 'score/score_details.html', locals())
 
 
-def show_given_exam(request, exam_id:int):
-    try:
-        exam=Exam.objects.get(id=exam_id)
-    except ObjectDoesNotExist:
-        raise ObjectNotFoundError('The exam not found.')
+@permission_check(UserType.Viewer)
+@require_http_methods(["GET"])
+def show_given_exam(request, exam_id):
+    from .models import AnswerSheet
+    answer_sheets_all = AnswerSheet.objects.all()
+    answer_sheets = []
+    for sheet in answer_sheets_all:
+        if sheet.exam.testpaper.is_testpaper == 1:
+            answer_sheets.append(sheet)
+    exams = []
+    for exam in answer_sheets:
+        if exam.exam_id == int(exam_id):
+            exams.append({'exam_id': exam_id, 'name': exam.exam.name, 'score': exam.score, 'finish_time': exam.finish_time,
+                          'testee': exam.user.user.name, 'testee_id': exam.user_id,})
+    data = {'exams': exams,
+            'exam_id': exam_id,}
+    return render(request, 'score/show_given_exam.html', data)
 
-    testpaper = TestPaper.objects.get(id=exam.testpaper_id)
-    answersheet = AnswerSheet.objects.get(exam_id=exam_id, user_id=request.user.id)
-    answers = json.loads(answersheet.answers)
-    answers = list(answers.values())
-    # questions = json.loads(answersheet.questions)
-    questions = testpaper.question_set.all()
-    for question in questions:
-        question.option = json.loads(question.option)
-    return render(request, "testee/show_given_exam.html", locals())
+@permission_check(UserType.Viewer)
+@require_http_methods(["GET"])
+def show_given_tester(request, user_id):
+    from .models import AnswerSheet
+    answer_sheets_all = AnswerSheet.objects.all()
+    answer_sheets = []
+    for sheet in answer_sheets_all:
+        if sheet.exam.testpaper.is_testpaper == 1:
+            answer_sheets.append(sheet)
+    exams = []
+    for exam in answer_sheets:
+        if exam.user_id == int(user_id):
+            exams.append({'exam_id': exam.id, 'name': exam.exam.name, 'score': exam.score, 'finish_time': exam.finish_time,
+                          'testee': exam.user.user.name,})
+    data = {'exams': exams,
+            'user_id': user_id,
+            'another_exam_type': '練習',
+            'redirect': 'show_given_practice',}
+    return render(request, 'score/show_given_testee.html', data)
+
+@permission_check(UserType.Viewer)
+@require_http_methods(["GET"])
+def show_given_practice(request, user_id):
+    from .models import AnswerSheet
+    answer_sheets_all = AnswerSheet.objects.all()
+    answer_sheets = []
+    for sheet in answer_sheets_all:
+        if sheet.exam.testpaper.is_testpaper == 0:
+            answer_sheets.append(sheet)
+    exams = []
+    for exam in answer_sheets:
+        if exam.user_id == int(user_id):
+            exams.append({'exam_id': exam.id, 'name': exam.exam.name, 'score': exam.score, 'finish_time': exam.finish_time,
+                          'testee': exam.user.user.name,})
+    data = {'exams': exams,
+            'user_id': user_id,
+            'another_exam_type': '考試',
+            'redirect': 'show_given_tester',}
+    return render(request, 'score/show_given_testee.html', data)
+
+@permission_check(UserType.Viewer)
+@require_http_methods(["GET"])
+def search(request):
+    keywords = {
+        'name': request.GET.get('name')
+    }
+
+    if keywords['name'] and any(char in punctuation for char in keywords['name']):
+        keywords['name'] = None
+        messages.warning(request, "Name cannot contains any special character.")
+
+    for keyword in ['department', 'grade', 'squadron']:
+        try:
+            keywords[keyword] = int(request.GET.get(keyword))
+        except (KeyError, TypeError, ValueError):
+            keywords[keyword] = None
+
+    if keywords['department']:
+        try:
+            keywords['department'] = Department.objects.get(id=keywords['department'])
+        except ObjectDoesNotExist:
+            keywords['department'] = None
+
+    if keywords['squadron']:
+        try:
+            keywords['squadron'] = Squadron.objects.get(id=keywords['squadron'])
+        except ObjectDoesNotExist:
+            keywords['squadron'] = None
+
+    users = systemmanager.score_query_users(**keywords, page=0)
+
+    data = {
+        'users': users,
+        'departments': Department.objects.all(),
+        'squadrons': Squadron.objects.all(),
+        'priviledges': UserType.__members__,
+        'num_types': range(1, len(UserType.__members__) + 1),
+        'keywords': keywords,
+    }
+
+    return render(request, 'score/score_list_search.html', data)
