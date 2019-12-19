@@ -43,7 +43,7 @@
                 <a class="fa fa-angle-double-right fa-lg box"></a>
                 <a href="{% url 'all_exam_score_list' %}" style="font-size: 18px">成績檢閱者</a>
                 <a class="fa fa-angle-right fa-lg"></a>
-                <a href="{% url 'all_exam_score_list' %}e" style="font-size: 18px">成績檢閱（非圖表）</a>
+                <a href="{% url 'all_exam_score_list' %}" style="font-size: 18px">成績檢閱（非圖表）</a>
             </div>
             <div style="padding-right: 10px"></div>
         </div>
@@ -51,6 +51,42 @@
     </section>
 
 
+    <div class="w-100 my-3"></div>
+    <section class="col">
+        <div class="card">
+            <div class="card-body">
+                <form action="/score/search" method="get">
+                    <div class="row">
+                        <div class="col-auto">
+                            <select class="custom-select" name="department">
+                                <option value="0">所有學系</option>
+                                {% for dept in departments %}
+                                <option value="{{ dept.id }}" {% if dept.id == keywords.department.id %} selected {% endif %}>{{ dept.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-2">
+                            <input type="number" class="form-control" name="grade" value="{{ keywords.grade }}" placeholder="年班">
+                        </div>
+                        <div class="col-2">
+                            <select class="custom-select" name="squadron">
+                                <option value="0">所有中隊</option>
+                                {% for squa in squadrons %}
+                                <option value="{{ squa.id }}" {% if squa.id == keywords.squadron.id %} selected {% endif %}>{{ squa.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col">
+                            <input type="text" class="form-control" name="name" {% if keywords.name %} value="{{ keywords.name }}" {% else %} value=""{% endif %} placeholder="學號/姓名">
+                        </div>
+                        <div class="col-auto">
+                            <button type="submit" class="btn btn-primary" style="background-color: #1b98e0; color: white;">搜尋</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
     <div class="w-100 my-3"></div>
 
     <section class="col">
@@ -71,9 +107,15 @@
                         <td class="align-middle">{{ exam.name }}</td>
                         <td class="align-middle text-center">{{ exam.average_score }}</td>
                         <td class="align-middle text-center">{{ exam.finish_time|date:'Y/n/d H:i' }}</td>
+<<<<<<< HEAD
 {#                        <td class="align-middle text-center">#}
 {#                            <a href="{% url 'show_given_exam' exam.exam_id %}"><i class="fa fa-search fa-fw mb-2"></i>test</a>#}
 {#                        </td>#}
+=======
+                        <td class="align-middle text-center">
+                            <a href="{% url 'show_given_exam' exam.exam_id %}"><i class="fa fa-search fa-fw mb-2"></i></a>
+                        </td>
+>>>>>>> 627b1d85000a5315466fd2d7b9402e0f5ef42419
                     </tr>
                 {% endfor %}
             {% else %}

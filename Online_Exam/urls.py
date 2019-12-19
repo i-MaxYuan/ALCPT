@@ -91,8 +91,10 @@ urlpatterns = [
     url(r'^score$', scores.index, name='all_exam_score_list'),
     url(r'^score/', include([
         url(r'^pie$', views.pie_viewer, name='score_pie'),
-        # url(r'^(?P<exam_id>[0-9]+)$', scores.show_given_exam, name='show_given_exam'),
-        # url(r'^testee/(?P<user_id>[0-9]+)$', scores.show_given_testee, name='show_given_testee'),
+        url(r'^exam/(?P<exam_id>[0-9]+)$', scores.show_given_exam, name='show_given_exam'),
+        url(r'^tester/(?P<user_id>[0-9]+)$', scores.show_given_tester, name='show_given_tester'),
+        url(r'^practice/(?P<user_id>[0-9]+)$', scores.show_given_practice, name='show_given_practice'),
+        url(r'^search/$', scores.search, name='search_testee'),
     ])),
 
     url(r'^tester$', scores.tester_index, name='testee_exam_score'),
