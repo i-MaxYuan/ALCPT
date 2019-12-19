@@ -143,9 +143,43 @@ def show_given_exam(request, exam_id):
 
 @permission_check(UserType.Viewer)
 @require_http_methods(["GET"])
-def show_given_testee(request, user_id):
+def show_given_tester(request, user_id):
+    from .models import AnswerSheet
+    answer_sheets_all = AnswerSheet.objects.all()
+    answer_sheets = []
+    for sheet in answer_sheets_all:
+        if sheet.exam.testpaper.is_testpaper == 1:
+            answer_sheets.append(sheet)
+    exams = []
+    for exam in answer_sheets:
+        if exam.user_id == int(user_id):
+            exams.append({'exam_id': exam.id, 'name': exam.exam.name, 'score': exam.score, 'finish_time': exam.finish_time,
+                          'testee': exam.user.user.name,})
+    data = {'exams': exams,
+            'user_id': user_id,
+            'another_exam_type': '練習',
+            'redirect': 'show_given_practice',}
+    return render(request, 'score/show_given_testee.html', data)
 
-    return render(request, 'score/empty.html')
+@permission_check(UserType.Viewer)
+@require_http_methods(["GET"])
+def show_given_practice(request, user_id):
+    from .models import AnswerSheet
+    answer_sheets_all = AnswerSheet.objects.all()
+    answer_sheets = []
+    for sheet in answer_sheets_all:
+        if sheet.exam.testpaper.is_testpaper == 0:
+            answer_sheets.append(sheet)
+    exams = []
+    for exam in answer_sheets:
+        if exam.user_id == int(user_id):
+            exams.append({'exam_id': exam.id, 'name': exam.exam.name, 'score': exam.score, 'finish_time': exam.finish_time,
+                          'testee': exam.user.user.name,})
+    data = {'exams': exams,
+            'user_id': user_id,
+            'another_exam_type': '考試',
+            'redirect': 'show_given_tester',}
+    return render(request, 'score/show_given_testee.html', data)
 
 @permission_check(UserType.Viewer)
 @require_http_methods(["GET"])
