@@ -13,7 +13,6 @@
     <section class="col">
         <div class="card">
             <div class="card-body">
-                <button class="btn btn" style="float: right ;background-color: indianred; color: white">暫停練習</button>
                 <form class="pt-2" action="/tester/practice/{{ practice_id }}/take/{{ index }}" method="post">
                     {% csrf_token %}
                 {% if question.question_type is 1 %}
@@ -31,26 +30,26 @@
 
                     <section class="row mt-3">
                         <div class="col">
+                            {% if has_pre %}
+                                <a href="/tester/practice/{{ practice_id }}/take/{{ pre_index }}">上一題
+                            {% endif %}
 
-                        {% if has_next %}
-{#                            <button class="btn btn-primary"><a href="/tester/practice/{{ practice_id }}/take/{{ next }}" style="text-decoration: none; color: #FFFFFF">下一題</a></button>#}
-                            <input type="submit" id="button" name="button" value="下一頁">
-
-                        {% else%}
-                            <input type="submit" id="button" name="button" value="結束練習">
-{#                            <button class="btn btn-success"><a href="/tester">結束練習</a></button>#}
-                        {% endif %}
+                            {% if has_next %}
+                                <input type="submit" id="button" name="button" value="下一題">
+                            {% else%}
+                                <input type="submit" id="button" name="button" value="結束練習">
+                            {% endif %}
                         </div>
 
                         <div class="col-auto">
                             {% for answer in answers %}
                                 {% if forloop.counter0|divisibleby:10 %}
-                                {% if forloop.first %}
-                                <ul class="pagination mb-0 d-flex justify-content-end">
-                                {% else %}
-                                </ul>
-                                <ul class="pagination mt-3 mb-0 d-flex justify-content-end">
-                                {% endif %}
+                                    {% if forloop.first %}
+                                    <ul class="pagination mb-0 d-flex justify-content-end">
+                                    {% else %}
+                                    </ul>
+                                    <ul class="pagination mt-3 mb-0 d-flex justify-content-end">
+                                    {% endif %}
                                 {% endif %}
                                     <li class="page-item {% if forloop.counter0 == index %}active{% endif %}">
                                         <a class="page-link {% if answer >= 0 and forloop.counter0 != index %}bg-success text-light

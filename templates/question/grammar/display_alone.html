@@ -9,11 +9,12 @@
                     {% elif not highlight and forloop.counter0 == question.answer %}
                         checked
                     {% endif %}
-                    disabled
+                     disabled
                {% elif forloop.counter0 == selected_answer %}
                     checked
                {% endif %} required>
-        <label class="custom-control-label {% if highlight and question.answer == forloop.counter0 %}text-success {% if question.answer == question.user_answer %}font-weight-bold{% endif %}{% elif highlight and question.user_answer == forloop.counter0 %}text-danger{% endif %}" for="option-{{ question.id }}-{{ forloop.counter0 }}">
+        <label class="custom-control-label{% if highlight and question.answer == forloop.counter0 %}text-success{% if question.answer == question.user_answer %}font-weight-bold{% endif %}{% elif highlight and question.user_answer == forloop.counter0 %}text-danger{% endif %}"
+               for="option-{{ question.id }}-{{ forloop.counter0 }}">
             {{ option }}
         </label>
     </div>

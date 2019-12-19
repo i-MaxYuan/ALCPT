@@ -121,7 +121,10 @@ def show_given_exam(request, exam_id:int):
         raise ObjectNotFoundError('The exam not found.')
 
     testpaper = TestPaper.objects.get(id=exam.testpaper_id)
-    # answersheet = AnswerSheet.objects.get(exam_id=exam_id, user_id=request.user.id)
+    answersheet = AnswerSheet.objects.get(exam_id=exam_id, user_id=request.user.id)
+    answers = json.loads(answersheet.answers)
+    answers = list(answers.values())
+    # questions = json.loads(answersheet.questions)
     questions = testpaper.question_set.all()
     for question in questions:
         question.option = json.loads(question.option)

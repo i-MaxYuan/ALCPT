@@ -18,6 +18,12 @@
                 {% elif question.question_type is 5 %}
                     {% include 'question/paragraph_understanding/display_alone.html' with question=question show_answer=True %}
                 {% endif %}
+                <h3>{{ answers }}</h3>
+                <h3>{{ answers.8 }}</h3>
+                <h3>{{ question.id }}</h3>
+                <h3>{{ forloop.counter0 }}</h3>
+                <h3>~~{{ counter0 }}</h3>
+{#                <h3>{{ answers. forloop.counter0 }}</h3>#}
             {% endfor %}
         {% endif %}
     </section>

@@ -149,6 +149,7 @@ def take_practice(request, practice_id, question_index: int):
 
             return redirect('/')
     else:
+        selected_answer = json.loads(answer_sheet.answers)[str(question.id)]
         question.option = json.loads(question.option)
 
         data = {
@@ -156,11 +157,13 @@ def take_practice(request, practice_id, question_index: int):
             'question_num': question_num,
             'question': question,
             'index': question_index,
+            'pre_index': question_index-1,
             'next' : question_index + 1,
+            'has_pre': question_index - 1 >= 0,
             'has_next': question_index + 1 < question_num,
             'practice_id': practice_id,
-            'selected_answered': -1,
-            'answers': answers,
+            'selected_answer': selected_answer,
+            'answers': list(answers.values()),
             'num_questions': range(answer_num),
         }
 
