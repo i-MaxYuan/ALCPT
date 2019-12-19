@@ -107,15 +107,9 @@
                         <td class="align-middle">{{ exam.name }}</td>
                         <td class="align-middle text-center">{{ exam.average_score }}</td>
                         <td class="align-middle text-center">{{ exam.finish_time|date:'Y/n/d H:i' }}</td>
-<<<<<<< HEAD
-{#                        <td class="align-middle text-center">#}
-{#                            <a href="{% url 'show_given_exam' exam.exam_id %}"><i class="fa fa-search fa-fw mb-2"></i>test</a>#}
-{#                        </td>#}
-=======
                         <td class="align-middle text-center">
                             <a href="{% url 'show_given_exam' exam.exam_id %}"><i class="fa fa-search fa-fw mb-2"></i></a>
                         </td>
->>>>>>> 627b1d85000a5315466fd2d7b9402e0f5ef42419
                     </tr>
                 {% endfor %}
             {% else %}
