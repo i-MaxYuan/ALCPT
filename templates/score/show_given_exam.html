@@ -69,11 +69,11 @@
                     <td class="align-middle text-center">{{ exam.score }}</td>
                     <td class="align-middle text-center">{{ exam.finish_time|date:'Y/n/d H:i' }}</td>
                     <td class="align-middle text-center">{{ exam.testee }}</td>
-                    <td class="align-middle text-center">   這是為了看那位受測者的歷次成績與變化
-                        {# <a href="{% url 'show_given_tester' exam.testee_id %}"><i class="fa fa-search fa-fw mb-2"></i></a> #}
+                    <td class="align-middle text-center">
+                        <a href="{% url 'show_given_tester' exam.testee_id %}">該受測者歷次考試成績</a>
                     </td>
-                    <td class="align-middle text-center">   這是為了看那位受測者的練習歷史
-                        {# <a href="{% url 'show_given_testee' exam.testee_id %}"><i class="fa fa-search fa-fw mb-2"></i></a> #}
+                    <td class="align-middle text-center">
+                        <a href="{% url 'show_given_practice' exam.testee_id %}">該受測者歷次練習</a>
                     </td>
                 </tr>
             {% endfor %}
