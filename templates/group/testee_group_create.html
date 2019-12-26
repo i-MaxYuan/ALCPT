@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block path %}
+    <a class="fa fa-angle-double-right fa-lg box"></a>
+    <a href="">考試管理員</a>
+    <a class="fa fa-angle-right fa-lg box"></a>
+    <a href="">受測者群組創建</a>
+{% endblock %}
+
+{% block content %}
+    <div>
+        <form action="" method="post">
+            {% csrf_token %}
+            <label for="group_name">群組名稱</label>
+            <input type="text" name="group_name" required>
+
+            <br>
+
+            <input type="submit" value="建立">
+        </form>
+    </div>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="form">
+        <form action="{% url 'login' %}" method="post">
+            {% csrf_token %}
+            <label for="reg_id">Reg_id</label>
+            <input type="text" id="reg_id" name="reg_id" placeholder="Reg_id">
+
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Enter your Password...">
+
+            <label for="verification">Verification code</label>
+{#            <input type="text" id="verification" name="verification" placeholder="Verification code">#}
+            {{ captcha.captcha }}
+
+
+            <input type="submit" value="Login">
+            <input type="reset" value="Cancel">
+        </form>
+    </div>
+{% endblock %}

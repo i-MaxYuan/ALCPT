@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+
+{% load web_filters %}
+
+{% block path %}
+    <a class="fa fa-angle-double-right fa-lg box"></a>
+    <a href="">系統管理員</a>
+    <a class="fa fa-angle-right fa-lg box"></a>
+    <a href="">使用者列表</a>
+{% endblock %}
+
+{% block content %}
+    <div>
+        <form action="" method="get">
+            <div>
+                <select name="department">
+                    <option value="0" selected>所有學系</option>
+                    {% for department in departments %}
+                        <option value="{{ department.id }}" {% if department.id == keywords.department.id %} selected {% endif %}>{{ department.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div>
+                <input type="number" name="grade" value="{{ keywords.grade }}" placeholder="年班">
+            </div>
+
+            <div>
+                <select name="squadron">
+                    <option value="0" selected>所有中隊</option>
+                    {% for squadron in squadrons %}
+                        <option value="{{ squadron.id }}" {% if squadron.id == keywords.squadron.id %} selected {% endif %}>{{ squadron.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div>
+                <input type="text" name="name" {% if keywords.name %}value="{{ keywords.name }}" {% else %}value="" {% endif %} placeholder="學號/姓名">
+            </div>
+
+            <div>
+                <button type="submit">搜尋</button>
+            </div>
+        </form>
+    </div>
+
+    <div><a href="{% url 'user_create' %}">新增使用者</a></div>
+
+    <div>
+        {% if users %}
+            <h1>使用者列表</h1>
+            <table border="1">
+                <tr>
+                    <th>帳號</th>
+                    <th>姓名</th>
+                    <th>年班</th>
+                    <th>學系</th>
+                    <th>中隊</th>
+                    <th>權限</th>
+                    <th>最後登入時間</th>
+                </tr>
+                {% for user in userList %}
+                    <tr>
+                        <td>{{ user.reg_id }}</td>
+                        <td>{{ user.name }}</td>
+                        <td>{% if user.student %}{{ user.student.grade }}{% else %}None{% endif %}</td>
+                        <td>{% if user.student %}{{ user.student.department }}{% else %}None{% endif %}</td>
+                        <td>{% if user.student %}{{ user.student.squadron }}{% else %}None{% endif %}</td>
+                        <td>
+                            {% if user|has_perms:privileges.SystemManager %}
+                                <span>{{ privileges.SystemManager.value.1 }}</span>
+                            {% endif %}
+                            {% if user|has_perms:privileges.TestManager %}
+                                <span>{{ privileges.TestManager.value.1 }}</span>
+                            {% endif %}
+                            {% if user|has_perms:privileges.TBManager %}
+                                <span>{{ privileges.TBManager.value.1 }}</span>
+                            {% endif %}
+                            {% if user|has_perms:privileges.TBOperator %}
+                                <span>{{ privileges.TBOperator.value.1 }}</span>
+                            {% endif %}
+                            {% if user|has_perms:privileges.Viewer %}
+                                <span>{{ privileges.Viewer.value.1 }}</span>
+                            {% endif %}
+                            {% if user|has_perms:privileges.Testee %}
+                                <span>{{ privileges.Testee.value.1 }}</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ user.last_login|date:'Y年m月d日, H時i分' }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <h2>目前暫無資料</h2>
+        {% endif %}
+    </div>
+
+    <div class="pagination">
+        <a href="?page=1{% if query_content %}&{{ query_content }}{% endif %}">&laquo; first</a>
+        {% if userList.has_previous %}
+            <a href="?page={{ userList.previous_page_number }}{% if query_content %}&{{ query_content }}{% endif %}">Prev</a>
+        {% else %}
+            <a href="">Prev</a>
+        {% endif %}
+
+        {% for page in paginator.page_range %}
+            {% if page == userList.number %}
+                <a class="active" href="?page={{ page }}{% if query_content %}&{{ query_content }}{% endif %}"></a>
+            {% else %}
+                <a href="?page={{ page }}{% if query_content %}&{{ query_content }}{% endif %}">{{ page }}</a>
+            {% endif %}
+        {% endfor %}
+
+        {% if userList.has_next %}
+            <a href="?page={{ userList.next_page_number }}{% if query_content %}&{{ query_content }}{% endif %}">Next</a>
+        {% else %}
+            <a href="">Next</a>
+        {% endif %}
+        <a href="?page={{ userList.paginator.num_pages }}{% if query_content %}&{{ query_content }}{% endif %}">last &raquo;</a>
+    </div>
+{% endblock %}

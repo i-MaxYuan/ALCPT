@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block path %}
+    <a class="fa fa-angle-double-right fa-lg box"></a>
+    <a href="">考試管理員</a>
+    <a class="fa fa-angle-right fa-lg box"></a>
+    <a href="">受測者群組列表</a>
+{% endblock %}
+
+{% block content %}
+    <div class="search_bar">
+        <form action="" method="get">
+            <div>
+                <input type="text" name="group_name" {% if group_name %}value="{{ group_name }}" {% else %}value="" {% endif %} placeholder="受測者群組名稱">
+            </div>
+
+            <div>
+                <button type="submit">搜尋</button>
+            </div>
+        </form>
+    </div>
+
+    <div>
+        <a href="{% url 'testee_group_create' %}">創建群組</a>
+    </div>
+
+    <div>
+        {% if groups %}
+            <h1>受測者群組列表</h1>
+            <table border="1">
+                <tr>
+                    <th>受測者群組名稱</th>
+                    <th>群組人數</th>
+                    <th>建立時間</th>
+                    <th>更新時間</th>
+                    <th>建立者</th>
+                </tr>
+                {% for group in groupList %}
+                    <tr>
+                        <td>{{ group.name }}</td>
+                        <td>{{ group.member.count }}</td>
+                        <td>{{ group.created_time|date:'Y年m月d日, H時i分' }}</td>
+                        <td>{{ group.update_time|date:'Y年m月d日, H時i分' }}</td>
+                        <td>{{ group.created_by.name }}</td>
+                        <td>
+                            <a href="{% url 'testee_group_edit' group.id %}"><i class="fa fa-pencil fa-fw mb-2"></i></a>
+                            <a href=""><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <h2>目前暫無資料</h2>
+        {% endif %}
+    </div>
+
+    <div class="pagination">
+        <a href="?page=1">&laquo; first</a>
+        {% if groupList.has_previous %}
+            <a href="?page={{ groupList.previous_page_number }}">Prev</a>
+        {% else %}
+            <a href="">Prev</a>
+        {% endif %}
+
+        {% for page in paginator.page_range %}
+            {% if page == groupList.number %}
+                <a class="active" href="?page={{ page }}">{{ page }}</a>
+            {% else %}
+                <a href="?page={{ page }}">{{ page }}</a>
+            {% endif %}
+        {% endfor %}
+
+        {% if examList.has_next %}
+            <a href="?page={{ groupList.next_page_number }}">Next</a>
+        {% else %}
+            <a href="">Next</a>
+        {% endif %}
+        <a href="?page={{ groupList.paginator.num_pages }}">last &raquo;</a>
+    </div>
+{% endblock %}
+

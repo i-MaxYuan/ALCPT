@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block path %}
+
+{% endblock %}
+
+{% block content %}
+    <div>
+        <form method="post">
+        {% csrf_token %}
+            <table border="1">
+                <tr>
+                    <th>題目</th>
+                    <th colspan="5">選項</th>
+                </tr>
+                {% for answer in answerList %}
+                <tr>
+                    <td>{{ answer.question }}</td>
+                    {% for option in answer.question.choice_set.all %}
+                        <td>
+                            <input type="radio" name="answer_{{ answer.id }}" value="{{ forloop.counter }}" {% if forloop.counter == answer.selected %}checked{% endif %} required>{{ option }}
+                        </td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </table>
+
+            <input type="submit" value="送出">
+        </form>
+    </div>
+
+
+{% endblock %}

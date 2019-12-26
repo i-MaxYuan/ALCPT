@@ -1,92 +1,72 @@
-import json
 from django.utils import timezone
+
 from datetime import datetime
 
-from alcpt.definitions import ExamType, QuestionType, QuestionTypeCounts
-from alcpt.exceptions import IllegalArgumentError
-from alcpt.models import User, Exam, Student, AnswerSheet, Question
-from .testmanager import random_select
 from ..managerfuncs import testmanager
+from .testmanager import random_select
+from alcpt.models import User, Exam, Question, TestPaper, AnswerSheet
+from alcpt.definitions import QuestionType, ExamType, QuestionTypeCounts
+from alcpt.exceptions import IllegalArgumentError
 
-def create_practice(*, user: User, practice_type: ExamType, question_types: list, num_questions: int, integration: bool=False):
 
+# practicemanager create a practice
+def create_practice(*, user: User, practice_type: ExamType, question_types: list, question_num: int, integration: bool = False):
     now = datetime.now()
-    name = "{}-practice-{}-{}".format(practice_type.value[1], user.reg_id, now)
+
+    practice_name = "{}-practice-{}-{}".format(practice_type.value[1], user.reg_id, now)
+
     question_type_counts = QuestionTypeCounts.Exam.value[0] if integration else []
 
     if not integration:
+        # how many questions will be selected in any question_type
         for question_type in QuestionType.__members__.values():
-            if question_type in question_types:
-                question_type_counts.append(int(num_questions / len(question_types)))
+            if str(question_type.value[0]) in question_types:
+                question_type_counts.append(int(question_num / len(question_types)))
             else:
                 question_type_counts.append(0)
 
-        if sum(question_type_counts) != num_questions:
-            i = list(QuestionType.__members__.values()).index(question_types[len(question_types) - 1])
-            question_type_counts[i] += num_questions - sum(question_type_counts)
+        if sum(question_type_counts) != question_num:
+            q_ts = []
+            for q_t in QuestionType:
+                q_ts.append(q_t.value[0])
+            i = q_ts.index(int(question_types[len(question_types) - 1]))
+            question_type_counts[i] += question_num - sum(question_type_counts)
 
-    num_questions_selected = 0
-    selected_questions = []
-    for question_type in question_types:
-        selected_questions += random_select(question_type_counts, question_type)
-        num_questions_selected += len(selected_questions)
-    if num_questions_selected < num_questions:
-        raise IllegalArgumentError(message="There is too few questions in the database.")
+    # use testmanager.random_select to shuffle question
+    selected_questions = testmanager.random_select(question_type_counts)
 
-    testpaper = testmanager.create_testpaper(name=name,
-                                             created_by=user,
-                                             is_testpaper=0)
+    practice_testpaper = testmanager.create_testpaper(name=practice_name, created_by=user, is_testpaper=0)
 
-    testpaper_id = testpaper.id
+    # add the questions into practice_testpaper
     for question in selected_questions:
-        testpaper.question_set.add(question)
+        practice_testpaper.question_set.add(question)
 
-    practice = Exam.objects.create(name=name,
-                                   exam_type=practice_type.value[0],
-                                   start_time=timezone.now(),
-                                   testpaper_id=testpaper_id,
-                                   duration=0,
-                                   is_public=1,
-                                   created_by_id=user.id)
+    practice_exam = Exam.objects.create(name=practice_name, exam_type=practice_type.value[0], testpaper=practice_testpaper,
+                                        duration=0, created_by=user)
 
-    return practice, selected_questions
+    return practice_exam
 
 
-# def evaluate_score(*, answer_sheet: AnswerSheet):
-def evaluate_score(answer_sheet):
-    questions = json.loads(answer_sheet.questions)
+# practicemanager calculate score of practice, not for exam
+def calculate_score(exam_id: int, answer_sheet: AnswerSheet):
+    answers = answer_sheet.answer_set.all()
 
-    answers = answer_sheet.answers
-    if type(answers) is str:
-        answers = json.loads(answer_sheet.answers)
+    score = 0
+    for answer in answers:
+        tmp = []
+        for choice in answer.question.choice_set.all():
+            tmp.append(choice)
 
-    num_correct = 0
-    for index in questions:
-        question_id = questions[index][0]
-        user_ans = answers[str(question_id)]
-        question = Question.objects.get(id=question_id)
-        correct_ans = question.answer
-        question.issued_freq += 1
-        if user_ans == correct_ans:
-            num_correct += 1
-            question.correct_freq += 1
+        if tmp[answer.selected-1].is_answer:
+            score += 1
+        else:
+            pass
 
-        # 難易度資料統計、分析
-        # if question.use_time >= 30:
-        #     if question.correct_rate > 66:
-        #         question.difficulty = 3
-        #
-        #     elif question.correct_rate < 33:
-        #         question.difficulty = 1
-        #
-        #     else:
-        #         question.difficulty = 2
-
-        question.save()
-
-    answer_sheet.score = num_correct
+    # calculate average score of practice
+    answer_sheet.score = int(score / len(answers)*100)
     answer_sheet.save()
+    exam = Exam.objects.get(id=exam_id)
+    exam.average_score = answer_sheet.score
+    exam.save()
 
-    return num_correct
-
-
+    return answer_sheet.score

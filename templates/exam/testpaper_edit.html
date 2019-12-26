@@ -1,62 +1,37 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
 {% load web_filters %}
 
-{% block stylesheets %}
-<link rel="stylesheet" href="/static/css/datetimepicker.min.css?{{ request.static_file_version }}">
-{% endblock %}
+{% block path %}
 
-{% block scripts %}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js" defer></script>
-<script src="/static/scripts/datetimepicker.min.js?{{ request.static_file_version }}" defer></script>
-<script src="/static/scripts/exam.js?{{ request.static_file_version }}" defer></script>
-<script>
-    $(function() {
-        $('#start-time').datetimepicker({
-            format: 'YYYY/MM/DD HH:mm',
-        });
-    });
-</script>
 {% endblock %}
 
 {% block content %}
-<section class="row">
-    <section class="col mb-3">
-        <h1 style="display: inline;">編輯考卷</h1>
-    </section>
+    <div>
+        <form method="post">
+            {% csrf_token %}
+            <label for="testpaper_name">考卷名稱</label>
+            <input type="text" id="testpaper_name" name="testpaper_name" placeholder="考卷名稱..." required>
 
-    <form class="col-12 row mt-3" enctype="multipart/form-data" action="/exam/testpaper/{{ testpaper.name }}/edit" method="post" autocomplete="off">
-        {% csrf_token %}
+            <br>
 
-        <input type="hidden" name="type" value="{{ question_type }}" />
-
-        <h3 class="col-12"><i class="fa fa-sticky-note fa-fw mb-2"></i> 基本資料</h3>
-
-        <div class="col-12 py-2 form-group">
-            <label for="name">考卷名稱</label>
-            <input type="text" class="form-control" id="name" name="name" value="{{ testpaper.name }}" required>
-        </div>
-
-        <h3 class="col-12"><i class="fa fa-folder-open fa-fw mb-2"></i> 選擇題目</h3>
-
-        <div class="col-12 card-columns">
-            {% for x in num_types %}
-            <div class="card {% if reach_limit|lookup:x %} border-success {% endif %}">
-                <div class="card-body">
-                    <h5 class="card-title">{{ x|readable_question_type }}</h5>
-                    <p class="card-text">共 {{ question_types|lookup:x }} 題，已選擇 {{ selected_num|lookup:x }} 題</p>
-                    <a href="/exam/testpaper/{{ testpaper.name }}/pick-question/{{ x }}" class="btn btn-success mt-1  ">重新選擇</a>
-                    <a href="/exam/testpaper/{{ testpaper.name }}/auto-pick-question/{{ x }}" class="btn btn-secondary mt-1 {% if selected_num|lookup:x >= question_types|lookup:x %} disabled {% endif %}">自動選題</a>
-                </div>
+            <label for="pick_up_questions">選擇題目</label>
+            <div>
+                {% for i in types_num %}
+                    <div>
+                        <h2>{{ i|readable_question_type }}</h2>
+                        <p>共 {{ question_types|lookup:i }} 題，已選擇 {{ selected_num|lookup:i }} 題</p>
+                        <a href="{% url 'manual_pick' testpaper_id=testpaper.id question_type=i %}">手動選擇</a>
+                        {% if question_types|lookup:i == selected_num|lookup:i %}
+                            <a disabled="{% url 'manual_pick' testpaper_id=testpaper.id question_type=i %}">自動選擇</a>
+                        {% else %}
+                            <a href="{% url 'auto_pick' testpaper_id=testpaper.id question_type=i %}">自動選擇</a>
+                        {% endif %}
+                    </div>
+                {% endfor %}
             </div>
-            {% endfor %}
-        </div>
 
-        <div class="w-100"></div>
-
-        <section class="col text-center pt-3">
-            <button class="btn btn-primary" type="submit">完成</button>
-        </section>
-    </form>
-</section>
+            <input type="submit" value="確認">
+        </form>
+    </div>
 {% endblock %}

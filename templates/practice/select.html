@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block path %}
+    <a class="fa fa-angle-double-right fa-lg box"></a>
+    <a href="{% url 'testee_score_list' %}">受測者</a>
+    <a class="fa fa-angle-right fa-lg box"></a>
+    <a href="">{% if kind == 'listening' %}聽力練習{% else %}閱讀練習{% endif %}</a>
+{% endblock %}
+
+{% block content %}
+    <div>
+        <form action="{% url 'testee_practice_create' kind %}" method="post">
+        {% csrf_token %}
+            {% if kind == 'listening' %}
+                <h1>聽力題型</h1>
+            {% else %}
+                <h1>閱讀題型</h1>
+            {% endif %}
+
+            {% if kind == 'listening' %}
+                <input type="checkbox" id="1" name="question_type" value="1">問答
+                <input type="checkbox" id="2" name="question_type" value="2">簡短對話
+            {% elif kind == 'reading' %}
+                <input type="checkbox" id="3" name="question_type" value="3">文法
+                <input type="checkbox" id="4" name="question_type" value="4">名詞片語
+                <input type="checkbox" id="5" name="question_type" value="5">段落理解
+            {% endif %}
+
+
+            <h1>題數</h1>
+            <select name="question_num" required>
+                <option value="" disabled selected hidden>請選擇題數</option>
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="30">30</option>
+            </select>
+
+            <input type="submit" value="開始練習">
+        </form>
+    </div>
+
+{% endblock %}

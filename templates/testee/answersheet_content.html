@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block path %}
+    <a class="fa fa-angle-double-right fa-lg box"></a>
+    <a href="{% url 'testee_score_list' %}">受測者</a>
+    <a class="fa fa-angle-right fa-lg box"></a>
+    <a href="">檢閱試卷內容</a>
+{% endblock %}
+
+{% block content %}
+    <div>
+        <table border="1">
+            <tr>
+                <th>題目</th>
+                <th>選項</th>
+            </tr>
+            {% for answer in answersheet.answer_set.all %}
+                <tr>
+                    <td>{{ answer.question }}</td>
+                    <td>
+                    {% for option in answer.question.choice_set.all %}
+                        {% if answer.selected == forloop.counter and option.is_answer %}
+                            <span style="color: green"><li>{{ option }}</li></span>
+                        {% elif answer.selected == forloop.counter %}
+                            <span style="color: red"><li>{{ option }}</li></span>
+                        {% elif option.is_answer %}
+                            <span style="color: green"><li>{{ option }}</li></span>
+                        {% else %}
+                            <li>{{ option }}</li>
+                        {% endif %}
+                    {% endfor %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}

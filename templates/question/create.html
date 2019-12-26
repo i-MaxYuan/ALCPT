@@ -1,0 +1,64 @@
+{% extends 'base.html'%}
+
+{% block path %}
+    <a class="fa fa-angle-double-right fa-lg box"></a>
+    <a href="">題目操作員</a>
+    <a class="fa fa-angle-right fa-lg box"></a>
+    <a href="">新增{% if kind == 'listening' %}聽力{% else %}閱讀{% endif %}試題</a>
+{% endblock %}
+
+{% block content %}
+    <div>
+        <form enctype="multipart/form-data" action="" method="post">
+            {% csrf_token %}
+
+        {% if kind == 'listening' %}
+            <label for="question_file">試題聽力音檔</label>
+            <input type="file" name="question_file" accept="audio/mpeg" required>
+
+            <br>
+
+            <label for="question_type">試題類型</label>
+            <select name="question_type">
+                <option value="1" selected>問答</option>
+                <option value="2">簡短對話</option>
+            </select>
+
+        {% else %}
+            <label for="question_content">試題題目</label>
+            <textarea cols="100" rows="10" name="question_content" placeholder="請輸入試題題目" required></textarea>
+
+            <br>
+
+            <label for="question_type">試題類型</label>
+            <select name="question_type">
+                <option value="3" selected>文法</option>
+                <option value="4">名詞片語</option>
+                <option value="5">段落理解</option>
+            </select>
+
+        {% endif %}
+
+            <label for="question_difficulty">試題難度</label>
+            <select name="question_difficulty">
+                <option value="1" selected>簡單</option>
+                <option value="2">中等</option>
+                <option value="3">困難</option>
+            </select>
+
+            <br>
+
+            <label for="question_choice">試題選項</label>
+            <input type="text" name="choice1" placeholder="Enter Choice content..." required>
+            <input type="text" name="choice2" placeholder="Enter Choice content..." required>
+            <input type="text" name="choice3" placeholder="Enter Choice content..." required>
+            <input type="text" name="choice4" placeholder="Enter Choice content..." required>
+
+            <br>
+
+            <input type="submit" value="送出">
+        </form>
+    </div>
+
+
+{% endblock %}

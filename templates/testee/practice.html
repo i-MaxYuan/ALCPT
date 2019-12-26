@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block path %}
+    <a class="fa fa-angle-double-right fa-lg box"></a>
+    <a href="">受測者</a>
+    <a class="fa fa-angle-right fa-lg box"></a>
+    <a href="">練習</a>
+{% endblock %}
+
+{% block content %}
+    <div>
+        <h1>{{ practice_exam }}</h1>
+        <form action="" method="post">
+            {% csrf_token %}
+            <table>
+                <tr>
+                    <th>題目</th>
+                    <th>選項</th>
+                </tr>
+                {% for question in questionList %}
+                    <tr>
+                        <td>{{ question.q_content }}</td>
+                        <td>
+                            {% for choice in question.choice_set.all %}
+                                <input type="radio" name="selected_answer" value="{{ choice.id }}">{{ choice.c_content }}
+                            {% endfor %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </form>
+    </div>
+
+    <div class="pagination">
+        <a href="?page=1">&laquo; first</a>
+        {% if questionList.has_previous %}
+            <a href="?page={{ questionList.previous_page_number }}">Prev</a>
+        {% else %}
+            <a href="">Prev</a>
+        {% endif %}
+
+        {% for page in paginator.page_range %}
+            {% if page == questionList.number %}
+                <a class="active" href="?page={{ page }}">{{ page }}</a>
+            {% else %}
+                <a href="?page={{ page }}">{{ page }}</a>
+            {% endif %}
+        {% endfor %}
+
+        {% if questionList.has_next %}
+            <a href="?page={{ questionList.next_page_number }}">Next</a>
+        {% else %}
+            <a href="">Next</a>
+        {% endif %}
+        <a href="?page={{ questionList.paginator.num_pages }}">last &raquo;</a>
+    </div>
+{% endblock %}

@@ -1,240 +1,178 @@
-from datetime import datetime
+from string import punctuation
 
 from django.shortcuts import render, redirect
+
+from django.views.decorators.http import require_http_methods
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
-from django.views.decorators.http import require_http_methods
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
-from .models import Exam, TestPaper, Proclamation, Group
-from .exceptions import *
-from .decorators import permission_check
-from .definitions import UserType, ExamType
-from .managerfuncs import testmanager
+from alcpt.managerfuncs import testmanager
+from alcpt.decorators import permission_check
+from alcpt.definitions import UserType, QuestionType, QuestionTypeCounts
+from alcpt.models import Exam, TestPaper, Group
+from alcpt.exceptions import *
 
 
 @permission_check(UserType.TestManager)
 @require_http_methods(["GET"])
-def index(request):
+def exam_list(request):
+    exam_name = request.GET.get('exam_name')
+
+    if exam_name:
+        exams = Exam.objects.filter(is_public=True).filter(name__contains=exam_name)
+    else:
+        exams = Exam.objects.filter(is_public=True)
+
+    page = request.GET.get('page', 0)
+    paginator = Paginator(exams, 10)  # the second parameter is used to display how many items. Now is display 10
+
     try:
-        page = int(request.GET.get('page', 0))
+        examList = paginator.page(page)
+    except PageNotAnInteger:
+        examList = paginator.page(1)
+    except EmptyPage:
+        examList = paginator.page(paginator.num_pages)
 
-    except ValueError:
-        page = 0
-
-    keywords = {
-        'name': request.GET.get('name', ''),
-        'exam_type': ExamType.Exam,
-        'is_public': True
-    }
-
-    num_pages, exams = testmanager.query_exams(**keywords, page=page)
-
-    data = {
-        'exams': exams,
-        'page': page,
-        'page_range': range(num_pages),
-    }
-
-    return render(request, 'exam/exam_list.html', data)
+    return render(request, 'exam/exam_list.html', locals())
 
 
 @permission_check(UserType.TestManager)
-@require_http_methods(["GET", "POST"])
-def create_exam(request):
+@require_http_methods(["GET"])
+def testpaper_list(request):
+    testpaper_name = request.GET.get('testpaper_name')
+
+    if testpaper_name:
+        testpapers = TestPaper.objects.filter(is_testpaper=True).filter(name__contains=testpaper_name)
+    else:
+        testpapers = TestPaper.objects.filter(is_testpaper=True)
+
+    page = request.GET.get('page', 0)
+    paginator = Paginator(testpapers, 10)  # the second parameter is used to display how many items. Now is display 10
+
+    try:
+        testpaperList = paginator.page(page)
+    except PageNotAnInteger:
+        testpaperList = paginator.page(1)
+    except EmptyPage:
+        testpaperList = paginator.page(paginator.num_pages)
+
+    return render(request, 'exam/testpaper_list.html', locals())
+
+
+@permission_check(UserType.TestManager)
+def testpaper_content(request, testpaper_id):
+    try:
+        testpaper = TestPaper.objects.get(id=testpaper_id)
+    except ObjectDoesNotExist:
+        messages.error(request, 'Testpaper does not exist, testpaper id: {}'.format(testpaper_id))
+        return redirect('testpaper_list')
+
+    questions = testpaper.question_set.all().order_by('q_type')
+
+    return render(request, 'exam/testpaper_content.html', locals())
+
+
+@permission_check(UserType.TestManager)
+def testpaper_create(request):
     if request.method == 'POST':
-        name = request.POST.get('name')
+        testpaper_name = request.POST.get('testpaper_name',)
 
         try:
-            start_time = datetime.strptime(request.POST.get('start_time'), '%Y/%m/%d %H:%M')
-
-        except TypeError:
-            raise ArgumentError('Missing create time.')
-
-        except ValueError:
-            raise IllegalArgumentError('Illegal time format.')
-
-        try:
-            duration = request.POST.get('duration')
-
-        except TypeError:
-            raise ArgumentError('Missing duration')
-
-        except ValueError:
-            raise IllegalArgumentError('The "duration" must be an integer.')
-
-        try:
-            testpaper = TestPaper.objects.get(id=request.POST.get('testpaper'))
-
-        except TypeError:
-            raise ArgumentError('Missing testpaper')
-
-        try:
-            group = Group.objects.get(id=request.POST.get('group'))
-
-        except TypeError:
-            raise ArgumentError('Missing testpaper')
-
-        try:
-            if Exam.objects.get(name=name):
+            if TestPaper.objects.filter(name__icontains=testpaper_name):
                 raise MultipleObjectsReturned('Question has existed.')
-
         except ObjectDoesNotExist:
             pass
 
-        exam = Exam.objects.create(name=name,
-                                   exam_type=ExamType.Exam.value[0],
-                                   testpaper=testpaper,
-                                   group=group,
-                                   start_time=start_time,
-                                   duration=duration,
-                                   created_by=request.user,
-                                   is_public=True if testpaper.valid else False)
+        testpaper = testmanager.create_testpaper(name=testpaper_name, created_by=request.user, is_testpaper=1)
 
-        return redirect('/exam/{}/edit'.format(exam.id))
+        return render(request, 'exam/testpaper_edit.html', locals())
 
     else:
-        data = {
-            'testpapers': TestPaper.objects.filter(valid=True),
-            'groups': Group.objects.all(),
-        }
-        return render(request, 'exam/exam_create.html', data)
+        return render(request, 'exam/testpaper_create.html', locals())
 
 
+# 編輯考卷（未完成）
 @permission_check(UserType.TestManager)
-@require_http_methods(["GET", "POST"])
-def edit_exam(request, exam_id: int):
+def testpaper_edit(request, testpaper_id):
     try:
-        exam = Exam.objects.get(id=exam_id)
-
+        testpaper = TestPaper.objects.get(id=testpaper_id)
     except ObjectDoesNotExist:
-        raise ObjectNotFoundError('Cannot find exam {}'.format(exam_id))
+        messages.error(request, 'Testpaper does not exist, testpaper id: {}'.format(testpaper_id))
+        return redirect('testpaper_list')
 
-    if request.method == 'POST':
-        name = request.POST.get('name')
+    if testpaper.valid == 1:
+        messages.warning(request, "This testpaper is valid, it can't not edit again.")
+        return redirect('testpaper_list')
 
-        try:
-            start_time = datetime.strptime(request.POST.get('start_time'), '%Y/%m/%d %H:%M')
+    if request.method == "POST":
+        testpaper_name = request.POST.get('testpaper_name',)
 
-        except TypeError:
-            raise ArgumentError('Missing create time.')
+        testpaper = testmanager.edit_testpaper(testpaper, testpaper_name)
 
-        except ValueError:
-            raise IllegalArgumentError('Illegal time format.')
+        testpaper.valid = testpaper.question_set.count() == sum(QuestionTypeCounts.Exam.value[0])
 
-        try:
-            duration = request.POST.get('duration')
+        if testpaper.valid:
+            for question in testpaper.question_set.all():
+                question.used_freq += 1
+                question.save()
 
-        except TypeError:
-            raise ArgumentError('Missing duration.')
+        testpaper.save()
 
-        except ValueError:
-            raise IllegalArgumentError('The "duration" must be an integer.')
+        messages.success(request, 'Successfully update testpaper: testpaper id: {}'.format(testpaper.id))
 
-        try:
-            testpaper = TestPaper.objects.get(id=request.POST.get('testpaper'))
-
-        except TypeError:
-            raise ArgumentError('Missing testpaper.')
-
-        try:
-            group = Group.objects.get(id=request.POST.get('group'))
-
-        except TypeError:
-            raise ArgumentError('Missing group.')
-
-        exam.name = name
-        exam.start_time = start_time
-        exam.duration = duration
-        exam.testpaper = testpaper
-        exam.group = group
-        exam.is_public = True if testpaper.valid else False
-        exam.save()
-
-        messages.success(request, "Successfully update exam :{}.".format(exam.name))
-
-        return redirect('/exam')
+        return redirect('testpaper_list')
 
     else:
-        data = {
-            'exam': exam,
-            'testpapers': TestPaper.objects.filter(valid=True),
-            'groups': Group.objects.all(),
-        }
+        question_types = [0] + QuestionTypeCounts.Exam.value[0]
+        selected_num = [0 for _ in question_types]
+        reach_limit = [False for _ in question_types]
 
-        return render(request, 'exam/exam_edit.html', data)
+        for question_type in QuestionType.__members__.values():
+            type_value = question_type.value[0]
+            selected_num[type_value] = testpaper.question_set.filter(q_type=type_value).count()
+            reach_limit[type_value] = selected_num[type_value] <= question_types[type_value]
+
+        if not all(reach_limit):
+            messages.warning(request, "This testpaper won't start until all questions have been selected.")
+
+        types_num = range(1, len(QuestionType.__members__)+1)
+
+        return render(request, 'exam/testpaper_edit.html', locals())
 
 
+# 人工選題（未完成）
 @permission_check(UserType.TestManager)
-@require_http_methods(["GET"])
-def delete_exam(request, exam_id):
+def manual_pick(request, testpaper_id, question_type):
+    messages.success(request, str(question_type))
+    return render(request, 'exam/testpaper_manual_pick.html', locals())
+
+
+# 自動選題（已完成）
+@permission_check(UserType.TestManager)
+def auto_pick(request, testpaper_id, question_type):
     try:
-        exam = Exam.objects.get(id=exam_id)
-
+        testpaper = TestPaper.objects.get(id=testpaper_id)
     except ObjectDoesNotExist:
-        raise ResourceNotFoundError('Cannot find question id = {}.'.format(exam_id))
+        messages.error(request, 'Testpaper does not exist, testpaper id: {}'.format(testpaper_id))
 
-    exam.is_public = False
-    exam.last_updated_by = request.user
-    exam.save()
+    if type(question_type) is int:
+        raise IllegalArgumentError('question_type does match category.')
 
-    messages.success(request, 'Delete exam name={}.'.format(exam.name))
+    for q_type in QuestionType.__members__.values():
+        if q_type.value[0] == int(question_type):
+            question_type = q_type
+            break
 
-    return redirect(request.META.get('HTTP_REFERER', '/exam'))
+    if testmanager.limit_check(testpaper=testpaper, q_type=question_type):
+        messages.warning(request, 'This type had reached limit amount.')
+        return redirect('/exam/testpaper/{}/edit'.format(testpaper_id))
 
+    selected_num = testmanager.auto_pick(testpaper=testpaper, type_counts=QuestionTypeCounts.Exam.value[0],
+                                         question_type=int(question_type.value[0]))
 
-@permission_check(UserType.TestManager)
-@require_http_methods(["GET", "POST"])
-def create_proclamation(request):
-    if request.method == 'POST':
-        title = request.POST.get('title')
-        text = request.POST.get('text')
-        Proclamation.objects.create(title=title,
-                                    text=text,
-                                    is_public=True,
-                                    created_by=request.user)
+    messages.success(request, selected_num)
 
-        return redirect('/')
-
-    else:
-        return render(request, 'exam/proclamation_create.html')
+    return redirect('/exam/testpaper/{}/edit'.format(testpaper_id))
 
 
-@permission_check(UserType.TestManager)
-@require_http_methods(["GET", "POST"])
-def edit_proclamation(request, proclamation_id: int):
-    try:
-        proclamation = Proclamation.objects.get(id=proclamation_id)
-
-    except ObjectDoesNotExist:
-        raise ResourceNotFoundError('Cannot find proclamation id = {}.'.format(proclamation_id))
-
-    if request.method == 'POST':
-        title = request.POST.get('title')
-        text = request.POST.get('text')
-
-        proclamation.title=title
-        proclamation.text=text
-        proclamation.is_public=True
-        proclamation.save()
-
-        messages.success(request, "Successfully update proclamation :{}.".format(proclamation.title))
-
-        return redirect('/exam/proclamation')
-    else:
-        return render(request, 'exam/proclamation_edit.html', {'proclamation':proclamation})
-
-
-@permission_check(UserType.TestManager)
-@require_http_methods(["GET"])
-def delete_proclamation(request, proclamation_id):
-    try:
-        proclamation = Proclamation.objects.get(id=proclamation_id)
-
-    except ObjectDoesNotExist:
-        raise ResourceNotFoundError('Cannot find proclamation id = {}.'.format(proclamation_id))
-
-    proclamation.delete()
-
-    messages.success(request, 'Delete proclamation title={}.'.format(proclamation.title))
-
-    return redirect(request.META.get('HTTP_REFERER', '/exam'))

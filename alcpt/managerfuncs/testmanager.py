@@ -1,105 +1,12 @@
-import json
-from random import sample
-
 from django.db.models import Q
 from django.utils import timezone
-from math import ceil
+import random
 
-from alcpt.definitions import ExamType, QuestionType
-from alcpt.models import Exam, Question, Student, TestPaper, Group, User, Department, Squadron
-
-
-def query_exams(*, exam_type: ExamType, is_public: bool, student: User=None, name: str=None, page: int=None, filter_func=None):
-    queries = Q()
-    queries &= Q(exam_type=exam_type.value[0])
-
-    if name:
-        queries &= Q(name=name)
-
-    if student:
-        queries &= Q(group__member__user=student)
-
-    if is_public:
-        queries &= Q(is_public=is_public)
-
-    exams = Exam.objects.filter(queries).order_by('-created_time')
-
-    for exam in exams:
-        exam.start_time = timezone.localtime(exam.start_time)
-
-    if filter_func:
-        exams = list(filter(filter_func, exams))
-
-    num_pages = ceil(len(exams) / 10)
-
-    if page and page >= 0:
-        exams = exams[page * 10: page * 10 + 10]
-
-    return num_pages, exams
+from alcpt.models import User, TestPaper, Question, Exam
+from alcpt.definitions import QuestionType, ExamType, QuestionTypeCounts
 
 
-def query_testpapers(*, name: str=None, page: int=None):
-    queries = Q()
-
-    if name:
-        queries &= Q(name=name)
-
-    testpapers = TestPaper.objects.filter(queries).order_by('-created_time')
-    testpapers = testpapers.filter(is_testpaper=1)
-
-    num_pages = ceil(len(testpapers) / 10)
-
-    if page and page >= 0:
-        testpapers = testpapers[page * 10: page * 10 + 10]
-
-    return num_pages, testpapers
-
-
-def query_groups(*, name: str=None, page: int=None):
-    queries = Q()
-
-    if name:
-        queries &= Q(name=name)
-
-    groups = Group.objects.filter(queries).order_by('-name')
-
-    num_pages = ceil(len(groups) / 10)
-
-    if page and page >= 0:
-        groups = groups[page * 10: page * 10 + 10]
-
-    return num_pages, groups
-
-
-def query_students(*, department: Department, grade: int, squadron: Squadron, name: str, page: int=None):
-    queries = Q()
-
-    if department:
-        queries &= Q(department=department)
-
-    if grade is not None:
-        queries &= Q(grade=grade)
-
-    if squadron:
-        queries &= Q(squadron=squadron)
-
-    if name is not None:
-        queries &= Q(user__reg_id__icontains=name) | Q(user__name__icontains=name)
-
-    users = Student.objects.filter(queries)
-    users = users.order_by('-grade')
-
-    num_pages = ceil(len(users) / 10)
-
-    if page and page >= 0:
-        users = users[page * 10: page * 10 + 10]
-
-    elif page == 0:
-        users = users[0: 10]
-
-    return num_pages, users
-
-
+# testmanager create a testpaper in db
 def create_testpaper(name: str, created_by: User, is_testpaper: int):
     testpaper = TestPaper.objects.create(name=name,
                                          created_by_id=created_by.id,
@@ -117,54 +24,78 @@ def edit_testpaper(testpaper: TestPaper, name: str):
     return testpaper
 
 
-def create_group(name: str, members: list, created_by: User):
-    group = Group.objects.create(name=name,
-                                 created_by=created_by)
+# use random.shuffle to change order of list
+def random_select(types_counts: list):
+    passed_questions = Question.objects.filter(state=1)
 
-    for member in members:
-        student = Student.objects.get(id=member)
-        group.member.add(student)
+    qaList = list(passed_questions.filter(q_type=1))
+    shortConversationList = list(passed_questions.filter(q_type=2))
+    grammarList = list(passed_questions.filter(q_type=3))
+    phraseList = list(passed_questions.filter(q_type=4))
+    paragraphUnderstandingList = list(passed_questions.filter(q_type=5))
 
-    group.save()
+    random.shuffle(qaList)
+    random.shuffle(shortConversationList)
+    random.shuffle(grammarList)
+    random.shuffle(phraseList)
+    random.shuffle(paragraphUnderstandingList)
 
-    return group
+    questions = []
+    questions.extend(qaList[:types_counts[0]])
+    questions.extend(shortConversationList[:types_counts[1]])
+    questions.extend(grammarList[:types_counts[2]])
+    questions.extend(phraseList[:types_counts[3]])
+    questions.extend(paragraphUnderstandingList[:types_counts[4]])
+
+    for question in questions:
+        question.used_freq += 1
+        question.save()
+
+    return questions
 
 
-def edit_group(group: Group, name: str, members: list):
-    group.member.clear()
-    for member in members:
-        student = Student.objects.get(id=member)
-        group.member.add(student)
+def limit_check(testpaper: TestPaper, q_type: QuestionType):
+    testpaper = testpaper
 
-    group.name = name
-    group.save()
-
-    return group
-
-
-def random_select(types_counts: list, question_type: QuestionType, testpaper: TestPaper=None):
-    reach_limit = types_counts[question_type.value[0] - 1]
-    if testpaper:
-        selected_questions = testpaper.question_set.filter(question_type=question_type.value[0])
-
-        selected_num = reach_limit - selected_questions.count()
-
-        if selected_num:
-            questions = Question.objects.filter(question_type=question_type.value[0], is_valid=True).exclude(id__in=selected_questions)
-
-            if questions:
-                questions = sample(list(questions), min(len(questions), selected_num))
-                for question in questions:
-                    testpaper.question_set.add(question)
-
-                selected_num = len(questions)
-
-        return selected_num
-
+    if len(testpaper.question_set.filter(q_type=q_type.value[0])) >= QuestionTypeCounts.Exam.value[0][q_type.value[0]-1]:
+        return True
     else:
-        selected_questions = Question.objects.filter(question_type=question_type.value[0], is_valid=True)
+        return False
 
-        if selected_questions:
-            selected_questions = sample(list(selected_questions), reach_limit)
 
-        return selected_questions
+def auto_pick(testpaper: TestPaper, type_counts: list, question_type: int):
+    passed_questions = Question.objects.filter(state=1)
+    questions = []
+
+    if question_type == 1:
+        qaList = list(passed_questions.filter(q_type=1))
+        random.shuffle(qaList)
+        questions.extend(qaList[:type_counts[question_type-1]])
+
+    if question_type == 2:
+        shortConversationList = list(passed_questions.filter(q_type=2))
+        random.shuffle(shortConversationList)
+        questions.extend(shortConversationList[:type_counts[question_type-1]])
+
+    if question_type == 3:
+        grammarList = list(passed_questions.filter(q_type=3))
+        random.shuffle(grammarList)
+        questions.extend(grammarList[:type_counts[question_type-1]])
+
+    if question_type == 4:
+        phraseList = list(passed_questions.filter(q_type=4))
+        random.shuffle(phraseList)
+        questions.extend(phraseList[:type_counts[question_type-1]])
+
+    if question_type == 5:
+        paragraphUnderstandingList = list(passed_questions.filter(q_type=5))
+        random.shuffle(paragraphUnderstandingList)
+        questions.extend(paragraphUnderstandingList[:type_counts[question_type-1]])
+
+    for question in questions:
+        testpaper.question_set.add(question)
+
+    return len(questions)
+
+
+# def manual_pick():

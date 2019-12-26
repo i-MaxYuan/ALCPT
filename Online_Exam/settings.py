@@ -46,11 +46,11 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    # 'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    'alcpt.middleware.EnglishExamSystemMiddleware',
+    # 'alcpt.middleware.EnglishExamSystemMiddleware',
 )
 
 ROOT_URLCONF = 'Online_Exam.urls'
@@ -91,6 +91,23 @@ DATABASES = {
 }
 
 
+CAPTCHA_NOISE_FUNCTIONS = (
+    'captcha.helpers.noise_null',   #沒有樣式
+    # 'captcha.helpers.noise_arcs',   #線
+    'captcha.helpers.noise_dots',   #點
+)
+
+# CAPTCHA_IMAGE_SIZE = (150, 200)    #驗證碼圖片大小
+
+CAPTCHA_BACKGROUND_COLOR = '#000fff'  #驗證碼顏色
+
+# CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.math_challenge' 數學計算式驗證碼
+
+# CAPTCHA_TIMEOUT = 0.1 驗證碼限制時間
+
+# CAPTCHA_LENGTH = 1 #驗證碼長度
+
+
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
 
@@ -104,7 +121,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
@@ -113,11 +129,9 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'alcpt/static')
-
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'alcpt/media')
 
-LOGIN_URL = '/login'
 LOGIN_REDIRECT_URL = '/'
 
 AUTH_USER_MODEL = 'alcpt.User'

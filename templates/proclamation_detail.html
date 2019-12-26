@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% load web_filters %}
+
+{% block path %}
+
+{% endblock %}
+
+{% block content %}
+    {% if request.user|has_perm:'SystemManager' %}
+        <div>
+            <a href="{% url 'proclamation_delete' proclamation.id %}" onclick="return confirm('確認刪除此公告:{{ proclamation.title }}?')">刪除此公告</a>
+        </div>
+    {% endif %}
+
+    <div>
+        <table border="1">
+            <tr>
+                <td>Proclamation Title</td>
+                <td>{{ proclamation.title }}</td>
+            </tr>
+            <tr>
+                <td>Proclamation Text</td>
+                <td>{{ proclamation.text }}</td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <input type="submit" onclick="history.back()" value="確認">
+                </td>
+            </tr>
+        </table>
+    </div>
+{% endblock %}
