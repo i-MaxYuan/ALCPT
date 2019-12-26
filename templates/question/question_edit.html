@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% load web_filters %}
+
+{% block path %}
+    <a class="fa fa-angle-double-right fa-lg box"></a>
+    <a {% if request.user|has_perm:'TBManager' %}href="{% url 'tbmanager_question_list' %}">題庫管理員{% else %}href="{% url 'tboperator_question_list' %}">題目操作員{% endif %}</a>
+    <a class="fa fa-angle-right fa-lg box"></a>
+    <a href="">編輯試題</a>
+{% endblock %}
+
+{% block content %}
+    <form enctype="multipart/form-data" action="" method="post">
+        {% csrf_token %}
+        <label for="q_content">Question</label>
+        {% if question.q_file %}
+            <audio controls preload="none">
+                <source src="{{ question.q_file }}" type="audio/mpeg">
+                Your browser does not support the audio tag.
+            </audio>
+        {% else %}
+            <textarea name="q_content" cols="100" rows="8">{{ question.q_content }}</textarea>
+        {% endif %}
+
+        <br>
+
+        <label for="select_answer">Select the Answer</label>
+        <select name="answer_choice">
+            {% for choice in question.choice_set.all %}
+                <option value="{{ choice.id }}" {% if choice.is_answer %} selected {% endif %}>{{ choice.c_content }}</option>
+            {% endfor %}
+        </select>
+
+        <br>
+
+        <input type="submit" value="確認更改" onclick="return confirm('確認更改此試題並通過審核？')">
+    </form>
+
+{% endblock %}

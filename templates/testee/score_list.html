@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block path %}
+    <a class="fa fa-angle-double-right fa-lg box"></a>
+    <a href="">受測者</a>
+    <a class="fa fa-angle-right fa-lg box"></a>
+    <a href="">測驗成績紀錄</a>
+{% endblock %}
+
+{% block content %}
+
+    <div>
+        <h1>測驗紀錄</h1>
+        <table border="1">
+            <tr>
+                <th>測驗名稱</th>
+                <th>測驗成績</th>
+                <th>測驗時間</th>
+                <th>試卷內容</th>
+            </tr>
+            {% for answersheet in answersheetList %}
+                <tr>
+                    <td>{{ answersheet.exam }}</td>
+                    <td>{{ answersheet.score }}</td>
+                    <td>{{ answersheet.finish_time|date:'Y年m月d日, H時m分' }}</td>
+                    <td><a href="{% url 'view_answersheet_content' answersheet.id %}">{{ answersheet.exam.testpaper }}</a></td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div>
+        <canvas id="chart" width="800" height="600"></canvas>
+        <script>
+            var ctx = document.getElementById('chart').getContext('2d');
+            var chart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ["及格", "不及格"],
+                    datasets: [{
+                        label: '# of Votes',
+                        data: [{{ qualified }}, {{ unqualified }}],
+                        backgroundColor: [
+                            'rgba(120, 194, 196, 1)',
+                            'rgba(219, 77, 109, 1)'
+                        ],
+                        borderColor: [
+                            'rgba(255,255,255,1)',
+                            'rgba(255, 255, 255, 1)'
+                        ],
+                        borderWidth: 6
+                    }]
+                }
+            });
+        </script>
+    </div>
+
+    <div class="pagination">
+        <a href="?page=1">&laquo; first</a>
+
+        {% if sheets.has_previous %}
+            <a href="?page={{ sheets.previous_page_number }}">Prev</a>
+        {% else %}
+            <a href="">Prev</a>
+        {% endif %}
+
+        {% for page in paginator.page_range %}
+            {% if page == sheets.number %}
+                <a class="active" href="?page={{ page }}">{{ page }}</a>
+            {% else %}
+                <a href="?page={{ page }}">{{ page }}</a>
+            {% endif %}
+        {% endfor %}
+
+
+        {% if sheets.has_next %}
+            <a href="?page={{ sheets.next_page_number }}">Next</a>
+        {% else %}
+            <a href="">Next</a>
+        {% endif %}
+        <a href="?page={{ sheets.paginator.num_pages }}">last &raquo;</a>
+    </div>
+{% endblock %}

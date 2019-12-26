@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% load web_filters %}
+
+{% block path %}
+
+{% endblock %}
+
+{% block content %}
+    <div>
+        <form method="post">
+            {% csrf_token %}
+            <label for="reg_id">Reg ID</label>
+            <input type="text" name="reg_id" required>
+
+            <br>
+
+            {% for privilege in privileges.values %}
+                <input type="checkbox" id="{{ privilege.value.0 }}" name="privilege_{{ forloop.counter0 }}" {% if privilege == privileges.Testee %} checked {% endif %}>
+                <label for="{{ privilege.value.0 }}">&nbsp;&nbsp;&nbsp;&nbsp;{{ privilege.value.1 }}</label>
+            {% endfor %}
+
+            <input type="submit" onclick="return confirm('確認建立此使用者')" value="新增使用者">
+        </form>
+    </div>
+
+    <div><a href="{% url 'user_multiCreate' %}">一次新增多個使用者？</a></div>
+{% endblock %}

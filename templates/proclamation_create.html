@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block path %}
+
+{% endblock %}
+
+{% block content %}
+    <div>
+        <form method="post">
+            {% csrf_token %}
+            <label for="proclamation_title">Proclamation Title</label>
+            <input type="text" name="p_title" required>
+
+            <br>
+
+            <label for="proclamation_text">Proclamation Text</label>
+            <textarea name="p_text" cols="100" rows="8" required></textarea>
+
+            <br>
+
+            <input type="submit" value="新增公告">
+            <input type="submit" onclick="history.back()" value="取消">
+        </form>
+    </div>
+{% endblock %}

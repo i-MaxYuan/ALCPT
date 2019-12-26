@@ -1,212 +1,83 @@
-import json
 from string import punctuation
 
 from django.shortcuts import render, redirect
+
+from django.views.decorators.http import require_http_methods
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
-from django.views.decorators.http import require_http_methods
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
-from .models import TestPaper, Group, Department, Squadron, Student
-from .exceptions import *
-from .decorators import permission_check
-from .definitions import UserType
-from .managerfuncs import testmanager
+from alcpt.managerfuncs import testmanager
+from alcpt.decorators import permission_check
+from alcpt.definitions import UserType, QuestionType, QuestionTypeCounts
+from alcpt.models import Exam, TestPaper, Group, Student
+from alcpt.exceptions import *
 
 
 @permission_check(UserType.TestManager)
 @require_http_methods(["GET"])
-def group_index(request):
+def group_list(request):
+    group_name = request.GET.get('group_name')
+
+    if group_name:
+        groups = Group.objects.filter(name__contains=group_name)
+    else:
+        groups = Group.objects.all()
+
+    page = request.GET.get('page', 0)
+    paginator = Paginator(groups, 10)
+
     try:
-        page = int(request.GET.get('page', 0))
+        groupList = paginator.page(page)
+    except PageNotAnInteger:
+        groupList = paginator.page(1)
+    except EmptyPage:
+        groupList = paginator.page(paginator.num_pages)
 
-    except ValueError:
-        page = 0
-
-    keywords = {
-        'name': request.GET.get('name', ''),
-    }
-
-    num_pages, groups = testmanager.query_groups(**keywords, page=page)
-
-    data = {
-        'groups': groups,
-        'page': page,
-        'page_range': range(num_pages),
-    }
-
-    return render(request, 'exam/group_list.html', data)
+    return render(request, 'group/testee_group_list.html', locals())
 
 
 @permission_check(UserType.TestManager)
-@require_http_methods(["GET", "POST"])
-def create_group(request):
-    try:
-        page = int(request.GET.get('page', 0))
-    except ValueError:
-        page = 0
-
+def group_create(request):
     if request.method == 'POST':
-        print(request.POST.get('name'))
-        name = request.POST.get('name')
+        group_name = request.POST.get('group_name',)
+        group = Group.objects.create(name=group_name, created_by=request.user)
+        group.save()
 
-        try:
-            members = request.POST.getlist('student_id')
-
-        except ValueError:
-            raise ArgumentError('No any members in group')
-
-        try:
-            if Group.objects.get(name=name):
-                raise MultipleObjectsReturned('Group has existed.')
-
-        except ObjectDoesNotExist:
-            pass
-
-        group = testmanager.create_group(name=name,
-                                         members=members,
-                                         created_by=request.user)
-
-        return redirect('/exam/group'.format(group.name))
+        messages.success(request, 'Group create successfully.')
+        return redirect('testee_group_list')
 
     else:
-        keywords = {
-            'name': request.GET.get('name')
-        }
-
-        if keywords['name'] and any(char in punctuation for char in keywords['name']):
-            keywords['name'] = None
-            messages.warning(request, "Name cannot contains any special character.")
-
-        for keyword in ['department', 'grade', 'squadron']:
-            try:
-                keywords[keyword] = int(request.GET.get(keyword))
-            except (KeyError, TypeError, ValueError):
-                keywords[keyword] = None
-
-        if keywords['department']:
-            try:
-                keywords['department'] = Department.objects.get(id=keywords['department'])
-            except ObjectDoesNotExist:
-                keywords['department'] = None
-
-        if keywords['squadron']:
-            try:
-                keywords['squadron'] = Squadron.objects.get(id=keywords['squadron'])
-            except ObjectDoesNotExist:
-                keywords['squadron'] = None
-
-        num_pages, students = testmanager.query_students(**keywords, page=page)
-
-        data = {
-            'students': students,
-            'keywords': keywords,
-            'page_range': range(num_pages),
-            'page': page,
-            'departments': Department.objects.all(),
-            'squadrons': Squadron.objects.all(),
-        }
-        return render(request, 'exam/group_create.html', data)
+        return render(request, 'group/testee_group_create.html', locals())
 
 
 @permission_check(UserType.TestManager)
-@require_http_methods(["GET", "POST"])
-def edit_group(request, group_name: str):
+def group_edit(request, group_id):
     try:
-        group = Group.objects.get(name=group_name)
+        group = Group.objects.get(id=group_id)
+        group_members = group.member.all()
+        students = Student.objects.all()
 
     except ObjectDoesNotExist:
-        raise ObjectNotFoundError('Cannot find group id={}'.format(group_name))
-
-    try:
-        page = int(request.GET.get('page', 0))
-    except ValueError:
-        page = 0
+        messages.error(request, 'Group does not exist, group id: {}'.format(group_id))
+        return redirect('testee_group_list')
 
     if request.method == 'POST':
-        name = request.POST.get('name')
+        selected_students = request.POST.getlist('student',)
 
-        try:
-            members = request.POST.getlist('student_id')
+        selected_student_list = []
+        for selected_student in selected_students:
+            selected_student_list.append(Student.objects.get(id=selected_student))
 
-        except ValueError:
-            raise ArgumentError('Missing members')
+        for selected_student in selected_student_list:  # add all selected students into group
+            group.member.add(selected_student)
+        for member in group.member.all():               # check those who were unselected, and remove from the group
+            if member not in selected_student_list:
+                group.member.remove(member)
 
-        print(members)
-
-        group = testmanager.edit_group(group=group,
-                                       name=name,
-                                       members=members)
-
-        messages.success(request, "Successfully update group :{}.".format(group.name))
-
-        return redirect('/exam/group')
-
+        messages.success(request, 'Update group member successfully.')
+        return redirect('testee_group_list')
     else:
-        keywords = {
-            'name': request.GET.get('name')
-        }
-
-        if keywords['name'] and any(char in punctuation for char in keywords['name']):
-            keywords['name'] = None
-            messages.warning(request, "Name cannot contains any special character.")
-
-        for keyword in ['department', 'grade', 'squadron']:
-            try:
-                keywords[keyword] = int(request.GET.get(keyword))
-            except (KeyError, TypeError, ValueError):
-                keywords[keyword] = None
-
-        if keywords['department']:
-            try:
-                keywords['department'] = Department.objects.get(id=keywords['department'])
-            except ObjectDoesNotExist:
-                keywords['department'] = None
-
-        if keywords['squadron']:
-            try:
-                keywords['squadron'] = Squadron.objects.get(id=keywords['squadron'])
-            except ObjectDoesNotExist:
-                keywords['squadron'] = None
-
-        num_pages, students = testmanager.query_students(**keywords, page=page)
-
-        data = {
-            'group': group,
-            'students': students,
-            'keywords': keywords,
-            'page_range': range(num_pages),
-            'page': page,
-            'departments': Department.objects.all(),
-            'squadrons': Squadron.objects.all(),
-        }
-        return render(request, 'exam/group_edit.html', data)
+        return render(request, 'group/testee_group_edit.html', locals())
 
 
-@permission_check(UserType.TestManager)
-@require_http_methods(["GET"])
-def delete_group(request, group_name: str):
-    try:
-        group = Group.objects.get(name=group_name)
-
-    except ObjectDoesNotExist:
-        raise ResourceNotFoundError('Cannot find group name = {}.'.format(group_name))
-
-    group.delete()
-
-    messages.success(request, 'Delete group name={}.'.format(group.name))
-
-    return redirect(request.META.get('HTTP_REFERER', '/group'))
-
-
-@permission_check(UserType.TestManager)
-@require_http_methods(["GET"])
-def member_list(request, group_name: str):
-    try:
-        group = Group.objects.get(name=group_name)
-
-    except ObjectDoesNotExist:
-        raise ResourceNotFoundError('Cannot find group name = {}.'.format(group_name))
-
-    members = group.member.all()
-
-    return render(request, 'exam/group_member_list.html', locals())

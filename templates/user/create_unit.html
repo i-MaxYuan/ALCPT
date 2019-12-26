@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block path %}
+    <a class="fa fa-angle-double-right fa-lg box"></a>
+    <a href="">系統管理員</a>
+    <a class="fa fa-angle-right fa-lg box"></a>
+    <a href="">單位列表</a>
+    <a class="fa fa-angle-right fa-lg box"></a>
+    <a href="">新增單位</a>
+{% endblock %}
+
+{% block content %}
+    <form action="{% url 'unit_create' %}" method="post" autocomplete="off">
+        {% csrf_token %}
+
+        <h3>單位</h3>
+
+        <div>
+            <select id='unit' name='unit'>
+                <option value='' selected disabled hidden>選擇要新增單位</option>
+                <option value='department'> 科系 </option>
+                <option value='squadron'> 中隊 </option>
+            </select>
+        </div>
+
+
+        <h3>單位名稱 </h3>
+
+        <div>
+            <textarea class="form-control" id="unit_name" name="unit_name" rows="3" placeholder="輸入要新增的單位名稱" required></textarea>
+        </div>
+
+
+        <div></div>
+
+        <button type="submit">新增</button>
+        <input type="reset" value="取消">
+        <button type="submit" onclick="history.back()">返回</button>
+    </form>
+{% endblock %}

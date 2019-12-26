@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% load web_filters %}
+
+{% block path %}
+
+{% endblock %}
+
+{% block content %}
+    <div>
+        <form method="post">
+            {% csrf_token %}
+            <label for="pick_up_questions">選擇題目</label>
+{#            <div>#}
+{#                {% for question in questions %}#}
+{#                    <div>#}
+{#                    </div>#}
+{#                {% endfor %}#}
+{#            </div>#}
+
+            <input type="submit" value="確認">
+        </form>
+    </div>
+{% endblock %}

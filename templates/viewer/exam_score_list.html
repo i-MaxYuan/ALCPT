@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% load web_filters %}
+
+{% block path %}
+    <a class="fa fa-angle-double-right fa-lg box"></a>
+    <a href="{% url 'exam_score_list' %}">成績檢閱者</a>
+    <a class="fa fa-angle-right fa-lg box"></a>
+    <a href="">考試成績列表</a>
+{% endblock %}
+
+{% block content %}
+    <div>
+        <table border="1">
+            <tr>
+                <th>Exam Name</th>
+                <th>Exam Average Score</th>
+                <th>Exam Group</th>
+                <th>People Number</th>
+                <th>Exam Start Time</th>
+                <th>Exam Finish Time</th>
+                <td>Duration</td>
+            </tr>
+            {% for exam in exams %}
+            <tr>
+                <td>{{ exam }}</td>
+                <td>{{ exam.average_score }}</td>
+                <td>{{ exam.group }}</td>
+                <td>{{ exam.group.member.count }}</td>
+                <td>{{ exam.start_time|date:'Y年m月d日, H時i分' }}</td>
+                <td>{{ exam.finish_time|date:'Y年m月d日, H時i分' }}</td>
+                <td>{{ exam.duration }}分鐘</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% load web_filters %}
+
+{% block path %}
+    <a class="fa fa-angle-double-right fa-lg box"></a>
+    <a href="{% url 'tbmanager_question_list' %}">題庫管理員</a>
+    <a class="fa fa-angle-right fa-lg box"></a>
+    <a href="">試題退件原因</a>
+{% endblock %}
+
+{% block content %}
+    <div>
+        <form action="{% url 'question_reject' question.id %}" method="post">
+            {% csrf_token %}
+            <label for="reject_reason">Reject Reason</label>
+            <textarea cols="50" rows="4" name="reason" placeholder="請輸入退回原因"></textarea>
+            <input type="submit" onclick="return confirm('確認退回？')" value="送出">
+        </form>
+    </div>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% load web_filters %}
+
+{% block path %}
+
+{% endblock %}
+
+{% block content %}
+    <div>
+        <form method="post">
+            {% csrf_token %}
+            <label for="proclamation_title">Proclamation Title</label>
+            <input type="text" name="proclamation_title" value="{{ proclamation.title }}" required>
+
+            <label for="proclamation_text">Proclamation Text</label>
+            <textarea cols="100" rows="8" name="proclamation_text" required>{{ proclamation.text }}</textarea>
+
+            <input type="submit" onclick="return confirm('確認更改?')">
+            <input type="submit" onclick="history.back()" value="取消編輯">
+        </form>
+    </div>
+{% endblock %}

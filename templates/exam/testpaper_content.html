@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% load web_filters %}
+
+{% block path %}
+    <a class="fa fa-angle-double-right fa-lg box"></a>
+{#    <a href="{% url 'testee_score_list' %}">受測者</a>#}
+    <a class="fa fa-angle-right fa-lg box"></a>
+    <a href="">檢閱試卷內容</a>
+{% endblock %}
+
+{% block content %}
+    <div>
+        <table border="1">
+            <tr>
+                <th>題號</th>
+                <th>題目</th>
+                <th>題型</th>
+                <th>選項</th>
+            </tr>
+            {% for question in questions %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ question }}</td>
+                    <td>{{ question.q_type|readable_question_type }}</td>
+                    <td>
+                    {% for choice in question.choice_set.all %}
+                        <li>{{ choice }}</li>
+                    {% endfor %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}

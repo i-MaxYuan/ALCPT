@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% load web_filters %}
+
+{% block path %}
+    <a class="fa fa-angle-double-right fa-lg box"></a>
+    <a href="">檢視個人資料</a>
+{% endblock %}
+
+{% block content %}
+    <div>
+        <a href="{% url 'profile_edit' user.reg_id %}">編輯個人檔案</a>
+        <a href="{% url 'password_change' %}">更改密碼</a>
+    </div>
+
+    <div>
+        <table>
+            <tr>
+                <th>使用者帳號</th>
+                <th>姓名</th>
+                <th>性別</th>
+                <th>權限</th>
+                {% if user.student %}
+                    <th>學號</th>
+                    <th>年班</th>
+                    <th>科系</th>
+                    <th>中隊</th>
+                {% endif %}
+                <th>最近登入</th>
+                <th>加入時間</th>
+                <th>狀態</th>
+            </tr>
+            <tr>
+                <td>{{ user.reg_id }}</td>
+                <td>{{ user.name }}</td>
+                <td>
+                    {% if user.gender == 0 %}
+                    男
+                    {% elif user.gender == 1 %}
+                    女
+                    {% elif user.gender == 2 %}
+                    不想公開
+                    {% else %}
+                    尚未設定
+                    {% endif %}
+                </td>
+                <td>
+                    {% if user|has_perms:privileges.SystemManager %}
+                        <span>{{ privileges.SystemManager.value.1 }}</span>
+                    {% endif %}
+                    {% if user|has_perms:privileges.TestManager %}
+                        <span>{{ privileges.TestManager.value.1 }}</span>
+                    {% endif %}
+                    {% if user|has_perms:privileges.TBManager %}
+                        <span>{{ privileges.TBManager.value.1 }}</span>
+                    {% endif %}
+                    {% if user|has_perms:privileges.TBOperator %}
+                        <span>{{ privileges.TBOperator.value.1 }}</span>
+                    {% endif %}
+                    {% if user|has_perms:privileges.Viewer %}
+                        <span>{{ privileges.Viewer.value.1 }}</span>
+                    {% endif %}
+                    {% if user|has_perms:privileges.Testee %}
+                        <span>{{ privileges.Testee.value.1 }}</span>
+                    {% endif %}
+                </td>
+                {% if user.student %}
+                    <td>{{ user.student.stu_id }}</td>
+                    <td>{{ user.student.grade }}</td>
+                    <td>{{ user.student.department }}</td>
+                    <td>{{ user.student.squadron }}</td>
+                {% endif %}
+                <td>{{ user.update_time|date:"Y年m月d日, H時i分" }}</td>
+                <td>{{ user.created_time|date:"Y年m月d日, H時i分" }}</td>
+                <td>
+                    {% if user.is_active %}
+                        <span>is active</span>
+                    {% elif user.is_staff %}
+                        <span>is staff</span>
+                    {% elif user.is_superuser %}
+                        <span>is superuser</span>
+                    {% endif %}
+                </td>
+            </tr>
+        </table>
+    </div>
+{% endblock %}

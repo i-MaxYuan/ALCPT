@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% load web_filters %}
+
+{% block path %}
+
+{% endblock %}
+
+{% block content %}
+    <div>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <label for="reg_ids">帳號清單</label>
+            <textarea name="reg_ids" cols="80" rows="6" placeholder="帳號1, 帳號2, ..."></textarea>
+
+            <input type="file" name="users_file" accept=".xls, .xlsx">
+
+            <br>
+
+            <small>學號即為帳號，僅限英文、數字，請用全形頓號區隔。<strong>預設密碼為學號。</strong></small>
+
+            <br>
+
+            {% for privilege in privileges.values %}
+                <input type="checkbox" id="{{ privilege.value.0 }}" name="privilege_{{ forloop.counter0 }}" {% if privilege == privileges.Testee %} checked {% endif %}>
+                <label for="{{ privilege.value.0 }}">&nbsp;&nbsp;&nbsp;&nbsp;{{ privilege.value.1 }}</label>
+            {% endfor %}
+
+            <br>
+
+            <input type="submit" onclick="return confirm('確認送出？')" value="新增使用者">
+        </form>
+    </div>
+{% endblock %}

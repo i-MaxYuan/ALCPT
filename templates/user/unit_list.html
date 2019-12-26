@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block path %}
+    <a class="fa fa-angle-double-right fa-lg box"></a>
+    <a href="">系統管理員</a>
+    <a class="fa fa-angle-right fa-lg box"></a>
+    <a href="">單位列表</a>
+{% endblock %}
+
+{% block content %}
+    <div class="unit_list">
+        <h1>單位列表</h1>
+
+        <div>
+            <a href="{% url 'unit_create' %}">新增單位</a>
+        </div>
+
+        <div class="create_unit"></div>
+
+        <div class="department_list">
+            <h2>科系列表</h2>
+            {% if departments %}
+                <table>
+                    <tr>
+                        <th scope="col">學系代號</th>
+                        <th scope="col">學系名稱</th>
+                        <th scope="col"></th>
+                    </tr>
+                {% for department in departments %}
+                    <tr>
+                        <td> {{ department.id }} </td>
+                        <td> {{ department.name }} </td>
+{#                        <td>#}
+{#                            <a href="{% url 'department_edit' department.id %}"><i class="fa fa-pencil fa-fw mb-2"></i></a>#}
+{#                            <a href="{% url 'department_delete' department.id %}"><i class="fa fa-trash-o" aria-hidden="true"></i></a>#}
+{#                        </td>#}
+                    </tr>
+                {% endfor %}
+            </table>
+            {% else %}
+                目前暫無資料
+            {% endif %}
+        </div>
+
+        <div class="squadron_list">
+            <h2>中隊列表</h2>
+            {% if squadrons %}
+                <table>
+                    <tr>
+                        <th>學系代號</th>
+                        <th>學系名稱</th>
+                        <th></th>
+                    </tr>
+                {% for squadron in squadrons %}
+                    <tr>
+                        <td> {{ squadron.id }} </td>
+                        <td> {{ squadron.name }} </td>
+{#                        <td>#}
+{#                            <a href="{% url 'squadron_edit' squadron.name %}"><i class="fa fa-pencil fa-fw mb-2"></i></a>#}
+{#                            <a href="{% url 'squadron_delete' squadron.name %}"><i class="fa fa-trash-o" aria-hidden="true"></i></a>#}
+{#                        </td>#}
+                    </tr>
+                {% endfor %}
+            </table>
+            {% else %}
+                目前暫無資料
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

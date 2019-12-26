@@ -1,49 +1,159 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
 {% load web_filters %}
 
-{% block scripts %}
-    <script src="/static/scripts/index.js?{{ request.js_version }}" defer></script>
-{% endblock %}
-
 {% block content %}
-    <section class="col-auto mr-auto" style="height: 100px">
-        <h1 style="display: inline; font-size: 30px">考試公告</h1>
-        <section class="col-auto float-right">
-            <a class="btn btn-sq-lg " href="/exam/proclamation/create" style="background-color: #1b98e0; color: white;
-            width: 105px; height: 44px; font-size: 20px; font-family: 微軟正黑體; align-content: center;" >新增公告</a>
-        </section>
-    </section>
+    {% if request.user|has_perm:'SystemManager' %}
+    <div class="add_proclamation">
+        <button type="button" class="btn btn-default btn-lg">
+            <a href="{% url 'proclamation_create' %}">新增公告</a>
+        </button>
 
-    <div class="container w3-myfont">
-        <div class="row1">
-            <div class="col">
-                <div class="panel panel-default">
-                     <div class="container">
-                        <table class="table table-striped table-hover" style="width:95%; height: 90%" border="0" align="center">
-                            <thead>
-                              <tr class="w3-light-grey w3-center w3-card-4">
-                                <th style=" width:300px;"><h4 style="font-size: 20px">公告標題</h4></th>
-                                <th><h4 style="font-size: 20px">公告人</h4></th>
-                                <th><h4 style="font-size: 20px">公告時間</h4></th>
-                              </tr>
-                            </thead>
 
-                            {% for proclamation in proclamations %}
-                                <tr class="w3-hover-green w3-center" style='cursor: pointer; font-size: 18px' onclick="window.location.href='/exam/proclamation/{{ proclamation.id }}/detail'">
-                                    <td>{{ proclamation.title }}</td>
-                                    <td>{{ proclamation.created_by.name}}</td>
-                                    <td>{{ proclamation.created_time }}</td>
-                                    <td>
-                                        <a href="/exam/proclamation/{{ proclamation.id }}/edit"><i class="fa fa-pencil fa-fw mb-2"></i></a>&nbsp;
-                                        <a href="/exam/proclamation/{{ proclamation.id }}/delete"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                        </table>
-                     </div>
-                </div>
+        <style>
+            .add_proclamation button{
+                width: 110px;
+                height: 50px;
+                background-color: #4CCABD;
+                border-radius: 10px;
+                text-align: center;
+                font-size: 20px;
+                border: none;
+
+                position: absolute;
+                top: -10%;
+                right: 0%;
+            }
+
+            .add_proclamation button:hover{
+                background-color: #2C3232;
+                transition: all 0.3s ease;
+            }
+
+            .add_proclamation a{
+                color: #FFFEF6;
+                text-decoration: none;
+            }
+        </style>
+    </div>
+    {% endif %}
+
+<!-- 表格的部分 -->
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead class="title">
+                <tr>
+                    <th class="col-md-4">公告標題</th>
+                    <th class="col-md-3">公告人</th>
+                    <th class="col-md-4">公告時間</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for pro in pros %}
+                <tr style="cursor: pointer" onclick="window.location.href='{% url 'proclamation_detail' pro.id %}'">
+                    <td>{{ pro.title }}</td>
+                    <td>{{ pro.created_by.name}}</td>
+                    <td>{{ pro.created_time|date:'Y年m月d日, H時i分' }}</td>
+                    <td>
+                        <a href="{% url 'proclamation_edit' pro.id %}"><i class="fa fa-pencil-square fa-fw mb-2"></i></a>&nbsp;
+                        <a href="{% url 'proclamation_delete' pro.id %}" onclick="return confirm('確認刪除此公告:{{ pro.title }}?')"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <style>
+            .table-responsive .table{
+                text-align: center;
+            }
+
+            .table-hover > tbody > tr:hover > td,
+            .table-hover > tbody > tr:hover > th {
+                background-color: #4CCABD;
+            }
+
+            .title{
+                font-size: 25px;
+            }
+
+            .title tr th{
+                text-align: center;
+            }
+
+            .table tbody{
+                font-size: 18px;
+            }
+
+            .table tbody td a{
+                color: #2C3232;
+            }
+        </style>
+    </div>
+
+<!-- 頁碼的部分 -->
+    <div>
+        <div class="pagination">
+            <div class="pager_group1">
+                <ul class="pager">
+                    <li class="previous"><a href="?page=1">&laquo; first</a></li>
+                    <li style="padding-left: 500px; padding-right: 490px">&nbsp;</li>
+                    <li class="next"><a href="?page={{ pros.paginator.num_pages }}">last &raquo;</a></li>
+                </ul>
             </div>
+
+            <div class="pager_group2">
+                <nav aria-label="Page navigation">
+                  <ul class="pagination justify-content-center">
+                    <li class="page-item disabled">
+                        {% if pros.has_previous %}
+                            <a class="page-link" href="?page={{ pros.previous_page_number }}" tabindex="-1">Previous</a>
+                        {% else %}
+                            <a href="#">Previous</a>
+                        {% endif %}
+                    </li>
+                    <li class="page-item">
+                        {% for page in paginator.page_range %}
+                            {% if page == sheets.number %}
+                                <a class="page-link" href="?page={{ page }}">{{ page }}</a>
+                            {% else %}
+                                <a href="?page={{ page }}">{{ page }}</a>
+                            {% endif %}
+                        {% endfor %}
+                    </li>
+                    <li class="page-item">
+                        {% if pros.has_next %}
+                            <a class="page-link" href="?page={{ pros.next_page_number }}">Next</a>
+                        {% else %}
+                            <a href="#">Next</a>
+                        {% endif %}
+                    </li>
+                  </ul>
+                </nav>
+
+            </div>
+
+
+            <style>
+                .pager_group1{
+                    position: absolute;
+                    bottom: 0%;
+                    left: 1%;
+                    right: 1%;
+                }
+
+                .pager_group2{
+                    position: absolute;
+                    bottom: 0%;
+                }
+
+            </style>
         </div>
+
+        <style>
+            .pagination{
+                font-size: 20px;
+            }
+        </style>
     </div>
 {% endblock %}

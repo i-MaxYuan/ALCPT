@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% load web_filters %}
+
+{% block path %}
+    <a class="fa fa-angle-double-right fa-lg box"></a>
+    <a href="{% url 'testee_score_list' %}">受測者</a>
+    <a class="fa fa-angle-right fa-lg box"></a>
+    <a href="">測驗記錄</a>
+{% endblock %}
+
+{% block content %}
+    <div>
+        <table border="">
+            <tr>
+                <th>測驗名稱</th>
+                <th>測驗類型</th>
+                <th>測驗成績</th>
+            </tr>
+            {% for exam in exams %}
+                <tr>
+                    <td>{{ exam }}</td>
+                    <td>{{ exam.exam_type|readable_exam_type }}</td>
+                    <td>{{ exam.average_score }}</td>
+                    <td>
+                        {% if not exam.average_score %}
+                            <a href="{% url 'testee_start_practice' exam.id %}">開始測驗</a>
+                        {% else %}
+                            <label>已完成測驗</label>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}

@@ -1,654 +1,329 @@
-import json
+from string import punctuation
 
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.views.decorators.http import require_http_methods
 
-from .models import Question
+from .models import Question, Choice
 from .exceptions import *
 from .decorators import permission_check
 from .definitions import UserType, QuestionType
-from .managerfuncs import tbmanager
+from .managerfuncs import tbmanager, tboperator
 
 
 @permission_check(UserType.TBManager)
 @require_http_methods(["GET"])
 def manager_index(request):
-    try:
-        page = int(request.GET.get('page', 0))
+    question_types = []
+    for q in list(QuestionType):
+        question_types.append(q)
 
-    except ValueError:
-        page = 0
+    state_choices = [(1, '審核通過'),
+                     (2, '審核未通過'),
+                     (3, '等待審核'),
+                     (4, '被回報錯誤'),
+                     (5, '被回報錯誤，已處理')]
+    difficulty_choices = [(1, '1'),
+                          (2, '2'),
+                          (3, '3'),
+                          (4, '4')]
 
     keywords = {
-        'description': request.GET.get('description', ''),
-        'question_type': int(request.GET.get('question_type', 0)),
+        'question_content': request.GET.get('question_content',)
     }
+    if keywords['question_content'] and any(char in punctuation for char in keywords['question_content']):
+        keywords['question_content'] = None
+        messages.warning(request, "Name cannot contains any special character.")
+    for keyword in ['question_type', 'difficulty', 'state']:
+        try:
+            keywords[keyword] = int(request.GET.get(keyword))
+        except (KeyError, TypeError, ValueError):
+            keywords[keyword] = None
 
-    num_pages, questions = tbmanager.query_question(**keywords, is_valid=True, page=page)
+    q_type = request.GET.get('question_type',)
+    difficulty = request.GET.get('difficulty',)
+    state = request.GET.get('state',)
 
-    for question in questions:
-        question.option = json.loads(question.option)
+    query_content, questions = tbmanager.query_questions(**keywords)
+    page = request.GET.get('page', 1)
+    paginator = Paginator(questions, 5)  # the second parameter is used to display how many items. Now is display 10
 
-    data = {
-        'questions': questions,
-        'num_types': range(1, len(QuestionType.__members__) + 1),
-        'keywords': keywords,
-        'page': page,
-        'page_range': range(num_pages),
-    }
+    try:
+        questionList = paginator.page(page)
+    except PageNotAnInteger:
+        questionList = paginator.page(1)
+    except EmptyPage:
+        questionList = paginator.page(paginator.num_pages)
 
-    return render(request, 'question/list.html', data)
+    return render(request, 'question/question_list.html', locals())
 
 
 @permission_check(UserType.TBManager)
 @require_http_methods(["GET"])
-def review_question_index(request):
+def review(request):
+    # 過濾掉狀態為"暫存"、"審核通過"、"被回報錯誤，已處理"
+    reviewed_questions = Question.objects.exclude(state=0).exclude(state=1).exclude(state=2).exclude(state=5)
+    page = request.GET.get('page', 1)
+    paginator = Paginator(reviewed_questions, 5)  # the second parameter is used to display how many items. Now is 10
+
     try:
-        page = int(request.GET.get('page', 0))
+        questionList = paginator.page(page)
+    except PageNotAnInteger:
+        questionList = paginator.page(1)
+    except EmptyPage:
+        questionList = paginator.page(paginator.num_pages)
 
-    except ValueError:
-        page = 0
-
-    keywords = {
-        'created_by': request.GET.get('created_by', ''),
-        'question_type': int(request.GET.get('question_type', 0)),
-    }
-
-    num_pages, questions = tbmanager.query_question(**keywords, is_valid=False, page=page)
-
-    for question in questions:
-        question.option = json.loads(question.option)
-
-    data = {
-        'questions': questions,
-        'num_types': range(1, len(QuestionType.__members__) + 1),
-        'keywords': keywords,
-        'page': page,
-        'page_range': range(num_pages),
-    }
-
-    return render(request, 'question/review.html', data)
+    return render(request, 'question/review.html', locals())
 
 
 @permission_check(UserType.TBManager)
-@require_http_methods(["GET", "POST"])
-def create_question(request):
-    if request.method == 'POST':
-        try:
-            question_type = int(request.POST.get('type'))
-
-        except TypeError:
-            raise ArgumentError(message='Not found question type.')
-
-        except ValueError:
-            raise IllegalArgumentError(message='Question type must be int.')
-        difficulty = request.POST.get('difficulty')
-        question = None
-        file = None
-
-        if question_type is QuestionType.QA.value[0]:
-            question_type = QuestionType.QA
-            template = 'question/qa/display.html'
-            if 'audio' not in request.FILES:
-                raise ArgumentError(message='Missing file field "audio".')
-
-            else:
-                file = request.FILES.get('audio')
-
-        elif question_type is QuestionType.ShortConversation.value[0]:
-            question_type = QuestionType.ShortConversation
-            template = 'question/short_conversation/display.html'
-            question = request.POST.get('description')
-            if 'audio' not in request.FILES:
-                raise ArgumentError(message='Missing file field "audio".')
-
-            else:
-                file = request.FILES.get('audio')
-
-        elif question_type is QuestionType.Grammar.value[0]:
-            question_type = QuestionType.Grammar
-            template = 'question/grammar/display.html'
-            question = request.POST.get('description')
-
-        elif question_type is QuestionType.Phrase.value[0]:
-            question_type = QuestionType.Phrase
-            template = 'question/phrase/display.html'
-            question = request.POST.get('description')
-
-        elif question_type is QuestionType.ParagraphUnderstanding.value[0]:
-            question_type = QuestionType.ParagraphUnderstanding
-            template = 'question/paragraph_understanding/display.html'
-            question = request.POST.get('description')
-
-        else:
-            raise IllegalArgumentError(message='The question type not in "definitions.py".')
-
-        try:
-            answer_index = int(request.POST.get('answer'))
-
-        except TypeError:
-            raise ArgumentError(message='Missing answer argument.')
-
-        except ValueError:
-            raise IllegalArgumentError(message='Choosing an answer from options.')
-
-        options = []
-
-        for cnt in range(0, 4):
-            option = request.POST.get('option-{}'.format(cnt))
-
-            if option:
-                options.append(option)
-
-                if cnt is answer_index:
-                    answer_index = len(options) - 1
-
-        if len(options) < 4:
-            raise ArgumentError(message='Options must have 4.')
-
-        if question is True:
-            try:
-                Question.objects.get(question=question)
-
-            except MultipleObjectsReturned:
-                raise MultipleObjectsReturned('Question has existed.')
-
-            except ObjectDoesNotExist:
-                pass
-
-        new_question = tbmanager.create_question(question_type=question_type,
-                                                 question=question,
-                                                 options=options,
-                                                 answer_index=answer_index,
-                                                 created_by=request.user,
-                                                 difficulty=difficulty,
-                                                 file=file)
-
-        messages.success(request, "Create question successfully.")
-
-        new_question.option = json.loads(new_question.option)
-
-        return render(request, template, {'question': new_question})
-
-    else:
-        if 'type' not in request.GET:
-            return render(request, 'question/select_type.html')
-
-        try:
-            question_type = int(request.GET.get('type'))
-
-        except ValueError:
-            raise IllegalArgumentError(message='Question type must be an integer.')
-
-        if question_type is QuestionType.QA.value[0]:
-            template = 'question/qa/create.html'
-
-        elif question_type is QuestionType.ShortConversation.value[0]:
-            template = 'question/short_conversation/create.html'
-
-        elif question_type is QuestionType.Grammar.value[0]:
-            template = 'question/grammar/create.html'
-
-        elif question_type is QuestionType.Phrase.value[0]:
-            template = 'question/phrase/create.html'
-
-        elif question_type is QuestionType.ParagraphUnderstanding.value[0]:
-            template = 'question/paragraph_understanding/create.html'
-
-        else:
-            raise IllegalArgumentError(message='The question type not in "definitions.py".')
-
-        return render(request, template, {'question_type': question_type})
-
-
-@permission_check(UserType.TBManager)
-@require_http_methods(["GET", "POST"])
-def edit_question(request, question_id):
+def question_pass(request, question_id):
     try:
         question = Question.objects.get(id=question_id)
-        question.option = json.loads(question.option)
-
     except ObjectDoesNotExist:
-        raise ResourceNotFoundError('Can\'t find question id={}'.format(question_id))
+        messages.error(request, 'Question does not exist, question id: {}'.format(question_id))
 
-    if request.method == 'POST':
-        difficulty = request.POST.get('difficulty')
-        description = None
-        file = None
-
-        if question.question_type is QuestionType.QA.value[0]:
-            question.question_type = QuestionType.QA
-            try:
-                if 'audio' not in request.FILES:
-                    raise ArgumentError(message='Missing file field "audio".')
-
-                else:
-                    file = request.FILES.get('audio')
-
-            except ArgumentError:
-                pass
-
-        elif question.question_type is QuestionType.ShortConversation.value[0]:
-            question.question_type = QuestionType.ShortConversation
-            description = request.POST.get('description')
-            try:
-                if 'audio' not in request.FILES:
-                    raise ArgumentError(message='Missing file field "audio".')
-
-                else:
-                    file = request.FILES.get('audio')
-
-            except ArgumentError:
-                pass
-
-        elif question.question_type is QuestionType.Grammar.value[0]:
-            question.question_type = QuestionType.Grammar
-            description = request.POST.get('description')
-
-        elif question.question_type is QuestionType.Phrase.value[0]:
-            question.question_type = QuestionType.Phrase
-            description = request.POST.get('description')
-
-        elif question.question_type is QuestionType.ParagraphUnderstanding.value[0]:
-            question.question_type = QuestionType.ParagraphUnderstanding
-            description = request.POST.get('description')
-
-        else:
-            raise IllegalArgumentError('The question type not in "definitions.py".')
-
-        try:
-            answer_index = int(request.POST.get('answer'))
-
-        except TypeError:
-            raise ArgumentError(message='Missing answer argument.')
-
-        except ValueError:
-            raise IllegalArgumentError(message='Choosing an answer from options.')
-
-        options = []
-
-        for cnt in range(0, 4):
-            option = request.POST.get('option-{}'.format(cnt))
-
-            if option:
-                options.append(option)
-
-                if cnt is answer_index:
-                    answer_index = len(options) - 1
-
-        if len(options) < 4:
-            raise ArgumentError(message='Options must have 4.')
-
-        question = tbmanager.update_question(question=question,
-                                             description=description,
-                                             options=options,
-                                             answer_index=answer_index,
-                                             file=file,
-                                             difficulty=difficulty,
-                                             last_updated=request.user)
-
-        messages.success(request, 'Update question id={}'.format(question.id))
-
-        return redirect(request.POST.get('next', '/question'))
-
-    else:
-        if question.question_type is QuestionType.QA.value[0]:
-            template = 'question/qa/create.html'
-
-        elif question.question_type is QuestionType.ShortConversation.value[0]:
-            template = 'question/short_conversation/create.html'
-
-        elif question.question_type is QuestionType.Grammar.value[0]:
-            template = 'question/grammar/create.html'
-
-        elif question.question_type is QuestionType.Phrase.value[0]:
-            template = 'question/phrase/create.html'
-
-        elif question.question_type is QuestionType.ParagraphUnderstanding.value[0]:
-            template = 'question/paragraph_understanding/create.html'
-
-        else:
-            raise IllegalArgumentError('The question type not in "definitions.py".')
-
-        data = {
-            'question': question,
-            'next': request.META.get('HTTP_REFERER', '/question'),
-        }
-
-        return render(request, template, data)
-
-
-@permission_check(UserType.TBManager)
-@require_http_methods(["GET"])
-def delete_question(request, question_id):
-    try:
-        question = Question.objects.get(id=question_id)
-
-    except ObjectDoesNotExist:
-        raise ResourceNotFoundError('Cannot find question id = {}.'.format(question_id))
-
-    question.is_valid = False
+    question.state = 1
+    question.faulted_reason = ""
     question.last_updated_by = request.user
     question.save()
 
-    messages.success(request, 'Delete question id={}.'.format(question_id))
-
-    return redirect(request.META.get('HTTP_REFERER', '/question'))
+    return redirect('question_review')
 
 
 @permission_check(UserType.TBManager)
-@require_http_methods(["POST"])
-def enable_question(request):
-    question_id_list = request.POST.get('question_id_list')
-    for question_id in question_id_list:
-        try:
-            question = Question.objects.get(id=question_id)
+def question_reject(request, question_id):
+    try:
+        question = Question.objects.get(id=question_id)
+    except ObjectDoesNotExist:
+        messages.error(request, 'Question does not exist, question id: {}'.format(question_id))
 
-        except ObjectDoesNotExist:
-            raise ResourceNotFoundError('Cannot find question id = {}.'.format(question_id))
-
-        question.is_valid = True
+    if request.method == "POST":
+        question.faulted_reason = request.POST.get('reason')
+        question.state = 2
         question.last_updated_by = request.user
         question.save()
+        return redirect('question_review')
+    else:
+        return render(request, 'question/reject_reason.html', locals())
 
-    messages.success(request, 'Enable question id={}.'.format(question_id))
 
-    return redirect(request.META.get('HTTP_REFERER', '/question/review'))
+@permission_check(UserType.TBManager)
+def question_edit(request, question_id):
+    try:
+        question = Question.objects.get(id=question_id)
+        if question.state == 1:
+            messages.warning(request, 'The question had been passed, can\'t be edited.')
+            return redirect('tbmanager_question_list')
+
+    except ObjectDoesNotExist:
+        messages.error(request, 'Question does not exist, question id: {}'.format(question_id))
+
+    if request.method == 'POST':
+        question.q_content = request.POST.get('q_content',)
+
+        for choice in question.choice_set.all():
+            choice.is_answer = 0
+            choice.save()
+
+        try:
+            choice = Choice.objects.get(id=request.POST.get('answer_choice'))
+            choice.is_answer = 1
+            choice.save()
+            question.state = 1
+            question.last_updated_by = request.user
+            question.save()
+
+            messages.success(request, 'Successful Update.')
+
+            return redirect('tbmanager_question_list')
+        except ObjectDoesNotExist:
+            messages.error(request, 'Choice does not exist, choice id: {}'.format(request.POST.get('answer_choice')))
+            return render(request, 'question/question_edit.html', locals())
+    else:
+        return render(request, 'question/question_edit.html', locals())
 
 
-# 以下都是題目操作員
+# 以下為「題目操作員」
 @permission_check(UserType.TBOperator)
 @require_http_methods(["GET"])
 def operator_index(request):
-    try:
-        page = int(request.GET.get('page', 0))
+    question_types = []
+    for q in list(QuestionType):
+        question_types.append(q)
 
-    except ValueError:
-        page = 0
+    state_choices = [(0, '暫存'),
+                     (2, '審核未通過'),
+                     (4, '被回報錯誤')]
+
+    difficulty_choices = [(1, '1'),
+                          (2, '2'),
+                          (3, '3'),
+                          (4, '4')]
 
     keywords = {
-        'description': request.GET.get('description', ''),
-        'question_type': int(request.GET.get('question_type', 0)),
+        'question_content': request.GET.get('question_content', )
     }
-
-    num_pages, questions = tbmanager.query_question(**keywords, created_by=request.user, is_valid=False, page=page)
-
-    for question in questions:
-        question.option = json.loads(question.option)
-
-    data = {
-        'questions': questions,
-        'num_types': range(1, len(QuestionType.__members__) + 1),
-        'keywords': keywords,
-        'page': page,
-        'page_range': range(num_pages),
-    }
-
-    return render(request, 'question/list.html', data)
-
-
-@permission_check(UserType.TBOperator)
-@require_http_methods(["GET", "POST"])
-def operator_create_question(request):
-    if request.method == 'POST':
+    if keywords['question_content'] and any(char in punctuation for char in keywords['question_content']):
+        keywords['question_content'] = None
+        messages.warning(request, "Name cannot contains any special character.")
+    for keyword in ['question_type', 'difficulty', 'state']:
         try:
-            question_type = int(request.POST.get('type'))
+            keywords[keyword] = int(request.GET.get(keyword))
+        except (KeyError, TypeError, ValueError):
+            keywords[keyword] = None
 
-        except TypeError:
-            raise ArgumentError(message='Not found question type.')
+    q_type = request.GET.get('question_type', )
+    state = request.GET.get('state', )
 
-        except ValueError:
-            raise IllegalArgumentError(message='Question type must be int.')
-        print(question_type)
-        difficulty = request.POST.get('difficulty')
-        question = None
-        file = None
+    query_content, questions = tboperator.query_questions(**keywords)
+    page = request.GET.get('page', 1)
+    paginator = Paginator(questions, 5)  # the second parameter is used to display how many items. Now is display 10
 
-        if question_type is QuestionType.QA.value[0]:
-            question_type = QuestionType.QA
-            template = 'question/qa/display.html'
-            if 'audio' not in request.FILES:
-                raise ArgumentError(message='Missing file field "audio".')
-
-            else:
-                file = request.FILES.get('audio')
-
-        elif question_type is QuestionType.ShortConversation.value[0]:
-            question_type = QuestionType.ShortConversation
-            template = 'question/short_conversation/display.html'
-            question = request.POST.get('description')
-            if 'audio' not in request.FILES:
-                raise ArgumentError(message='Missing file field "audio".')
-
-            else:
-                file = request.FILES.get('audio')
-
-        elif question_type is QuestionType.Grammar.value[0]:
-            question_type = QuestionType.Grammar
-            template = 'question/grammar/display.html'
-            question = request.POST.get('description')
-
-        elif question_type is QuestionType.Phrase.value[0]:
-            question_type = QuestionType.Phrase
-            template = 'question/phrase/display.html'
-            question = request.POST.get('description')
-
-        elif question_type is QuestionType.ParagraphUnderstanding.value[0]:
-            question_type = QuestionType.ParagraphUnderstanding
-            template = 'question/paragraph_understanding/display.html'
-            question = request.POST.get('description')
-
-        else:
-            raise IllegalArgumentError(message='The question type not in "definitions.py".')
-
-        try:
-            answer_index = int(request.POST.get('answer'))
-
-        except TypeError:
-            raise ArgumentError(message='Missing answer argument.')
-
-        except ValueError:
-            raise IllegalArgumentError(message='Choosing an answer from options.')
-
-        options = []
-
-        for cnt in range(0, 4):
-            option = request.POST.get('option-{}'.format(cnt))
-
-            if option:
-                options.append(option)
-
-                if cnt is answer_index:
-                    answer_index = len(options) - 1
-
-        if len(options) < 4:
-            raise ArgumentError(message='Options must have 4.')
-
-        if question is True:
-            try:
-                Question.objects.get(question=question)
-
-            except MultipleObjectsReturned:
-                raise MultipleObjectsReturned('Question has existed.')
-
-            except ObjectDoesNotExist:
-                pass
-
-        new_question = tbmanager.create_question(question_type=question_type,
-                                                 question=question,
-                                                 options=options,
-                                                 answer_index=answer_index,
-                                                 file=file,
-                                                 created_by=request.user,
-                                                 difficulty=difficulty)
-
-        messages.success(request, "Create question successfully.")
-
-        new_question.option = json.loads(new_question.option)
-
-        return render(request, template, {'question': new_question})
-
-    else:
-        if 'type' not in request.GET:
-            return render(request, 'question/select_type.html')
-
-        try:
-            question_type = int(request.GET.get('type'))
-
-        except ValueError:
-            raise IllegalArgumentError(message='Question type must be an integer.')
-
-        if question_type is QuestionType.QA.value[0]:
-            template = 'question/qa/create.html'
-
-        elif question_type is QuestionType.ShortConversation.value[0]:
-            template = 'question/short_conversation/create.html'
-
-        elif question_type is QuestionType.Grammar.value[0]:
-            template = 'question/grammar/create.html'
-
-        elif question_type is QuestionType.Phrase.value[0]:
-            template = 'question/phrase/create.html'
-
-        elif question_type is QuestionType.ParagraphUnderstanding.value[0]:
-            template = 'question/paragraph_understanding/create.html'
-
-        else:
-            raise IllegalArgumentError(message='The question type not in "definitions.py".')
-
-        return render(request, template, {'question_type': question_type})
-
-
-@permission_check(UserType.TBOperator)
-@require_http_methods(["GET", "POST"])
-def operator_edit_question(request, question_id):
     try:
-        question = Question.objects.get(id=question_id)
-        question.option = json.loads(question.option)
+        questionList = paginator.page(page)
+    except PageNotAnInteger:
+        questionList = paginator.page(1)
+    except EmptyPage:
+        questionList = paginator.page(paginator.num_pages)
 
-    except ObjectDoesNotExist:
-        raise ResourceNotFoundError('Can\'t find question id={}'.format(question_id))
-
-    if request.method == 'POST':
-        difficulty = request.POST.get('difficulty')
-        description = None
-        file = None
-
-        if question.question_type is QuestionType.QA.value[0]:
-            question.question_type = QuestionType.QA
-            try:
-                if 'audio' not in request.FILES:
-                    raise ArgumentError(message='Missing file field "audio".')
-
-                else:
-                    file = request.FILES.get('audio')
-
-            except ArgumentError:
-                pass
-
-        elif question.question_type is QuestionType.ShortConversation.value[0]:
-            question.question_type = QuestionType.ShortConversation
-            description = request.POST.get('description')
-            try:
-                if 'audio' not in request.FILES:
-                    raise ArgumentError(message='Missing file field "audio".')
-
-                else:
-                    file = request.FILES.get('audio')
-
-            except ArgumentError:
-                pass
-
-        elif question.question_type is QuestionType.Grammar.value[0]:
-            question.question_type = QuestionType.Grammar
-            description = request.POST.get('description')
-
-        elif question.question_type is QuestionType.Phrase.value[0]:
-            question.question_type = QuestionType.Phrase
-            description = request.POST.get('description')
-
-        elif question.question_type is QuestionType.ParagraphUnderstanding.value[0]:
-            question.question_type = QuestionType.ParagraphUnderstanding
-            description = request.POST.get('description')
-
-        else:
-            raise IllegalArgumentError('The question type not in "definitions.py".')
-
-        try:
-            answer_index = int(request.POST.get('answer'))
-
-        except TypeError:
-            raise ArgumentError(message='Missing answer argument.')
-
-        except ValueError:
-            raise IllegalArgumentError(message='Choosing an answer from options.')
-
-        options = []
-
-        for cnt in range(0, 4):
-            option = request.POST.get('option-{}'.format(cnt))
-
-            if option:
-                options.append(option)
-
-                if cnt is answer_index:
-                    answer_index = len(options) - 1
-
-        if len(options) < 4:
-            raise ArgumentError(message='Options must have 4.')
-
-        question = tbmanager.update_question(question=question,
-                                             description=description,
-                                             options=options,
-                                             answer_index=answer_index,
-                                             file=file,
-                                             difficulty=difficulty,
-                                             last_updated=request.user)
-
-        messages.success(request, 'Update question id={}'.format(question.id))
-
-        return redirect(request.POST.get('next', '/question'))
-
-    else:
-        if question.question_type is QuestionType.QA.value[0]:
-            template = 'question/qa/create.html'
-
-        elif question.question_type is QuestionType.ShortConversation.value[0]:
-            template = 'question/short_conversation/create.html'
-
-        elif question.question_type is QuestionType.Grammar.value[0]:
-            template = 'question/grammar/create.html'
-
-        elif question.question_type is QuestionType.Phrase.value[0]:
-            template = 'question/phrase/create.html'
-
-        elif question.question_type is QuestionType.ParagraphUnderstanding.value[0]:
-            template = 'question/paragraph_understanding/create.html'
-
-        else:
-            raise IllegalArgumentError('The question type not in "definitions.py".')
-
-        data = {
-            'question': question,
-            'next': request.META.get('HTTP_REFERER', '/question'),
-        }
-
-        return render(request, template, data)
+    return render(request, 'question/question_list.html', locals())
 
 
+# 將題目狀態從"暫存"轉換成"等待審核", 目前只能一次送出一題
 @permission_check(UserType.TBOperator)
 @require_http_methods(["GET"])
-def operator_delete_question(request, question_id):
+def question_submit(request, question_id):
     try:
         question = Question.objects.get(id=question_id)
-
     except ObjectDoesNotExist:
-        raise ResourceNotFoundError('Cannot find question id = {}.'.format(question_id))
+        messages.error(request, 'Question doesn\'t exist, question id: {}'.format(question_id))
 
-    question.delete()
+    question.state = 3      # 將狀態從 0 轉 3 , 從"暫存"轉"等待審核"
+    question.save()
 
-    messages.success(request, 'Delete question id={}.'.format(question_id))
+    return redirect('tboperator_question_list')
 
-    return redirect(request.META.get('HTTP_REFERER', '/question'))
+
+@permission_check(UserType.TBOperator)
+def question_create(request, kind):
+    if request.method == 'POST':
+        if kind == 'listening':
+            if request.POST.get('is_answer',):
+                choice = Choice.objects.get(id=int(request.POST.get('is_answer',)))
+                choice.is_answer = 1
+                choice.save()
+                return redirect('tboperator_question_list')
+            else:
+                try:
+                    q_file = request.FILES.get('question_file',)
+                except:
+                    messages.error(request, 'Missing file field "question_file"')
+
+                q_type = request.POST.get('question_type',)
+                q_difficulty = request.POST.get('question_difficulty',)
+                choice1 = request.POST.get('choice1',)
+                choice2 = request.POST.get('choice2',)
+                choice3 = request.POST.get('choice3',)
+                choice4 = request.POST.get('choice4',)
+
+                listening_question = tboperator.create_listening_question(q_file,
+                                                                          q_type=q_type,
+                                                                          created_by=request.user,
+                                                                          difficulty=q_difficulty)
+
+                option1 = Choice.objects.create(c_content=choice1, question=listening_question)
+                option2 = Choice.objects.create(c_content=choice2, question=listening_question)
+                option3 = Choice.objects.create(c_content=choice3, question=listening_question)
+                option4 = Choice.objects.create(c_content=choice4, question=listening_question)
+                option1.save()
+                option2.save()
+                option3.save()
+                option4.save()
+
+                return render(request, 'question/set_answer.html', locals())
+
+        elif kind == 'reading':
+            if request.POST.get('is_answer',):
+                choice = Choice.objects.get(id=int(request.POST.get('is_answer',)))
+                choice.is_answer = 1
+                choice.save()
+                return redirect('tboperator_question_list')
+            else:
+                try:
+                    q_content = request.POST.get('question_content',)
+                except:
+                    messages.error(request, 'The question content had been the same with other one.')
+
+                q_type = request.POST.get('question_type',)
+                q_difficulty = request.POST.get('question_difficulty',)
+                choice1 = request.POST.get('choice1',)
+                choice2 = request.POST.get('choice2',)
+                choice3 = request.POST.get('choice3',)
+                choice4 = request.POST.get('choice4',)
+                reading_question = tboperator.create_reading_question(q_content=q_content,
+                                                                      q_type=q_type,
+                                                                      created_by=request.user,
+                                                                      difficulty=q_difficulty)
+
+                option1 = Choice.objects.create(c_content=choice1, question=reading_question)
+                option2 = Choice.objects.create(c_content=choice2, question=reading_question)
+                option3 = Choice.objects.create(c_content=choice3, question=reading_question)
+                option4 = Choice.objects.create(c_content=choice4, question=reading_question)
+                option1.save()
+                option2.save()
+                option3.save()
+                option4.save()
+
+                return render(request, 'question/set_answer.html', locals())
+        else:
+            messages.error(request, 'The kind can not be found.')
+            return redirect('Homepage')
+    else:
+        return render(request, 'question/create.html', locals())
+
+
+@permission_check(UserType.TBOperator)
+def operator_edit(request, question_id):
+    try:
+        question = Question.objects.get(id=question_id)
+    except ObjectDoesNotExist:
+        messages.error(request, 'Question does not exist, question id: {}'.format(question_id))
+
+    if request.method == 'POST':
+        question.q_content = request.POST.get('q_content', )
+        for choice in question.choice_set.all():
+            choice.is_answer = 0
+            choice.save()
+        try:
+            choice = Choice.objects.get(id=request.POST.get('answer_choice'))
+            choice.is_answer = 1
+            choice.save()
+            question.state = 0
+            question.save()
+
+            messages.success(request, 'Successful Update.')
+
+            return redirect('tboperator_question_list')
+        except ObjectDoesNotExist:
+            messages.error(request, 'Choice does not exist, choice id: {}'.format(request.POST.get('answer_choice')))
+            return render(request, 'question/operator_edit.html', locals())
+    else:
+        return render(request, 'question/operator_edit.html', locals())
+
+
+@permission_check(UserType.TBOperator)
+def question_delete(request, question_id):
+    try:
+        question = Question.objects.get(id=question_id)
+        if question.state == 0 or question.state == 2:
+            question.delete()
+            messages.success('Delete question successfully, question id: {}'.format(question.id))
+        else:
+            messages.warning(request, 'Question can not be deleted, question id: {}'.format(question_id))
+    except ObjectDoesNotExist:
+        messages.error(request, 'Question does not exist, question id: {}'.format(question_id))
+
+    return redirect('tboperator_question_list')

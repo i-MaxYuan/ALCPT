@@ -1,7 +1,7 @@
-"""Online_Exam URL Configurationｒ
+"""Online_Exam URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/1.8/topics/http/urls/
+    https://docs.djangoproject.com/en/1.11/topics/http/urls/
 Examples:
 Function views
     1. Add an import:  from my_app import views
@@ -10,135 +10,101 @@ Class-based views
     1. Add an import:  from other_app.views import Home
     2. Add a URL to urlpatterns:  url(r'^$', Home.as_view(), name='home')
 Including another URLconf
-    1. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
+    1. Import the include() function: from django.conf.urls import url, include
+    2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import include, url
+from django.conf.urls import url, include
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
-from alcpt import views, question, exam, scores, system, testpaper, group, practice, simulation_exam
+
+from alcpt import registration, system, views, exam, question, viewer, testee, group
 
 urlpatterns = [
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^admin/', admin.site.urls),
 
-    url(r'^$', views.index),
+    url(r'^$', views.index, name='Homepage'),
 
-    url(r'captcha/', include('captcha.urls')),
+    url(r'^captcha/', include('captcha.urls')),
 
-    url(r'^exam/proclamation/(?P<proclamation_id>[0-9]+)/', include([
-        url(r'^detail$', views.proclamation_detail, name='proclamation_detail'),
-        url(r'^edit$', exam.edit_proclamation, name='proclamation_edit'),
-        url(r'^delete$', exam.delete_proclamation, name='proclamation_delete'),
+    url(r'^accounts/', include([
+        url(r'^login/', registration.login, name='login'),  # 登入
+        url(r'^logout/', registration.logout, name='logout'),  # 登出
+        url(r'^profile$', registration.profile, name='profile'),
+        url(r'^edit/(?P<reg_id>[0-9]+)$', registration.edit_profile, name='profile_edit'),
+        url(r'^password/change$', registration.change_password, name='password_change'),
     ])),
 
-    url(r'^login$', views.login),
-    url(r'^logout$', views.logout),
-
-    url(r'^question$', question.manager_index),
-    url(r'^question/', include([
-        url(r'^create$', question.create_question),
-        url(r'^review$', question.review_question_index),
-        url(r'^(?P<question_id>[0-9]+)/', include([
-            url(r'^edit$', question.edit_question),
-            url(r'^delete$', question.delete_question),
-        ]))
-    ])),
-
-    url(r'^question_operator$', question.operator_index),
-    url(r'^question_operator/', include([
-        url(r'^create$', question.operator_create_question),
-        url(r'^(?P<question_id>[0-9]+)/', include([
-            url(r'^edit$', question.operator_edit_question),
-            url(r'^delete$', question.operator_delete_question),
-        ]))
-    ])),
-
-    url(r'^exam$', exam.index, name='exam_list'),
-    url(r'^exam/', include([
-        url(r'^proclamation$', views.index, name='proclamation_list'),
-        url(r'^proclamation/', include([
-            url(r'^create$', exam.create_proclamation, name='proclamation_create'),
-        ])),
-
-        url(r'^create$', exam.create_exam, name='exam_create'),
-        url(r'^(?P<exam_id>[0-9]+)/', include([
-            url(r'^edit$', exam.edit_exam, name='exam_edit'),
-            url(r'^delete$', exam.delete_exam, name='exam_delete')
-            ])),
-
-        url(r'^testpaper$', testpaper.testpaper_index, name='testpaper_list'),
-        url(r'^testpaper/', include([
-            url(r'^create$', testpaper.create_testpaper, name='testpaper_create'),
-            url(r'^(?P<testpaper_name>[%\w\d]+)/', include([
-                url(r'^pick-question/(?P<question_type>[0-9]+)$', testpaper.pick_question, name='testpaper_pick_question'),
-                url(r'^auto-pick-question/(?P<question_type>[0-9]+)$', testpaper.auto_pick_question, name='testpaper_auto_pick_question'),
-                url(r'^edit$', testpaper.edit_testpaper, name='testpaper_edit'),
-                url(r'^delete$', testpaper.delete_testpaper, name='testpaper_delete')
-            ]))
-        ])),
-
-        url(r'^group$', group.group_index, name='testee_group_list'),
-        url(r'^group/', include([
-            url(r'^create$', group.create_group, name='testee_group_create'),
-            url(r'^(?P<group_name>[%\w\d]+)/', include([
-                url(r'^edit$', group.edit_group, name='testee_group_edit'),
-                url(r'^delete$', group.delete_group, name='testee_group_delete'),
-                url(r'^detail$', group.member_list, name='testee_group_detail'),
-            ]))
-        ]))
-    ])),
-
-    url(r'^score$', scores.index, name='all_exam_score_list'),
-    url(r'^score/', include([
-        url(r'^pie$', views.pie_viewer, name='score_pie'),
-        url(r'^exam/(?P<exam_id>[0-9]+)$', scores.show_given_exam, name='show_given_exam'),
-        url(r'^tester/(?P<user_id>[0-9]+)$', scores.show_given_tester, name='show_given_tester'),
-        url(r'^practice/(?P<user_id>[0-9]+)$', scores.show_given_practice, name='show_given_practice'),
-        url(r'^search/$', scores.search, name='search_testee'),
-    ])),
-
-    url(r'^tester$', scores.tester_index, name='testee_exam_score'),
-    url(r'^tester/', include([
-        url(r'^pie$', views.pie, name='testee_score_pie'),
-        url(r'^score/(?P<exam_id>[0-9]+)$', scores.show_given_exam, name='show_given_exam'),
-        url(r'^practice/', include([
-            url(r'^score$', scores.tester_index, name='testee_practice_score'),
-            url(r'^(?P<practice_type>(listening|reading))$', practice.create, name='testee_practice_selected'),
-            url(r'^integration$', practice.create_integration, name='testee_practice_all'),
-            url(r'^(?P<practice_id>[0-9]+)/', include([
-                url(r'^take/(?P<question_index>[0-9]*)$', practice.take_practice, name='testee_practice'),
-            ])),
-        ])),
-        url(r'^simulation-exam$', simulation_exam.index, name='testee_sim_exam_list'),
-        url(r'^simulation-exam/', include([
-            url(r'^(?P<exam_id>[0-9]+)/', include([
-                url(r'^take/(?P<question_index>[0-9]*)$', simulation_exam.take_exam, name='testee_sim_exam_take'),
-            ])),
-        ])),
-    ])),
-    url(r'^practice/score$', scores.tester_index),
-
-
-    url(r'^user$', system.index, name='user_list'),
+    # 系統管理員部分
     url(r'^user/', include([
-        url(r'^create$', system.create_user, name='user_create'),
-        url(r'^(?P<reg_id>[a-zA-Z0-9]+)$', system.edit_user, name='user_edit'),
-        url(r'^(?P<reg_id>[a-zA-Z0-9]+)/delete$', system.delete_user, name='delete'),
+        url(r'^list$', system.user_list, name='user_list'),
+        url(r'^create$', system.user_create, name='user_create'),
+        url(r'^multiCreate$', system.user_multiCreate, name='user_multiCreate'),
+        # url(r'^(?P<reg_id>[a-zA-Z0-9]+)$', system.edit_user, name='user_edit'),
 
         url(r'^unit_list/$', system.unit, name='unit_list'),
         url(r'^unit_list/', include([
             url(r'^create$', system.create_unit, name='unit_create'),
+        ])),
 
-            url(r'^(?P<department_id>[0-9]+)/', include([
-                url(r'^edit$', system.edit_department, name='department_edit'),
-                url(r'^delete$', system.delete_department, name='department_delete'),
-            ])),
-            url(r'^(?P<squadron_name>[\w]+)/', include([
-                url(r'^edit$', system.edit_squadron, name='squadron_edit'),
-                url(r'^delete$', system.delete_squadron, name='squadron_delete'),
-            ])),
+        url(r'^proclamation/', include([
+            url(r'^create$', system.proclamation_create, name='proclamation_create'),
+            url(r'^(?P<proclamation_id>[0-9]+)/detail$', system.proclamation_detail, name='proclamation_detail'),
+            url(r'^(?P<proclamation_id>[0-9]+)/delete$', system.proclamation_delete, name='proclamation_delete'),
+            url(r'^(?P<proclamation_id>[0-9]+)/edit$', system.proclamation_edit, name='proclamation_edit'),
         ]))
-    ]))
+    ])),
+
+    # 考試管理員
+    url(r'^exam$', exam.exam_list, name='exam_list'),
+    url(r'^exam/', include([
+        url(r'^testpaper/', include([
+            url(r'^list$', exam.testpaper_list, name='testpaper_list'),
+            url(r'^create$', exam.testpaper_create, name='testpaper_create'),
+            url(r'^(?P<testpaper_id>[0-9]+)/content$', exam.testpaper_content, name='view_testpaper_content'),
+            url(r'^(?P<testpaper_id>[0-9]+)/edit$', exam.testpaper_edit, name='testpaper_edit'),
+            url(r'^(?P<testpaper_id>[0-9]+)/(?P<question_type>[0-9]+)/auto_pick', exam.auto_pick, name='auto_pick'),
+            url(r'^(?P<testpaper_id>[0-9]+)/(?P<question_type>[0-9]+)/manual_pick', exam.manual_pick, name='manual_pick'),
+        ])),
+        url(r'^testee_group$', group.group_list, name='testee_group_list'),
+        url(r'^testee_group/', include([
+            url(r'^create$', group.group_create, name='testee_group_create'),
+            url(r'edit/(?P<group_id>[0-9]+)$', group.group_edit, name='testee_group_edit'),
+            # url(r'delete/(?P<group_id>[0-9]+)$', group.group_delete, name='testee_group_delete'),
+        ])),
+    ])),
+
+    # 題庫管理員
+    url(r'^question$', question.manager_index, name='tbmanager_question_list'),
+    url(r'^question/', include([
+        url(r'^review$', question.review, name='question_review'),
+        url(r'^(?P<question_id>[0-9]+)/pass$', question.question_pass, name='question_pass'),
+        url(r'^(?P<question_id>[0-9]+)/reject$', question.question_reject, name='question_reject'),
+        url(r'^(?P<question_id>[0-9]+)/edit$', question.question_edit, name='question_edit'),
+    ])),
+
+    # 題目操作員
+    url(r'^operator$', question.operator_index, name='tboperator_question_list'),
+    url(r'^operator/', include([
+        url(r'^submit/(?P<question_id>[0-9]+)$', question.question_submit, name='question_submit'),
+        url(r'^(?P<kind>(listening|reading))/question_create$', question.question_create, name='question_create'),
+        url(r'^(?P<question_id>[0-9]+)/edit$', question.operator_edit, name='operator_edit'),
+        url(r'^(?P<question_id>[0-9]+)/delete$', question.question_delete, name='question_delete'),
+    ])),
+
+    # 成績檢閱者
+    url(r'^viewer$', viewer.index, name='exam_score_list'),
+
+    # 受測者部分(尚未完成)
+    url(r'^testee$', testee.score_list, name='testee_score_list'),  # 受測者主頁（顯示自我成績）
+    url(r'^testee/', include([
+        url(r'^exam_list', testee.exam_list, name='testee_exam_list'),
+        url(r'^(?P<answersheet_id>[0-9]+)/content$', testee.view_answersheet_content, name='view_answersheet_content'),
+        url(r'^practice/', include([
+            url(r'^(?P<kind>(listening|reading))$', testee.practice_create, name='testee_practice_create'),
+            url(r'^(?P<exam_id>[0-9]+)', testee.start_practice, name='testee_start_practice'),
+        ]))
+    ])),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
