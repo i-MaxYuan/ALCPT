@@ -186,6 +186,12 @@ def show_given_practice(request, user_id):
 @permission_check(UserType.Viewer)
 @require_http_methods(["GET"])
 def search(request):
+    try:
+        page = int(request.GET.get('page', 0))
+    except ValueError:
+        page = 0
+
+
     keywords = {
         'name': request.GET.get('name')
     }
@@ -212,7 +218,7 @@ def search(request):
         except ObjectDoesNotExist:
             keywords['squadron'] = None
 
-    users = systemmanager.score_query_users(**keywords, page=0)
+    users = systemmanager.score_query_users(**keywords, page=page)
 
     data = {
         'users': users,
