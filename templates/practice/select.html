@@ -1,41 +1,138 @@
 {% extends 'base.html' %}
 
 {% block path %}
-    <a class="fa fa-angle-double-right fa-lg box"></a>
     <a href="{% url 'testee_score_list' %}">受測者</a>
-    <a class="fa fa-angle-right fa-lg box"></a>
+    <a class="fa fa-angle-double-right fa-lg box"></a>
     <a href="">{% if kind == 'listening' %}聽力練習{% else %}閱讀練習{% endif %}</a>
 {% endblock %}
 
 {% block content %}
-    <div>
+    <div class="testee_practice_create">
         <form action="{% url 'testee_practice_create' kind %}" method="post">
+            <div class="title"><h1>Test Practice Create.</h1> <h2>&nbsp;</h2></div>
         {% csrf_token %}
-            {% if kind == 'listening' %}
-                <h1>聽力題型</h1>
-            {% else %}
-                <h1>閱讀題型</h1>
-            {% endif %}
+            <div class="type">
+                {% if kind == 'listening' %}
+                    <h1>聽力題型：</h1>
+                {% else %}
+                    <h1>閱讀題型：</h1>
+                {% endif %}
+            </div>
 
-            {% if kind == 'listening' %}
-                <input type="checkbox" id="1" name="question_type" value="1">問答
-                <input type="checkbox" id="2" name="question_type" value="2">簡短對話
-            {% elif kind == 'reading' %}
-                <input type="checkbox" id="3" name="question_type" value="3">文法
-                <input type="checkbox" id="4" name="question_type" value="4">名詞片語
-                <input type="checkbox" id="5" name="question_type" value="5">段落理解
-            {% endif %}
+            <div class="type_choose">
+                {% if kind == 'listening' %}
+                    <input type="checkbox" id="1" name="question_type" value="1">問答
+                    <input type="checkbox" id="2" name="question_type" value="2">簡短對話
+                {% elif kind == 'reading' %}
+                    <input type="checkbox" id="3" name="question_type" value="3">文法
+                    <input type="checkbox" id="4" name="question_type" value="4">名詞片語
+                    <input type="checkbox" id="5" name="question_type" value="5">段落理解
+                {% endif %}
+            </div>
+
+            <div class="question_num">
+                <h1>題數：</h1>
+                <select name="question_num" required>
+                    <option value="" disabled selected hidden>請選擇題數</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="30">30</option>
+                </select>
+            </div>
+
+            <div class="btn">
+                <input type="submit" value="開始練習">
+            </div>
+
+            <div class="btn2">
+                <input type="reset" value="取消">
+            </div>
+
+            <style>
+                .testee_practice_create .title h1{
+                    font-size: 40px;
+                    color: #FFFEF6;
+                    background-color: #4CCABD;
+                    padding-top: 10px;
+                    padding-bottom: 10px;
+                    padding-right: 15px;
+                    padding-left: 45px;
+                    text-align: center;
+                    position: absolute;
+                    top: 1%;
+                }
+
+                .testee_practice_create .title h2{
+                    background-color: #4CCABD;
+                    padding-top: 10px;
+                    padding-bottom: 22px;
+                    padding-right: 15px;
+                    padding-left: 30px;
+                    position: absolute;
+                    top: 1%;
+                    left: 29%;
+                }
+
+                .testee_practice_create form .type h1{
+                    font-size: 30px;
+                    padding-left: 30%;
+                    position: absolute;
+                    top: 30%;
+                }
+
+                .testee_practice_create form .type_choose{
+                    position: absolute;
+                    top: 32%;
+                    left: 40%;
+                    padding-left: 10px;
+
+                    font-size: 30px;
+                }
+
+                .testee_practice_create form .question_num h1{
+                    font-size: 30px;
+                    padding-left: 30%;
+                    position: absolute;
+                    top: 40%;
+                }
+
+                .testee_practice_create form .question_num select{
+                    position: absolute;
+                    top: 42%;
+                    left: 37%;
+                    padding-left: 10px;
+
+                    font-size: 30px;
+                }
+
+                .testee_practice_create form .btn input{
+                    font-size: 25px;
+                    padding: 10px;
+                    padding-left: 15px;
+                    padding-right: 15px;
+                    color: #FFFEF6;
+                    background-color: #4CCABD;
+                    border: none;
+                    position: absolute;
+                    top: 85%;
+                    left: 40%;
+                }
+
+                .testee_practice_create form .btn2 input{
+                    font-size: 25px;
+                    padding: 10px;
+                    padding-left: 15px;
+                    padding-right: 15px;
+                    color: #FFFEF6;
+                    background-color: #5e5e5e;
+                    border: none;
+                    position: absolute;
+                    top: 85%;
+                    left: 52%;
+                }
 
 
-            <h1>題數</h1>
-            <select name="question_num" required>
-                <option value="" disabled selected hidden>請選擇題數</option>
-                <option value="10">10</option>
-                <option value="20">20</option>
-                <option value="30">30</option>
-            </select>
-
-            <input type="submit" value="開始練習">
+            </style>
         </form>
     </div>
 

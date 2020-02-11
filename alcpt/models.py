@@ -1,4 +1,4 @@
-import time
+import time, datetime, json
 
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
@@ -44,6 +44,8 @@ class UserManager(BaseUserManager):
 # update_time: user update its profile time
 class User(AbstractBaseUser):
     reg_id = models.CharField(max_length=50, unique=True)
+    email = models.EmailField(default="", blank=True, null=True)
+    email_is_verified = models.BooleanField(default=False)
     name = models.CharField(max_length=20, blank=True, null=True)
     gender = models.PositiveSmallIntegerField(blank=True, null=True)
     privilege = models.PositiveSmallIntegerField(default=0)
@@ -304,3 +306,51 @@ class Proclamation(models.Model):
 
     def __str__(self):
         return self.title
+
+
+# name: the name of report category
+# responsibility: who responsible for this category
+# 回報類別
+class ReportCategory(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+    responsibility = models.PositiveSmallIntegerField(default=32)
+
+    def __str__(self):
+        return self.name
+
+
+# category: this report is belong to which category
+# question: when the testees taking the exam and thinking the question is issued, then they can press the button, after
+#           exam, they can submit the question report.
+# reply:    the principal replied.
+# supplement_note: when the user reported, they can describe their situation though the supplement to let the category
+#             principal get more understanding.
+# state: which state of this report.
+# 問題回報
+class Report(models.Model):
+    user_notification = models.BooleanField(default=False)       # use to notify user the report had been change.
+    staff_notification = models.BooleanField(default=False)
+    category = models.ForeignKey('ReportCategory', on_delete=models.PROTECT)
+    question = models.ForeignKey('Question', on_delete=models.PROTECT, blank=True, null=True)
+    reply = models.TextField()
+    supplement_note = models.TextField()
+    STATES_CHOICES = (
+        (0, '暫存'),
+        (1, '待處理'),
+        (2, '處理中'),
+        (3, '已解決'),
+    )
+    state = models.SmallIntegerField(choices=STATES_CHOICES, default=0)
+    created_by = models.ForeignKey('User', on_delete=models.PROTECT)
+    created_time = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    resolved_by = models.ForeignKey('User', on_delete=models.PROTECT, related_name='resolve_by', blank=True, null=True)
+    resolved_time = models.DateTimeField(auto_now=True, blank=True, null=True)
+
+    def __str__(self):
+        return self.category
+
+    def store_reply(self, reply):
+        self.reply = json.dumps(reply).encode('utf-8').decode('unicode_escape')
+
+    def get_reply(self):
+        return json.loads(self.reply)

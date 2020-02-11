@@ -1,83 +1,246 @@
-{% extends 'base.html' %}
+{% extends 'base_long_page.html' %}
 
 {% block path %}
-    <a class="fa fa-angle-double-right fa-lg box"></a>
     <a href="">受測者</a>
-    <a class="fa fa-angle-right fa-lg box"></a>
-    <a href="">測驗成績紀錄</a>
+    <a class="fa fa-angle-double-right fa-lg box"></a>
+    <a href="">成績紀錄</a>
+
+    <div class="container-flu" style="position: ">
+        <!-- BS4 的靠右由 pull-right 改為 float-right -->
+        <div class="btn-group float-right">
+          <button type="button" class="btn btn-primary dropdown-toggle pull-right" data-toggle="dropdown">
+              <i style="font-size: 20px">圖表</i>
+          </button>
+          <!-- 重點在這 -->
+          <div class="dropdown-menu dropdown-menu-right">
+              <div class="search_bar">
+                <h1>統計圖表</h1>
+                <form action="" method="get">
+                    <div>
+                        <canvas id="chart" width="800" height="600"></canvas>
+                        <script>
+                            var ctx = document.getElementById('chart').getContext('2d');
+                            var chart = new Chart(ctx, {
+                                type: 'pie',
+                                data: {
+                                    labels: ["及格", "不及格"],
+                                    datasets: [{
+                                        label: '# of Votes',
+                                        data: [{{ qualified }}, {{ unqualified }}],
+                                        backgroundColor: [
+                                            'rgba(120, 194, 196, 1)',
+                                            'rgba(219, 77, 109, 1)'
+                                        ],
+                                        borderColor: [
+                                            'rgba(255,255,255,1)',
+                                            'rgba(255, 255, 255, 1)'
+                                        ],
+                                        borderWidth: 6
+                                    }]
+                                }
+                            });
+                        </script>
+                    </div>
+
+                </form>
+            </div>
+          </div>
+
+            <style>
+                .container-flu button{
+                    height: 70px;
+                    width: 70px;
+                    background-color: #4CCABD;
+                    border: none;
+
+                }
+
+
+                .container-flu{
+                    position: absolute;
+                    top: -5%;
+                    left: 850%;
+                }
+
+                .btn-group{
+                    position: absolute;
+                    top: 50px;
+                    right: 30px;
+                }
+
+                .btn-group .dropdown-menu{
+                    height: 600px;
+                    width: 800px;
+                    padding-left: 10px;
+                    padding-right: 10px;
+                    text-align: center;
+
+                    position: absolute;
+                    top: -40%;
+                    right: 97%;
+
+                    opacity: 1;
+                }
+
+                .dropdown-menu form{
+                    height: auto;
+                    width: auto;
+                }
+
+                .search_bar h1{
+                    width: 100px;
+                    height: 30px;
+                    font-size: 20px;
+                    position: absolute;
+                    top: 3px;
+                    left: 10px;
+                }
+
+
+                .search_btn button{
+                    width: 60px;
+                    height: 30px;
+                    border-radius: 5px;
+                    color: #FFFEF6;
+
+                    position: absolute;
+                    right: 20px;
+                    top: 67%;
+
+                    opacity: 1;
+                }
+            </style>
+        </div>
+    </div>
+
 {% endblock %}
 
 {% block content %}
 
-    <div>
-        <h1>測驗紀錄</h1>
-        <table border="1">
-            <tr>
-                <th>測驗名稱</th>
-                <th>測驗成績</th>
-                <th>測驗時間</th>
-                <th>試卷內容</th>
-            </tr>
-            {% for answersheet in answersheetList %}
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <caption style="font-size: 30px;">&nbsp;&nbsp;成績紀錄（共{{ answer_sheets.count }}條結果）</caption>
+            <thead class="title">
                 <tr>
-                    <td>{{ answersheet.exam }}</td>
-                    <td>{{ answersheet.score }}</td>
-                    <td>{{ answersheet.finish_time|date:'Y年m月d日, H時m分' }}</td>
-                    <td><a href="{% url 'view_answersheet_content' answersheet.id %}">{{ answersheet.exam.testpaper }}</a></td>
+                    <th class="col-md-2">測驗名稱</th>
+                    <th class="col-md-1">測驗成績</th>
+                    <th class="col-md-1">測驗時間</th>
                 </tr>
-            {% endfor %}
+            </thead>
+            <tbody>
+                {% for answersheet in answer_sheets %}
+                    <tr style="cursor: pointer" onclick="window.location.href='{% url 'view_answersheet_content' answersheet.id %}'">
+                        <td style="text-align: center; vertical-align:middle;">{{ answersheet.exam }}</td>
+                        <td style="vertical-align:middle;">{{ answersheet.score }}</td>
+                        <td style="vertical-align:middle;">{{ answersheet.finish_time|date:'Y年m月d日, H時m分' }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+
         </table>
+
+        <style>
+            .table-responsive .table{
+                text-align: center;
+                position: absolute;
+                top: 30px;
+            }
+
+            .table-hover > tbody > tr:hover > td,
+            .table-hover > tbody > tr:hover > th {
+                background-color: #4CCABD;
+            }
+
+            .title{
+                font-size: 20px;
+            }
+
+            .title tr th{
+                text-align: center;
+            }
+
+            .table tbody{
+                font-size: 18px;
+            }
+
+            .table tbody td a{
+                color: #2C3232;
+            }
+
+        </style>
     </div>
 
+
+
+
+        <!-- 頁碼的部分 -->
     <div>
-        <canvas id="chart" width="800" height="600"></canvas>
-        <script>
-            var ctx = document.getElementById('chart').getContext('2d');
-            var chart = new Chart(ctx, {
-                type: 'pie',
-                data: {
-                    labels: ["及格", "不及格"],
-                    datasets: [{
-                        label: '# of Votes',
-                        data: [{{ qualified }}, {{ unqualified }}],
-                        backgroundColor: [
-                            'rgba(120, 194, 196, 1)',
-                            'rgba(219, 77, 109, 1)'
-                        ],
-                        borderColor: [
-                            'rgba(255,255,255,1)',
-                            'rgba(255, 255, 255, 1)'
-                        ],
-                        borderWidth: 6
-                    }]
+        <div class="pagination">
+            <div class="pager_group1">
+                <ul class="pager">
+                    <li class="previous" style="color: #2C3232"><a href="?page=1{% if query_content %}&{{ query_content }}{% endif %}">&laquo; first</a></li>
+                    <li style="padding-left: 500px; padding-right: 490px">&nbsp;</li>
+                    <li class="next"><a href="?page={{ sheets.paginator.num_pages }}{% if query_content %}&{{ query_content }}{% endif %}">last &raquo;</a></li>
+                </ul>
+            </div>
+
+            <div class="pager_group2">
+                <nav aria-label="Page navigation">
+                  <ul class="pagination justify-content-center">
+                    <li {% if not sheets.has_previous %}class="page-item disabled"{% endif %}>
+                        {% if sheets.has_previous %}
+                            <a class="page-link" href="?page={{ sheets.previous_page_number }}{% if query_content %}&{{ query_content }}{% endif %}" tabindex="-1">Previous</a>
+                        {% else %}
+                            <a href="javascript:void(0)">Previous</a>
+                        {% endif %}
+                    </li>
+                    <li class="page-item">
+                        {% for page in paginator.page_range %}
+                            {% if page == sheets.number %}
+                                <a class="page-link" href="?page={{ page }}{% if query_content %}&{{ query_content }}{% endif %}">{{ page }}</a>
+                            {% else %}
+                                <a href="?page={{ page }}{% if query_content %}&{{ query_content }}{% endif %}">{{ page }}</a>
+                            {% endif %}
+                        {% endfor %}
+                    </li>
+                    <li {% if not sheets.has_next %}class="page-item disabled"{% endif %}>
+                        {% if sheets.has_next %}
+                            <a class="page-link" href="?page={{ sheets.next_page_number }}{% if query_content %}&{{ query_content }}{% endif %}">Next</a>
+                        {% else %}
+                            <a href="javascript:void(0)">Next</a>
+                        {% endif %}
+                    </li>
+                  </ul>
+                </nav>
+
+            </div>
+
+
+            <style>
+
+                .pager_group1{
+                    text-decoration: none;
+                    position: absolute;
+                    bottom: 0%;
+                    left: 1%;
+                    right: 1%;
                 }
-            });
-        </script>
-    </div>
 
-    <div class="pagination">
-        <a href="?page=1">&laquo; first</a>
+                .pager_group2{
+                    position: absolute;
+                    bottom: 6.5%;
+                    right: 50%;
 
-        {% if sheets.has_previous %}
-            <a href="?page={{ sheets.previous_page_number }}">Prev</a>
-        {% else %}
-            <a href="">Prev</a>
-        {% endif %}
+                    transform: translate(50%,50%);
+                }
 
-        {% for page in paginator.page_range %}
-            {% if page == sheets.number %}
-                <a class="active" href="?page={{ page }}">{{ page }}</a>
-            {% else %}
-                <a href="?page={{ page }}">{{ page }}</a>
-            {% endif %}
-        {% endfor %}
+            </style>
+        </div>
 
-
-        {% if sheets.has_next %}
-            <a href="?page={{ sheets.next_page_number }}">Next</a>
-        {% else %}
-            <a href="">Next</a>
-        {% endif %}
-        <a href="?page={{ sheets.paginator.num_pages }}">last &raquo;</a>
+        <style>
+            .pagination{
+                font-size: 20px;
+            }
+        </style>
     </div>
 {% endblock %}

@@ -1,70 +1,167 @@
 {% extends 'base.html' %}
 
 {% block path %}
-    <a class="fa fa-angle-double-right fa-lg box"></a>
     <a href="">系統管理員</a>
-    <a class="fa fa-angle-right fa-lg box"></a>
+    <a class="fa fa-angle-double-right fa-lg box"></a>
     <a href="">單位列表</a>
 {% endblock %}
 
 {% block content %}
     <div class="unit_list">
-        <h1>單位列表</h1>
 
-        <div>
-            <a href="{% url 'unit_create' %}">新增單位</a>
+        <div class="add_unit">
+            <button type="button" class="btn btn-default btn-lg">
+                <a href="{% url 'unit_create' %}">新增單位</a>
+            </button>
+
+            <style>
+                .add_unit button{
+                    width: 130px;
+                    height: 50px;
+                    background-color: #4CCABD;
+                    border-radius: 10px;
+                    text-align: center;
+                    font-size: 20px;
+                    border: none;
+                    box-shadow: 0px 3px 8px 0px #486260;
+
+                    position: absolute;
+                    top: -15%;
+                    right: 0%;;
+                }
+
+                .add_unit button:hover{
+                    background-color: #2C3232;
+                    transition: all 0.3s ease;
+                }
+
+                .add_unit a{
+                    color: #FFFEF6;
+                    text-decoration: none;
+                }
+            </style>
         </div>
 
-        <div class="create_unit"></div>
+        <div class="button-tags">
+            <button onclick="openUnit('department')">科系列表</button>
+            <button onclick="openUnit('squadron')">中隊列表</button>
 
-        <div class="department_list">
-            <h2>科系列表</h2>
+            <style>
+                .button-tags button{
+                    position: relative;
+                    top: -40px;
+
+                    border: none;
+                    border-radius: 6px;
+                    background-color: rgb(240, 240, 240);
+                    color: rgb(100, 100, 100);
+
+                    font-size: 24px;
+                    padding: 6px 12px;
+                }
+            </style>
+        </div>
+
+        <div id="department" class="table-responsive">
             {% if departments %}
-                <table>
-                    <tr>
-                        <th scope="col">學系代號</th>
-                        <th scope="col">學系名稱</th>
-                        <th scope="col"></th>
-                    </tr>
-                {% for department in departments %}
-                    <tr>
-                        <td> {{ department.id }} </td>
-                        <td> {{ department.name }} </td>
-{#                        <td>#}
-{#                            <a href="{% url 'department_edit' department.id %}"><i class="fa fa-pencil fa-fw mb-2"></i></a>#}
-{#                            <a href="{% url 'department_delete' department.id %}"><i class="fa fa-trash-o" aria-hidden="true"></i></a>#}
-{#                        </td>#}
-                    </tr>
-                {% endfor %}
+                <table class="table table-hover">
+                    <thead class="title">
+                        <tr>
+                            <th class="col-md-4">科系代號</th>
+                            <th class="col-md-3">科系名稱</th>
+                            <th class="col-md-4">科系人數</th>
+                            <th class="col-md-1"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for department in departments %}
+                            <tr style="cursor: pointer" onclick="window.location.href='{% url 'unit_member_list' 'department' department.name %}'">
+                                <td>{{ department.id }}</td>
+                                <td>{{ department.name }}</td>
+                                <td>{{ department.student_set.all.count }}</td>
+                                <td>
+                                    <a href=""><i class="fa fa-pencil-square fa-fw mb-2"></i></a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
             </table>
             {% else %}
                 目前暫無資料
             {% endif %}
         </div>
 
-        <div class="squadron_list">
-            <h2>中隊列表</h2>
-            {% if squadrons %}
-                <table>
-                    <tr>
-                        <th>學系代號</th>
-                        <th>學系名稱</th>
-                        <th></th>
-                    </tr>
+        <div id="squadron" class="table-responsive" style="display: none">
+            {% if departments %}
+                <table class="table table-hover">
+                    <thead class="title">
+                        <tr>
+                            <th class="col-md-4">中隊代號</th>
+                            <th class="col-md-3">中隊名稱</th>
+                            <th class="col-md-4">中隊人數</th>
+                            <th class="col-md-1"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
                 {% for squadron in squadrons %}
-                    <tr>
-                        <td> {{ squadron.id }} </td>
-                        <td> {{ squadron.name }} </td>
-{#                        <td>#}
-{#                            <a href="{% url 'squadron_edit' squadron.name %}"><i class="fa fa-pencil fa-fw mb-2"></i></a>#}
-{#                            <a href="{% url 'squadron_delete' squadron.name %}"><i class="fa fa-trash-o" aria-hidden="true"></i></a>#}
-{#                        </td>#}
+                    <tr style="cursor: pointer" onclick="window.location.href='{% url 'unit_member_list' 'squadron' squadron.name %}'">
+                        <td>{{ squadron.id }}</td>
+                        <td>{{ squadron.name }}</td>
+                        <td>{{ squadron.student_set.all.count }}</td>
+                        <td>
+                            <a href=""><i class="fa fa-pencil-square fa-fw mb-2"></i></a>
+                        </td>
                     </tr>
                 {% endfor %}
             </table>
             {% else %}
                 目前暫無資料
             {% endif %}
+            <style>
+                .table-responsive .table{
+                    text-align: center;
+                }
+
+                .table-hover a{
+                    visibility: hidden;
+                }
+                .table-hover > tbody > tr:hover{
+                    cursor: pointer;
+                    background-color: #4CCABD;
+                }
+                .table-hover > tbody > tr:hover a, td{
+                    visibility: visible;
+                }
+
+                .title{
+                    font-size: 25px;
+                }
+
+                .title tr th{
+                    text-align: center;
+                }
+
+                .table tbody{
+                    font-size: 18px;
+                }
+
+                .table tbody td a{
+                    color: #2C3232;
+                }
+            </style>
         </div>
     </div>
+
+    <script type="application/javascript">
+    function openUnit(unit_kind) {
+        var i;
+        var x = document.getElementsByClassName("table-responsive");
+        for (i = 0; i < x.length; i++) {
+            x[i].style.display = "none";
+        }
+        document.getElementById(unit_kind).style.display = "block";
+    }
+    </script>
 {% endblock %}

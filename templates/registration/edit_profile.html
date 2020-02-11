@@ -1,111 +1,283 @@
-{% extends 'base.html' %}
+{% extends 'profile_base.html' %}
 
 {% load web_filters %}
 
 {% block path %}
+    <a href="{% url 'profile' %}">檢視個人資料</a>
     <a class="fa fa-angle-double-right fa-lg box"></a>
-    <a href="{% url 'profile' %}">個人資料</a>
-    <a class="fa fa-angle-right fa-lg box"></a>
     <a href="">編輯個人資料</a>
 {% endblock %}
 
 {% block content %}
-    <div>
-        <a href="{% url 'profile_edit' user.reg_id %}">編輯個人檔案</a>
-        <a href="{% url 'password_change' %}">更改密碼</a>
+    <div class="tool-btn">
+        <ul class="nav nav-pills nav-stacked">
+            <li><a href="{% url 'profile' %}">基本資料</a></li>
+            <li><a href="#" style="background-color: #DCDCDC">編輯個人檔案</a></li>
+            <li><a href="{% url 'password_change' %}">更改密碼</a></li>
+            <li><a href="{% url 'report_list' %}">問題回報</a></li>
+        </ul>
+
+        <style>
+            .tool-btn{
+                background-color: #F3F3F3;
+                width: 20%;
+                height: 70%;
+                border-top-left-radius: 1%;
+                border-bottom-left-radius: 1%;
+                border-right-style: solid;
+                border-right-width: 0.8px;
+                border-right-color: #c0c0c0;
+                overflow: hidden;
+
+                position: absolute;
+                top: 0%;
+                left: 0%;
+            }
+
+            .tool-btn ul{
+                width: 100%;
+                position: absolute;
+                padding-top: 10px;
+            }
+
+            .tool-btn ul li a{
+                color: #2C3232;
+                font-size: 16px;
+                text-decoration: none;
+                padding-left: 50px;
+                padding-top: 20px;
+                padding-bottom: 20px;
+            }
+        </style>
     </div>
 
-    <div>
+    <!-- 大頭貼 -->
+    <div class="photo">
+        <i class="fa fa-user-circle"></i>
+
+        <style>
+            .photo{
+                position: absolute;
+                left: 26%;
+                top: 6%;
+
+            }
+
+            .photo i{
+                font-size: 100px;
+                color: #5e5e5e;
+            }
+        </style>
+    </div>
+
+    <div class="personal_infor">
         <form action="{% url 'profile_edit' user.reg_id %}" method="post">
             {% csrf_token %}
-            <table>
-                <tr>
-                    <th>使用者帳號</th>
-                    <th>姓名</th>
-                    <th>性別</th>
-                    <th>權限</th>
+            <ul style="list-style: none;" class="infor1">
+                <li>使用者帳號</li>
+                <li>姓名</li>
+                <li>Email</li>
+                <li>性別</li>
+                <li>權限</li>
+                <div class="student_infor">
                     {% if user.student %}
-                        <th>學號</th>
-                        <th>年班</th>
-                        <th>科系</th>
-                        <th>中隊</th>
+                        <div class="line"></div>
+                        <li>學號</li>
+                        <li>年班</li>
+                        <li>科系</li>
+                        <li>中隊</li>
                     {% endif %}
-                    <th>最近登入</th>
-                    <th>加入時間</th>
-                    <th>狀態</th>
-                </tr>
-                <tr>
-                    <td>{{ user.reg_id }}</td>
-                    <td>
+                </div>
+
+                <div class="time">
+                    <li style="border-bottom-style:solid ;border-bottom-color: #adadad;border-bottom-width: 0.7px;">最近登入：<br>{{ user.update_time|date:"Y年m月d日, H時i分" }}</li>
+                    <li style="border-bottom-style:solid ;border-bottom-color: #adadad;border-bottom-width: 0.7px;">加入時間：<br>{{ user.created_time|date:"Y年m月d日, H時i分" }}</li>
+                    <li>狀態：{% if user.is_active %}
+                            <span>active</span>
+                        {% elif user.is_staff %}
+                            <span>staff</span>
+                        {% elif user.is_superuser %}
+                            <span>superuser</span>
+                        {% endif %}
+                    </li>
+                </div>
+
+                <div class="time_icon">
+                    <i class="fa fa-clock-o"></i>
+                </div>
+
+                <ul style="list-style: none" class="infor2">
+                    <li>{{ user.reg_id }}</li>
+                    <li>
                         {% if user.name %}
                             <input type="text" name="name" value="{{ user.name }}" required>
                         {% else %}
                             <input type="text" name="name" required>
                         {% endif %}
-                    </td>
-                    <td>
+                    </li>
+                    <li>
+                        {% if user.email %}
+                            <input type="email" name="email" value="{{ user.email }}" required>
+                        {% else %}
+                            <input type="email" name="email" required>
+                        {% endif %}
+                    </li>
+                    <li>
                         <select name="gender" required>
                             <option value="" disabled selected>請選擇性別</option>
                             <option value="0" {% if user.gender == 0 %}selected{% endif %}>男</option>
                             <option value="1" {% if user.gender == 1 %}selected{% endif %}>女</option>
                             <option value="2" {% if user.gender == 2 %}selected{% endif %}>不想公開</option>
                         </select>
-                    </td>
-                    <td>
+                    </li>
+                    <li>
                         {% if user|has_perms:privileges.SystemManager %}
-                            <span>{{ privileges.SystemManager.value.1 }}</span>
+                            <span class="badge alert-danger">{{ privileges.SystemManager.value.1 }}</span>
                         {% endif %}
                         {% if user|has_perms:privileges.TestManager %}
-                            <span>{{ privileges.TestManager.value.1 }}</span>
+                            <span class="badge alert-warning">{{ privileges.TestManager.value.1 }}</span>
                         {% endif %}
                         {% if user|has_perms:privileges.TBManager %}
-                            <span>{{ privileges.TBManager.value.1 }}</span>
+                            <span class="badge badge-primary">{{ privileges.TBManager.value.1 }}</span>
                         {% endif %}
                         {% if user|has_perms:privileges.TBOperator %}
-                            <span>{{ privileges.TBOperator.value.1 }}</span>
+                            <span class="badge alert-success">{{ privileges.TBOperator.value.1 }}</span>
                         {% endif %}
                         {% if user|has_perms:privileges.Viewer %}
-                            <span>{{ privileges.Viewer.value.1 }}</span>
+                            <span class="badge alert-info">{{ privileges.Viewer.value.1 }}</span>
                         {% endif %}
                         {% if user|has_perms:privileges.Testee %}
-                            <span>{{ privileges.Testee.value.1 }}</span>
+                            <span class="badge alert-inverse">{{ privileges.Testee.value.1 }}</span>
                         {% endif %}
-                    </td>
-                    {% if user.student %}
-                        <td>{{ user.student.stu_id }}</td>
-                        <td>
-                            <select name="department" required>
-                                {% for department in departments %}
-                                    <option value="{{ department.id }}" {% if department == user.student.department %}selected{% endif %}>{{ department }}</option>
-                                {% endfor %}
-                            </select>
-                        </td>
-                        <td>
-                            <select name="department" required>
-                                {% for squadron in squadrons %}
-                                    <option value="{{ squadron.id }}" {% if squadron == user.student.squadron %}selected{% endif %}>{{ squadron }}</option>
-                                {% endfor %}
-                            </select>
-                        </td>
-                        <td>
-                            <input type="number" name="grade" value="{{ user.student.grade }}" required>
-                        </td>
-                    {% endif %}
-                    <td>{{ user.last_login|date:"Y年m月d日, H時i分" }}</td>
-                    <td>{{ user.created_time|date:"Y年m月d日, H時i分" }}</td>
-                    <td>
-                        {% if user.is_active %}
-                            <span>is active</span>
-                        {% elif user.is_staff %}
-                            <span>is staff</span>
-                        {% elif user.is_superuser %}
-                            <span>is superuser</span>
-                        {% endif %}
-                    </td>
-                </tr>
-            </table>
+                    </li>
 
-            <input type="submit" value="提交">
+                    <div class="student_infor_">
+                        {% if user.student %}
+                            <li>{{ user.student.stu_id }}</li>
+                            <li>
+                                <input type="number" name="grade" value="{{ user.student.grade }}" required>
+                            </li>
+                            <li>
+                                <select name="department" required>
+                                    <option value="" disabled selected>請選擇科系</option>
+                                    {% for department in departments %}
+                                        <option value="{{ department.id }}" {% if department == user.student.department %}selected{% endif %}>{{ department }}</option>
+                                    {% endfor %}
+                                </select>
+                            </li>
+                            <li>
+                                <select name="squadron" required>
+                                    <option value="" disabled selected>請選擇連隊單位</option>
+                                    {% for squadron in squadrons %}
+                                        <option value="{{ squadron.id }}" {% if squadron == user.student.squadron %}selected{% endif %}>{{ squadron }}</option>
+                                    {% endfor %}
+                                </select>
+                            </li>
+                        {% endif %}
+                    </div>
+                </ul>
+
+            </ul>
+
+            <div class="btn1">
+                <input type="submit" value="提交">
+            </div>
+
         </form>
+
+        <style>
+            .btn1 input{
+                width: 90px;
+                height: 40px;
+                background-color: #4CCABD;
+                border: none;
+                border-radius: 5px;
+                color: #FFFEF6;
+
+                position: absolute;
+                top: 180%;
+                left: 600%;
+            }
+
+            .personal_infor{
+                position: absolute;
+                left: 43%;
+                top: 5%;
+            }
+
+            .infor1 li{
+                font-size: 18px;
+                line-height: 50px;
+            }
+
+            .infor2{
+                width: 400%;
+                height: 117%;
+                position: absolute;
+                top: 0%;
+                left: 200%;
+            }
+
+            .infor2 input{
+                width: 100%;
+                height: 40px;
+            }
+
+            .infor2 li{
+                font-size: 18px;
+                line-height: 50px;
+                color: #777777;
+            }
+
+            .student_infor{
+                position: absolute;
+                left: 0%;
+                top: 130%;
+            }
+
+            .student_infor_{
+                position: absolute;
+                left: 0%;
+                top: 110%;
+            }
+
+            .line{
+                width: 1500%;
+                border-top-style: solid;
+                border-top-color: #c0c0c0;
+                border-top-width: 1px;
+
+                position: absolute;
+                top: -20%;
+            }
+
+            .time_icon{
+                font-size: 30px;
+                color: #5e5e5e;
+                position: absolute;
+                top: 86%;
+                left: -260%;
+                background-color: #F3F3F3;
+            }
+
+            .time{
+                color: #5e5e5e;
+                position: absolute;
+                top: 85%;
+                left: -250%;
+
+                border: #c0c0c0 solid 0.7px;
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+
+            .time li{
+                width: 100%;
+                font-size: 10px;
+                top: 85%;
+
+            }
+
+        </style>
     </div>
 {% endblock %}

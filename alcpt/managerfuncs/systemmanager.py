@@ -18,26 +18,18 @@ def query_users(*, department: Department, grade: int, squadron: Squadron, name:
     if department:
         queries &= Q(student__department=department)
         query_content += "department="+str(department)
-    else:
-        query_content += "department="
 
     if grade:
         queries &= Q(student__grade=grade)
         query_content += "&grade="+str(grade)
-    else:
-        query_content += "&grade="
 
     if squadron:
         queries &= Q(student__squadron=squadron)
         query_content += "&squadron="+str(squadron)
-    else:
-        query_content += "&squadron="
 
     if name:
         queries &= Q(reg_id__icontains=name) | Q(name__icontains=name)
         query_content += "&name="+str(name)
-    else:
-        query_content += "&name="
 
     users = User.objects.filter(queries).order_by('reg_id')
 

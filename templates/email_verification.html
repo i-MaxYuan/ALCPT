@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block path %}
+
+{% endblock %}
+
+{% block content %}
+    <div class="email_verification">
+        <form action="{% url 'email_verification' %}" method="post">
+            <div class="title"><h1>Email Verification.</h1> <h2>&nbsp;</h2></div>
+            {% csrf_token %}
+            <div class="email">
+                <label for="email_verification">Email驗證碼：</label><br>
+                <input type="text" name="verification_code" placeholder="請輸入驗證碼..." required>
+
+                <input type="hidden" name="random_code" value="{{ random_code }}">
+
+                <input type="hidden" name="forget_change_pwd" value="{{ flag }}">
+
+                <input type="hidden" name="reg_id" value="{{ reg_id }}">
+
+            </div>
+
+            <div class="btn">
+                <input type="submit" onclick="return confirm('是否送出？')" value="送出">
+            </div>
+
+
+            <style>
+                .email_verification .title h1{
+                    font-size: 40px;
+                    color: #FFFEF6;
+                    background-color: #4CCABD;
+                    padding-top: 10px;
+                    padding-bottom: 10px;
+                    padding-right: 15px;
+                    padding-left: 45px;
+                    text-align: center;
+                    position: absolute;
+                    top: 1%;
+                }
+
+                .email_verification .title h2{
+                    background-color: #4CCABD;
+                    padding-top: 10px;
+                    padding-bottom: 22px;
+                    padding-right: 15px;
+                    padding-left: 30px;
+                    position: absolute;
+                    top: 1%;
+                    left: 25%;
+                }
+
+                .email_verification form .email label{
+                    font-size: 30px;
+                    padding-left: 25%;
+                    position: absolute;
+                    top: 40%;
+
+                }
+
+                .email_verification form .email input{
+                    font-size: 25px;
+                    padding-left: 10px;
+                    position: absolute;
+                    top: 40.5%;
+                    left: 40%;
+                }
+
+                .email_verification form .btn input{
+                    font-size: 25px;
+                    padding: 10px;
+                    padding-left: 15px;
+                    padding-right: 15px;
+                    color: #FFFEF6;
+                    background-color: #4CCABD;
+                    border: none;
+                    position: absolute;
+                    top: 85%;
+                    left: 45%;
+                }
+            </style>
+        </form>
+    </div>
+{% endblock %}

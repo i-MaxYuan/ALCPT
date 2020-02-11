@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% load web_filters %}
+
+{% block content %}
+    <div class="report-description">
+        <table>
+            <tr>
+                <td class="col-md-1">編號</td>
+                <td class="col-md-3">{{ replying_report.id }}</td>
+            </tr>
+            <tr>
+                <td class="col-md-1">問題類別</td>
+                <td class="col-md-3">{{ replying_report.category }}</td>
+            </tr>
+
+            {% if replying_report.question %}
+            <tr>
+                <td class="col-md-1">試題</td>
+                <td class="col-md-3">{{ replying_report.question }}</td>
+            </tr>
+            <tr>
+                <td class="col-md-1">選項</td>
+                <td>
+                    <ul>
+                        {% for option in replying_report.question.choice_set.all %}
+                            <li>{{ option }}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+            {% endif %}
+
+            <tr>
+                <td class="col-md-1">說明</td>
+                <td class="col-md-3">{{ replying_report.supplement_note|safe }}</td>
+            </tr>
+            <tr>
+                <td class="col-md-1">回覆</td>
+                <td class="col-md-3">{{ replying_report.reply|safe }}</td>
+            </tr>
+
+            {% if replying_report.state == 3 %}
+            <tr>
+                <td class="col-md-1">解決人</td>
+                <td class="col-md-3">{{ replying_report.resolved_by.name }}</td>
+            </tr>
+                <tr>
+                <td class="col-md-1">解決時間</td>
+                <td class="col-md-3">{{ replying_report.resolved_time|date:"Y年m月d日, H時i分" }}</td>
+            </tr>
+            {% endif %}
+
+        </table>
+
+        <style>
+            .report-description{
+                position: absolute;
+
+                width: 50%;
+                font-size: 20px;
+            }
+            .report-description table{
+                position: relative;
+                top: 50px;
+            }
+            .report-description td{
+                padding: 6px;
+            }
+        </style>
+    </div>
+
+    <button type="button" onclick="history.back()">返回</button>
+
+{% endblock %}

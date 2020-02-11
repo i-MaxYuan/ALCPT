@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block path %}
+    <a href="">問題回報</a>
+{% endblock %}
+
+{% block content %}
+    <div class="question_report">
+        <form action="" method="post">
+            {% csrf_token %}
+            <table>
+                <tr>
+                    <td class="col-md-1">發生問題</td>
+                    <td class="col-md-5">
+                        <select name="category" required>
+                            <option value="" disabled selected>請選擇發生問題</option>
+                            {% for category in categories %}
+                                <option value="{{ category.id }}">{{ category }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-1">補充說明</td>
+                    <td class="col-md-5"><textarea class="form-control" name="supplement_note" cols="100" rows="8" required placeholder="補充說明..."></textarea></td>
+                </tr>
+            </table>
+
+            <input type="submit" value="送出">
+            <input type="button" value="取消" onclick="window.location.href='{% url 'report_list' %}'">
+        </form>
+
+        <style>
+            .question_report{
+                position: absolute;
+                top: 10%;
+                left: 15%;
+
+                font-size: 20px;
+
+                width: 70%;
+            }
+            .question_report td{
+                padding: 4px;
+            }
+
+            input{
+                position: relative;
+                left: 100%;
+                
+                font-size: 20px;
+                padding: 10px;
+                padding-left: 15px;
+                padding-right: 15px;
+                color: #FFFEF6;
+                background-color: #4CCABD;
+                border: none;
+                border-radius: 6px;
+            }
+        </style>
+    </div>
+{% endblock %}

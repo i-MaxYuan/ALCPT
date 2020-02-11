@@ -14,26 +14,18 @@ def query_questions(*, question_type: int, question_content: str, difficulty: in
     if question_type:
         queries &= Q(q_type=question_type)
         query_content += "question_type=" + str(question_type)
-    else:
-        query_content += "question_type="
 
     if question_content:
         queries &= Q(q_content__icontains=question_content)
         query_content += "&question_content=" + str(question_content)
-    else:
-        query_content += "&question_content="
 
     if difficulty:
         queries &= Q(difficulty=difficulty)
         query_content += "&difficulty=" + str(difficulty)
-    else:
-        query_content += "&difficulty="
 
     if state:
         queries &= Q(state=state)
         query_content += "&state=" + str(state)
-    else:
-        query_content += "&state="
 
     # tbmanager doesn't need question.state == 1(審核通過) | 3(等待審核) | 5(被回報錯誤，已處理)
     # use Q to filter Question.objects and order by created time

@@ -1,0 +1,158 @@
+{% extends 'profile_base.html' %}
+
+{% load web_filters %}
+
+{% block path %}
+    <a href="{% url 'profile' %}">檢視個人資料</a>
+    <a class="fa fa-angle-double-right fa-lg box"></a>
+    <a href="{% url 'report_list' %}">問題回報</a>
+    <a class="fa fa-angle-right fa-lg box"></a>
+    <a href="{% url 'report_list' %}">回報單號 ＿ {{ viewed_report.id }}</a>
+{% endblock %}
+
+{% block content %}
+    <div class="report-description">
+        <table>
+            <tr>
+                <td class="col-md-1">編號</td>
+                <td class="col-md-3">{{ viewed_report.id }}</td>
+            </tr>
+
+            {% if viewed_report.reply %}
+            <tr>
+                <td class="col-md-1">管理員對您說</td>
+                <td class="col-md-3">{{ viewed_report.reply|safe }}</td>
+            </tr>
+        {% endif %}
+
+            <tr>
+                <td class="col-md-1">問題類別</td>
+                <td class="col-md-3">{{ viewed_report.category }}</td>
+            </tr>
+
+            {% if viewed_report.question %}
+            <tr>
+                <td class="col-md-1">試題</td>
+                <td class="col-md-3">{{ viewed_report.question }}</td>
+            </tr>
+            <tr>
+                <td class="col-md-1">選項</td>
+                <td>
+                    <ul>
+                        {% for option in viewed_report.question.choice_set.all %}
+                            <li>{{ option }}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+            {% endif %}
+
+            <tr>
+                <td class="col-md-1">說明</td>
+                <td class="col-md-3">{{ viewed_report.supplement_note|safe }}</td>
+            </tr>
+            <tr>
+                <td class="col-md-1">狀態</td>
+                <td class="col-md-3">{{ viewed_report.state|readable_report_state }}</td>
+            </tr>
+
+            {% if viewed_report.state == 3 %}
+                <tr>
+                    <td class="col-md-1">解決人</td>
+                    <td class="col-md-3">{{ viewed_report.resolved_by.name }}</td>
+                </tr>
+                <tr>
+                    <td class="col-md-1">解決時間</td>
+                    <td class="col-md-3">{{ viewed_report.resolved_time|date:"Y年m月d日, H時i分" }}</td>
+                </tr>
+
+            {% endif %}
+
+        </table>
+
+        <style>
+            ul, li{
+                list-style: none;
+            }
+            .report-description{
+                position: absolute;
+
+                width: 50%;
+                font-size: 20px;
+            }
+            .report-description table{
+                position: relative;
+                top: 50px;
+            }
+            .report-description td{
+                padding: 6px;
+            }
+        </style>
+    </div>
+
+    <div class="reply-block">
+        <form action="" method="post">
+            {% csrf_token %}
+            <table>
+                <tr>
+                    <td>回應</td>
+                </tr>
+                <tr>
+                    {% if not viewed_report.state == 3 %}
+                        <td><textarea class="form-control" rows="15" name="reply"></textarea></td>
+                    {% else %}
+                        <td><textarea class="form-control" rows="15" name="reply" disabled></textarea></td>
+                    {% endif %}
+                </tr>
+            </table>
+
+            {% if not viewed_report.state == 3 %}
+                <button type="submit">送出</button>
+                <button type="button" onclick="history.back()">返回</button>
+            {% else %}
+                <button type="button" onclick="history.back()">返回</button>
+            {% endif %}
+        </form>
+
+        <style>
+            .reply-block{
+                position: absolute;
+                left: 50%;
+
+                width: 30%;
+                font-size: 20px;
+            }
+            .reply-block table{
+                position: relative;
+                top: 50px;
+            }
+            .reply-block td{
+                padding: 6px;
+            }
+            .reply-block textarea{
+                width: 250%;
+            }
+            .reply-block form button{
+                position: relative;
+                left: 50%;
+                top: 60px;
+            }
+
+            .buttons {
+                position: relative;
+                left: 75%;
+                top: 12px;
+            }
+            button{
+                font-size: 20px;
+                padding: 10px;
+                padding-left: 15px;
+                padding-right: 15px;
+                color: #FFFEF6;
+                background-color: #4CCABD;
+                border: none;
+                border-radius: 6px;
+            }
+        </style>
+    </div>
+{% endblock %}

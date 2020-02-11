@@ -19,9 +19,10 @@
                 text-align: center;
                 font-size: 20px;
                 border: none;
+                box-shadow: 0px 3px 8px 0px #486260;
 
                 position: absolute;
-                top: -10%;
+                top: -15%;
                 right: 0%;
             }
 
@@ -43,21 +44,37 @@
         <table class="table table-hover">
             <thead class="title">
                 <tr>
-                    <th class="col-md-4">公告標題</th>
-                    <th class="col-md-3">公告人</th>
-                    <th class="col-md-4">公告時間</th>
+                    {% if request.user|has_perm:'SystemManager' %}
+                        <th class="col-md-2">公告標題</th>
+                        <th class="col-md-6">公告內容</th>
+                        <th class="col-md-1">公告人</th>
+                        <th class="col-md-2">公告時間</th>
+                        <th class="col-md-1"></th>
+                    {% else %}
+                        <th class="col-md-2">公告標題</th>
+                        <th class="col-md-6">公告內容</th>
+                        <th class="col-md-1">公告人</th>
+                        <th class="col-md-2">公告時間</th>
+                    {% endif %}
                 </tr>
             </thead>
             <tbody>
             {% for pro in pros %}
                 <tr style="cursor: pointer" onclick="window.location.href='{% url 'proclamation_detail' pro.id %}'">
                     <td>{{ pro.title }}</td>
+                    {% if request.user|has_perm:'SystemManager' %}
+                        <td>{{ pro.text|safe|summary:33 }}</td>
+                    {% else %}
+                        <td>{{ pro.text|safe|summary:36 }}</td>
+                    {% endif %}
                     <td>{{ pro.created_by.name}}</td>
-                    <td>{{ pro.created_time|date:'Y年m月d日, H時i分' }}</td>
+                    <td style="font-size: 12px">{{ pro.created_time|date:'H:i, Y/m/d' }}</td>
+                    {% if request.user|has_perm:'SystemManager' %}
                     <td>
                         <a href="{% url 'proclamation_edit' pro.id %}"><i class="fa fa-pencil-square fa-fw mb-2"></i></a>&nbsp;
                         <a href="{% url 'proclamation_delete' pro.id %}" onclick="return confirm('確認刪除此公告:{{ pro.title }}?')"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                     </td>
+                    {% endif %}
                 </tr>
             {% endfor %}
             </tbody>
@@ -68,9 +85,15 @@
                 text-align: center;
             }
 
-            .table-hover > tbody > tr:hover > td,
-            .table-hover > tbody > tr:hover > th {
+            .table-hover a{
+                    visibility: hidden;
+            }
+            .table-hover > tbody > tr:hover{
+                cursor: pointer;
                 background-color: #4CCABD;
+            }
+            .table-hover > tbody > tr:hover a, td{
+                visibility: visible;
             }
 
             .title{
@@ -96,7 +119,7 @@
         <div class="pagination">
             <div class="pager_group1">
                 <ul class="pager">
-                    <li class="previous"><a href="?page=1">&laquo; first</a></li>
+                    <li class="previous" style="color: #2C3232"><a href="?page=1">&laquo; first</a></li>
                     <li style="padding-left: 500px; padding-right: 490px">&nbsp;</li>
                     <li class="next"><a href="?page={{ pros.paginator.num_pages }}">last &raquo;</a></li>
                 </ul>
@@ -105,11 +128,11 @@
             <div class="pager_group2">
                 <nav aria-label="Page navigation">
                   <ul class="pagination justify-content-center">
-                    <li class="page-item disabled">
+                    <li {% if not pros.has_previous %}class="page-item disabled"{% endif %}>
                         {% if pros.has_previous %}
                             <a class="page-link" href="?page={{ pros.previous_page_number }}" tabindex="-1">Previous</a>
                         {% else %}
-                            <a href="#">Previous</a>
+                            <a href="javascript:void(0)">Previous</a>
                         {% endif %}
                     </li>
                     <li class="page-item">
@@ -121,11 +144,11 @@
                             {% endif %}
                         {% endfor %}
                     </li>
-                    <li class="page-item">
+                    <li {% if not pros.has_next %}class="page-item disabled"{% endif %}>
                         {% if pros.has_next %}
                             <a class="page-link" href="?page={{ pros.next_page_number }}">Next</a>
                         {% else %}
-                            <a href="#">Next</a>
+                            <a href="javascript:void(0)">Next</a>
                         {% endif %}
                     </li>
                   </ul>
@@ -136,6 +159,7 @@
 
             <style>
                 .pager_group1{
+                    text-decoration: none;
                     position: absolute;
                     bottom: 0%;
                     left: 1%;
@@ -144,7 +168,10 @@
 
                 .pager_group2{
                     position: absolute;
-                    bottom: 0%;
+                    bottom: 6.5%;
+                    right: 50%;
+
+                    transform: translate(50%,50%);
                 }
 
             </style>

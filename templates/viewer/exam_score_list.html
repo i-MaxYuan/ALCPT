@@ -3,35 +3,70 @@
 {% load web_filters %}
 
 {% block path %}
-    <a class="fa fa-angle-double-right fa-lg box"></a>
     <a href="{% url 'exam_score_list' %}">成績檢閱者</a>
-    <a class="fa fa-angle-right fa-lg box"></a>
+    <a class="fa fa-angle-double-right fa-lg box"></a>
     <a href="">考試成績列表</a>
 {% endblock %}
 
 {% block content %}
-    <div>
-        <table border="1">
-            <tr>
-                <th>Exam Name</th>
-                <th>Exam Average Score</th>
-                <th>Exam Group</th>
-                <th>People Number</th>
-                <th>Exam Start Time</th>
-                <th>Exam Finish Time</th>
-                <td>Duration</td>
-            </tr>
-            {% for exam in exams %}
-            <tr>
-                <td>{{ exam }}</td>
-                <td>{{ exam.average_score }}</td>
-                <td>{{ exam.group }}</td>
-                <td>{{ exam.group.member.count }}</td>
-                <td>{{ exam.start_time|date:'Y年m月d日, H時i分' }}</td>
-                <td>{{ exam.finish_time|date:'Y年m月d日, H時i分' }}</td>
-                <td>{{ exam.duration }}分鐘</td>
-            </tr>
-            {% endfor %}
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <caption style="font-size: 30px;">&nbsp;&nbsp;考試成績列表</caption>
+            <thead class="title">
+                <tr>
+                    <th class="col-md-1">考試名稱</th>
+                    <th class="col-md-1">平均分數</th>
+                    <th class="col-md-1">受測者群組</th>
+                    <th class="col-md-1">受測人數</th>
+                    <th class="col-md-2">考試開始時間</th>
+                    <th class="col-md-2">考試結束時間</th>
+                    <th class="col-md-2">考試時間</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for exam in exams %}
+                    <tr style="cursor: pointer" onclick="window.location.href='{% url 'exam_score_detail' exam.id %}'">
+                        <td style="text-align: center; vertical-align:middle;">{{ exam }}</td>
+                        <td style="vertical-align:middle;">{{ exam.average_score }}</td>
+                        <td style="vertical-align:middle;">{{ exam.group }}</td>
+                        <td style="vertical-align:middle;">{{ exam.group.member.count }}</td>
+                        <td style="vertical-align:middle;">{{ exam.start_time|date:'Y年m月d日, H時i分' }}</td>
+                        <td style="vertical-align:middle;">{{ exam.finish_time|date:'Y年m月d日, H時i分' }}</td>
+                        <td style="vertical-align:middle;">{{ exam.duration }}分鐘</td>
+
+                    </tr>
+                {% endfor %}
+            </tbody>
         </table>
+
+        <style>
+            .table-responsive .table{
+                text-align: center;
+                position: absolute;
+                top: 30px;
+            }
+
+            .table-hover > tbody > tr:hover > td,
+            .table-hover > tbody > tr:hover > th {
+                background-color: #4CCABD;
+            }
+
+            .title{
+                font-size: 20px;
+            }
+
+            .title tr th{
+                text-align: center;
+            }
+
+            .table tbody{
+                font-size: 18px;
+            }
+
+            .table tbody td a{
+                color: #2C3232;
+            }
+
+        </style>
     </div>
 {% endblock %}

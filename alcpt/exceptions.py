@@ -36,3 +36,8 @@ class ArgumentError(BaseError):
 class ResourceNotFoundError(BaseError):
     def __init__(self, message):
         super().__init__(message=message)
+
+
+class IntegrityError(BaseError):
+    def __init__(self, message):
+        super().__init__(message=message)

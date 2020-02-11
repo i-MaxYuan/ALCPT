@@ -1,0 +1,80 @@
+{% extends 'base_long_page.html' %}
+
+{% block path %}
+    <a href="">系統管理員</a>
+    <a class="fa fa-angle-double-right fa-lg box"></a>
+    <a href="{% url 'unit_list' %}">單位列表</a>
+    <a class="fa fa-angle-right fa-lg box"></a>
+    <a href="">{{ unit.name }}</a>
+{% endblock %}
+
+{% block content %}
+    <table class="table table-hover">
+        <caption style="font-size: 30px; padding-left: 5%">&nbsp;{{ unit.name }}名單</caption>
+        {% if unit_members %}
+        <thead class="title">
+            <tr>
+                <th class="col-md-1">＃</th>
+                <th class="col-md-2">名稱</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for member in unit_members %}
+                <tr style="cursor: pointer" onclick="window.location.href='{% url 'view_profile' member.user.id %}'">
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ member.user.name }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+        {% else %}
+            <h2>目前暫無資料</h2>
+        {% endif %}
+        <style>
+            .table-hover > tbody > tr:hover > td,
+            .table-hover > tbody > tr:hover > th {
+                background-color: #4CCABD;
+            }
+
+            .title{
+                font-size: 20px;
+            }
+
+            .title tr th{
+                text-align: center;
+                vertical-align: middle;
+            }
+
+            .table tbody{
+                font-size: 18px;
+                text-align: center;
+            }
+
+            .table tbody td{
+                vertical-align: middle;
+                color: #2C3232;
+            }
+        </style>
+    </table>
+    <div class="btn4">
+        <input type="button" value="返回" onclick="window.location.href='{% url 'unit_list' %}'">
+
+        <style>
+            .btn4 input{
+                background-color: #4CCABD;
+                color: #FFFEF6;
+                border: none;
+                padding-top: 5px;
+                padding-bottom: 5px;
+                padding-left: 5px;
+                padding-right: 5px;
+                font-size: 25px;
+
+                position: relative;
+                left: 45%;
+            }
+            .btn4{
+                padding-bottom: 5%;
+            }
+        </style>
+    </div>
+{% endblock %}
