@@ -1,154 +1,406 @@
-{% extends 'base.html' %}
+{% extends 'base_long_page.html' %}
 
 {% load web_filters %}
 
 {% block path %}
-    <a class="fa fa-angle-double-right fa-lg box"></a>
     <a href="">{% if request.user|has_perm:'TBManager' %}題庫管理員{% else %}題目操作員{% endif %}</a>
-    <a class="fa fa-angle-right fa-lg box"></a>
+    <a class="fa fa-angle-double-right fa-lg box"></a>
     <a href="">題目列表</a>
 {% endblock %}
 
 {% block content%}
-    <div class="search_bar">
-        <form action="" method="get">
-            <select name="question_type">
-                    <option value="" selected>請選擇試題類型</option>
-                    {% for q_type in question_types %}
-                        <option value="{{ q_type.value.0 }}" {% if q_type.value.0 == keywords.question_type %} selected {% endif %}>{{ q_type.value.1 }}</option>
-                    {% endfor %}
-            </select>
 
-            <div>
-                <input type="text" name="question_content" {% if keywords.question_content %}value="{{ keywords.question_content }}" {% else %}value="" {% endif %} placeholder="試題內容">
-            </div>
-
-            {% if request.user|has_perm:'TBManager' %}
-                <div>
-                    <select name="difficulty" selected>
-                        <option value="" selected>所有難度試題</option>
-                        {% for difficulty in difficulty_choices %}
-                            <option value="{{ difficulty.0 }}" {% if difficulty.0 == keywords.difficulty %} selected {% endif %}>{{ difficulty.1 }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-            {% endif %}
-
-            <div>
-                <select name="state">
-                    <option value="" selected>所有狀態試題</option>
-                    {% for state in state_choices %}
-                        <option value="{{ state.0 }}" {% if state.0 == keywords.state %} selected {% endif %}>{{ state.1 }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-
-            <div>
-                <button type="submit">搜尋</button>
-            </div>
-        </form>
-    </div>
-
-    <div>
-        {% if questions %}
-            <h1>題目列表</h1>
-            <table border="1">
+    <!-- 表格的部分 -->
+    <div class="table-responsive">
+    {% if questions %}
+        <table class="table table-hover">
+            <caption style="font-size: 30px; padding-top: 30px">&nbsp;&nbsp;題目列表（共 {{ questions.count }} 條結果）</caption>
+            <thead class="title">
                 <tr>
-                    <th>ＩＤ</th>
-                    <th>題目</th>
-                    <th>類型</th>
-                    <th>難度</th>
-                    <th>錯誤回報次數</th>
-                    <th>使用次數</th>
-                    <th>建立者</th>
-                    <th>更新時間</th>
-                    <th>狀態</th>
-                    <th>題目選項</th>
-                    <th>
+                    <th class="col-md-1">ＩＤ</th>
+                    <th class="col-md-3">題目</th>
+                    <th class="col-md-2">類型</th>
+                    <th class="col-md-2">題目選項</th>
+                    <th class="col-md-1">狀態</th>
+                    <th class="col-md-2">
                     {% if request.user|has_perm:'TBOperator' %}
                         提交審核 / 編輯
                     {% elif request.user|has_perm:'TBManager' %}
                         編輯
                     {% endif %}
                     </th>
-                    <th>備註</th>
+                    <th class="col-md-3">備註</th>
+                    <th class="col-md-1"></th>
                 </tr>
-                {% for question in questionList %}
-                    <tr>
-                        <td>{{ question.id }}</td>
-                        <td>
-                            {% if question.q_file %}
-                                <audio controls preload="none">
-                                    <source src="{{ question.q_file }}" type="audio/mpeg">
-                                    Your browser does not support the audio tag.
-                                </audio>
+            </thead>
+
+            <tbody>
+            {% for question in questionList %}
+                <tr>
+                    <td style="vertical-align: middle">{{ question.id }}</td>
+                    <td style="text-align: left; vertical-align: middle">
+                        {% if question.q_file %}
+                            <audio controls preload="none">
+                                <source src="{{ question.q_file }}" type="audio/mpeg">
+                                Your browser does not support the audio tag.
+                            </audio>
+                        {% else %}
+                            {{ question.q_content }}
+                        {% endif %}
+                    </td>
+                    <td style="text-align: center; vertical-align: middle">{{ question.q_type|readable_question_type }}</td>
+                    <td style="text-align: left; vertical-align: middle">
+                        {% for option in question.choice_set.all %}
+                            {% if option.is_answer %}
+                                <span style="color: red"><li>{{ option }}</li></span>
                             {% else %}
-                                {{ question.q_content }}
+                                <li>{{ option }}</li>
                             {% endif %}
-                        </td>
-                        <td>{{ question.q_type|readable_question_type }}</td>
-                        <td>{{ question.difficulty }}</td>
-                        <td>{{ question.issued_freq }}</td>
-                        <td>{{ question.used_freq }}</td>
-                        <td>{{ question.created_by.name }}</td>
-                        <td>{{ question.update_time|date:'Y年m月d日, H時i分' }}</td>
-                        <td>{{ question.state|readable_state }}</td>
-                        <td>
-                            {% for option in question.choice_set.all %}
-                                {% if option.is_answer %}
-                                    <span style="color: red"><li>{{ option }}</li></span>
-                                {% else %}
-                                    <li>{{ option }}</li>
-                                {% endif %}
-                            {% endfor %}
-                        </td>
-                        <td>
-                            {% if question.state == 0 %}
-                                <a href="{% url 'question_submit' question.id %}" onclick="return confirm('是否提交給題庫管理員審核')">提交</a> /
-                            {% endif %}
-                            {% if request.user|has_perm:'TBOperator' and question.state != 1 %}
-                                <a href="{% url 'operator_edit' question.id %}">編輯</a>
-                                <a href="{% url 'question_delete' question.id %}" onclick="return confirm('確認是否刪除此試題？{{ question.q_content }}')">刪除</a>
-                            {% elif request.user|has_perm:'TBManager' and question.state != 1 %}
-                                <a href="{% url 'question_edit' question.id %}">編輯</a>
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if question.faulted_reason %}
-                                {{ question.faulted_reason }}
-                            {% else %}
-                                無
-                            {% endif %}
-                        </td>
-                    </tr>
-                {% endfor %}
+                        {% endfor %}
+                    </td>
+                    <td style="text-align: center; vertical-align: middle">{{ question.state|readable_state }}</td>
+                    <td style="vertical-align: middle">
+                        {% if question.state == 0 %}
+                            <a href="{% url 'question_submit' question.id %}" onclick="return confirm('是否提交給題庫管理員審核')">提交</a> /
+                        {% endif %}
+                        {% if request.user|has_perm:'TBOperator' and question.state != 1 %}
+                            <a href="{% url 'operator_edit' question.id %}">編輯</a> / 
+                            <a href="{% url 'question_delete' question.id %}" onclick="return confirm('確認是否刪除此試題？')">刪除</a>
+                        {% elif request.user|has_perm:'TBManager' and question.state != 1 %}
+                            <a href="{% url 'question_edit' question.id %}">編輯</a>
+                        {% endif %}
+                    </td>
+                    <td style="vertical-align: middle">
+                        {% if question.faulted_reason %}
+                            {{ question.faulted_reason }}
+                        {% else %}
+                            無
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div>
+                            <button type="button" class="btn btn-primary dropdown-toggle pull-right" data-toggle="dropdown" style="background-color: #4CCABD;
+                            border-color: #FFFEF6;">
+                                <i class="fa fa-ellipsis-h"></i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right" style="width: 300px">
+                                  <div class="detail_block">
+                                      <ul style="text-align: left; font-size: 16px">
+                                          <li>更新時間：{{ question.update_time|date:'Y年m月d日, H時i分' }}</li>
+                                          <li>錯誤回報次數：{{ question.issued_freq }}</li>
+                                          <li>使用次數：{{ question.used_freq }}</li>
+                                          <li>難度：{{ question.difficulty }}</li>
+                                          <li>建立者：{{ question.created_by.name }}</li>
+                                      </ul>
+                                  </div>
+                            </div>
+                        </div>
+                    </td>
+                    <style>
+                        .detail_block li{
+                            list-style: none;
+                            padding-left: 10px;
+                        }
+
+                    </style>
+                <!--
+                    <td>
+                        {% if question.faulted_reason %}
+                            {{ question.faulted_reason }}
+                        {% else %}
+                            無
+                        {% endif %}
+                    </td>
+                -->
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+         {% else %}
+            <table class="table table-hover">
+                <caption style="font-size: 30px;">&nbsp;&nbsp;題目列表（共{% if query_content %}{{ questions.count }}{% elif questions %}{{ questions.count }}{% else %} 0 {% endif %}條結果）</caption>
+                <h2>目前暫無資料</h2>
             </table>
-        {% else %}
-            <h2>目前暫無資料</h2>
-        {% endif %}
+         {% endif %}
+
+    <style>
+            .table-responsive .table{
+                text-align: center;
+                position: absolute;
+                top: 30px;
+                left: 0px;
+            }
+
+            .table-hover > tbody > tr:hover > td,
+            .table-hover > tbody > tr:hover > th {
+                background-color: #4CCABD;
+            }
+
+            .title{
+                font-size: 20px;
+            }
+
+            .title tr th{
+                text-align: center;
+            }
+
+            .table tbody{
+                font-size: 18px;
+            }
+
+            .table tbody td a{
+                color: #2C3232;
+            }
+        </style>
     </div>
 
-    <div class="pagination">
-        <a href="?page=1{% if query_content %}&{{ query_content }}{% endif %}">&laquo; first</a>
-        {% if questionList.has_previous %}
-            <a href="?page={{ questionList.previous_page_number }}{% if query_content %}&{{ query_content }}{% endif %}">Prev</a>
-        {% else %}
-            <a href="">Prev</a>
-        {% endif %}
+    <div class="container-flu">
+        <!-- BS4 的靠右由 pull-right 改為 float-right -->
+        <div class="btn-group float-right">
+          <button type="button" class="btn btn-primary dropdown-toggle pull-right" data-toggle="dropdown">
+              <i class="fa fa-search" ></i>
+          </button>
+          <!-- 重點在這 -->
+          <div class="dropdown-menu dropdown-menu-right">
+              <div class="search_bar">
+                <h1>搜尋條件</h1>
+                <form action="" method="get">
+                    <div class="type">
+                        <h1>類型：</h1>
+                        <select name="question_type">
+                            <option value="" selected>請選擇試題類型</option>
+                            {% for q_type in question_types %}
+                                <option value="{{ q_type.value.0 }}" {% if q_type.value.0 == keywords.question_type %} selected {% endif %}>{{ q_type.value.1 }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
 
-        {% for page in paginator.page_range %}
-            {% if page == questionList.number %}
-                <a class="active" href="?page={{ page }}{% if query_content %}&{{ query_content }}{% endif %}"></a>
-            {% else %}
-                <a href="?page={{ page }}{% if query_content %}&{{ query_content }}{% endif %}">{{ page }}</a>
-            {% endif %}
-        {% endfor %}
+                    <div class="word">
+                        <h1>單字查詢：</h1>
+                        <input type="text" name="question_content" {% if keywords.question_content %}value="{{ keywords.question_content }}" {% else %}value="" {% endif %} placeholder="試題內容">
+                    </div>
 
-        {% if questionList.has_next %}
-            <a href="?page={{ questionList.next_page_number }}{% if query_content %}&{{ query_content }}{% endif %}">Next</a>
-        {% else %}
-            <a href="">Next</a>
-        {% endif %}
-        <a href="?page={{ questionList.paginator.num_pages }}{% if query_content %}&{{ query_content }}{% endif %}">last &raquo;</a>
+                    {% if request.user|has_perm:'TBManager' %}
+                        <div class="difficult">
+                            <h1>難度：</h1>
+                            <select name="difficulty" selected>
+                                <option value="" selected>所有難度試題</option>
+                                {% for difficulty in difficulty_choices %}
+                                    <option value="{{ difficulty.0 }}" {% if difficulty.0 == keywords.difficulty %} selected {% endif %}>{{ difficulty.1 }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    {% endif %}
+
+                    <div class="state">
+                        <h1>狀態：</h1>
+                        <select name="state">
+                            <option value="" selected>所有狀態試題</option>
+                            {% for state in state_choices %}
+                                <option value="{{ state.0 }}" {% if state.0 == keywords.state %} selected {% endif %}>{{ state.1 }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="search_btn">
+                        <button type="submit">搜尋</button>
+                    </div>
+                </form>
+            </div>
+          </div>
+
+            <style>
+                .container-flu button{
+                    height: 70px;
+                    width: 70px;
+                    background-color: #4CCABD;
+                    border: none;
+
+                }
+
+
+                .container-flu{
+                    position: absolute;
+                    top: -5%;
+                    right: 0%;
+                }
+
+                .btn-group{
+                    position: absolute;
+                    top: 50px;
+                    right: 30px;
+                }
+
+                .btn-group .dropdown-menu{
+                    height: 150px;
+                    width: 400px;
+                    padding-left: 10px;
+                    padding-right: 10px;
+                    text-align: center;
+
+                    position: absolute;
+                    top: -40%;
+                    right: 97%;
+
+                    opacity: 0.8;
+                }
+
+                .dropdown-menu form{
+                    height: 150%;
+                    width: 700px;
+                }
+
+                .search_bar h1{
+                    width: 100px;
+                    height: 30px;
+                    font-size: 20px;
+                    position: absolute;
+                    top: 3px;
+                    left: 10px;
+                }
+
+                .type select{
+                    position: absolute;
+                    top: 42%;
+                    left: 15%;
+                }
+
+                .type h1{
+                    font-size: 18px;
+                    position: absolute;
+                    top: 30%;
+                    left: 20px;
+                }
+
+                .difficult h1{
+                    font-size: 18px;
+                    position: absolute;
+                    top: 30%;
+                    left: 33%;
+                }
+
+                .difficult select{
+                    position: absolute;
+                    top: 42%;
+                    left: 45%;
+                }
+
+                .state h1{
+                    font-size: 18px;
+                    position: absolute;
+                    top: 30%;
+                    left: 61%;
+                }
+
+                .state select{
+                    position: absolute;
+                    top: 42%;
+                    left: 73%;
+                }
+
+                .word h1{
+                    font-size: 18px;
+                    position: absolute;
+                    top: 55%;
+                    left: 5%;
+                }
+
+                .word input{
+                    position: absolute;
+                    top: 67%;
+                    left: 20%;
+
+                    border: 0.5px solid;
+                    border-radius: 10px;
+                    padding: 5px;
+                    width: 50%;
+                }
+
+                .search_btn button{
+                    width: 60px;
+                    height: 30px;
+                    border-radius: 5px;
+                    color: #FFFEF6;
+
+                    position: absolute;
+                    right: 20px;
+                    top: 67%;
+
+                    opacity: 1;
+                }
+            </style>
+        </div>
+    </div>
+
+
+    <!-- 頁碼的部分 -->
+    <div>
+        <div class="pagination">
+            <div class="pager_group1">
+                <ul class="pager">
+                    <li class="previous" style="color: #2C3232"><a href="?page=1{% if query_content %}&{{ query_content }}{% endif %}">&laquo; first</a></li>
+                    <li style="padding-left: 500px; padding-right: 490px">&nbsp;</li>
+                    <li class="next"><a href="?page={{ questionList.paginator.num_pages }}{% if query_content %}&{{ query_content }}{% endif %}">last &raquo;</a></li>
+                </ul>
+            </div>
+
+            <div class="pager_group2">
+                <nav aria-label="Page navigation">
+                  <ul class="pagination justify-content-center">
+                    <li {% if not questionList.has_previous %}class="page-item disabled"{% endif %}>
+                        {% if questionList.has_previous %}
+                            <a class="page-link" href="?page={{ questionList.previous_page_number }}{% if query_content %}&{{ query_content }}{% endif %}" tabindex="-1">Previous</a>
+                        {% else %}
+                            <a href="javascript:void(0)">Previous</a>
+                        {% endif %}
+                    </li>
+                    <li class="page-item">
+                        {% for page in paginator.page_range %}
+                            {% if page == sheets.number %}
+                                <a class="page-link" href="?page={{ page }}{% if query_content %}&{{ query_content }}{% endif %}">{{ page }}</a>
+                            {% else %}
+                                <a href="?page={{ page }}{% if query_content %}&{{ query_content }}{% endif %}">{{ page }}</a>
+                            {% endif %}
+                        {% endfor %}
+                    </li>
+                    <li {% if not questionList.has_next %}class="page-item disabled"{% endif %}>
+                        {% if questionList.has_next %}
+                            <a class="page-link" href="?page={{ questionList.next_page_number }}{% if query_content %}&{{ query_content }}{% endif %}">Next</a>
+                        {% else %}
+                            <a href="javascript:void(0)">Next</a>
+                        {% endif %}
+                    </li>
+                  </ul>
+                </nav>
+
+            </div>
+
+
+            <style>
+
+                .pager_group1{
+                    text-decoration: none;
+                    position: absolute;
+                    bottom: 0%;
+                    left: 1%;
+                    right: 1%;
+                }
+
+                .pager_group2{
+                    position: absolute;
+                    bottom: 6.5%;
+                    right: 50%;
+
+                    transform: translate(50%,50%);
+                }
+
+            </style>
+        </div>
+
+        <style>
+            .pagination{
+                font-size: 20px;
+            }
+        </style>
     </div>
 {% endblock %}

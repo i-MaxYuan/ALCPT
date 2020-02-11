@@ -1,0 +1,152 @@
+{% extends 'profile_base.html' %}
+
+{% load web_filters %}
+
+{% block path %}
+    <a href="{% url 'profile' %}">檢視個人資料</a>
+    <a class="fa fa-angle-double-right fa-lg box"></a>
+    <a href="{% url 'report_list' %}">問題回報</a>
+{% endblock %}
+
+{% block content %}
+    <div class="tool-btn">
+        <ul class="nav nav-pills nav-stacked">
+            <li><a href="{% url 'profile' %}">基本資料</a></li>
+            <li><a href="{% url 'profile_edit' user.reg_id %}">編輯個人檔案</a></li>
+            <li><a href="{% url 'password_change' %}">更改密碼</a></li>
+            <li><a href="#" style="background-color: #DCDCDC">問題回報</a></li>
+        </ul>
+
+        <style>
+            .tool-btn{
+                background-color: #F3F3F3;
+                width: 20%;
+                height: 70%;
+                border-top-left-radius: 1%;
+                border-bottom-left-radius: 1%;
+                border-right-style: solid;
+                border-right-width: 0.8px;
+                border-right-color: #c0c0c0;
+                overflow: hidden;
+
+                position: absolute;
+                top: 0%;
+                left: 0%;
+            }
+
+            .tool-btn ul{
+                width: 100%;
+                position: absolute;
+                padding-top: 10px;
+            }
+
+            .tool-btn ul li a{
+                color: #2C3232;
+                font-size: 16px;
+                text-decoration: none;
+                padding-left: 50px;
+                padding-top: 20px;
+                padding-bottom: 20px;
+            }
+        </style>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <caption style="font-size: 30px;">&nbsp;&nbsp;問題回報</caption>
+            <thead class="title">
+                <tr>
+                    <th class="col-md-1">問題類別</th>
+                    <th class="col-md-5">內容</th>
+                    <th class="col-md-1">狀態</th>
+                    <th class="col-md-1"></th>
+                </tr>
+            </thead>
+            <tbody>
+            {% if reports %}
+                {% for report in reports %}
+                    <tr {% if report.user_notification %}class="notification"{% endif %} style="cursor: pointer" onclick="window.location.href='{% url 'report_detail' report.id %}'">
+                        <td>{{ report.category }}</td>
+                        <td style="font-size: 13px; text-align: left; vertical-align: middle">{{ report.supplement_note|safe|summary:44 }}</td>
+                        <td>{{ report.state|readable_report_state }}</td>
+                        <td style="font-size: 12px; vertical-align: bottom">{{ report.created_time|date:"H:i, m/d/Y" }}</td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <h2>目前暫無資料</h2>
+                </tr>
+            {% endif %}
+            </tbody>
+        </table>
+
+        <style>
+            .table-responsive .table{
+                text-align: center;
+                position: relative;
+                left: 20%;
+                top: -60px;
+
+                width: 80%;
+            }
+
+            .table-hover > tbody > tr:hover > td,
+            .table-hover > tbody > tr:hover > th {
+                background-color: #4CCABD;
+            }
+
+            .title{
+                font-size: 20px;
+            }
+
+            .title tr th{
+                text-align: center;
+            }
+
+            .table tbody{
+                font-size: 18px;
+            }
+
+            .table tbody td a{
+                color: #2C3232;
+            }
+
+            .notification{
+                background-color: rgb(230, 230, 230);
+            }
+        </style>
+    </div>
+
+    <div class="add_report">
+        <button type="button" class="btn btn-default btn-lg">
+            <a href="{% url 'report' %}">新增</a>
+        </button>
+
+        <style>
+            .add_report button{
+                position: absolute;
+                left: 90%;
+                top: -60px;
+
+                width: 100px;
+                height: 50px;
+                background-color: #4CCABD;
+                border-radius: 10px;
+                text-align: center;
+                font-size: 20px;
+                border: none;
+                box-shadow: 0px 3px 8px 0px #486260;
+            }
+
+            .add_report button:hover{
+                background-color: #2C3232;
+                transition: all 0.3s ease;
+            }
+
+            .add_report a{
+                color: #FFFEF6;
+                text-decoration: none;
+            }
+        </style>
+    </div>
+{% endblock %}

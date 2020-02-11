@@ -81,3 +81,13 @@ def group_edit(request, group_id):
         return render(request, 'group/testee_group_edit.html', locals())
 
 
+@permission_check(UserType.TestManager)
+def group_content(request, group_id):
+    try:
+        group = Group.objects.get(id=group_id)
+        group_members = group.member.all()
+        return render(request, 'group/testee_group_member_list.html', locals())
+
+    except ObjectDoesNotExist:
+        messages.error(request, 'Group does not exist, group id: {}'.format(group_id))
+        return redirect('testee_group_list')

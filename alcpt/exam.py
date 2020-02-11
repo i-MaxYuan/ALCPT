@@ -1,4 +1,5 @@
 from string import punctuation
+from datetime import datetime, timedelta
 
 from django.shortcuts import render, redirect
 
@@ -6,23 +7,19 @@ from django.views.decorators.http import require_http_methods
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.db import IntegrityError
 
 from alcpt.managerfuncs import testmanager
 from alcpt.decorators import permission_check
 from alcpt.definitions import UserType, QuestionType, QuestionTypeCounts
-from alcpt.models import Exam, TestPaper, Group
+from alcpt.models import Exam, TestPaper, Group, Question
 from alcpt.exceptions import *
 
 
 @permission_check(UserType.TestManager)
 @require_http_methods(["GET"])
 def exam_list(request):
-    exam_name = request.GET.get('exam_name')
-
-    if exam_name:
-        exams = Exam.objects.filter(is_public=True).filter(name__contains=exam_name)
-    else:
-        exams = Exam.objects.filter(is_public=True)
+    exams = Exam.objects.filter(is_public=True)
 
     page = request.GET.get('page', 0)
     paginator = Paginator(exams, 10)  # the second parameter is used to display how many items. Now is display 10
@@ -35,6 +32,36 @@ def exam_list(request):
         examList = paginator.page(paginator.num_pages)
 
     return render(request, 'exam/exam_list.html', locals())
+
+
+@permission_check(UserType.TestManager)
+def exam_create(request):
+    if request.method == 'POST':
+        start_time = request.POST.get('start_time',)
+        duration = request.POST.get('duration',)
+        started_time = datetime.strptime(str(start_time)+".000Z", '%Y-%m-%dT%H:%M:%S.%fZ')
+        finish_time = datetime.strptime(str(start_time)+".000Z", '%Y-%m-%dT%H:%M:%S.%fZ') + timedelta(minutes=int(duration))
+        testpaper = TestPaper.objects.get(id=int(request.POST.get('seleceed_testpaper',)))
+
+        exam_name = request.POST.get('exam_name',)
+        try:
+            Exam.objects.create(name=exam_name,
+                                exam_type=1,
+                                start_time=start_time,
+                                created_time=datetime.now(),
+                                duration=duration,
+                                finish_time=finish_time,
+                                testpaper=testpaper,
+                                is_public=True,
+                                created_by=request.user,)
+            messages.success(request, "exam: {} create successfully.".format(exam_name))
+        except IntegrityError:
+            raise IntegrityError("Duplicate entry '%s' for key 'name'".format(exam_name))
+
+        return redirect('exam_list')
+    else:
+        testpapers = TestPaper.objects.filter(is_testpaper=True, valid=True)
+        return render(request, 'exam/exam_create.html', locals())
 
 
 @permission_check(UserType.TestManager)
@@ -86,7 +113,8 @@ def testpaper_create(request):
 
         testpaper = testmanager.create_testpaper(name=testpaper_name, created_by=request.user, is_testpaper=1)
 
-        return render(request, 'exam/testpaper_edit.html', locals())
+        messages.success(request, 'Add a testpaper successfully, please edit the new testpaper: {}'.format(testpaper.name))
+        return redirect('testpaper_list')
 
     else:
         return render(request, 'exam/testpaper_create.html', locals())
@@ -141,11 +169,57 @@ def testpaper_edit(request, testpaper_id):
         return render(request, 'exam/testpaper_edit.html', locals())
 
 
-# 人工選題（未完成）
+# 刪除考卷
+@permission_check(UserType.TestManager)
+def testpaper_delete(request, testpaper_id):
+    try:
+        testpaper = TestPaper.objects.get(id=testpaper_id)
+        if testpaper.is_testpaper and testpaper.valid:
+            messages.warning(request, 'This testpaper is valid, can not delete.')
+        else:
+            messages.success(request, 'Testpaper has been deleted successfully, testpaper id: {}'.format(testpaper.id))
+            testpaper.delete()
+        return redirect('testpaper_list')
+
+    except ObjectDoesNotExist:
+        messages.error(request, 'Testpaper does not exist, testpaper id: {}'.format(testpaper_id))
+        return redirect('testpaper_list')
+
+
+# 人工選題（已完成）
 @permission_check(UserType.TestManager)
 def manual_pick(request, testpaper_id, question_type):
-    messages.success(request, str(question_type))
-    return render(request, 'exam/testpaper_manual_pick.html', locals())
+    try:
+        testpaper = TestPaper.objects.get(id=testpaper_id)
+    except ObjectDoesNotExist:
+        messages.error(request, 'Testpaper does not exist, testpaper id: {}'.format(testpaper_id))
+
+    if request.method == "POST":
+        selected_questions = request.POST.getlist('question',)
+
+        selected_question_list = []
+        for question in selected_questions:
+            selected_question_list.append(Question.objects.get(id=question))
+
+        for question in selected_question_list:
+            testpaper.question_set.add(question)
+        for question in testpaper.question_set.all():
+            if question not in selected_question_list:
+                testpaper.question_set.remove(question)
+        testpaper.save()
+        messages.success(request, "testpaper: {} is successfully selected manually.".format(testpaper.name))
+        return redirect('testpaper_edit', testpaper_id=testpaper_id)
+
+    else:
+        for q_type in QuestionType.__members__.values():
+            if q_type.value[0] == int(question_type):
+                question_type = q_type
+                break
+
+        questionList = testmanager.manual_pick(question_type=question_type.value[0])
+        selected_questions = testpaper.question_set.all()
+
+        return render(request, 'exam/testpaper_manual_pick.html', locals())
 
 
 # 自動選題（已完成）

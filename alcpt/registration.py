@@ -1,3 +1,7 @@
+import re
+import datetime
+import templates
+
 from django.shortcuts import render, redirect
 
 from django.utils import timezone
@@ -10,7 +14,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from Online_Exam.settings import LOGIN_REDIRECT_URL
 from alcpt.definitions import UserType
 from alcpt.forms import CaptchaForm
-from alcpt.models import User, Department, Squadron
+from alcpt.models import User, Student, Department, Squadron, Report
+from alcpt.email_verification import email_verified
 
 # Create your views here.
 
@@ -32,19 +37,18 @@ def login(request):
                     return redirect('login')
 
                 auth.login(request, user)
-                user.last_login = timezone.now()
                 user.save()
+                if request.user.email is "":
+                    departments = Department.objects.all()
+                    squadrons = Squadron.objects.all()
+                    messages.warning(request, 'Fist login, please edit your data')
+                    return render(request, 'registration/edit_profile.html', locals())
                 messages.success(request, 'Login Success.')
 
             except ObjectDoesNotExist:
                 return redirect('login')
 
-            if user.last_login is None:     # 看起來好像沒作用誒
-                messages.warning(request, 'First login, please update your profile.')
-                data = {'user': user, 'privileges': UserType.__members__}
-                return render(request, 'registration/edit_profile.html', data)
-            else:
-                return redirect(next_page)
+            return redirect(next_page)
         else:
             messages.error(request, '驗證碼錯誤')
             return redirect('login')
@@ -62,6 +66,7 @@ def login(request):
 @login_required
 def logout(request):
     auth.logout(request)
+    messages.success(request, 'Logout Success.')
 
     return redirect('Homepage')
 
@@ -87,12 +92,30 @@ def edit_profile(request, reg_id):
         user.gender = int(request.POST.get('gender',))
         user.save()
 
-        # if user.check_password():
-        #     messages.success(request, 'Update profile successfully.')
-        #     return redirect('profile')
-        # else:
-        #     messages.error(request, 'Password wrong, Update failed.')
-        #     return redirect('profile_edit')
+        email = request.POST.get('email',)
+        if not re.match("[^@]+@[^@]+\.[^@]+", email):
+            messages.warning(request, "email doesn't match regular expression.")
+            departments = Department.objects.all()
+            squadrons = Squadron.objects.all()
+            return render(request, 'registration/edit_profile.html', locals())
+        else:
+            if email == user.email:
+                pass
+            else:
+                user.email = email
+                user.email_is_verified = False
+                messages.warning(request, 'Your have to verify email again.')
+                user.save()
+
+        try:
+            student = user.student
+            student.grade = int(request.POST.get('grade',))
+            student.department = Department.objects.get(id=int(request.POST.get('department',)))
+            student.squadron = Squadron.objects.get(id=int(request.POST.get('squadron',)))
+            student.save()
+        except ObjectDoesNotExist:
+            pass
+
         messages.success(request, 'Saved profile successfully.')
         return redirect('profile')
 
@@ -134,3 +157,104 @@ def change_password(request):
             return redirect('profile')
     else:
         return render(request, 'registration/password_change.html', locals())
+
+
+@login_required
+def reset_password(request):
+    if request.method == 'POST':
+        new_password = request.POST.get('new_password', )
+        verification_password = request.POST.get('verification_password', )
+        if new_password != verification_password:
+            messages.error(request, 'Verification error.')
+            return redirect('password_reset')
+        else:
+            user = User.objects.get(reg_id=request.POST.get('reg_id', ))
+            user.set_password(new_password)
+            user.save()
+            messages.warning(request, 'Your password update successfully.')
+
+            return redirect('Homepage')
+    else:
+        return render(request, 'registration/password_reset.html', locals())
+
+
+@login_required
+def verification(request):
+    if request.method == 'POST':
+        if int(request.POST.get('random_code',)) == int(request.POST.get('verification_code',)):
+            messages.success(request, 'Email Verified successfully.')
+
+            if request.POST.get('forget_change_pwd',):
+                reg_id = request.POST.get('reg_id',)
+                return render(request, 'registration/password_reset.html', locals())
+
+            request.user.email_is_verified = True
+            request.user.save()
+            return redirect('profile')
+        else:
+            departments = Department.objects.all()
+            squadrons = Squadron.objects.all()
+            info = 'Email Verified Failed, check your email.' + str(request.POST.get('random_code',))
+            messages.warning(request, info)
+            return render(request, 'registration/edit_profile.html', locals())
+    else:
+        random_code = email_verified(request.user)
+        return render(request, 'email_verification.html', locals())
+
+
+def forget_password(request):
+    if request.method == 'POST':
+        try:
+            user = User.objects.get(reg_id=request.POST.get('reg_id',))
+            if user.email_is_verified:
+                random_code = email_verified(user)
+                reg_id = user.reg_id
+                flag = int(request.POST.get('forget_change_pwd',))
+                messages.success(request, 'Please check your email.')
+                return render(request, 'email_verification.html', locals())
+            else:
+                messages.error(request, 'Your email does not verify.')
+                return redirect('password_forget')
+        except ObjectDoesNotExist:
+            messages.error(request, 'User does not exist, user id: {}'.format(request.POST.get('reg_id',)))
+            return redirect('password_forget')
+    else:
+        return render(request, 'registration/check_id.html', locals())
+
+
+# 取得個人所回報的所有問題
+@login_required
+def report_list(request):
+    reports = Report.objects.filter(created_by=request.user)
+    return render(request, 'registration/report_list.html', locals())
+
+
+@login_required
+def report_detail(request, report_id):
+    try:
+        viewed_report = Report.objects.get(id=report_id)
+        if viewed_report.created_by == request.user:
+            pass
+        elif request.user.has_perm(UserType.SystemManager):
+            pass
+        else:
+            messages.warning(request, 'You have no permission')
+            return redirect('Homepage')
+    except ObjectDoesNotExist:
+        messages.error(request, "Report doesn't exist, report id: {}".format(report_id))
+        return redirect('report_list')
+
+    if request.method == 'POST':
+        if viewed_report.state == 3 or viewed_report.resolved_by:
+            messages.warning(request, 'This report had been resolved.')
+            return redirect('report_list')
+        reply = request.POST.get('reply')
+        viewed_report.supplement_note += (str(datetime.datetime.now()) + ': ' + reply + '<br>')
+        viewed_report.user_notification = False
+        viewed_report.staff_notification = True
+        viewed_report.save()
+        return redirect('report_list')
+    else:
+        viewed_report.user_notification = False
+        viewed_report.save()
+        return render(request, 'registration/report_detail.html', locals())

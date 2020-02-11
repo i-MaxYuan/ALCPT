@@ -1,0 +1,211 @@
+{% extends 'profile_base.html' %}
+
+{% load web_filters %}
+
+{% block path %}
+    <a href="">檢視個人資料</a>
+{% endblock %}
+
+{% block content %}
+    <!-- 大頭貼 -->
+    <div class="photo">
+        <i class="fa fa-user-circle"></i>
+
+        <style>
+            .photo{
+                position: absolute;
+                left: 8%;
+                top: 6%;
+
+            }
+
+            .photo i{
+                font-size: 160px;
+                color: #5e5e5e;
+            }
+        </style>
+    </div>
+
+    <div class="personal_infor">
+        <ul style="list-style: none;" class="infor1">
+            <li>使用者帳號</li>
+            <li>姓名</li>
+            <li>Email</li>
+            <li>性別</li>
+            <li>權限</li>
+            <div class="student_infor">
+                {% if viewed_user.student %}
+                    <div class="line"></div>
+                    <li>學號</li>
+                    <li>年班</li>
+                    <li>科系</li>
+                    <li>中隊</li>
+                {% endif %}
+            </div>
+
+            <div class="time">
+                <li style="border-bottom-style:solid ;border-bottom-color: #adadad;border-bottom-width: 0.7px;">最近登入：<br>{{ viewed_user.update_time|date:"Y年m月d日, H時i分" }}</li>
+                <li style="border-bottom-style:solid ;border-bottom-color: #adadad;border-bottom-width: 0.7px;">加入時間：<br>{{ viewed_user.created_time|date:"Y年m月d日, H時i分" }}</li>
+                <li>狀態：{% if viewed_user.is_active %}
+                        <span>active</span>
+                    {% elif viewed_user.is_staff %}
+                        <span>staff</span>
+                    {% elif viewed_user.is_superuser %}
+                        <span>superuser</span>
+                    {% endif %}
+                </li>
+            </div>
+
+            <div class="time_icon">
+                <i class="fa fa-clock-o"></i>
+            </div>
+
+        </ul>
+
+        <ul style="list-style: none" class="infor2">
+            <li>{{ viewed_user.reg_id }}</li>
+            <li>{{ viewed_user.name }}</li>
+            <li>{{ viewed_user.email }}</li>
+            <li>
+                {% if viewed_user.gender == 0 %}
+                男
+                {% elif viewed_user.gender == 1 %}
+                女
+                {% elif viewed_user.gender == 2 %}
+                不想公開
+                {% else %}
+                尚未設定
+                {% endif %}
+            </li>
+            <li>
+                {% if viewed_user|has_perms:privileges.SystemManager %}
+                    <span class="badge alert-danger">{{ privileges.SystemManager.value.1 }}</span>
+                {% endif %}
+                {% if viewed_user|has_perms:privileges.TestManager %}
+                    <span class="badge alert-warning">{{ privileges.TestManager.value.1 }}</span>
+                {% endif %}
+                {% if viewed_user|has_perms:privileges.TBManager %}
+                    <span class="badge badge-primary">{{ privileges.TBManager.value.1 }}</span>
+                {% endif %}
+                {% if viewed_user|has_perms:privileges.TBOperator %}
+                    <span class="badge alert-success">{{ privileges.TBOperator.value.1 }}</span>
+                {% endif %}
+                {% if viewed_user|has_perms:privileges.Viewer %}
+                    <span class="badge alert-info">{{ privileges.Viewer.value.1 }}</span>
+                {% endif %}
+                {% if viewed_user|has_perms:privileges.Testee %}
+                    <span class="badge alert-inverse">{{ privileges.Testee.value.1 }}</span>
+                {% else %}
+                    <span>{{ viewed_user.privilege }}</span>
+                {% endif %}
+            </li>
+
+            <div class="student_infor_">
+                {% if viewed_user.student %}
+                    <li>{{ viewed_user.student.stu_id }}</li>
+                    <li>{{ viewed_user.student.grade }}</li>
+                    <li>{{ viewed_user.student.department }}</li>
+                    <li>{{ viewed_user.student.squadron }}</li>
+                {% endif %}
+            </div>
+        </ul>
+
+        <style>
+            .personal_infor{
+                position: absolute;
+                left: 35%;
+                top: 5%;
+            }
+
+            .infor1 li{
+                font-size: 25px;
+                line-height: 50px;
+            }
+
+            .infor2{
+                width: 300%;
+                height: 117%;
+                position: absolute;
+                top: 0%;
+                left: 200%;
+            }
+
+            .infor2 li{
+                font-size: 23px;
+                line-height: 50px;
+                color: #777777;
+            }
+
+            .student_infor{
+                position: absolute;
+                left: 0%;
+                top: 135%;
+            }
+
+            .student_infor_{
+                position: absolute;
+                left: 0%;
+                top: 116%;
+            }
+
+            .line{
+                width: 1100%;
+                border-top-style: solid;
+                border-top-color: #c0c0c0;
+                border-top-width: 1px;
+
+                position: absolute;
+                top: -10%;
+            }
+
+            .time_icon{
+                font-size: 30px;
+                color: #5e5e5e;
+                position: absolute;
+                top: 86%;
+                left: -260%;
+                background-color: #F3F3F3;
+            }
+
+            .time{
+                color: #5e5e5e;
+                position: absolute;
+                top: 85%;
+                left: -250%;
+
+                border: #c0c0c0 solid 0.7px;
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+
+            .time li{
+                width: 100%;
+                font-size: 14px;
+                top: 85%;
+
+            }
+
+        </style>
+
+    </div>
+
+    <div class="back-btn">
+        <input type="submit" value="返回" onclick="history.back()">
+
+        <style>
+            .back-btn input{
+                position: relative;
+                left: 90%;
+                top: 10px;
+
+                font-size: 25px;
+                padding: 10px;
+                padding-left: 15px;
+                padding-right: 15px;
+                color: #FFFEF6;
+                background-color: #4CCABD;
+                border: none;
+            }
+        </style>
+    </div>
+{% endblock %}

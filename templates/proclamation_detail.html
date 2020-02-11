@@ -3,31 +3,100 @@
 {% load web_filters %}
 
 {% block path %}
-
+    <a href="">公告資訊</a>
 {% endblock %}
 
 {% block content %}
-    {% if request.user|has_perm:'SystemManager' %}
-        <div>
-            <a href="{% url 'proclamation_delete' proclamation.id %}" onclick="return confirm('確認刪除此公告:{{ proclamation.title }}?')">刪除此公告</a>
-        </div>
-    {% endif %}
+    <div class="title">
+        <h1>Proclamation Delete.</h1> <h2>&nbsp;</h2>
 
-    <div>
-        <table border="1">
-            <tr>
-                <td>Proclamation Title</td>
-                <td>{{ proclamation.title }}</td>
-            </tr>
-            <tr>
-                <td>Proclamation Text</td>
-                <td>{{ proclamation.text }}</td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <input type="submit" onclick="history.back()" value="確認">
-                </td>
-            </tr>
-        </table>
+        <style>
+            .title h1{
+                    font-size: 40px;
+                    color: #FFFEF6;
+                    background-color: #4CCABD;
+                    padding-top: 10px;
+                    padding-bottom: 10px;
+                    padding-right: 15px;
+                    padding-left: 45px;
+                    text-align: center;
+                    position: absolute;
+                    top: 1%;
+                }
+
+            .title h2{
+                    background-color: #4CCABD;
+                    padding-top: 10px;
+                    padding-bottom: 22px;
+                    padding-right: 15px;
+                    padding-left: 30px;
+                    position: absolute;
+                    top: 1%;
+                    left: 30%;
+                }
+        </style>
     </div>
+
+    <div class="proclamation_delete">
+        {% if request.user|has_perm:'SystemManager' %}
+            <div class="delete">
+                <a href="{% url 'proclamation_delete' proclamation.id %}" onclick="return confirm('確認刪除此公告:{{ proclamation.title }}?')">刪除此公告</a>
+            </div>
+        {% endif %}
+
+        <div class="proclamation_title">
+            <label for="proclamation_title">公告標題：{{ proclamation.title }}</label>
+        </div>
+
+        <div class="content">
+            <label for="proclamation_text">公告內容：{{ proclamation.text }}</label>
+        </div>
+
+        <div class="btn"><input type="submit" onclick="history.back()" value="確認"></div>
+
+        <style>
+            .delete a{
+                font-size: 30px;
+                text-decoration: none;
+                color: #4CCABD;
+                position: absolute;
+                top: 20%;
+                left: 20%;
+
+                border-bottom-color: #4CCABD;
+                border-bottom-style: dotted;
+                border-bottom-width: 2px;
+            }
+
+            .proclamation_title label{
+                font-size: 30px;
+                padding-left: 20%;
+                position: absolute;
+                top: 30%;
+            }
+
+            .content label{
+                font-size: 30px;
+                padding-left: 20%;
+                position: absolute;
+                top: 40%;
+            }
+
+            .btn input{
+                    font-size: 25px;
+                    padding: 10px;
+                    padding-left: 15px;
+                    padding-right: 15px;
+                    color: #FFFEF6;
+                    background-color: #4CCABD;
+                    border: none;
+                    position: absolute;
+                    top: 85%;
+                    left: 40%;
+                }
+
+        </style>
+    </div>
+
+
 {% endblock %}

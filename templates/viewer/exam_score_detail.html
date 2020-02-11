@@ -1,0 +1,123 @@
+{% extends 'base_long_page.html' %}
+
+{#{% load web_filters %}#}
+
+{% block path %}
+    <a href="{% url 'exam_score_list' %}">成績檢閱者</a>
+    <a class="fa fa-angle-double-right fa-lg box"></a>
+    <a href="">檢視{{ exam }}</a>
+{% endblock %}
+
+{% block content %}
+    <div class="display-kind-btn">
+        <button onclick="displayFunc('columnar')">條列式</button>
+        <button onclick="displayFunc('pie-chart')">圓餅圖</button>
+        <style>
+            .display-kind-btn{
+                position: relative;
+                left: 20%;
+                top: 50px;
+                font-size: 20px;
+                z-index: 100;
+            }
+        </style>
+    </div>
+    <div class="table-responsive">
+        <table id="columnar" class="table table-hover">
+            <caption style="font-size: 30px;">&nbsp;&nbsp 受測學生成績</caption>
+
+            <thead class="title">
+                <tr>
+                    <th class="col-md-1">學號</th>
+                    <th class="col-md-1">受測者</th>
+                    <th class="col-md-1">受測者科系</th>
+                    <th class="col-md-1">單位</th>
+                    <th class="col-md-2">考試成績</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for testee, answer_sheet in testeeData %}
+                    <tr>
+                        <td style="text-align: center; vertical-align:middle;">{{ testee.stu_id }}</td>
+                        <td style="vertical-align:middle;">{{ testee.user.name }}</td>
+                        <td style="vertical-align:middle;">{{ testee.department }}</td>
+                        <td style="vertical-align:middle;">{{ testee.squadron }}</td>
+                        {% if answer_sheet.score or answer_sheet.score == 0 %}
+                            <td>{{ answer_sheet.score }}</td>
+                        {% else %}
+                            <td>尚未測驗</td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div id="pie-chart" class="table table-hover" style="display: none">
+        <canvas id="chart" width="800" height="600"></canvas>
+        <script>
+            var ctx = document.getElementById('chart').getContext('2d');
+            var chart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ["及格", "不及格", "未施測"],
+                    datasets: [{
+                        label: '# of Votes',
+                        data: [{{ qualified }}, {{ unqualified }}, {{ not_tested }}],
+                        backgroundColor: [
+                            'rgba(120, 194, 196, 1)',
+                            'rgba(219, 77, 109, 1)'
+                        ],
+                        borderColor: [
+                            'rgba(255,255,255,1)',
+                            'rgba(255, 255, 255, 1)'
+                        ],
+                        borderWidth: 6
+                    }]
+                }
+            });
+        </script>
+    </div>
+
+        <style>
+            .table-responsive .table{
+                text-align: center;
+                position: absolute;
+                top: 30px;
+            }
+
+            .table-hover > tbody > tr:hover > td,
+            .table-hover > tbody > tr:hover > th {
+                background-color: #4CCABD;
+            }
+
+            .title{
+                font-size: 20px;
+            }
+
+            .title tr th{
+                text-align: center;
+            }
+
+            .table tbody{
+                font-size: 18px;
+            }
+
+            .table tbody td a{
+                color: #2C3232;
+            }
+
+        </style>
+    </div>
+
+
+    <script type="application/javascript">
+    function displayFunc(display_kind) {
+        var i;
+        var x = document.getElementsByClassName("table table-hover");
+        for (i = 0; i < x.length; i++) {
+            x[i].style.display = "none";
+        }
+        document.getElementById(display_kind).style.display = "block";
+    }
+    </script>
+{% endblock %}

@@ -1,7 +1,9 @@
 from django import template
 
+from django.core.exceptions import ObjectDoesNotExist
+
 from alcpt.definitions import UserType, QuestionType, ExamType
-from alcpt.models import User, Student, Question
+from alcpt.models import User, Student, Question, ReportCategory, Exam
 from alcpt.utility import set_query_parameter
 from alcpt.exceptions import IllegalArgumentError, ObjectNotFoundError
 
@@ -98,7 +100,6 @@ def student_data(user: User):
         return data
 
 
-
 @register.filter(name='check_correct')
 def check_correct(option: str, question: Question):
     if question.option.index(option) == question.answer:
@@ -119,3 +120,76 @@ def readable_state(state: int):
         (5, '被回報錯誤，已處理'),
     )
     return STATE[state][1]
+
+
+@register.filter(name='readable_report_state')
+def readable_report_state(state: int):
+    STATE = (
+        (0, '暫存'),
+        (1, '待處理'),
+        (2, '處理中'),
+        (3, '已解決'),
+    )
+    return STATE[state][1]
+
+
+@register.filter(name='trans_int')
+def trans_int(score: float):
+    return int(score)
+
+
+@register.filter(name='responsible_unit')
+def responsible_unit(category: ReportCategory, required_privilege: UserType):
+    return (category.responsibility & required_privilege.value[0]) > 0
+
+
+@register.filter(name='question_kind')
+def question_kind(question_type: int):
+    if question_type == QuestionType.QA.value[0]:
+        return 'listening'
+    elif question_type == QuestionType.ShortConversation.value[0]:
+        return 'listening'
+    elif question_type == QuestionType.Grammar.value[0]:
+        return 'reading'
+    elif question_type == QuestionType.Phrase.value[0]:
+        return 'reading'
+    elif question_type == QuestionType.ParagraphUnderstanding.value[0]:
+        return 'reading'
+    else:
+        return 'unknown'
+
+
+@register.filter(name='is_finished')
+def is_finished(exam: Exam, user: User):
+    try:
+        answer_sheet = exam.answersheet_set.get(user_id=user.student)
+        if answer_sheet.score is None:
+            return False
+        else:
+            return True
+    except ObjectDoesNotExist:
+        return False
+
+
+@register.filter(name='readable_report_state')
+def readable_report_state(state: int):
+    STATE = (
+        (0, '暫存'),
+        (1, '待處理'),
+        (2, '處理中'),
+        (3, '已解決'),
+    )
+    return STATE[state][1]
+
+
+@register.filter(name='belongs_to')
+def belongs_to(category: ReportCategory, privilege: UserType):
+    return category.responsibility & privilege.value[0] > 0
+
+
+@register.filter(name='summary')
+def summary(completed_string: str, wanted: int):
+    if len(completed_string) > wanted:
+        return completed_string[:wanted] + '...'
+    else:
+        return completed_string

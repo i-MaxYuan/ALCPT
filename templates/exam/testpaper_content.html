@@ -1,35 +1,83 @@
-{% extends 'base.html' %}
+{% extends 'base_long_page.html' %}
 
 {% load web_filters %}
 
 {% block path %}
+    <a href="">考試管理員</a>
     <a class="fa fa-angle-double-right fa-lg box"></a>
-{#    <a href="{% url 'testee_score_list' %}">受測者</a>#}
+    <a href="{% url 'testpaper_list' %}">考卷列表</a>
     <a class="fa fa-angle-right fa-lg box"></a>
-    <a href="">檢閱試卷內容</a>
+    <a href="">檢閱考卷內容</a>
 {% endblock %}
 
 {% block content %}
-    <div>
-        <table border="1">
-            <tr>
-                <th>題號</th>
-                <th>題目</th>
-                <th>題型</th>
-                <th>選項</th>
-            </tr>
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead class="title">
+                <tr>
+                    <th class="col-md-1">題號</th>
+                    <th class="col-md-3">題目</th>
+                    <th class="col-md-2">類型</th>
+                    <th class="col-md-2">選項</th>
+                </tr>
+            </thead>
+            <tbody>
             {% for question in questions %}
                 <tr>
-                    <td>{{ forloop.counter }}</td>
-                    <td>{{ question }}</td>
-                    <td>{{ question.q_type|readable_question_type }}</td>
-                    <td>
-                    {% for choice in question.choice_set.all %}
-                        <li>{{ choice }}</li>
-                    {% endfor %}
+                    <td style="vertical-align: middle">{{ forloop.counter }}</td>
+                    {% if question.q_type|question_kind == 'listening' %}
+                        <td style="text-align: left; vertical-align: middle">
+                            <audio controls preload="none">
+                                <source src="{{ question.q_file }}" type="audio/mpeg">
+                                Your browser does not support the audio tag.
+                            </audio>
+                        </td>
+                    {% elif question.q_type|question_kind == 'reading' %}
+                        <td style="text-align: left; vertical-align: middle">
+                            {{ question }}
+                        </td>
+                    {% else %}
+                        <td>Unknown</td>
+                    {% endif %}
+                    <td style="text-align: center; vertical-align: middle">{{ question.q_type|readable_question_type }}</td>
+                    <td style="text-align: left; vertical-align: middle">
+                        {% for choice in question.choice_set.all %}
+                            <li>{{ choice }}</li>
+                        {% endfor %}
                     </td>
                 </tr>
+            </tbody>
             {% endfor %}
+
+            <style>
+                .table-responsive .table{
+                    text-align: center;
+                    position: absolute;
+                    top: 30px;
+                    left: 0px;
+                }
+
+                .table-hover > tbody > tr:hover > td,
+                .table-hover > tbody > tr:hover > th {
+                    background-color: #4CCABD;
+                }
+
+                .title{
+                    font-size: 20px;
+                }
+
+                .title tr th{
+                    text-align: center;
+                }
+
+                .table tbody{
+                    font-size: 18px;
+                }
+
+                .table tbody td a{
+                    color: #2C3232;
+                }
+            </style>
         </table>
     </div>
 {% endblock %}

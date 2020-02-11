@@ -1,37 +1,96 @@
-{% extends 'base.html' %}
+{% extends 'base_long_page.html' %}
+
+{% load web_filters %}
 
 {% block path %}
+    <a href="">受測者</a>
     <a class="fa fa-angle-double-right fa-lg box"></a>
-    <a href="{% url 'testee_score_list' %}">受測者</a>
+    <a href="{% url 'testee_score_list' %}">成績紀錄</a>
     <a class="fa fa-angle-right fa-lg box"></a>
     <a href="">檢閱試卷內容</a>
 {% endblock %}
 
 {% block content %}
-    <div>
-        <table border="1">
-            <tr>
-                <th>題目</th>
-                <th>選項</th>
-            </tr>
-            {% for answer in answersheet.answer_set.all %}
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <caption style="font-size: 30px;">&nbsp;&nbsp;試卷作答內容</caption>
+            <thead class="title">
                 <tr>
-                    <td>{{ answer.question }}</td>
-                    <td>
-                    {% for option in answer.question.choice_set.all %}
-                        {% if answer.selected == forloop.counter and option.is_answer %}
-                            <span style="color: green"><li>{{ option }}</li></span>
-                        {% elif answer.selected == forloop.counter %}
-                            <span style="color: red"><li>{{ option }}</li></span>
-                        {% elif option.is_answer %}
-                            <span style="color: green"><li>{{ option }}</li></span>
-                        {% else %}
-                            <li>{{ option }}</li>
-                        {% endif %}
-                    {% endfor %}
-                    </td>
+                    <th class="col-md-1">題序</th>
+                    <th class="col-md-5">題目</th>
+                    <th class="col-md-2">選項</th>
                 </tr>
-            {% endfor %}
+            </thead>
+            <tbody>
+                {% for answer in answersheet.answer_set.all %}
+                    <tr>
+                        <td style="text-align: center; vertical-align:middle;">{{ forloop.counter }}</td>
+                    {% if answer.question.q_type|question_kind == 'listening' %}
+                        <td style="vertical-align:middle; text-align: left">
+                            {% if answer.selected == -1 %}
+                                <span style="color: red">此題未作答</span>
+                            {% endif %}
+                            <audio controls preload="none">
+                                <source src="{{ answer.question.q_file }}" type="audio/mpeg">
+                                Your browser does not support the audio tag.
+                            </audio>
+                        </td>
+                    {% elif answer.question.q_type|question_kind == 'reading' %}
+                        <td style="vertical-align:middle; text-align: left">
+                            {% if answer.selected == -1 %}
+                                <span style="color: red">此題未作答</span>
+                            {% endif %}
+                            {{ answer.question }}
+                        </td>
+                    {% else %}
+                        <td style="vertical-align:middle;">Unknown</td>
+                    {% endif %}
+                        <td style="vertical-align:middle; text-align: left">
+                            {% for option in answer.question.choice_set.all %}
+                                {% if answer.selected == forloop.counter and option.is_answer %}
+                                    <span style="color: green"><li>{{ option }}</li></span>
+                                {% elif answer.selected == forloop.counter %}
+                                    <span style="color: red"><li>{{ option }}</li></span>
+                                {% elif option.is_answer %}
+                                    <span style="color: green"><li>{{ option }}</li></span>
+                                {% else %}
+                                    <li>{{ option }}</li>
+                                {% endif %}
+                            {% endfor %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
         </table>
+
+        <style>
+            .table-responsive .table{
+                text-align: center;
+                position: absolute;
+                top: 30px;
+            }
+
+            .table-hover > tbody > tr:hover > td,
+            .table-hover > tbody > tr:hover > th {
+                background-color: #4CCABD;
+            }
+
+            .title{
+                font-size: 30px;
+            }
+
+            .title tr th{
+                text-align: center;
+            }
+
+            .table tbody{
+                font-size: 25px;
+            }
+
+            .table tbody td a{
+                color: #2C3232;
+            }
+
+        </style>
     </div>
 {% endblock %}

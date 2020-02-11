@@ -1,3 +1,5 @@
+import xlrd
+
 from string import punctuation
 
 from django.shortcuts import render, redirect
@@ -48,7 +50,7 @@ def manager_index(request):
 
     query_content, questions = tbmanager.query_questions(**keywords)
     page = request.GET.get('page', 1)
-    paginator = Paginator(questions, 5)  # the second parameter is used to display how many items. Now is display 10
+    paginator = Paginator(questions, 10)  # the second parameter is used to display how many items. Now is display 10
 
     try:
         questionList = paginator.page(page)
@@ -66,7 +68,7 @@ def review(request):
     # 過濾掉狀態為"暫存"、"審核通過"、"被回報錯誤，已處理"
     reviewed_questions = Question.objects.exclude(state=0).exclude(state=1).exclude(state=2).exclude(state=5)
     page = request.GET.get('page', 1)
-    paginator = Paginator(reviewed_questions, 5)  # the second parameter is used to display how many items. Now is 10
+    paginator = Paginator(reviewed_questions, 8)  # the second parameter is used to display how many items. Now is 10
 
     try:
         questionList = paginator.page(page)
@@ -138,7 +140,7 @@ def question_edit(request, question_id):
 
             messages.success(request, 'Successful Update.')
 
-            return redirect('tbmanager_question_list')
+            return redirect('question_review')
         except ObjectDoesNotExist:
             messages.error(request, 'Choice does not exist, choice id: {}'.format(request.POST.get('answer_choice')))
             return render(request, 'question/question_edit.html', locals())
@@ -180,7 +182,7 @@ def operator_index(request):
 
     query_content, questions = tboperator.query_questions(**keywords)
     page = request.GET.get('page', 1)
-    paginator = Paginator(questions, 5)  # the second parameter is used to display how many items. Now is display 10
+    paginator = Paginator(questions, 10)  # the second parameter is used to display how many items. Now is display 10
 
     try:
         questionList = paginator.page(page)
@@ -286,6 +288,59 @@ def question_create(request, kind):
 
 
 @permission_check(UserType.TBOperator)
+def question_multiCreate(request):
+    if request.method == "POST":
+        if request.FILES.get('users_file', ):
+            wb = xlrd.open_workbook(filename=None, file_contents=request.FILES['users_file'].read())
+            table = wb.sheets()[0]
+            all_questions = []
+
+            q_type = request.POST.get('question_type', )
+            q_difficulty = request.POST.get('question_difficulty', )
+
+            for i in range(table.nrows):
+                question = []
+                for j in range(table.ncols):
+                    item = table.cell_value(i, j)
+                    if isinstance(item, float):
+                        item = int(item)
+                    question.append(item)
+                all_questions.append(question)
+
+            for question in all_questions:
+                q_content = question[0]
+                choice1 = question[1]
+                choice2 = question[2]
+                choice3 = question[3]
+                choice4 = question[4]
+
+                reading_question = tboperator.create_reading_question(q_content=q_content,
+                                                                      q_type=q_type,
+                                                                      created_by=request.user,
+                                                                      difficulty=q_difficulty)
+
+                option1 = Choice.objects.create(c_content=choice1, question=reading_question)
+                option2 = Choice.objects.create(c_content=choice2, question=reading_question)
+                option3 = Choice.objects.create(c_content=choice3, question=reading_question)
+                option4 = Choice.objects.create(c_content=choice4, question=reading_question)
+                option1.save()
+                option2.save()
+                option3.save()
+                option4.save()
+
+                choice = Choice.objects.get(id=question[5])
+                choice.is_answer = 1
+                choice.save()
+
+            return redirect('tboperator_question_list')
+        else:
+            messages.warning(request, 'Must load a file.')
+            return redirect('question_multiCreate')
+    else:
+        return render(request, 'question/multi_create.html', locals())
+
+
+@permission_check(UserType.TBOperator)
 def operator_edit(request, question_id):
     try:
         question = Question.objects.get(id=question_id)
@@ -294,6 +349,7 @@ def operator_edit(request, question_id):
 
     if request.method == 'POST':
         question.q_content = request.POST.get('q_content', )
+        question.q_type = request.POST.get('question_type',)
         for choice in question.choice_set.all():
             choice.is_answer = 0
             choice.save()
@@ -319,8 +375,12 @@ def question_delete(request, question_id):
     try:
         question = Question.objects.get(id=question_id)
         if question.state == 0 or question.state == 2:
+            choices = question.choice_set.all()
+            for choice in choices:
+                choice.delete()
+
             question.delete()
-            messages.success('Delete question successfully, question id: {}'.format(question.id))
+            messages.success(request, 'Delete question successfully, question id: {}'.format(question.id))
         else:
             messages.warning(request, 'Question can not be deleted, question id: {}'.format(question_id))
     except ObjectDoesNotExist:

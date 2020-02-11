@@ -1,0 +1,12 @@
+Django==1.11.17
+django-extensions==2.2.5
+django-ranged-response==0.2.0
+django-simple-captcha==0.5.12
+mysql-connector-python==8.0.18
+mysqlclient==1.4.4
+Pillow==6.2.1
+protobuf==3.11.2
+PyMySQL==0.9.3
+pytz==2019.3
+six==1.13.0
+xlrd==1.2.0

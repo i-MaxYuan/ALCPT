@@ -1,10 +1,11 @@
-{% extends 'base.html' %}
+{% extends 'base_long_page.html' %}
 
 {% block path %}
-    <a class="fa fa-angle-double-right fa-lg box"></a>
     <a href="">考試管理員</a>
+    <a class="fa fa-angle-double-right fa-lg box"></a>
+    <a href="{% url 'testee_group_list' %}" onclick="return confirm('是否放棄編輯？')">受測者群組列表</a>
     <a class="fa fa-angle-right fa-lg box"></a>
-    <a href="">受測者群組列表</a>
+    <a href="">編輯受測者群組（{{ group.name }}）</a>
 {% endblock %}
 
 {% block scripts %}
@@ -34,21 +35,117 @@
 {% endblock %}
 
 {% block content %}
-    <div>
+    <div class="table-responsive">
         <form action="" method="post">
             {% csrf_token %}
-            <table>
-                <input type="button" value="全選" onclick="selAll();">
-                <input type="button" value="全取消" onclick="unselAll();">
-                <input type="button" value="反向選取" onclick="usel();">
+            <table class="table table-hover">
+                <caption style="font-size: 30px; padding-left: 5%">&nbsp;{{ group.name }}＿群組內受測者名單</caption>
+                <div class="btn">
+                    <div class="btn1"><input type="button" value="全選" onclick="selAll();"></div>
+                    <div class="btn2"><input type="button" value="全取消" onclick="unselAll();"></div>
+                    <div class="btn3"><input type="button" value="反向選取" onclick="usel();"></div>
+
+                    <style>
+                        .btn input{
+                            background-color: #4CCABD;
+                            color: #FFFEF6;
+                            border: none;
+                            padding-top: 5px;
+                            padding-bottom: 5px;
+                            padding-left: 5px;
+                            padding-right: 5px;
+                            font-size: 25px;
+                        }
+
+                        .btn .btn1 input{
+                            position: absolute;
+                            left: 75%;
+                            top: 5%;
+                        }
+
+                        .btn .btn2 input{
+                            position: absolute;
+                            left: 81%;
+                            top: 5%;
+                        }
+
+                        .btn .btn3 input{
+                            position: absolute;
+                            left: 89%;
+                            top: 5%;
+                        }
+                    </style>
+                </div>
+
                 {% for student in students %}
                     <tr>
-                        <td><input type="checkbox" name="student" value="{{ student.id }}" {% if student in group_members %}checked{% endif %}>{{ student.user.name }}</td>
+                        <td style="font-size: 18px; padding-left: 5%"><input type="checkbox" name="student" value="{{ student.id }}" {% if student in group_members %}checked{% endif %}>&nbsp;{{ student.user.name }}</td>
                     </tr>
                 {% endfor %}
             </table>
+            <div class="btn4">
+                <input type="submit" value="變更群組" onclick="return confirm('確認變更群組？')">
 
-            <input type="submit" value="變更群組">
+                <style>
+                    .btn4 input{
+                        background-color: #4CCABD;
+                        color: #FFFEF6;
+                        border: none;
+                        padding-top: 5px;
+                        padding-bottom: 5px;
+                        padding-left: 5px;
+                        padding-right: 5px;
+                        font-size: 25px;
+
+                        position: absolute;
+                        left: 35%;
+                    }
+                </style>
+            </div>
+
+            <div class="btn5">
+                <input type="reset" value="取消">
+
+                <style>
+                    .btn5 input{
+                        background-color: #5e5e5e;
+                        color: #FFFEF6;
+                        border: none;
+                        padding-top: 5px;
+                        padding-bottom: 5px;
+                        padding-left: 5px;
+                        padding-right: 5px;
+                        font-size: 25px;
+
+                        position: absolute;
+                        left: 45%;
+                    }
+                </style>
+            </div>
+
+            <div class="btn6">
+                <button type="button" onclick="history.back()">返回</button>
+
+                <style>
+                    .btn6 button{
+                        background-color: #4CCABD;
+                        color: #FFFEF6;
+                        border: none;
+                        padding-top: 5px;
+                        padding-bottom: 5px;
+                        padding-left: 5px;
+                        padding-right: 5px;
+                        font-size: 25px;
+
+                        position: absolute;
+                        left: 51%;
+                    }
+
+                    .btn6 {
+                        padding-bottom: 5%;
+                    }
+                </style>
+            </div>
         </form>
     </div>
 {% endblock %}
