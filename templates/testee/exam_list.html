@@ -9,9 +9,38 @@
 {% endblock %}
 
 {% block content %}
-    <div class="table-responsive">
+    <div class="button-tags">
+        <button id="prac" onclick="openList('practiceList')">練習</button>
+        <button id="exam" onclick="openList('examList')">測驗</button>
+
+        <style>
+            .button-tags button{
+                border: none;
+                border-radius: 6px;
+                background-color: rgb(200, 200, 200);
+                color: rgb(100, 100, 100);
+
+                font-size: 24px;
+                padding: 6px 12px;
+            }
+            #exam{
+                position: absolute;
+                left: 20%;
+                top: 1%;
+            }
+            #prac{
+                position: absolute;
+                left: 28%;
+                top: 1%;
+            }
+
+        </style>
+    </div>
+
+    <div id="examList" class="table-responsive" style="display: none">
         <table class="table table-hover">
             <caption style="font-size: 30px;">&nbsp;&nbsp;測驗記錄列表</caption>
+
             <thead class="title">
                 <tr>
                     <th class="col-md-2">測驗名稱</th>
@@ -39,8 +68,63 @@
         <style>
             .table-responsive .table{
                 text-align: center;
-                position: absolute;
-                top: 30px;
+            }
+
+            .table-hover > tbody > tr:hover > td,
+            .table-hover > tbody > tr:hover > th {
+                background-color: #4CCABD;
+            }
+
+            .title{
+                font-size: 20px;
+            }
+
+            .title tr th{
+                text-align: center;
+            }
+
+            .table tbody{
+                font-size: 18px;
+            }
+
+            .table tbody td a{
+                color: #002a80;
+            }
+
+        </style>
+    </div>
+
+    <div id="practiceList" class="table-responsive">
+        <table class="table table-hover">
+            <caption style="font-size: 30px;">&nbsp;&nbsp;測驗記錄列表</caption>
+
+            <thead class="title">
+                <tr>
+                    <th class="col-md-2">測驗名稱</th>
+                    <th class="col-md-1">測驗類型</th>
+                    <th class="col-lg-1">備註</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for exam in practiceList %}
+                    <tr>
+                        <td style="text-align: left; vertical-align:middle;">{{ exam }}</td>
+                        <td style="vertical-align:middle;">{{ exam.exam_type|readable_exam_type }}</td>
+                        <td style="vertical-align:middle;">
+                            {% if not exam|is_finished:request.user %}
+                                <a style="color: rgb(0, 51, 153)" href="{% url 'testee_start_exam' exam.id %}">開始測驗</a>
+                            {% else %}
+                                <label>已完成測驗</label>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <style>
+            .table-responsive .table{
+                text-align: center;
             }
 
             .table-hover > tbody > tr:hover > td,
@@ -66,4 +150,15 @@
 
         </style>
     </div>
+
+    <script type="application/javascript">
+    function openList(exam_kind) {
+        var i;
+        var x = document.getElementsByClassName("table-responsive");
+        for (i = 0; i < x.length; i++) {
+            x[i].style.display = "none";
+        }
+        document.getElementById(exam_kind).style.display = "block";
+    }
+    </script>
 {% endblock %}

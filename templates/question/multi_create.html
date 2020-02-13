@@ -21,32 +21,35 @@
 
             <br>
             <div class="list">
-                <strong>檔案內欄位順序：題目＞選項1＞選項2＞選項3＞選項4＞答案</strong>
+                <strong>檔案內欄位順序：題目＞選項1＞選項2＞選項3＞選項4＞答案>題目類型>難度</strong><br><br>
+                <strong>題目類型：1.文法, 2.名詞片語, 3.段落理解</strong><br>
+                <strong>難度：1.簡單, 2.中等, 3.困難</strong><br>
+                <strong style="color: #c12e2a">請按照上述順序和選項輸入Excel中</strong>
             </div>
 
             <br>
 
-            <div class="question_type">
-                <label for="question_type">試題類型：</label>
-                <select name="question_type">
-                    <option value="3" selected>文法</option>
-                    <option value="4">名詞片語</option>
-                    <option value="5">段落理解</option>
-                </select>
-            </div>
-
-            <br>
-
-            <div class="question_difficulty">
-                <label for="question_difficulty">試題難度：</label>
-                <select name="question_difficulty">
-                    <option value="1" selected>簡單</option>
-                    <option value="2">中等</option>
-                    <option value="3">困難</option>
-                </select>
-            </div>
-
-            <br>
+{#            <div class="question_type">#}
+{#                <label for="question_type">試題類型：</label>#}
+{#                <select name="question_type">#}
+{#                    <option value="3" selected>文法</option>#}
+{#                    <option value="4">名詞片語</option>#}
+{#                    <option value="5">段落理解</option>#}
+{#                </select>#}
+{#            </div>#}
+{##}
+{#            <br>#}
+{##}
+{#            <div class="question_difficulty">#}
+{#                <label for="question_difficulty">試題難度：</label>#}
+{#                <select name="question_difficulty">#}
+{#                    <option value="1" selected>簡單</option>#}
+{#                    <option value="2">中等</option>#}
+{#                    <option value="3">困難</option>#}
+{#                </select>#}
+{#            </div>#}
+{##}
+{#            <br>#}
             <div class="btn">
                 <input type="submit" onclick="return confirm('確認送出？')" value="新增試題">
             </div>
@@ -99,7 +102,7 @@
                     padding: 10px;
                 }
 
-                .multi_add form .list strong{
+                .multi_add form .list{
                     font-size: 20px;
                     padding-left: 30%;
                     position: absolute;

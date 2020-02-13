@@ -149,7 +149,8 @@
                 <thead class="title">
                     <tr>
                         <th class="col-md-3">名稱</th>
-                        <th class="col-md-2">有效考卷</th>
+                        <th class="col-md-1">有效考卷</th>
+                        <th class="col-md-1">已使用</th>
                         <th class="col-md-3">更新時間</th>
                         <th class="col-md-1">建立者</th>
                         <th class="col-md-1"></th>
@@ -160,13 +161,14 @@
                         <tr style="cursor: pointer" onclick="window.location.href=('{% url 'view_testpaper_content' testpaper.id %}')">
                             <td style="text-align: center; vertical-align:middle;">{{ testpaper.name }}</td>
                             <td style="vertical-align:middle;">{{ testpaper.valid }}</td>
+                            <td style="vertical-align:middle;">{{ testpaper.is_used }}</td>
                             <td style="vertical-align:middle;">{{ testpaper.update_time|date:'Y年m月d日, H時i分' }}</td>
                             <td style="vertical-align:middle;">{{ testpaper.created_by.name }}</td>
                             <td style="vertical-align:middle;">
                                 {% if testpaper.is_testpaper %}
                                     <a href="{% url 'testpaper_edit' testpaper.id %}"><i class="fa fa-pencil fa-fw mb-2"></i></a>
+                                    <a href="{% url 'testpaper_delete' testpaper.id %}" onclick="return confirm('確認刪除此考卷？')"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                                 {% endif %}
-                                <a href="{% url 'testpaper_delete' testpaper.id %}"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                             </td>
                         </tr>
                     {% endfor %}
@@ -182,7 +184,7 @@
             }
 
             .table-hover a{
-                    visibility: hidden;
+                visibility: hidden;
             }
             .table-hover > tbody > tr:hover{
                 cursor: pointer;
@@ -259,15 +261,15 @@
             <style>
                 .pager_group1{
                     text-decoration: none;
-                    position: absolute;
-                    bottom: 0%;
-                    left: 1%;
-                    right: 1%;
+                    position: fixed;
+                    bottom: 9%;
+                    left: 10%;
+                    right: 10%;
                 }
 
                 .pager_group2{
-                    position: absolute;
-                    bottom: 6.5%;
+                    position: fixed;
+                    bottom: 14%;
                     right: 50%;
 
                     transform: translate(50%,50%);

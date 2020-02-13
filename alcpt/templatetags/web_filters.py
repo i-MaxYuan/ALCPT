@@ -22,6 +22,11 @@ def has_perms(user: User, required_privilege: UserType):
     return user.has_perm(required_privilege)
 
 
+@register.filter(name='has_permission')
+def has_permission(user: User, privilege: UserType):
+    return user.privilege & privilege.value[0] > 0
+
+
 # check whether question_type is readable question_type
 @register.filter(name='readable_question_type')
 def readable_question_type(question_type: int):
@@ -86,6 +91,16 @@ def is_student(user: User):
 
     except Exception:
         return False
+
+
+@register.filter(name='readableIdentity')
+def readableIdentity(identity: int):
+    IDENTITY = (
+        (0, '訪客'),
+        (1, '學生'),
+        (2, '老師'),
+    )
+    return IDENTITY[identity][1]
 
 
 @register.filter(name='student_data')
@@ -162,7 +177,7 @@ def question_kind(question_type: int):
 @register.filter(name='is_finished')
 def is_finished(exam: Exam, user: User):
     try:
-        answer_sheet = exam.answersheet_set.get(user_id=user.student)
+        answer_sheet = exam.answersheet_set.get(user_id=user.id)
         if answer_sheet.score is None:
             return False
         else:
@@ -193,3 +208,4 @@ def summary(completed_string: str, wanted: int):
         return completed_string[:wanted] + '...'
     else:
         return completed_string
+

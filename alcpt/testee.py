@@ -28,12 +28,14 @@ def exam_list(request):
                 pass
         except:
             pass
+
+    practiceList = []
     practices = Exam.objects.filter(created_by=request.user)
     for practice in practices:
         if practice in examList:
             pass
         else:
-            examList.append(practice)
+            practiceList.append(practice)
 
     return render(request, 'testee/exam_list.html', locals())
 
@@ -43,7 +45,7 @@ def exam_list(request):
 def score_list(request):
     qualified = 0
     unqualified = 0
-    answer_sheets = AnswerSheet.objects.all().filter(user=request.user.student)
+    answer_sheets = AnswerSheet.objects.all().filter(user=request.user)
     page = request.GET.get('page', 1)
     paginator = Paginator(answer_sheets, 10)
 
@@ -137,15 +139,14 @@ def start_exam(request, exam_id):
         return redirect('testee_exam_list')
 
     try:
-        answer_sheet = AnswerSheet.objects.get(exam=exam, user=request.user.student)
+        answer_sheet = AnswerSheet.objects.get(exam=exam, user=request.user)
         if answer_sheet.is_finished:
             messages.warning(request, 'You had done this exam.')
             return redirect('testee_exam_list')
     except ObjectDoesNotExist:
-        answer_sheet = AnswerSheet.objects.create(exam=exam, user=request.user.student)
-        all_questions = exam.testpaper.question_set.all()
+        answer_sheet = AnswerSheet.objects.create(exam=exam, user=request.user)
 
-        all_questions = list(all_questions)
+        all_questions = list(exam.testpaper.question_set.all())
         random.shuffle(all_questions)
 
         for question in all_questions:
@@ -162,7 +163,7 @@ def answering(request, exam_id, answer_id):
     try:
         exam = Exam.objects.get(id=exam_id)
         answer = Answer.objects.get(id=answer_id)
-        answer_sheet = AnswerSheet.objects.get(exam=exam, user=request.user.student)
+        answer_sheet = AnswerSheet.objects.get(exam=exam, user=request.user)
         if answer not in answer_sheet.answer_set.all():
             messages.warning(request, 'Not your answer: {}'.format(answer_id))
             return redirect('testee_answering', exam_id=exam.id, answer_id=list(answer_sheet.answer_set.all())[0].id)

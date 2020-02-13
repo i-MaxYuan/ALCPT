@@ -48,36 +48,53 @@
                 </tr>
             </tbody>
             {% endfor %}
-
-            <style>
-                .table-responsive .table{
-                    text-align: center;
-                    position: absolute;
-                    top: 30px;
-                    left: 0px;
-                }
-
-                .table-hover > tbody > tr:hover > td,
-                .table-hover > tbody > tr:hover > th {
-                    background-color: #4CCABD;
-                }
-
-                .title{
-                    font-size: 20px;
-                }
-
-                .title tr th{
-                    text-align: center;
-                }
-
-                .table tbody{
-                    font-size: 18px;
-                }
-
-                .table tbody td a{
-                    color: #2C3232;
-                }
-            </style>
         </table>
+
+        <style>
+            .table-responsive .table{
+                text-align: center;
+            }
+
+            .table-hover > tbody > tr:hover > td,
+            .table-hover > tbody > tr:hover > th {
+                background-color: #4CCABD;
+            }
+
+            .title{
+                font-size: 20px;
+            }
+
+            .title tr th{
+                text-align: center;
+            }
+
+            .table tbody{
+                font-size: 18px;
+            }
+
+            .table tbody td a{
+                color: #2C3232;
+            }
+        </style>
+
+        <div class="btn">
+            <button type="button" onclick="self.location=document.referrer;">確認</button>&nbsp;
+        </div>
+
+        <style>
+            .btn{
+                position: relative;
+                left: 45%;
+            }
+            .btn button{
+                font-size: 25px;
+                padding: 10px;
+                padding-left: 15px;
+                padding-right: 15px;
+                color: #FFFEF6;
+                background-color: #4CCABD;
+                border: none;
+            }
+        </style>
     </div>
 {% endblock %}

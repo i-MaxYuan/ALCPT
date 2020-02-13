@@ -16,7 +16,7 @@
             .display-kind-btn{
                 position: relative;
                 left: 20%;
-                top: 50px;
+                top: 30px;
                 font-size: 20px;
                 z-index: 100;
             }
@@ -37,13 +37,17 @@
             </thead>
             <tbody>
                 {% for testee, answer_sheet in testeeData %}
-                    <tr>
+                    <tr onclick="window.location.href='{% url "view_profile" testee.user.id %}'">
                         <td style="text-align: center; vertical-align:middle;">{{ testee.stu_id }}</td>
                         <td style="vertical-align:middle;">{{ testee.user.name }}</td>
                         <td style="vertical-align:middle;">{{ testee.department }}</td>
                         <td style="vertical-align:middle;">{{ testee.squadron }}</td>
                         {% if answer_sheet.score or answer_sheet.score == 0 %}
-                            <td>{{ answer_sheet.score }}</td>
+                            {% if answer_sheet.score < 60.0 %}
+                                <td style="color: #c12e2a">{{ answer_sheet.score }}</td>
+                            {% else %}
+                                <td>{{ answer_sheet.score }}</td>
+                            {% endif %}
                         {% else %}
                             <td>尚未測驗</td>
                         {% endif %}

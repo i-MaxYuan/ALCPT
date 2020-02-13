@@ -17,11 +17,11 @@
             <thead class="title">
                 <tr>
                     <th class="col-md-1">ＩＤ</th>
-                    <th class="col-md-3">題目</th>
+                    <th class="col-md-4">題目</th>
                     <th class="col-md-2">類型</th>
                     <th class="col-md-2">題目選項</th>
-                    <th class="col-md-2">審核</th>
-                    <th class="col-md-2">備註</th>
+                    <th class="col-md-1">審核</th>
+                    <th class="col-md-1"></th>
                 </tr>
             </thead>
             <tbody>
@@ -49,45 +49,53 @@
                             {% endfor %}
                         </td>
 
+                        <td class="functions-btn" style="vertical-align: middle">
+                            <button id="pass" type="button" onclick="window.location.href='{% url 'question_pass' question.id %}'">Pass</button>
+                            <button id="reject" type="button" onclick="window.location.href='{% url 'question_reject' question.id %}'">Reject</button>
+                            <button type="button" onclick="window.location.href='{% url 'question_edit' question.id %}'">edit</button>
+                        </td>
+
                         <td style="vertical-align: middle">
-                            <a href="{% url 'question_pass' question.id %}" onclick="return confirm('確認審核通過？')">Pass</a> /
-                            <a href="{% url 'question_reject' question.id %}">Reject</a> /
-                            <a href="{% url 'question_edit' question.id %}">Edit</a>
-                        </td>
-
-                        <td style="text-align: center; vertical-align: middle">
-                            {% if question.fault_reason %}
-                                {{ question.fault_reason }}
-                            {% else %}
-                                無
-                            {% endif %}
-                        </td>
-
-                        <td>
-                            <div>
+                            <div class="detail">
                                 <button type="button" class="btn btn-primary dropdown-toggle pull-right" data-toggle="dropdown" style="background-color: #4CCABD;
                                 border-color: #FFFEF6;">
                                     <i class="fa fa-ellipsis-h"></i>
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-right" style="width: 300px">
-                                      <div class="detail_block">
-                                          <ul style="text-align: left; font-size: 16px">
-                                              <li>更新時間：{{ question.update_time|date:'Y年m月d日, H時i分' }}</li>
-                                              <li>錯誤回報次數：{{ question.issued_freq }}</li>
-                                              <li>正確次數：{{ question.correct_freq }}</li>
-                                              <li>難度：{{ question.difficulty }}</li>
-                                              <li>建立者：{{ question.created_by.name }}</li>
-                                          </ul>
-                                      </div>
+                                      <ul style="text-align: left; font-size: 16px">
+                                          <li>備註：{% if question.fault_reason %}{{ question.fault_reason }}{% else %}無{% endif %}</li>
+                                          <li>更新時間：{{ question.update_time|date:'Y年m月d日, H時i分' }}</li>
+                                          <li>難度：{{ question.difficulty }}</li>
+                                          <li>建立者：{{ question.created_by.name }}</li>
+                                      </ul>
                                 </div>
                             </div>
                         </td>
+
                         <style>
-                            .detail_block li{
+                            .detail li{
                                 list-style: none;
                                 padding-left: 10px;
                             }
 
+                            .functions-btn button{
+                                width: 70px;
+
+                                font-size: 16px;
+                                text-align: center;
+
+                                padding: 4px;
+                                margin: 2px;
+                            }
+                            .functions-btn #pass{
+                                background-color: aquamarine;
+                            }
+                            .functions-btn #reject{
+                                background-color: orangered;
+                            }
+                            .functions-btn button:hover{
+                                cursor: pointer;
+                            }
                         </style>
                     </tr>
                 {% endfor %}
@@ -100,8 +108,6 @@
         <style>
             .table-responsive .table{
                 text-align: center;
-                position: absolute;
-                top: 30px;
             }
 
             .table-hover > tbody > tr:hover > td,
@@ -174,20 +180,19 @@
             <style>
                 .pager_group1{
                     text-decoration: none;
-                    position: absolute;
-                    bottom: 0%;
-                    left: 1%;
-                    right: 1%;
+                    position: fixed;
+                    bottom: 9%;
+                    left: 10%;
+                    right: 10%;
                 }
 
                 .pager_group2{
-                    position: absolute;
-                    bottom: 6.5%;
+                    position: fixed;
+                    bottom: 14%;
                     right: 50%;
 
                     transform: translate(50%,50%);
                 }
-
             </style>
         </div>
 

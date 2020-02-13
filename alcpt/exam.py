@@ -11,8 +11,8 @@ from django.db import IntegrityError
 
 from alcpt.managerfuncs import testmanager
 from alcpt.decorators import permission_check
-from alcpt.definitions import UserType, QuestionType, QuestionTypeCounts
-from alcpt.models import Exam, TestPaper, Group, Question
+from alcpt.definitions import UserType, QuestionType, QuestionTypeCounts, ExamType
+from alcpt.models import Exam, TestPaper, Group, Question, TesteeList
 from alcpt.exceptions import *
 
 
@@ -41,19 +41,29 @@ def exam_create(request):
         duration = request.POST.get('duration',)
         started_time = datetime.strptime(str(start_time)+".000Z", '%Y-%m-%dT%H:%M:%S.%fZ')
         finish_time = datetime.strptime(str(start_time)+".000Z", '%Y-%m-%dT%H:%M:%S.%fZ') + timedelta(minutes=int(duration))
-        testpaper = TestPaper.objects.get(id=int(request.POST.get('seleceed_testpaper',)))
+        testpaper = TestPaper.objects.get(id=int(request.POST.get('selected_testpaper',)))
+        selected_group = Group.objects.get(id=int(request.POST.get('selected_group')))
 
         exam_name = request.POST.get('exam_name',)
         try:
-            Exam.objects.create(name=exam_name,
-                                exam_type=1,
-                                start_time=start_time,
-                                created_time=datetime.now(),
-                                duration=duration,
-                                finish_time=finish_time,
-                                testpaper=testpaper,
-                                is_public=True,
-                                created_by=request.user,)
+            exam = Exam.objects.create(name=exam_name,
+                                       exam_type=ExamType.Exam.value[0],
+                                       start_time=start_time,
+                                       created_time=datetime.now(),
+                                       duration=duration,
+                                       finish_time=finish_time,
+                                       testpaper=testpaper,
+                                       is_public=True,
+                                       created_by=request.user)
+            testpaper.is_used = True
+            testpaper.save()
+
+            testee_list = TesteeList.objects.create()
+            testee_list.created_by = exam
+            for testee in selected_group.user_set.all():
+                testee_list.testees.add(testee)
+            testee_list.save()
+
             messages.success(request, "exam: {} create successfully.".format(exam_name))
         except IntegrityError:
             raise IntegrityError("Duplicate entry '%s' for key 'name'".format(exam_name))
@@ -61,6 +71,7 @@ def exam_create(request):
         return redirect('exam_list')
     else:
         testpapers = TestPaper.objects.filter(is_testpaper=True, valid=True)
+        groups = Group.objects.all()
         return render(request, 'exam/exam_create.html', locals())
 
 
@@ -117,6 +128,7 @@ def testpaper_create(request):
         return redirect('testpaper_list')
 
     else:
+        testpaper_names = [_.name for _ in TestPaper.objects.all()]
         return render(request, 'exam/testpaper_create.html', locals())
 
 

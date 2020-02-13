@@ -12,21 +12,21 @@
     <script type="text/javascript">
     function selAll(){
         //變數checkItem為checkbox的集合
-        var checkItem = document.getElementsByName("student");
+        var checkItem = document.getElementsByName("testee");
         for(var i=0;i<checkItem.length;i++){
             checkItem[i].checked=true;
         }
     }
     function unselAll(){
         //變數checkItem為checkbox的集合
-        var checkItem = document.getElementsByName("student");
+        var checkItem = document.getElementsByName("testee");
         for(var i=0;i<checkItem.length;i++){
             checkItem[i].checked=false;
         }
     }
     function usel() {
         //變數checkItem為checkbox的集合
-        var checkItem = document.getElementsByName("student");
+        var checkItem = document.getElementsByName("testee");
         for (var i = 0; i < checkItem.length; i++) {
             checkItem[i].checked = !checkItem[i].checked;
         }
@@ -40,112 +40,91 @@
             {% csrf_token %}
             <table class="table table-hover">
                 <caption style="font-size: 30px; padding-left: 5%">&nbsp;{{ group.name }}＿群組內受測者名單</caption>
-                <div class="btn">
-                    <div class="btn1"><input type="button" value="全選" onclick="selAll();"></div>
-                    <div class="btn2"><input type="button" value="全取消" onclick="unselAll();"></div>
-                    <div class="btn3"><input type="button" value="反向選取" onclick="usel();"></div>
-
-                    <style>
-                        .btn input{
-                            background-color: #4CCABD;
-                            color: #FFFEF6;
-                            border: none;
-                            padding-top: 5px;
-                            padding-bottom: 5px;
-                            padding-left: 5px;
-                            padding-right: 5px;
-                            font-size: 25px;
-                        }
-
-                        .btn .btn1 input{
-                            position: absolute;
-                            left: 75%;
-                            top: 5%;
-                        }
-
-                        .btn .btn2 input{
-                            position: absolute;
-                            left: 81%;
-                            top: 5%;
-                        }
-
-                        .btn .btn3 input{
-                            position: absolute;
-                            left: 89%;
-                            top: 5%;
-                        }
-                    </style>
+                <div class="function-btn">
+                    <button type="button" onclick="selAll();">全選</button>
+                    <button type="button" onclick="unselAll();">全取消</button>
+                    <button type="button" onclick="usel();">反向選取</button>
                 </div>
 
-                {% for student in students %}
-                    <tr>
-                        <td style="font-size: 18px; padding-left: 5%"><input type="checkbox" name="student" value="{{ student.id }}" {% if student in group_members %}checked{% endif %}>&nbsp;{{ student.user.name }}</td>
+                <tr>
+                    <th class="col-md-1"></th>
+                    <th class="col-md-2">姓名</th>
+                    <th class="col-md-2">科系</th>
+                    <th class="col-md-2">中隊</th>
+                    <th class="col-md-2">年班</th>
+                </tr>
+
+                {% for testee in testees %}
+                    <tr class="data-row" onclick="selectRow(this)">
+                        <td><input type="checkbox" name="testee" value="{{ testee.id }}" {% if testee in group_members %}checked{% endif %}></td>
+                        <td>{{ testee.name }}</td>
+                        <td>{{ testee.student.department }}</td>
+                        <td>{{ testee.student.squadron }}</td>
+                        <td>{{ testee.student.grade }}</td>
                     </tr>
                 {% endfor %}
             </table>
-            <div class="btn4">
-                <input type="submit" value="變更群組" onclick="return confirm('確認變更群組？')">
 
-                <style>
-                    .btn4 input{
-                        background-color: #4CCABD;
-                        color: #FFFEF6;
-                        border: none;
-                        padding-top: 5px;
-                        padding-bottom: 5px;
-                        padding-left: 5px;
-                        padding-right: 5px;
-                        font-size: 25px;
-
-                        position: absolute;
-                        left: 35%;
-                    }
-                </style>
-            </div>
-
-            <div class="btn5">
-                <input type="reset" value="取消">
-
-                <style>
-                    .btn5 input{
-                        background-color: #5e5e5e;
-                        color: #FFFEF6;
-                        border: none;
-                        padding-top: 5px;
-                        padding-bottom: 5px;
-                        padding-left: 5px;
-                        padding-right: 5px;
-                        font-size: 25px;
-
-                        position: absolute;
-                        left: 45%;
-                    }
-                </style>
-            </div>
-
-            <div class="btn6">
-                <button type="button" onclick="history.back()">返回</button>
-
-                <style>
-                    .btn6 button{
-                        background-color: #4CCABD;
-                        color: #FFFEF6;
-                        border: none;
-                        padding-top: 5px;
-                        padding-bottom: 5px;
-                        padding-left: 5px;
-                        padding-right: 5px;
-                        font-size: 25px;
-
-                        position: absolute;
-                        left: 51%;
-                    }
-
-                    .btn6 {
-                        padding-bottom: 5%;
-                    }
-                </style>
+            <div class="btn">
+                <button type="submit" onclick="return confirm('確認變更群組？')">變更群組</button>
+                <button type="reset">取消</button>
+                <button type="button" onclick="self.location=document.referrer;">返回</button>
             </div>
         </form>
+
+        <style>
+            .table-responsive table{
+                position: relative;
+                left: 10%;
+
+                width: 80%;
+            }
+            .table-responsive table th{
+                font-size: 20px;
+            }
+            .table-responsive table th,td{
+                text-align: center;
+            }
+            .table-responsive .data-row:hover{
+                cursor: pointer;
+            }
+
+            .function-btn{
+                position: absolute;
+                top: 5px;
+                left: 75%;
+            }
+            .function-btn button{
+                font-size: 18px;
+                padding: 10px;
+                padding-left: 15px;
+                padding-right: 15px;
+                color: #FFFEF6;
+                background-color: #4CCABD;
+                border: none;
+            }
+
+            .btn{
+                position: relative;
+                left: 38%;
+            }
+            .btn button{
+                font-size: 25px;
+                padding: 10px;
+                padding-left: 15px;
+                padding-right: 15px;
+                color: #FFFEF6;
+                background-color: #4CCABD;
+                border: none;
+            }
+        </style>
     </div>
+
+    <script type="text/javascript">
+        function selectRow(row)
+        {
+            var firstInput = row.getElementsByTagName('input')[0];
+            firstInput.checked = !firstInput.checked;
+        }
+    </script>
 {% endblock %}

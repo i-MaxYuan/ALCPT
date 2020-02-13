@@ -9,103 +9,80 @@
 {% endblock %}
 
 {% block content %}
-    <div>
-        <div class="table-responsive">
-            {% if category.report_set.all %}
-                <table class="table table-hover">
-                    <caption style="font-size: 30px;">回報列表</caption>
-                    <thead class="title">
-                        <tr>
-                            <th class="col-md-1">單號</th>
-                            <th class="col-md-2">使用者代號</th>
-                            <th class="col-md-2">回報類別</th>
-                            <th class="col-md-6">內容</th>
-                            <th class="col-md-1">狀態</th>
-                        </tr>
-                    </thead>
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <caption style="font-size: 30px;">回報列表</caption>
+            <thead class="title">
+                <tr>
+                    <th class="col-md-1">單號</th>
+                    <th class="col-md-2">使用者代號</th>
+                    <th class="col-md-2">回報類別</th>
+                    <th class="col-md-6">內容</th>
+                    <th class="col-md-1">狀態</th>
+                </tr>
+            </thead>
 
-                    <tbody>
-                        {% for report in category.report_set.all %}
-                        <tr style="cursor: pointer" onclick="window.location.href='{% url 'report_detail' report.id %}'">
-                            <td>{{ report.id }}</td>
-                            <td>{{ report.created_by }}</td>
-                            <td>{{ report.category }}</td>
-                            <td>{{ report.supplement_note|safe|summary:31 }}</td>
-                            <td>{{ report.state|readable_report_state }}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
+            <tbody>
+                {% if category.report_set.all %}
+                    {% for report in category.report_set.all %}
+                    <tr style="cursor: pointer" onclick="window.location.href='{% url 'report_detail' report.id %}'">
+                        <td>{{ report.id }}</td>
+                        <td>{{ report.created_by }}</td>
+                        <td>{{ report.category }}</td>
+                        <td>{{ report.supplement_note|safe|summary:31 }}</td>
+                        <td>{{ report.state|readable_report_state }}</td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <h2>目前暫無資料</h2>
+                {% endif %}
+            </tbody>
 
-                </table>
+        </table>
 
-                <div class="btn">
-                    <button type="submit" onclick="history.back()">返回</button>
-                </div>
-            {% else %}
-                目前暫無資料
-            {% endif %}
-
-            <style>
-                .table-responsive .table{
-                    text-align: center;
-                }
-
-                .table-hover > tbody > tr:hover > td,
-                .table-hover > tbody > tr:hover > th {
-                    background-color: #4CCABD;
-                }
-
-                .title{
-                    font-size: 25px;
-                }
-
-                .title tr th{
-                    text-align: center;
-                }
-
-                .table tbody{
-                    font-size: 18px;
-                }
-
-                .table tbody td a{
-                    color: #2C3232;
-                }
-
-                .btn button{
-                    font-size: 25px;
-                    padding: 10px;
-                    padding-left: 15px;
-                    padding-right: 15px;
-                    color: #FFFEF6;
-                    background-color: #4CCABD;
-                    border: none;
-                    position: absolute;
-                    top: 85%;
-                    left: 45%;
-                }
-            </style>
-
-            <div class="btn4">
-                <input type="button" value="返回" onclick="history.back()">
-
-                <style>
-                    .btn4 input{
-                        width: 90px;
-                        height: 40px;
-                        background-color: #4CCABD;
-                        border: none;
-                        border-radius: 5px;
-                        color: #FFFEF6;
-                        font-size: 20px;
-
-                        position: relative;
-                        left: 45%;
-                    }
-                    .btn4{
-                        padding-bottom: 5%;
-                    }
-                </style>
-            </div>
+        <div class="btn">
+            <button type="submit" onclick="history.back()">返回</button>
         </div>
+
+        <style>
+            .table-responsive .table{
+                text-align: center;
+            }
+
+            .table-hover > tbody > tr:hover > td,
+            .table-hover > tbody > tr:hover > th {
+                background-color: #4CCABD;
+            }
+
+            .title{
+                font-size: 25px;
+            }
+
+            .title tr th{
+                text-align: center;
+            }
+
+            .table tbody{
+                font-size: 18px;
+            }
+
+            .table tbody td a{
+                color: #2C3232;
+            }
+
+            .btn{
+                position: relative;
+                left: 45%;
+            }
+            .btn button{
+                font-size: 25px;
+                padding: 10px;
+                padding-left: 15px;
+                padding-right: 15px;
+                color: #FFFEF6;
+                background-color: #4CCABD;
+                border: none;
+            }
+        </style>
     </div>
 {% endblock %}

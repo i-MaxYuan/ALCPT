@@ -16,11 +16,8 @@ from .managerfuncs import tbmanager, tboperator
 
 
 @permission_check(UserType.TBManager)
-@require_http_methods(["GET"])
 def manager_index(request):
-    question_types = []
-    for q in list(QuestionType):
-        question_types.append(q)
+    question_types = [_ for _ in QuestionType]
 
     state_choices = [(1, '審核通過'),
                      (2, '審核未通過'),
@@ -49,6 +46,8 @@ def manager_index(request):
     state = request.GET.get('state',)
 
     query_content, questions = tbmanager.query_questions(**keywords)
+    resultNum = len(questions)
+
     page = request.GET.get('page', 1)
     paginator = Paginator(questions, 10)  # the second parameter is used to display how many items. Now is display 10
 
@@ -295,8 +294,8 @@ def question_multiCreate(request):
             table = wb.sheets()[0]
             all_questions = []
 
-            q_type = request.POST.get('question_type', )
-            q_difficulty = request.POST.get('question_difficulty', )
+            # q_type = request.POST.get('question_type', )
+            # q_difficulty = request.POST.get('question_difficulty', )
 
             for i in range(table.nrows):
                 question = []
@@ -313,6 +312,8 @@ def question_multiCreate(request):
                 choice2 = question[2]
                 choice3 = question[3]
                 choice4 = question[4]
+                q_type = question[5] + 2
+                q_difficulty = question[6]
 
                 reading_question = tboperator.create_reading_question(q_content=q_content,
                                                                       q_type=q_type,

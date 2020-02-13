@@ -23,16 +23,15 @@
     {% endblock %}
 </head>
 <body>
-    <div class="back-btn">
-        <button title="顯示上一頁" onclick="history.back()"><i class="fa fa-angle-left fa-lg box"></i></button>
-        <button title="顯示下一頁" onclick="history.forward()"><i class="fa fa-angle-right fa-lg box"></i></button>
+    <div class="page-buttons">
+        <button title="顯示上一頁" onclick="self.location=document.referrer;"><i class="fa fa-angle-left fa-lg box"></i></button>
         <button title="重新整理" onclick="window.location.reload();"><i class="fa fa-refresh"></i></button>
 
         <style>
-            .back-btn{
+            .page-buttons{
                 position: absolute;
                 top: 13%;
-                left: 1%;
+                left: 2%;
                 z-index: 9999;
             }
             button{
@@ -43,21 +42,21 @@
         </style>
     </div>
 
-    <div class="hint-info">
+    <div class="prompt-info">
         <section>
             {% if messages %}
                 {% for message in messages %}
                     {% if message.tags == "error" %}
-                        <div class="alert alert-danger mt-3" role="alert">
-                            <i class="fa fa-window-close" aria-hidden="true"></i> {{ message }}
+                        <div class="prompt-bar error" id="3seconds">
+                            {{ message }}
                         </div>
                     {% elif message.tags == "success" %}
-                        <div class="alert alert-success mt-3" role="alert">
+                        <div class="prompt-bar success" id="3seconds">
                             {{ message }}
                         </div>
                     {% elif message.tags == "warning" %}
-                        <div class="alert alert-warning mt-3" role="alert">
-                            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> {{ message }}
+                        <div class="prompt-bar warning" id="3seconds">
+                            {{ message }}
                         </div>
                     {% endif %}
                 {% endfor %}
@@ -65,7 +64,21 @@
         </section>
 
         <style>
-            .hint-info{
+            .prompt-bar{
+                font-size: 24px;
+                border-radius: 4px;
+            }
+            .error{
+                background-color: salmon;
+            }
+            .success{
+                background-color: aquamarine;
+            }
+            .warning{
+                background-color: khaki;
+            }
+
+            .prompt-info{
                 position: absolute;
                 width: 38%;
                 top: 18%;
@@ -74,244 +87,297 @@
                 text-align: center;
             }
         </style>
+
+        <script type="text/javascript">
+            var timer = window.setInterval(disappear, 3000); // display 3 seconds , then disappear
+            function disappear() {
+                document.getElementById('3seconds').innerHTML = "";
+            }
+        </script>
     </div>
 
     <div class="wrapper">
         <img src="{% static "/background.jpg" %}">
         <div class="cover"></div>
 
-        <div class="infor">
+        <div class="info">
+            <div class="tool-btn">
+                <ul class="nav nav-pills nav-stacked">
+                    <li><a id="profile" href="{% url 'profile' %}">基本資料</a></li>
+                    <li><a id="edit_profile" href="{% url 'profile_edit' user.reg_id %}">編輯個人檔案</a></li>
+                    <li><a id="password_change" href="{% url 'password_change' %}">更改密碼</a></li>
+                    <li><a id="report" href="{% url 'report_list' %}">問題回報</a></li>
+                </ul>
+
+                <style>
+                    .tool-btn{
+                        background-color: #F3F3F3;
+                        width: 20%;
+                        height: 100%;
+                        border-top-left-radius: 1%;
+                        border-bottom-left-radius: 1%;
+                        border-right-style: solid;
+                        border-right-width: 0.8px;
+                        border-right-color: #c0c0c0;
+                        overflow: hidden;
+
+                        position: absolute;
+                        top: 0%;
+                        left: 0%;
+                    }
+
+                    .tool-btn ul{
+                        width: 100%;
+                        position: absolute;
+                        padding-top: 10px;
+                    }
+
+                    .tool-btn ul li a{
+                        color: #2C3232;
+                        font-size: 16px;
+                        text-decoration: none;
+                        padding-left: 50px;
+                        padding-top: 20px;
+                        padding-bottom: 20px;
+                    }
+                </style>
+            </div>
             {% block content %}
 
             {% endblock %}
         </div>
+    </div>
+
     <!-- 標題列 -->
-        <div class="permission_toolbar" style="opacity: 0.8;">
-                <nav class="navbar navbar-light bg-green" role="navigation">
-                    <div class="container-fluid">
-                        <div class="navbar-header">
-                            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-                                <span class="icon-bar"></span>
-                                <span class="icon-bar"></span>
-                                <span class="icon-bar"></span>
-                            </button>
-                            <a class="navbar-brand" href="{% url "Homepage" %}" style=" opacity: 1; font-size: 30px;">ALCPT線上練習平台</a>
-                        </div>
-                        <div class="collapse navbar-collapse" id="myNavbar">
-                            <ul class="nav navbar-nav" style="position: absolute; left: 50%">
-                                {% if request.user|has_perm:'SystemManager' %}
-                                    <li class="dropdown">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" >系統管理員 <b class="caret"></b></a>
-                                        <ul class="dropdown-menu">
-                                            <li><a href="{% url 'user_list' %}">使用者列表</a></li>
-                                            <li><a href="{% url 'unit_list' %}">單位列表</a></li>
-                                            <li><a href="{% url 'report_category_list' %}">回報類別列表</a></li>
-                                            <li><a href="{% url 'responsible_report_list' 'SystemManager' %}">問題回報列表</a></li>
-                                        </ul>
-                                    </li>
-                                {% endif %}
-
-                                {% if request.user|has_perm:'TestManager' %}
-                                    <li class="dropdown">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" >考試管理員<b class="caret"></b></a>
-                                        <ul class="dropdown-menu">
-                                            <li><a href="{% url 'exam_list' %}">考試列表</a></li>
-                                            <li><a href="{% url 'testpaper_list' %}">考卷列表</a></li>
-                                            <li><a href="{% url 'testee_group_list' %}">受測者群組</a></li>
-                                            <li><a href="{% url 'responsible_report_list' 'TestManager' %}">問題回報列表</a></li>
-                                        </ul>
-                                    </li>
-                                {% endif %}
-
-                                {% if request.user|has_perm:'TBManager' %}
-                                    <li class="dropdown">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" >題庫管理員<b class="caret"></b></a>
-                                        <ul class="dropdown-menu">
-                                            <li><a href="{% url 'tbmanager_question_list' %}">題目列表</a></li>
-                                            <li><a href="{% url 'question_review' %}">審核試題</a></li>
-                                            <li><a href="{% url 'responsible_report_list' 'TBManager' %}">問題回報列表</a></li>
-                                        </ul>
-                                    </li>
-                                {% endif %}
-
-                                {% if request.user|has_perm:'TBOperator' %}
-                                    <li class="dropdown">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" >題目操作員<b class="caret"></b></a>
-                                        <ul class="dropdown-menu">
-                                            <li><a href="{% url 'tboperator_question_list' %}">題目列表</a></li>
-                                            <li><a href="{% url 'question_create' 'listening' %}">新增聽力試題</a></li>
-                                            <li><a href="{% url 'question_create' 'reading' %}">新增閱讀試題</a></li>
-                                        </ul>
-                                    </li>
-                                {% endif %}
-
-                                {% if request.user|has_perm:'Viewer' %}
-                                    <li class="dropdown">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" >成績檢閱者<b class="caret"></b></a>
-                                        <ul class="dropdown-menu">
-                                            <li><a href="{% url 'exam_score_list' %}">考試成績列表</a></li>
-                                        </ul>
-                                    </li>
-                                {% endif %}
-
-                                {% if request.user|has_perm:'Testee' %}
-                                    <li class="dropdown">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" >受測者<b class="caret"></b></a>
-                                        <ul class="dropdown-menu">
-                                            <li><a href="{% url 'testee_exam_list' %}">測驗紀錄</a></li>
-                                            <li><a href="{% url 'testee_score_list' %}">成績紀錄</a></li>
-                                            <li><a href="{% url 'testee_practice_create' 'listening' %}">聽力練習</a></li>
-                                            <li><a href="{% url 'testee_practice_create' 'reading' %}">閱讀練習</a></li>
-                    {#                        <li><a href="/tester/practice/integration">綜合練習</a></li>#}
-                    {#                        <li><a href="/tester/simulation-exam">模擬鑑測</a></li>#}
-                                        </ul>
-                                    </li>
-                                {% endif %}
-                            </ul>
-                        </div>
-                    </div>
-                    <Style>
-                        .navbar{
-                            padding-top: 40px;
-                            font-size: 20px;
-                        }
-                        .bg-green{
-                            background-color: #4CCABD;
-                            box-shadow: 0px 3px 8px 0px #486260;
-                        }
-                        /*選項顏色*/
-                        .bg-green .navbar-nav .dropdown-toggle,
-                        .bg-green .navbar-brand {
-                            color: rgb(255, 255, 255);
-                            right: 70%;
-                        }
-
-                        .bg-green .navbar-nav .dropdown-toggle:hover{
-                            color: #2C3232;
-                        }
-
-                        .bg-green .navbar-nav .dropdown-toggle:active{
-                            color: #2C3232;
-                        }
-
-                        .bg-green .dropdown-menu{
-                            font-size: 20px;
-                        }
-
-                    </Style>
-                </nav>
-
-                <!-- 右上角按鈕 -->
-                <div class="container-fluid">
-                    <!-- BS4 的靠右由 pull-right 改為 float-right -->
-                    <div class="btn-group float-right">
-                      <button type="button" class="btn btn-primary dropdown-toggle pull-right" data-toggle="dropdown">
-                          <i class="fa fa-reorder"></i>
-                      </button>
-                      <!-- 重點在這 -->
-                      <div class="dropdown-menu dropdown-menu-right">
-                          <div class="registration_block">
-                            {% if user.is_authenticated %}
-                                <h1>Welcome, {{ user.name }}(<a href="{% url 'profile' %}">{{ user.reg_id }}</a>) </h1>
-                                <h2><a title="即將登出" href="{% url 'logout' %}" onclick="return confirm('確認登出？')">Logout</a></h2>
-                            {% else %}
-                                <p><a title="我要登入" href="{% url 'login' %}">Login</a></p>
-                            {% endif %}
-                          </div>
-                      </div>
-                    </div>
+    <div class="permission_toolbar" style="opacity: 0.8;">
+        <nav class="navbar navbar-light bg-green" role="navigation">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="{% url "Homepage" %}" style=" opacity: 1; font-size: 30px;">ALCPT線上練習平台</a>
                 </div>
 
-                <Style>
-                    .container-fluid button{
-                        background-color: #4CCABD;
-                        border-color: #FFFEF6;
+                <div class="collapse navbar-collapse" id="myNavbar">
+                    <ul class="nav navbar-nav" style="position: absolute; left: 50%">
+                        {% if request.user|has_perm:'SystemManager' %}
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" >系統管理員 <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="{% url 'user_list' %}">使用者列表</a></li>
+                                    <li><a href="{% url 'unit_list' %}">單位列表</a></li>
+                                    <li><a href="{% url 'report_category_list' %}">回報類別列表</a></li>
+                                    <li><a href="{% url 'responsible_report_list' 'SystemManager' %}">問題回報列表</a></li>
+                                </ul>
+                            </li>
+                        {% endif %}
 
-                    }
-                    .btn-group{
-                        position: absolute;
-                        top: 50px;
-                        right: 30px;
-                    }
+                        {% if request.user|has_perm:'TestManager' %}
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" >考試管理員<b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="{% url 'exam_list' %}">考試列表</a></li>
+                                    <li><a href="{% url 'testpaper_list' %}">考卷列表</a></li>
+                                    <li><a href="{% url 'testee_group_list' %}">受測者群組</a></li>
+                                    <li><a href="{% url 'responsible_report_list' 'TestManager' %}">問題回報列表</a></li>
+                                </ul>
+                            </li>
+                        {% endif %}
 
-                    .btn-group .dropdown-menu{
-                        height: 150px;
-                        width: auto;
-                        padding-left: 10px;
-                        padding-right: 10px;
-                        text-align: center;
-                    }
+                        {% if request.user|has_perm:'TBManager' %}
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" >題庫管理員<b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="{% url 'tbmanager_question_list' %}">題目列表</a></li>
+                                    <li><a href="{% url 'question_review' %}">審核試題</a></li>
+                                    <li><a href="{% url 'responsible_report_list' 'TBManager' %}">問題回報列表</a></li>
+                                </ul>
+                            </li>
+                        {% endif %}
 
-                    .registration_block{
-                        width: 200px;
-                        font-size: 20px;
-                    }
+                        {% if request.user|has_perm:'TBOperator' %}
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" >題目操作員<b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="{% url 'tboperator_question_list' %}">題目列表</a></li>
+                                    <li><a href="{% url 'question_create' 'listening' %}">新增聽力試題</a></li>
+                                    <li><a href="{% url 'question_create' 'reading' %}">新增閱讀試題</a></li>
+                                </ul>
+                            </li>
+                        {% endif %}
 
-                    .registration_block h1{
-                        font-size: 20px;
-                        position: absolute;
-                        top: 10px;
-                    }
+                        {% if request.user|has_perm:'Viewer' %}
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" >成績檢閱者<b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="{% url 'exam_score_list' %}">考試成績列表</a></li>
+                                </ul>
+                            </li>
+                        {% endif %}
 
-                    .registration_block h2{
-                        position: absolute;
-                        top: 50%;
-                        left: 4%;
-                        padding-right: 70px;
-                        padding-left: 70px;
-                        padding-bottom: 20px;
-                        border-top: #486260 2px solid;
-                    }
-
-                    .registration_block h2 a{
-                        color: #555555;
-                    }
-
-                </Style>
-
-
+                        {% if request.user|has_perm:'Testee' %}
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" >受測者<b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="{% url 'testee_exam_list' %}">測驗紀錄</a></li>
+                                    <li><a href="{% url 'testee_score_list' %}">成績紀錄</a></li>
+                                    <li><a href="{% url 'testee_practice_create' 'listening' %}">聽力練習</a></li>
+                                    <li><a href="{% url 'testee_practice_create' 'reading' %}">閱讀練習</a></li>
+                                </ul>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
             </div>
-    <!-- 左邊button -->
-        <div class="icon-bar">
-            <a href="{% url 'Homepage' %}"><i class="fa fa-home"></i></a>
-            <a href="{% url 'profile' %}"><i class="fa fa-user-circle"></i></a>
+
             <style>
-                .icon-bar {
-                    width: 90px;
-                    background-color: #5e5e5e;
-                    position: fixed;
-                    top: 20%;
-                    left: 2%;
-                    box-shadow: 0px 3px 8px 0px #2C3232;
-
-                    opacity: 0.8;
+                .navbar{
+                    padding-top: 40px;
+                    font-size: 20px;
+                }
+                .bg-green{
+                    background-color: #4CCABD;
+                    box-shadow: 0px 3px 8px 0px #486260;
+                }
+                /*選項顏色*/
+                .bg-green .navbar-nav .dropdown-toggle,
+                .bg-green .navbar-brand {
+                    color: rgb(255, 255, 255);
+                    right: 70%;
                 }
 
-                .icon-bar a {
-                    display: block;
-                    text-align: center;
-                    padding: 16px;
-                    transition: all 0.3s ease;
-                    color: white;
-                    font-size: 36px;
+                .bg-green .navbar-nav .dropdown-toggle:hover{
+                    color: #2C3232;
                 }
 
-                .icon-bar a:hover {
-                    background-color: #000;
+                .bg-green .navbar-nav .dropdown-toggle:active{
+                    color: #2C3232;
+                }
+
+                .bg-green .dropdown-menu{
+                    font-size: 20px;
                 }
 
             </style>
+        </nav>
+
+        <!-- 右上角按鈕 -->
+        <div class="container-fluid">
+            <!-- BS4 的靠右由 pull-right 改為 float-right -->
+            <div class="btn-group float-right">
+                <button type="button" class="btn btn-primary dropdown-toggle pull-right" data-toggle="dropdown">
+                    <i class="fa fa-reorder"></i>
+                </button>
+
+                <!-- 重點在這 -->
+                <div class="dropdown-menu dropdown-menu-right">
+                    <div class="registration_block">
+                    {% if user.is_authenticated %}
+                        <h1>Welcome, {{ user.name }}(<a href="{% url 'profile' %}">{{ user.reg_id }}</a>) </h1>
+                        <h2><a title="即將登出" href="{% url 'logout' %}" onclick="return confirm('確認登出？')">Logout</a></h2>
+                    {% else %}
+                        <p><a title="我要登入" href="{% url 'login' %}">Login</a></p>
+                    {% endif %}
+                    </div>
+                </div>
+            </div>
         </div>
+
+        <style>
+            .container-fluid button{
+                background-color: #4CCABD;
+                border-color: #FFFEF6;
+
+            }
+            .btn-group{
+                position: absolute;
+                top: 50px;
+                right: 30px;
+            }
+
+            .btn-group .dropdown-menu{
+                height: 150px;
+                width: auto;
+                padding-left: 10px;
+                padding-right: 10px;
+                text-align: center;
+            }
+
+            .registration_block{
+                width: 200px;
+                font-size: 20px;
+            }
+
+            .registration_block h1{
+                font-size: 20px;
+                position: absolute;
+                top: 10px;
+            }
+
+            .registration_block h2{
+                position: absolute;
+                top: 50%;
+                left: 4%;
+                padding-right: 70px;
+                padding-left: 70px;
+                padding-bottom: 20px;
+                border-top: #486260 2px solid;
+            }
+
+            .registration_block h2 a{
+                color: #555555;
+            }
+
+        </style>
+    </div>
+
+    <!-- 左邊button -->
+    <div class="icon-bar">
+        <a href="{% url 'Homepage' %}"><i class="fa fa-home"></i></a>
+        <a href="{% url 'profile' %}"><i class="fa fa-user-circle"></i></a>
+
+        <style>
+            .icon-bar {
+                width: 90px;
+                background-color: #5e5e5e;
+                position: fixed;
+                top: 20%;
+                left: 2%;
+                box-shadow: 0px 3px 8px 0px #2C3232;
+
+                opacity: 0.8;
+            }
+
+            .icon-bar a {
+                display: block;
+                text-align: center;
+                padding: 16px;
+                transition: all 0.3s ease;
+                color: white;
+                font-size: 36px;
+            }
+
+            .icon-bar a:hover {
+                background-color: #000;
+            }
+
+        </style>
+    </div>
+
     <!-- 路徑喔 -->
-        <!-- 路徑喔 -->
+    <div>
         <nav aria-label="breadcrumb">
-          <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'Homepage' %}">主頁</a></li>
-            <li class="breadcrumb-item">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'Homepage' %}">主頁</a></li>
+                <li class="breadcrumb-item">
                 {% block path %}
+
                 {% endblock %}
-            </li>
-          </ol>
+                </li>
+            </ol>
         </nav>
 
         <style>
@@ -333,10 +399,7 @@
         </style>
     </div>
 
-
-    </div>
-
-<!-- 基本頁面 -->
+    <!-- 基本頁面 -->
     <style>
         *{
             padding: 0px;
@@ -383,7 +446,7 @@
             font-size: 16px;
         }
 
-        .infor{
+        .info{
             width: 70%;
             height: 65%;
             background-color: rgba(255,255,255,0.92);

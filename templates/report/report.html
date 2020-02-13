@@ -5,8 +5,9 @@
 {% endblock %}
 
 {% block content %}
-    <div class="question_report">
+    <div class="report">
         <form action="" method="post">
+            <div class="title"><h1>Report.</h1></div>
             {% csrf_token %}
             <table>
                 <tr>
@@ -26,36 +27,59 @@
                 </tr>
             </table>
 
-            <input type="submit" value="送出">
-            <input type="button" value="取消" onclick="window.location.href='{% url 'report_list' %}'">
+            <div class="btn">
+                <button type="submit" onclick="return confirm('確認回報？')">新增</button>
+                <button type="button" onclick="self.location=document.referrer;">取消</button>
+            </div>
         </form>
 
         <style>
-            .question_report{
-                position: absolute;
-                top: 10%;
+            .report .title h1{
+                width: 30%;
+                font-size: 28px;
+                color: #FFFEF6;
+                background-color: #4CCABD;
+                padding-top: 10px;
+                padding-bottom: 10px;
+                padding-right: 15px;
+                padding-left: 45px;
+                text-align: center;
+            }
+
+            .report table{
+                position: relative;
                 left: 15%;
 
-                font-size: 20px;
-
                 width: 70%;
+
+                font-size: 20px;
             }
-            .question_report td{
+            .report table td{
                 padding: 4px;
             }
-
-            input{
-                position: relative;
-                left: 100%;
-                
+            .report form input{
+                padding: 6px;
+            }
+            .report form textarea{
                 font-size: 20px;
+                width: 100%;
+                height: 45%;
+                padding: 10px;
+            }
+
+            .report .btn{
+                position: relative;
+                top: 30px;
+                left: 40%;
+            }
+            .report .btn button{
+                font-size: 25px;
                 padding: 10px;
                 padding-left: 15px;
                 padding-right: 15px;
                 color: #FFFEF6;
                 background-color: #4CCABD;
                 border: none;
-                border-radius: 6px;
             }
         </style>
     </div>

@@ -38,7 +38,6 @@
         </div>
 
         <div class="table-responsive">
-            {% if report_categories %}
                 <table class="table table-hover">
                     <caption style="font-size: 30px;">回報類別列表</caption>
                     <thead class="title">
@@ -52,45 +51,45 @@
                     </thead>
 
                     <tbody>
+                    {% if report_categories %}
                         {% for category in report_categories %}
-                        <tr onclick="window.location.href='{% url 'report_category_detail' category.id %}'">
-                            <td>{{ category.id }}</td>
-                            <td>{{ category.name }}</td>
-                            <td style="text-align: center;">
-                                {% if category|responsible_unit:privileges.SystemManager %}
-                                    <span class="badge alert-danger" style="padding-bottom: 8px">{{ privileges.SystemManager.value.1 }}</span>
-                                {% endif %}
-                                {% if category|responsible_unit:privileges.TestManager %}
-                                    <span class="badge alert-warning" style="padding-bottom: 8px">{{ privileges.TestManager.value.1 }}</span>
-                                {% endif %}
-                                {% if category|responsible_unit:privileges.TBManager %}
-                                    <span class="badge badge-primary" style="padding-bottom: 8px">{{ privileges.TBManager.value.1 }}</span>
-                                {% endif %}
-                                {% if category|responsible_unit:privileges.TBOperator %}
-                                    <span class="badge alert-success" style="padding-bottom: 8px">{{ privileges.TBOperator.value.1 }}</span>
-                                {% endif %}
-                                {% if category|responsible_unit:privileges.Viewer %}
-                                    <span class="badge alert-info" style="padding-bottom: 8px">{{ privileges.Viewer.value.1 }}</span>
-                                {% endif %}
-                                {% if category|responsible_unit:privileges.Testee %}
-                                    <span class="badge alert-inverse" style="padding-bottom: 8px">{{ privileges.Testee.value.1 }}</span>
-                                {% endif %}
-                            </td>
-                            <td>{{ category.report_set.all.count }}</td>
-                            <td>
-                                <a href="{% url 'report_category_edit' category.id %}"><i class="fa fa-pencil-square fa-fw mb-2"></i></a>&nbsp;
-                            </td>
-                        </tr>
+                            <tr onclick="window.location.href='{% url 'report_category_detail' category.id %}'">
+                                <td>{{ category.id }}</td>
+                                <td>{{ category.name }}</td>
+                                <td style="text-align: center;">
+                                    {% if category|responsible_unit:privileges.SystemManager %}
+                                        <span class="badge alert-danger" style="padding-bottom: 8px">{{ privileges.SystemManager.value.1 }}</span>
+                                    {% endif %}
+                                    {% if category|responsible_unit:privileges.TestManager %}
+                                        <span class="badge alert-warning" style="padding-bottom: 8px">{{ privileges.TestManager.value.1 }}</span>
+                                    {% endif %}
+                                    {% if category|responsible_unit:privileges.TBManager %}
+                                        <span class="badge badge-primary" style="padding-bottom: 8px">{{ privileges.TBManager.value.1 }}</span>
+                                    {% endif %}
+                                    {% if category|responsible_unit:privileges.TBOperator %}
+                                        <span class="badge alert-success" style="padding-bottom: 8px">{{ privileges.TBOperator.value.1 }}</span>
+                                    {% endif %}
+                                    {% if category|responsible_unit:privileges.Viewer %}
+                                        <span class="badge alert-info" style="padding-bottom: 8px">{{ privileges.Viewer.value.1 }}</span>
+                                    {% endif %}
+                                    {% if category|responsible_unit:privileges.Testee %}
+                                        <span class="badge alert-inverse" style="padding-bottom: 8px">{{ privileges.Testee.value.1 }}</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ category.report_set.all.count }}</td>
+                                <td>
+                                    <a href="{% url 'report_category_edit' category.id %}"><i class="fa fa-pencil-square fa-fw mb-2"></i></a>&nbsp;
+                                </td>
+                            </tr>
                         {% endfor %}
+                    {% else %}
+                        <h2>目前暫無資料</h2>
+                    {% endif %}
                     </tbody>
                 </table>
-            {% else %}
-                目前暫無資料
-            {% endif %}
 
             <style>
                 .table-responsive .table{
-                    position: relative;
                     text-align: center;
                 }
 
@@ -106,7 +105,7 @@
                 }
 
                 .title{
-                    font-size: 25px;
+                    font-size: 20px;
                 }
 
                 .title tr th{

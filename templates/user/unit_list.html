@@ -10,14 +10,13 @@
     <div class="unit_list">
 
         <div class="add_unit">
-            <button type="button" class="btn btn-default btn-lg">
-                <a href="{% url 'unit_create' %}">新增單位</a>
-            </button>
+            <button type="button" class="btn btn-default btn-lg" onclick="window.location.href='{% url 'unit_create' %}'">新增單位</button>
 
             <style>
                 .add_unit button{
                     width: 130px;
                     height: 50px;
+                    color: #FFFEF6;
                     background-color: #4CCABD;
                     border-radius: 10px;
                     text-align: center;
@@ -31,13 +30,9 @@
                 }
 
                 .add_unit button:hover{
+                    color: #FFFEF6;
                     background-color: #2C3232;
                     transition: all 0.3s ease;
-                }
-
-                .add_unit a{
-                    color: #FFFEF6;
-                    text-decoration: none;
                 }
             </style>
         </div>

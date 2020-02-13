@@ -9,47 +9,11 @@
 {% endblock %}
 
 {% block content %}
-    <div class="tool-btn">
-        <ul class="nav nav-pills nav-stacked">
-            <li><a href="{% url 'profile' %}">基本資料</a></li>
-            <li><a href="#" style="background-color: #DCDCDC">編輯個人檔案</a></li>
-            <li><a href="{% url 'password_change' %}">更改密碼</a></li>
-            <li><a href="{% url 'report_list' %}">問題回報</a></li>
-        </ul>
-
-        <style>
-            .tool-btn{
-                background-color: #F3F3F3;
-                width: 20%;
-                height: 70%;
-                border-top-left-radius: 1%;
-                border-bottom-left-radius: 1%;
-                border-right-style: solid;
-                border-right-width: 0.8px;
-                border-right-color: #c0c0c0;
-                overflow: hidden;
-
-                position: absolute;
-                top: 0%;
-                left: 0%;
-            }
-
-            .tool-btn ul{
-                width: 100%;
-                position: absolute;
-                padding-top: 10px;
-            }
-
-            .tool-btn ul li a{
-                color: #2C3232;
-                font-size: 16px;
-                text-decoration: none;
-                padding-left: 50px;
-                padding-top: 20px;
-                padding-bottom: 20px;
-            }
-        </style>
-    </div>
+    <style>
+        #edit_profile{
+            background-color: #DCDCDC;
+        }
+    </style>
 
     <!-- 大頭貼 -->
     <div class="photo">
@@ -57,10 +21,9 @@
 
         <style>
             .photo{
-                position: absolute;
-                left: 26%;
-                top: 6%;
-
+                position: relative;
+                left: 25%;
+                top: 25px;
             }
 
             .photo i{
@@ -70,67 +33,121 @@
         </style>
     </div>
 
-    <div class="personal_infor">
+    <!-- 時間資料區塊 -->
+    <div class="time-block">
+        <div class="time_icon">
+            <i class="fa fa-clock-o"></i>
+        </div>
+
+        <div class="time">
+            <li>最近登入：<br>{{ user.last_login|date:"Y年m月d日, H時i分" }}</li>
+            <li style="border-top-style: solid; border-top-color: #adadad; border-top-width: 0.7px;">&nbsp;</li>
+            <li>更新時間：<br>{{ user.update_time|date:"Y年m月d日, H時i分" }}</li>
+            <li style="border-top-style: solid; border-top-color: #adadad; border-top-width: 0.7px;">&nbsp;</li>
+            <li>加入時間：<br>{{ user.created_time|date:"Y年m月d日, H時i分" }}</li>
+            <li style="border-top-style: solid; border-top-color: #adadad; border-top-width: 0.7px;">&nbsp;</li>
+            <li>狀態：
+                {% if user.is_active %}
+                    <span>active</span>
+                {% elif user.is_staff %}
+                    <span>staff</span>
+                {% elif user.is_superuser %}
+                    <span>superuser</span>
+                {% endif %}
+            </li>
+        </div>
+
+        <style>
+            .time-block{
+                position: absolute;
+                top: 40%;
+                left: 23%;
+
+                width: 220px;
+            }
+
+            .time_icon{
+                position: relative;
+                top: 35px;
+                left: -10px;
+
+                width: 20px;
+
+                font-size: 22px;
+                color: #5e5e5e;
+                background-color: #F3F3F3;
+            }
+
+            .time{
+                color: #5e5e5e;
+
+                border: #c0c0c0 solid 0.7px;
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+
+            .time li{
+                list-style: none;
+                width: 100%;
+                font-size: 14px;
+                top: 85%;
+            }
+        </style>
+    </div>
+
+    <!-- 個人資料區 -->
+    <div class="personal_info">
         <form action="{% url 'profile_edit' user.reg_id %}" method="post">
             {% csrf_token %}
-            <ul style="list-style: none;" class="infor1">
-                <li>使用者帳號</li>
-                <li>姓名</li>
-                <li>Email</li>
-                <li>性別</li>
-                <li>權限</li>
-                <div class="student_infor">
-                    {% if user.student %}
-                        <div class="line"></div>
-                        <li>學號</li>
-                        <li>年班</li>
-                        <li>科系</li>
-                        <li>中隊</li>
-                    {% endif %}
-                </div>
+            <table>
+                <tr>
+                    <td class="title">使用者帳號</td>
+                    <td>{{ user.reg_id }}</td>
+                </tr>
 
-                <div class="time">
-                    <li style="border-bottom-style:solid ;border-bottom-color: #adadad;border-bottom-width: 0.7px;">最近登入：<br>{{ user.update_time|date:"Y年m月d日, H時i分" }}</li>
-                    <li style="border-bottom-style:solid ;border-bottom-color: #adadad;border-bottom-width: 0.7px;">加入時間：<br>{{ user.created_time|date:"Y年m月d日, H時i分" }}</li>
-                    <li>狀態：{% if user.is_active %}
-                            <span>active</span>
-                        {% elif user.is_staff %}
-                            <span>staff</span>
-                        {% elif user.is_superuser %}
-                            <span>superuser</span>
-                        {% endif %}
-                    </li>
-                </div>
-
-                <div class="time_icon">
-                    <i class="fa fa-clock-o"></i>
-                </div>
-
-                <ul style="list-style: none" class="infor2">
-                    <li>{{ user.reg_id }}</li>
-                    <li>
+                <tr>
+                    <td class="title">姓名</td>
+                    <td>
                         {% if user.name %}
-                            <input type="text" name="name" value="{{ user.name }}" required>
+                            <input class="form-control" type="text" name="name" value="{{ user.name }}" required>
                         {% else %}
-                            <input type="text" name="name" required>
+                            <input class="form-control" type="text" name="name" required>
                         {% endif %}
-                    </li>
-                    <li>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="title">Email</td>
+                    <td>
                         {% if user.email %}
-                            <input type="email" name="email" value="{{ user.email }}" required>
+                            <input class="form-control" type="email" name="email" value="{{ user.email }}" required>
                         {% else %}
-                            <input type="email" name="email" required>
+                            <input class="form-control" type="email" name="email" required>
                         {% endif %}
-                    </li>
-                    <li>
+                    </td>
+
+                </tr>
+
+                <tr>
+                    <td class="title">性別</td>
+                    <td>
                         <select name="gender" required>
                             <option value="" disabled selected>請選擇性別</option>
                             <option value="0" {% if user.gender == 0 %}selected{% endif %}>男</option>
                             <option value="1" {% if user.gender == 1 %}selected{% endif %}>女</option>
                             <option value="2" {% if user.gender == 2 %}selected{% endif %}>不想公開</option>
                         </select>
-                    </li>
-                    <li>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="title">身份</td>
+                    <td>{% if user.identity %}{{ user.identity|readableIdentity }}{% else %}尚未設定{% endif %}</td>
+                </tr>
+
+                <tr>
+                    <td class="title">權限</td>
+                    <td>
                         {% if user|has_perms:privileges.SystemManager %}
                             <span class="badge alert-danger">{{ privileges.SystemManager.value.1 }}</span>
                         {% endif %}
@@ -149,135 +166,79 @@
                         {% if user|has_perms:privileges.Testee %}
                             <span class="badge alert-inverse">{{ privileges.Testee.value.1 }}</span>
                         {% endif %}
-                    </li>
+                    </td>
+                </tr>
 
-                    <div class="student_infor_">
-                        {% if user.student %}
-                            <li>{{ user.student.stu_id }}</li>
-                            <li>
-                                <input type="number" name="grade" value="{{ user.student.grade }}" required>
-                            </li>
-                            <li>
-                                <select name="department" required>
-                                    <option value="" disabled selected>請選擇科系</option>
-                                    {% for department in departments %}
-                                        <option value="{{ department.id }}" {% if department == user.student.department %}selected{% endif %}>{{ department }}</option>
-                                    {% endfor %}
-                                </select>
-                            </li>
-                            <li>
-                                <select name="squadron" required>
-                                    <option value="" disabled selected>請選擇連隊單位</option>
-                                    {% for squadron in squadrons %}
-                                        <option value="{{ squadron.id }}" {% if squadron == user.student.squadron %}selected{% endif %}>{{ squadron }}</option>
-                                    {% endfor %}
-                                </select>
-                            </li>
-                        {% endif %}
-                    </div>
-                </ul>
+                {% if user.student %}
+                <tr style="border-top: solid; border-width: 1px; border-color: rgb(200, 200, 200)">
+                    <td class="title">學號</td>
+                    <td>{{ user.student.stu_id }}</td>
+                </tr>
 
-            </ul>
+                <tr>
+                    <td class="title">年班</td>
+                    <td><input class="form-control" type="number" name="grade" value="{{ user.student.grade }}" required></td>
+                </tr>
 
-            <div class="btn1">
-                <input type="submit" value="提交">
+                <tr>
+                    <td class="title">科系</td>
+                    <td>
+                        <select name="department" required>
+                            <option value="" disabled selected>請選擇科系</option>
+                            {% for department in departments %}
+                                <option value="{{ department.id }}" {% if department == user.student.department %}selected{% endif %}>{{ department }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="title">中隊</td>
+                    <td>
+                        <select name="squadron" required>
+                            <option value="" disabled selected>請選擇中隊單位</option>
+                            {% for squadron in squadrons %}
+                                <option value="{{ squadron.id }}" {% if squadron == user.student.squadron %}selected{% endif %}>{{ squadron }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                {% endif %}
+
+            </table>
+
+            <div class="btn">
+                <button type="submit">提交</button>
+
+                <style>
+                    .btn{
+                        position: absolute;
+                        top: 90%;
+                        left: 45%;
+                    }
+                </style>
             </div>
-
         </form>
 
         <style>
-            .btn1 input{
-                width: 90px;
-                height: 40px;
-                background-color: #4CCABD;
-                border: none;
-                border-radius: 5px;
-                color: #FFFEF6;
-
-                position: absolute;
-                top: 180%;
-                left: 600%;
+            .personal_info{
+                position: relative;
+                left: 45%;
+                top: -80px;
             }
+            .personal_info table{
+                width: 50%;
 
-            .personal_infor{
-                position: absolute;
-                left: 43%;
-                top: 5%;
-            }
-
-            .infor1 li{
                 font-size: 18px;
-                line-height: 50px;
+            }
+            .personal_info table td{
+                padding: 10px;
             }
 
-            .infor2{
-                width: 400%;
-                height: 117%;
-                position: absolute;
-                top: 0%;
-                left: 200%;
+            .personal_info .title{
+                font-size: 20px;
+                width: 25%;
             }
-
-            .infor2 input{
-                width: 100%;
-                height: 40px;
-            }
-
-            .infor2 li{
-                font-size: 18px;
-                line-height: 50px;
-                color: #777777;
-            }
-
-            .student_infor{
-                position: absolute;
-                left: 0%;
-                top: 130%;
-            }
-
-            .student_infor_{
-                position: absolute;
-                left: 0%;
-                top: 110%;
-            }
-
-            .line{
-                width: 1500%;
-                border-top-style: solid;
-                border-top-color: #c0c0c0;
-                border-top-width: 1px;
-
-                position: absolute;
-                top: -20%;
-            }
-
-            .time_icon{
-                font-size: 30px;
-                color: #5e5e5e;
-                position: absolute;
-                top: 86%;
-                left: -260%;
-                background-color: #F3F3F3;
-            }
-
-            .time{
-                color: #5e5e5e;
-                position: absolute;
-                top: 85%;
-                left: -250%;
-
-                border: #c0c0c0 solid 0.7px;
-                padding-left: 20px;
-                padding-right: 20px;
-            }
-
-            .time li{
-                width: 100%;
-                font-size: 10px;
-                top: 85%;
-
-            }
-
         </style>
     </div>
 {% endblock %}

@@ -11,32 +11,32 @@
 {% block content %}
     <!-- 表格的部分 -->
     <div class="table-responsive">
-        {% if reports %}
-            <table class="table table-hover">
-                <caption style="font-size: 30px;">&nbsp;&nbsp;問題回報列表</caption>
-                <thead class="title">
-                    <tr>
-                        <th class="col-md-1">問題類別</th>
-                        <th class="col-md-6">內容</th>
-                        <th class="col-md-1">狀態</th>
-                        <th class="col-md-1"></th>
-                    </tr>
-                </thead>
-                {% for report in reports %}
-                    <tr {% if report.staff_notification %}class="notification"{% endif %} onclick="window.location.href='{% url 'report_reply' report.id %}'">
-                        <td>{{ report.category }}</td>
-                        <td style="text-align: left">{{ report.supplement_note|safe|summary:51 }}</td>
-                        <td>{{ report.state|readable_report_state }}</td>
-                        <td style="font-size: 12px; vertical-align: bottom">{{ report.created_time|date:"H:i, m/d/Y" }}</td>
-                    </tr>
-                {% endfor %}
-                <tbody>
+        <table class="table table-hover">
+            <caption style="font-size: 30px;">&nbsp;&nbsp;問題回報列表</caption>
+            <thead class="title">
+                <tr>
+                    <th class="col-md-1">問題類別</th>
+                    <th class="col-md-6">內容</th>
+                    <th class="col-md-1">狀態</th>
+                    <th class="col-md-1"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if reports %}
+                    {% for report in reports %}
+                        <tr {% if report.staff_notification %}class="notification"{% endif %} onclick="window.location.href='{% url 'report_reply' report.id %}'">
+                            <td>{{ report.category }}</td>
+                            <td style="text-align: left">{{ report.supplement_note|safe|summary:51 }}</td>
+                            <td>{{ report.state|readable_report_state }}</td>
+                            <td style="font-size: 12px; vertical-align: bottom">{{ report.created_time|date:"H:i, m/d/Y" }}</td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <h2>目前暫無資料</h2>
+                {% endif %}
+            </tbody>
+        </table>
 
-                </tbody>
-            </table>
-        {% else %}
-            <h2>目前暫無資料</h2>
-        {% endif %}
         <style>
             .table-responsive .table{
                 text-align: center;

@@ -24,39 +24,74 @@
     {% endblock %}
 </head>
 <body>
+    <div class="hint-info">
+        <section>
+            {% if messages %}
+                {% for message in messages %}
+                    {% if message.tags == "error" %}
+                        <div class="alert alert-danger mt-3" role="alert">
+                            <i class="fa fa-window-close" aria-hidden="true"></i> {{ message }}
+                        </div>
+                    {% elif message.tags == "success" %}
+                        <div class="alert alert-success mt-3" role="alert">
+                            {{ message }}
+                        </div>
+                    {% elif message.tags == "warning" %}
+                        <div class="alert alert-warning mt-3" role="alert">
+                            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> {{ message }}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        </section>
+
+        <style>
+            .hint-info{
+                position: absolute;
+                width: 38%;
+                top: 18%;
+                left: 30%;
+                z-index: 9999;
+                text-align: center;
+            }
+        </style>
+    </div>
+
     <div class="wrapper">
         <img src="{% static "/background.jpg" %}">
         <div class="cover"></div>
 
         <div class="login_block">
             <h1>Login</h1>
-           <form action="{% url 'login' %}" method="post">
+            <form action="{% url 'login' %}" method="post">
                 {% csrf_token %}
-               <div class="reg_id">
-                    <label for="reg_id">學號：</label>
+                <div class="reg_id">
+                    <label for="reg_id">帳號：</label>
                     <input type="text" id="reg_id" name="reg_id" placeholder="Reg_id">
-               </div>
+                </div>
+
                 <div class="password">
                     <label for="password">密碼：</label>
                     <input type="password" id="password" name="password" placeholder="Enter your Password...">
                 </div>
-               <div class="ver-code">
-                   <label for="verification">驗證碼：</label>
-{#                    <input type="text" id="verification" name="verification" placeholder="Verification code"> #}
-                   <div class="code">
-                       {{ captcha.captcha }}
-                   </div>
 
-               </div>
+                <div class="ver-code">
+                    <label for="verification">驗證碼：</label>
+                <div class="code">
+                    {{ captcha.captcha }}
+                </div>
+
+                </div>
+
                 <div class="login">
                     <input type="submit" value="Login">
                 </div>
+
                 <div class="forget">
                     <a href="{% url 'password_forget' %}">忘記密碼？</a>
                 </div>
-
-
             </form>
+
             <style>
                 .login_block form .forget{
                     font-size: 15px;
@@ -161,91 +196,92 @@
             </style>
 
         </div>
-    <!-- 標題列 -->
+
+        <!-- 標題列 -->
         <div class="permission_toolbar" style="opacity: 0.8;">
-                <nav class="navbar navbar-light bg-green" role="navigation">
-                    <div class="container-fluid">
-                        <div class="navbar-header">
-                            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-                                <span class="icon-bar"></span>
-                                <span class="icon-bar"></span>
-                                <span class="icon-bar"></span>
-                            </button>
-                            <a class="navbar-brand" href="{% url "Homepage" %}" style=" opacity: 1; font-size: 30px;">ALCPT線上練習平台</a>
-                        </div>
-
+            <nav class="navbar navbar-light bg-green" role="navigation">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="{% url "Homepage" %}" style=" opacity: 1; font-size: 30px;">ALCPT線上練習平台</a>
                     </div>
-                    <Style>
-                        .navbar{
-                            padding-top: 40px;
-                            font-size: 20px;
-                        }
-                        .bg-green{
-                            background-color: #4CCABD;
-                            box-shadow: 0px 3px 8px 0px #486260;
-                        }
-                        /*選項顏色*/
-                        .bg-green .navbar-nav .dropdown-toggle,
-                        .bg-green .navbar-brand {
-                            color: rgb(255, 255, 255);
-                            right: 70%;
-                        }
 
-                    </Style>
-                </nav>
-            </div>
+                </div>
+                <Style>
+                    .navbar{
+                        padding-top: 40px;
+                        font-size: 20px;
+                    }
+                    .bg-green{
+                        background-color: #4CCABD;
+                        box-shadow: 0px 3px 8px 0px #486260;
+                    }
+                    /*選項顏色*/
+                    .bg-green .navbar-nav .dropdown-toggle,
+                    .bg-green .navbar-brand {
+                        color: rgb(255, 255, 255);
+                        right: 70%;
+                    }
 
-
-<!-- 基本頁面 -->
-    <style>
-        *{
-            padding: 0px;
-            margin: 0px;
-            font-family: 圓體-繁;
-        }
-        .wrapper{
-            width: 100%;
-            height: 100%;
-            background-color: #FFFEF6;
-        }
-
-        .wrapper img{
-            width: 100%;
-            height: 100%;
-            opacity: 0.7%;
-
-            position: absolute;
-            top: 0%;
-            left: 0%;
-        }
-
-        .cover{
-            width: 100%;
-            height: 100%;
-            background-color: #2C3232;
-            opacity: 0.7;
-
-            position: absolute;
-            top: 0%;
-            left: 0%;
-        }
-
-        .container a{
-            font-size: 30px;
-            color: dimgray;
-
-            position: absolute;
-            top: 10px;
-            left: 10px;
-        }
-
-        .registration_block a{
-            font-size: 20px;
-        }
+                </Style>
+            </nav>
+        </div>
 
 
+        <!-- 基本頁面 -->
+        <style>
+            *{
+                padding: 0px;
+                margin: 0px;
+                font-family: 圓體-繁;
+            }
+            .wrapper{
+                width: 100%;
+                height: 100%;
+                background-color: #FFFEF6;
+            }
 
-    </style>
+            .wrapper img{
+                width: 100%;
+                height: 100%;
+                opacity: 0.7%;
+
+                position: absolute;
+                top: 0%;
+                left: 0%;
+            }
+
+            .cover{
+                width: 100%;
+                height: 100%;
+                background-color: #2C3232;
+                opacity: 0.7;
+
+                position: absolute;
+                top: 0%;
+                left: 0%;
+            }
+
+            .container a{
+                font-size: 30px;
+                color: dimgray;
+
+                position: absolute;
+                top: 10px;
+                left: 10px;
+            }
+
+            .registration_block a{
+                font-size: 20px;
+            }
+
+
+
+        </style>
     </div>
 
 </body>
