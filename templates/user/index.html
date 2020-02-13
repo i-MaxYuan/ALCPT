@@ -10,14 +10,13 @@
 
 {% block content %}
     <div class="add_users">
-        <button type="button" class="btn btn-default btn-lg">
-            <a href="{% url 'user_create' %}">新增使用者</a>
-        </button>
+        <button type="button" class="btn btn-default btn-lg" onclick="window.location.href='{% url 'user_create' %}'">新增使用者</button>
 
         <style>
             .add_users button{
                 width: 130px;
                 height: 50px;
+                color: #FFFEF6;
                 background-color: #4CCABD;
                 border-radius: 10px;
                 text-align: center;
@@ -31,13 +30,9 @@
             }
 
             .add_users button:hover{
+                color: #FFFEF6;
                 background-color: #2C3232;
                 transition: all 0.3s ease;
-            }
-
-            .add_users a{
-                color: #FFFEF6;
-                text-decoration: none;
             }
         </style>
     </div>
@@ -46,26 +41,23 @@
     <div class="table-responsive">
         {% if users %}
             <table class="table table-hover">
-                <caption style="font-size: 30px;">&nbsp;&nbsp;使用者列表</caption>
+                <caption style="font-size: 30px;">&nbsp;&nbsp;使用者列表（共 {{ users.count }} 條結果）</caption>
                 <thead class="title">
                     <tr>
-                        <th class="col-md-1">帳號</th>
+                        <th class="col-md-1" style="text-align: left">帳號</th>
                         <th class="col-md-1">姓名</th>
-                        <th class="col-md-1">年班</th>
-                        <th class="col-md-1">學系</th>
-                        <th class="col-md-2">中隊</th>
-                        <th class="col-md-3">權限</th>
-                        <th class="col-md-3">最後登入時間</th>
+                        <th class="col-md-1">身份</th>
+                        <th class="col-md-6">權限</th>
+                        <th class="col-md-2">最後登入時間</th>
+                        <th class="col-md-1"></th>
                     </tr>
                 </thead>
                 <tbody>
                 {% for user in userList %}
-                    <tr>
+                    <tr onclick="window.location.href='{% url "view_profile" user.reg_id %}'">
                         <td style="text-align: left; vertical-align:middle;">{{ user.reg_id }}</td>
                         <td style="vertical-align:middle;">{{ user.name }}</td>
-                        <td style="vertical-align:middle;">{% if user.student %}{{ user.student.grade }}{% else %}None{% endif %}</td>
-                        <td style="vertical-align:middle;">{% if user.student %}{{ user.student.department }}{% else %}None{% endif %}</td>
-                        <td style="vertical-align:middle;">{% if user.student %}{{ user.student.squadron }}{% else %}None{% endif %}</td>
+                        <td style="vertical-align:middle;">{{ user.identity|readableIdentity }}</td>
                         <td style="text-align: left;">
                             {% if user|has_perms:privileges.SystemManager %}
                                 <span class="badge alert-danger" style="padding-bottom: 8px">{{ privileges.SystemManager.value.1 }}</span>
@@ -86,7 +78,10 @@
                                 <span class="badge alert-inverse" style="padding-bottom: 8px">{{ privileges.Testee.value.1 }}</span>
                             {% endif %}
                         </td>
-                        <td style="vertical-align:middle;">{{ user.last_login|date:'Y年m月d日, H時i分' }}</td>
+                        <td style="vertical-align:middle; font-size: 14px">{{ user.last_login|date:'Y年m月d日, H時i分' }}</td>
+                        <td>
+                            <a href="{% url 'user_edit' user.reg_id %}"><i class="fa fa-pencil-square fa-fw mb-2"></i></a>
+                        </td>
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -97,12 +92,17 @@
         <style>
             .table-responsive .table{
                 text-align: center;
-                position: absolute;
             }
 
-            .table-hover > tbody > tr:hover > td,
-            .table-hover > tbody > tr:hover > th {
+            table-hover a{
+                    visibility: hidden;
+            }
+            .table-hover > tbody > tr:hover{
+                cursor: pointer;
                 background-color: #4CCABD;
+            }
+            .table-hover > tbody > tr:hover a, td{
+                visibility: visible;
             }
 
             .title{
@@ -352,15 +352,15 @@
             <style>
                 .pager_group1{
                     text-decoration: none;
-                    position: absolute;
-                    bottom: 0%;
-                    left: 1%;
-                    right: 1%;
+                    position: fixed;
+                    bottom: 9%;
+                    left: 10%;
+                    right: 10%;
                 }
 
                 .pager_group2{
-                    position: absolute;
-                    bottom: 6.5%;
+                    position: fixed;
+                    bottom: 14%;
                     right: 50%;
 
                     transform: translate(50%,50%);

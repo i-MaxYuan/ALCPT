@@ -1,0 +1,224 @@
+{% extends 'base.html' %}
+
+{% load web_filters %}
+
+{% block path %}
+    <a href="">系統管理員</a>
+    <a class="fa fa-angle-double-right fa-lg box"></a>
+    <a href="{% url 'user_list' %}">使用者列表</a>
+    <a class="fa fa-angle-right fa-lg box"></a>
+    <a href="#">編輯使用者</a>
+{% endblock %}
+
+{% block content %}
+    <!-- 大頭貼 -->
+    <div class="photo">
+        <i class="fa fa-user-circle"></i>
+
+        <style>
+            .photo{
+                position: absolute;
+                left: 8%;
+                top: 6%;
+            }
+
+            .photo i{
+                font-size: 160px;
+                color: #5e5e5e;
+            }
+        </style>
+    </div>
+
+    <div class="user_info">
+        <form action="" method="post">
+            {% csrf_token %}
+            <ul class="user_info1">
+                <li>使用者帳號</li>
+                <li>姓名</li>
+                <li>Email</li>
+                <li>性別</li>
+                <li>身份</li>
+                <li>權限</li>
+            </ul>
+
+            <ul class="user_info1_">
+                <li><input type="text" name="reg_id" value="{{ edited_user.reg_id }}" required></li>
+                <li><input type="text" name="name" {% if edited_user.name %}value="{{ edited_user.name }}"{% endif %} placeholder="Name..." required></li>
+                <li><input type="text" name="email" {% if edited_user.email %}value="{{ edited_user.email }}"{% endif %} placeholder="Email..." required></li>
+                <li>
+                    <select name="gender" required>
+                        <option value="" disabled selected>請選擇性別</option>
+                        <option value="0" {% if edited_user.gender == 0 %}selected{% endif %}>男</option>
+                        <option value="1" {% if edited_user.gender == 1 %}selected{% endif %}>女</option>
+                        <option value="2" {% if edited_user.gender == 2 %}selected{% endif %}>不想公開</option>
+                    </select>
+                </li>
+                <li>
+                    <select name="identity" required>
+                        <option value="" disabled selected>請選擇身份</option>
+                        {% for identity in identities %}
+                            <option value="{{ identity.value.0 }}" {% if edited_user.identity == identity.value.0 %}selected{% endif %}>{{ identity.value.1 }}</option>
+                        {% endfor %}
+                    </select>
+                </li>
+                <li>
+                    {% for privilege in privileges %}
+                        <input type="checkbox" id="{{ privilege.value.0 }}" name="{{ privilege }}" {% if edited_user|has_permission:privilege %} checked {% endif %}>
+                        <label for="{{ privilege.value.0 }}">{{ privilege.value.1 }}&nbsp;&nbsp;&nbsp;</label>
+                    {% endfor %}
+                </li>
+            </ul>
+
+            {% if edited_user.student %}
+                <ul class="student_info1">
+                    <li>學號</li>
+                    <li>年班</li>
+                    <li>科系</li>
+                    <li>中隊</li>
+                </ul>
+
+                <ul class="student_info1_">
+                    <li><input type="text" name="stu_id" value="{{ edited_user.student.stu_id }}" required></li>
+                    <li><input type="number" name="grade" value="{{ edited_user.student.grade }}" required></li>
+                    <li>
+                        <select name="department" required>
+                            <option value="" disabled selected>請選擇科系</option>
+                            {% for department in departments %}
+                                <option value="{{ department.id }}" {% if department == user.student.department %}selected{% endif %}>{{ department }}</option>
+                            {% endfor %}
+                        </select>
+                    </li>
+                    <li>
+                        <select name="squadron" required>
+                            <option value="" disabled selected>請選擇連隊單位</option>
+                            {% for squadron in squadrons %}
+                                <option value="{{ squadron.id }}" {% if squadron == user.student.squadron %}selected{% endif %}>{{ squadron }}</option>
+                            {% endfor %}
+                        </select>
+                    </li>
+                </ul>
+            {% endif %}
+
+            <div class="buttons">
+                <button type="submit">送出</button>
+                <button type="button"onclick="window.location.href='{% url 'user_list' %}'">返回</button>
+            </div>
+        </form>
+
+        <style>
+            .user_info1{
+                position: absolute;
+                left: 30%;
+                top: 1%;
+            }
+            .user_info1 li{
+                font-size: 20px;
+                list-style: none;
+                line-height: 60px;
+            }
+            .user_info1_{
+                position: absolute;
+                left: 40%;
+                top: 1%;
+            }
+            .user_info1_ li{
+                list-style: none;
+                line-height: 58px;
+            }
+
+            .student_info1{
+                position: absolute;
+                left: 62%;
+                top: 1%;
+            }
+            .student_info1 li{
+                font-size: 20px;
+                list-style: none;
+                line-height: 60px;
+            }
+            .student_info1_{
+                position: absolute;
+                left: 72%;
+                top: 1%;
+            }
+            .student_info1_ li{
+                list-style: none;
+                line-height: 58px;
+            }
+
+            .user_info > form > button{
+                position: relative;
+                top: 140px;
+                left: 500%;
+
+                background-color: #4CCABD;
+                border: none;
+                color: #FFFEF6;
+            }
+            .buttons{
+                position: absolute;
+                top: 85%;
+                left: 82%;
+            }
+        </style>
+
+    </div>
+
+    <div class="time-block">
+        <div class="time_icon">
+            <i class="fa fa-clock-o"></i>
+        </div>
+
+        <div class="time">
+            <li>最近登入：<br>{{ edited_user.last_login|date:"Y年m月d日, H時i分" }}</li>
+            <li style="border-top-style: solid; border-top-color: #adadad; border-top-width: 0.7px;">&nbsp;</li>
+            <li>更新時間：<br>{{ edited_user.update_time|date:"Y年m月d日, H時i分" }}</li>
+            <li style="border-top-style: solid; border-top-color: #adadad; border-top-width: 0.7px;">&nbsp;</li>
+            <li>加入時間：<br>{{ edited_user.created_time|date:"Y年m月d日, H時i分" }}</li>
+            <li style="border-top-style: solid; border-top-color: #adadad; border-top-width: 0.7px;">&nbsp;</li>
+            <li>狀態：{% if edited_user.is_active %}
+                    <span>active</span>
+                {% elif edited_user.is_staff %}
+                    <span>staff</span>
+                {% elif edited_user.is_superuser %}
+                    <span>superuser</span>
+                {% endif %}
+            </li>
+        </div>
+
+        <style>
+            .time-block{
+                position: absolute;
+                top: 40%;
+                left: 7%;
+            }
+
+            .time_icon{
+                position: relative;
+                top: 35px;
+                left: -10px;
+
+                width: 20px;
+
+                font-size: 22px;
+                color: #5e5e5e;
+                background-color: #F3F3F3;
+            }
+
+            .time{
+                color: #5e5e5e;
+
+                border: #c0c0c0 solid 0.7px;
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+
+            .time li{
+                list-style: none;
+                width: 100%;
+                font-size: 14px;
+                top: 85%;
+            }
+        </style>
+    </div>
+{% endblock %}

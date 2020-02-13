@@ -40,3 +40,9 @@ class ExamType(Enum):
     Practice = (2, '綜合練習')
     Listening = (3, '聽力練習')
     Reading = (4, '閱讀練習')
+
+
+class Identity(Enum):
+    Visitor = (0, '訪客')
+    Student = (1, '學生')
+    Teacher = (2, '老師')

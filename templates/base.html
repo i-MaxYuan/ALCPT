@@ -21,16 +21,15 @@
     {% endblock %}
 </head>
 <body>
-    <div class="back-btn">
-        <button title="顯示上一頁" onclick="history.back()"><i class="fa fa-angle-left fa-lg box"></i></button>
-        <button title="顯示下一頁" onclick="history.forward()"><i class="fa fa-angle-right fa-lg box"></i></button>
+    <div class="page-buttons">
+        <button title="顯示上一頁" onclick="self.location=document.referrer;"><i class="fa fa-angle-left fa-lg box"></i></button>
         <button title="重新整理" onclick="window.location.reload();"><i class="fa fa-refresh"></i></button>
 
         <style>
-            .back-btn{
+            .page-buttons{
                 position: absolute;
                 top: 13%;
-                left: 1%;
+                left: 2%;
                 z-index: 9999;
             }
             button{
@@ -41,21 +40,21 @@
         </style>
     </div>
 
-    <div class="hint-info">
+    <div class="prompt-info">
         <section>
             {% if messages %}
                 {% for message in messages %}
                     {% if message.tags == "error" %}
-                        <div class="alert alert-danger mt-3" role="alert">
-                            <i class="fa fa-window-close" aria-hidden="true"></i> {{ message }}
+                        <div class="prompt-bar error" id="3seconds">
+                            {{ message }}
                         </div>
                     {% elif message.tags == "success" %}
-                        <div class="alert alert-success mt-3" role="alert">
+                        <div class="prompt-bar success" id="3seconds">
                             {{ message }}
                         </div>
                     {% elif message.tags == "warning" %}
-                        <div class="alert alert-warning mt-3" role="alert">
-                            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> {{ message }}
+                        <div class="prompt-bar warning" id="3seconds">
+                            {{ message }}
                         </div>
                     {% endif %}
                 {% endfor %}
@@ -63,7 +62,21 @@
         </section>
 
         <style>
-            .hint-info{
+            .prompt-bar{
+                font-size: 24px;
+                border-radius: 4px;
+            }
+            .error{
+                background-color: salmon;
+            }
+            .success{
+                background-color: aquamarine;
+            }
+            .warning{
+                background-color: khaki;
+            }
+
+            .prompt-info{
                 position: absolute;
                 width: 38%;
                 top: 18%;
@@ -72,6 +85,13 @@
                 text-align: center;
             }
         </style>
+
+        <script type="text/javascript">
+            var timer = window.setInterval(disappear, 3000); // display 3 seconds , then disappear
+            function disappear() {
+                document.getElementById('3seconds').innerHTML = "";
+            }
+        </script>
     </div>
 
     <div class="wrapper">
@@ -83,7 +103,8 @@
 
             {% endblock %}
         </div>
-    <!-- 標題列 -->
+
+        <!-- 標題列 -->
         <div class="permission_toolbar" style="opacity: 0.8;">
             <nav class="navbar navbar-light bg-green" role="navigation">
                 <div class="container-fluid">
@@ -96,7 +117,7 @@
                         <a class="navbar-brand" href="{% url "Homepage" %}" style=" opacity: 1; font-size: 30px;">ALCPT線上練習平台</a>
                     </div>
 
-                <!-- 功能表 -->
+                    <!-- 功能表 -->
                     <div class="collapse navbar-collapse" id="myNavbar">
                         <ul class="nav navbar-nav" style="position: absolute; left: 50%">
                             {% if request.user|has_perm:'SystemManager' %}
@@ -219,55 +240,57 @@
                         </div>
                     </div>
                 </div>
+
+                <style>
+                .container-fluid button{
+                    background-color: #4CCABD;
+                    border-color: #FFFEF6;
+
+                }
+                .btn-group{
+                    position: absolute;
+                    top: 50px;
+                    right: 30px;
+                }
+
+                .btn-group .dropdown-menu{
+                    height: 150px;
+                    width: auto;
+                    padding-left: 10px;
+                    padding-right: 10px;
+                    text-align: center;
+                }
+
+                .registration_block{
+                    width: 200px;
+                    font-size: 20px;
+                }
+
+                .registration_block h1{
+                    font-size: 20px;
+                    position: absolute;
+                    top: 10px;
+                }
+
+                .registration_block h2{
+                    position: absolute;
+                    top: 50%;
+                    left: 4%;
+                    padding-right: 70px;
+                    padding-left: 70px;
+                    padding-bottom: 20px;
+                    border-top: #486260 2px solid;
+                }
+
+                .registration_block h2 a{
+                    color: #555555;
+                }
+            </style>
             </div>
 
-            <style>
-                    .container-fluid button{
-                        background-color: #4CCABD;
-                        border-color: #FFFEF6;
-
-                    }
-                    .btn-group{
-                        position: absolute;
-                        top: 50px;
-                        right: 30px;
-                    }
-
-                    .btn-group .dropdown-menu{
-                        height: 150px;
-                        width: auto;
-                        padding-left: 10px;
-                        padding-right: 10px;
-                        text-align: center;
-                    }
-
-                    .registration_block{
-                        width: 200px;
-                        font-size: 20px;
-                    }
-
-                    .registration_block h1{
-                        font-size: 20px;
-                        position: absolute;
-                        top: 10px;
-                    }
-
-                    .registration_block h2{
-                        position: absolute;
-                        top: 50%;
-                        left: 4%;
-                        padding-right: 70px;
-                        padding-left: 70px;
-                        padding-bottom: 20px;
-                        border-top: #486260 2px solid;
-                    }
-
-                    .registration_block h2 a{
-                        color: #555555;
-                    }
-                </style>
         </div>
-    <!-- 左邊button -->
+
+        <!-- 左邊button -->
         <div class="icon-bar">
             <a href="{% url 'Homepage' %}"><i class="fa fa-home"></i></a>
             <a href="{% url 'profile' %}"><i class="fa fa-user-circle"></i></a>
@@ -297,109 +320,109 @@
                 }
             </style>
         </div>
-    <!-- 路徑喔 -->
+
         <!-- 路徑喔 -->
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{% url 'Homepage' %}">主頁</a></li>
-                <li class="breadcrumb-item">
-                    {% block path %}
-                    {% endblock %}
-                </li>
-            </ol>
-        </nav>
+        <div>
+            <!-- 路徑喔 -->
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'Homepage' %}">主頁</a></li>
+                    <li class="breadcrumb-item">
+                        {% block path %}
+                        {% endblock %}
+                    </li>
+                </ol>
+            </nav>
 
+            <style>
+                .breadcrumb{
+                    background-color: #FFFEF6;
+                    opacity: 0.8;
+                    color: #2C3232;
+
+                    position: absolute;
+                    top: 18%;
+                    left: 10%;
+                    box-shadow: 0px 3px 8px 0px #5e5e5e;
+                }
+
+                .breadcrumb-item a{
+                    color: #2C3232;
+                    text-decoration: none;
+                }
+            </style>
+        </div>
+
+        <!-- 基本頁面 -->
         <style>
-            .breadcrumb{
+            *{
+                padding: 0px;
+                margin: 0px;
+                font-family: 圓體-繁;
+            }
+            .wrapper{
+                width: 100%;
+                height: 100%;
                 background-color: #FFFEF6;
-                opacity: 0.8;
-                color: #2C3232;
-
-                position: absolute;
-                top: 18%;
-                left: 10%;
-                box-shadow: 0px 3px 8px 0px #5e5e5e;
             }
 
-            .breadcrumb-item a{
-                color: #2C3232;
-                text-decoration: none;
+            .wrapper img{
+                width: 100%;
+                height: 100%;
+                opacity: 0.7%;
+
+                position: absolute;
+                top: 0%;
+                left: 0%;
+            }
+
+            .cover{
+                width: 100%;
+                height: 100%;
+                background-color: #2C3232;
+                opacity: 0.7;
+
+                position: absolute;
+                top: 0%;
+                left: 0%;
+            }
+    /*
+            .block{
+                width: 70%;
+                height: 120%;
+                background-color: #FFFEF6;
+
+                position: absolute;
+                top: 20%;
+                left: 330px;
+
+                border-radius: 15px;
+            }
+    */
+            .container a{
+                font-size: 30px;
+                color: dimgray;
+
+                position: absolute;
+                top: 10px;
+                left: 10px;
+            }
+
+            .registration_block a{
+                font-size: 20px;
+            }
+
+            .infor{
+                width: 70%;
+                height: 60%;
+                background-color: rgba(255,255,255,0.92);
+
+                position: absolute;
+                left: 15%;
+                top: 30%;
             }
         </style>
     </div>
-
-
-    </div>
-
-<!-- 基本頁面 -->
-    <style>
-        *{
-            padding: 0px;
-            margin: 0px;
-            font-family: 圓體-繁;
-        }
-        .wrapper{
-            width: 100%;
-            height: 100%;
-            background-color: #FFFEF6;
-        }
-
-        .wrapper img{
-            width: 100%;
-            height: 100%;
-            opacity: 0.7%;
-
-            position: absolute;
-            top: 0%;
-            left: 0%;
-        }
-
-        .cover{
-            width: 100%;
-            height: 100%;
-            background-color: #2C3232;
-            opacity: 0.7;
-
-            position: absolute;
-            top: 0%;
-            left: 0%;
-        }
-/*
-        .block{
-            width: 70%;
-            height: 120%;
-            background-color: #FFFEF6;
-
-            position: absolute;
-            top: 20%;
-            left: 330px;
-
-            border-radius: 15px;
-        }
-*/
-        .container a{
-            font-size: 30px;
-            color: dimgray;
-
-            position: absolute;
-            top: 10px;
-            left: 10px;
-        }
-
-        .registration_block a{
-            font-size: 20px;
-        }
-
-        .infor{
-            width: 70%;
-            height: 60%;
-            background-color: rgba(255,255,255,0.92);
-
-            position: absolute;
-            left: 15%;
-            top: 30%;
-        }
-    </style>
 
 </body>
 

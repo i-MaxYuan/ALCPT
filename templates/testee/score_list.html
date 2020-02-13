@@ -4,8 +4,10 @@
     <a href="">受測者</a>
     <a class="fa fa-angle-double-right fa-lg box"></a>
     <a href="">成績紀錄</a>
+{% endblock %}
 
-    <div class="container-flu" style="position: ">
+{% block content %}
+    <div class="container-flu" style="position: relative">
         <!-- BS4 的靠右由 pull-right 改為 float-right -->
         <div class="btn-group float-right">
           <button type="button" class="btn btn-primary dropdown-toggle pull-right" data-toggle="dropdown">
@@ -57,9 +59,9 @@
 
 
                 .container-flu{
-                    position: absolute;
+                    position: relative;
                     top: -5%;
-                    left: 850%;
+                    left: 2%;
                 }
 
                 .btn-group{
@@ -113,10 +115,6 @@
         </div>
     </div>
 
-{% endblock %}
-
-{% block content %}
-
     <div class="table-responsive">
         <table class="table table-hover">
             <caption style="font-size: 30px;">&nbsp;&nbsp;成績紀錄（共{{ answer_sheets.count }}條結果）</caption>
@@ -131,7 +129,11 @@
                 {% for answersheet in answer_sheets %}
                     <tr style="cursor: pointer" onclick="window.location.href='{% url 'view_answersheet_content' answersheet.id %}'">
                         <td style="text-align: center; vertical-align:middle;">{{ answersheet.exam }}</td>
-                        <td style="vertical-align:middle;">{{ answersheet.score }}</td>
+                        {% if answersheet.score  < 60 %}
+                            <td style="vertical-align:middle; color: #c12e2a">{{ answersheet.score }}</td>
+                        {% else %}
+                            <td style="vertical-align:middle;">{{ answersheet.score }}</td>
+                        {% endif %}
                         <td style="vertical-align:middle;">{{ answersheet.finish_time|date:'Y年m月d日, H時m分' }}</td>
                     </tr>
                 {% endfor %}
@@ -142,8 +144,6 @@
         <style>
             .table-responsive .table{
                 text-align: center;
-                position: absolute;
-                top: 30px;
             }
 
             .table-hover > tbody > tr:hover > td,
@@ -169,8 +169,6 @@
 
         </style>
     </div>
-
-
 
 
         <!-- 頁碼的部分 -->
@@ -217,18 +215,17 @@
 
 
             <style>
-
                 .pager_group1{
                     text-decoration: none;
-                    position: absolute;
-                    bottom: 0%;
-                    left: 1%;
-                    right: 1%;
+                    position: fixed;
+                    bottom: 9%;
+                    left: 10%;
+                    right: 10%;
                 }
 
                 .pager_group2{
-                    position: absolute;
-                    bottom: 6.5%;
+                    position: fixed;
+                    bottom: 14%;
                     right: 50%;
 
                     transform: translate(50%,50%);

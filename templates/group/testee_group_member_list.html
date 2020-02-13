@@ -28,13 +28,21 @@
             {% if group_members %}
             <tbody id="group_members">
                 {% for member in group_members %}
-                    <tr>
-                        <td>{{ member.user.student.stu_id }}  /  {{ member.user.name }}</td>
+                    <tr onclick="window.location.href='{% url "view_profile" member.id %}'">
+                        {% if member.student %}
+                            <td>{{ member.student.stu_id }}  /  {{ member.name }}</td>
+                        {% else %}
+                            <td>{{ member.reg_id }}  /  {{ member.name }}</td>
+                        {% endif %}
                     </tr>
                 {% endfor %}
             </tbody>
             {% else %}
-                <h2>目前暫無資料</h2>
+            <tbody>
+                <tr>
+                    <td><h2>目前暫無資料</h2></td>
+                </tr>
+            </tbody>
             {% endif %}
 
             <style>
@@ -55,10 +63,10 @@
             </style>
         </table>
         <div class="btn4">
-            <input type="button" value="返回列表" onclick="window.location.href='{% url 'testee_group_list' %}'">
+            <button type="button" onclick="window.location.href='{% url 'testee_group_list' %}'">返回列表</button>
 
             <style>
-                .btn4 input{
+                .btn4 button{
                     background-color: #4CCABD;
                     color: #FFFEF6;
                     border: none;

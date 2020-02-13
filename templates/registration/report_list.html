@@ -9,47 +9,11 @@
 {% endblock %}
 
 {% block content %}
-    <div class="tool-btn">
-        <ul class="nav nav-pills nav-stacked">
-            <li><a href="{% url 'profile' %}">基本資料</a></li>
-            <li><a href="{% url 'profile_edit' user.reg_id %}">編輯個人檔案</a></li>
-            <li><a href="{% url 'password_change' %}">更改密碼</a></li>
-            <li><a href="#" style="background-color: #DCDCDC">問題回報</a></li>
-        </ul>
-
-        <style>
-            .tool-btn{
-                background-color: #F3F3F3;
-                width: 20%;
-                height: 70%;
-                border-top-left-radius: 1%;
-                border-bottom-left-radius: 1%;
-                border-right-style: solid;
-                border-right-width: 0.8px;
-                border-right-color: #c0c0c0;
-                overflow: hidden;
-
-                position: absolute;
-                top: 0%;
-                left: 0%;
-            }
-
-            .tool-btn ul{
-                width: 100%;
-                position: absolute;
-                padding-top: 10px;
-            }
-
-            .tool-btn ul li a{
-                color: #2C3232;
-                font-size: 16px;
-                text-decoration: none;
-                padding-left: 50px;
-                padding-top: 20px;
-                padding-bottom: 20px;
-            }
-        </style>
-    </div>
+    <style>
+        #report{
+            background-color: #DCDCDC;
+        }
+    </style>
 
     <div class="table-responsive">
         <table class="table table-hover">
@@ -118,9 +82,7 @@
     </div>
 
     <div class="add_report">
-        <button type="button" class="btn btn-default btn-lg">
-            <a href="{% url 'report' %}">新增</a>
-        </button>
+        <button type="button" class="btn btn-default btn-lg" onclick="window.location.href='{% url 'report' %}'">新增</button>
 
         <style>
             .add_report button{
@@ -130,6 +92,7 @@
 
                 width: 100px;
                 height: 50px;
+                color: #FFFEF6;
                 background-color: #4CCABD;
                 border-radius: 10px;
                 text-align: center;
@@ -139,13 +102,9 @@
             }
 
             .add_report button:hover{
+                color: #FFFEF6;
                 background-color: #2C3232;
                 transition: all 0.3s ease;
-            }
-
-            .add_report a{
-                color: #FFFEF6;
-                text-decoration: none;
             }
         </style>
     </div>

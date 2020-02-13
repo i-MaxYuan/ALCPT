@@ -12,7 +12,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 
 from Online_Exam.settings import LOGIN_REDIRECT_URL
-from alcpt.definitions import UserType
+from alcpt.definitions import UserType, Identity
 from alcpt.forms import CaptchaForm
 from alcpt.models import User, Student, Department, Squadron, Report
 from alcpt.email_verification import email_verified
@@ -34,14 +34,16 @@ def login(request):
 
                 if user is None or not user.is_active:
                     messages.error(request, 'Wrong Password or User unexist.')
-                    return redirect('login')
+                    return render(request, 'registration/login.html', locals())
 
                 auth.login(request, user)
                 user.save()
-                if request.user.email is "":
+                if user.last_login is None:
                     departments = Department.objects.all()
                     squadrons = Squadron.objects.all()
                     messages.warning(request, 'Fist login, please edit your data')
+                    privileges = UserType.__members__
+                    identities = Identity.__members__.values()
                     return render(request, 'registration/edit_profile.html', locals())
                 messages.success(request, 'Login Success.')
 
@@ -121,6 +123,7 @@ def edit_profile(request, reg_id):
 
     else:
         privileges = UserType.__members__
+        identities = Identity.__members__.values()
         departments = Department.objects.all()
         squadrons = Squadron.objects.all()
         return render(request, 'registration/edit_profile.html', locals())

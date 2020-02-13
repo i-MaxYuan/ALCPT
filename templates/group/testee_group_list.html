@@ -113,14 +113,13 @@
 
 
     <div class="testee_group_create">
-        <button type="button" class="btn btn-default btn-lg">
-            <a href="{% url 'testee_group_create' %}">創建群組</a>
-        </button>
+        <button type="button" class="btn btn-default btn-lg" onclick="window.location.href='{% url 'testee_group_create' %}'">創建群組</button>
 
         <style>
             .testee_group_create button{
                 width: 130px;
                 height: 50px;
+                color: #FFFEF6;
                 background-color: #4CCABD;
                 border-radius: 10px;
                 text-align: center;
@@ -134,13 +133,9 @@
             }
 
             .testee_group_create button:hover{
+                color: #FFFEF6;
                 background-color: #2C3232;
                 transition: all 0.3s ease;
-            }
-
-            .testee_group_create a{
-                color: #FFFEF6;
-                text-decoration: none;
             }
         </style>
     </div>
@@ -260,15 +255,15 @@
             <style>
                 .pager_group1{
                     text-decoration: none;
-                    position: absolute;
-                    bottom: 0%;
-                    left: 1%;
-                    right: 1%;
+                    position: fixed;
+                    bottom: 9%;
+                    left: 10%;
+                    right: 10%;
                 }
 
                 .pager_group2{
-                    position: absolute;
-                    bottom: 6.5%;
+                    position: fixed;
+                    bottom: 14%;
                     right: 50%;
 
                     transform: translate(50%,50%);

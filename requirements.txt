@@ -1,4 +1,4 @@
-Django==1.11.17
+Django==1.11.28
 django-extensions==2.2.5
 django-ranged-response==0.2.0
 django-simple-captcha==0.5.12

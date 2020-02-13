@@ -9,48 +9,53 @@
 {% block content %}
     <div class="testee_practice_create">
         <form action="{% url 'testee_practice_create' kind %}" method="post">
-            <div class="title"><h1>Test Practice Create.</h1> <h2>&nbsp;</h2></div>
-        {% csrf_token %}
-            <div class="type">
-                {% if kind == 'listening' %}
-                    <h1>聽力題型：</h1>
-                {% else %}
-                    <h1>閱讀題型：</h1>
-                {% endif %}
-            </div>
+            <div class="title"><h1>Test Practice Create.</h1></div>
+            {% csrf_token %}
+            <table>
+                <tr>
+                    {% if kind == 'listening' %}
+                        <td class="col-md-2">聽力類型（可複選）</td>
+                        <td class="col-md-3">
+                            <input type="checkbox" name="question_type" value="1">問答
+                            <input type="checkbox" name="question_type" value="2">簡短對話
+                        </td>
 
-            <div class="type_choose">
-                {% if kind == 'listening' %}
-                    <input type="checkbox" id="1" name="question_type" value="1">問答
-                    <input type="checkbox" id="2" name="question_type" value="2">簡短對話
-                {% elif kind == 'reading' %}
-                    <input type="checkbox" id="3" name="question_type" value="3">文法
-                    <input type="checkbox" id="4" name="question_type" value="4">名詞片語
-                    <input type="checkbox" id="5" name="question_type" value="5">段落理解
-                {% endif %}
-            </div>
+                    {% elif kind == 'reading' %}
+                        <td class="col-md-2">閱讀類型（可複選）</td>
+                        <td class="col-md-3">
+                            <input type="checkbox" name="question_type" value="3">文法
+                            <input type="checkbox" name="question_type" value="4">名詞片語
+                            <input type="checkbox" name="question_type" value="5">段落理解
+                        </td>
 
-            <div class="question_num">
-                <h1>題數：</h1>
-                <select name="question_num" required>
-                    <option value="" disabled selected hidden>請選擇題數</option>
-                    <option value="10">10</option>
-                    <option value="20">20</option>
-                    <option value="30">30</option>
-                </select>
-            </div>
+                    {% else %}
+                        <td>Unknown</td>
+                    {% endif %}
+                </tr>
+
+                <tr>
+                    <td>題數</td>
+                    <td>
+                        <select name="question_num" required>
+                            <option value="" disabled selected hidden>請選擇題數</option>
+                            <option value="10">10</option>
+                            <option value="20">20</option>
+                            <option value="30">30</option>
+                        </select>
+                    </td>
+                </tr>
+            </table>
 
             <div class="btn">
-                <input type="submit" value="開始練習">
-            </div>
-
-            <div class="btn2">
-                <input type="reset" value="取消">
+                <button type="submit" onclick="alert('可開始進行練習')">建立練習</button>
+                <button type="reset">重設</button>
+                <button type="button" onclick="self.location=document.referrer;">取消</button>
             </div>
 
             <style>
                 .testee_practice_create .title h1{
-                    font-size: 40px;
+                    width: 30%;
+                    font-size: 28px;
                     color: #FFFEF6;
                     background-color: #4CCABD;
                     padding-top: 10px;
@@ -58,54 +63,35 @@
                     padding-right: 15px;
                     padding-left: 45px;
                     text-align: center;
-                    position: absolute;
-                    top: 1%;
                 }
 
-                .testee_practice_create .title h2{
-                    background-color: #4CCABD;
-                    padding-top: 10px;
-                    padding-bottom: 22px;
-                    padding-right: 15px;
-                    padding-left: 30px;
-                    position: absolute;
-                    top: 1%;
-                    left: 29%;
+                .testee_practice_create table{
+                    position: relative;
+                    left: 30%;
+
+                    width: 40%;
+
+                    font-size: 20px;
+                }
+                .testee_practice_create table td{
+                    padding: 4px;
+                }
+                .testee_practice_create form input{
+                    padding: 6px;
+                }
+                .testee_practice_create form textarea{
+                    font-size: 20px;
+                    width: 100%;
+                    height: 45%;
+                    padding: 10px;
                 }
 
-                .testee_practice_create form .type h1{
-                    font-size: 30px;
-                    padding-left: 30%;
-                    position: absolute;
-                    top: 30%;
+                .testee_practice_create .btn{
+                    position: relative;
+                    top: 30px;
+                    left: 35%;
                 }
-
-                .testee_practice_create form .type_choose{
-                    position: absolute;
-                    top: 32%;
-                    left: 40%;
-                    padding-left: 10px;
-
-                    font-size: 30px;
-                }
-
-                .testee_practice_create form .question_num h1{
-                    font-size: 30px;
-                    padding-left: 30%;
-                    position: absolute;
-                    top: 40%;
-                }
-
-                .testee_practice_create form .question_num select{
-                    position: absolute;
-                    top: 42%;
-                    left: 37%;
-                    padding-left: 10px;
-
-                    font-size: 30px;
-                }
-
-                .testee_practice_create form .btn input{
+                .testee_practice_create .btn button{
                     font-size: 25px;
                     padding: 10px;
                     padding-left: 15px;
@@ -113,25 +99,7 @@
                     color: #FFFEF6;
                     background-color: #4CCABD;
                     border: none;
-                    position: absolute;
-                    top: 85%;
-                    left: 40%;
                 }
-
-                .testee_practice_create form .btn2 input{
-                    font-size: 25px;
-                    padding: 10px;
-                    padding-left: 15px;
-                    padding-right: 15px;
-                    color: #FFFEF6;
-                    background-color: #5e5e5e;
-                    border: none;
-                    position: absolute;
-                    top: 85%;
-                    left: 52%;
-                }
-
-
             </style>
         </form>
     </div>

@@ -1,9 +1,13 @@
-{% extends 'profile_base.html' %}
+{% extends 'base.html' %}
 
 {% load web_filters %}
 
 {% block path %}
-    <a href="">檢視個人資料</a>
+    <a href="">系統管理員</a>
+    <a class="fa fa-angle-double-right fa-lg box"></a>
+    <a href="{% url 'user_list' %}">使用者列表</a>
+    <a class="fa fa-angle-right fa-lg box"></a>
+    <a href="#">編輯使用者</a>
 {% endblock %}
 
 {% block content %}
@@ -16,7 +20,6 @@
                 position: absolute;
                 left: 8%;
                 top: 6%;
-
             }
 
             .photo i{
@@ -26,152 +29,154 @@
         </style>
     </div>
 
-    <div class="personal_infor">
-        <ul style="list-style: none;" class="infor1">
+    <div class="user_info">
+        <ul class="user_info1">
             <li>使用者帳號</li>
             <li>姓名</li>
             <li>Email</li>
             <li>性別</li>
+            <li>身份</li>
             <li>權限</li>
-            <div class="student_infor">
-                {% if viewed_user.student %}
-                    <div class="line"></div>
-                    <li>學號</li>
-                    <li>年班</li>
-                    <li>科系</li>
-                    <li>中隊</li>
-                {% endif %}
-            </div>
-
-            <div class="time">
-                <li style="border-bottom-style:solid ;border-bottom-color: #adadad;border-bottom-width: 0.7px;">最近登入：<br>{{ viewed_user.update_time|date:"Y年m月d日, H時i分" }}</li>
-                <li style="border-bottom-style:solid ;border-bottom-color: #adadad;border-bottom-width: 0.7px;">加入時間：<br>{{ viewed_user.created_time|date:"Y年m月d日, H時i分" }}</li>
-                <li>狀態：{% if viewed_user.is_active %}
-                        <span>active</span>
-                    {% elif viewed_user.is_staff %}
-                        <span>staff</span>
-                    {% elif viewed_user.is_superuser %}
-                        <span>superuser</span>
-                    {% endif %}
-                </li>
-            </div>
-
-            <div class="time_icon">
-                <i class="fa fa-clock-o"></i>
-            </div>
-
         </ul>
 
-        <ul style="list-style: none" class="infor2">
+        <ul class="user_info1_">
             <li>{{ viewed_user.reg_id }}</li>
-            <li>{{ viewed_user.name }}</li>
-            <li>{{ viewed_user.email }}</li>
+            <li>{% if viewed_user.name %}{{ viewed_user.name }}{% else %}尚未設定{% endif %}</li>
+            <li>{% if viewed_user.email %}{{ viewed_user.email }}{% else %}尚未設定{% endif %}</li>
             <li>
-                {% if viewed_user.gender == 0 %}
-                男
-                {% elif viewed_user.gender == 1 %}
-                女
-                {% elif viewed_user.gender == 2 %}
-                不想公開
-                {% else %}
-                尚未設定
-                {% endif %}
-            </li>
+                {% if viewed_user.gender == 0 %}男
+                {% elif viewed_user.gender == 1 %}女
+                {% elif viewed_user.gender == 2 %}不想公開
+                {% else %}尚未設定
+                {% endif %}</li>
+            <li>{% if viewed_user.identity %}{{ viewed_user.identity|readableIdentity }}{% else %}尚未設定{% endif %}</li>
             <li>
                 {% if viewed_user|has_perms:privileges.SystemManager %}
-                    <span class="badge alert-danger">{{ privileges.SystemManager.value.1 }}</span>
+                    <span class="badge alert-danger" style="padding-bottom: 8px">{{ privileges.SystemManager.value.1 }}</span>
                 {% endif %}
                 {% if viewed_user|has_perms:privileges.TestManager %}
-                    <span class="badge alert-warning">{{ privileges.TestManager.value.1 }}</span>
+                    <span class="badge alert-warning" style="padding-bottom: 8px">{{ privileges.TestManager.value.1 }}</span>
                 {% endif %}
                 {% if viewed_user|has_perms:privileges.TBManager %}
-                    <span class="badge badge-primary">{{ privileges.TBManager.value.1 }}</span>
+                    <span class="badge badge-primary" style="padding-bottom: 8px">{{ privileges.TBManager.value.1 }}</span>
                 {% endif %}
                 {% if viewed_user|has_perms:privileges.TBOperator %}
-                    <span class="badge alert-success">{{ privileges.TBOperator.value.1 }}</span>
+                    <span class="badge alert-success" style="padding-bottom: 8px">{{ privileges.TBOperator.value.1 }}</span>
                 {% endif %}
                 {% if viewed_user|has_perms:privileges.Viewer %}
-                    <span class="badge alert-info">{{ privileges.Viewer.value.1 }}</span>
+                    <span class="badge alert-info" style="padding-bottom: 8px">{{ privileges.Viewer.value.1 }}</span>
                 {% endif %}
                 {% if viewed_user|has_perms:privileges.Testee %}
-                    <span class="badge alert-inverse">{{ privileges.Testee.value.1 }}</span>
-                {% else %}
-                    <span>{{ viewed_user.privilege }}</span>
+                    <span class="badge alert-inverse" style="padding-bottom: 8px">{{ privileges.Testee.value.1 }}</span>
                 {% endif %}
             </li>
-
-            <div class="student_infor_">
-                {% if viewed_user.student %}
-                    <li>{{ viewed_user.student.stu_id }}</li>
-                    <li>{{ viewed_user.student.grade }}</li>
-                    <li>{{ viewed_user.student.department }}</li>
-                    <li>{{ viewed_user.student.squadron }}</li>
-                {% endif %}
-            </div>
         </ul>
 
+        {% if viewed_user.student %}
+            <ul class="student_info1">
+                <li>學號</li>
+                <li>年班</li>
+                <li>科系</li>
+                <li>中隊</li>
+            </ul>
+
+            <ul class="student_info1_">
+                <li>{{ viewed_user.student.stu_id }}</li>
+                <li>{{ viewed_user.student.grade }}</li>
+                <li>{{ viewed_user.student.department }}</li>
+                <li>{{ viewed_user.student.squadron }}</li>
+            </ul>
+        {% endif %}
+
         <style>
-            .personal_infor{
+            .user_info1{
                 position: absolute;
-                left: 35%;
-                top: 5%;
+                left: 30%;
+                top: 1%;
             }
-
-            .infor1 li{
-                font-size: 25px;
-                line-height: 50px;
+            .user_info1 li{
+                font-size: 20px;
+                list-style: none;
+                line-height: 60px;
             }
-
-            .infor2{
-                width: 300%;
-                height: 117%;
+            .user_info1_{
                 position: absolute;
-                top: 0%;
-                left: 200%;
+                left: 40%;
+                top: 1%;
+            }
+            .user_info1_ li{
+                list-style: none;
+                line-height: 60px;
+                font-size: 20px;
             }
 
-            .infor2 li{
-                font-size: 23px;
-                line-height: 50px;
-                color: #777777;
-            }
-
-            .student_infor{
+            .student_info1{
                 position: absolute;
-                left: 0%;
-                top: 135%;
+                left: 62%;
+                top: 1%;
             }
-
-            .student_infor_{
-                position: absolute;
-                left: 0%;
-                top: 116%;
+            .student_info1 li{
+                font-size: 20px;
+                list-style: none;
+                line-height: 60px;
             }
-
-            .line{
-                width: 1100%;
-                border-top-style: solid;
-                border-top-color: #c0c0c0;
-                border-top-width: 1px;
-
+            .student_info1_{
                 position: absolute;
-                top: -10%;
+                left: 72%;
+                top: 1%;
+            }
+            .student_info1_ li{
+                list-style: none;
+                line-height: 60px;
+                font-size: 20px;
+            }
+        </style>
+
+    </div>
+
+    <div class="time-block">
+        <div class="time_icon">
+            <i class="fa fa-clock-o"></i>
+        </div>
+
+        <div class="time">
+            <li>最近登入：<br>{{ edited_user.last_login|date:"Y年m月d日, H時i分" }}</li>
+            <li style="border-top-style: solid; border-top-color: #adadad; border-top-width: 0.7px;">&nbsp;</li>
+            <li>更新時間：<br>{{ edited_user.update_time|date:"Y年m月d日, H時i分" }}</li>
+            <li style="border-top-style: solid; border-top-color: #adadad; border-top-width: 0.7px;">&nbsp;</li>
+            <li>加入時間：<br>{{ edited_user.created_time|date:"Y年m月d日, H時i分" }}</li>
+            <li style="border-top-style: solid; border-top-color: #adadad; border-top-width: 0.7px;">&nbsp;</li>
+            <li>狀態：{% if edited_user.is_active %}
+                    <span>active</span>
+                {% elif edited_user.is_staff %}
+                    <span>staff</span>
+                {% elif edited_user.is_superuser %}
+                    <span>superuser</span>
+                {% endif %}
+            </li>
+        </div>
+
+        <style>
+            .time-block{
+                position: absolute;
+                top: 40%;
+                left: 7%;
             }
 
             .time_icon{
-                font-size: 30px;
+                position: relative;
+                top: 35px;
+                left: -10px;
+
+                width: 20px;
+
+                font-size: 22px;
                 color: #5e5e5e;
-                position: absolute;
-                top: 86%;
-                left: -260%;
                 background-color: #F3F3F3;
             }
 
             .time{
                 color: #5e5e5e;
-                position: absolute;
-                top: 85%;
-                left: -250%;
 
                 border: #c0c0c0 solid 0.7px;
                 padding-left: 20px;
@@ -179,32 +184,22 @@
             }
 
             .time li{
+                list-style: none;
                 width: 100%;
                 font-size: 14px;
                 top: 85%;
-
             }
-
         </style>
-
     </div>
 
     <div class="back-btn">
-        <input type="submit" value="返回" onclick="history.back()">
+        <button type="button"onclick="self.location=document.referrer;">返回</button>
 
         <style>
-            .back-btn input{
-                position: relative;
+            .back-btn{
+                position: absolute;
+                top: 85%;
                 left: 90%;
-                top: 10px;
-
-                font-size: 25px;
-                padding: 10px;
-                padding-left: 15px;
-                padding-right: 15px;
-                color: #FFFEF6;
-                background-color: #4CCABD;
-                border: none;
             }
         </style>
     </div>

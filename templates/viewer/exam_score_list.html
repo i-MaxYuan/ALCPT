@@ -20,20 +20,23 @@
                     <th class="col-md-1">受測人數</th>
                     <th class="col-md-2">考試開始時間</th>
                     <th class="col-md-2">考試結束時間</th>
-                    <th class="col-md-2">考試時間</th>
+                    <th class="col-md-1">考試時間</th>
                 </tr>
             </thead>
             <tbody>
                 {% for exam in exams %}
-                    <tr style="cursor: pointer" onclick="window.location.href='{% url 'exam_score_detail' exam.id %}'">
+                    <tr onclick="window.location.href='{% url "exam_score_detail" exam.id %}'">
                         <td style="text-align: center; vertical-align:middle;">{{ exam }}</td>
-                        <td style="vertical-align:middle;">{{ exam.average_score }}</td>
+                        {% if exam.average_score  < 60.0 %}
+                            <td style="vertical-align:middle; color: #c12e2a">{{ exam.average_score }}</td>
+                        {% else %}
+                            <td style="vertical-align:middle;">{{ exam.average_score }}</td>
+                        {% endif %}
                         <td style="vertical-align:middle;">{{ exam.group }}</td>
                         <td style="vertical-align:middle;">{{ exam.group.member.count }}</td>
                         <td style="vertical-align:middle;">{{ exam.start_time|date:'Y年m月d日, H時i分' }}</td>
                         <td style="vertical-align:middle;">{{ exam.finish_time|date:'Y年m月d日, H時i分' }}</td>
                         <td style="vertical-align:middle;">{{ exam.duration }}分鐘</td>
-
                     </tr>
                 {% endfor %}
             </tbody>
@@ -42,13 +45,17 @@
         <style>
             .table-responsive .table{
                 text-align: center;
-                position: absolute;
-                top: 30px;
             }
 
-            .table-hover > tbody > tr:hover > td,
-            .table-hover > tbody > tr:hover > th {
+            .table-hover button{
+                    visibility: hidden;
+            }
+            .table-hover > tbody > tr:hover{
+                cursor: pointer;
                 background-color: #4CCABD;
+            }
+            .table-hover > tbody > tr:hover button, td{
+                visibility: visible;
             }
 
             .title{
@@ -68,5 +75,16 @@
             }
 
         </style>
+
+        <script>
+        function showInfo() {
+            var x = document.getElementById("Info");
+            if (x.className.indexOf("w3-show") == -1) {
+            x.className += " w3-show";
+            } else {
+            x.className = x.className.replace(" w3-show", "");
+            }
+        }
+        </script>
     </div>
 {% endblock %}

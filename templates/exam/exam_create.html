@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
+
 {% load staticfiles %}
+
 <link href="{% static '/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" media="screen">
 <link href="{% static '/bootstrap/css/bootstrap-datetimepicker.min.css' %}" rel="stylesheet" media="screen">
 
@@ -11,60 +13,110 @@
     <a href="">新增考試</a>
 {% endblock %}
 
-
 {% block content %}
-    <div class="container">
-        <fieldset>
-            <h1>新增考試</h1>
+    <div class="exam_create">
+        <div class="title"><h1>Create Exam.</h1></div>
             <form method="post" class="form-horizontal" role="form">
                 {% csrf_token %}
-                <div class="test_name">
-                    <label>測驗名稱：</label>
-                    <input type="text" name="exam_name" required>
-                </div>
+                <table>
+                    <tr>
+                        <td>測驗名稱</td>
+                        <td><input type="text" name="exam_name" required></td>
+                    </tr>
 
+                    <tr>
+                        <td>開始時間</td>
+                        <td>
+                            <div class="input-group date form_datetime col-md-4" data-date="" data-date-format="yyyy-mm-ddThh:ii:ss" data-link-field="dtp_input1">
+                                <input style="width: 550%" class="form-control" size="16" type="text" id="start_time" name="start_time" required>
+                                <span style="position: relative; left: 200%" class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                <span style="position: relative; left: 200%" class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                            </div>
+                            <input type="hidden" id="dtp_input1" value="" />
+                        </td>
+                    </tr>
 
-                <!----------------------------------------------------------------------------------------------------->
+                    <tr>
+                        <td>測驗時間</td>
+                        <td><input type="number" name="duration" value="40" required></td>
+                    </tr>
 
-                <div class="form-group">
-                    <label for="dtp_input1" class="col-md-2 control-label">開始時間：</label>
-                    <div class="input-group date form_datetime col-md-4" data-date="" data-date-format="yyyy-mm-ddThh:ii:ss" data-link-field="dtp_input1">
-                        <input class="form-control" size="16" type="text" id="start_time" name="start_time" required>
-                        <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-                        <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
-                    </div>
-                    <input type="hidden" id="dtp_input1" value="" /><br/>
-                </div>
+                    <tr>
+                        <td>測驗試卷</td>
+                        <td>
+                            <select name="selected_testpaper" required>
+                                <option value="" disabled selected>請選擇測驗用試卷</option>
+                                {% for testpaper in testpapers %}
+                                    <option value="{{ testpaper.id }}">{{ testpaper.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                    </tr>
 
-                <!----------------------------------------------------------------------------------------------------->
-                <div class="time_range">
-                    <label>測驗時間：</label>
-                    <input type="number" name="duration" value="40" required>
-                </div>
-
-                <div class="choose_test_paper">
-                    <label>測驗試卷：</label>
-                    <select name="seleceed_testpaper" required>
-                        <option value="" disabled selected>請選擇測驗用試卷</option>
-                        {% for testpaper in testpapers %}
-                            <option value="{{ testpaper.id }}">{{ testpaper.name }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
+                    <tr>
+                        <td>測驗群組</td>
+                        <td>
+                            <select name="selected_group" required>
+                                <option value="" disabled selected>請選擇受測者群組</option>
+                                {% for group in groups %}
+                                    <option value="{{ group.id }}">{{ group.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                    </tr>
+                </table>
 
                 <div class="btn">
-                    <input type="submit" value="送出">
+                    <button type="submit">送出</button>
+                    <button type="reset">重設</button>
+                    <button type="button" onclick="self.location=document.referrer;">取消</button>&nbsp;
                 </div>
-
-                <div class="btn2">
-                    <input type="reset" value="取消">
-                </div>
-
-                <div class="btn3">
-                    <button type="button" onclick="history.back()">返回</button>
-                </div>
-
             </form>
+
+            <style>
+                .exam_create .title h1{
+                    width: 30%;
+                    font-size: 28px;
+                    color: #FFFEF6;
+                    background-color: #4CCABD;
+                    padding-top: 10px;
+                    padding-bottom: 10px;
+                    padding-right: 15px;
+                    padding-left: 45px;
+                    text-align: center;
+                }
+                .exam_create table{
+                    position: relative;
+                    left: 25%;
+
+                    width: 50%;
+
+                    font-size: 20px;
+                }
+                .exam_create table td{
+                    padding: 4px;
+                }
+                .exam_create form input{
+                    width: 100%;
+                    padding: 6px;
+                }
+
+                .exam_create .btn{
+                    position: relative;
+                    top: 30px;
+                    left: 38%;
+                }
+                .exam_create .btn button{
+                    font-size: 25px;
+                    padding: 10px;
+                    padding-left: 15px;
+                    padding-right: 15px;
+                    color: #FFFEF6;
+                    background-color: #4CCABD;
+                    border: none;
+                }
+
+            </style>
 
             <!---------------------------------------------- Javascript ----------------------------------------------->
 
@@ -74,7 +126,6 @@
             <script type="text/javascript" src="{% static '/bootstrap/js/bootstrap-datetimepicker.fr.js' %}" charset="UTF-8"></script>
 
             <script type="text/javascript">
-
                 $('.form_datetime').datetimepicker({
                     language:  'en',
                     weekStart: 1,
@@ -85,111 +136,7 @@
                     forceParse: 0,
                     showMeridian: 1
                 });
-
             </script>
-
-            <style>
-                .container fieldset h1{
-                    position: absolute;
-                    top: 15%;
-                }
-
-                .container fieldset label{
-                    font-size: 22px;
-                    color: #2C3232;
-                }
-
-                .test_name label{
-                    position: absolute;
-                    left: 5%;
-                    top: 32%;
-                }
-
-                .test_name input{
-                    position: absolute;
-                    left: 15%;
-                    top: 32%;
-
-                    height: 30px;
-
-                }
-
-                .form-group label{
-                    position: absolute;
-                    left: -1.1%;
-                    top: 42%;
-                }
-
-                .input-group{
-                    position: absolute;
-                    left: 15%;
-                    top: 43%;
-                }
-
-                .time_range label{
-                    position: absolute;
-                    left: 5%;
-                    top: 55%;
-                }
-
-                .time_range input{
-                    position: absolute;
-                    left: 15%;
-                    top: 55%;
-
-                    height: 30px;
-                }
-
-                .btn input{
-                    width: 90px;
-                    height: 60px;
-                    border-radius: 5px;
-                    border: 1px;
-                    color: #FFFEF6;
-                    background-color: #4CCABD;
-                    font-size: 20px;
-
-                    position: absolute;
-                    top: 70%;
-                    left: 35%;
-                }
-
-                .btn2 input{
-                    width: 90px;
-                    height: 60px;
-                    border-radius: 5px;
-                    border: 1px;
-                    color: #FFFEF6;
-                    background-color: #5e5e5e;
-                    font-size: 20px;
-
-                    position: absolute;
-                    top: 70%;
-                    left: 45%;
-                }
-
-                .btn3 button{
-                    width: 90px;
-                    height: 60px;
-                    border-radius: 5px;
-                    border: 1px;
-                    color: #FFFEF6;
-                    background-color: #4CCABD;
-                    font-size: 20px;
-
-                    position: absolute;
-                    top: 70%;
-                    left: 55%;
-                }
-
-                .choose_test_paper{
-                    position: absolute;
-                    top: 67%;
-                    left: 5%;
-                }
-
-            </style>
-
-        </fieldset>
+        </div>
     </div>
 {% endblock %}

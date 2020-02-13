@@ -11,140 +11,46 @@
 {% endblock %}
 
 {% block content %}
-
-
     <div class="testpaper">
         <form method="post">
-            <div class="title"><h1>Testpaper Edit.</h1> <h2>&nbsp;</h2></div>
+            <div class="title"><h1>Testpaper Edit.</h1></div>
             {% csrf_token %}
-            <div class="testpaper_name">
-                <label for="testpaper_name">考卷名稱：</label>
-                <input type="text" id="testpaper_name" name="testpaper_name" value="{{ testpaper.name }}" required>
-            </div>
-
-            <br>
-
-            <div class="pick_up_questions">
-                <label for="pick_up_questions">選擇題目：</label>
-            </div>
-
-
-
-
-            <div class="question_types">
-                {% for i in types_num %}
-                    <div class="card" style="width: 18rem; float: left; clear: right;">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ i|readable_question_type }}</h5>
-                            <h6 class="card-subtitle mb-2 text-muted">共 {{ question_types|lookup:i }} 題，已選擇 {{ selected_num|lookup:i }} 題</h6>
-                            <!--<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>-->
-                            <div class="choose">
-                                <a href="{% url 'manual_pick' testpaper_id=testpaper.id question_type=i %}" class="card-link" >手動選擇</a>
-                                {% if question_types|lookup:i == selected_num|lookup:i %}
-                                    <label>自動選擇</label>
-                                {% else %}
-                                    <a href="{% url 'auto_pick' testpaper_id=testpaper.id question_type=i %}" class="card-link" >自動選擇</a>
-                                {% endif %}
+            <table>
+                <tr>
+                    <td class="col-md-1">考卷名稱</td>
+                    <td class="col-md-7" style="text-align: center"><input type="text" id="testpaper_name" name="testpaper_name" value="{{ testpaper.name }}" required></td>
+                </tr>
+                <tr>
+                    <td class="col-md-1">題目類型</td>
+                    <td class="col-md-7">
+                        {% for i in types_num %}
+                            <div class="card" style="width: 18rem; float: left; clear: right;">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ i|readable_question_type }}</h5>
+                                    <h6 class="card-subtitle mb-2 text-muted">共 {{ question_types|lookup:i }} 題，已選擇 {{ selected_num|lookup:i }} 題</h6>
+                                    <div class="choose">
+                                        <a href="{% url 'manual_pick' testpaper_id=testpaper.id question_type=i %}" class="card-link" >手動選擇</a>
+                                        {% if question_types|lookup:i == selected_num|lookup:i %}
+                                            <label>自動選擇</label>
+                                        {% else %}
+                                            <a href="{% url 'auto_pick' testpaper_id=testpaper.id question_type=i %}" class="card-link" >自動選擇</a>
+                                        {% endif %}
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-
-                {% endfor %}
-            </div>
-
+                        {% endfor %}
+                    </td>
+                </tr>
+            </table>
 
             <div class="btn">
-                <input type="submit" value="確認">
-            </div>
-
-            <div class="btn2">
-                <button type="button" onclick="window.location.href='{% url "testpaper_list" %}'">返回</button>
+                <button type="button" onclick="window.location.href='{% url 'testpaper_list' %}'">確認</button>
             </div>
 
             <style>
-                .testpaper form .card{
-                    margin-left: 100px;
-                }
-
-                .testpaper form .card-body{
-                    padding-bottom: 10px;
-                    width: 160%;
-                    height: 70%;
-
-                    text-align: center;
-
-                }
-
-                .testpaper form .btn input{
-                    font-size: 25px;
-                    padding: 10px;
-                    padding-left: 15px;
-                    padding-right: 15px;
-                    color: #FFFEF6;
-                    background-color: #4CCABD;
-                    border: none;
-                    overflow: visible;
-                    position: absolute;
-                    left: 40%;
-                    top: 85%;
-                }
-
-                .testpaper form .btn2 button{
-                    font-size: 25px;
-                    padding: 10px;
-                    padding-left: 15px;
-                    padding-right: 15px;
-                    color: #FFFEF6;
-                    background-color: #4CCABD;
-                    border: none;
-                    overflow: visible;
-                    position: absolute;
-                    left: 50%;
-                    top: 85%;
-                }
-
-                .testpaper form .question_types {
-                    width: 150%;
-                    height: 10%;
-
-                    position: absolute;
-                    top: 45%;
-                    left: -7%;
-                }
-
-                .testpaper form .question_types h5{
-                    font-size: 30px;
-                    text-align: center;
-                    width: 130%;
-                }
-
-                .testpaper form .question_types h6{
-                    font-size: 20px;
-                    text-align: center;
-                    width: 130%;
-                }
-
-                .testpaper form .choose{
-                    width: 130%;
-                    text-align: center;
-                }
-
-                .testpaper form .question_types a {
-                    font-size: 25px;
-                    text-align: center;
-                    width: 120%;
-
-                    text-decoration: none;
-
-                }
-
-                .testpaper form .question_types label{
-                    font-size: 25px;
-                }
-
-
                 .testpaper .title h1{
-                    font-size: 40px;
+                    width: 30%;
+                    font-size: 28px;
                     color: #FFFEF6;
                     background-color: #4CCABD;
                     padding-top: 10px;
@@ -152,41 +58,42 @@
                     padding-right: 15px;
                     padding-left: 45px;
                     text-align: center;
-                    position: absolute;
-                    top: 1%;
+                }
+                .testpaper table{
+                    position: relative;
+                    left: 10%;
+
+                    width: 80%;
+
+                    font-size: 20px;
+                }
+                .testpaper form input{
+                    width: 80%;
+                    padding: 6px;
                 }
 
-                .testpaper .title h2{
-                    background-color: #4CCABD;
-                    padding-top: 10px;
-                    padding-bottom: 22px;
-                    padding-right: 15px;
-                    padding-left: 30px;
-                    position: absolute;
-                    top: 1%;
-                    left: 23%;
+                .testpaper .btn{
+                    position: relative;
+                    top: 30px;
+                    left: 45%;
                 }
-
-                .testpaper form .testpaper_name label{
-                    font-size: 30px;
-                    padding-left: 10%;
-                    position: absolute;
-                    top: 20%;
-                }
-
-                .testpaper form .testpaper_name input{
+                .testpaper .btn button{
                     font-size: 25px;
-                    position: absolute;
-                    top: 20.5%;
-                    left: 20%;
-                    padding-left: 10px;
+                    padding: 10px;
+                    padding-left: 15px;
+                    padding-right: 15px;
+                    color: #FFFEF6;
+                    background-color: #4CCABD;
+                    border: none;
                 }
 
-                .testpaper form .pick_up_questions label{
-                    font-size: 30px;
-                    position: absolute;
-                    top: 30%;
-                    padding-left: 10%;
+                .testpaper form .card{
+                    margin-left: 50px;
+                }
+                .testpaper form .card-body{
+                    padding-bottom: 10px;
+
+                    text-align: center;
                 }
             </style>
         </form>

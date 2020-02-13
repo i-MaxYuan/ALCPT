@@ -9,90 +9,85 @@
 {% block content %}
     <div class="add_questions">
         <form enctype="multipart/form-data" action="" method="post">
-            <div class="title"><h1>Add Questions.</h1> <h2>&nbsp;</h2></div>
+            <div class="title"><h1>Add Questions.</h1></div>
             {% csrf_token %}
 
+            <table>
+                {% if kind == 'listening' %}
+                    <tr>
+                        <td class="col-md-2">試題聽力音檔</td>
+                        <td><input type="file" name="question_file" accept="audio/mpeg" required></td>
+                    </tr>
 
-        {% if kind == 'listening' %}
-            <div class="question_file">
-                <label for="question_file">試題聽力音檔：</label>
-                <input style="font-size: 25px;" type="file" name="question_file" accept="audio/mpeg" required>
-            </div>
+                    <tr>
+                        <td class="col-md-2">試題類型</td>
+                        <td>
+                            <select name="question_type" required>
+                                <option value="" disabled selected>請選擇試題類型</option>
+                                <option value="1">問答</option>
+                                <option value="2">簡短對話</option>
+                            </select>
+                        </td>
+                    </tr>
 
-            <br>
+                {% elif kind == 'reading' %}
+                    <tr>
+                        <td class="col-md-2">試題題目</td>
+                        <td><textarea class="form-control" cols="100" rows="3" name="question_content" placeholder="請輸入試題題目" required></textarea></td>
+                    </tr>
 
-            <div class="type">
-                <label for="question_type">試題類型：</label>
-                <select name="question_type">
-                    <option value="1" selected>問答</option>
-                    <option value="2">簡短對話</option>
-                </select>
-            </div>
+                    <tr>
+                        <td class="col-md-2">試題類型</td>
+                        <td>
+                            <select name="question_type" required>
+                                <option value="" disabled selected>請選擇試題類型</option>
+                                <option value="3">文法</option>
+                                <option value="4">名詞片語</option>
+                                <option value="5">段落理解</option>
+                            </select>
+                        </td>
+                    </tr>
 
+                {% else %}
+                    <tr>
+                        <td colspan="2">Unknown</td>
+                    </tr>
 
-        {% else %}
-            <div class="question_content">
-                <label for="question_content">試題題目：</label>
-                <textarea cols="100" rows="10" name="question_content" placeholder="請輸入試題題目" required></textarea>
-            </div>
+                {% endif %}
 
-            <br>
-            <div class="question_multiCreate">
-                <a href={% url 'question_multiCreate' %} >多重選題</a>
-            </div>
+                <tr>
+                    <td>試題難度</td>
+                    <td>
+                        <select name="question_difficulty">
+                            <option value="1" selected>簡單</option>
+                            <option value="2">中等</option>
+                            <option value="3">困難</option>
+                        </select>
+                    </td>
+                </tr>
 
-            <br>
+                <tr>
+                    <td>試題選項</td>
+                    <td>
+                        <input class="form-control" type="text" name="choice1" placeholder="Enter Choice content..." required>
+                        <input class="form-control" type="text" name="choice2" placeholder="Enter Choice content..." required>
+                        <input class="form-control" type="text" name="choice3" placeholder="Enter Choice content..." required>
+                        <input class="form-control" type="text" name="choice4" placeholder="Enter Choice content..." required>
+                    </td>
+                </tr>
 
-            <div class="type">
-                <label for="question_type">試題類型：</label>
-                <select name="question_type">
-                    <option value="3" selected>文法</option>
-                    <option value="4">名詞片語</option>
-                    <option value="5">段落理解</option>
-                </select>
-            </div>
-
-
-        {% endif %}
-
-            <div class="question_difficulty">
-                <label for="question_difficulty">試題難度：</label>
-                <select name="question_difficulty">
-                    <option value="1" selected>簡單</option>
-                    <option value="2">中等</option>
-                    <option value="3">困難</option>
-                </select>
-            </div>
-
-            <br>
-
-            <div class="question_choice">
-                <label for="question_choice">試題選項：</label>
-                <div class="choice1"><input type="text" name="choice1" placeholder="Enter Choice content..." required></div>
-                <div class="choice2"><input type="text" name="choice2" placeholder="Enter Choice content..." required></div>
-                <div class="choice3"><input type="text" name="choice3" placeholder="Enter Choice content..." required></div>
-                <div class="choice4"><input type="text" name="choice4" placeholder="Enter Choice content..." required></div>
-
-            </div>
-
-            <br>
+            </table>
 
             <div class="btn">
-                <input type="submit" value="送出">
+                <button type="submit" onclick="return confirm('確認新增此試題？')">新增試題</button>
+                <button type="reset">重設</button>
+                <button type="button" onclick="window.location.href='{% url 'tboperator_question_list' %}'">取消</button>
             </div>
-
-            <div class="btn2">
-                <input type="reset" value="取消">
-            </div>
-
-            <div class="btn3">
-                <button type="button" onclick="history.back()">返回</button>
-            </div>
-
 
             <style>
                 .add_questions .title h1{
-                    font-size: 40px;
+                    width: 30%;
+                    font-size: 28px;
                     color: #FFFEF6;
                     background-color: #4CCABD;
                     padding-top: 10px;
@@ -100,147 +95,36 @@
                     padding-right: 15px;
                     padding-left: 45px;
                     text-align: center;
-                    position: absolute;
-                    top: 1%;
                 }
 
-                .add_questions .title h2{
-                    background-color: #4CCABD;
-                    padding-top: 10px;
-                    padding-bottom: 22px;
-                    padding-right: 15px;
-                    padding-left: 30px;
-                    position: absolute;
-                    top: 1%;
-                    left: 23%;
-                }
+                .add_questions table{
+                    position: relative;
+                    left: 15%;
 
-                .add_questions form .question_content label{
-                    font-size: 30px;
-                    padding-left: 30%;
-                    position: absolute;
-                    top: 20%;
-                }
+                    width: 70%;
 
-                .add_questions form .question_content textarea{
-                    font-size: 30px;
-                    width: 600px;
-                    height: 50px;
-                    position: absolute;
-                    top: 20%;
-                    left: 40%;
+                    font-size: 20px;
                 }
-
-                .add_questions form .question_file label{
-                    font-size: 30px;
-                    padding-left: 30%;
-                    position: absolute;
-                    top: 20%;
+                .add_questions table td{
+                    padding: 4px;
                 }
-
-                .add_questions form .question_file input{
-                    padding-left: 10px;
-                    position: absolute;
-                    top: 20.5%;
-                    left: 45%;
+                .add_questions form input{
+                    padding: 6px;
+                    margin: 2px;
+                }
+                .add_questions form textarea{
+                    font-size: 20px;
+                    width: 100%;
+                    height: 45%;
                     padding: 10px;
                 }
 
-                .add_questions form .type label{
-                    font-size: 30px;
-                    padding-left: 30%;
-                    position: absolute;
-                    top: 30%;
-                }
-
-                .add_questions form .type select{
-                    position: absolute;
-                    top: 31%;
-                    left: 40%;
-                    padding-left: 10px;
-
-                    font-size: 25px;
-                }
-
-                .add_questions form .question_difficulty label{
-                    font-size: 30px;
-                    padding-left: 30%;
-                    position: absolute;
-                    top: 40%;
-                }
-
-                .add_questions form .question_difficulty select{
-                    position: absolute;
-                    top: 41%;
-                    left: 40%;
-                    padding-left: 10px;
-
-                    font-size: 25px;
-                }
-
-                .add_questions form .question_choice label{
-                    font-size: 30px;
-                    padding-left: 30%;
-                    position: absolute;
-                    top: 50%;
-                }
-
-                .add_questions form .question_choice input{
-                    padding-left: 10px;
-                    font-size: 25px;
-                }
-
-                .add_questions form .choice1{
-                    position: absolute;
-                    top: 51%;
-                    left: 40%;
-                }
-
-                .add_questions form .choice2{
-                    position: absolute;
-                    top: 58%;
-                    left: 40%;
-                }
-
-                .add_questions form .choice3{
-                    position: absolute;
-                    top: 65%;
-                    left: 40%;
-                }
-
-                .add_questions form .choice4{
-                    position: absolute;
-                    top: 72%;
-                    left: 40%;
-                }
-
-                .add_questions form .btn input{
-                    font-size: 25px;
-                    padding: 10px;
-                    padding-left: 15px;
-                    padding-right: 15px;
-                    color: #FFFEF6;
-                    background-color: #4CCABD;
-                    border: none;
-                    position: absolute;
-                    top: 85%;
+                .add_questions .btn{
+                    position: relative;
+                    top: 30px;
                     left: 35%;
                 }
-
-                .add_questions form .btn2 input{
-                    font-size: 25px;
-                    padding: 10px;
-                    padding-left: 15px;
-                    padding-right: 15px;
-                    color: #FFFEF6;
-                    background-color: #5e5e5e;
-                    border: none;
-                    position: absolute;
-                    top: 85%;
-                    left: 45%;
-                }
-
-                .add_questions form .btn3 button{
+                .add_questions .btn button{
                     font-size: 25px;
                     padding: 10px;
                     padding-left: 15px;
@@ -248,17 +132,6 @@
                     color: #FFFEF6;
                     background-color: #4CCABD;
                     border: none;
-                    position: absolute;
-                    top: 85%;
-                    left: 55%;
-                }
-
-                .add_questions form .question_multiCreate a{
-                    position: absolute;
-                    top: 87%;
-                    left: 85%;
-                    font-size: 30px;
-                    color: #4CCABD;
                 }
             </style>
         </form>

@@ -53,7 +53,7 @@ urlpatterns = [
         url(r'^list$', system.user_list, name='user_list'),
         url(r'^create$', system.user_create, name='user_create'),
         url(r'^multiCreate$', system.user_multiCreate, name='user_multiCreate'),
-        # url(r'^(?P<reg_id>[a-zA-Z0-9]+)$', system.edit_user, name='user_edit'),
+        url(r'^edit/(?P<reg_id>[a-zA-Z0-9]+)$', system.user_edit, name='user_edit'),
 
         url(r'^unit_list/$', system.unit, name='unit_list'),
         url(r'^unit_list/', include([
@@ -76,7 +76,7 @@ urlpatterns = [
             url(r'^(?P<category_id>[0-9]+)/edit$', system.report_category_edit, name='report_category_edit'),
         ])),
 
-        url(r'^view_profile/(?P<user_id>[0-9]+)$', system.view_profile, name='view_profile'),
+        url(r'^view_profile/(?P<reg_id>[a-zA-Z0-9]+)$', system.view_profile, name='view_profile'),
     ])),
 
     # 考試管理員

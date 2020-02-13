@@ -10,7 +10,7 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from alcpt.managerfuncs import testmanager
 from alcpt.decorators import permission_check
 from alcpt.definitions import UserType, QuestionType, QuestionTypeCounts
-from alcpt.models import Exam, TestPaper, Group, Student
+from alcpt.models import Exam, TestPaper, Group, Student, User
 from alcpt.exceptions import *
 
 
@@ -56,23 +56,30 @@ def group_edit(request, group_id):
     try:
         group = Group.objects.get(id=group_id)
         group_members = group.member.all()
-        students = Student.objects.all()
+        # students = Student.objects.all()
+        # change to testees not by student
+        testees = []
+        for user in User.objects.all().filter(name__contains=''):
+            if user.has_perm(UserType.Testee):
+                testees.append(user)
+            else:
+                pass
 
     except ObjectDoesNotExist:
         messages.error(request, 'Group does not exist, group id: {}'.format(group_id))
         return redirect('testee_group_list')
 
     if request.method == 'POST':
-        selected_students = request.POST.getlist('student',)
+        selected_testees = request.POST.getlist('testee',)
 
-        selected_student_list = []
-        for selected_student in selected_students:
-            selected_student_list.append(Student.objects.get(id=selected_student))
+        selected_testee_list = []
+        for selected_testee in selected_testees:
+            selected_testee_list.append(User.objects.get(id=selected_testee))
 
-        for selected_student in selected_student_list:  # add all selected students into group
+        for selected_student in selected_testee_list:  # add all selected students into group
             group.member.add(selected_student)
         for member in group.member.all():               # check those who were unselected, and remove from the group
-            if member not in selected_student_list:
+            if member not in selected_testee_list:
                 group.member.remove(member)
 
         messages.success(request, 'Update group member successfully.')

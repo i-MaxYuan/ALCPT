@@ -31,7 +31,7 @@ def query_users(*, department: Department, grade: int, squadron: Squadron, name:
         queries &= Q(reg_id__icontains=name) | Q(name__icontains=name)
         query_content += "&name="+str(name)
 
-    users = User.objects.filter(queries).order_by('reg_id')
+    users = User.objects.filter(queries).order_by('-privilege')
 
     return query_content, users
 
