@@ -1,125 +1,76 @@
-{% extends 'base.html' %}
+{% extends 'new_base.html' %}
 
 {% load web_filters %}
 
 {% block path %}
-    <a href="">系統管理員</a>
-    <a class="fa fa-angle-double-right fa-lg box"></a>
-    <a href="">回報類別列表</a>
+    <li class="breadcrumb-item active" aria-current="page">ReportCategory List</li>
 {% endblock %}
 
 {% block content %}
-    <div>
-        <div class="add_category">
-            <button type="button" class="btn btn-default btn-lg" onclick="window.location.href='{% url 'report_category_create' %}'">新增回報類別</button>
-
-            <style>
-                .add_category button{
-                    width: 150px;
-                    height: 50px;
-                    color: #FFFEF6;
-                    background-color: #4CCABD;
-                    border-radius: 10px;
-                    text-align: center;
-                    font-size: 20px;
-                    border: none;
-
-                    position: absolute;
-                    top: -15%;
-                    right: 0%;;
-                }
-
-                .add_category button:hover{
-                    color: #FFFEF6;
-                    background-color: #2C3232;
-                    transition: all 0.3s ease;
-                }
-            </style>
-        </div>
-
-        <div class="table-responsive">
-                <table class="table table-hover">
-                    <caption style="font-size: 30px;">回報類別列表</caption>
-                    <thead class="title">
-                        <tr>
-                            <th class="col-md-2">類別代號</th>
-                            <th class="col-md-3">類別名稱</th>
-                            <th class="col-md-3">負責單位</th>
-                            <th class="col-md-2">數量</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                    {% if report_categories %}
-                        {% for category in report_categories %}
-                            <tr onclick="window.location.href='{% url 'report_category_detail' category.id %}'">
-                                <td>{{ category.id }}</td>
-                                <td>{{ category.name }}</td>
-                                <td style="text-align: center;">
-                                    {% if category|responsible_unit:privileges.SystemManager %}
-                                        <span class="badge alert-danger" style="padding-bottom: 8px">{{ privileges.SystemManager.value.1 }}</span>
-                                    {% endif %}
-                                    {% if category|responsible_unit:privileges.TestManager %}
-                                        <span class="badge alert-warning" style="padding-bottom: 8px">{{ privileges.TestManager.value.1 }}</span>
-                                    {% endif %}
-                                    {% if category|responsible_unit:privileges.TBManager %}
-                                        <span class="badge badge-primary" style="padding-bottom: 8px">{{ privileges.TBManager.value.1 }}</span>
-                                    {% endif %}
-                                    {% if category|responsible_unit:privileges.TBOperator %}
-                                        <span class="badge alert-success" style="padding-bottom: 8px">{{ privileges.TBOperator.value.1 }}</span>
-                                    {% endif %}
-                                    {% if category|responsible_unit:privileges.Viewer %}
-                                        <span class="badge alert-info" style="padding-bottom: 8px">{{ privileges.Viewer.value.1 }}</span>
-                                    {% endif %}
-                                    {% if category|responsible_unit:privileges.Testee %}
-                                        <span class="badge alert-inverse" style="padding-bottom: 8px">{{ privileges.Testee.value.1 }}</span>
-                                    {% endif %}
-                                </td>
-                                <td>{{ category.report_set.all.count }}</td>
-                                <td>
-                                    <a href="{% url 'report_category_edit' category.id %}"><i class="fa fa-pencil-square fa-fw mb-2"></i></a>&nbsp;
-                                </td>
+    <main class="report-category-list">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-12 table-responsive-md">
+                    <h2>ReportCategory List.</h2>
+                    <table class="table table-hover table-bordered table-striped table-mc-light-blue">
+                        <thead class="thead-light">
+                            <tr>
+                                <th class="text-center">Category ID.</th>
+                                <th class="text-center">Name.</th>
+                                <th class="text-center">Responsibility.</th>
+                                <th class="text-center">Number.</th>
+                                <th>
+                                    <div class="add text-center">
+                                        <button class="btn btn-secondary " type="button" onclick="window.location.href='{% url 'report_category_create' %}'"><i class="fa fa-plus"></i></button>
+                                    </div>
+                                </th>
                             </tr>
-                        {% endfor %}
-                    {% else %}
-                        <h2>目前暫無資料</h2>
-                    {% endif %}
-                    </tbody>
-                </table>
+                        </thead>
 
-            <style>
-                .table-responsive .table{
-                    text-align: center;
-                }
-
-                .table-hover a{
-                    visibility: hidden;
-                }
-                .table-hover > tbody > tr:hover{
-                    cursor: pointer;
-                    background-color: #4CCABD;
-                }
-                .table-hover > tbody > tr:hover a, td{
-                    visibility: visible;
-                }
-
-                .title{
-                    font-size: 20px;
-                }
-
-                .title tr th{
-                    text-align: center;
-                }
-
-                .table tbody{
-                    font-size: 18px;
-                }
-
-                .table tbody td a{
-                    color: #2C3232;
-                }
-            </style>
+                        <tbody>
+                            <div class="add-secret">
+                                <button type="button" class="btn btn-secondary" onclick="window.location.href='{% url 'testee_group_create' %}'"><i class="fa fa-plus"></i></button>
+                            </div>
+                            {% if report_categories %}
+                                {% for category in report_categories %}
+                                    <tr style="cursor: pointer" onclick="window.location.href='{% url 'report_category_detail' category.id %}'">
+                                        <td class="text-center" data-title="Category ID" >{{ category.id }}</td>
+                                        <td class="text-center" data-title="Name">{{ category.name }}</td>
+                                        <td class="text-center" data-title="Respo" class="text-center">
+                                            {% if category|responsible_unit:privileges.SystemManager %}
+                                                <span class="badge alert-danger">{{ privileges.SystemManager.value.1 }}</span>
+                                            {% endif %}
+                                            {% if category|responsible_unit:privileges.TestManager %}
+                                                <span class="badge alert-warning">{{ privileges.TestManager.value.1 }}</span>
+                                            {% endif %}
+                                            {% if category|responsible_unit:privileges.TBManager %}
+                                                <span class="badge badge-primary">{{ privileges.TBManager.value.1 }}</span>
+                                            {% endif %}
+                                            {% if category|responsible_unit:privileges.TBOperator %}
+                                                <span class="badge alert-success">{{ privileges.TBOperator.value.1 }}</span>
+                                            {% endif %}
+                                            {% if category|responsible_unit:privileges.Viewer %}
+                                                <span class="badge alert-info" style>{{ privileges.Viewer.value.1 }}</span>
+                                            {% endif %}
+                                            {% if category|responsible_unit:privileges.Testee %}
+                                                <span class="badge alert-dark">{{ privileges.Testee.value.1 }}</span>
+                                            {% endif %}
+                                        </td>
+                                        <td class="text-center" data-title="Number">{{ category.report_set.all.count }}</td>
+                                        <td class="text-center" >
+                                            <a href="{% url 'report_category_edit' category.id %}"><i class="fa fa-pencil-square-o fa-fw mb-2"></i></a>&nbsp;
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td class="text-center" colspan="5">No Data.</td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-    </div>
+    </main>
 {% endblock %}

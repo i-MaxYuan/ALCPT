@@ -1,378 +1,190 @@
-{% extends 'base.html' %}
+{% extends 'new_base.html' %}
 
 {% load web_filters %}
 
+{% block scripts %}
+    <script>
+        $(document).ready(function() {
+            $('.mdb-select').materialSelect();
+        });
+    </script>
+{% endblock %}
+
 {% block path %}
-    <a href="">系統管理員</a>
-    <a class="fa fa-angle-double-right fa-lg box"></a>
-    <a href="">使用者列表</a>
+    <li class="breadcrumb-item active" aria-current="page">User List</li>
 {% endblock %}
 
 {% block content %}
-    <div class="add_users">
-        <button type="button" class="btn btn-default btn-lg" onclick="window.location.href='{% url 'user_create' %}'">新增使用者</button>
+    <main class="user-list">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-12">
+                    <!-- 搜尋 -->
+                    <form class="form-inline md-form form-group-sm mt-0" method="get">
+                    <input class="form-control" type="text" name="name" {% if keywords.name %}value="{{ keywords.name }}"{% endif %} placeholder="Search" aria-label="Search">
 
-        <style>
-            .add_users button{
-                width: 130px;
-                height: 50px;
-                color: #FFFEF6;
-                background-color: #4CCABD;
-                border-radius: 10px;
-                text-align: center;
-                font-size: 20px;
-                border: none;
-                box-shadow: 0px 3px 8px 0px #486260;
-
-                position: absolute;
-                top: -15%;
-                right: 8%;
-            }
-
-            .add_users button:hover{
-                color: #FFFEF6;
-                background-color: #2C3232;
-                transition: all 0.3s ease;
-            }
-        </style>
-    </div>
-
-    <!-- 表格的部分 -->
-    <div class="table-responsive">
-        {% if users %}
-            <table class="table table-hover">
-                <caption style="font-size: 30px;">&nbsp;&nbsp;使用者列表（共 {{ users.count }} 條結果）</caption>
-                <thead class="title">
-                    <tr>
-                        <th class="col-md-1" style="text-align: left">帳號</th>
-                        <th class="col-md-1">姓名</th>
-                        <th class="col-md-1">身份</th>
-                        <th class="col-md-6">權限</th>
-                        <th class="col-md-2">最後登入時間</th>
-                        <th class="col-md-1"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                {% for user in userList %}
-                    <tr onclick="window.location.href='{% url "view_profile" user.reg_id %}'">
-                        <td style="text-align: left; vertical-align:middle;">{{ user.reg_id }}</td>
-                        <td style="vertical-align:middle;">{{ user.name }}</td>
-                        <td style="vertical-align:middle;">{{ user.identity|readableIdentity }}</td>
-                        <td style="text-align: left;">
-                            {% if user|has_perms:privileges.SystemManager %}
-                                <span class="badge alert-danger" style="padding-bottom: 8px">{{ privileges.SystemManager.value.1 }}</span>
-                            {% endif %}
-                            {% if user|has_perms:privileges.TestManager %}
-                                <span class="badge alert-warning" style="padding-bottom: 8px">{{ privileges.TestManager.value.1 }}</span>
-                            {% endif %}
-                            {% if user|has_perms:privileges.TBManager %}
-                                <span class="badge badge-primary" style="padding-bottom: 8px">{{ privileges.TBManager.value.1 }}</span>
-                            {% endif %}
-                            {% if user|has_perms:privileges.TBOperator %}
-                                <span class="badge alert-success" style="padding-bottom: 8px">{{ privileges.TBOperator.value.1 }}</span>
-                            {% endif %}
-                            {% if user|has_perms:privileges.Viewer %}
-                                <span class="badge alert-info" style="padding-bottom: 8px">{{ privileges.Viewer.value.1 }}</span>
-                            {% endif %}
-                            {% if user|has_perms:privileges.Testee %}
-                                <span class="badge alert-inverse" style="padding-bottom: 8px">{{ privileges.Testee.value.1 }}</span>
-                            {% endif %}
-                        </td>
-                        <td style="vertical-align:middle; font-size: 14px">{{ user.last_login|date:'Y年m月d日, H時i分' }}</td>
-                        <td>
-                            <a href="{% url 'user_edit' user.reg_id %}"><i class="fa fa-pencil-square fa-fw mb-2"></i></a>
-                        </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        {% else %}
-            <h2>目前暫無資料</h2>
-        {% endif %}
-        <style>
-            .table-responsive .table{
-                text-align: center;
-            }
-
-            table-hover a{
-                    visibility: hidden;
-            }
-            .table-hover > tbody > tr:hover{
-                cursor: pointer;
-                background-color: #4CCABD;
-            }
-            .table-hover > tbody > tr:hover a, td{
-                visibility: visible;
-            }
-
-            .title{
-                font-size: 20px;
-            }
-
-            .title tr th{
-                text-align: center;
-            }
-
-            .table tbody{
-                font-size: 18px;
-            }
-
-            .table tbody td a{
-                color: #2C3232;
-            }
-
-        </style>
-    </div>
-
-    <!-- 搜尋 -->
-    <div class="container-flu" >
-        <div class="btn-group float-right">
-          <button type="button" class="btn btn-primary dropdown-toggle pull-right" data-toggle="dropdown">
-              <i class="fa fa-search" ></i>
-          </button>
-          <!-- 重點在這 -->
-          <div class="dropdown-menu dropdown-menu-right">
-              <div class="search_bar">
-                <h1>搜尋條件</h1>
-                <form action="" method="get">
-                    <div class="department">
-                        <h1>學系：</h1>
-                        <select name="department">
-                            <option value="0" selected>所有學系</option>
-                            {% for department in departments %}
-                                <option value="{{ department.id }}" {% if department.id == keywords.department.id %} selected {% endif %}>{{ department.name }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-
-                    <div class="number">
-                        <h1>年班：</h1>
-                        <input type="number" name="grade" value="{{ keywords.grade }}" placeholder="年班">
-                    </div>
-
-                    {% if request.user|has_perm:'TBManager' %}
-                        <div class="squadron">
-                            <h1>中隊：</h1>
-                            <select name="squadron">
-                                <option value="0" selected>所有中隊</option>
-                                {% for squadron in squadrons %}
-                                    <option value="{{ squadron.id }}" {% if squadron.id == keywords.squadron.id %} selected {% endif %}>{{ squadron.name }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                    {% endif %}
-
-                    <div class="name">
-                        <h1>學號／姓名：</h1>
-                        <input type="text" name="name" {% if keywords.name %}value="{{ keywords.name }}" {% else %}value="" {% endif %} placeholder="學號/姓名">
-                    </div>
-
-                    <div class="search_btn">
-                        <button type="submit">搜尋</button>
-                    </div>
-                </form>
-            </div>
-          </div>
-
-            <style>
-                .container-flu button{
-                    height: 55px;
-                    width: 55px;
-                    background-color: #4CCABD;
-                    border: none;
-                    box-shadow: 0px 3px 8px 0px #486260;
-
-
-                }
-
-
-                .container-flu{
-                    position: absolute;
-                    top: -24%;
-                    right: -2%;
-                }
-
-                .btn-group {
-                    position: absolute;
-                    top: 10%;
-                    right: 24px;
-                }
-
-                .btn-group .dropdown-menu{
-                    height: 150px;
-                    width: 400px;
-                    padding-left: 10px;
-                    padding-right: 10px;
-                    text-align: center;
-
-                    position: absolute;
-                    top: -40%;
-                    right: 97%;
-
-                    opacity: 0.8;
-                }
-
-                .dropdown-menu form{
-                    height: 150%;
-                    width: 700px;
-                }
-
-                .search_bar h1{
-                    width: 100px;
-                    height: 30px;
-                    font-size: 20px;
-                    position: absolute;
-                    top: 3px;
-                    left: 10px;
-                }
-
-                .department select{
-                    position: absolute;
-                    top: 42%;
-                    left: 15%;
-                }
-
-                .department h1{
-                    font-size: 18px;
-                    position: absolute;
-                    top: 30%;
-                    left: 20px;
-                }
-
-                .number h1{
-                    font-size: 18px;
-                    position: absolute;
-                    top: 30%;
-                    left: 33%;
-                }
-
-                .number input{
-                    position: absolute;
-                    top: 39%;
-                    left: 45%;
-
-                    border: 0.65px solid ;
-                    border-radius: 10px;
-                    padding: 5px;
-                    width: 15%;
-                }
-
-                .squadron h1{
-                    font-size: 18px;
-                    position: absolute;
-                    top: 30%;
-                    left: 61%;
-                }
-
-                .squadron select{
-                    position: absolute;
-                    top: 42%;
-                    left: 73%;
-                }
-
-                .name h1{
-                    font-size: 18px;
-                    position: absolute;
-                    top: 55%;
-                    left: 6%;
-
-                    width: 15%;
-                }
-
-                .name input{
-                    position: absolute;
-                    top: 65%;
-                    left: 22%;
-
-                    border: 0.65px solid;
-                    border-radius: 10px;
-                    padding: 5px;
-                    width: 30%;
-                }
-
-                .search_btn button{
-                    width: 60px;
-                    height: 30px;
-                    border-radius: 5px;
-                    color: #FFFEF6;
-
-                    position: absolute;
-                    right: 20px;
-                    top: 67%;
-
-                    opacity: 1;
-                }
-            </style>
-        </div>
-    </div>
-
-    <!-- 頁碼的部分 -->
-    <div>
-        <div class="pagination">
-            <div class="pager_group1">
-                <ul class="pager">
-                    <li class="previous" style="color: #2C3232"><a href="?page=1{% if query_content %}&{{ query_content }}{% endif %}">&laquo; first</a></li>
-                    <li style="padding-left: 500px; padding-right: 490px">&nbsp;</li>
-                    <li class="next"><a href="?page={{ userList.paginator.num_pages }}{% if query_content %}&{{ query_content }}{% endif %}">last &raquo;</a></li>
-                </ul>
-            </div>
-
-            <div class="pager_group2">
-                <nav aria-label="Page navigation">
-                  <ul class="pagination justify-content-center">
-                    <li {% if not userList.has_previous %}class="page-item disabled"{% endif %}>
-                        {% if userList.has_previous %}
-                            <a class="page-link" href="?page={{ userList.previous_page_number }}{% if query_content %}&{{ query_content }}{% endif %}" tabindex="-1">Previous</a>
-                        {% else %}
-                            <a href="javascript:void(0)">Previous</a>
-                        {% endif %}
-                    </li>
-                    <li class="page-item">
-                        {% for page in paginator.page_range %}
-                            {% if page == sheets.number %}
-                                <a class="page-link" href="?page={{ page }}{% if query_content %}&{{ query_content }}{% endif %}">{{ page }}</a>
-                            {% else %}
-                                <a href="?page={{ page }}{% if query_content %}&{{ query_content }}{% endif %}">{{ page }}</a>
-                            {% endif %}
+                    <label class="mr-sm-2" for="inlineFormCustomSelect">Department.</label>
+                    <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" name="department">
+                        <option value="" selected>All</option>
+                        {% for department in departments %}
+                            <option value="{{ department.id }}" {% if department.id == keywords.department.id %} selected {% endif %}>{{ department.name }}</option>
                         {% endfor %}
-                    </li>
-                    <li  {% if not userList.has_next %}class="page-item disabled"{% endif %}>
-                        {% if userList.has_next %}
-                            <a class="page-link" href="?page={{ userList.next_page_number }}{% if query_content %}&{{ query_content }}{% endif %}">Next</a>
-                        {% else %}
-                            <a href="javascript:void(0)">Next</a>
-                        {% endif %}
-                    </li>
-                  </ul>
-                </nav>
+                    </select>
 
+
+                    <label class="mr-sm-2" for="inlineFormCustomSelect">Squadron.</label>
+                    <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" name="squadron">
+                        <option value="" selected>All</option>
+                        {% for squadron in squadrons %}
+                            <option value="{{ squadron.id }}" {% if squadron.id == keywords.squadron.id %} selected {% endif %}>{{ squadron.name }}</option>
+                        {% endfor %}
+                    </select>
+
+
+                    <label class="mr-sm-2" for="inlineFormCustomSelect">Grade.</label>
+                    <input class="form-control" type="number" name="grade" {% if keywords.grade %}value="{{ keywords.grade }}"{% endif %} placeholder="grade...">
+
+                    <button class="btn btn-primary btn-group-justified" type="submit">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </form>
+                </div>
             </div>
 
+            <div class="row">
+                <!--資料區塊-->
+                <div class="col-md-12 table-responsive-md">
+                    <h2>User List.（Total: {{ users.count }}）</h2>
+                    <table class="table table-bordered table-striped table-hover table-mc-light-blue">
+                        <thead class="thead-light">
+                            <tr>
+                                <th class="text-center">Account.</th>
+                                <th class="text-center">Name.</th>
+                                <th class="text-center">Identity.</th>
+                                <th class="text-center">Privilege.</th>
+                                <th class="text-center">Last Login.</th>
+                                <th>
+                                    <div class="add">
+                                        <button type="button" class="btn btn-secondary" onclick="window.location.href='{% url 'user_create' %}'"><i class="fa fa-plus"></i></button>
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
 
-            <style>
-                .pager_group1{
-                    text-decoration: none;
-                    position: fixed;
-                    bottom: 9%;
-                    left: 10%;
-                    right: 10%;
-                }
+                        <tbody>
+                            <div class="add-secret">
+                                <button type="button" class="btn btn-secondary" onclick="window.location.href='{% url 'testee_group_create' %}'"><i class="fa fa-plus"></i></button>
+                            </div>
+                            {% if userList %}
+                                {% for user in userList %}
+                                    <tr class="align-center" style="cursor: pointer" onclick="window.location.href='{% url "view_profile" user.reg_id %}'">
+                                        <td class="text-center" data-title="Account：、">{{ user.reg_id }}</td>
 
-                .pager_group2{
-                    position: fixed;
-                    bottom: 14%;
-                    right: 50%;
+                                        <td class="text-center" data-title="Name：">{{ user.name }}</td>
 
-                    transform: translate(50%,50%);
-                }
+                                        <td class="text-center" data-title="Identity：">
+                                            {% if user.identity %}
+                                                {{ user.identity|readableIdentity }}
+                                            {% else %}
+                                                尚未設定
+                                            {% endif %}
+                                        </td>
 
-            </style>
+                                        <td data-title="Privilege：">
+                                            {% if user|has_perms:privileges.SystemManager %}
+                                                <span class="badge alert-danger">{{ privileges.SystemManager.value.1 }}</span>
+                                            {% endif %}
+                                            {% if user|has_perms:privileges.TestManager %}
+                                                <span class="badge alert-warning">{{ privileges.TestManager.value.1 }}</span>
+                                            {% endif %}
+                                            {% if user|has_perms:privileges.TBManager %}
+                                                <span class="badge badge-primary">{{ privileges.TBManager.value.1 }}</span>
+                                            {% endif %}
+                                            {% if user|has_perms:privileges.TBOperator %}
+                                                <span class="badge alert-success">{{ privileges.TBOperator.value.1 }}</span>
+                                            {% endif %}
+                                            {% if user|has_perms:privileges.Viewer %}
+                                                <span class="badge alert-info">{{ privileges.Viewer.value.1 }}</span>
+                                            {% endif %}
+                                            {% if user|has_perms:privileges.Testee %}
+                                                <span class="badge alert-dark">{{ privileges.Testee.value.1 }}</span>
+                                            {% endif %}
+                                        </td>
+
+                                        <td data-title="Last Login：">
+                                            {% if user.last_login %}
+                                                {{ user.last_login|date:'Y/m/d, H:i' }}
+                                            {% else %}
+                                                Not logged in
+                                            {% endif %}
+                                        </td>
+
+                                        <td>
+                                            <a href="{% url 'user_edit' user.reg_id %}"><i class="fa fa-pencil-square-o"></i></a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td class="text-center" colspan="8">
+                                        {% if query_content and not users %}
+                                            Cannot query these conditions「{{ query_content|readable_user_query_content }}」users。
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
+    </main>
 
-        <style>
-            .pagination{
-                font-size: 20px;
-            }
-        </style>
-    </div>
+    <style>
+        .user-list table > tbody > tr > td{
+            vertical-align: middle;
+        }
+        .user-list .table-responsive-md tr > td > a{
+            display: none;
+        }
+        .user-list .table-responsive-md tr:hover > td > a{
+            display: block;
+        }
+    </style>
+{% endblock %}
+
+{% block pagination %}
+    <ul class="pagination justify-content-center">
+        <li class="page-item"><a class="page-link" href="?page=1{{ query_content }}"><i class="fa fa-angle-double-left"></i></a></li>
+
+        <li class="page-item {% if not userList.has_previous %}disable{% endif %}">
+            {% if userList.has_previous %}
+                <a class="page-link" href="?page={{ userList.previous_page_number }}{{ query_content }}" tabindex="-1"><i class="fa fa-angle-left"></i></a>
+            {% else %}
+                <a class="page-link" href="javascript:void(0);"><i class="fa fa-angle-left"></i></a>
+            {% endif %}
+        </li>
+
+        {% for page in paginator.page_range %}
+            {% if page == userList.number %}
+                <li class="page-item active">
+                    <a class="page-link" href="?page={{ page }}{{ query_content }}">{{ page }}</a>
+                </li>
+            {% else %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page }}{{ query_content }}">{{ page }}</a>
+                </li>
+            {% endif %}
+        {% endfor %}
+
+        <li class="page-item {% if not userList.has_next %}disable{% endif %}">
+            {% if userList.has_next %}
+                <a class="page-link" href="?page={{ userList.next_page_number }}{{ query_content }}"><i class="fa fa-angle-right"></i></a>
+            {% else %}
+                <a class="page-link" href="javascript:void(0);"><i class="fa fa-angle-right"></i></a>
+            {% endif %}
+        </li>
+
+        <li class="page-item"><a class="page-link" href="?page={{ userList.paginator.num_pages }}{{ query_content }}"><i class="fa fa-angle-double-right"></i></a></li>
+    </ul>
 {% endblock %}

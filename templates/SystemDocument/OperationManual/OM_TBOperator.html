@@ -1,0 +1,93 @@
+{% extends 'OperationManual_base.html' %}
+
+{% load static %}
+
+{% block content %}
+    <main id="om-content">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-12 text-left">
+                    <h1>題庫操作員說明</h1>
+                    <p>
+                        <ul>
+                            <li>主要負責輸入紙本題目至系統中，再提交給<a href="{% url 'OM_TBManager' %}">題庫管理員</a>審核。</li>
+                            <img src="{% static '/images/om/tbo/om-tbo01.png' %}" width="50%">
+                            <ul>
+                                <li>Question List：試題列表</li>
+                                <li>Create Listening：建立聽力試題</li>
+                                <li>Create Reading：建立閱讀試題</li>
+                            </ul>
+                        </ul>
+                    </p>
+
+                    <hr>
+
+                    <h3>Question List：試題列表</h3>
+                    <img src="{% static '/images/om/tbo/om-tbo02.png' %}" width="70%">
+                    <p>
+                        <ul>
+                            <li><button class="btn btn-success">Submit</button>：題庫操作員提交該試題等待審核。</li>
+                            <li>
+                                <button class="btn btn-warning">Edit</button>：題庫操作員編輯該試題，並使該試題進入<code>Saved</code>。
+                                <ul>
+                                    <li>編輯試題僅能更改該試題的「<a href="{% url 'OM_TBManager' %}">試題類型</a>」及「正確答案」。</li>
+                                    <li style="color: red">更改選項內容持續開發中。</li>
+                                </ul>
+                            </li>
+                            <li><button class="btn btn-danger">Delete</button>：題庫操作員刪除該試題。</li>
+                        </ul>
+                    </p>
+
+                    <hr>
+
+                    <h3>Create Listening：建立聽力試題</h3>
+                    <img src="{% static '/images/om/tbo/om-tbo03.png' %}" width="50%">
+                    <p>
+                        <ul>
+                            <li>「File.」：選擇該試題音檔。</li>
+                            <li>「Type.」：選擇該試題<a href="{% url 'OM_TBManager' %}">試題類型</a>。</li>
+                            <li>
+                                「Difficulty.」：設置該試題難度。difficulty區分為：
+                                <ul>
+                                    <li>Easy</li>
+                                    <li>Medium</li>
+                                    <li>Hard</li>
+                                </ul>
+                            </li>
+                            <li>「Question Option.」：該試題的４個選項。</li>
+                        </ul>
+                    </p>
+
+                    <hr>
+
+                    <h3>Create Reading：建立閱讀試題</h3>
+                    <img src="{% static '/images/om/tbo/om-tbo04.png' %}" width="60%">
+                    <p>
+                        <ul>
+                            <li>「Question Content.」：閱讀試題的題目內容。</li>
+                            <li>其餘欄位請參考建立聽力試題。</li>
+                        </ul>
+                    </p>
+
+                    <hr>
+
+                    <h3>多重建立試題</h3>
+                    <img src="{% static '/images/om/tbo/om-tbo05.png' %}" width="40%">
+                    <p>
+                        <ul>
+                            <li>以匯入Excel檔（xls, xlsx）來建立試題。</li>
+                            <li>
+                                「File Format.」：規範該檔案需如何輸入資料，題庫操作員需遵守以下資料順序：
+                                <ul>
+                                    <li style="color: red">試題內容➡️選項１➡️選項２️➡️選項３️➡️選項４️➡️答案（填入1,2,3,4）➡️試題類型（填入1,2,3）➡️難度(填入1,2,3)️</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </p>
+
+                    <hr class="featurette-divider">
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

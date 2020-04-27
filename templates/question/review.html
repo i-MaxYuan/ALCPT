@@ -1,207 +1,199 @@
-{% extends 'base_long_page.html' %}
+{% extends 'new_base.html' %}
 
 {% load web_filters %}
 
+{% block scripts %}
+    <script>
+        function toggle(index){
+            var mainDataIndex = 'mainData'+index;
+            var mainData = document.getElementById(mainDataIndex);
+            var dataIndex = 'detailData'+index;
+            var data = document.getElementById(dataIndex);
+            var summaryIndex = 'summary_Q_content'+index;
+            var summary_Q_content = document.getElementById(summaryIndex);
+            var fullIndex = 'full_Q_content'+index;
+            var full_Q_content = document.getElementById(fullIndex);
+            var iconRightIndex = 'iconRight'+index;
+            var iconRight = document.getElementById(iconRightIndex);
+            var iconDownIndex = 'iconDown'+index;
+            var iconDown = document.getElementById(iconDownIndex);
+
+            if (data.style.display === "none"){
+                data.style.display = "table-row";
+                iconRight.style.display = "none";
+                iconDown.style.display = "block";
+                summary_Q_content.style.display = 'none';
+                full_Q_content.style.display = 'block';
+            } else {
+                data.style.display = "none";
+                iconRight.style.display = "block";
+                iconDown.style.display = "none";
+                summary_Q_content.style.display = 'block';
+                full_Q_content.style.display = 'none';
+            }
+        }
+    </script>
+{% endblock %}
+
 {% block path %}
-    <a href="">題庫管理員</a>
-    <a class="fa fa-angle-double-right fa-lg box"></a>
-    <a href="">審核試題</a>
+    <li class="breadcrumb-item active" aria-current="page">QUestion Review</li>
 {% endblock %}
 
 {% block content%}
-    <!-- 表格的部分 -->
-    <div class="table-responsive">
-        <table class="table table-hover">
-        {% if reviewed_questions %}
-            <caption style="font-size: 30px;">&nbsp;&nbsp;題目列表（共{% if query_content %}{{ questions.count }}{% elif reviewed_questions %}{{ reviewed_questions.count }}{% else %} 0 {% endif %}條結果）</caption>
-            <thead class="title">
-                <tr>
-                    <th class="col-md-1">ＩＤ</th>
-                    <th class="col-md-4">題目</th>
-                    <th class="col-md-2">類型</th>
-                    <th class="col-md-2">題目選項</th>
-                    <th class="col-md-1">審核</th>
-                    <th class="col-md-1"></th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for question in questionList %}
-                    <tr>
-                        <td style="vertical-align: middle">{{ question.id }}</td>
-                        <td style="text-align: left; vertical-align: middle">
-                            {% if question.q_file %}
-                                <audio controls preload="none">
-                                    <source src="{{ question.q_file }}" type="audio/mpeg">
-                                    Your browser does not support the audio tag.
-                                </audio>
-                            {% else %}
-                                {{ question.q_content }}
-                            {% endif %}
-                        </td>
-                        <td style="text-align: center; vertical-align: middle">{{ question.q_type|readable_question_type }}</td>
-                        <td style="text-align: left; vertical-align: middle">
-                            {% for option in question.choice_set.all %}
-                                {% if option.is_answer %}
-                                    <span style="color: red"><li>{{ option }}</li></span>
+    <main class="review-table">
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="col-md-12">
+                    <div class="table-responsive-md">
+                        <h2>Review.（Total: {{ reviewed_questions.count }}）</h2>
+
+                        <table class="table table-hover table-bordered table-striped table-mc-light-blue">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th scope="col"></th>
+                                    <th scope="col">Serial.</th>
+                                    <th scope="col">Content.</th>
+                                    <th scope="col">Type.</th>
+                                    <th scope="col">State.</th>
+                                    <th scope="col">Other.</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% if reviewed_questions %}
+                                    {% for question in questionList %}
+                                        <tr>
+                                            <td class="text-center" id="mainData{{ forloop.counter }}" onclick="toggle('{{ forloop.counter }}')" style="cursor: pointer;">
+                                                <i id="iconRight{{ forloop.counter }}" class="fa fa-angle-right"></i>
+                                                <i id="iconDown{{ forloop.counter }}" class="fa fa-angle-down" style="display: none;"></i>
+                                            </td>
+
+                                            <td class="text-center">{{ question.id }}</td>
+
+                                            <td class="text-center">
+                                                {% if question.q_file %}
+                                                    <audio controls preload="none">
+                                                        <source src="{{ question.q_file.url }}" type="audio/mpeg">
+                                                        Your browser does not support the audio tag.
+                                                    </audio>
+                                                {% else %}
+                                                    <div id="summary_Q_content{{ forloop.counter }}" class="text-left">
+                                                        {{ question.q_content|summary:90 }}
+                                                    </div>
+                                                    <div id="full_Q_content{{ forloop.counter }}" style="display: none" class="text-left">
+                                                        {{ question.q_content|linebreaksbr }}
+                                                    </div>
+                                                {% endif %}
+                                            </td>
+
+                                            <td class="text-center">{{ question.q_type|readable_question_type }}</td>
+
+                                            <td>
+                                                <button type="button"
+                                                {% if question.state == 1 %}
+                                                    class="btn btn-success"
+                                                {% elif question.state == 2 or question.state == 4 %}
+                                                    class="btn btn-danger"
+                                                {% elif question.state == 3 %}
+                                                    class="btn btn-light"
+                                                {% elif question.state == 5 %}
+                                                    class="btn btn-dark"
+                                                {% elif question.state == 6 %}
+                                                    class="btn btn-secondary"
+                                                {% endif %}
+                                                 disabled>{{ question.state|readable_state }}</button>
+                                            </td>
+
+                                            <td>
+                                                <a href="{% url 'question_pass' question.id %}" class="btn btn-success" onclick="return confirm('Sure to pass?')">Pass</a>
+                                                <button type="button" class="btn btn-warning" onclick="window.location.href='{% url 'question_edit' question.id %}'">Edit</button>
+                                                <button type="button" class="btn btn-danger" onclick="window.location.href='{% url 'question_reject' question.id %}'">Reject</button>
+                                            </td>
+                                        </tr>
+
+                                        <tr id="detailData{{ forloop.counter }}" style="display: none;">
+                                            <td colspan="2"></td>
+                                            <td style="text-align: left;">
+                                                <ol type="A">
+                                                    {% for option in question.choice_set.all %}
+                                                        {% if option.is_answer %}
+                                                            <li style="color: red">{{ option }}</li>
+                                                        {% else %}
+                                                            <li>{{ option }}</li>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </ol>
+                                            </td>
+                                            <td colspan="2" style="font-size: 14px; text-align: left">
+                                                {% if question.faulted_reason %}
+                                                    {{ question.faulted_reason }}
+                                                {% endif %}
+                                            </td>
+                                            <td style="text-align: left; font-size: 14px">
+                                                <ul style="font-size: 14px; list-style: none">
+                                                      <li>Last update:{{ question.update_time|date:'H:i, Y/m/d' }}</li>
+                                                      <li>Issued:{{ question.issued_freq }}</li>
+                                                      <li>Difficulty:{{ question.difficulty }}</li>
+                                                      <li>Creator:{{ question.created_by.name }}</li>
+                                                  </ul>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
                                 {% else %}
-                                    <li>{{ option }}</li>
+                                    <tr>
+                                        <td colspan="6">No Data.</td>
+                                    </tr>
                                 {% endif %}
-                            {% endfor %}
-                        </td>
-
-                        <td class="functions-btn" style="vertical-align: middle">
-                            <button id="pass" type="button" onclick="window.location.href='{% url 'question_pass' question.id %}'">Pass</button>
-                            <button id="reject" type="button" onclick="window.location.href='{% url 'question_reject' question.id %}'">Reject</button>
-                            <button type="button" onclick="window.location.href='{% url 'question_edit' question.id %}'">edit</button>
-                        </td>
-
-                        <td style="vertical-align: middle">
-                            <div class="detail">
-                                <button type="button" class="btn btn-primary dropdown-toggle pull-right" data-toggle="dropdown" style="background-color: #4CCABD;
-                                border-color: #FFFEF6;">
-                                    <i class="fa fa-ellipsis-h"></i>
-                                </button>
-                                <div class="dropdown-menu dropdown-menu-right" style="width: 300px">
-                                      <ul style="text-align: left; font-size: 16px">
-                                          <li>備註：{% if question.fault_reason %}{{ question.fault_reason }}{% else %}無{% endif %}</li>
-                                          <li>更新時間：{{ question.update_time|date:'Y年m月d日, H時i分' }}</li>
-                                          <li>難度：{{ question.difficulty }}</li>
-                                          <li>建立者：{{ question.created_by.name }}</li>
-                                      </ul>
-                                </div>
-                            </div>
-                        </td>
-
-                        <style>
-                            .detail li{
-                                list-style: none;
-                                padding-left: 10px;
-                            }
-
-                            .functions-btn button{
-                                width: 70px;
-
-                                font-size: 16px;
-                                text-align: center;
-
-                                padding: 4px;
-                                margin: 2px;
-                            }
-                            .functions-btn #pass{
-                                background-color: aquamarine;
-                            }
-                            .functions-btn #reject{
-                                background-color: orangered;
-                            }
-                            .functions-btn button:hover{
-                                cursor: pointer;
-                            }
-                        </style>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        {% else %}
-            <h2>目前暫無資料</h2>
-        {% endif %}
-
-        <style>
-            .table-responsive .table{
-                text-align: center;
-            }
-
-            .table-hover > tbody > tr:hover > td,
-            .table-hover > tbody > tr:hover > th {
-                background-color: #4CCABD;
-            }
-
-            .title{
-                font-size: 20px;
-            }
-
-            .title tr th{
-                text-align: center;
-            }
-
-            .table tbody{
-                font-size: 18px;
-            }
-
-            .table tbody td a{
-                color: #2C3232;
-            }
-        </style>
-
-    </div>
-
-    <!-- 頁碼的部分 -->
-    <div>
-        <div class="pagination">
-            <div class="pager_group1">
-                <ul class="pager">
-                    <li class="previous" style="color: #2C3232"><a href="?page=1">&laquo; first</a></li>
-                    <li style="padding-left: 500px; padding-right: 490px">&nbsp;</li>
-                    <li class="next"><a href="?page={{ questionList.paginator.num_pages }}">last &raquo;</a></li>
-                </ul>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-
-            <div class="pager_group2">
-                <nav aria-label="Page navigation">
-                  <ul class="pagination justify-content-center">
-                    <li {% if not questionList.has_previous %}class="page-item disabled"{% endif %}>
-                        {% if questionList.has_previous %}
-                            <a class="page-link" href="?page={{ questionList.previous_page_number }}" tabindex="-1">Previous</a>
-                        {% else %}
-                            <a href="javascript:void(0)">Previous</a>
-                        {% endif %}
-                    </li>
-                    <li class="page-item">
-                        {% for page in paginator.page_range %}
-                            {% if page == sheets.number %}
-                                <a class="page-link" href="?page={{ page }}">{{ page }}</a>
-                            {% else %}
-                                <a href="?page={{ page }}">{{ page }}</a>
-                            {% endif %}
-                        {% endfor %}
-                    </li>
-                    <li {% if not questionList.has_next %}class="page-item disabled"{% endif %}>
-                        {% if questionList.has_next %}
-                            <a class="page-link" href="?page={{ questionList.next_page_number }}">Next</a>
-                        {% else %}
-                            <a href="javascript:void(0)">Next</a>
-                        {% endif %}
-                    </li>
-                  </ul>
-                </nav>
-
-            </div>
-
-
-            <style>
-                .pager_group1{
-                    text-decoration: none;
-                    position: fixed;
-                    bottom: 9%;
-                    left: 10%;
-                    right: 10%;
-                }
-
-                .pager_group2{
-                    position: fixed;
-                    bottom: 14%;
-                    right: 50%;
-
-                    transform: translate(50%,50%);
-                }
-            </style>
         </div>
+    </main>
+    <style>
+        .review-table .table > thead > tr > th{
+            text-align: center;
+        }
+        .review-table .table > tbody > tr > td{
+            text-align: center;
+            vertical-align: middle;
+        }
+    </style>
+{% endblock %}
 
-        <style>
-            .pagination{
-                font-size: 20px;
-            }
-        </style>
-    </div>
+{% block pagination %}
+    <ul class="pagination justify-content-center">
+        <li class="page-item"><a class="page-link" href="?page=1"><i class="fa fa-angle-double-left"></i></a></li>
 
+        <li class="page-item {% if not questionList.has_previous %}disable{% endif %}">
+            {% if questionList.has_previous %}
+                <a class="page-link" href="?page={{ questionList.previous_page_number }}" tabindex="-1"><i class="fa fa-angle-left"></i></a>
+            {% else %}
+                <a class="page-link" href="javascript:void(0);"><i class="fa fa-angle-left"></i></a>
+            {% endif %}
+        </li>
 
+        {% for page in paginator.page_range %}
+            {% if page == questionList.number %}
+                <li class="page-item active">
+                    <a class="page-link" href="?page={{ page }}">{{ page }}</a>
+                </li>
+            {% else %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page }}">{{ page }}</a>
+                </li>
+            {% endif %}
+        {% endfor %}
+
+        <li class="page-item {% if not questionList.has_next %}disable{% endif %}">
+            {% if questionList.has_next %}
+                <a class="page-link" href="?page={{ questionList.next_page_number }}"><i class="fa fa-angle-right"></i></a>
+            {% else %}
+                <a class="page-link" href="javascript:void(0);"><i class="fa fa-angle-right"></i></a>
+            {% endif %}
+        </li>
+
+        <li class="page-item"><a class="page-link" href="?page={{ questionList.paginator.num_pages }}"><i class="fa fa-angle-double-right"></i></a></li>
+    </ul>
 {% endblock %}

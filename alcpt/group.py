@@ -41,11 +41,15 @@ def group_list(request):
 def group_create(request):
     if request.method == 'POST':
         group_name = request.POST.get('group_name',)
-        group = Group.objects.create(name=group_name, created_by=request.user)
-        group.save()
 
-        messages.success(request, 'Group create successfully.')
-        return redirect('testee_group_list')
+        try:
+            group = Group.objects.create(name=group_name, created_by=request.user)
+        except:
+            messages.error(request, "Failed created, this name has existed.")
+            return render(request, 'group/testee_group_create.html', locals())
+
+        messages.success(request, 'Successfully created.')
+        return redirect('testee_group_edit', group_id=group.id)
 
     else:
         return render(request, 'group/testee_group_create.html', locals())
@@ -56,8 +60,6 @@ def group_edit(request, group_id):
     try:
         group = Group.objects.get(id=group_id)
         group_members = group.member.all()
-        # students = Student.objects.all()
-        # change to testees not by student
         testees = []
         for user in User.objects.all().filter(name__contains=''):
             if user.has_perm(UserType.Testee):
@@ -82,10 +84,26 @@ def group_edit(request, group_id):
             if member not in selected_testee_list:
                 group.member.remove(member)
 
+        group.save()
+
         messages.success(request, 'Update group member successfully.')
         return redirect('testee_group_list')
     else:
         return render(request, 'group/testee_group_edit.html', locals())
+
+
+@permission_check(UserType.TestManager)
+def group_delete(request, group_id):
+    try:
+        group = Group.objects.get(id=group_id)
+        group.member.clear()
+        group.delete()
+        messages.success(request, "Successfully deleted.")
+        return redirect(request.META.get('HTTP_REFERER'))
+
+    except ObjectDoesNotExist:
+        messages.error(request, "Group does not exist, group id - {}".format(group_id))
+        return redirect(request.META.get('HTTP_REFERER'))
 
 
 @permission_check(UserType.TestManager)

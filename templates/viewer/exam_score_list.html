@@ -1,90 +1,50 @@
-{% extends 'base.html' %}
+{% extends 'new_base.html' %}
 
 {% load web_filters %}
 
 {% block path %}
-    <a href="{% url 'exam_score_list' %}">成績檢閱者</a>
-    <a class="fa fa-angle-double-right fa-lg box"></a>
-    <a href="">考試成績列表</a>
+    <li class="breadcrumb-item active" aria-current="page">View Testee Score</li>
 {% endblock %}
 
 {% block content %}
-    <div class="table-responsive">
-        <table class="table table-hover">
-            <caption style="font-size: 30px;">&nbsp;&nbsp;考試成績列表</caption>
-            <thead class="title">
-                <tr>
-                    <th class="col-md-1">考試名稱</th>
-                    <th class="col-md-1">平均分數</th>
-                    <th class="col-md-1">受測者群組</th>
-                    <th class="col-md-1">受測人數</th>
-                    <th class="col-md-2">考試開始時間</th>
-                    <th class="col-md-2">考試結束時間</th>
-                    <th class="col-md-1">考試時間</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for exam in exams %}
-                    <tr onclick="window.location.href='{% url "exam_score_detail" exam.id %}'">
-                        <td style="text-align: center; vertical-align:middle;">{{ exam }}</td>
-                        {% if exam.average_score  < 60.0 %}
-                            <td style="vertical-align:middle; color: #c12e2a">{{ exam.average_score }}</td>
-                        {% else %}
-                            <td style="vertical-align:middle;">{{ exam.average_score }}</td>
-                        {% endif %}
-                        <td style="vertical-align:middle;">{{ exam.group }}</td>
-                        <td style="vertical-align:middle;">{{ exam.group.member.count }}</td>
-                        <td style="vertical-align:middle;">{{ exam.start_time|date:'Y年m月d日, H時i分' }}</td>
-                        <td style="vertical-align:middle;">{{ exam.finish_time|date:'Y年m月d日, H時i分' }}</td>
-                        <td style="vertical-align:middle;">{{ exam.duration }}分鐘</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    <main class="exam-score-list">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-12">
+                    <h2>Exam Score List.</h2>
 
-        <style>
-            .table-responsive .table{
-                text-align: center;
-            }
-
-            .table-hover button{
-                    visibility: hidden;
-            }
-            .table-hover > tbody > tr:hover{
-                cursor: pointer;
-                background-color: #4CCABD;
-            }
-            .table-hover > tbody > tr:hover button, td{
-                visibility: visible;
-            }
-
-            .title{
-                font-size: 20px;
-            }
-
-            .title tr th{
-                text-align: center;
-            }
-
-            .table tbody{
-                font-size: 18px;
-            }
-
-            .table tbody td a{
-                color: #2C3232;
-            }
-
-        </style>
-
-        <script>
-        function showInfo() {
-            var x = document.getElementById("Info");
-            if (x.className.indexOf("w3-show") == -1) {
-            x.className += " w3-show";
-            } else {
-            x.className = x.className.replace(" w3-show", "");
-            }
-        }
-        </script>
-    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th class="text-center">Name.</th>
+                                    <th class="text-center">Average.</th>
+                                    <th class="text-center"><i class="fa fa-users"></i></th>
+                                    <th class="text-center">Start Time.</th>
+                                    <th class="text-center">Finish Time.</th>
+                                    <th class="text-center">Duration.(min)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for exam in exams %}
+                                    <tr style="cursor: pointer" onclick="window.location.href='{% url 'exam_score_detail' exam.id %}'">
+                                        <td class="text-center">{{ exam.name }}</td>
+                                        <td class="text-center">{{ exam.average_score }}</td>
+                                        <td class="text-center">{{ exam.testeeList.count }}</td>
+                                        <td class="text-center">{{ exam.start_time|date:"Y/m/d, H:i" }}</td>
+                                        <td class="text-center">{{ exam.finish_time|date:"Y/m/d, H:i" }}</td>
+                                        <td class="text-center">{{ exam.duration }}</td>
+                                    </tr>
+                                {% empty %}
+                                    <tr>
+                                        <td colspan="6" class="text-center">No Data.</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
 {% endblock %}

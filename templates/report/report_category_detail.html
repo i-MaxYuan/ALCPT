@@ -1,88 +1,58 @@
-{% extends 'base.html' %}
+{% extends 'new_base.html' %}
 
 {% load web_filters %}
 
 {% block path %}
-    <a href="">系統管理員</a>
-    <a class="fa fa-angle-double-right fa-lg box"></a>
-    <a href="{% url 'report_category_list' %}">回報類別列表（{{ category.name }}）</a>
+    <li class="breadcrumb-item" aria-current="page"><a href="{% url 'report_category_list' %}">ReportCategory List</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ category.name }}</li>
 {% endblock %}
 
 {% block content %}
-    <div class="table-responsive">
-        <table class="table table-hover">
-            <caption style="font-size: 30px;">回報列表</caption>
-            <thead class="title">
-                <tr>
-                    <th class="col-md-1">單號</th>
-                    <th class="col-md-2">使用者代號</th>
-                    <th class="col-md-2">回報類別</th>
-                    <th class="col-md-6">內容</th>
-                    <th class="col-md-1">狀態</th>
-                </tr>
-            </thead>
+    <main class="report-category-detail">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">ReportCategory Detail.</div>
 
-            <tbody>
-                {% if category.report_set.all %}
-                    {% for report in category.report_set.all %}
-                    <tr style="cursor: pointer" onclick="window.location.href='{% url 'report_detail' report.id %}'">
-                        <td>{{ report.id }}</td>
-                        <td>{{ report.created_by }}</td>
-                        <td>{{ report.category }}</td>
-                        <td>{{ report.supplement_note|safe|summary:31 }}</td>
-                        <td>{{ report.state|readable_report_state }}</td>
-                    </tr>
-                    {% endfor %}
-                {% else %}
-                    <h2>目前暫無資料</h2>
-                {% endif %}
-            </tbody>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th>Serial Number.</th>
+                                            <th>Account.</th>
+                                            <th>Report Category.</th>
+                                            <th>Content.</th>
+                                            <th>State.</th>
+                                        </tr>
+                                    </thead>
 
-        </table>
+                                    <tbody>
+                                        {% if category.report_set.all %}
+                                            {% for report in category.report_set.all %}
+                                            <tr style="cursor: pointer" onclick="window.location.href='{% url 'view_report_detail' report.id %}'">
+                                                <td class="text-center">{{ report.id }}</td>
+                                                <td>{{ report.created_by }}</td>
+                                                <td>{{ report.category }}</td>
+                                                <td>{{ report.supplement_note|safe|summary:31 }}</td>
+                                                <td>{{ report.state|readable_report_state }}</td>
+                                            </tr>
+                                            {% endfor %}
+                                        {% else %}
+                                            <tr><td colspan="5" class="text-center">No Dara.</td></tr>
+                                        {% endif %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
 
-        <div class="btn">
-            <button type="submit" onclick="history.back()">返回</button>
+                        <div class="card-footer text-muted">
+                            <button type="button" class="btn btn-primary float-right" onclick="history.go(-1)">OK</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-
-        <style>
-            .table-responsive .table{
-                text-align: center;
-            }
-
-            .table-hover > tbody > tr:hover > td,
-            .table-hover > tbody > tr:hover > th {
-                background-color: #4CCABD;
-            }
-
-            .title{
-                font-size: 25px;
-            }
-
-            .title tr th{
-                text-align: center;
-            }
-
-            .table tbody{
-                font-size: 18px;
-            }
-
-            .table tbody td a{
-                color: #2C3232;
-            }
-
-            .btn{
-                position: relative;
-                left: 45%;
-            }
-            .btn button{
-                font-size: 25px;
-                padding: 10px;
-                padding-left: 15px;
-                padding-right: 15px;
-                color: #FFFEF6;
-                background-color: #4CCABD;
-                border: none;
-            }
-        </style>
-    </div>
+    </main>
 {% endblock %}

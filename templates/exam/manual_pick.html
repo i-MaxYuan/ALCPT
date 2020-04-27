@@ -1,0 +1,130 @@
+{% extends 'new_base.html' %}
+
+{% load web_filters %}
+
+{% block scripts %}
+    <script>
+        function question_detail(index) {
+            var detailIndex = 'question_detail'+index;
+            var question_detail = document.getElementById(detailIndex);
+            var summaryIndex = 'summary'+index;
+            var summary_q_content = document.getElementById(summaryIndex);
+            var fullIndex = 'full'+index;
+            var full_q_content = document.getElementById(fullIndex);
+
+            if (question_detail.style.display === 'none'){
+                question_detail.style.display = 'table-row';
+                summary_q_content.style.display = 'none';
+                full_q_content.style.display = 'table-row';
+            }else{
+                question_detail.style.display = 'none';
+                summary_q_content.style.display = 'table-row';
+                full_q_content.style.display = 'none';
+            }
+        }
+    </script>
+{% endblock %}
+
+{% block path %}
+    <li class="breadcrumb-item" aria-current="page"><a href="{% url 'testpaper_list' %}">TestPaper List</a></li>
+    <li class="breadcrumb-item" aria-current="page"><a href="{% url 'testpaper_edit' testpaper.id %}">TestPaper Edit</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Manual Pick</li>
+{% endblock %}
+
+{% block content %}
+    <main class="manual-pick">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-12">
+                    <form action="{% url 'manual_pick' testpaper.id question_type.value.0 %}" method="post">
+                        {% csrf_token %}
+                        <h2>Manual Pick - {{ question_type.value.1 }}（<span id="selected_number">{{ selected_questions.count }}</span>／{{ limit_number }}）</h2>
+
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th></th>
+                                        <th>#</th>
+                                        <th>Content.</th>
+                                        <th>difficulty.</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    {% for question in all_questions %}
+                                        <tr>
+                                            <td><input type="checkbox" class="passed-questions" name="question" value="{{ question.id }}" {% if question in selected_questions %}checked{% endif %}></td>
+
+                                            <td>{{ question.id }}</td>
+
+                                            <td>
+                                                {% if question.q_file %}
+                                                    <audio controls preload="none">
+                                                        <source src="{{ question.q_file.url }}" type="audio/mpeg">
+                                                        Your browser does not support the audio tag.
+                                                    </audio>
+                                                {% else %}
+                                                    <span id="summary{{ question.id }}">
+                                                        {{ question.q_content|summary:115 }}
+                                                    </span>
+                                                    <span id="full{{ question.id }}" style="display: none">
+                                                        {{ question.q_content|linebreaksbr }}
+                                                    </span>
+                                                {% endif %}
+                                            </td>
+
+                                            <td>{{ question.difficulty|readable_question_difficulty }}</td>
+
+                                            <td>
+                                                <i class="fa fa-angle-down" onclick="question_detail('{{ question.id }}')" style="cursor: pointer"></i>
+                                            </td>
+                                        </tr>
+                                        <tr id="question_detail{{ question.id }}" style="display: none">
+                                            <td colspan="2"></td>
+
+                                            <td colspan="3">
+                                                <ol type="A">
+                                                    {% for option in question.choice_set.all %}
+                                                        {% if option.is_answer %}
+                                                            <li style="color: red">{{ option }}</li>
+                                                        {% else %}
+                                                            <li>{{ option }}</li>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </ol>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    <script>
+                                        var limit = {{ limit_number }};
+                                        $('input[type=checkbox]').on('change', function (e) {
+                                            if ($('input[type=checkbox]:checked').length > limit) {
+                                                $(this).prop('checked', false);
+                                                alert("Limit number: " + limit);
+                                                return false;
+                                            }else{
+                                                showChecked();
+                                                function showChecked(){
+                                                    document.getElementById("selected_number").textContent = "" + document.querySelectorAll("input:checked").length;
+                                                }
+                                                document.querySelectorAll("input[name=question]").forEach(i=>{i.oncheck = function(){showChecked();}});
+                                            }
+                                        });
+
+                                    </script>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary">OK</button>
+                            <button type="button" class="btn btn-secondary" onclick="self.location=document.referrer;">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

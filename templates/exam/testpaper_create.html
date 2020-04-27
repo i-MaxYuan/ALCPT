@@ -1,100 +1,38 @@
-{% extends 'base.html' %}
+{% extends 'new_base.html' %}
 
 {% block path %}
-    <a href="">考試管理員</a>
-    <a class="fa fa-angle-double-right fa-lg box"></a>
-    <a href="{% url 'testpaper_list' %}">考卷列表</a>
-    <a class="fa fa-angle-right fa-lg box"></a>
-    <a href="">新增考卷</a>
+    <li class="breadcrumb-item" aria-current="page">TestPaper List</li>
+    <li class="breadcrumb-item active" aria-current="page">TestPaper Create</li>
 {% endblock %}
 
 {% block content %}
-    <div class="testpaper_create">
-        <form method="post">
-            <div class="title"><h1>Testpaper Create.</h1></div>
-            {% csrf_token %}
-            <table>
-                <tr>
-                    <td>考卷名稱</td>
-                    <td><input type="text" name="testpaper_name" onkeyup="uniqueName({{ testpaper_names }}, this)" required></td>
-                </tr>
+    <main class="testpaper-create-form">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="card">
+                            <div class="card-header">TestPaper Create.</div>
 
-                <div class="unique_name" id="unique_name"></div>
-            </table>
+                            <div class="card-body">
+                                <h5 class="card-subtitle mb-2 text-muted">
+                                    TestPaper Name.<span class="invalid" id="invalid"></span>
+                                </h5>
+                                <p class="card-text">
+                                    <input class="form-control" type="text" name="testpaper_name" onkeyup="data_unique({{ testpaper_names }}, this)" required>
+                                </p>
 
-            <div class="btn">
-                <button type="submit">送出</button>
-                <button type="reset">重設</button>
-                <button type="button" onclick="self.location=document.referrer;">取消</button>&nbsp;
+                                <div class="float-right">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                    <button type="reset" class="btn btn-light">Reset</button>
+                                    <button type="button" class="btn btn-secondary" onclick="history.go(-1)">Back</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
-
-            <style>
-                .testpaper_create .title h1{
-                    width: 30%;
-                    font-size: 28px;
-                    color: #FFFEF6;
-                    background-color: #4CCABD;
-                    padding-top: 10px;
-                    padding-bottom: 10px;
-                    padding-right: 15px;
-                    padding-left: 45px;
-                    text-align: center;
-                }
-
-                .testpaper_create table{
-                    position: relative;
-                    left: 25%;
-
-                    width: 50%;
-
-                    font-size: 20px;
-                }
-                .testpaper_create table td{
-                    padding: 4px;
-                }
-                .testpaper_create form input{
-                    width: 100%;
-                    padding: 6px;
-                }
-
-                .testpaper_create .btn{
-                    position: relative;
-                    top: 30px;
-                    left: 38%;
-                }
-                .testpaper_create .btn button{
-                    font-size: 25px;
-                    padding: 10px;
-                    padding-left: 15px;
-                    padding-right: 15px;
-                    color: #FFFEF6;
-                    background-color: #4CCABD;
-                    border: none;
-                }
-
-                .unique_name {
-                    position: absolute;
-                    left: 76%;
-                    top: 17%;
-                    color: #c12e2a;
-                    font-size: 14px;
-                }
-            </style>
-
-            <script type="text/javascript">
-                function uniqueName(testpaper_names , name) {
-                    var arr = testpaper_names;
-
-                    for(var i = 0; i < arr.length; i++) {
-                        if (name.value === arr[i]) {
-                            document.getElementById('unique_name').innerHTML = "此名稱已存在";
-                            break;
-                        } else {
-                            document.getElementById('unique_name').innerHTML = '';
-                        }
-                    }
-                }
-            </script>
-        </form>
-    </div>
+        </div>
+    </main>
 {% endblock %}

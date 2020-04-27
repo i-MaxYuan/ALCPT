@@ -1,0 +1,109 @@
+{% extends 'OperationManual_base.html' %}
+
+{% load static %}
+
+{% block content %}
+    <main id="om-content">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-12 text-left">
+                    <h1>題庫管理員說明</h1>
+                    <p>
+                        <ul>
+                            <li>主要負責管理及審核試題</li>
+                            <img src="{% static '/images/om/tbm/om-tbm01.png' %}" width="50%">
+                            <ul>
+                                <li>Question List：試題列表</li>
+                                <li>Review：審核試題</li>
+                                <li>Report List：問題列表</li>
+                            </ul>
+                        </ul>
+                    </p>
+
+                    <hr>
+
+                    <h3>Question List：試題列表</h3>
+                    <img src="{% static '/images/om/tbm/om-tbm02.png' %}" width="90%">
+                    <p>
+                        <ul>
+                            <li>
+                                表格內主要顯示試題的「Serial.」、「Content.」、「Type.」、「State.」、「Other.」
+                                <ul>
+                                    <li>「Serial.」：代表該試題的流水號。</li>
+                                    <li>「Content.」：代表該試題的內容。</li>
+                                    <li>「Type.」：代表該試題的試題類型。</li>
+                                    <li>「State.」：代表該試題的狀態。</li>
+                                    <li>「Other.」：代表該試題的功能鍵。</li>
+                                </ul>
+                            </li>
+                            <li>點擊該試題的欄位可顯示該「試題的選項」、「正確答案」、「Update.」（最新更新時間）、「Issued.」（使用次數）、<br>
+                                「Difficulty.」（難度）、「Creator.」（建立者）、「Last Update.」（最新更新者）</li>
+                            <li>
+                                試題類型<code>Type</code>區分為：
+                                <ul>
+                                    <li>Listening／QA：問答</li>
+                                    <li>Listening／Conversation：簡短對話</li>
+                                    <li>Reading／Grammar：文法</li>
+                                    <li>Reading／Phrase：名詞片語</li>
+                                    <li>Reading／Paragraph：段落理解。閱讀完一篇簡短的文章後，會有與文章相關試題令受測者作答。</li>
+                                </ul>
+                            </li>
+                            <li>
+                                試題狀態<code>State</code>區分為：
+                                <ul>
+                                    <li>Saved：暫存。該試題在<a href="{% url 'OM_TBOperator' %}">題庫操作員</a>輸入後，會暫時存放在題庫操作員的題目列表中，待題庫操作員確認無誤後即可送出交由題庫管理員進行審核。</li>
+                                    <li>Pass：審核通過。該試題在通過審核之後即可成為題庫中的試題，將可供<a href="{% url 'OM_TestManager' %}">考試管理員</a>進行選用。</li>
+                                    <li>Reject：審核未通過。該試題內容或選項可能有誤，待題庫操作員更改後即可重新提交審核。</li>
+                                    <li>Pending：等待審核。該試題尚未被題庫管理員進行審核。</li>
+                                    <li>Reported：被回報錯誤。該試題在被使用後，被受測者回報有問題，包含題目有誤或是選項無法選取等等。</li>
+                                    <li>Handled：被回報錯誤已處理。該試題在被回報錯誤後，經由題庫管理員進行處理，而該試題將不被繼續進行使用。</li>
+                                    <li style="color: red">以上「Reported」及「Handled」的<a href="{% url 'OM_Report' %}">問題回報</a>機制持續開發中。</li>
+                                </ul>
+                            </li>
+                            <li>
+                                「搜尋」功能列：可進行「Search」、「Type.」、「Difficulty.」及「State.」。
+                                <ul>
+                                    <li>「Search」：可透過試題的內容或是試題選項進行試題的搜尋。</li>
+                                    <li>「State」：題庫管理員僅能透過<code>Pass</code>、<code>Reported</code>、<code>Handle</code>進行搜尋。</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </p>
+
+                    <hr>
+
+                    <h3>Review：審核試題</h3>
+                    <img src="{% static '/images/om/tbm/om-tbm03.png' %}" width="70%">
+                    <p>
+                        <ul>
+                            <li><button class="btn btn-success">Pass</button>：題庫管理員使該試題通過審核。</li>
+                            <li>
+                                <button class="btn btn-warning">Edit</button>：題庫管理員編輯該試題並使其通過審核。
+                                <ul>
+                                    <li style="color: red">題庫管理員編輯功能，僅提供更改答案。</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <button class="btn btn-danger">Reject</button>：題庫管理員退回該試題。
+                                <ul>
+                                    <li style="color: red">題庫管理員在退回時需填寫相關的訊息來說明為何退回？</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </p>
+
+                    <hr>
+
+                    <h3>Report List：問題列表</h3>
+                    <p>
+                        <ul>
+                            <li>請參閱<a href="{% url 'OM_Report' %}">問題回報</a>。</li>
+                        </ul>
+                    </p>
+
+                    <hr class="featurette-divider">
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

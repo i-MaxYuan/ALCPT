@@ -1,7 +1,7 @@
 from django import forms
 from django.utils.translation import gettext as _
 from django.core.exceptions import ValidationError
-
+from .models import Exam
 from captcha.fields import CaptchaField
 
 
@@ -21,3 +21,21 @@ def validate_excel(value):
 class UploadExcelForm(forms.Form):
     excel = forms.FileField(validators=[validate_excel])
 
+
+class DateTimeInput(forms.DateTimeInput):
+    input_type = "datetime-local"
+
+    def __init__(self, **kwargs):
+        kwargs["format"] = "%Y-%m-%dT%H:%M"
+        super().__init__(**kwargs)
+
+
+class ExhibitionForm(forms.ModelForm):
+    class Meta:
+        model = Exam
+        fields = "__all__"
+
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self.fields["started_time"].widget = DateTimeInput()
+            self.fields["started_time"].input_formats = ["%Y-%m-%dT%H:%M", "%Y-%m-%d %H:%M"]

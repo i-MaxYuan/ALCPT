@@ -1,0 +1,51 @@
+{% extends 'new_base.html' %}
+
+{% block path %}
+    <li class="breadcrumb-item active" aria-current="page">Proclamation Create</li>
+{% endblock %}
+
+{% block content %}
+    <main class="proclamation-create-form">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header">Proclamation Create.</div>
+
+                        <div class="card-body">
+                            <form method="post">
+                                {% csrf_token %}
+
+                                <div class="form-group row">
+                                    <label for="p_title" class="col-md-4 col-form-label text-md-right">Title.</label>
+                                    <div class="col-md-6">
+                                        <input type="text" id="p_title" class="form-control" name="p_title" placeholder="Proclamation Title..." required autofocus>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="p_text" class="col-md-4 col-form-label text-md-right">Content.</label>
+                                    <div class="col-md-6">
+                                        <textarea class="form-control" name="p_text" cols="100" rows="8" placeholder="Proclamation Content..." required></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 offset-md-4">
+                                    <button type="submit" class="btn btn-primary">
+                                        Submit
+                                    </button>
+                                    <button type="reset" class="btn btn-light">
+                                        Reset
+                                    </button>
+                                    <button type="button" class="btn btn-secondary" onclick="history.go(-1)">
+                                        Cancel
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

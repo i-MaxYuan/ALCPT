@@ -47,55 +47,45 @@ def random_select(types_counts: list):
     questions.extend(phraseList[:types_counts[3]])
     questions.extend(paragraphUnderstandingList[:types_counts[4]])
 
-    for question in questions:
-        question.used_freq += 1
-        question.save()
-
     return questions
 
 
-def limit_check(testpaper: TestPaper, q_type: QuestionType):
-    testpaper = testpaper
+def quantity_confirmation(testpaper: TestPaper):
+    confirmation_list = [False, False, False, False, False]
+    question_types = list(QuestionType.__members__.values())
+    question_type_counts = QuestionTypeCounts.Exam.value[0]
 
-    if len(testpaper.question_set.filter(q_type=q_type.value[0])) >= QuestionTypeCounts.Exam.value[0][q_type.value[0]-1]:
-        return True
-    else:
+    questionData = zip(range(5), question_types, question_type_counts)
+
+    for x, question_type, question_type_count in questionData:
+        if len(testpaper.question_list.filter(q_type=question_type.value[0])) == question_type_count:
+            confirmation_list[x] = True
+        else:
+            pass
+
+    if False in confirmation_list:
         return False
+    else:
+        return True
 
 
-def auto_pick(testpaper: TestPaper, type_counts: list, question_type: int):
-    passed_questions = Question.objects.filter(state=1)
-    questions = []
+def auto_pick(testpaper: TestPaper, question_type: int):
+    Q_type_all_passed_questions = set(Question.objects.filter(state=1).filter(q_type=question_type))
+    Q_type_selected_questions = set(testpaper.question_list.all().filter(q_type=question_type))
+    Q_type_not_used_questions = list(Q_type_all_passed_questions.difference(Q_type_selected_questions))
 
-    if question_type == 1:
-        qaList = list(passed_questions.filter(q_type=1))
-        random.shuffle(qaList)
-        questions.extend(qaList[:type_counts[question_type-1]])
+    existed_num = len(testpaper.question_list.all().filter(q_type=question_type))
+    necessary_num = QuestionTypeCounts.Exam.value[0][question_type-1]
+    missing = necessary_num - existed_num
 
-    if question_type == 2:
-        shortConversationList = list(passed_questions.filter(q_type=2))
-        random.shuffle(shortConversationList)
-        questions.extend(shortConversationList[:type_counts[question_type-1]])
+    random.shuffle(Q_type_not_used_questions)
 
-    if question_type == 3:
-        grammarList = list(passed_questions.filter(q_type=3))
-        random.shuffle(grammarList)
-        questions.extend(grammarList[:type_counts[question_type-1]])
+    for question in Q_type_not_used_questions[:missing]:
+        testpaper.question_list.add(question)
 
-    if question_type == 4:
-        phraseList = list(passed_questions.filter(q_type=4))
-        random.shuffle(phraseList)
-        questions.extend(phraseList[:type_counts[question_type-1]])
+    testpaper.save()
 
-    if question_type == 5:
-        paragraphUnderstandingList = list(passed_questions.filter(q_type=5))
-        random.shuffle(paragraphUnderstandingList)
-        questions.extend(paragraphUnderstandingList[:type_counts[question_type-1]])
-
-    for question in questions:
-        testpaper.question_set.add(question)
-
-    return len(questions)
+    return missing
 
 
 def manual_pick(question_type: int):

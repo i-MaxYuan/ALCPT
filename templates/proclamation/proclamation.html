@@ -1,0 +1,140 @@
+{% extends 'new_base.html' %}
+
+{% load web_filters %}
+
+{% block content %}
+    <main class="proclamation">
+        <div class="container">
+            <div class="table-responsive-md">
+                <table class="table table-bordered table-striped table-hover table-mc-light-blue">
+                    <thead class="thead-light">
+                        <tr>
+                            {% if request.user|has_perm:'SystemManager' %}
+                                <th class="text-center">Title.</th>
+                                <th class="text-center">Content.</th>
+                                <th class="text-center">Announcer.</th>
+                                <th class="text-center">Release Time.</th>
+                                <th class="text-center">
+                                    {% if request.user|has_perm:'SystemManager' %}
+                                        <div class="add">
+                                            <button type="button" class="btn btn-secondary" onclick="window.location.href='{% url 'proclamation_create' %}'"><i class="fa fa-plus"></i></button>
+                                        </div>
+                                    {% endif %}
+                                </th>
+                            {% else %}
+                                <th class="text-center">Title.</th>
+                                <th class="text-center">Content.</th>
+                                <th class="text-center">Announcer.</th>
+                                <th class="text-center">Release Time.</th>
+                            {% endif %}
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% if request.user|has_perm:'SystemManager' %}
+                            <div class="add-secret">
+                                <button type="button" class="btn btn-secondary" onclick="window.location.href='{% url 'proclamation_create' %}'"><i class="fa fa-plus"></i></button>
+                            </div>
+                        {% endif %}
+                        {% for pro in pros %}
+                            <tr style="cursor: pointer" data-toggle="modal" data-target="#pro_{{ pro.id }}">
+                                <td class="text-center" data-title='Title'>{{ pro.title }}</td>
+
+                                {% if request.user|has_perm:'SystemManager' %}
+                                    {% if pro.title|isAlpha %}
+                                        <td class="text-center" data-title="Content">{{ pro.text|safe|summary:45 }}</td>
+                                    {% else %}
+                                        <td class="text-center" data-title="Content">{{ pro.text|safe|summary:25 }}</td>
+                                    {% endif %}
+                                {% else %}
+                                    {% if pro.title|isAlpha %}
+                                        <td class="text-center" data-title="Content">{{ pro.text|safe|summary:48 }}</td>
+                                    {% else %}
+                                        <td class="text-center" data-title="Content">{{ pro.text|safe|summary:28 }}</td>
+                                    {% endif %}
+                                {% endif %}
+
+                                <td class="text-center" data-title="Announcer">{{ pro.created_by.name}}</td>
+
+                                <td class="text-center" data-title="Release Time">{{ pro.created_time|date:'Y/m/d, H:i' }}</td>
+
+                                {% if request.user|has_perm:'SystemManager' %}
+                                    <td>
+                                        <a href="{% url 'proclamation_edit' pro.id %}"><i class="fa fa-pencil-square-o"></i></a>
+                                        <a href="{% url 'proclamation_delete' pro.id %}" onclick="return confirm('Sure to delete?')"><i class="fa fa-trash-o"></i></a>
+                                    </td>
+                                {% endif %}
+
+                                <div class="modal fade" id="pro_{{ pro.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLongTitle">{{ pro.title }}</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+
+                                            <div class="modal-body">{{ pro.text|linebreaksbr }}</div>
+
+                                            <div class="modal-footer">
+                                                <footer class="blockquote-footer">{{ pro.created_by }} in <cite title="Source Title">{{ pro.created_time }}</cite></footer>
+                                                <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td class="text-center" colspan="5">No News.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+    <style>
+        .proclamation table > tbody > tr > td{
+            vertical-align: middle;
+        }
+    </style>
+
+{% endblock %}
+
+{% block pagination %}
+    <ul class="pagination justify-content-center">
+        <li class="page-item"><a class="page-link" href="?page=1"><i class="fa fa-angle-double-left"></i></a></li>
+
+        <li class="page-item {% if not pros.has_previous %}disable{% endif %}">
+            {% if pros.has_previous %}
+                <a class="page-link" href="?page={{ pros.previous_page_number }}" tabindex="-1"><i class="fa fa-angle-left"></i></a>
+            {% else %}
+                <a class="page-link" href="javascript:void(0);"><i class="fa fa-angle-left"></i></a>
+            {% endif %}
+        </li>
+
+        {% for page in paginator.page_range %}
+            {% if page == pros.number %}
+                <li class="page-item active">
+                    <a class="page-link" href="?page={{ page }}">{{ page }}</a>
+                </li>
+            {% else %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page }}">{{ page }}</a>
+                </li>
+            {% endif %}
+        {% endfor %}
+
+        <li class="page-item {% if not pros.has_next %}disable{% endif %}">
+            {% if pros.has_next %}
+                <a class="page-link" href="?page={{ pros.next_page_number }}"><i class="fa fa-angle-right"></i></a>
+            {% else %}
+                <a class="page-link" href="javascript:void(0);"><i class="fa fa-angle-right"></i></a>
+            {% endif %}
+        </li>
+
+        <li class="page-item"><a class="page-link" href="?page={{ pros.paginator.num_pages }}"><i class="fa fa-angle-double-right"></i></a></li>
+    </ul>
+{% endblock %}

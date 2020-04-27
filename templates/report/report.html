@@ -1,86 +1,56 @@
-{% extends 'base.html' %}
+{% extends 'new_base.html' %}
 
 {% block path %}
-    <a href="">問題回報</a>
+    <li class="breadcrumb-item" aria-current="page">Report</li>
 {% endblock %}
 
 {% block content %}
-    <div class="report">
-        <form action="" method="post">
-            <div class="title"><h1>Report.</h1></div>
-            {% csrf_token %}
-            <table>
-                <tr>
-                    <td class="col-md-1">發生問題</td>
-                    <td class="col-md-5">
-                        <select name="category" required>
-                            <option value="" disabled selected>請選擇發生問題</option>
-                            {% for category in categories %}
-                                <option value="{{ category.id }}">{{ category }}</option>
-                            {% endfor %}
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col-md-1">補充說明</td>
-                    <td class="col-md-5"><textarea class="form-control" name="supplement_note" cols="100" rows="8" required placeholder="補充說明..."></textarea></td>
-                </tr>
-            </table>
+    <main class="report-form">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header">Report.</div>
 
-            <div class="btn">
-                <button type="submit" onclick="return confirm('確認回報？')">新增</button>
-                <button type="button" onclick="self.location=document.referrer;">取消</button>
+                        <div class="card-body">
+                            <form method="post">
+                                {% csrf_token %}
+
+                                <div class="form-group row">
+                                    <label for="p_title" class="col-md-4 col-form-label text-md-right">Report Category.</label>
+                                    <div class="col-md-6">
+                                        <select class="custom-select custom-select-sm" name="category" required>
+                                            <option value="" disabled selected>What is your problem？</option>
+                                            {% for category in categories %}
+                                                <option value="{{ category.id }}">{{ category }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="p_text" class="col-md-4 col-form-label text-md-right">Supplement Note.</label>
+                                    <div class="col-md-6">
+                                        <textarea class="form-control" name="supplement_note" cols="100" rows="8" placeholder="Describe your situation what happened..." required></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-primary" onclick="return confirm('Sure to report?')">
+                                        Submit
+                                    </button>
+                                    <button type="reset" class="btn btn-light">
+                                        Reset
+                                    </button>
+                                    <button type="button" class="btn btn-secondary" onclick="history.go(-1)">
+                                        Cancel
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </form>
-
-        <style>
-            .report .title h1{
-                width: 30%;
-                font-size: 28px;
-                color: #FFFEF6;
-                background-color: #4CCABD;
-                padding-top: 10px;
-                padding-bottom: 10px;
-                padding-right: 15px;
-                padding-left: 45px;
-                text-align: center;
-            }
-
-            .report table{
-                position: relative;
-                left: 15%;
-
-                width: 70%;
-
-                font-size: 20px;
-            }
-            .report table td{
-                padding: 4px;
-            }
-            .report form input{
-                padding: 6px;
-            }
-            .report form textarea{
-                font-size: 20px;
-                width: 100%;
-                height: 45%;
-                padding: 10px;
-            }
-
-            .report .btn{
-                position: relative;
-                top: 30px;
-                left: 40%;
-            }
-            .report .btn button{
-                font-size: 25px;
-                padding: 10px;
-                padding-left: 15px;
-                padding-right: 15px;
-                color: #FFFEF6;
-                background-color: #4CCABD;
-                border: none;
-            }
-        </style>
-    </div>
+        </div>
+    </main>
 {% endblock %}

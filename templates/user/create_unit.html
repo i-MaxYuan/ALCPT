@@ -1,138 +1,73 @@
-{% extends 'base.html' %}
+{% extends 'new_base.html' %}
+
+{% block scripts %}
+    <script type="text/javascript">
+        function is_selected() {
+            var unitName = document.getElementById("unit_name");
+            var unit = document.getElementById("unit");
+
+            if (unit.value === 'department' || unit.value === 'squadron') {
+                unitName.disabled = false;
+            } else {
+                unitName.disabled =  true;
+            }
+        }
+
+        function valid_name(input_unit){
+            var invalid = document.getElementById("invalid");
+            var submit = document.getElementById("submit");
+
+            if (input_unit.value === ''){
+                invalid.innerHTML = "<span style='color: red; font-size: 14px'>Require</span>";
+                submit.disabled = true;
+            }
+            else {
+                invalid.innerHTML = "";
+                submit.disabled = false;
+            }
+        }
+    </script>
+{% endblock %}
 
 {% block path %}
-    <a href="">系統管理員</a>
-    <a class="fa fa-angle-double-right fa-lg box"></a>
-    <a href="{% url 'unit_list' %}">單位列表</a>
-    <a class="fa fa-angle-right fa-lg box"></a>
-    <a href="">新增單位</a>
+    <li class="breadcrumb-item" aria-current="page"><a href="{% url 'unit_list' %}">Unit List</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Create Unit</li>
 {% endblock %}
 
 {% block content %}
-    <div class="create_unit">
-        <div class="title"><h1>Unit Create.</h1></div>
-        <form action="{% url 'unit_create' %}" method="post" autocomplete="off">
-            {% csrf_token %}
+    <main class="unit-create-form">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="card">
+                            <div class="card-header">Unit Create.</div>
 
-            <table>
-                <tr>
-                    <td class="col-md-2" style="text-align: center">單位</td>
-                    <td class="col-md-5">
-                        <select id='unit' name='unit' required>
-                            <option value='' selected disabled hidden>選擇要新增單位</option>
-                            <option value='department'> 科系 </option>
-                            <option value='squadron'> 中隊 </option>
-                        </select>
-                    </td>
-                </tr>
+                            <div class="card-body">
+                                <h5 class="card-subtitle mb-2 text-muted">Unit.</h5>
+                                <p class="card-text">
+                                    <select class="custom-select custom-select-sm" id='unit' name='unit' onchange="is_selected();" required>
+                                        <option value='' selected disabled hidden>Choose the Unit</option>
+                                        <option value='department'>Department</option>
+                                        <option value='squadron'>Squadron</option>
+                                    </select>
+                                </p>
 
-                <tr>
-                    <td class="col-md-2" style="text-align: center">單位名稱</td>
-                    <td class="col-md-5"><input type="text" id="unit_name" name="unit_name" onkeyup="uniqueName({{ department_names }}, {{ squadron_names }}, document.getElementById('unit').value, this)" placeholder="輸入要新增的單位名稱" required></td>
-                </tr>
-            </table>
+                                <h5 class="card-subtitle mb-2 text-muted">Unit Name.<label id="invalid"></label></h5>
+                                <p class="card-text">
+                                    <input class="form-control" type="text" id="unit_name" name="unit_name" onkeyup="valid_name(this)" placeholder="Enter the name of the unit..." required disabled>
+                                </p>
 
-            <div class="btn">
-                <button type="submit">新增</button>
-                <button type="button" onclick="self.location=document.referrer;">取消</button>&nbsp;
+                                <div class="float-right">
+                                    <button class="btn btn-primary" type="submit" id="submit" disabled>Submit</button>
+                                    <button class="btn btn-secondary" type="button" onclick="self.location=document.referrer;">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
-
-            <div id="invalid" class="result"></div>
-            <div id="valid" class="result"></div>
-
-        </form>
-
-        <style>
-            .create_unit .title h1{
-                width: 30%;
-                font-size: 28px;
-                color: #FFFEF6;
-                background-color: #4CCABD;
-                padding-top: 10px;
-                padding-bottom: 10px;
-                padding-right: 15px;
-                padding-left: 45px;
-                text-align: center;
-            }
-
-            .create_unit table{
-                position: relative;
-                left: 20%;
-
-                width: 60%;
-
-                font-size: 20px;
-            }
-            .create_unit table td{
-                padding: 4px;
-            }
-            .create_unit form input{
-                width: 80%;
-                padding: 6px;
-            }
-            .create_unit form textarea{
-                font-size: 20px;
-                width: 100%;
-                height: 45%;
-                padding: 10px;
-            }
-
-            .create_unit .btn{
-                position: relative;
-                top: 30px;
-                left: 40%;
-            }
-            .create_unit .btn button{
-                font-size: 25px;
-                padding: 10px;
-                padding-left: 15px;
-                padding-right: 15px;
-                color: #FFFEF6;
-                background-color: #4CCABD;
-                border: none;
-            }
-
-            .result{
-                position: absolute;
-                top: 55%;
-                left: 30%;
-            }
-            #valid{
-                color: green;
-            }
-            #invalid{
-                color: red;
-            }
-        </style>
-    </div>
-
-    <div>
-        <script type="text/JavaScript">
-            function uniqueName(departments, squadrons, mode, input_unit){
-                var arr = squadrons;
-
-                if(mode === 'department'){
-                    arr = departments
-                }
-
-                for(var i = 0; i < arr.length; i++) {
-                    if (input_unit.value == ''){
-                        document.getElementById("valid").innerHTML = '';
-                        document.getElementById("invalid").innerHTML = '';
-                    }
-                    else if (input_unit.value === arr[i]) {
-                        document.getElementById("invalid").innerHTML =
-                            input_unit.value + ' has exist, please change ' + mode + ' name.';
-                        document.getElementById("valid").innerHTML = '';
-                        break;
-                    }
-                    else {
-                        document.getElementById("valid").innerHTML = 'This name can be used.';
-                        document.getElementById("invalid").innerHTML = '';
-                    }
-                }
-            }
-        </script>
-    </div>
-
+        </div>
+    </main>
 {% endblock %}

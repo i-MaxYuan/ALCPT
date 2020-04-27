@@ -1,101 +1,148 @@
-{% extends 'base.html' %}
+{% extends 'new_base.html' %}
 
 {% load web_filters %}
 
+{% block scripts %}
+    <script type="text/javascript">
+        var passPrivilege = true;
+        var passFile = false;
+
+        function privilege_not_empty() {
+            var privilegeInvalid = document.getElementById('privilege_invalid');
+            var system = document.getElementById('32');
+            var testM = document.getElementById('16');
+            var tbM = document.getElementById('8');
+            var tbO = document.getElementById('4');
+            var viewer = document.getElementById('2');
+            var testee = document.getElementById('1');
+
+            if (system.checked === false && testM.checked === false && tbM.checked === false &&
+                tbO.checked === false && viewer.checked === false && testee.checked === false) {
+                privilegeInvalid.innerHTML = "<span style='color: red; font-size: 14px'>Choose one privilege at least</span>";
+                passPrivilege = false;
+            } else {
+                privilegeInvalid.innerHTML = '';
+                privilegeInvalid.style.display = 'none';
+                passPrivilege = true;
+            }
+            is_valid();
+        }
+
+        function file_not_empty(){
+            if (document.getElementById('users_file')){
+                passFile = true;}
+            else{
+                passFile = false;}
+            is_valid();
+        }
+
+        function is_valid() {
+            var submit = document.getElementById('submit');
+
+            if(passFile === true && passPrivilege === true){
+                submit.disabled = false;
+            } else{
+                submit.disabled = true;
+            }
+            document.getElementById('test').innerHTML =  "~";
+        }
+    </script>
+{% endblock %}
+
 {% block path %}
-    <a href="">系統管理員</a>
-    <a class="fa fa-angle-double-right fa-lg box"></a>
-    <a href="">使用者列表</a>
-    <a class="fa fa-angle-right fa-lg box"></a>
-    <a href="">新增使用者（多重）</a>
+    <li class="breadcrumb-item" aria-current="page"><a href="{% url 'user_list' %}">User List</a></li>
+    <li class="breadcrumb-item active" aria-current="page">User Create（Multiple）</li>
 {% endblock %}
 
 {% block content %}
-    <div class="multi_create">
-        <form method="post" enctype="multipart/form-data">
-            <div class="title"><h1>Multi-Create User.</h1></div>
-            {% csrf_token %}
-            <table>
-                <tr>
-                    <td class="col-md-1">帳號清單</td>
-                    <td class="col-md-2">
-                        <textarea class="form-control" name="reg_ids" rows="5" placeholder="帳號1, 帳號2, ..."></textarea>
-                        <small>學號即為帳號，僅限英文、數字，請用全形頓號區隔。<strong>預設密碼為學號。</strong></small>
-                    </td>
-                </tr>
+    <main class="multi-create-user-form">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-10">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
 
-                <tr>
-                    <td class="col-md-1">選擇檔案</td>
-                    <td class="col-md-2"><input type="file" name="users_file" accept=".xls, .xlsx"></td>
-                </tr>
+                        <div class="card">
+                            <div class="card-header">Multiple Create User.</div>
 
-                <tr>
-                    <td class="col-md-1">權限</td>
-                    <td class="col-md-2">
-                        {% for privilege in privileges.values %}
-                            <input type="checkbox" id="{{ privilege.value.0 }}" name="privilege_{{ forloop.counter0 }}" {% if privilege == privileges.Testee %} checked {% endif %}>{{ privilege.value.1 }}&nbsp;
-                        {% endfor %}
-                    </td>
-                </tr>
-            </table>
+                            <div class="card-body">
+                                <h5 class="subtitle mb-2 text-muted">Upload File.</h5>
+                                <div class="input-group">
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="users_file" name="users_file" accept=".xls, .xlsx" onchange="file_not_empty()">
+                                        <label class="custom-file-label" for="users_file">Select .xls and .xlsx file</label>
+                                    </div>
+                                    <div class="input-group-append">
+                                        <button type="submit" id="submit" class="btn btn-outline-secondary" disabled><i class="fa fa-upload"></i></button>
+                                    </div>
+                                </div>
+                                <script>
+                                    // to change the label, the selected file name will display
+                                    $(".custom-file-input").on("change", function() {
+                                        var fileName = $(this).val().split("\\").pop();
+                                        $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+                                    });
+                                </script>
 
-            <div class="btn">
-                <button type="submit" onclick="return confirm('確認新增？')">新增使用者</button>
-                <button type="reset" onclick="return confirm('確認重設？')">重設</button>
-                <button type="button" onclick="self.location=document.referrer;">取消</button>
+                                <h5 class="subtitle mb-2 text-muted">Privilege.<span id="privilege_invalid" class="privilege_invalid"></span></h5>
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="button-group">
+                                                <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+                                                    <i class="fa fa-gears"></i>
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li>Privilege Setting.</li>
+                                                    {% for privilege in privileges.values %}
+                                                        <li><input type="checkbox" id="{{ privilege.value.0 }}" name="{{ privilege }}" onchange="privilege_not_empty()" {% if privilege == privilege.Testee %} checked {% endif %}>&nbsp;{{ privilege.value.1 }}</li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <h5 class="card-subtitle mb-2 text-muted">File Criteria.</h5>
+                                <p class="card-text">
+                                    <p style="color: red">&ast;Field Order：Account／Name／Identity</p>
+                                    <p style="color: red">&ast;Account do not accept these specific characters： ' or " or ; or \ or / or , or # or *</p>
+                                </p>
+
+                                <h5 class="card-subtitle mb-2 text-muted">Tips.</h5>
+                                <p class="card-text mark">
+                                    <strong>identity.</strong><br>
+                                    1 -> Visitor<br>
+                                    2 -> Student<br>
+                                    3 -> Teacher<br>
+                                </p>
+
+                                <div class="dropdown-divider"></div>
+
+                                <div class="text-center">
+                                    <button type="button" class="btn btn-secondary" onclick="history.go(-1)">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
+        </div>
+    </main>
+    <style>
+        .multi-create-user-form .container .card .card-body .button-group ul{
+            padding-left: 10px;
+        }
+        .mark{
+            background-color: rgb(248, 248, 248);
 
-        </form>
+            border-left-style: solid;
+            border-left-width: 4px;
+            border-left-color: rgb(200, 200, 200);
+            opacity: 0.6;
 
-        <style>
-            .multi_create .title h1{
-                    width: 30%;
-                    font-size: 28px;
-                    color: #FFFEF6;
-                    background-color: #4CCABD;
-                    padding-top: 10px;
-                    padding-bottom: 10px;
-                    padding-right: 15px;
-                    padding-left: 45px;
-                    text-align: center;
-                }
-
-            .multi_create table{
-                position: relative;
-                left: 15%;
-
-                width: 70%;
-
-                font-size: 20px;
-            }
-            .multi_create table td{
-                padding: 4px;
-            }
-            .multi_create form textarea{
-                    font-size: 20px;
-                    width: 100%;
-                    height: 45%;
-                    padding: 10px;
-                }
-            .multi_create form input{
-                padding: 6px;
-            }
-
-            .multi_create .btn{
-                position: relative;
-                top: 10px;
-                left: 35%;
-            }
-            .multi_create .btn button{
-                font-size: 25px;
-                padding: 10px;
-                padding-left: 15px;
-                padding-right: 15px;
-                color: #FFFEF6;
-                background-color: #4CCABD;
-                border: none;
-            }
-        </style>
-
-    </div>
+            padding-left: 10px;
+        }
+    </style>
 {% endblock %}
+

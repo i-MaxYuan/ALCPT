@@ -1,127 +1,102 @@
-{% extends 'base_long_page.html' %}
+{% extends 'new_base.html' %}
 
-{#{% load web_filters %}#}
+{% block scripts %}
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>   <!--for chart-->
+{% endblock %}
 
 {% block path %}
-    <a href="{% url 'exam_score_list' %}">成績檢閱者</a>
-    <a class="fa fa-angle-double-right fa-lg box"></a>
-    <a href="">檢視{{ exam }}</a>
+    <li class="breadcrumb-item" aria-current="page"><a href="{% url 'exam_score_list' %}">View Testee Score</a></li>
+    <li class="breadcrumb-item active" aria-current="page">View - {{ exam.name }}</li>
 {% endblock %}
 
 {% block content %}
-    <div class="display-kind-btn">
-        <button onclick="displayFunc('columnar')">條列式</button>
-        <button onclick="displayFunc('pie-chart')">圓餅圖</button>
-        <style>
-            .display-kind-btn{
-                position: relative;
-                left: 20%;
-                top: 30px;
-                font-size: 20px;
-                z-index: 100;
-            }
-        </style>
-    </div>
-    <div class="table-responsive">
-        <table id="columnar" class="table table-hover">
-            <caption style="font-size: 30px;">&nbsp;&nbsp 受測學生成績</caption>
+    <main class="view-exam-score-detail">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <h2>{{ exam.name }}.</h2>
+                    <div class="table-responsive" style="height: 65vh">
+                        <table class="table table-hover">
+                            <thead class="thead-light">
+                                <th class="text-center">ID.</th>
+                                <th class="text-center">Name.</th>
+                                <th class="text-center">Score.</th>
+                                <th class="text-right"></th>
+                            </thead>
 
-            <thead class="title">
-                <tr>
-                    <th class="col-md-1">學號</th>
-                    <th class="col-md-1">受測者</th>
-                    <th class="col-md-1">受測者科系</th>
-                    <th class="col-md-1">單位</th>
-                    <th class="col-md-2">考試成績</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for testee, answer_sheet in testeeData %}
-                    <tr onclick="window.location.href='{% url "view_profile" testee.user.id %}'">
-                        <td style="text-align: center; vertical-align:middle;">{{ testee.stu_id }}</td>
-                        <td style="vertical-align:middle;">{{ testee.user.name }}</td>
-                        <td style="vertical-align:middle;">{{ testee.department }}</td>
-                        <td style="vertical-align:middle;">{{ testee.squadron }}</td>
-                        {% if answer_sheet.score or answer_sheet.score == 0 %}
-                            {% if answer_sheet.score < 60.0 %}
-                                <td style="color: #c12e2a">{{ answer_sheet.score }}</td>
-                            {% else %}
-                                <td>{{ answer_sheet.score }}</td>
-                            {% endif %}
-                        {% else %}
-                            <td>尚未測驗</td>
-                        {% endif %}
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                            <tbody>
+                                {% for testee, answer_sheet in testeeData %}
+                                    <tr>
+                                        <td class="text-center">
+                                            {% if testee.student %}
+                                                {{ testee.student.stu_id }}
+                                            {% else %}
+                                                {{ testee.reg_id }}
+                                            {% endif %}
+                                        </td>
+                                        <td class="text-center">{{ testee.name }}</td>
+                                        <td class="text-center">
+                                            {% if answer_sheet.score is none %}
+                                                未進行測驗
+                                            {% else %}
+                                                {{ answer_sheet.score }}
+                                            {% endif %}
+                                        </td>
+                                        <td class="text-right">
+                                            {% if testee.student %}
+                                                <a href="{% url 'view_testee_info' exam.id testee.reg_id %}">&rightarrow;</a>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
 
-        <div id="pie-chart" class="table table-hover" style="display: none">
-        <canvas id="chart" width="800" height="600"></canvas>
-        <script>
-            var ctx = document.getElementById('chart').getContext('2d');
-            var chart = new Chart(ctx, {
-                type: 'pie',
-                data: {
-                    labels: ["及格", "不及格", "未施測"],
-                    datasets: [{
-                        label: '# of Votes',
-                        data: [{{ qualified }}, {{ unqualified }}, {{ not_tested }}],
-                        backgroundColor: [
-                            'rgba(120, 194, 196, 1)',
-                            'rgba(219, 77, 109, 1)'
-                        ],
-                        borderColor: [
-                            'rgba(255,255,255,1)',
-                            'rgba(255, 255, 255, 1)'
-                        ],
-                        borderWidth: 6
-                    }]
-                }
-            });
-        </script>
-    </div>
+                    <div class="float-right">
+                        <button class="btn btn-primary" onclick="history.go(-1)">OK</button>
+                    </div>
+                </div>
 
-        <style>
-            .table-responsive .table{
-                text-align: center;
-                position: absolute;
-                top: 30px;
-            }
+                <div class="col-md-6">
+                    <h2>Pie Chart.</h2>
+                    <div id="pie-chart-container" style="width: 100%; height: 100%"></div>
 
-            .table-hover > tbody > tr:hover > td,
-            .table-hover > tbody > tr:hover > th {
-                background-color: #4CCABD;
-            }
+                    <script type="text/javascript">
+                        google.charts.load('current', {'packages':['corechart']});
+                        google.charts.setOnLoadCallback(drawChart);
 
-            .title{
-                font-size: 20px;
-            }
+                        function drawChart() {
+                            var data = google.visualization.arrayToDataTable([
+                                ['Task', 'Times'],
+                                ['Qualified', {{ qualified }}],
+                                ['Unqualified', {{ unqualified }}],
+                                ['Not tested', {{ not_tested }}],
+                            ]);
 
-            .title tr th{
-                text-align: center;
-            }
+                            var options = {
+                                title: 'Qualified Rate',
+                                width: 800,
+                                height: 450,
+                                is3D: true,
+                            };
 
-            .table tbody{
-                font-size: 18px;
-            }
+                            var chart = new google.visualization.PieChart(document.getElementById('pie-chart-container'));
 
-            .table tbody td a{
-                color: #2C3232;
-            }
-
-        </style>
-    </div>
-
-
-    <script type="application/javascript">
-    function displayFunc(display_kind) {
-        var i;
-        var x = document.getElementsByClassName("table table-hover");
-        for (i = 0; i < x.length; i++) {
-            x[i].style.display = "none";
+                            chart.draw(data, options);
+                        }
+                    </script>
+                </div>
+            </div>
+        </div>
+    </main>
+    <style>
+        .view-exam-score-detail .container .row .col-md-6 table > tbody > tr > td > a{
+            text-decoration: none;
+            visibility: hidden;
         }
-        document.getElementById(display_kind).style.display = "block";
-    }
-    </script>
+        .view-exam-score-detail .container .row .col-md-6 table > tbody > tr:hover > td > a{
+            visibility: visible;
+        }
+    </style>
 {% endblock %}

@@ -1,94 +1,189 @@
-{% extends 'base_long_page.html' %}
+{% extends 'new_base.html' %}
 
 {% load web_filters %}
 
+{% block scripts %}
+    <script>
+        function toggle(index){
+            var angle_right_btnIndex = 'angle_right_btn_'+index;
+            var angle_right_btn = document.getElementById(angle_right_btnIndex);
+            var dataIndex = 'detailData'+index;
+            var data = document.getElementById(dataIndex);
+            var iconRightIndex = 'iconRight'+index;
+            var iconRight = document.getElementById(iconRightIndex);
+            var iconDownIndex = 'iconDown'+index;
+            var iconDown = document.getElementById(iconDownIndex);
+
+            if (data.style.display === "none"){
+                angle_right_btn.innerHTML = '<i class="fa fa-angle-down"></i>';
+                data.style.display = "table-row";
+                iconRight.style.display = "none";
+                iconDown.style.display = "block";
+            } else {
+                angle_right_btn.innerHTML = '<i class="fa fa-angle-right"></i>';
+                data.style.display = "none";
+                iconRight.style.display = "block";
+                iconDown.style.display = "none";
+            }
+        }
+    </script>
+{% endblock %}
+
 {% block path %}
-    <a href="">受測者</a>
-    <a class="fa fa-angle-double-right fa-lg box"></a>
-    <a href="{% url 'testee_score_list' %}">成績紀錄</a>
-    <a class="fa fa-angle-right fa-lg box"></a>
-    <a href="">檢閱試卷內容</a>
+    <li class="breadcrumb-item" aria-current="page"><a href="{% url 'testee_score_list' %}">Score List</a></li>
+    <li class="breadcrumb-item active" aria-current="page">View Test paper Content</li>
 {% endblock %}
 
 {% block content %}
-    <div class="table-responsive">
-        <table class="table table-hover">
-            <caption style="font-size: 30px;">&nbsp;&nbsp;試卷作答內容</caption>
-            <thead class="title">
-                <tr>
-                    <th class="col-md-1">題序</th>
-                    <th class="col-md-6">題目</th>
-                    <th class="col-md-2">選項</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for answer in answersheet.answer_set.all %}
-                    <tr>
-                        <td style="text-align: center; vertical-align:middle;">{{ forloop.counter }}</td>
-                    {% if answer.question.q_type|question_kind == 'listening' %}
-                        <td style="vertical-align:middle; text-align: left">
-                            {% if answer.selected == -1 %}
-                                <span style="color: red">此題未作答</span>
-                            {% endif %}
-                            <audio controls preload="none">
-                                <source src="{{ answer.question.q_file }}" type="audio/mpeg">
-                                Your browser does not support the audio tag.
-                            </audio>
-                        </td>
-                    {% elif answer.question.q_type|question_kind == 'reading' %}
-                        <td style="vertical-align:middle; text-align: left">
-                            {% if answer.selected == -1 %}
-                                <span style="color: red">此題未作答</span>
-                            {% endif %}
-                            {{ answer.question }}
-                        </td>
-                    {% else %}
-                        <td style="vertical-align:middle;">Unknown</td>
-                    {% endif %}
-                        <td style="vertical-align:middle; text-align: left">
-                            {% for option in answer.question.choice_set.all %}
-                                {% if answer.selected == forloop.counter and option.is_answer %}
-                                    <span style="color: green"><li>{{ option }}</li></span>
-                                {% elif answer.selected == forloop.counter %}
-                                    <span style="color: red"><li>{{ option }}</li></span>
-                                {% elif option.is_answer %}
-                                    <span style="color: green"><li>{{ option }}</li></span>
-                                {% else %}
-                                    <li>{{ option }}</li>
-                                {% endif %}
-                            {% endfor %}
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    <main class="testee-score-list">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-12">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th></th>
+                                    <th scope="col">Serial.</th>
+                                    <th scope="col">Content.</th>
+                                    <th scope="col" class="text-right">
+                                        <button type="button" class="btn" data-toggle="modal" data-target="#promptContent">
+                                            <i class="fa fa-question-circle"></i>
+                                        </button>
+                                        <div class="modal fade text-left" id="promptContent" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header text-center">
+                                                        <h5 class="modal-title" id="ModalLongTitle">Tips</h5>
+                                                    </div>
 
-        <style>
-            .table-responsive .table{
-                text-align: center;
-            }
+                                                    <div class="modal-body" style="font-size: 20px">
+                                                        <ul>
+                                                            <li>
+                                                                <p>
+                                                                    If your <u>answer is correct</u>, then it will display only one color in all choices and
+                                                                    there will display <i class="fa fa-check" style="color: green"></i> behind the question.
+                                                                </p>
+                                                            </li>
+                                                            <li>
+                                                                <p>
+                                                                    If you <u>didn't answer the question</u>, then it will display only one color in all choices and
+                                                                    also display <i class="fa fa-question" style="color: red"></i> behind the question.
+                                                                </p>
+                                                            </li>
+                                                            <li>
+                                                                <p>
+                                                                    The question has been reported as an error, but after processing by the TBManager, then it will
+                                                                    display <i class="fa fa-exclamation-circle" style="color: red"></i> behind the question.
+                                                                </p>
+                                                            </li>
+                                                            <li>
+                                                                <p style="color: red">
+                                                                    Red color means your selected the wrong answer on the exam.
+                                                                </p>
+                                                            </li>
+                                                            <li>
+                                                                <p style="color: green">
+                                                                    Green color means the sentence is correct but you miss it.
+                                                                </p>
+                                                            </li>
+                                                            <li>
+                                                                <p>
+                                                                    If you think there is a problem with the question, you can click <i class="fa fa-exclamation-triangle"></i> to report it.
+                                                                </p>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
 
-            .table-hover > tbody > tr:hover > td,
-            .table-hover > tbody > tr:hover > th {
-                background-color: #4CCABD;
-            }
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
 
-            .title{
-                font-size: 30px;
-            }
+                            <tbody>
+                                {% for answer in answersheet.answer_set.all %}
+                                    <tr id="mainData{{ forloop.counter }}">
+                                        <td id="angle_right_btn_{{ forloop.counter }}" onclick="toggle('{{ forloop.counter }}')" style="cursor: pointer;"><i class="fa fa-angle-right"></i></td>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td class="text-left">
+                                            {% if answer.question.q_file %}
+                                                <audio controls preload="none">
+                                                    <source src="{{ answer.question.q_file.url }}" type="audio/mpeg">
+                                                    Your browser does not support the audio tag.
+                                                </audio>
+                                            {% else %}
+                                                <div id="summary_Q_content{{ forloop.counter }}">
+                                                    {{ answer.question.q_content|summary:110 }}
+                                                </div>
+                                                <div id="full_Q_content{{ forloop.counter }}" style="display: none">
+                                                    {{ answer.question.q_content|linebreaksbr }}
+                                                </div>
+                                            {% endif %}
+                                        </td>
+                                        <td class="text-right">
+                                            {% if answer.question.state == 5 %}
+                                                <i class="fa fa-exclamation-circle" style="color: red; font-size: 20px"></i>
+                                            {% else %}
+                                                {% if answer.selected == -1 %}
+                                                    <i class="fa fa-question" style="color: red; font-size: 20px"></i>
+                                                {% else %}
+                                                    {% for option in answer.question.choice_set.all %}
+                                                        {% if answer.selected == forloop.counter and option.is_answer %}
+                                                            <i class="fa fa-check" style="color: green; font-size: 20px"></i>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                {% endif %}
+                                            {% endif %}
+                                        </td>
+                                    </tr>
 
-            .title tr th{
-                text-align: center;
-            }
+                                    <tr id="detailData{{ forloop.counter }}" style="display: none;">
+                                        <td></td>
+                                        <td colspan="2" style="text-align: left">
+                                            <ol type="A">
+                                                {% for option in answer.question.choice_set.all %}
+                                                    {% if answer.selected == forloop.counter and option.is_answer %}
+                                                        <span style="color: green"><li>{{ option }}</li></span>
+                                                    {% elif answer.selected == forloop.counter %}
+                                                        <span style="color: red"><li>{{ option }}</li></span>
+                                                    {% elif option.is_answer %}
+                                                        <span style="color: green"><li>{{ option }}</li></span>
+                                                    {% else %}
+                                                        <li>{{ option }}</li>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </ol>
+                                        </td>
+                                        <td class="text-right">
+                                            {% if answer.question.state == 5 %}
+                                                <i class="fa fa-exclamation-triangle" style="cursor: pointer;" onclick="alert('This question had been modified.')"></i>
+                                            {% else %}
+                                                <i class="fa fa-exclamation-triangle" style="cursor: pointer;" onclick="window.location.href='{% url 'report_question' question_id=answer.question.id %}'"></i>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
 
-            .table tbody{
-                font-size: 16px;
-            }
-
-            .table tbody td a{
-                color: #2C3232;
-            }
-
-        </style>
-    </div>
+                        <div class="text-center">
+                            <button type="button" class="btn btn-primary" onclick="self.location=document.referrer;">OK</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <style>
+        .testee-score-list table > thead > tr > th,
+        .testee-score-list table > tbody > tr > td{
+            text-align: center;
+            vertical-align: middle;
+        }
+    </style>
 {% endblock %}
