@@ -1,0 +1,207 @@
+{% extends 'new_base.html' %}
+
+{% load static %}
+
+{% block scripts %}
+    <script type="text/javascript">
+        {#var validName = false;#}
+        {#var validTime = false;#}
+        {#var validDuration = true;#}
+        {#var validTestpaper = false;#}
+        {#var validGroup = false;#}
+
+        {#function time_valid() {#}
+        {#    var time = document.getElementById('start-time');#}
+        {#    var time_invalid = document.getElementById('time_invalid');#}
+        {##}
+        {#    validTime = true;#}
+        {#    time_invalid.innerHTML = '';#}
+        {#    data_valid();#}
+        {#}#}
+
+        {#function unique_name(names, input){#}
+        {#    var invalid = document.getElementById("name_invalid");#}
+        {#    var arr = names;#}
+        {##}
+        {#    for(var i = 0; i < arr.length; i++) {#}
+        {#        if (input.value === ''){#}
+        {#            invalid.innerHTML = "<span style='color: red; font-size: 14px'>Required</span>";#}
+        {#            validName = false;#}
+        {#        }#}
+        {#        else if (input.value === arr[i]) {#}
+        {#            invalid.innerHTML = "<span style='color: red; font-size: 14px'>Name has existed</span>";#}
+        {#            validName = false;#}
+        {#            break;#}
+        {#        }#}
+        {#        else {#}
+        {#            invalid.innerHTML = '';#}
+        {#            validName = true;#}
+        {#        }#}
+        {#    }#}
+        {#    data_valid();#}
+        {#}#}
+        {##}
+        {#Checkout whether duration not null and not negative.#}
+        {#function duration_valid(input){#}
+        {#    var duration_invalid = document.getElementById("duration_invalid");#}
+        {#    var reMatch = input.value.match(/[0-9]/g);#}
+        {##}
+        {##}
+        {#    if(input.value === ''){#}
+        {#        duration_invalid.innerHTML = "<span style='color: red; font-size: 14px'>Required</span>";#}
+        {#        validDuration = false;#}
+        {#    }#}
+        {#    else if(parseInt(input.value) <= 0){#}
+        {#        duration_invalid.innerHTML = "<span style='color: red; font-size: 14px'>must be a positive integer</span>";#}
+        {#        validDuration = false;#}
+        {#    }#}
+        {#    else if(reMatch.length !== (input.value).length){#}
+        {#        duration_invalid.innerHTML = "<span style='color: red; font-size: 14px'>reject other characters exclude positive integer</span>";#}
+        {#        validDuration = false;#}
+        {#    }#}
+        {#    else{#}
+        {#        duration_invalid.innerHTML = "";#}
+        {#        validDuration = true;#}
+        {#    }#}
+        {#    data_valid();#}
+        {#}#}
+        {##}
+        {#Checkout whether testpaper and group are not null.#}
+        {#function is_selected(selectedData, kind) {#}
+        {#    var testpaper_invalid = document.getElementById("testpaper_invalid");#}
+        {#    var group_invalid = document.getElementById("group_invalid");#}
+        {##}
+        {#    if (selectedData.value === ''){#}
+        {#        if(kind === 'Group'){#}
+        {#            validGroup = false;#}
+        {#            group_invalid.innerHTML = "<span style='color: red; font-size: 14px'>Required</span>";#}
+        {#        } else {#}
+        {#            validTestpaper = false;#}
+        {#            testpaper_invalid.innerHTML = "<span style='color: red; font-size: 14px'>Required</span>";#}
+        {#        }#}
+        {#    }#}
+        {#    else {#}
+        {#        if(kind === 'group'){#}
+        {#            validGroup = true;#}
+        {#            group_invalid.innerHTML = '';#}
+        {#        } else{#}
+        {#            validTestpaper = true;#}
+        {#            testpaper_invalid.innerHTML = '';#}
+        {#        }#}
+        {#    }#}
+        {#    data_valid();#}
+        {#}#}
+        {##}
+        {#Checkout whether all tag is valid and can send the form.#}
+        {#function data_valid() {#}
+        {#    if(validName===true && validTime===true && validDuration===true && validTestpaper===true && validGroup===true){#}
+                {#submit.style.backgroundColor = '#4CCABD';#}
+        {#        submit.disabled = false;#}
+        {#    }#}
+        {#    else{#}
+                {#submit.style.backgroundColor = 'grey';#}
+        {#        submit.disabled = true;#}
+        {#    }#}
+            {#document.getElementById('time_invalid').innerHTML = validName + ','+validTime + validDuration + validTestpaper + validGroup;#}
+        {#}#}
+    </script>
+{% endblock %}
+
+
+{% block path %}
+    <li class="breadcrumb-item" aria-current="page"><a href="{% url 'exam_list' %}">Exam List</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Exam Edit</li>
+{% endblock %}
+
+{% block content %}
+    <main class="exam-create-form">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="card">
+                            <div class="card-header">Exam Edit.</div>
+
+                            <div class="card-body">
+                                <h5 class="card-subtitle mb-2 text-muted">
+                                    Exam Name.<span id="name_invalid" class="name_invalid"></span>
+                                </h5>
+                                <p class="card-text">
+                                    <input class="form-control" type="text" onkeyup="unique_name({{ exam_names }}, this)" name="exam_name" value="{{ exam.name }}" required>
+                                </p>
+
+                                <div class="dropdown-divider"></div>
+
+                                <h5 class="card-subtitle mb-2 text-muted">
+                                    Test Paper.<span id="name_invalid" class="name_invalid"></span>
+                                </h5>
+                                <p class="card-text">
+{#                                    <select class="custom-select custom-select-sm" name="selected_testpaper" id="selected_testpaper" onchange="is_selected(document.getElementById('selected_testpaper'), 'testpaper')" required>#}
+                                    <select class="custom-select custom-select-sm" name="selected_testpaper" id="selected_testpaper" required>
+                                        <option value="" disabled selected>Choose Test Paper</option>
+                                        {% for testpaper in testpapers %}
+                                            <option value="{{ testpaper.id }}" {% if exam.testpaper.name == testpaper.name %}selected{% endif %}>{{ testpaper.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </p>
+
+                                <div class="dropdown-divider"></div>
+
+                                <h5 class="card-subtitle mb-2 text-muted">
+                                    Group.<span id="group_invalid" class="group_invalid"></span>
+                                </h5>
+                                <p class="card-text">
+{#                                    <select class="custom-select custom-select-sm" name="selected_group" id="selected_group" onchange="is_selected(document.getElementById('selected_group'), 'group')" required>#}
+                                    <select class="custom-select custom-select-sm" name="selected_group" id="selected_group">
+                                        <option value="" disabled selected>Choose Testee Group</option>
+                                        {% for group in groups %}
+                                            <option value="{{ group.id }}">{{ group.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </p>
+
+                                <div class="dropdown-divider"></div>
+
+                                <h5 class="card-subtitle mb-2 text-muted">
+                                    Start Time.
+                                </h5>
+                                <p class="card-text">
+                                    Date:
+                                    <select name="start_time_date" required>
+                                        {% for date in dateList %}
+                                            <option value="{{ date }}" {% if date == original_date %}selected{% endif %}>{{ date }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    Time:
+                                    <select name="start_time_hour" required>
+                                        {% for hour in hourList %}
+                                            <option value="{{ hour }}" {% if hour == original_hour %}selected{% endif %}>{{ hour }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <select name="start_time_minute" required>
+                                        {% for minute in minuteList %}
+                                            <option value="{{ minute }}" {% if minute == original_minute %}selected{% endif %}>{{ minute }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </p>
+
+                                <h5 class="card-subtitle mb-2 text-muted">
+                                    Duration.(min)<span id="duration_invalid" class="duration_invalid"></span>
+                                </h5>
+                                <p class="card-text">
+                                    <input class="form-control" type="text" name="duration" value="{{ exam.duration }}" required>
+                                </p>
+
+                                <div class="float-right">
+                                    <button type="submit" class="btn btn-primary" id="submit">Update</button>
+                                    <button type="button" class="btn btn-secondary" onclick="self.location=document.referrer;">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

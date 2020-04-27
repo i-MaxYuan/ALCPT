@@ -41,12 +41,12 @@ INSTALLED_APPS = (
     'captcha',
 )
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+    #'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
@@ -78,18 +78,17 @@ WSGI_APPLICATION = 'Online_Exam.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
-# 更換成 mysql
+# mysql
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'ALCPT',
+        'NAME': 'ALCPT2',
         'USER': 'root',
         'PASSWORD': 'alcptalcpt',
         'HOST': '127.0.0.1',
         'PORT': '3306',
     }
 }
-
 
 CAPTCHA_NOISE_FUNCTIONS = (
     'captcha.helpers.noise_null',   # 沒有樣式
@@ -130,8 +129,9 @@ STATICFILES_DIRS = [
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'alcpt/static')
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'alcpt/media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/proclamation'
+LOGOUT_REDIRECT_URL = '/'
 
 AUTH_USER_MODEL = 'alcpt.User'

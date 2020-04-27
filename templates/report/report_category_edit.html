@@ -1,93 +1,177 @@
-{% extends 'base.html' %}
+{% extends 'new_base.html' %}
 
 {% load web_filters %}
 
+{% block scripts %}
+    <script type="text/javascript">
+        var changeName = false;
+        var changePrivilege = false;
+        var passPrivilege = true;
+        var passName = true;
+
+        var originSystem = false;
+        var originTestM = false;
+        var originTBM = false;
+        var originTBO = false;
+        var originViewer = false;
+        var originTestee = false;
+
+        // Get original privilege
+        window.onload = function() {
+            var system = document.getElementById('SystemManager');
+            var testM = document.getElementById('TestManager');
+            var tbM = document.getElementById('TBManager');
+            var tbO = document.getElementById('TBOperator');
+            var viewer = document.getElementById('Viewer');
+            var testee = document.getElementById('Testee');
+
+            if(system.checked === true) originSystem = true;
+            if(testM.checked === true) originTestM = true;
+            if(tbM.checked === true) originTBM = true;
+            if(tbO.checked === true) originTBO = true;
+            if(viewer.checked === true) originViewer = true;
+            if(testee.checked === true) originTestee = true;
+        };
+
+        // Checkout whether privilege change and privilege can't be empty.
+        function privilege_change() {
+            var privilegeInvalid = document.getElementById('privilege_invalid');
+            var system = document.getElementById('SystemManager');
+            var testM = document.getElementById('TestManager');
+            var tbM = document.getElementById('TBManager');
+            var tbO = document.getElementById('TBOperator');
+            var viewer = document.getElementById('Viewer');
+            var testee = document.getElementById('Testee');
+
+            {# Checkout wether privilege is changed. #}
+            if (system.checked === originSystem && testM.checked === originTestM && tbM.checked === originTBM &&
+                tbO.checked === originTBO && viewer.checked === originViewer && testee.checked === originTestee){
+                privilegeInvalid.innerHTML = '';
+                changePrivilege = false;
+            }
+            {# Checkout wether privilege isn't null. #}
+            else if (system.checked === false && testM.checked === false && tbM.checked === false &&
+                tbO.checked === false && viewer.checked === false && testee.checked === false) {
+                privilegeInvalid.innerHTML = "<span style='color: red; font-size: 14px'>Choose one privilege at least.</span>";
+                passPrivilege = false;
+            }
+            else {
+                privilegeInvalid.innerHTML = '';
+                changePrivilege = true;
+                passPrivilege = true;
+            }
+            data_valid();
+        }
+
+        // Checkout whether name change and name can't be empty.
+        function name_change(origin, input) {
+            var invalid = document.getElementById('name_invalid');
+
+                if (input.value === ""){
+                    invalid.innerHTML = "<span style='color: red; font-size: 14px'>Required</span>";
+                    passName = false;}
+                else if (origin === input.value) {
+                    invalid.innerHTML = "";
+                    changeName = false;}
+                else {
+                    invalid.innerHTML = '';
+                    changeName = true;
+                    passName = true;
+                }
+            data_valid();
+        }
+
+
+        // Checkout whether all of data is valid.
+        function data_valid() {
+            var submit = document.getElementById('submit');
+
+            if(changeName === true || changePrivilege === true){
+                if(passName === true && passPrivilege === true){
+                    submit.disabled = false;
+                }
+                else{
+                    submit.disabled = true;
+                }
+            }
+            else{
+                submit.disabled = true;
+            }
+        }
+    </script>
+{% endblock %}
+
 {% block path %}
-    <a href="">系統管理員</a>
-    <a class="fa fa-angle-double-right fa-lg box"></a>
-    <a href="{% url 'report_category_list' %}">回報類別列表</a>
-    <a class="fa fa-angle-right fa-lg box"></a>
-    <a href="">新增回報類別</a>
+    <li class="breadcrumb-item" aria-current="page"><a href="{% url 'report_category_list' %}">ReportCategory List</a></li>
+    <li class="breadcrumb-item active" aria-current="page">ReportCategory Edit</li>
 {% endblock %}
 
 {% block content %}
-    <div class="category">
-        <form method="post">
-            <div class="title"><h1>Update Report Category.</h1></div>
-            {% csrf_token %}
-            <table>
-                <tr>
-                    <td class="col-md-2">回報類別名稱</td>
-                    <td class="col-md-5"><input type="text" name="category_name" value="{{ category }}" required></td>
-                </tr>
+    <main class="report-category-edit-form">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header">ReportCategory Edit.</div>
 
-                <tr>
-                    <td class="col-md-2">所屬權限</td>
-                    <td class="col-md-5">
-                        <ul style="list-style: none; line-height: 40px">
-                            {% for privilege in privileges %}
-                                <li><input type="checkbox" id="{{ privilege.value.0 }}" name="{{ privilege }}" {% if category|belongs_to:privilege %} checked {% endif %}> {{ privilege.value.1 }}</li>
-                            {% endfor %}
-                        </ul>
-                    </td>
-                </tr>
-            </table>
+                        <div class="card-body">
+                            <form method="post">
+                                {% csrf_token %}
 
-            <div class="btn">
-                <button type="submit" onclick="return confirm('確認更改此類別？')">更改</button>
-                <button type="reset">重設</button>
-                <button type="reset" onclick="self.location=document.referrer;">取消</button>
+                                <div class="form-group row">
+                                    <label for="p_title" class="col-md-4 col-form-label text-md-right">ReportCategory Name.</label>
+                                    <div class="col-md-6">
+                                        <input class="form-control" type="text" name="category_name" value="{{ category }}" onkeyup="name_change('{{ category }}', this)" placeholder="ReportCategory Name..." required>
+                                        <label id="name_invalid" class="name_invalid"></label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="p_title" class="col-md-4 col-form-label text-md-right">Privilege.</label>
+                                    <div class="col-md-6">
+                                        <div class="container">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <div class="button-group">
+                                                        <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+                                                            <i class="fa fa-gears align-middle"></i>
+                                                        </button>
+                                                        <ul class="dropdown-menu">
+                                                            <li class="dropdown-header">Privilege Setting</li>
+                                                            {% for privilege in privileges %}
+                                                                {% if forloop.counter <= 3 %}
+                                                                    <li><input type="checkbox" id="{{ privilege.value.1 }}" name="{{ privilege }}" onclick="privilege_change()" {% if category|belongs_to:privilege %} checked {% endif %}>&nbsp;&nbsp;{{ privilege.value.1 }}</li>
+                                                                {% else %}
+                                                                    <li><strike><input type="checkbox" id="{{ privilege.value.1 }}" name="{{ privilege }}" onclick="this.checked=!this.checked;">&nbsp;&nbsp;{{ privilege.value.1 }}</strike></li>
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                        </ul>
+                                                        <label class="privilege_invalid" id="privilege_invalid"></label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="offset-md-4 float-right">
+                                    <button type="submit" id="submit" class="btn btn-primary">
+                                        Update
+                                    </button>
+                                    <button type="button" class="btn btn-secondary" onclick="history.go(-1)">
+                                        Cancel
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </form>
-
-        <style>
-            .category .title h1{
-                    width: 35%;
-                    font-size: 28px;
-                    color: #FFFEF6;
-                    background-color: #4CCABD;
-                    padding-top: 10px;
-                    padding-bottom: 10px;
-                    padding-right: 15px;
-                    padding-left: 45px;
-                    text-align: center;
-                }
-
-            .category table{
-                    position: relative;
-                    left: 30%;
-
-                    width: 50%;
-
-                    font-size: 20px;
-                }
-            .category table td{
-                    padding: 4px;
-    }
-            .category form input{
-                padding: 6px;
-            }
-            .category form textarea{
-                font-size: 20px;
-                width: 100%;
-                height: 45%;
-                padding: 10px;
-            }
-
-            .category .btn{
-                position: relative;
-                top: 30px;
-                left: 40%;
-            }
-            .category .btn button{
-                font-size: 25px;
-                padding: 10px;
-                padding-left: 15px;
-                padding-right: 15px;
-                color: #FFFEF6;
-                background-color: #4CCABD;
-                border: none;
-            }
-        </style>
-    </div>
+        </div>
+    </main>
+    <style>
+        .report-category-edit-form .container .card .card-body .button-group ul{
+            padding-left: 10px;
+        }
+    </style>
 {% endblock %}

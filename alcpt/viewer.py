@@ -30,7 +30,7 @@ def index(request):
 def exam_score_detail(request, exam_id):
     try:
         exam = Exam.objects.get(id=exam_id)
-        testees = exam.group.member.all().order_by('stu_id')
+        testees = exam.testeeList.all()
 
         qualified = 0
         unqualified = 0
@@ -39,12 +39,12 @@ def exam_score_detail(request, exam_id):
         for testee in testees:
             try:
                 answer_sheet = AnswerSheet.objects.get(exam=exam, user_id=testee.id)
-                if answer_sheet.score >= 60:
+                if answer_sheet.score is None:
+                    not_tested += 1
+                elif answer_sheet.score >= 60:
                     qualified += 1
                 elif answer_sheet.score < 60:
                     unqualified += 1
-                elif answer_sheet.score is None:
-                    not_tested += 1
 
                 answer_sheets.append(answer_sheet)
             except ObjectDoesNotExist:
@@ -55,5 +55,25 @@ def exam_score_detail(request, exam_id):
 
         return render(request, 'viewer/exam_score_detail.html', locals())
     except ObjectDoesNotExist:
-        messages.error(request, 'Exam does not exist, exam id: {}'.format(exam_id))
+        messages.error(request, 'Exam does not exist, exam id - {}'.format(exam_id))
+        return redirect('exam_score_list')
+
+
+@permission_check(UserType.Viewer)
+def view_testee_info(request, exam_id, reg_id):
+    try:
+        exam = Exam.objects.get(id=exam_id)
+        try:
+            viewed_testee = User.objects.get(reg_id=reg_id)
+
+            answer_sheets = AnswerSheet.objects.filter(user=viewed_testee)
+
+            return render(request, 'viewer/view_testee_info.html', locals())
+
+        except ObjectDoesNotExist:
+            messages.error(request, "User does not exist, user register id - {}".format(reg_id))
+            return redirect('exam_score_detail', exam_id=exam.id)
+
+    except ObjectDoesNotExist:
+        messages.error(request, "Exam does not exist, exam id - {}".format(exam_id))
         return redirect('exam_score_list')

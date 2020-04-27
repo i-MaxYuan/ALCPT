@@ -1,85 +1,38 @@
-{% extends 'base.html' %}
+{% extends 'new_base.html' %}
 
 {% load web_filters %}
 
 {% block path %}
-    <a href="{% url 'tbmanager_question_list' %}">題庫管理員</a>
-    <a class="fa fa-angle-double-right fa-lg box"></a>
-    <a href="{% url 'question_review' %}">審核試題</a>
-    <a class="fa fa-angle-right fa-lg box">
-    <a href="">試題退件原因</a>
+    <li class="breadcrumb-item" aria-current="page"><a href="{% url 'question_review' %}">Review</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Reject Reason</li>
 {% endblock %}
 
 {% block content %}
-    <div class="question_reject">
-        <form action="{% url 'question_reject' question.id %}" method="post">
-            <div class="title"><h1>Reject Reason.</h1></div>
-            {% csrf_token %}
-            <table>
-                <tr>
-                    <td>退件原因</td>
-                </tr>
-                <tr>
-                    <td><textarea class="form-control" cols="50" rows="6" name="reason" placeholder="請輸入退回原因"></textarea></td>
-                </tr>
-            </table>
+    <main class="question-reject-form">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <form method="post">
+                        {% csrf_token %}
 
-            <div class="btn">
-                <button type="submit" onclick="return confirm('確認退回？')">送出</button>
-                <button type="button" onclick="self.location=document.referrer;">取消</button>
+                        <div class="card">
+                            <div class="card-header">Reject Reason.</div>
+
+                            <div class="card-body">
+                                <h5 class="subtitle mb-2 text-muted">Reject Reason.</h5>
+                                <p class="card-text">
+                                    <textarea class="form-control" cols="50" rows="6" name="reason" placeholder="Enter the reject reason..."></textarea>
+                                </p>
+
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Sure to reject?')">Reject</button>
+                                    <button type="button" class="btn btn-secondary" onclick="self.location=document.referrer;">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
-
-        </form>
-
-        <style>
-            .question_reject .title h1{
-                width: 30%;
-                font-size: 28px;
-                color: #FFFEF6;
-                background-color: #4CCABD;
-                padding-top: 10px;
-                padding-bottom: 10px;
-                padding-right: 15px;
-                padding-left: 45px;
-                text-align: center;
-            }
-
-            .question_reject table{
-                position: relative;
-                left: 30%;
-
-                width: 40%;
-
-                font-size: 20px;
-            }
-            .question_reject table td{
-                padding: 4px;
-                text-align: left;
-            }
-            .question_reject form input{
-                padding: 6px;
-            }
-            .question_reject form textarea{
-                font-size: 20px;
-                width: 100%;
-                height: 45%;
-                padding: 10px;
-            }
-
-            .question_reject .btn{
-                position: relative;
-                top: 30px;
-                left: 40%;
-            }
-            .question_reject .btn button{
-                font-size: 25px;
-                padding: 10px;
-                padding-left: 15px;
-                padding-right: 15px;
-                color: #FFFEF6;
-                background-color: #4CCABD;
-                border: none;
-            }
-        </style>
-    </div>
+        </div>
+    </main>
 {% endblock %}

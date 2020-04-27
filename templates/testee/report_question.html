@@ -1,0 +1,81 @@
+{% extends 'new_base.html' %}
+
+{% block path %}
+
+{% endblock %}
+
+{% block content %}
+    <main class="report-form">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header">Report.</div>
+
+                        <div class="card-body">
+                            <form action="{% url 'report_question' question_id=reported_question.id %}" method="post">
+                                {% csrf_token %}
+
+                                <div class="form-group row">
+                                    <label for="p_title" class="col-md-4 col-form-label text-md-right">Report Category.</label>
+                                    <div class="col-md-6">
+                                        <select class="custom-select custom-select-sm" name="category" required>
+                                            <option value="" disabled selected>What is your problem？</option>
+                                            {% for category in categories %}
+                                                <option value="{{ category.id }}" {% if category.id == 5 %}selected{% else %} disabled{% endif %}>{{ category }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="p_text" class="col-md-4 col-form-label text-md-right">Supplement Note.</label>
+                                    <div class="col-md-6">
+                                        <textarea class="form-control" name="supplement_note" cols="100" rows="8" placeholder="Describe your situation what happened..." required></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="p_text" class="col-md-4 col-form-label text-md-right">Question Content.</label>
+                                    {% if reported_question.q_file %}
+                                        <audio controls preload="none">
+                                            <source src="{{ reported_question.q_file.url }}" type="audio/mpeg">
+                                            Your browser does not support the audio tag.
+                                        </audio>
+                                    {% else %}
+                                        <div class="col-md-8">
+                                            {{ reported_question.q_content }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="p_text" class="col-md-4 col-form-label text-md-right">Question Choice.</label>
+                                    <div class="col-md-8">
+                                        <ol type="A">
+                                            {% for choice in reported_question.choice_set.all %}
+                                                <li {% if choice.is_answer %}style="color: green"{% endif %}>{{ choice }}</li>
+                                            {% endfor %}
+                                        </ol>
+                                    </div>
+                                </div>
+
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-primary" onclick="return confirm('Sure to report?')">
+                                        Submit
+                                    </button>
+                                    <button type="reset" class="btn btn-light">
+                                        Reset
+                                    </button>
+                                    <button type="button" class="btn btn-secondary" onclick="history.go(-1)">
+                                        Cancel
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

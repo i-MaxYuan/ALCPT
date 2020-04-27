@@ -16,7 +16,8 @@ from django.db import IntegrityError
 from django.contrib import messages
 
 from alcpt.managerfuncs import systemmanager
-from alcpt.models import User, Student, Department, Squadron, Proclamation, ReportCategory, Report
+from alcpt.models import User, Student, Department, Squadron, ReportCategory, Report, Reply
+from alcpt.proclamation import notify
 from alcpt.definitions import UserType, Identity
 from alcpt.decorators import permission_check, login_required
 from alcpt.exceptions import IllegalArgumentError
@@ -76,15 +77,13 @@ def user_create(request):
         reg_id = request.POST.get('reg_id',)
 
         privilege_value = 0
-        i = 0
         for privilege in UserType.__members__.values():
-            if privilege and request.POST.get('privilege_{}'.format(i)):
+            if privilege and request.POST.get('{}'.format(privilege)):
                 privilege_value |= privilege.value[0]
-            i += 1
 
         try:
             identity = int(request.POST.get('identity'))
-            if identity == 1:
+            if identity == 2:
                 if request.POST.get('stu_id'):
                     new_user = User.objects.create_user(reg_id=reg_id, privilege=privilege_value, password=reg_id)
                     new_user.identity = identity
@@ -99,11 +98,11 @@ def user_create(request):
 
                     new_user.save()
                     new_user_stu.save()
-                    messages.success(request, 'Create User and Student successfully.')
+                    messages.success(request, 'Successfully Created - User, Student')
                     return redirect('user_list')
 
                 else:
-                    messages.warning(request, 'Please input the student basic information.')
+                    messages.warning(request, 'Please input the student ID.')
                     privileges = UserType.__members__
                     identities = Identity.__members__.values()
                     departments = Department.objects.all()
@@ -114,7 +113,7 @@ def user_create(request):
                 new_user = User.objects.create_user(reg_id=reg_id, privilege=privilege_value, password=reg_id)
                 new_user.identity = identity
                 new_user.save()
-                messages.success(request, 'Create User successfully.')
+                messages.success(request, 'Successfully Created - User')
 
                 if request.POST.get('stu_id'):
                     messages.warning(request, 'You are not student.')
@@ -122,7 +121,7 @@ def user_create(request):
                 return redirect('user_list')
 
         except IntegrityError:
-            messages.error(request, "Existed user, register ID: {}".format(reg_id))
+            messages.error(request, "Existed user, register ID - {}".format(reg_id))
             privileges = UserType.__members__
             identities = Identity.__members__.values()
             departments = Department.objects.all()
@@ -130,8 +129,7 @@ def user_create(request):
             return render(request, 'user/create_user.html', locals())
 
     else:
-        reg_ids = [_.reg_id for _ in User.objects.all()]
-        privileges = UserType.__members__
+        privileges = UserType.__members__.values()
         identities = Identity.__members__.values()
         departments = Department.objects.all()
         squadrons = Squadron.objects.all()
@@ -142,23 +140,26 @@ def user_create(request):
 @permission_check(UserType.SystemManager)
 def user_multiCreate(request):
     if request.method == 'POST':
-        if request.POST.get('reg_ids'):
-            new_accounts = []
-            for account in request.POST.get('reg_ids').split(','):
-                account = account.strip().lower()
-                if not re.match('[a-z0-9]+', account):
-                    raise IllegalArgumentError('Account can only contain letters and numbers.')
-
-                new_accounts.append(account)
-
-        elif request.FILES.get('users_file',):
+        if request.FILES.get('users_file',):
             wb = xlrd.open_workbook(filename=None, file_contents=request.FILES['users_file'].read())
             table = wb.sheets()[0]
-            new_accounts = []
+            new_users = []
+
             for i in range(table.nrows):
-                for j in range(table.ncols):
-                    if isinstance(table.cell_value(i, j), float):
-                        new_accounts.append(int(table.cell_value(i, j)))
+                row = table.row_values(i)
+                if row[0]:  # account
+                    if isinstance(row[0], float):
+                        row[0] = int(row[0])
+                    if isinstance(row[0], str):
+                        if re.findall("[#*'”;/\\\ ,|+=-]", row[0]):
+                            continue
+                    if not isinstance(row[2], float) or row[2] == '':   # identity
+                        row[2] = 1
+                    if isinstance(row[2], float):
+                        row[2] = int(row[2])
+                        if row[2] < 1 or row[2] > 3:
+                            row[2] = 1
+                    new_users.append(row)   # valid user
 
         else:
             messages.warning(request, 'Must enter textarea or load a file.')
@@ -175,13 +176,13 @@ def user_multiCreate(request):
         else:
             privilege_value = UserType.Testee.value[0]
 
-        new_users = systemmanager.create_users(reg_ids=new_accounts,
-                                               privilege=privilege_value,)
+        for user in new_users:
+            new_user = User.objects.create_user(reg_id=user[0], privilege=privilege_value, password=user[0])
+            new_user.name = user[1]
+            new_user.identity = user[2]
+            new_user.save()
 
-        if privilege_value & UserType.Testee.value[0]:
-            Student.objects.bulk_create([Student(stu_id=new_user.reg_id, user=new_user) for new_user in new_users])
-
-        messages.success(request, 'Create user "{}" successful.'.format(len(new_users)))
+        messages.success(request, 'Successfully Created users - {}'.format(len(new_users)))
 
         return redirect('user_list')
 
@@ -211,14 +212,16 @@ def user_edit(request, reg_id):
             edited_user.gender = int(request.POST.get('gender'))
             edited_user.privilege = privilege_value
 
-            if int(request.POST.get('identity')) == 1:
+            if int(request.POST.get('identity')) == 2:
                 edited_user.identity = request.POST.get('identity')
                 edited_user.save()
                 try:
                     edited_student = edited_user.student
                     edited_student.grade = request.POST.get('grade')
-                    edited_student.department = Department.objects.get(id=request.POST.get('department'))
-                    edited_student.squadron = Squadron.objects.get(id=request.POST.get('squadron'))
+                    if request.POST.get('department'):
+                        edited_student.department = Department.objects.get(id=request.POST.get('department'))
+                    if request.POST.get('squadron'):
+                        edited_student.squadron = Squadron.objects.get(id=request.POST.get('squadron'))
                     edited_student.save()
                     try:
                         edited_user.reg_id = request.POST.get('reg_id')
@@ -226,7 +229,7 @@ def user_edit(request, reg_id):
                         edited_user.save()
                         edited_student.save()
 
-                        messages.success(request, "User update successfully.")
+                        messages.success(request, "Successfully updated user.")
                         return redirect('user_list')
 
                     except IntegrityError:
@@ -249,7 +252,7 @@ def user_edit(request, reg_id):
                     if edited_user.student:
                         Student.objects.get(user=edited_user).delete()
 
-                    messages.success(request, "User update successfully.")
+                    messages.success(request, "Successfully updated user.")
                     return redirect('user_list')
 
                 except IntegrityError:
@@ -264,7 +267,7 @@ def user_edit(request, reg_id):
                     return render(request, 'user/edit_user.html', locals())
 
         except ObjectDoesNotExist:
-            messages.error(request, "User doesn't exist, user register id: {}".format(reg_id))
+            messages.error(request, "User doesn't exist, user register id - {}".format(reg_id))
             return redirect('user_list')
     else:
         try:
@@ -276,9 +279,12 @@ def user_edit(request, reg_id):
             except ObjectDoesNotExist:
                 pass
 
+            reg_ids = [_.reg_id for _ in User.objects.all().exclude(reg_id=reg_id)]
+            stu_ids = [_.stu_id for _ in Student.objects.all().exclude(stu_id=edited_user.reg_id)]
             return render(request, 'user/edit_user.html', locals())
+
         except ObjectDoesNotExist:
-            messages.error(request, "User doesn't exist, user register id: {}".format(reg_id))
+            messages.error(request, "User doesn't exist, user register id - {}".format(reg_id))
             return redirect('user_list')
 
 
@@ -291,78 +297,25 @@ def unit(request):
     return render(request, 'user/unit_list.html', locals())
 
 
-# 新增公告
-@permission_check(UserType.SystemManager)
-def proclamation_create(request):
-    if request.method == 'POST':
-        title = request.POST.get('p_title')
-        text = request.POST.get('p_text')
-        Proclamation.objects.create(title=title, text=text, is_public=True, created_by=request.user)
-
-        return redirect('/')
-    else:
-        return render(request, 'proclamation_create.html', locals())
-
-
-# 公告內容
-def proclamation_detail(request, proclamation_id):
-    try:
-        proclamation = Proclamation.objects.get(id=proclamation_id)
-        return render(request, 'proclamation_detail.html', locals())
-    except ObjectDoesNotExist:
-        messages.error(request, 'Proclamation doesn\'t exist, proclamation id: {}'.format(proclamation_id))
-        return redirect('/')
-
-
-# 刪除公告
-@permission_check(UserType.SystemManager)
-def proclamation_delete(request, proclamation_id):
-    try:
-        proclamation = Proclamation.objects.get(id=proclamation_id)
-        proclamation.delete()
-        messages.success(request, 'Delete proclamation successfully, proclamation title: {}.'.format(proclamation.title))
-    except ObjectDoesNotExist:
-        messages.error(request, 'Proclamation doesn\'t exist, proclamation id: {}'.format(proclamation_id))
-
-    return redirect('/')
-
-
-# 編輯公告
-@permission_check(UserType.SystemManager)
-def proclamation_edit(request, proclamation_id):
-    try:
-        proclamation = Proclamation.objects.get(id=proclamation_id)
-    except ObjectDoesNotExist:
-        messages.error(request, 'Proclamation doesn\'t exist, proclamation id: {}'.format(proclamation_id))
-        return redirect('/')
-
-    if request.method == 'POST':
-        proclamation.title = request.POST.get('proclamation_title',)
-        proclamation.text = request.POST.get('proclamation_text',)
-        messages.success(request, 'Update Successfully. proclamation title: {}'.format(proclamation.title))
-        return redirect('/')
-    else:
-        return render(request, 'proclamation_edit.html', locals())
-
-
 # 新增單位（學系、中隊）
 @permission_check(UserType.SystemManager)
 @require_http_methods(["GET", "POST"])
 def create_unit(request):
     name = request.POST.get('unit_name')
 
-    department_names = [d.name for d in Department.objects.all()]
-    squadron_names = [s.name for s in Squadron.objects.all()]
-
     if request.method == 'POST':
-        if request.POST.get('unit') == 'department':
-            Department.objects.create(name=name)
+        try:
+            if request.POST.get('unit') == 'department':
+                Department.objects.create(name=name)
 
-        elif request.POST.get('unit') == 'squadron':
-            Squadron.objects.create(name=name)
+            elif request.POST.get('unit') == 'squadron':
+                Squadron.objects.create(name=name)
 
-        else:
-            messages.error(request, 'Choose the unit which you want to create.')
+            else:
+                messages.error(request, 'Choose the unit which you want to create.')
+                return redirect('unit_create')
+        except IntegrityError:
+            messages.error(request, "This name had been used.")
             return redirect('unit_create')
 
         messages.success(request, 'Success insert new unit: {}.'.format(name))
@@ -370,29 +323,37 @@ def create_unit(request):
         return redirect('unit_list')
 
     else:
-        departments = Department.objects.all()
-        squadrons = Squadron.objects.all()
-        dep_list, squa_list = '', ''
-        for d in departments:
-            dep_list += d.name
-        for s in squadrons:
-            squa_list += s.name
         return render(request, 'user/create_unit.html', locals())
 
 
-# 檢查單位名稱是否存在
 @permission_check(UserType.SystemManager)
-@require_http_methods(["POST"])
-def check_unit_name(request):
-    if request.method == 'POST':
-        tmp_unit_name = request.POST.get('unit_name')
-        if Department.objects.filter(name=tmp_unit_name):
-            messages.warning(request, '<script>window.alert("This name had been used.");</script>')
-        elif Squadron.objects.filter(name=tmp_unit_name):
-            messages.warning(request, '<script>window.alert("This name had been used.");</script>')
+def unit_edit(request, unit_kind, unit_name):
+    if request.method == "POST":
+        if unit_kind == 'squadron':
+            edited_unit = Squadron.objects.get(name=unit_name)
+            edited_unit.name = request.POST.get('name')
+            edited_unit.save()
+
+        elif unit_kind == 'department':
+            edited_unit = Department.objects.get(name=unit_name)
+            edited_unit.name = request.POST.get('name')
+            edited_unit.save()
+
+        messages.success(request, "Update successfully.")
+        return redirect('unit_list')
+
+    else:
+        if unit_kind == 'squadron':
+            edited_unit = Squadron.objects.get(name=unit_name)
+
+        elif unit_kind == 'department':
+            edited_unit = Department.objects.get(name=unit_name)
+
         else:
-            messages.success(request, '<script>window.alert("This name can be use.");</script>')
-        return render(request, 'user/create_unit.html', )
+            messages.warning(request, "Unknown unit name.")
+            return redirect('unit_list')
+
+        return render(request, 'user/unit_edit.html', locals())
 
 
 # 顯示單位人員
@@ -443,13 +404,14 @@ def report_category_create(request):
                                                          responsibility=responsibility_value)
             new_category.save()
         except IntegrityError:
-            messages.error(request, "Existed category name: {}".format(category_name))
+            messages.error(request, "Existed category name - {}".format(category_name))
             return redirect('report_category_list')
 
-        messages.success(request, 'Create report category "{}" successful.'.format(new_category))
+        messages.success(request, 'Successfully created report category - {}.'.format(new_category))
 
         return redirect('report_category_list')
     else:
+        categories_names = [_.name for _ in ReportCategory.objects.all()]
         return render(request, 'report/report_category_create.html', locals())
 
 
@@ -492,6 +454,7 @@ def report_category_edit(request, category_id):
             messages.error(request, "Existed category name: {}".format(category_name))
             return redirect('report_category_edit', category_id=category.id)
     else:
+        categories_names = [_.name for _ in ReportCategory.objects.all().exclude(id=category_id)]
         return render(request, 'report/report_category_edit.html', locals())
 
 
@@ -535,7 +498,7 @@ def report(request):
             categories = ReportCategory.objects.all()
             return render(request, 'report/report.html', locals())
 
-        supplement_note = request.POST.get('supplement_note',)+'<br>'
+        supplement_note = request.POST.get('supplement_note')
 
         user_report = Report.objects.create(category=category,
                                             supplement_note=supplement_note,
@@ -547,7 +510,7 @@ def report(request):
 
         messages.success(request, 'Thanks for your advise, we will help you to solve your problem as soon as possible.')
 
-        return redirect('Homepage')
+        return redirect('report_list')
     else:
         categories = ReportCategory.objects.all()
         return render(request, 'report/report.html', locals())
@@ -586,15 +549,46 @@ def report_reply(request, report_id):
         if replying_report.state == 3:
             messages.warning(request, 'This report had been resolved.')
             return redirect('responsible_report_list', responsibility=permission)
+
         reply = request.POST.get('reply')
-        replying_report.reply += (str(datetime.datetime.now()) + ': ' + reply + '<br>')
+        new_reply = Reply.objects.create(source=replying_report, content=reply, created_by=request.user)
+
+        proclamation_content = "The administrator has responded the problem you encountered.\n" \
+                               "Please refer to the notification center for more details."
+        notify(title='Reply',
+               text=proclamation_content,
+               is_read=False,
+               is_public=False,
+               announcer=request.user,
+               users=[replying_report.created_by])
+
         replying_report.user_notification = True
         replying_report.save()
         return redirect('responsible_report_list', responsibility=permission)
     else:
-        replying_report.staff_notification = False
-        replying_report.save()
+        Report.objects.filter(id=report_id).update(staff_notification=False)
+
+        replies = replying_report.reply_set.all().order_by('created_time')
         return render(request, 'report/reply.html', locals())
+
+
+@permission_check(UserType.SystemManager)
+def view_report_detail(request, report_id):
+    try:
+        viewed_report = Report.objects.get(id=report_id)
+        if viewed_report.created_by == request.user:
+            pass
+        elif request.user.has_perm(UserType.SystemManager):
+            pass
+        else:
+            messages.warning(request, 'You have no permission')
+            return redirect('Homepage')
+    except ObjectDoesNotExist:
+        messages.error(request, "Report doesn't exist, report id: {}".format(report_id))
+        return redirect('report_list')
+
+    replies = viewed_report.reply_set.all().order_by('created_time')
+    return render(request, 'report/report_detail.html', locals())
 
 
 @login_required
@@ -637,6 +631,7 @@ def report_done(request, report_id):
 
 
 # 系統管理員檢視使用者個人基本資料
+@permission_check(UserType.SystemManager)
 def view_profile(request, reg_id):
     try:
         viewed_user = User.objects.get(reg_id=reg_id)

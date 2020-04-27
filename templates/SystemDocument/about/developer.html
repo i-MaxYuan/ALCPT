@@ -1,0 +1,192 @@
+{% load static %}
+{% load web_filters %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>線上英文考試系統</title>
+    <link rel="stylesheet" type="text/css" href="{% static '/css/loginstyle.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static '/css/aboutstyle.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Fonts -->
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600" rel="stylesheet" type="text/css">
+
+    <link rel="icon" href="Favicon.png">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+    <!--new-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    {% block stylesheets %}
+    {% endblock %}
+
+    {% block scripts %}
+    {% endblock %}
+
+</head>
+
+{% include 'header.html' %}
+
+<body>
+    <main class="about" role="main">
+        <!--For 109 year class.-->
+        <div class="developer-intro" id="developer109">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-12">
+                        <h2>Developer 109.</h2>
+
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-3 col-sm-6">
+                                    <div class="card">
+                                        <div class="card-header">Project Manager.</div>
+                                        <img src="{% static '/images/楊家齊.png' %}" class="card-img-top" alt="...">
+                                        <div class="card-body">
+                                            <div class="card-title">楊家齊</div>
+                                                <p class="card-text">
+                                                    Some introduction to introduce themselves.
+                                                </p>
+                                            </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-sm-6">
+                                    <div class="card">
+                                        <div class="card-header">Program Design.</div>
+                                        <img src="{% static '/images/蘇典煒.png' %}" class="card-img-top" alt="...">
+                                        <div class="card-body">
+                                            <div class="card-title">蘇典煒</div>
+                                                <p class="card-text">
+                                                    Some introduction to introduce themselves.
+                                                </p>
+                                            </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-sm-6">
+                                    <div class="card">
+                                        <div class="card-header">UI Design.</div>
+                                        <img src="{% static '/images/傅晴俞.png' %}" class="card-img-top" alt="...">
+                                        <div class="card-body">
+                                            <div class="card-title">傅晴俞</div>
+                                                <p class="card-text">
+                                                    Some introduction to introduce themselves.
+                                                </p>
+                                            </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-sm-6">
+                                    <div class="card">
+                                        <div class="card-header">Product Tester.</div>
+                                        <img src="{% static '/images/陳信綸.png' %}" class="card-img-top" alt="...">
+                                        <div class="card-body">
+                                            <div class="card-title">陳信綸</div>
+                                                <p class="card-text">
+                                                    Some introduction to introduce themselves.
+                                                </p>
+                                            </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr class="featurette-divider">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--For 110 year class.-->
+        <div class="developer-intro" id="developer110">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-12">
+                        <h2>Developer 110.</h2>
+
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-3 col-sm-6">
+                                    <div class="card">
+                                        <div class="card-header">Project Manager.</div>
+                                        <img src="{% static '/images/胖呆.png' %}" class="card-img-top" alt="...">
+                                        <div class="card-body">
+                                            <div class="card-title">胖呆</div>
+                                                <p class="card-text">
+                                                    Some introduction to introduce themselves.
+                                                </p>
+                                            </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-sm-6">
+                                    <div class="card">
+                                        <div class="card-header">Program Design.</div>
+                                        <img src="{% static '/images/黃柏豪.jpg' %}" class="card-img-top" alt="...">
+                                        <div class="card-body">
+                                            <div class="card-title">黃柏豪</div>
+                                                <p class="card-text">
+                                                    Some introduction to introduce themselves.
+                                                </p>
+                                            </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-sm-6">
+                                    <div class="card">
+                                        <div class="card-header">UI Design.</div>
+                                        <img src="{% static '/images/賴昱婷.jpg' %}" class="card-img-top" alt="...">
+                                        <div class="card-body">
+                                            <div class="card-title">賴昱婷</div>
+                                                <p class="card-text">
+                                                    Some introduction to introduce themselves.
+                                                </p>
+                                            </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-sm-6">
+                                    <div class="card">
+                                        <div class="card-header">Product Tester.</div>
+                                        <img src="{% static '/images/黃子祐.jpg' %}" class="card-img-top" alt="...">
+                                        <div class="card-body">
+                                            <div class="card-title">黃子祐</div>
+                                                <p class="card-text">
+                                                    Some introduction to introduce themselves.
+                                                </p>
+                                            </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr class="featurette-divider">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="contact-us">
+            <div class="container">
+                <div class="row">
+                    <h3 class="text-muted">
+                        Contact Us.
+                    </h3>
+                </div>
+
+                <hr class="featurette-divider">
+            </div>
+        </div>
+    </main>
+</body>
+{% include "footer.html" %}
+
+</html>
+

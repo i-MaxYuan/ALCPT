@@ -1,244 +1,323 @@
-{% extends 'profile_base.html' %}
+{% extends 'new_profile_base.html' %}
 
 {% load web_filters %}
 
 {% block path %}
-    <a href="{% url 'profile' %}">檢視個人資料</a>
-    <a class="fa fa-angle-double-right fa-lg box"></a>
-    <a href="">編輯個人資料</a>
+    <li class="breadcrumb-item" aria-current="page"><a href="{% url 'profile' %}">Profile</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Update Profile</li>
 {% endblock %}
 
 {% block content %}
     <style>
         #edit_profile{
-            background-color: #DCDCDC;
+            color: rgb(150, 150, 150);
+            opacity: 0.3;
         }
     </style>
 
-    <!-- 大頭貼 -->
-    <div class="photo">
-        <i class="fa fa-user-circle"></i>
-
-        <style>
-            .photo{
-                position: relative;
-                left: 25%;
-                top: 25px;
-            }
-
-            .photo i{
-                font-size: 100px;
-                color: #5e5e5e;
-            }
-        </style>
-    </div>
-
-    <!-- 時間資料區塊 -->
-    <div class="time-block">
-        <div class="time_icon">
-            <i class="fa fa-clock-o"></i>
-        </div>
-
-        <div class="time">
-            <li>最近登入：<br>{{ user.last_login|date:"Y年m月d日, H時i分" }}</li>
-            <li style="border-top-style: solid; border-top-color: #adadad; border-top-width: 0.7px;">&nbsp;</li>
-            <li>更新時間：<br>{{ user.update_time|date:"Y年m月d日, H時i分" }}</li>
-            <li style="border-top-style: solid; border-top-color: #adadad; border-top-width: 0.7px;">&nbsp;</li>
-            <li>加入時間：<br>{{ user.created_time|date:"Y年m月d日, H時i分" }}</li>
-            <li style="border-top-style: solid; border-top-color: #adadad; border-top-width: 0.7px;">&nbsp;</li>
-            <li>狀態：
-                {% if user.is_active %}
-                    <span>active</span>
-                {% elif user.is_staff %}
-                    <span>staff</span>
-                {% elif user.is_superuser %}
-                    <span>superuser</span>
-                {% endif %}
-            </li>
-        </div>
-
-        <style>
-            .time-block{
-                position: absolute;
-                top: 40%;
-                left: 23%;
-
-                width: 220px;
-            }
-
-            .time_icon{
-                position: relative;
-                top: 35px;
-                left: -10px;
-
-                width: 20px;
-
-                font-size: 22px;
-                color: #5e5e5e;
-                background-color: #F3F3F3;
-            }
-
-            .time{
-                color: #5e5e5e;
-
-                border: #c0c0c0 solid 0.7px;
-                padding-left: 20px;
-                padding-right: 20px;
-            }
-
-            .time li{
-                list-style: none;
-                width: 100%;
-                font-size: 14px;
-                top: 85%;
-            }
-        </style>
-    </div>
-
-    <!-- 個人資料區 -->
-    <div class="personal_info">
-        <form action="{% url 'profile_edit' user.reg_id %}" method="post">
+    <main class="edit-user-form">
+        <form enctype="multipart/form-data" action="{% url 'profile_edit' %}" method="post">
             {% csrf_token %}
-            <table>
-                <tr>
-                    <td class="title">使用者帳號</td>
-                    <td>{{ user.reg_id }}</td>
-                </tr>
 
-                <tr>
-                    <td class="title">姓名</td>
-                    <td>
-                        {% if user.name %}
-                            <input class="form-control" type="text" name="name" value="{{ user.name }}" required>
-                        {% else %}
-                            <input class="form-control" type="text" name="name" required>
-                        {% endif %}
-                    </td>
-                </tr>
-
-                <tr>
-                    <td class="title">Email</td>
-                    <td>
-                        {% if user.email %}
-                            <input class="form-control" type="email" name="email" value="{{ user.email }}" required>
-                        {% else %}
-                            <input class="form-control" type="email" name="email" required>
-                        {% endif %}
-                    </td>
-
-                </tr>
-
-                <tr>
-                    <td class="title">性別</td>
-                    <td>
-                        <select name="gender" required>
-                            <option value="" disabled selected>請選擇性別</option>
-                            <option value="0" {% if user.gender == 0 %}selected{% endif %}>男</option>
-                            <option value="1" {% if user.gender == 1 %}selected{% endif %}>女</option>
-                            <option value="2" {% if user.gender == 2 %}selected{% endif %}>不想公開</option>
-                        </select>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td class="title">身份</td>
-                    <td>{% if user.identity %}{{ user.identity|readableIdentity }}{% else %}尚未設定{% endif %}</td>
-                </tr>
-
-                <tr>
-                    <td class="title">權限</td>
-                    <td>
-                        {% if user|has_perms:privileges.SystemManager %}
-                            <span class="badge alert-danger">{{ privileges.SystemManager.value.1 }}</span>
-                        {% endif %}
-                        {% if user|has_perms:privileges.TestManager %}
-                            <span class="badge alert-warning">{{ privileges.TestManager.value.1 }}</span>
-                        {% endif %}
-                        {% if user|has_perms:privileges.TBManager %}
-                            <span class="badge badge-primary">{{ privileges.TBManager.value.1 }}</span>
-                        {% endif %}
-                        {% if user|has_perms:privileges.TBOperator %}
-                            <span class="badge alert-success">{{ privileges.TBOperator.value.1 }}</span>
-                        {% endif %}
-                        {% if user|has_perms:privileges.Viewer %}
-                            <span class="badge alert-info">{{ privileges.Viewer.value.1 }}</span>
-                        {% endif %}
-                        {% if user|has_perms:privileges.Testee %}
-                            <span class="badge alert-inverse">{{ privileges.Testee.value.1 }}</span>
-                        {% endif %}
-                    </td>
-                </tr>
-
+            <div class="container">
                 {% if user.student %}
-                <tr style="border-top: solid; border-width: 1px; border-color: rgb(200, 200, 200)">
-                    <td class="title">學號</td>
-                    <td>{{ user.student.stu_id }}</td>
-                </tr>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="card mb-3">
+                                <div class="card-header">
+                                    User Photo.
+                                </div>
 
-                <tr>
-                    <td class="title">年班</td>
-                    <td><input class="form-control" type="number" name="grade" value="{{ user.student.grade }}" required></td>
-                </tr>
+                                {% if user.photo %}
+                                    <img class="card-img-top" src="{{ user.photo.url }}" alt="{{ user.name }}">
+                                {% else %}
+                                    <img class="card-img-top" src="..." alt="{{ user.name }}">
+                                {% endif %}
+                                <div class="input-group">
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="photo_file" name="photo_file" accept="image/*">
+                                        <label class="custom-file-label" for="photo_file">Select image file</label>
+                                    </div>
+                                </div>
+                                <script>
+                                    // to change the label, the selected file name will display
+                                    $(".custom-file-input").on("change", function() {
+                                        var fileName = $(this).val().split("\\").pop();
+                                        $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+                                    });
+                                </script>
 
-                <tr>
-                    <td class="title">科系</td>
-                    <td>
-                        <select name="department" required>
-                            <option value="" disabled selected>請選擇科系</option>
-                            {% for department in departments %}
-                                <option value="{{ department.id }}" {% if department == user.student.department %}selected{% endif %}>{{ department }}</option>
-                            {% endfor %}
-                        </select>
-                    </td>
-                </tr>
+                                <div class="card-body">
+                                    <p class="card-text">
+                                        <textarea class="form-control" rows="4" name="introduction" placeholder="Introduce yourself...">{% if user.introduction %}{{ user.introduction }}{% endif %}</textarea>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
 
-                <tr>
-                    <td class="title">中隊</td>
-                    <td>
-                        <select name="squadron" required>
-                            <option value="" disabled selected>請選擇中隊單位</option>
-                            {% for squadron in squadrons %}
-                                <option value="{{ squadron.id }}" {% if squadron == user.student.squadron %}selected{% endif %}>{{ squadron }}</option>
-                            {% endfor %}
-                        </select>
-                    </td>
-                </tr>
+                        <div class="col-lg-5">
+                            <div class="card mb-3">
+                                <div class="card-header">
+                                    User Profile.
+                                </div>
+
+                                <div class="card-body text-left">
+                                    <h5 class="card-subtitle mb-2 text-muted">Register ID.</h5>
+                                    <h4 class="card-text">{{ user.reg_id }}</h4>
+
+                                    <h5 class="card-subtitle mb-2 text-muted">
+                                        Name.<label id="name_invalid" class="name_invalid"></label>
+                                    </h5>
+                                    <p class="card-text">
+                                        <input class="form-control" type="text" name="name" {% if user.name %}value="{{ user.name }}"{% endif %} onkeyup="name_valid('{{ user.name }}', this)" placeholder="Name..." required>
+                                    </p>
+
+                                    <h5 class="card-subtitle mb-2 text-muted">
+                                        Email.{% if user.email_is_verified %}<i class="fa fa-check-circle" style="color: green"></i>{% endif %}</h5>
+                                    </h5>
+                                    <p class="card-text">
+                                        {% if user.email %}
+                                            {{ user.email }}
+                                        {% else %}
+                                            Unset
+                                        {% endif %}
+                                    </p>
+
+                                    <h5 class="card-subtitle mb-2 text-muted">
+                                        Gender.<label id="gender_invalid" class="gender_invalid"></label>
+                                    </h5>
+                                    <p class="card-text">
+                                        <select class="custom-select custom-select-sm" name="gender" id="gender" onchange="gender_valid('{{ user.gender }}', document.getElementById('gender'))" required>
+                                            <option value="" disabled selected>Choose your gender</option>
+                                            <option value="1" {% if user.gender == 1 %}selected{% endif %}>Male</option>
+                                            <option value="2" {% if user.gender == 2 %}selected{% endif %}>Female</option>
+                                            <option value="3" {% if user.gender == 3 %}selected{% endif %}>Privacy</option>
+                                        </select>
+                                    </p>
+
+                                    <h5 class="card-subtitle mb-2 text-muted">
+                                        Identity.<label id="identity_invalid" class="identity_invalid"></label>
+                                    </h5>
+                                    <p class="card-text">
+                                        {% if user.identity %}
+                                            {{ user.identity|readableIdentity }}
+                                        {% else %}
+                                            Unset
+                                        {% endif %}
+                                    </p>
+
+                                    <h5 class="card-subtitle mb-2 text-muted">
+                                        Privilege.<label id="privilege_invalid" class="privilege_invalid"></label>
+                                    </h5>
+                                    <p class="card-text">
+                                        {% if user|has_perms:privileges.SystemManager %}
+                                            <span class="badge alert-danger">{{ privileges.SystemManager.value.1 }}</span>
+                                        {% endif %}
+                                        {% if user|has_perms:privileges.TestManager %}
+                                            <span class="badge alert-warning">{{ privileges.TestManager.value.1 }}</span>
+                                        {% endif %}
+                                        {% if user|has_perms:privileges.TBManager %}
+                                            <span class="badge badge-primary">{{ privileges.TBManager.value.1 }}</span>
+                                        {% endif %}
+                                        {% if user|has_perms:privileges.TBOperator %}
+                                            <span class="badge alert-success">{{ privileges.TBOperator.value.1 }}</span>
+                                        {% endif %}
+                                        {% if user|has_perms:privileges.Viewer %}
+                                            <span class="badge alert-info">{{ privileges.Viewer.value.1 }}</span>
+                                        {% endif %}
+                                        {% if user|has_perms:privileges.Testee %}
+                                            <span class="badge alert-dark">{{ privileges.Testee.value.1 }}</span>
+                                        {% endif %}
+                                    </p>
+                                </div>
+
+                                <div class="card-footer text-muted">
+                                    <span style="font-size: 12px">Last login - {{ user.last_login }}<br></span>
+                                    <span style="font-size: 12px">Create time - {{ user.created_time }}<br></span>
+                                    <span style="font-size: 12px">
+                                        Status -
+                                        {% if user.is_active %}
+                                            active
+                                        {% elif user.is_staff %}
+                                            staff
+                                        {% elif user.is_superuser %}
+                                            superuser
+                                        {% endif %}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3">
+                            <div class="card lg-3">
+                                <div class="card-header">
+                                    Student Profile.
+                                </div>
+
+                                <div class="card-body text-left">
+                                    <h5 class="card-subtitle mb-2 text-muted">Student ID.</h5>
+                                    <h4 class="card-text">{{ user.student.stu_id }}</h4>
+
+                                    <h5 class="card-subtitle mb-2 text-muted">
+                                        Department.<label id="department_invalid" class="department_invalid"></label>
+                                    </h5>
+                                    <p class="card-text">
+                                        <select class="custom-select custom-select-sm" name="department" id="department" onchange="department_valid('{{ user.student.department.id }}', document.getElementById('department'))" required>
+                                            <option value="" disabled selected>Choose your department</option>
+                                            {% for department in departments %}
+                                                <option value="{{ department.id }}" {% if department == user.student.department %}selected{% endif %}>{{ department }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </p>
+
+                                    <h5 class="card-subtitle mb-2 text-muted">
+                                        Squadron.<label id="squadron_invalid" class="squadron_invalid"></label>
+                                    </h5>
+                                    <p class="card-text">
+                                        <select class="custom-select custom-select-sm" name="squadron" id="squadron" onchange="squadron_valid('{{ user.student.squadron.id }}', document.getElementById('squadron'))" required>
+                                            <option value="" disabled selected>Choose your squadron</option>
+                                            {% for squadron in squadrons %}
+                                                <option value="{{ squadron.id }}" {% if squadron == user.student.squadron %}selected{% endif %}>{{ squadron }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </p>
+
+                                    <h5 class="card-subtitle mb-2 text-muted">
+                                        Grade.<label id="grade_invalid" class="grade_invalid"></label>
+                                    </h5>
+                                    <p class="card-text">
+                                        <input class="form-control" type="text" name="grade" value="{{ user.student.grade }}" onkeyup="grade_valid('{{ user.student.grade }}', this)" required>
+                                    </p>
+                                </div>
+
+                                <div class="card-footer text-right">
+                                    <button type="submit" class="btn btn-primary" id="submit" style="font-size: 12px">Update</button>
+                                    <button type="button" class="btn btn-secondary" style="font-size: 12px" onclick="self.location=document.referrer;">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="card mb-3">
+                                <div class="card-header">
+                                    User Photo.
+                                </div>
+
+                                {% if user.photo %}
+                                    <img class="card-img-top" src="{{ user.photo.url }}" alt="{{ user.name }}">
+                                {% else %}
+                                    <img class="card-img-top" src="..." alt="{{ user.name }}">
+                                {% endif %}
+                                <input type="file" name="photo_file" id="photo_file" accept="image/png">
+
+                                <div class="card-body">
+                                    <p class="card-text">
+                                        <textarea class="form-control" rows="4" name="introduction" placeholder="Introduce yourself...">{% if user.introduction %}{{ user.introduction }}{% endif %}</textarea>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-8">
+                            <div class="card mb-3">
+                                <div class="card-header">
+                                    User Profile.
+                                </div>
+
+                                <div class="card-body text-left">
+                                    <h5 class="card-subtitle mb-2 text-muted">Register ID.</h5>
+                                    <h4 class="card-text">{{ user.reg_id }}</h4>
+
+                                    <h5 class="card-subtitle mb-2 text-muted">
+                                        Name.<label id="name_invalid" class="name_invalid"></label>
+                                    </h5>
+                                    <p class="card-text">
+                                        <input class="form-control" type="text" name="name" {% if user.name %}value="{{ user.name }}"{% endif %} onkeyup="name_valid('{{ user.name }}', this)" placeholder="Name..." required>
+                                    </p>
+
+                                    <h5 class="card-subtitle mb-2 text-muted">
+                                        Email.{% if user.email_is_verified %}<i class="fa fa-check-circle" style="color: green"></i>{% endif %}</h5>
+                                    </h5>
+                                    <p class="card-text">
+                                        {% if user.email %}
+                                            {{ user.email }}
+                                        {% else %}
+                                            Unset
+                                        {% endif %}
+                                    </p>
+
+                                    <h5 class="card-subtitle mb-2 text-muted">
+                                        Gender.<label id="gender_invalid" class="gender_invalid"></label>
+                                    </h5>
+                                    <p class="card-text">
+                                        <select class="custom-select custom-select-sm" name="gender" id="gender" onchange="gender_valid('{{ user.gender }}', document.getElementById('gender'))" required>
+                                            <option value="" disabled selected>Choose your gender</option>
+                                            <option value="1" {% if user.gender == 0 %}selected{% endif %}>Male</option>
+                                            <option value="2" {% if user.gender == 1 %}selected{% endif %}>Female</option>
+                                            <option value="3" {% if user.gender == 2 %}selected{% endif %}>Privacy</option>
+                                        </select>
+                                    </p>
+
+                                    <h5 class="card-subtitle mb-2 text-muted">
+                                        Identity.<label id="identity_invalid" class="identity_invalid"></label>
+                                    </h5>
+                                    <p class="card-text">
+                                        {% if user.identity %}
+                                            {{ user.identity|readableIdentity }}
+                                        {% else %}
+                                            Unset
+                                        {% endif %}
+                                    </p>
+
+                                    <h5 class="card-subtitle mb-2 text-muted">Privilege.</h5>
+                                    <p class="card-text">
+                                        {% if user|has_perms:privileges.SystemManager %}
+                                            <span class="badge alert-danger">{{ privileges.SystemManager.value.1 }}</span>
+                                        {% endif %}
+                                        {% if user|has_perms:privileges.TestManager %}
+                                            <span class="badge alert-warning">{{ privileges.TestManager.value.1 }}</span>
+                                        {% endif %}
+                                        {% if user|has_perms:privileges.TBManager %}
+                                            <span class="badge badge-primary">{{ privileges.TBManager.value.1 }}</span>
+                                        {% endif %}
+                                        {% if user|has_perms:privileges.TBOperator %}
+                                            <span class="badge alert-success">{{ privileges.TBOperator.value.1 }}</span>
+                                        {% endif %}
+                                        {% if user|has_perms:privileges.Viewer %}
+                                            <span class="badge alert-info">{{ privileges.Viewer.value.1 }}</span>
+                                        {% endif %}
+                                        {% if user|has_perms:privileges.Testee %}
+                                            <span class="badge alert-dark">{{ privileges.Testee.value.1 }}</span>
+                                        {% endif %}
+                                    </p>
+                                </div>
+
+                                <div class="card-footer text-muted">
+                                    <span style="font-size: 12px">Last login - {{ user.last_login }}<br></span>
+                                    <span style="font-size: 12px">Create time - {{ user.created_time }}<br></span>
+                                    <span style="font-size: 12px">
+                                        Status -
+                                        {% if user.is_active %}
+                                            active
+                                        {% elif user.is_staff %}
+                                            staff
+                                        {% elif user.is_superuser %}
+                                            superuser
+                                        {% endif %}
+                                    </span>
+
+                                    <div class="text-right">
+                                        <button type="submit" id="submit" class="btn btn-primary" style="font-size: 12px">Update</button>
+                                        <button type="button" class="btn btn-secondary" style="font-size: 12px" onclick="self.location=document.referrer;">Cancel</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 {% endif %}
-
-            </table>
-
-            <div class="btn">
-                <button type="submit">提交</button>
-
-                <style>
-                    .btn{
-                        position: absolute;
-                        top: 90%;
-                        left: 45%;
-                    }
-                </style>
             </div>
         </form>
-
-        <style>
-            .personal_info{
-                position: relative;
-                left: 45%;
-                top: -80px;
-            }
-            .personal_info table{
-                width: 50%;
-
-                font-size: 18px;
-            }
-            .personal_info table td{
-                padding: 10px;
-            }
-
-            .personal_info .title{
-                font-size: 20px;
-                width: 25%;
-            }
-        </style>
-    </div>
+    </main>
 {% endblock %}

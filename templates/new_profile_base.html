@@ -1,0 +1,138 @@
+{% load static %}
+{% load web_filters %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>線上英文考試系統</title>
+    <link rel="stylesheet" type="text/css" href="{% static '/css/loginstyle.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Fonts -->
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600" rel="stylesheet" type="text/css">
+
+    <link rel="icon" href="Favicon.png">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+
+    <!--new-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    {% block stylesheets %}
+    {% endblock %}
+
+    {% block scripts %}
+    {% endblock %}
+
+</head>
+
+{% include 'header.html' %}
+
+<body>
+    <!--路徑-->
+    <div id="path">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item active" aria-current="page"><a href="{% url 'Homepage' %}">Home</a></li>
+                {% block path %}
+                {% endblock %}
+            </ol>
+        </nav>
+    </div>
+    <style>
+        #path a{
+            text-decoration: none;
+        }
+    </style>
+
+    <!--主要資料區-->
+    <div id="sidebar">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-2" id="sidebar-content">
+                    <button id="profile" onclick="window.location.href='{% url 'profile' %}'">Profile</button>
+                    <button id="edit_profile" onclick="window.location.href='{% url 'profile_edit' %}'">Edit Profile</button>
+                    <button id="email" onclick="window.location.href='{% url 'email' %}'">Email</button>
+                    <button id="password_change" onclick="window.location.href='{% url 'password_change' %}'">Password Change</button>
+                    <button id="real_exam_record" onclick="alert('Function is developing. Stay tuned.🤪');">Real Exam Record</button>
+                    {% if request.user|get_report_notification == 0 %}
+                        <button id="report" onclick="window.location.href='{% url 'report_list' %}'">Report</button>
+                    {% else %}
+                        <button id="report" onclick="window.location.href='{% url 'report_list' %}'">Report<label class="notification-badge">{{ request.user|get_report_notification }}</label></button>
+                    {% endif %}
+                </div>
+
+                <div class="col-lg-10 bg-light">
+                    {% block content %}
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+
+        <h5 class="featurette-divider"></h5>
+    </div>
+    <style>
+        #sidebar .container .row{
+            height: 76vh;
+        }
+        #sidebar .container .row #sidebar-content{
+            background-color: rgb(134, 142, 150);
+        }
+        #sidebar .container .row #sidebar-content button{
+            background-color: rgb(134, 142, 150);
+            width: 100%;
+            padding: 16px;
+
+            font-size: 24px;
+            color: rgb(255, 255, 255);
+
+            border: none;
+        }
+        .add button{
+            border-radius: 24px;
+        }
+        .add button:hover{
+            box-shadow: 2px 4px 10px 0px rgb(44, 50, 50);
+        }
+        .notification-badge{
+            width: 25px;
+            height: 25px;
+            font-size: 16px;
+            background-color: red;
+            border-radius: 24px;
+            color: white;
+            text-align: center;
+        }
+        .featurette-divider {
+          margin: 5rem 0; /* Space out the Bootstrap <hr> more */
+        }
+    </style>
+
+    <!--分頁-->
+    <div id="pagination">
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="col-xs-12">
+                    {% block pagination %}
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+{% include "footer.html" %}
+
+</html>

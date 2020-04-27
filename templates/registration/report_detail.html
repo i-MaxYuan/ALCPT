@@ -1,158 +1,105 @@
-{% extends 'profile_base.html' %}
+{% extends 'new_base.html' %}
 
 {% load web_filters %}
 
 {% block path %}
-    <a href="{% url 'profile' %}">檢視個人資料</a>
-    <a class="fa fa-angle-double-right fa-lg box"></a>
-    <a href="{% url 'report_list' %}">問題回報</a>
-    <a class="fa fa-angle-right fa-lg box"></a>
-    <a href="{% url 'report_list' %}">回報單號 ＿ {{ viewed_report.id }}</a>
+    <li class="breadcrumb-item" aria-current="page"><a href="{% url 'profile' %}">Profile</a></li>
+    <li class="breadcrumb-item" aria-current="page"><a href="{% url 'report_list' %}">Report</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Report Number#{{ viewed_report.id }}</li>
 {% endblock %}
 
 {% block content %}
-    <div class="report-description">
-        <table>
-            <tr>
-                <td class="col-md-1">編號</td>
-                <td class="col-md-3">{{ viewed_report.id }}</td>
-            </tr>
+    <main class="reply">
+        <div class="original-report-card">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-5">
+                        <div class="card">
+                            <div class="card-header">{{ viewed_report.category }}#{{ viewed_report.id }}</div>
 
-            {% if viewed_report.reply %}
-            <tr>
-                <td class="col-md-1">管理員對您說</td>
-                <td class="col-md-3">{{ viewed_report.reply|safe }}</td>
-            </tr>
-        {% endif %}
+                            <div class="card-body">
+                                {% if viewed_report.question %}
+                                    <h5>Question Content</h5>
+                                    {% if viewed_report.question.q_file %}
+                                        <audio controls preload="none">
+                                            <source src="{{ viewed_report.question.q_file.url }}" type="audio/mpeg">
+                                            Your browser does not support the audio tag.
+                                        </audio>
+                                    {% else %}
+                                        <div>
+                                            {{ viewed_report.question.q_content|linebreaksbr }}
+                                        </div>
+                                    {% endif %}
+                                    <h5>Choice</h5>
+                                    <ol type="A">
+                                        {% for choice in viewed_report.question.choice_set.all %}
+                                            <li {% if choice.is_answer %}style="color: green"{% endif %}>{{ choice }}</li>
+                                        {% endfor %}
+                                    </ol>
+                                {% endif %}
 
-            <tr>
-                <td class="col-md-1">問題類別</td>
-                <td class="col-md-3">{{ viewed_report.category }}</td>
-            </tr>
+                                <h5>Supplement Note.</h5>
+                                <div class="dropdown-divider"></div>
+                                <p>{{ viewed_report.supplement_note }}</p>
+                            </div>
 
-            {% if viewed_report.question %}
-            <tr>
-                <td class="col-md-1">試題</td>
-                <td class="col-md-3">{{ viewed_report.question }}</td>
-            </tr>
-            <tr>
-                <td class="col-md-1">選項</td>
-                <td>
-                    <ul>
-                        {% for option in viewed_report.question.choice_set.all %}
-                            <li>{{ option }}</li>
-                        {% endfor %}
-                    </ul>
-                </td>
-            </tr>
-            {% endif %}
+                            <div class="card-footer">
+                                <footer class="blockquote-footer">
+                                    <cite title="Source Title">{{ viewed_report.created_by }} in {{ viewed_report.created_time }}<br></cite>
+                                    {% if viewed_report.state == 2 %}
+                                        <label class="btn btn-danger float-right">Processing</label>
+                                    {% elif viewed_report.state == 3 %}
+                                        <cite title="Source Title">Resolved by {{ viewed_report.resolved_by }} in {{ viewed_report.resolved_time }}</cite>
+                                        <label class="btn btn-success float-right">Solved</label>
+                                    {% endif %}
+                                </footer>
+                            </div>
+                        </div>
+                    </div>
 
-            <tr>
-                <td class="col-md-1">說明</td>
-                <td class="col-md-3">{{ viewed_report.supplement_note|safe }}</td>
-            </tr>
-            <tr>
-                <td class="col-md-1">狀態</td>
-                <td class="col-md-3">{{ viewed_report.state|readable_report_state }}</td>
-            </tr>
+                    <div class="col-lg-7">
+                        <div class="card" style="height: 75vh">
+                            <div class="card-header">Reply</div>
 
-            {% if viewed_report.state == 3 %}
-                <tr>
-                    <td class="col-md-1">解決人</td>
-                    <td class="col-md-3">{{ viewed_report.resolved_by.name }}</td>
-                </tr>
-                <tr>
-                    <td class="col-md-1">解決時間</td>
-                    <td class="col-md-3">{{ viewed_report.resolved_time|date:"Y年m月d日, H時i分" }}</td>
-                </tr>
+                            <div id="reply-content" class="card-body">
+                                <div class="reply-content" data-spy="scroll" data-target="#navbar-example2" data-offset="0">
+                                    {% if replies %}
+                                        {% for reply in replies %}
+                                            {% if reply.created_by == viewed_report.created_by %}
+                                                <div class="text-right">
+                                                    ：{{ reply.created_by }}<br>{{ reply.content }}<footer class="blockquote-footer"><cite title="Source Title">{{ reply.created_time|date:"H:i, Y/m/d" }}</cite></footer>
+                                                </div>
+                                            {% else %}
+                                                <div class="">
+                                                    {{ reply.created_by }}：<br>{{ reply.content }}<footer class="blockquote-footer"><cite title="Source Title">{{ reply.created_time|date:"H:i, Y/m/d" }}</cite></footer>
+                                                </div>
+                                            {% endif %}
+                                            <hr>
+                                        {% endfor %}
+                                    {% else %}
+                                        No message...
+                                    {% endif %}
+                                </div>
+                            </div>
 
-            {% endif %}
+                            <div class="card-footer text-right">
+                                <form action="" method="post">
+                                    {% csrf_token %}
+                                    <textarea class="form-control" name="reply" rows="4" placeholder="Reply..." {% if viewed_report.state == 3 %}disabled{% endif %}></textarea>
 
-        </table>
-
-        <style>
-            ul, li{
-                list-style: none;
-            }
-            .report-description{
-                position: absolute;
-
-                width: 50%;
-                font-size: 20px;
-            }
-            .report-description table{
-                position: relative;
-                top: 50px;
-            }
-            .report-description td{
-                padding: 6px;
-            }
-        </style>
-    </div>
-
-    <div class="reply-block">
-        <form action="" method="post">
-            {% csrf_token %}
-            <table>
-                <tr>
-                    <td>回應</td>
-                </tr>
-                <tr>
-                    {% if not viewed_report.state == 3 %}
-                        <td><textarea class="form-control" rows="15" name="reply"></textarea></td>
-                    {% else %}
-                        <td><textarea class="form-control" rows="15" name="reply" disabled></textarea></td>
-                    {% endif %}
-                </tr>
-            </table>
-
-            {% if not viewed_report.state == 3 %}
-                <button type="submit">送出</button>
-                <button type="button" onclick="history.back()">返回</button>
-            {% else %}
-                <button type="button" onclick="history.back()">返回</button>
-            {% endif %}
-        </form>
-
-        <style>
-            .reply-block{
-                position: absolute;
-                left: 50%;
-
-                width: 30%;
-                font-size: 20px;
-            }
-            .reply-block table{
-                position: relative;
-                top: 50px;
-            }
-            .reply-block td{
-                padding: 6px;
-            }
-            .reply-block textarea{
-                width: 250%;
-            }
-            .reply-block form button{
-                position: relative;
-                left: 50%;
-                top: 60px;
-            }
-
-            .buttons {
-                position: relative;
-                left: 75%;
-                top: 12px;
-            }
-            button{
-                font-size: 20px;
-                padding: 10px;
-                padding-left: 15px;
-                padding-right: 15px;
-                color: #FFFEF6;
-                background-color: #4CCABD;
-                border: none;
-                border-radius: 6px;
-            }
-        </style>
-    </div>
+                                    <button type="submit" class="btn btn-primary" {% if viewed_report.state == 3 %}disabled{% endif %}>Comment</button>
+                                    <button type="button" class="btn btn-secondary" onclick="window.location=document.referrer;">Cancel</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <style>
+                        #reply-content{
+                            overflow-x: scroll;
+                        }
+                    </style>
+                </div>
+            </div>
+        </div>
+    </main>
 {% endblock %}

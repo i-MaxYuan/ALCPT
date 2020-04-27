@@ -13,7 +13,7 @@ from alcpt.exceptions import IllegalArgumentError
 def create_practice(*, user: User, practice_type: ExamType, question_types: list, question_num: int, integration: bool = False):
     now = datetime.now()
 
-    practice_name = "{}-{}".format(practice_type.value[1], now.strftime('%Y/%m/%d %H:%M:%d'))
+    practice_name = "{}-{}".format(practice_type.value[1], now.strftime('%Y/%m/%d %H:%M:%S'))
 
     question_type_counts = QuestionTypeCounts.Exam.value[0] if integration else []
 
@@ -39,7 +39,7 @@ def create_practice(*, user: User, practice_type: ExamType, question_types: list
 
     # add the questions into practice_testpaper
     for question in selected_questions:
-        practice_testpaper.question_set.add(question)
+        practice_testpaper.question_list.add(question)
 
     practice_exam = Exam.objects.create(name=practice_name, exam_type=practice_type.value[0], testpaper=practice_testpaper,
                                         duration=0, created_by=user)

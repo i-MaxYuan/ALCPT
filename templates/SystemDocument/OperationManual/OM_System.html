@@ -1,0 +1,62 @@
+{% extends 'OperationManual_base.html' %}
+
+{% load static %}
+
+{% block content %}
+    <main id="om-content">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-12 text-left">
+                    <h1>系統使用說明</h1>
+                    <p>
+                        <ul>
+                            <li>請以 Internet Explorer (11 以上版本)、Microsoft Edge (44.18362.449.0 以上版本)或 Safari (13.0.5 以上版本)等網 頁瀏覽器使用本系統。</li>
+                            <li>本手冊製作是以 Microsoft Edge【版本 44.18362.449.0 (正式 版本) (64 位元)】瀏覽器擷取操作頁面圖例，使用者若使用其 他瀏覽器或其他版本瀏覽器操作系統時，頁面可能會與手冊圖 例有所差異。</li>
+                            <li>本手冊製作是以系統版本 x.xx 為操作說明與頁面圖例，若版本 不同，頁面可能會與手冊圖例有所差異。</li>
+                        </ul>
+                    </p>
+
+                    <h1>進入系統</h1>
+                    <p>
+                        <ul>
+                            <li>首先，開啟瀏覽器連上系統後，會看到系統首頁。</li>
+                            <img src="{% static '/images/om/system/om-system01.png' %}" width="100%" height="100%">
+
+                            <li>
+                                此時，有兩種方式使用系統：
+                                <ul>
+                                    <li>第一，訪客瀏覽系統。</li>
+                                    <li>第二，登入系統後開始使用系統。</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </p>
+
+                    <hr>
+
+                    <h3>訪客瀏覽系統</h3>
+                    <p>
+                        <ul>
+                            <li>點選「Start」或「首頁」圖示</li>
+                            <img src="{% static '/images/om/system/om-system02.png' %}" width="100%" height="100%">
+                            <li>點選欄位後可觀看該公告詳情</li>
+                            <img src="{% static '/images/om/system/om-system03.png' %}" width="50%" height="50%">
+                        </ul>
+                    </p>
+
+                    <hr>
+
+                    <h3>登入系統後開始使用系統</h3>
+                    <p>
+                        <ul>
+                            <li>點選「登入」圖示</li>
+                            <img src="{% static '/images/om/system/om-system04.png' %}" width="100%" height="100%">
+                        </ul>
+                    </p>
+
+                    <hr class="featurette-divider">
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

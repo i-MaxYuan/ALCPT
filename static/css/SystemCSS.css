@@ -13,13 +13,3 @@ body{
 * a:visited{
     color: blue;
 }
-.footer{
-    position: fixed;
-    bottom: 0px;
-    text-align: center;
-
-    width: 100%;
-    height: 50px;
-    color: white;
-    background-color: rgba(70, 130, 180, 0.85);
-}

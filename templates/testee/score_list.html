@@ -1,243 +1,182 @@
-{% extends 'base_long_page.html' %}
+{% extends 'new_base.html' %}
+
+{% block scripts %}
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>   <!--for chart-->
+{% endblock %}
 
 {% block path %}
-    <a href="">受測者</a>
-    <a class="fa fa-angle-double-right fa-lg box"></a>
-    <a href="">成績紀錄</a>
+    <li class="breadcrumb-item active" aria-current="page">Score Record</li>
 {% endblock %}
 
 {% block content %}
-    <div class="container-flu" style="position: relative">
-        <!-- BS4 的靠右由 pull-right 改為 float-right -->
-        <div class="btn-group float-right">
-          <button type="button" class="btn btn-primary dropdown-toggle pull-right" data-toggle="dropdown">
-              <i style="font-size: 20px">圖表</i>
-          </button>
-          <!-- 重點在這 -->
-          <div class="dropdown-menu dropdown-menu-right">
-              <div class="search_bar">
-                <h1>統計圖表</h1>
-                <form action="" method="get">
-                    <div>
-                        <canvas id="chart" width="800" height="600"></canvas>
-                        <script>
-                            var ctx = document.getElementById('chart').getContext('2d');
-                            var chart = new Chart(ctx, {
-                                type: 'pie',
-                                data: {
-                                    labels: ["及格", "不及格"],
-                                    datasets: [{
-                                        label: '# of Votes',
-                                        data: [{{ qualified }}, {{ unqualified }}],
-                                        backgroundColor: [
-                                            'rgba(120, 194, 196, 1)',
-                                            'rgba(219, 77, 109, 1)'
-                                        ],
-                                        borderColor: [
-                                            'rgba(255,255,255,1)',
-                                            'rgba(255, 255, 255, 1)'
-                                        ],
-                                        borderWidth: 6
-                                    }]
-                                }
-                            });
-                        </script>
+    <main class="score-record">
+        <div class="container">
+            <ul class="nav nav-tabs" id="newTab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="data-list-tab" data-toggle="tab" href="#data-list" role="tab" aria-controls="data-list" aria-selected="true"><i class="fa fa-list-ul"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="bar-chart-tab" data-toggle="tab" href="#bar-chart" role="tab" aria-controls="bar-chart" aria-selected="false"><i class="fa fa-bar-chart"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="pie-chart-tab" data-toggle="tab" href="#pie-chart" role="tab" aria-controls="pie-chart" aria-selected="false"><i class="fa fa-pie-chart"></i></a>
+                </li>
+            </ul>
+
+            <div class="tab-content" id="tabContent">
+                <div class="tab-pane fade show active" id="data-list" role="tabpanel" aria-labelledby="data-list-tab">
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-md-12">
+                                <h2>Score Record List.</h2>
+
+                                <div class="table-responsive-md">
+                                    <table class="table table-hover table-bordered table-striped table-mc-light-blue">
+                                        <thead class="thead-light">
+                                            <tr>
+                                                <th class="text-center">Name.</th>
+                                                <th class="text-center">Score.</th>
+                                                <th class="text-center">Finish Time.</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            {% for answersheet in answer_sheets %}
+                                                <tr style="cursor: pointer" onclick="window.location.href='{% url 'view_answersheet_content' answersheet.id %}'">
+                                                    <td class="text-center" data-title="Name">{{ answersheet.exam }}</td>
+                                                    {% if answersheet.score  < 60 %}
+                                                        <td class="text-center" data-title="Type" style="color: #c12e2a">{{ answersheet.score }}</td>
+                                                    {% else %}
+                                                        <td class="text-center" data-title="Type">{{ answersheet.score }}</td>
+                                                    {% endif %}
+                                                    <td class="text-center" data-title="Finish Time">{{ answersheet.finish_time|date:'Y/m/d, H:i' }}</td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+                </div>
 
-                </form>
+                <div class="tab-pane fade" id="bar-chart" role="tabpanel" aria-labelledby="bar-chart-tab">
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-md-12">
+                                <h2>Bar Chart.</h2>
+                                <div id="bar-chart-container" style="width: 100%; height: 100%"></div>
+
+                                <script>
+                                    google.charts.load('current', {'packages':['corechart']});
+                                    google.charts.setOnLoadCallback(drawChart);
+
+                                    function drawChart() {
+                                        var data = google.visualization.arrayToDataTable([
+                                            ['Task', 'Times', {role: 'style'}, { role: 'annotation' }],
+                                            ['0~10', {{ one }}, "color: rgb(255, 0, 0)", '{{ one }}'],
+                                            ['10~20', {{ two }}, "color: rgb(255, 64, 0)", '{{ two }}'],
+                                            ['20~30', {{ three }}, "color: rgb(255, 128, 0)", '{{ three }}'],
+                                            ['30~40', {{ four }}, "color: rgb(255, 191, 0)", '{{ four }}'],
+                                            ['40~50', {{ five }}, "color: rgb(0, 255, 0)", '{{ five }}'],
+                                            ['50~60', {{ six }}, "color: rgb(0, 255, 64)", '{{ six }}'],
+                                            ['60~70', {{ seven }}, "color: rgb(0, 255, 128)", '{{ seven }}'],
+                                            ['70~80', {{ eight }}, "color: rgb(0, 128, 255)", '{{ eight }}'],
+                                            ['80~90', {{ nine }}, "color: rgb(0, 64, 255)", '{{ nine }}'],
+                                            ['90~100', {{ ten }}, "color: rgb(128, 0, 255)", '{{ ten }}'],
+                                        ]);
+
+                                        var options = {
+                                            title: 'My Score Bar Chart',
+                                            width: 900,
+                                            height: 450
+                                        };
+
+                                        var chart = new google.visualization.ColumnChart(document.getElementById('bar-chart-container'));
+                                        chart.draw(data, options);
+                                    }
+                                </script>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="pie-chart" role="tabpanel" aria-labelledby="pie-chart-tab">
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-md-12">
+                                <h2>Pie Chart.</h2>
+                                <div id="pie-chart-container" style="width: 100%; height: 100%"></div>
+
+                                <script type="text/javascript">
+                                    google.charts.load('current', {'packages':['corechart']});
+                                    google.charts.setOnLoadCallback(drawChart);
+
+                                    function drawChart() {
+                                        var data = google.visualization.arrayToDataTable([
+                                            ['Task', 'Times'],
+                                            ['及格', {{ qualified }}],
+                                            ['不及格', {{ unqualified }}],
+                                        ]);
+
+                                        var options = {
+                                            title: 'Qualified Rate',
+                                            width: 900,
+                                            height: 450,
+                                            is3D: true,
+                                        };
+
+                                        var chart = new google.visualization.PieChart(document.getElementById('pie-chart-container'));
+
+                                        chart.draw(data, options);
+                                    }
+                                </script>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-
-            <style>
-                .container-flu button{
-                    height: 70px;
-                    width: 70px;
-                    background-color: #4CCABD;
-                    border: none;
-
-                }
-
-
-                .container-flu{
-                    position: relative;
-                    top: -5%;
-                    left: 2%;
-                }
-
-                .btn-group{
-                    position: absolute;
-                    top: 50px;
-                    right: 30px;
-                }
-
-                .btn-group .dropdown-menu{
-                    height: 600px;
-                    width: 800px;
-                    padding-left: 10px;
-                    padding-right: 10px;
-                    text-align: center;
-
-                    position: absolute;
-                    top: -40%;
-                    right: 97%;
-
-                    opacity: 1;
-                }
-
-                .dropdown-menu form{
-                    height: auto;
-                    width: auto;
-                }
-
-                .search_bar h1{
-                    width: 100px;
-                    height: 30px;
-                    font-size: 20px;
-                    position: absolute;
-                    top: 3px;
-                    left: 10px;
-                }
-
-
-                .search_btn button{
-                    width: 60px;
-                    height: 30px;
-                    border-radius: 5px;
-                    color: #FFFEF6;
-
-                    position: absolute;
-                    right: 20px;
-                    top: 67%;
-
-                    opacity: 1;
-                }
-            </style>
         </div>
-    </div>
+    </main>
+    <style>
+        .exam-record .container #tabContent table > tbody > tr > td{
+            vertical-align: middle;
+        }
+    </style>
+{% endblock %}
 
-    <div class="table-responsive">
-        <table class="table table-hover">
-            <caption style="font-size: 30px;">&nbsp;&nbsp;成績紀錄（共{{ answer_sheets.count }}條結果）</caption>
-            <thead class="title">
-                <tr>
-                    <th class="col-md-2">測驗名稱</th>
-                    <th class="col-md-1">測驗成績</th>
-                    <th class="col-md-1">測驗時間</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for answersheet in answer_sheets %}
-                    <tr style="cursor: pointer" onclick="window.location.href='{% url 'view_answersheet_content' answersheet.id %}'">
-                        <td style="text-align: center; vertical-align:middle;">{{ answersheet.exam }}</td>
-                        {% if answersheet.score  < 60 %}
-                            <td style="vertical-align:middle; color: #c12e2a">{{ answersheet.score }}</td>
-                        {% else %}
-                            <td style="vertical-align:middle;">{{ answersheet.score }}</td>
-                        {% endif %}
-                        <td style="vertical-align:middle;">{{ answersheet.finish_time|date:'Y年m月d日, H時m分' }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
+{% block pagination %}
+    <ul class="pagination justify-content-center">
+        <li class="page-item"><a class="page-link" href="?page=1"><i class="fa fa-angle-double-left"></i></a></li>
 
-        </table>
+        <li class="page-item {% if not answersheetList.has_previous %}disable{% endif %}">
+            {% if answersheetList.has_previous %}
+                <a class="page-link" href="?page={{ answersheetList.previous_page_number }}" tabindex="-1"><i class="fa fa-angle-left"></i></a>
+            {% else %}
+                <a class="page-link" href="javascript:void(0);"><i class="fa fa-angle-left"></i></a>
+            {% endif %}
+        </li>
 
-        <style>
-            .table-responsive .table{
-                text-align: center;
-            }
+        {% for page in paginator.page_range %}
+            {% if page == answersheetList.number %}
+                <li class="page-item active">
+                    <a class="page-link" href="?page={{ page }}">{{ page }}</a>
+                </li>
+            {% else %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page }}">{{ page }}</a>
+                </li>
+            {% endif %}
+        {% endfor %}
 
-            .table-hover > tbody > tr:hover > td,
-            .table-hover > tbody > tr:hover > th {
-                background-color: #4CCABD;
-            }
+        <li class="page-item {% if not answersheetList.has_next %}disable{% endif %}">
+            {% if answersheetList.has_next %}
+                <a class="page-link" href="?page={{ answersheetList.next_page_number }}"><i class="fa fa-angle-right"></i></a>
+            {% else %}
+                <a class="page-link" href="javascript:void(0);"><i class="fa fa-angle-right"></i></a>
+            {% endif %}
+        </li>
 
-            .title{
-                font-size: 20px;
-            }
-
-            .title tr th{
-                text-align: center;
-            }
-
-            .table tbody{
-                font-size: 18px;
-            }
-
-            .table tbody td a{
-                color: #2C3232;
-            }
-
-        </style>
-    </div>
-
-
-        <!-- 頁碼的部分 -->
-    <div>
-        <div class="pagination">
-            <div class="pager_group1">
-                <ul class="pager">
-                    <li class="previous" style="color: #2C3232"><a href="?page=1{% if query_content %}&{{ query_content }}{% endif %}">&laquo; first</a></li>
-                    <li style="padding-left: 500px; padding-right: 490px">&nbsp;</li>
-                    <li class="next"><a href="?page={{ sheets.paginator.num_pages }}{% if query_content %}&{{ query_content }}{% endif %}">last &raquo;</a></li>
-                </ul>
-            </div>
-
-            <div class="pager_group2">
-                <nav aria-label="Page navigation">
-                  <ul class="pagination justify-content-center">
-                    <li {% if not sheets.has_previous %}class="page-item disabled"{% endif %}>
-                        {% if sheets.has_previous %}
-                            <a class="page-link" href="?page={{ sheets.previous_page_number }}{% if query_content %}&{{ query_content }}{% endif %}" tabindex="-1">Previous</a>
-                        {% else %}
-                            <a href="javascript:void(0)">Previous</a>
-                        {% endif %}
-                    </li>
-                    <li class="page-item">
-                        {% for page in paginator.page_range %}
-                            {% if page == sheets.number %}
-                                <a class="page-link" href="?page={{ page }}{% if query_content %}&{{ query_content }}{% endif %}">{{ page }}</a>
-                            {% else %}
-                                <a href="?page={{ page }}{% if query_content %}&{{ query_content }}{% endif %}">{{ page }}</a>
-                            {% endif %}
-                        {% endfor %}
-                    </li>
-                    <li {% if not sheets.has_next %}class="page-item disabled"{% endif %}>
-                        {% if sheets.has_next %}
-                            <a class="page-link" href="?page={{ sheets.next_page_number }}{% if query_content %}&{{ query_content }}{% endif %}">Next</a>
-                        {% else %}
-                            <a href="javascript:void(0)">Next</a>
-                        {% endif %}
-                    </li>
-                  </ul>
-                </nav>
-
-            </div>
-
-
-            <style>
-                .pager_group1{
-                    text-decoration: none;
-                    position: fixed;
-                    bottom: 9%;
-                    left: 10%;
-                    right: 10%;
-                }
-
-                .pager_group2{
-                    position: fixed;
-                    bottom: 14%;
-                    right: 50%;
-
-                    transform: translate(50%,50%);
-                }
-
-            </style>
-        </div>
-
-        <style>
-            .pagination{
-                font-size: 20px;
-            }
-        </style>
-    </div>
+        <li class="page-item"><a class="page-link" href="?page={{ answersheetList.paginator.num_pages }}"><i class="fa fa-angle-double-right"></i></a></li>
+    </ul>
 {% endblock %}

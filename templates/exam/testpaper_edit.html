@@ -1,101 +1,65 @@
-{% extends 'base.html' %}
+{% extends 'new_base.html' %}
 
 {% load web_filters %}
 
+{% block scripts %}
+    <script type="text/javascript">
+        passName = true;
+
+    </script>
+{% endblock %}
+
 {% block path %}
-    <a href="">考試管理員</a>
-    <a class="fa fa-angle-double-right fa-lg box"></a>
-    <a href="{% url 'testpaper_list' %}">考卷列表</a>
-    <a class="fa fa-angle-right fa-lg box"></a>
-    <a href="">編輯考卷</a>
+    <li class="breadcrumb-item" aria-current="page"><a href="{% url 'testpaper_list' %}">TestPaper List</a></li>
+    <li class="breadcrumb-item active" aria-current="page">TestPaper Edit</li>
 {% endblock %}
 
 {% block content %}
-    <div class="testpaper">
-        <form method="post">
-            <div class="title"><h1>Testpaper Edit.</h1></div>
-            {% csrf_token %}
-            <table>
-                <tr>
-                    <td class="col-md-1">考卷名稱</td>
-                    <td class="col-md-7" style="text-align: center"><input type="text" id="testpaper_name" name="testpaper_name" value="{{ testpaper.name }}" required></td>
-                </tr>
-                <tr>
-                    <td class="col-md-1">題目類型</td>
-                    <td class="col-md-7">
-                        {% for i in types_num %}
-                            <div class="card" style="width: 18rem; float: left; clear: right;">
-                                <div class="card-body">
-                                    <h5 class="card-title">{{ i|readable_question_type }}</h5>
-                                    <h6 class="card-subtitle mb-2 text-muted">共 {{ question_types|lookup:i }} 題，已選擇 {{ selected_num|lookup:i }} 題</h6>
-                                    <div class="choose">
-                                        <a href="{% url 'manual_pick' testpaper_id=testpaper.id question_type=i %}" class="card-link" >手動選擇</a>
-                                        {% if question_types|lookup:i == selected_num|lookup:i %}
-                                            <label>自動選擇</label>
-                                        {% else %}
-                                            <a href="{% url 'auto_pick' testpaper_id=testpaper.id question_type=i %}" class="card-link" >自動選擇</a>
-                                        {% endif %}
+    <main class="testpaper-edit-form">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-12">
+                    <h2>TestPaper Edit</h2>
+
+                    <form action="{% url 'testpaper_edit' testpaper.id %}" method="post">
+                        {% csrf_token %}
+                        <div class="container">
+                            <div class="row justify-content-center">
+                                <h5>TestPaper Name.</h5>
+                                <input class="form-control" type="text" name="testpaper_name" value="{{ testpaper.name }}">
+
+                                {% for question_type, question_type_count, selected_question_type_num in testpaper_data %}
+                                    <div class="card text-center m-1">
+                                        <div class="card-header">{{ question_type.value.1 }}</div>
+
+                                        <div class="card-body">
+                                            <p class="card-context">Total: {{ question_type_count }}，Selected: {{ selected_question_type_num }}</p>
+                                        </div>
+
+                                        <div class="card-footer text-center">
+                                            <div class="p-2">
+                                                <a class="btn btn-primary" href="{% url 'manual_pick' testpaper.id question_type.value.0 %}" class="card-link" >&nbsp;&nbsp; Manual&nbsp;&nbsp; </a>
+                                            </div>
+                                            <div>
+                                                {% if selected_question_type_num == question_type_count %}
+                                                    <button class="btn btn-danger" disabled>Automatic</button>
+                                                {% else %}
+                                                    <a class="btn btn-warning" href="{% url 'auto_pick' testpaper.id question_type.value.0 %}" class="card-link" >Automatic</a>
+                                                {% endif %}
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
+                                {% endfor %}
                             </div>
-                        {% endfor %}
-                    </td>
-                </tr>
-            </table>
+                        </div>
 
-            <div class="btn">
-                <button type="button" onclick="window.location.href='{% url 'testpaper_list' %}'">確認</button>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary">OK</button>
+                            <button type="button" class="btn btn-secondary" onclick="self.location=document.referrer;">Cancel</button>
+                        </div>
+                    </form>
+                </div>
             </div>
-
-            <style>
-                .testpaper .title h1{
-                    width: 30%;
-                    font-size: 28px;
-                    color: #FFFEF6;
-                    background-color: #4CCABD;
-                    padding-top: 10px;
-                    padding-bottom: 10px;
-                    padding-right: 15px;
-                    padding-left: 45px;
-                    text-align: center;
-                }
-                .testpaper table{
-                    position: relative;
-                    left: 10%;
-
-                    width: 80%;
-
-                    font-size: 20px;
-                }
-                .testpaper form input{
-                    width: 80%;
-                    padding: 6px;
-                }
-
-                .testpaper .btn{
-                    position: relative;
-                    top: 30px;
-                    left: 45%;
-                }
-                .testpaper .btn button{
-                    font-size: 25px;
-                    padding: 10px;
-                    padding-left: 15px;
-                    padding-right: 15px;
-                    color: #FFFEF6;
-                    background-color: #4CCABD;
-                    border: none;
-                }
-
-                .testpaper form .card{
-                    margin-left: 50px;
-                }
-                .testpaper form .card-body{
-                    padding-bottom: 10px;
-
-                    text-align: center;
-                }
-            </style>
-        </form>
-    </div>
+        </div>
+    </main>
 {% endblock %}

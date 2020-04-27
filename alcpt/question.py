@@ -19,37 +19,44 @@ from .managerfuncs import tbmanager, tboperator
 def manager_index(request):
     question_types = [_ for _ in QuestionType]
 
-    state_choices = [(1, '審核通過'),
-                     (2, '審核未通過'),
-                     (3, '等待審核'),
-                     (4, '被回報錯誤'),
-                     (5, '被回報錯誤，已處理')]
+    state_choices = [(1, 'Pass'),
+                     (4, 'Faulty'),
+                     (5, 'Handle')]
+    states = []
+    for x in state_choices:
+        states.append(x[0])
+
     difficulty_choices = [(1, '1'),
                           (2, '2'),
                           (3, '3'),
                           (4, '4')]
 
     keywords = {
-        'question_content': request.GET.get('question_content',)
+        'question_content': request.GET.get('question_content'),
     }
-    if keywords['question_content'] and any(char in punctuation for char in keywords['question_content']):
-        keywords['question_content'] = None
-        messages.warning(request, "Name cannot contains any special character.")
+
     for keyword in ['question_type', 'difficulty', 'state']:
         try:
             keywords[keyword] = int(request.GET.get(keyword))
         except (KeyError, TypeError, ValueError):
             keywords[keyword] = None
 
-    q_type = request.GET.get('question_type',)
-    difficulty = request.GET.get('difficulty',)
-    state = request.GET.get('state',)
+    if keywords['question_content'] and any(char in punctuation for char in keywords['question_content']):
+        keywords['question_content'] = None
+        messages.warning(request, "Name cannot contains any special character.")
+        questions = Question.objects.exclude(state=6)
 
+    elif keywords['state'] and int(keywords['state']) not in states:
+        hi = keywords['state']
+        messages.warning(request, "Can not search by this state.")
+        questions = Question.objects.exclude(state=6)
+
+        # 使用搜尋功能，系統會至後端資料庫filter出符合條件的題目。所以，頁面會有重新載入的效果。
+        # 若是使用Javascript，因是使用cache檔案，所以不會有進入後端抓資料一樣的問題。
     query_content, questions = tbmanager.query_questions(**keywords)
-    resultNum = len(questions)
 
     page = request.GET.get('page', 1)
-    paginator = Paginator(questions, 10)  # the second parameter is used to display how many items. Now is display 10
+    paginator = Paginator(questions, 20)  # the second parameter is used to display how many items. Now is display 10
 
     try:
         questionList = paginator.page(page)
@@ -65,9 +72,9 @@ def manager_index(request):
 @require_http_methods(["GET"])
 def review(request):
     # 過濾掉狀態為"暫存"、"審核通過"、"被回報錯誤，已處理"
-    reviewed_questions = Question.objects.exclude(state=0).exclude(state=1).exclude(state=2).exclude(state=5)
+    reviewed_questions = Question.objects.filter(state=3).order_by('id')
     page = request.GET.get('page', 1)
-    paginator = Paginator(reviewed_questions, 8)  # the second parameter is used to display how many items. Now is 10
+    paginator = Paginator(reviewed_questions, 10)  # the second parameter is used to display how many items. Now is 10
 
     try:
         questionList = paginator.page(page)
@@ -83,13 +90,14 @@ def review(request):
 def question_pass(request, question_id):
     try:
         question = Question.objects.get(id=question_id)
-    except ObjectDoesNotExist:
-        messages.error(request, 'Question does not exist, question id: {}'.format(question_id))
+        question.state = 1
+        question.faulted_reason = ""
+        question.last_updated_by = request.user
+        question.save()
 
-    question.state = 1
-    question.faulted_reason = ""
-    question.last_updated_by = request.user
-    question.save()
+        messages.success(request, "Successfully passed, question id - {}.".format(question.id))
+    except ObjectDoesNotExist:
+        messages.error(request, 'Question does not exist, question id - {}'.format(question_id))
 
     return redirect('question_review')
 
@@ -98,53 +106,104 @@ def question_pass(request, question_id):
 def question_reject(request, question_id):
     try:
         question = Question.objects.get(id=question_id)
+        if request.method == "POST":
+            question.faulted_reason = request.POST.get('reason')
+            question.state = 2
+            question.last_updated_by = request.user
+            question.save()
+            return redirect('question_review')
+        else:
+            return render(request, 'question/reject_reason.html', locals())
     except ObjectDoesNotExist:
-        messages.error(request, 'Question does not exist, question id: {}'.format(question_id))
-
-    if request.method == "POST":
-        question.faulted_reason = request.POST.get('reason')
-        question.state = 2
-        question.last_updated_by = request.user
-        question.save()
+        messages.error(request, 'Question does not exist, question id - {}'.format(question_id))
         return redirect('question_review')
-    else:
-        return render(request, 'question/reject_reason.html', locals())
 
 
 @permission_check(UserType.TBManager)
 def question_edit(request, question_id):
     try:
         question = Question.objects.get(id=question_id)
-        if question.state == 1:
-            messages.warning(request, 'The question had been passed, can\'t be edited.')
-            return redirect('tbmanager_question_list')
+        if question.state == 1 or question.state == 5:
+            messages.warning(request, 'Failed edited, the question had been passed or handled.')
+            return redirect(request.META.get('HTTP_REFERER',))
+
+        if request.method == 'POST':
+            if question.state == 4:
+                if question.q_file:
+                    new_question = Question.objects.create(q_type=question.q_type,
+                                                           q_file=question.q_file,
+                                                           difficulty=question.difficulty,
+                                                           issued_freq=question.issued_freq,
+                                                           correct_freq=question.correct_freq,
+                                                           created_by=request.user,
+                                                           last_updated_by=request.user,
+                                                           state=1)
+                else:
+                    new_question = Question.objects.create(q_type=question.q_type,
+                                                           q_content=question.q_content,
+                                                           difficulty=question.difficulty,
+                                                           issued_freq=question.issued_freq,
+                                                           correct_freq=question.correct_freq,
+                                                           created_by=request.user,
+                                                           last_updated_by=request.user,
+                                                           state=1)
+                new_question.save()
+
+                original_answer_choice_id = 0
+                for choice in question.choice_set.all():
+                    if choice.is_answer:
+                        original_answer_choice_id = choice.id
+                        choice.is_answer = False
+                    else:
+                        choice.is_answer = False
+                    choice.save()
+                Choice.objects.filter(id=request.POST.get('answer_choice')).update(is_answer=True)
+
+                for choice in question.choice_set.all():
+                    Choice.objects.create(c_content=choice.c_content,
+                                          question=new_question,
+                                          is_answer=choice.is_answer)
+
+                for choice in question.choice_set.all():
+                    if choice.id == original_answer_choice_id:
+                        choice.is_answer = True
+                    else:
+                        choice.is_answer = False
+                    choice.save()
+
+                question.state = 5
+                question.save()
+
+                messages.success(request, "Successfully processed the question")
+                return redirect('tbmanager_question_list')
+            else:
+                question.q_content = request.POST.get('q_content')
+
+                for choice in question.choice_set.all():
+                    choice.is_answer = 0
+                    choice.save()
+
+                try:
+                    choice = Choice.objects.get(id=request.POST.get('answer_choice'))
+                    choice.is_answer = 1
+                    choice.save()
+                    question.state = 1
+                    question.last_updated_by = request.user
+                    question.save()
+
+                    messages.success(request, 'Successfully updated.')
+
+                    return redirect('question_review')
+                except ObjectDoesNotExist:
+                    messages.error(request,
+                                   'Choice does not exist, choice id: {}'.format(request.POST.get('answer_choice')))
+                    return render(request, 'question/question_edit.html', locals())
+        else:
+            return render(request, 'question/question_edit.html', locals())
 
     except ObjectDoesNotExist:
-        messages.error(request, 'Question does not exist, question id: {}'.format(question_id))
-
-    if request.method == 'POST':
-        question.q_content = request.POST.get('q_content',)
-
-        for choice in question.choice_set.all():
-            choice.is_answer = 0
-            choice.save()
-
-        try:
-            choice = Choice.objects.get(id=request.POST.get('answer_choice'))
-            choice.is_answer = 1
-            choice.save()
-            question.state = 1
-            question.last_updated_by = request.user
-            question.save()
-
-            messages.success(request, 'Successful Update.')
-
-            return redirect('question_review')
-        except ObjectDoesNotExist:
-            messages.error(request, 'Choice does not exist, choice id: {}'.format(request.POST.get('answer_choice')))
-            return render(request, 'question/question_edit.html', locals())
-    else:
-        return render(request, 'question/question_edit.html', locals())
+        messages.error(request, 'Question does not exist, question id - {}'.format(question_id))
+        return redirect('question_review')
 
 
 # 以下為「題目操作員」
@@ -155,9 +214,10 @@ def operator_index(request):
     for q in list(QuestionType):
         question_types.append(q)
 
-    state_choices = [(0, '暫存'),
-                     (2, '審核未通過'),
-                     (4, '被回報錯誤')]
+    state_choices = [
+        (6, 'Saved'),
+        (2, 'Reject'),
+        (4, 'Faulty')]
 
     difficulty_choices = [(1, '1'),
                           (2, '2'),
@@ -180,8 +240,10 @@ def operator_index(request):
     state = request.GET.get('state', )
 
     query_content, questions = tboperator.query_questions(**keywords)
+    resultNum = len(questions)
+
     page = request.GET.get('page', 1)
-    paginator = Paginator(questions, 10)  # the second parameter is used to display how many items. Now is display 10
+    paginator = Paginator(questions, 20)  # the second parameter is used to display how many items. Now is display 10
 
     try:
         questionList = paginator.page(page)
@@ -199,11 +261,10 @@ def operator_index(request):
 def question_submit(request, question_id):
     try:
         question = Question.objects.get(id=question_id)
+        question.state = 3  # 將狀態從 0 轉 3 , 從"暫存"轉"等待審核"
+        question.save()
     except ObjectDoesNotExist:
-        messages.error(request, 'Question doesn\'t exist, question id: {}'.format(question_id))
-
-    question.state = 3      # 將狀態從 0 轉 3 , 從"暫存"轉"等待審核"
-    question.save()
+        messages.error(request, 'Question does not exist, question id - {}'.format(question_id))
 
     return redirect('tboperator_question_list')
 
@@ -219,7 +280,7 @@ def question_create(request, kind):
                 return redirect('tboperator_question_list')
             else:
                 try:
-                    q_file = request.FILES.get('question_file',)
+                    q_file = request.FILES.get('question_file')
                 except:
                     messages.error(request, 'Missing file field "question_file"')
 
@@ -290,12 +351,9 @@ def question_create(request, kind):
 def question_multiCreate(request):
     if request.method == "POST":
         if request.FILES.get('users_file', ):
-            wb = xlrd.open_workbook(filename=None, file_contents=request.FILES['users_file'].read())
+            wb = xlrd.open_workbook(filename=None, file_contents=request.FILES['questions_file'].read())
             table = wb.sheets()[0]
             all_questions = []
-
-            # q_type = request.POST.get('question_type', )
-            # q_difficulty = request.POST.get('question_difficulty', )
 
             for i in range(table.nrows):
                 question = []
@@ -345,46 +403,46 @@ def question_multiCreate(request):
 def operator_edit(request, question_id):
     try:
         question = Question.objects.get(id=question_id)
-    except ObjectDoesNotExist:
-        messages.error(request, 'Question does not exist, question id: {}'.format(question_id))
 
-    if request.method == 'POST':
-        question.q_content = request.POST.get('q_content', )
-        question.q_type = request.POST.get('question_type',)
-        for choice in question.choice_set.all():
-            choice.is_answer = 0
-            choice.save()
-        try:
-            choice = Choice.objects.get(id=request.POST.get('answer_choice'))
-            choice.is_answer = 1
-            choice.save()
-            question.state = 0
-            question.save()
+        if request.method == 'POST':
+            question.q_content = request.POST.get('q_content')
+            question.q_type = request.POST.get('question_type')
+            question.last_updated_by = request.user
+            for choice in question.choice_set.all():
+                choice.is_answer = 0
+                choice.save()
+            try:
+                choice = Choice.objects.get(id=request.POST.get('answer_choice'))
+                choice.is_answer = 1
+                choice.save()
+                question.state = 6
+                question.save()
 
-            messages.success(request, 'Successful Update.')
+                messages.success(request, 'Successful Update.')
 
-            return redirect('tboperator_question_list')
-        except ObjectDoesNotExist:
-            messages.error(request, 'Choice does not exist, choice id: {}'.format(request.POST.get('answer_choice')))
+                return redirect('tboperator_question_list')
+            except ObjectDoesNotExist:
+                messages.error(request,
+                               'Choice does not exist, choice id - {}'.format(request.POST.get('answer_choice')))
+                return render(request, 'question/operator_edit.html', locals())
+        else:
             return render(request, 'question/operator_edit.html', locals())
-    else:
-        return render(request, 'question/operator_edit.html', locals())
+    except ObjectDoesNotExist:
+        messages.error(request, 'Question does not exist, question id - {}'.format(question_id))
+        return redirect('tboperator_question_list')
 
 
 @permission_check(UserType.TBOperator)
 def question_delete(request, question_id):
     try:
         question = Question.objects.get(id=question_id)
-        if question.state == 0 or question.state == 2:
-            choices = question.choice_set.all()
-            for choice in choices:
-                choice.delete()
+        if question.state == 6 or question.state == 2:
+            tboperator.delete_question(question)
+            messages.success(request, "Successfully deleted, question id - {}.".format(question_id))
 
-            question.delete()
-            messages.success(request, 'Delete question successfully, question id: {}'.format(question.id))
         else:
-            messages.warning(request, 'Question can not be deleted, question id: {}'.format(question_id))
+            messages.warning(request, 'Failed deleted, question id - {}.'.format(question_id))
     except ObjectDoesNotExist:
-        messages.error(request, 'Question does not exist, question id: {}'.format(question_id))
+        messages.error(request, 'Question does not exist, question id - {}'.format(question_id))
 
     return redirect('tboperator_question_list')

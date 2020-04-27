@@ -7,9 +7,10 @@ from django.http.response import HttpResponse
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
 from django.views.decorators.http import require_http_methods
+from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
-from .models import Question, AnswerSheet, Student, User, Exam, TestPaper, Answer
+from .models import Question, AnswerSheet, Student, User, Exam, TestPaper, Answer, ReportCategory, Report
 from .exceptions import *
 from .decorators import permission_check
 from .definitions import UserType, QuestionType, ExamType
@@ -19,22 +20,13 @@ from .managerfuncs import viewer, practicemanager, testmanager
 @permission_check(UserType.Testee)
 def exam_list(request):
     examList = []
-    exams = Exam.objects.exclude(is_public=False)
+    exams = Exam.objects.filter(is_public=True).filter(testeeList=request.user)
     for exam in exams:
-        try:
-            if request.user.student in exam.group.member.all():
-                examList.append(exam)
-            else:
-                pass
-        except:
-            pass
+        examList.append(exam)
 
     practiceList = []
-    practices = Exam.objects.filter(created_by=request.user)
+    practices = Exam.objects.filter(is_public=False).filter(created_by=request.user)
     for practice in practices:
-        if practice in examList:
-            pass
-        else:
             practiceList.append(practice)
 
     return render(request, 'testee/exam_list.html', locals())
@@ -45,7 +37,7 @@ def exam_list(request):
 def score_list(request):
     qualified = 0
     unqualified = 0
-    answer_sheets = AnswerSheet.objects.all().filter(user=request.user)
+    answer_sheets = AnswerSheet.objects.all().filter(user=request.user).order_by('-exam__created_time')
     page = request.GET.get('page', 1)
     paginator = Paginator(answer_sheets, 10)
 
@@ -56,6 +48,32 @@ def score_list(request):
             qualified += 1
         else:
             unqualified += 1
+
+    one, two, three, four, five, six, seven, eight, nine, ten = 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+    for answer_sheet in answer_sheets:
+        if answer_sheet.score is None:
+            pass
+        else:
+            if 0 <= answer_sheet.score <= 10:
+                one += 1
+            elif 10 < answer_sheet.score <= 20:
+                two += 1
+            elif 20 < answer_sheet.score <= 30:
+                three += 1
+            elif 30 < answer_sheet.score <= 40:
+                four += 1
+            elif 40 < answer_sheet.score <= 50:
+                five += 1
+            elif 50 < answer_sheet.score <= 60:
+                six += 1
+            elif 60 < answer_sheet.score <= 70:
+                seven += 1
+            elif 70 < answer_sheet.score <= 80:
+                eight += 1
+            elif 80 < answer_sheet.score <= 90:
+                nine += 1
+            elif 90 < answer_sheet.score <= 100:
+                ten += 1
 
     try:
         answersheetList = paginator.page(page)
@@ -146,7 +164,7 @@ def start_exam(request, exam_id):
     except ObjectDoesNotExist:
         answer_sheet = AnswerSheet.objects.create(exam=exam, user=request.user)
 
-        all_questions = list(exam.testpaper.question_set.all())
+        all_questions = list(exam.testpaper.question_list.all())
         random.shuffle(all_questions)
 
         for question in all_questions:
@@ -160,10 +178,17 @@ def start_exam(request, exam_id):
 @permission_check(UserType.Testee)
 @require_http_methods(["GET", "POST"])
 def answering(request, exam_id, answer_id):
+    exam = Exam.objects.get(id=exam_id)
+    if exam.exam_type == 1:
+        hour = exam.finish_time.hour
+        minute = exam.finish_time.minute
     try:
         exam = Exam.objects.get(id=exam_id)
         answer = Answer.objects.get(id=answer_id)
         answer_sheet = AnswerSheet.objects.get(exam=exam, user=request.user)
+        if answer_sheet.is_finished:
+            messages.warning(request, "You had completed this exam.")
+            return redirect('testee_score_list')
         if answer not in answer_sheet.answer_set.all():
             messages.warning(request, 'Not your answer: {}'.format(answer_id))
             return redirect('testee_answering', exam_id=exam.id, answer_id=list(answer_sheet.answer_set.all())[0].id)
@@ -195,7 +220,7 @@ def answering(request, exam_id, answer_id):
         if len(Answer.objects.filter(answer_sheet=answer_sheet).filter(selected=-1)) is 0:
             messages.success(request, 'You had finished the exam.')
             score = testmanager.calculate_score(exam.id, answer_sheet)
-            return redirect('testee_exam_list')
+            return redirect('testee_score_list')
         else:
             the_next_question = list(Answer.objects.filter(answer_sheet=answer_sheet).filter(selected=-1)).pop(0)
 
@@ -206,3 +231,59 @@ def answering(request, exam_id, answer_id):
         answers = answer_sheet.answer_set.all()
 
         return render(request, 'testee/answering.html', locals())
+
+
+# Settle exam score directly.
+@permission_check(UserType.Testee)
+def settle(request, exam_id):
+    try:
+        exam = Exam.objects.get(id=exam_id)
+        try:
+            answer_sheet = AnswerSheet.objects.get(exam=exam, user=request.user)
+            score = testmanager.calculate_score(exam.id, answer_sheet)
+            messages.success(request, "You have settled this exam score directly. You got {} point in this exam.".format(score))
+            return redirect('testee_score_list')
+        except ObjectDoesNotExist:
+            messages.error(request, "Query failed, you may not start this exam.")
+            return redirect('testee_exam_list')
+
+    except ObjectDoesNotExist:
+        messages.error(request, "Query failed, Exam doesn't exist.")
+        return redirect('testee_exam_list')
+
+
+@login_required
+def report_question(request, question_id):
+    if request.method == 'POST':
+        try:
+            category = ReportCategory.objects.get(id=int(request.POST.get('category')))
+            Question.objects.filter(id=question_id).update(state=4)
+            reported_question = Question.objects.get(id=question_id)
+
+            supplement_note = request.POST.get('supplement_note')
+
+            question_report = Report.objects.create(staff_notification=True,
+                                                    category=category,
+                                                    question=reported_question,
+                                                    supplement_note=supplement_note,
+                                                    created_by=request.user,
+                                                    state=1)
+
+            question_report.save()
+
+            messages.success(request, 'Thanks for your report, we will review this question as soon as possible.')
+
+            return redirect('testee_score_list')
+
+        except ObjectDoesNotExist:
+            messages.error(request, 'Category or Question does not exist.')
+            categories = ReportCategory.objects.all()
+            return render(request, 'testee/report_question.html', locals())
+
+    else:
+        categories = ReportCategory.objects.all()
+        reported_question = Question.objects.get(id=question_id)
+        if reported_question.state == 4:
+            messages.warning(request, "This question had been reported, thank you.")
+            return redirect(request.META.get('HTTP_REFERER'))
+        return render(request, 'testee/report_question.html', locals())

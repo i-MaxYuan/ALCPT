@@ -1,0 +1,31 @@
+{% extends 'new_base.html' %}
+
+{% load web_filters %}
+
+{% block path %}
+    <li class="breadcrumb-item active" aria-current="page">Proclamation Detail</li>
+{% endblock %}
+
+{% block content %}
+    <main class="proclamation-detail">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card">
+                        <h5 class="card-header">Proclamation Detail.</h5>
+
+                        <div class="card-body">
+                            <h5 class="card-title">{{ proclamation.title }}</h5>
+
+                            <p class="card-text">{{ proclamation.text|linebreaksbr }}</p>
+
+                            <footer class="blockquote-footer">{{ proclamation.created_by }} in <cite title="Source Title">{{ proclamation.created_time }}</cite></footer>
+
+                            <button type="button" class="btn btn-primary float-right" onclick="self.location=document.referrer;">OK</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

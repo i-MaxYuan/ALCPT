@@ -43,21 +43,23 @@ class UserManager(BaseUserManager):
 # created_time: user's registration time
 # update_time: user update its profile time
 class User(AbstractBaseUser):
+    photo = models.ImageField(upload_to='photos', null=True)
     reg_id = models.CharField(max_length=50, unique=True)
     email = models.EmailField(blank=True, null=True)
     email_is_verified = models.BooleanField(default=False)
     name = models.CharField(max_length=20, blank=True, null=True)
     gender = models.PositiveSmallIntegerField(blank=True, null=True)
-    TESTEE_PREVILEGE = 1
-    privilege = models.PositiveSmallIntegerField(default=TESTEE_PREVILEGE)     # 1 => Testee
+    TESTEE_PRIVILEGE = 1
+    privilege = models.PositiveSmallIntegerField(default=TESTEE_PRIVILEGE)     # 1 => Testee
     created_time = models.DateTimeField(auto_now_add=True)
     update_time = models.DateTimeField(auto_now=True)
     IDENTITY_CHOICES = (
-        (0, '訪客'),
-        (1, '學生'),
-        (2, '老師'),
+        (1, '訪客'),
+        (2, '學生'),
+        (3, '老師'),
     )
     identity = models.PositiveSmallIntegerField(null=True, default=0)
+    introduction = models.TextField(null=True)
 
     objects = UserManager()
 
@@ -109,7 +111,7 @@ class Squadron(models.Model):
 # grade: user's grade
 # squadron: user's squadron
 class Student(models.Model):
-    stu_id = models.CharField(max_length=10, unique=True)
+    stu_id = models.CharField(max_length=50, unique=True)
     user = models.OneToOneField("User", on_delete=models.CASCADE)
     department = models.ForeignKey("Department", on_delete=models.PROTECT, blank=True, null=True)
     grade = models.PositiveSmallIntegerField(default=time.localtime().tm_year - 1911)
@@ -124,6 +126,7 @@ class Student(models.Model):
 # valid: True = testpaper is valid and can be used; False is the opposite
 class TestPaper(models.Model):
     name = models.CharField(max_length=100, unique=True)
+    question_list = models.ManyToManyField('Question')
     created_time = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey("User", on_delete=models.PROTECT, related_name='testee_created')
     is_testpaper = models.BooleanField(default=False)
@@ -148,8 +151,8 @@ class Exam(models.Model):
     name = models.CharField(max_length=100, unique=True)
     exam_type = models.PositiveSmallIntegerField(default=2)
     testpaper = models.ForeignKey('TestPaper', on_delete=models.CASCADE, null=True)
-    use_freq = models.IntegerField(default=0)
-    modified_times = models.IntegerField(default=0)
+    use_freq = models.IntegerField(default=0)       # 似乎沒用到
+    modified_times = models.IntegerField(default=0)     # 似乎沒用到
     average_score = models.FloatField(default=0)     # 資料庫我有加一欄，不影響可以不用刪掉
     start_time = models.DateTimeField(blank=True, null=True)
     created_time = models.DateTimeField(auto_now_add=True)
@@ -157,6 +160,7 @@ class Exam(models.Model):
     created_by = models.ForeignKey('User', on_delete=models.PROTECT, related_name='exam_created')
     finish_time = models.DateTimeField(blank=True, null=True)
     is_public = models.BooleanField(default=False)
+    testeeList = models.ManyToManyField('User')
 
     class Meta:
         ordering = ('-created_time',)
@@ -183,29 +187,27 @@ class Exam(models.Model):
 # state: state of the question
 class Question(models.Model):
     q_type = models.PositiveSmallIntegerField()
-    q_file = models.TextField(blank=True, null=True)
+    q_file = models.FileField(upload_to='question_files', null=True)
     q_content = models.TextField(blank=True, null=True)
     difficulty = models.PositiveSmallIntegerField(default=0)
     issued_freq = models.IntegerField(default=0)
     correct_freq = models.IntegerField(default=0)
-    used_freq = models.PositiveIntegerField(default=0)
     created_time = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey('User', on_delete=models.PROTECT, related_name='question_created')
     update_time = models.DateTimeField(auto_now=True)
     last_updated_by = models.ForeignKey('User', on_delete=models.SET_NULL, blank=True, null=True,
                                         related_name='last_updated')
-    is_valid = models.BooleanField(default=False)
-    used_to = models.ManyToManyField(TestPaper)
+    is_valid = models.BooleanField(default=False)       # 似乎沒用到
     faulted_reason = models.CharField(max_length=255, blank=True, null=True, default="")
     STATES_CHOICES = (
-        (0, '暫存'),
         (1, '審核通過'),
         (2, '審核未通過'),
         (3, '等待審核'),
         (4, '被回報錯誤'),
         (5, '被回報錯誤，已處理'),
+        (6, '暫存'),
     )
-    state = models.SmallIntegerField(choices=STATES_CHOICES, default=0)
+    state = models.SmallIntegerField(choices=STATES_CHOICES, default=6)
 
     class Meta:
         ordering = ('-q_content',)
@@ -261,23 +263,7 @@ class Answer(models.Model):
         return self.question.q_content
 
 
-# 試卷上的選項順序
-# answer: the option list is related to what answer
-# choice: the option list is related to what choice
-# added_time: time of the option list is added
-class OptionList(models.Model):
-    answer = models.ForeignKey('Answer', on_delete=models.PROTECT)
-    choice = models.ForeignKey('Choice', on_delete=models.PROTECT)
-    added_time = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        ordering = ('added_time', )
-
-    def __str__(self):
-        return self.choice.c_content
-
-
-# 受測名單
+# 受測者群組
 # member: members of the group
 # create_by: user of creating the group
 # update_time: time of updating group profile
@@ -296,11 +282,6 @@ class Group(models.Model):
         return self.name
 
 
-class TesteeList(models.Model):
-    created_by = models.ForeignKey('Exam', on_delete=models.PROTECT)
-    testees = models.ManyToManyField('User', blank=True)
-
-
 # 公告
 # text: content of the proclamation
 # is_public: if value is False the proclamation can't be showed; True is the opposite
@@ -308,10 +289,12 @@ class TesteeList(models.Model):
 # created_by: user of creating the proclamation
 class Proclamation(models.Model):
     title = models.TextField(max_length=255)
-    text = models.TextField(max_length=512)
+    text = models.TextField()
+    is_read = models.BooleanField(default=True)
     is_public = models.BooleanField(default=False)
+    recipient = models.ForeignKey('User', on_delete=models.CASCADE, null=True)
     created_time = models.DateTimeField(auto_now_add=True)
-    created_by = models.ForeignKey('User', on_delete=models.PROTECT, related_name='proclamation_created')
+    created_by = models.ForeignKey('User', on_delete=models.SET_NULL, null=True, related_name='announcer')
 
     class Meta:
         ordering = ('-created_time',)
@@ -344,13 +327,12 @@ class Report(models.Model):
     staff_notification = models.BooleanField(default=False)
     category = models.ForeignKey('ReportCategory', on_delete=models.PROTECT)
     question = models.ForeignKey('Question', on_delete=models.PROTECT, blank=True, null=True)
-    reply = models.TextField()
     supplement_note = models.TextField()
     STATES_CHOICES = (
-        (0, '暫存'),
         (1, '待處理'),
         (2, '處理中'),
         (3, '已解決'),
+        (4, '暫存')
     )
     state = models.SmallIntegerField(choices=STATES_CHOICES, default=0)
     created_by = models.ForeignKey('User', on_delete=models.PROTECT)
@@ -361,8 +343,15 @@ class Report(models.Model):
     def __str__(self):
         return self.category
 
-    def store_reply(self, reply):
-        self.reply = json.dumps(reply).encode('utf-8').decode('unicode_escape')
 
-    def get_reply(self):
-        return json.loads(self.reply)
+class Reply(models.Model):
+    source = models.ForeignKey('Report', null=True, on_delete=models.SET_NULL)
+    content = models.TextField()
+    created_by = models.ForeignKey('User', null=True, on_delete=models.SET_NULL)
+    created_time = models.DateTimeField(auto_now_add=True)
+
+    def store_content(self, content):
+        self.reply = json.dumps(content).encode('utf-8').decode('unicode_escape')
+
+    def get_content(self):
+        return json.loads(self.content)

@@ -1,108 +1,73 @@
-{% extends 'base.html' %}
+{% extends 'new_base.html' %}
 
 {% block path %}
-    <a href="{% url 'tboperator_question_list' %}">題目操作員</a>
-    <a class="fa fa-angle-double-right fa-lg box"></a>
-    <a href="">編輯試題</a>
+    <li class="breadcrumb-item" aria-current="page"><a href="{% url 'tboperator_question_list' %}" onclick="return confirm('Sure to leave edition?')">Question List</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Question Edit</li>
 {% endblock %}
 
 {% block content %}
-    <div class="edit_question">
-        <form enctype="multipart/form-data" action="" method="post">
-            <div class="title"><h1>Edit Questions.</h1></div>
-            {% csrf_token %}
-            <table>
-                <tr>
-                    <td class="col-md-2" style="font-size: 20px">題目</td>
-                    <td class="col-md-5">
-                        {% if question.q_file %}
-                            <audio controls preload="none">
-                                <source src="{{ question.q_file }}" type="audio/mpeg">
-                                Your browser does not support the audio tag.
-                            </audio>
-                        {% else %}
-                            <textarea name="q_content" cols="100" rows="8">{{ question.q_content }}</textarea>
-                        {% endif %}
-                    </td>
-                </tr>
+    <main class="operator-question-edit">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-12">
+                    <form enctype="multipart/form-data" method="post">
+                        {% csrf_token %}
 
-                <tr>
-                    <td class="col-md-2" style="font-size: 20px">選擇題目類型：</td>
-                    <td class="col-md-5">
-                        <select name="question_type" required>
-                            <option value="" disabled selected>請選擇題目類型</option>
-                            {% if question.q_content %}
-                                <option value="3" {% if question.q_type == 3 %}selected{% endif %}>文法</option>
-                                <option value="4" {% if question.q_type == 4 %}selected{% endif %}>名詞片語</option>
-                                <option value="5" {% if question.q_type == 5 %}selected{% endif %}>段落理解</option>
-                            {% elif question.q_file %}
-                                <option value="1" {% if question.q_type == 1 %}selected{% endif %}>問答</option>
-                                <option value="2" {% if question.q_type == 2 %}selected{% endif %}>簡短對話</option>
-                            {% endif %}
-                        </select>
-                    </td>
-                </tr>
+                        <div class="card">
+                            <div class="card-header">Question Edit.</div>
 
-                <tr>
-                    <td class="col-md-2" style="font-size: 20px">選擇答案：</td>
-                    <td class="col-md-5"></td>
-                </tr>
+                            <div class="card-body">
+                                <h5 class="card-subtitle mb-2 text-muted">
+                                    Question Content.
+                                </h5>
+                                <p class="card-text">
+                                    {% if question.q_file %}
+                                        <audio controls preload="none">
+                                            <source src="{{ question.q_file.url }}" type="audio/mpeg">
+                                            Your browser does not support the audio tag.
+                                        </audio>
+                                    {% else %}
+                                        <textarea class="form-control" name="q_content" cols="55" rows="10" onkeyup="ChangeJudgementButton('{{ question_q_content }}', this)">{{ question.q_content }}</textarea>
+                                    {% endif %}
+                                </p>
 
-                {% for choice in question.choice_set.all %}
-                <tr>
-                    <td class="col-md-2"></td>
-                    <td class="col-md-5"><input type="radio" name="answer_choice" {% if choice.is_answer %}checked{% endif %}>{{ choice }}</td>
-                </tr>
-                {% endfor %}
-            </table>
+                                <h5 class="card-subtitle mb-2 text-muted">
+                                    Type.
+                                </h5>
+                                <p class="card-text">
+                                    <select class="custom-select" name="question_type" id="question_type" onchange="ChangeJudgementButton('{{ question_type }}', this)" required>
+                                        <option value="" disabled selected>Choose the question type</option>
+                                        {% if question.q_content %}
+                                            <option value="3" {% if question.q_type == 3 %}selected{% endif %}>Grammar</option>
+                                            <option value="4" {% if question.q_type == 4 %}selected{% endif %}>Phrase</option>
+                                            <option value="5" {% if question.q_type == 5 %}selected{% endif %}>ParagraphUnderstanding</option>
+                                        {% elif question.q_file %}
+                                            <option value="1" {% if question.q_type == 1 %}selected{% endif %}>QA</option>
+                                            <option value="2" {% if question.q_type == 2 %}selected{% endif %}>ShortConversation</option>
+                                        {% endif %}
+                                    </select>
+                                </p>
 
-            <div class="btn">
-                <button type="submit" onclick="return confirm('確認更改此試題並進入暫存階段？')">確認更改</button>
-                <button type="button" onclick="self.location=document.referrer;">取消</button>
+                                <h5 class="card-subtitle mb-2 text-muted">
+                                    Set Answer.
+                                </h5>
+                                <p class="card-text">
+                                    <ol type="A">
+                                        {% for choice in question.choice_set.all %}
+                                            <li><input type="radio" name="answer_choice" value="{{ choice.id }}" {% if choice.is_answer %}checked{% endif %}>{{ choice }}</li>
+                                        {% endfor %}
+                                    </ol>
+                                </p>
+
+                                <div class="text-center">
+                                    <button type="submit" id="submit" class="btn btn-primary" onclick="return confirm('Sure to update and saved it?')">Update</button>
+                                    <button type="button" class="btn btn-secondary" onclick="self.location=document.referrer;">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
-        </form>
-
-        <style>
-            .edit_question .title h1{
-                width: 30%;
-                font-size: 28px;
-                color: #FFFEF6;
-                background-color: #4CCABD;
-                padding-top: 10px;
-                padding-bottom: 10px;
-                padding-right: 15px;
-                padding-left: 45px;
-                text-align: center;
-            }
-
-            .edit_question table{
-                position: relative;
-                left: 20%;
-
-                width: 60%;
-
-                font-size: 16px;
-            }
-            .edit_question table td{
-                padding: 6px;
-            }
-
-            .edit_question form .btn{
-                position: relative;
-                top: 110px;
-                left: 40%;
-            }
-            .edit_question form .btn button{
-                font-size: 25px;
-                padding: 10px;
-                padding-left: 15px;
-                padding-right: 15px;
-                color: #FFFEF6;
-                background-color: #4CCABD;
-                border: none;
-            }
-        </style>
-    </div>
-
-
+        </div>
+    </main>
 {% endblock %}

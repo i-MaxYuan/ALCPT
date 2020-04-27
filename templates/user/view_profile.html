@@ -1,206 +1,259 @@
-{% extends 'base.html' %}
+{% extends 'new_base.html' %}
 
 {% load web_filters %}
 
 {% block path %}
-    <a href="">系統管理員</a>
-    <a class="fa fa-angle-double-right fa-lg box"></a>
-    <a href="{% url 'user_list' %}">使用者列表</a>
-    <a class="fa fa-angle-right fa-lg box"></a>
-    <a href="#">編輯使用者</a>
+    <li class="breadcrumb-item" aria-current="page"><a href="{% url 'user_list' %}">User List</a></li>
+    <li class="breadcrumb-item active" aria-current="page">View Profile</li>
 {% endblock %}
 
 {% block content %}
-    <!-- 大頭貼 -->
-    <div class="photo">
-        <i class="fa fa-user-circle"></i>
+    <main class="view-profile">
+        <div class="container">
+            {% if viewed_user.student %}
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                User Photo.
+                            </div>
 
-        <style>
-            .photo{
-                position: absolute;
-                left: 8%;
-                top: 6%;
-            }
+                            {% if viewed_user.photo %}
+                                <img class="card-img-top" src="{{ viewed_user.photo.url }}" alt="{{ viewed_user.name }}">
+                            {% else %}
+                                <img class="card-img-top" src="..." alt="{{ viewed_user.name }}">
+                            {% endif %}
 
-            .photo i{
-                font-size: 160px;
-                color: #5e5e5e;
-            }
-        </style>
-    </div>
+                            <div class="card-body">
+                                <p class="card-text">{{ viewed_user.introduction|linebreaksbr }}</p>
+                            </div>
+                        </div>
+                    </div>
 
-    <div class="user_info">
-        <ul class="user_info1">
-            <li>使用者帳號</li>
-            <li>姓名</li>
-            <li>Email</li>
-            <li>性別</li>
-            <li>身份</li>
-            <li>權限</li>
-        </ul>
+                    <div class="col-lg-6">
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                User Profile.
+                            </div>
 
-        <ul class="user_info1_">
-            <li>{{ viewed_user.reg_id }}</li>
-            <li>{% if viewed_user.name %}{{ viewed_user.name }}{% else %}尚未設定{% endif %}</li>
-            <li>{% if viewed_user.email %}{{ viewed_user.email }}{% else %}尚未設定{% endif %}</li>
-            <li>
-                {% if viewed_user.gender == 0 %}男
-                {% elif viewed_user.gender == 1 %}女
-                {% elif viewed_user.gender == 2 %}不想公開
-                {% else %}尚未設定
-                {% endif %}</li>
-            <li>{% if viewed_user.identity %}{{ viewed_user.identity|readableIdentity }}{% else %}尚未設定{% endif %}</li>
-            <li>
-                {% if viewed_user|has_perms:privileges.SystemManager %}
-                    <span class="badge alert-danger" style="padding-bottom: 8px">{{ privileges.SystemManager.value.1 }}</span>
-                {% endif %}
-                {% if viewed_user|has_perms:privileges.TestManager %}
-                    <span class="badge alert-warning" style="padding-bottom: 8px">{{ privileges.TestManager.value.1 }}</span>
-                {% endif %}
-                {% if viewed_user|has_perms:privileges.TBManager %}
-                    <span class="badge badge-primary" style="padding-bottom: 8px">{{ privileges.TBManager.value.1 }}</span>
-                {% endif %}
-                {% if viewed_user|has_perms:privileges.TBOperator %}
-                    <span class="badge alert-success" style="padding-bottom: 8px">{{ privileges.TBOperator.value.1 }}</span>
-                {% endif %}
-                {% if viewed_user|has_perms:privileges.Viewer %}
-                    <span class="badge alert-info" style="padding-bottom: 8px">{{ privileges.Viewer.value.1 }}</span>
-                {% endif %}
-                {% if viewed_user|has_perms:privileges.Testee %}
-                    <span class="badge alert-inverse" style="padding-bottom: 8px">{{ privileges.Testee.value.1 }}</span>
-                {% endif %}
-            </li>
-        </ul>
+                            <div class="card-body text-left">
+                                <h5 class="card-subtitle mb-2 text-muted">Register ID.</h5>
+                                <h3 class="card-text">{{ viewed_user.reg_id }}</h3>
 
-        {% if viewed_user.student %}
-            <ul class="student_info1">
-                <li>學號</li>
-                <li>年班</li>
-                <li>科系</li>
-                <li>中隊</li>
-            </ul>
+                                <h5 class="card-subtitle mb-2 text-muted">Name.</h5>
+                                <p class="card-text">
+                                    {% if viewed_user.name %}
+                                        {{ viewed_user.name }}
+                                    {% else %}
+                                        Unset
+                                    {% endif %}
+                                </p>
 
-            <ul class="student_info1_">
-                <li>{{ viewed_user.student.stu_id }}</li>
-                <li>{{ viewed_user.student.grade }}</li>
-                <li>{{ viewed_user.student.department }}</li>
-                <li>{{ viewed_user.student.squadron }}</li>
-            </ul>
-        {% endif %}
+                                <h5 class="card-subtitle mb-2 text-muted">Email.</h5>
+                                <p class="card-text">
+                                    {% if viewed_user.email %}
+                                        {{ viewed_user.email }}
+                                    {% else %}
+                                        Unset
+                                    {% endif %}
+                                </p>
 
-        <style>
-            .user_info1{
-                position: absolute;
-                left: 30%;
-                top: 1%;
-            }
-            .user_info1 li{
-                font-size: 20px;
-                list-style: none;
-                line-height: 60px;
-            }
-            .user_info1_{
-                position: absolute;
-                left: 40%;
-                top: 1%;
-            }
-            .user_info1_ li{
-                list-style: none;
-                line-height: 60px;
-                font-size: 20px;
-            }
+                                <h5 class="card-subtitle mb-2 text-muted">Gender.</h5>
+                                <p class="card-text">
+                                    {% if viewed_user.gender == 1 %}Male
+                                    {% elif viewed_user.gender == 2 %}Female
+                                    {% elif viewed_user.gender == 3 %}Privacy
+                                    {% else %}Unset
+                                    {% endif %}
+                                </p>
 
-            .student_info1{
-                position: absolute;
-                left: 62%;
-                top: 1%;
-            }
-            .student_info1 li{
-                font-size: 20px;
-                list-style: none;
-                line-height: 60px;
-            }
-            .student_info1_{
-                position: absolute;
-                left: 72%;
-                top: 1%;
-            }
-            .student_info1_ li{
-                list-style: none;
-                line-height: 60px;
-                font-size: 20px;
-            }
-        </style>
+                                <h5 class="card-subtitle mb-2 text-muted">Identity.</h5>
+                                <p class="card-text">
+                                    {% if viewed_user.identity %}
+                                        {{ viewed_user.identity|readableIdentity }}
+                                    {% else %}
+                                        Unset
+                                    {% endif %}
+                                </p>
 
-    </div>
+                                <h5 class="card-subtitle mb-2 text-muted">Privilege.</h5>
+                                <p class="card-text">
+                                    {% if viewed_user|has_perms:privileges.SystemManager %}
+                                        <span class="badge alert-danger">{{ privileges.SystemManager.value.1 }}</span>
+                                    {% endif %}
+                                    {% if viewed_user|has_perms:privileges.TestManager %}
+                                        <span class="badge alert-warning">{{ privileges.TestManager.value.1 }}</span>
+                                    {% endif %}
+                                    {% if viewed_user|has_perms:privileges.TBManager %}
+                                        <span class="badge badge-primary">{{ privileges.TBManager.value.1 }}</span>
+                                    {% endif %}
+                                    {% if viewed_user|has_perms:privileges.TBOperator %}
+                                        <span class="badge alert-success">{{ privileges.TBOperator.value.1 }}</span>
+                                    {% endif %}
+                                    {% if viewed_user|has_perms:privileges.Viewer %}
+                                        <span class="badge alert-info">{{ privileges.Viewer.value.1 }}</span>
+                                    {% endif %}
+                                    {% if viewed_user|has_perms:privileges.Testee %}
+                                        <span class="badge alert-dark">{{ privileges.Testee.value.1 }}</span>
+                                    {% endif %}
+                                </p>
+                            </div>
 
-    <div class="time-block">
-        <div class="time_icon">
-            <i class="fa fa-clock-o"></i>
+                            <div class="card-footer text-muted">
+                                <p style="font-size: 12px">Last login - {{ viewed_user.last_login }}</p>
+                                <p style="font-size: 12px">Create time - {{ viewed_user.created_time }}</p>
+                                <p style="font-size: 12px">
+                                    Status -
+                                    {% if viewed_user.is_active %}
+                                        <span>active</span>
+                                    {% elif viewed_user.is_staff %}
+                                        <span>staff</span>
+                                    {% elif viewed_user.is_superuser %}
+                                        <span>superuser</span>
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3">
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                Student Profile.
+                            </div>
+
+                            <div class="card-body text-left">
+                                <h5 class="card-subtitle mb-2 text-muted">Student ID.</h5>
+                                <h3 class="card-text">{{ viewed_user.student.stu_id }}</h3>
+
+                                <h5 class="card-subtitle mb-2 text-muted">Department.</h5>
+                                <p class="card-text">{{ viewed_user.student.department }}</p>
+
+                                <h5 class="card-subtitle mb-2 text-muted">Squadron.</h5>
+                                <p class="card-text">{{ viewed_user.student.squadron }}</p>
+
+                                <h5 class="card-subtitle mb-2 text-muted">Grade.</h5>
+                                <p class="card-text">{{ viewed_user.student.grade }}</p>
+                            </div>
+
+                            <div class="card-footer text-right">
+                                <button onclick="history.back()" class="btn btn-primary">OK</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                User Photo.
+                            </div>
+
+                            {% if viewed_user.photo %}
+                                <img class="card-img-top" src="{{ viewed_user.photo.url }}" alt="{{ viewed_user.name }}">
+                            {% else %}
+                                <img class="card-img-top" src="..." alt="{{ viewed_user.name }}">
+                            {% endif %}
+
+                            <div class="card-body">
+                                <p class="card-text">{{ viewed_user.introduction|linebreaksbr }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-8">
+                        <div class="card mb-3">
+                    <div class="card-header">
+                        User Profile.
+                    </div>
+
+                    <div class="card-body">
+                        <h5 class="card-subtitle mb-2 text-muted">Reg ID.</h5>
+                        <h3 class="card-text">{{ viewed_user.reg_id }}</h3>
+
+                        <h5 class="card-subtitle mb-2 text-muted">Name.</h5>
+                        <p class="card-text">
+                            {% if viewed_user.name %}
+                                {{ viewed_user.name }}
+                            {% else %}
+                                Unset
+                            {% endif %}
+                        </p>
+
+                        <h5 class="card-subtitle mb-2 text-muted">Email.</h5>
+                        <p class="card-text">
+                            {% if viewed_user.email %}
+                                {{ viewed_user.email }}
+                            {% else %}
+                                Unset
+                            {% endif %}
+                        </p>
+
+                        <h5 class="card-subtitle mb-2 text-muted">Gender.</h5>
+                        <p class="card-text">
+                            {% if viewed_user.gender == 1 %}Male
+                            {% elif viewed_user.gender == 2 %}Female
+                            {% elif viewed_user.gender == 3 %}Privacy
+                            {% else %}Unset
+                            {% endif %}
+                        </p>
+
+                        <h5 class="card-subtitle mb-2 text-muted">Identity.</h5>
+                        <p class="card-text">
+                            {% if viewed_user.identity %}
+                                {{ viewed_user.identity|readableIdentity }}
+                            {% else %}
+                                Unset
+                            {% endif %}
+                        </p>
+
+                        <h5 class="card-subtitle mb-2 text-muted">Privilege.</h5>
+                        <p class="card-text">
+                            {% if viewed_user|has_perms:privileges.SystemManager %}
+                                <span class="badge alert-danger">{{ privileges.SystemManager.value.1 }}</span>
+                            {% endif %}
+                            {% if viewed_user|has_perms:privileges.TestManager %}
+                                <span class="badge alert-warning">{{ privileges.TestManager.value.1 }}</span>
+                            {% endif %}
+                            {% if viewed_user|has_perms:privileges.TBManager %}
+                                <span class="badge badge-primary">{{ privileges.TBManager.value.1 }}</span>
+                            {% endif %}
+                            {% if viewed_user|has_perms:privileges.TBOperator %}
+                                <span class="badge alert-success">{{ privileges.TBOperator.value.1 }}</span>
+                            {% endif %}
+                            {% if viewed_user|has_perms:privileges.Viewer %}
+                                <span class="badge alert-info">{{ privileges.Viewer.value.1 }}</span>
+                            {% endif %}
+                            {% if viewed_user|has_perms:privileges.Testee %}
+                                <span class="badge alert-dark">{{ privileges.Testee.value.1 }}</span>
+                            {% endif %}
+                        </p>
+                    </div>
+
+                    <div class="card-footer text-muted">
+                        <p style="font-size: 12px">Last login - {{ viewed_user.last_login }}</p>
+                        <p style="font-size: 12px">Create time - {{ viewed_user.created_time }}</p>
+                        <p style="font-size: 12px">
+                            Status -
+                            {% if viewed_user.is_active %}
+                                <span>active</span>
+                            {% elif viewed_user.is_staff %}
+                                <span>staff</span>
+                            {% elif viewed_user.is_superuser %}
+                                <span>superuser</span>
+                            {% endif %}
+                        </p>
+
+                        <div class="text-right">
+                            <button onclick="history.back()" class="btn btn-primary">OK</button>
+                        </div>
+                    </div>
+                </div>
+                    </div>
+                </div>
+            {% endif %}
         </div>
+    </main>
 
-        <div class="time">
-            <li>最近登入：<br>{{ edited_user.last_login|date:"Y年m月d日, H時i分" }}</li>
-            <li style="border-top-style: solid; border-top-color: #adadad; border-top-width: 0.7px;">&nbsp;</li>
-            <li>更新時間：<br>{{ edited_user.update_time|date:"Y年m月d日, H時i分" }}</li>
-            <li style="border-top-style: solid; border-top-color: #adadad; border-top-width: 0.7px;">&nbsp;</li>
-            <li>加入時間：<br>{{ edited_user.created_time|date:"Y年m月d日, H時i分" }}</li>
-            <li style="border-top-style: solid; border-top-color: #adadad; border-top-width: 0.7px;">&nbsp;</li>
-            <li>狀態：{% if edited_user.is_active %}
-                    <span>active</span>
-                {% elif edited_user.is_staff %}
-                    <span>staff</span>
-                {% elif edited_user.is_superuser %}
-                    <span>superuser</span>
-                {% endif %}
-            </li>
-        </div>
-
-        <style>
-            .time-block{
-                position: absolute;
-                top: 40%;
-                left: 7%;
-            }
-
-            .time_icon{
-                position: relative;
-                top: 35px;
-                left: -10px;
-
-                width: 20px;
-
-                font-size: 22px;
-                color: #5e5e5e;
-                background-color: #F3F3F3;
-            }
-
-            .time{
-                color: #5e5e5e;
-
-                border: #c0c0c0 solid 0.7px;
-                padding-left: 20px;
-                padding-right: 20px;
-            }
-
-            .time li{
-                list-style: none;
-                width: 100%;
-                font-size: 14px;
-                top: 85%;
-            }
-        </style>
-    </div>
-
-    <div class="back-btn">
-        <button type="button"onclick="self.location=document.referrer;">返回</button>
-
-        <style>
-            .back-btn{
-                position: absolute;
-                top: 85%;
-                left: 90%;
-            }
-        </style>
-    </div>
 {% endblock %}
