@@ -15,7 +15,6 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
@@ -26,7 +25,6 @@ SECRET_KEY = 'yftv^g7w17v-vd96!=ad37dv@m$_gh^nn_&d*4@qzsoce5*pd3'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -46,7 +44,7 @@ MIDDLEWARE = (
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    #'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+    # 'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
@@ -58,8 +56,7 @@ ROOT_URLCONF = 'Online_Exam.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')]
-        ,
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -74,7 +71,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'Online_Exam.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
@@ -82,7 +78,7 @@ WSGI_APPLICATION = 'Online_Exam.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'ALCPT2',
+        'NAME': 'ALCPT',
         'USER': 'root',
         'PASSWORD': 'alcptalcpt',
         'HOST': '127.0.0.1',
@@ -91,9 +87,9 @@ DATABASES = {
 }
 
 CAPTCHA_NOISE_FUNCTIONS = (
-    'captcha.helpers.noise_null',   # 沒有樣式
+    'captcha.helpers.noise_null',  # 沒有樣式
     # 'captcha.helpers.noise_arcs',   # 線
-    'captcha.helpers.noise_dots',   # 點
+    'captcha.helpers.noise_dots',  # 點
 )
 
 # CAPTCHA_IMAGE_SIZE = (150, 200)    # 驗證碼圖片大小
@@ -105,7 +101,6 @@ CAPTCHA_BACKGROUND_COLOR = '#000fff'  # 驗證碼顏色
 # CAPTCHA_TIMEOUT = 0.1 驗證碼限制時間
 
 # CAPTCHA_LENGTH = 1 #驗證碼長度
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
