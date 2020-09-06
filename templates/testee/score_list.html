@@ -64,10 +64,12 @@
                     <div class="container">
                         <div class="row justify-content-center">
                             <div class="col-md-12">
-                                <h2>Bar Chart.</h2>
-                                <div id="bar-chart-container" style="width: 100%; height: 100%"></div>
+                                {% autoescape off %}
+                                    {{ bar_chart }}
+                                {% endautoescape %}
 
-                                <script>
+
+                                <!-- <script>
                                     google.charts.load('current', {'packages':['corechart']});
                                     google.charts.setOnLoadCallback(drawChart);
 
@@ -95,7 +97,7 @@
                                         var chart = new google.visualization.ColumnChart(document.getElementById('bar-chart-container'));
                                         chart.draw(data, options);
                                     }
-                                </script>
+                                </script> -->
                             </div>
                         </div>
                     </div>
@@ -105,7 +107,10 @@
                     <div class="container">
                         <div class="row justify-content-center">
                             <div class="col-md-12">
-                                <h2>Pie Chart.</h2>
+                              {% autoescape off %}
+                                  {{ pie_chart }}
+                              {% endautoescape %}
+                                <!-- <h2>Pie Chart.</h2>
                                 <div id="pie-chart-container" style="width: 100%; height: 100%"></div>
 
                                 <script type="text/javascript">
@@ -130,7 +135,7 @@
 
                                         chart.draw(data, options);
                                     }
-                                </script>
+                                </script> -->
                             </div>
                         </div>
                     </div>

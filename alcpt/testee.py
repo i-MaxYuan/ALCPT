@@ -16,6 +16,9 @@ from .decorators import permission_check
 from .definitions import UserType, QuestionType, ExamType
 from .managerfuncs import viewer, practicemanager, testmanager
 
+import plotly.offline as pyo
+import plotly.graph_objs as go
+import pandas as pd
 
 @permission_check(UserType.Testee)
 def exam_list(request):
@@ -81,6 +84,58 @@ def score_list(request):
         answersheetList = paginator.page(1)
     except EmptyPage:
         answersheetList = paginator.page(paginator.num_pages)
+
+    # xaxis : Score
+    # yaxis : Times
+    # Line chart
+    x_data = ['10', '20', '30', '40', '50', '60', '70', '80', '90', '100']
+    y_data = [one, two, three, four, five, six, seven, eight, nine, ten]
+    color = ['#FF0000','#FF5B00','#FF7900','#FFB600','#FFE700','#E1FF00','#B6FF00','#86FF00','#55FF00','#18FF00']
+
+
+    df = pd.DataFrame(list(zip(x_data,y_data)))
+    df['color'] = color
+    df = df.rename(columns={0: 'score', 1: 'time'})
+
+
+    trace = go.Bar(x=df['score'], y=df['time'],
+                opacity=0.8,
+                marker_color=df['color'])
+    data=[trace]
+    layout = go.Layout(
+        title='Score Chart',
+        xaxis = dict(title = 'Score'),
+        yaxis = dict(title = 'Times')
+    )
+    fig = go.Figure(data=data, layout=layout)
+    bar_chart = pyo.plot(fig, output_type='div')
+
+    #Pie chart
+    qualify = ['合格', '不合格']
+    qualify_count = [qualified, unqualified]
+
+    trace = go.Pie(labels = qualify,
+                   values = qualify_count,
+                   hole = .4,
+                   type= 'pie')
+
+    data = [trace]
+    layout = go.Layout({
+        'title': '合格率分析',
+        'annotations': [
+             {
+                'font': {
+                   'size': 20
+                },
+                'showarrow': False,
+                'text': '合格率',
+             },
+          ]
+        }
+    )
+    fig = go.Figure(data=data, layout=layout)
+    pie_chart = pyo.plot(fig, output_type='div')
+
 
     return render(request, 'testee/score_list.html', locals())
 
@@ -217,7 +272,7 @@ def answering(request, exam_id, answer_id):
         answering_ans.selected = selected_answer
         answering_ans.save()
 
-        if len(Answer.objects.filter(answer_sheet=answer_sheet).filter(selected=-1)) is 0:
+        if len(Answer.objects.filter(answer_sheet=answer_sheet).filter(selected=-1)) == 0:
             messages.success(request, 'You had finished the exam.')
             score = testmanager.calculate_score(exam.id, answer_sheet)
             return redirect('testee_score_list')
