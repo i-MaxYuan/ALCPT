@@ -33,6 +33,10 @@ xlrd = "==1.2.0"
 zipp = "==0.6.0"
 Pillow = "==6.2.1"
 requests = "*"
+django-plotly-dash = "*"
+channels = "*"
+channels-redis = "*"
+pandas = "*"
 
 [requires]
 python_version = "3.8"

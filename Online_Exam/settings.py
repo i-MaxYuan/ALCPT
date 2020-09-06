@@ -37,6 +37,8 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'alcpt',
     'captcha',
+    'django_plotly_dash.apps.DjangoPlotlyDashConfig',
+
 )
 
 MIDDLEWARE = (
@@ -80,7 +82,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'ALCPT',
         'USER': 'root',
-        'PASSWORD': 'alcptalcpt',
+        'PASSWORD': 'joy88818',
         'HOST': '127.0.0.1',
         'PORT': '3306',
     }
@@ -112,6 +114,10 @@ TIME_ZONE = 'Asia/Taipei'
 USE_I18N = True
 
 USE_L10N = True
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+CRISPY_TEMPLATE_PACK = 'bootstap4'
 
 # USE_TZ = True
 
