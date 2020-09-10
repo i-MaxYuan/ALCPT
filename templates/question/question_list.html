@@ -193,7 +193,7 @@
                                                 <ul style="font-size: 14px; list-style: none">
                                                     <li>Update:{{ question.update_time|date:'H:i, Y/m/d' }}</li>
                                                     <li>Issued:{{ question.issued_freq }}</li>
-                                                    <li>Difficulty:{{ question.difficulty }}</li>
+                                                    <li>Difficulty:{{ question.difficulty|readable_question_difficulty }}</li>
                                                     <li>Creator:{{ question.created_by.name }}</li>
                                                     <li>Last Update:{{ question.last_updated_by.name }}</li>
                                                 </ul>

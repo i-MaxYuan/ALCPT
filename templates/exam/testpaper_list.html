@@ -41,6 +41,8 @@
                                         <td class="text-center" data-title="Creator">{{ testpaper.created_by.name }}</td>
                                         <td class="text-center">
                                             {% if testpaper.is_testpaper %}
+                                                <a href="{% url 'testpaper_valid' testpaper.id %}"><i class="fa fa-check-circle"></i></a>
+                                                <a href="{% url 'testpaper_unvalid' testpaper.id %}"><i class="fa fa-times"></i></a>
                                                 <a href="{% url 'testpaper_edit' testpaper.id %}"><i class="fa fa-pencil-square-o fa-fw mb-2"></i></a>
                                                 <a href="{% url 'testpaper_delete' testpaper.id %}" onclick="return confirm('Sure to delete？');"><i class="fa fa-trash" aria-hidden="true"></i></a>
                                             {% endif %}
