@@ -103,9 +103,9 @@ def score_list(request):
                 marker_color=df['color'])
     data=[trace]
     layout = go.Layout(
-        title='Score Chart',
-        xaxis = dict(title = 'Score'),
-        yaxis = dict(title = 'Times')
+        title='歷史練習成績',
+        xaxis = dict(title = '成績'),
+        yaxis = dict(title = '考試成績範圍次數')
     )
     fig = go.Figure(data=data, layout=layout)
     bar_chart = pyo.plot(fig, output_type='div')
@@ -113,7 +113,7 @@ def score_list(request):
     #Pie chart
     qualify = ['合格', '不合格']
     qualify_count = [qualified, unqualified]
-
+    colors = ['green', 'red']
     trace = go.Pie(labels = qualify,
                    values = qualify_count,
                    hole = .4,
@@ -134,6 +134,7 @@ def score_list(request):
         }
     )
     fig = go.Figure(data=data, layout=layout)
+    fig.update_traces(marker=dict(colors=colors))
     pie_chart = pyo.plot(fig, output_type='div')
 
 

@@ -17,6 +17,9 @@ from alcpt.definitions import UserType
 from alcpt.decorators import permission_check
 from alcpt.exceptions import IllegalArgumentError
 
+import plotly.offline as pyo
+import plotly.graph_objs as go
+import pandas as pd
 
 @permission_check(UserType.Viewer)
 def index(request):
@@ -52,6 +55,31 @@ def exam_score_detail(request, exam_id):
                 answer_sheets.append(None)
 
         testeeData = zip(testees, answer_sheets)
+
+        #Pie chart
+        status = ['未進行測驗', '合格', '不合格']
+        status_count = [not_tested, qualified, unqualified]
+        colors = ['grey','green', 'red']
+        trace = go.Pie(labels = status,
+                       values = status_count,
+                       hole = .4,
+                       type = 'pie')
+        data = [trace]
+        layout = go.Layout({
+            'title': '考試狀態',
+            'annotations': [
+                 {
+                    'font': {
+                       'size': 20
+                    },
+                    'showarrow': False,
+                    'text': '考試狀態',
+                 },
+              ]
+        })
+        fig = go.Figure(data=data, layout=layout)
+        fig.update_traces(marker = dict(colors=colors))
+        pie_chart = pyo.plot(fig, output_type='div')
 
         return render(request, 'viewer/exam_score_detail.html', locals())
     except ObjectDoesNotExist:

@@ -293,6 +293,21 @@ def testpaper_create(request):
 
 
 @permission_check(UserType.TestManager)
+def testpaper_valid(request, testpaper_id):
+    testpaper = TestPaper.objects.get(id=testpaper_id)
+    testpaper.valid = True
+    messages.success(request, 'Successfully valid test paper - {}'.format(testpaper.id))
+    testpaper.save()
+    return redirect('testpaper_list')
+
+def testpaper_unvalid(request, testpaper_id):
+    testpaper = TestPaper.objects.get(id=testpaper_id)
+    testpaper.valid = False
+    messages.success(request, 'Successfully valid test paper - {}'.format(testpaper.id))
+    testpaper.save()
+    return redirect('testpaper_list')
+
+@permission_check(UserType.TestManager)
 def testpaper_edit(request, testpaper_id):
     try:
         testpaper = TestPaper.objects.get(id=testpaper_id)
