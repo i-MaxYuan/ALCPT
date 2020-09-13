@@ -20,6 +20,7 @@ from alcpt.exceptions import IllegalArgumentError
 import plotly.offline as pyo
 import plotly.graph_objs as go
 import pandas as pd
+import numpy as np
 
 @permission_check(UserType.Viewer)
 def index(request):
@@ -38,6 +39,7 @@ def exam_score_detail(request, exam_id):
         qualified = 0
         unqualified = 0
         not_tested = 0
+        testee_scores = []
         answer_sheets = []
         for testee in testees:
             try:
@@ -45,14 +47,22 @@ def exam_score_detail(request, exam_id):
                 if answer_sheet.score is None:
                     not_tested += 1
                 elif answer_sheet.score >= 60:
+                    testee_scores.append(answer_sheet.score)
                     qualified += 1
                 elif answer_sheet.score < 60:
+                    testee_scores.append(answer_sheet.score)
                     unqualified += 1
 
                 answer_sheets.append(answer_sheet)
             except ObjectDoesNotExist:
                 not_tested += 1
                 answer_sheets.append(None)
+
+        #平均分數
+        if testee_scores:
+            testee_score_means = np.mean(testee_scores)
+        else:
+            testee_score_means = '無考試成績'
 
         testeeData = zip(testees, answer_sheets)
 
