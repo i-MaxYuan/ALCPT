@@ -52,17 +52,17 @@
                             </tbody>
                         </table>
                     </div>
-
                     <div class="float-right">
                         <button class="btn btn-primary" onclick="history.go(-1)">OK</button>
                     </div>
                 </div>
 
-                <div class="col-md-6">
-                    {% autoescape off %}
-                    {{ pie_chart }}
-                    {% endautoescape %}
-                </div>
+                    <div class="col-md-6">
+                        {% autoescape off %}
+                        {{ pie_chart }}
+                        {% endautoescape %}
+                        <p>平均分數：{{ testee_score_means }}</p>
+                    </div>
             </div>
         </div>
     </main>
