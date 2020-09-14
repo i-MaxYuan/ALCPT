@@ -43,7 +43,7 @@ class UserManager(BaseUserManager):
 # created_time: user's registration time
 # update_time: user update its profile time
 class User(AbstractBaseUser):
-    photo = models.ImageField(upload_to='photos', null=True)
+    photo = models.ImageField(upload_to='photos', null=True, default="photos/default_propic.png")
     reg_id = models.CharField(max_length=50, unique=True)
     email = models.EmailField(blank=True, null=True)
     email_is_verified = models.BooleanField(default=False)
