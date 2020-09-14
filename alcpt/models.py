@@ -180,6 +180,8 @@ class Exam(models.Model):
 # difficulty: difficulty of the question
 # issued_freq: frequency of the question being issued
 # correct_freq: fault of frequency of the question
+# q_time: 總答此題次數
+# q_correct_time: 答對次數
 # lasted_updated_by: user of last change the question
 # is_valid: if value is False the question can't be used; True is the opposite
 # used_to: question is used in what test paper
@@ -192,6 +194,8 @@ class Question(models.Model):
     difficulty = models.PositiveSmallIntegerField(default=0)
     issued_freq = models.IntegerField(default=0)
     correct_freq = models.IntegerField(default=0)
+    q_time = models.IntegerField(default=0)
+    q_correct_time = models.IntegerField(default=0)
     created_time = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey('User', on_delete=models.PROTECT, related_name='question_created')
     update_time = models.DateTimeField(auto_now=True)

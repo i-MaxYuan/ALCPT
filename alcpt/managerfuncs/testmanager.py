@@ -124,8 +124,26 @@ def calculate_score(exam_id: int, answer_sheet: AnswerSheet):
 
             if tmp[answer.selected-1].is_answer:
                 score += 1
+                answer.question.q_correct_time += 1
+                answer.question.q_time += 1
             else:
-                pass
+                answer.question.q_time += 1
+                #在這裡把錯的題目寄到資料庫
+            #correct_freq正確率 = 答對次數/總答本題次數
+            answer.question.correct_freq = (answer.question.q_correct_time / answer.question.q_time)*100
+            #正確率 轉 難易度
+            if answer.question.correct_freq <= 33:
+                answer.question.difficulty = 3
+
+            elif 36 <= answer.question.correct_freq <= 66:
+                answer.question.difficulty = 2
+
+            elif 67 <= answer.question.correct_freq <= 100:
+                answer.question.difficulty = 1
+
+            else:
+                answer.question.difficulty = 1
+            answer.question.save()
 
     # calculate average score of practice
     answer_sheet.score = int(score / len(answers) * 100)

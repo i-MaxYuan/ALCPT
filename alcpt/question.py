@@ -26,10 +26,9 @@ def manager_index(request):
     for x in state_choices:
         states.append(x[0])
 
-    difficulty_choices = [(1, '1'),
-                          (2, '2'),
-                          (3, '3'),
-                          (4, '4')]
+    difficulty_choices = [(1, 'Easy'),
+                          (2, 'Medium'),
+                          (3, 'Hard')]
 
     keywords = {
         'question_content': request.GET.get('question_content'),
