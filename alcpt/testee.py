@@ -230,7 +230,6 @@ def start_exam(request, exam_id):
                     exam_id=exam.id,
                     answer_id=Answer.objects.filter(answer_sheet=answer_sheet)[0].id)   # transfer the first question
 
-
 @permission_check(UserType.Testee)
 @require_http_methods(["GET", "POST"])
 def answering(request, exam_id, answer_id):
