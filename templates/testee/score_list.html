@@ -28,7 +28,7 @@
                     <div class="container">
                         <div class="row justify-content-center">
                             <div class="col-md-12">
-                                <h2>Score Record List.</h2>
+                                <h5>Exam Score Records</h5>
 
                                 <div class="table-responsive-md">
                                     <table class="table table-hover table-bordered table-striped table-mc-light-blue">
@@ -41,7 +41,71 @@
                                         </thead>
 
                                         <tbody>
-                                            {% for answersheet in answer_sheets %}
+                                            {% for answersheet in answer_sheets_exam %}
+                                                <tr style="cursor: pointer" onclick="window.location.href='{% url 'view_answersheet_content' answersheet.id %}'">
+                                                    <td class="text-center" data-title="Name">{{ answersheet.exam }}</td>
+                                                    {% if answersheet.score  < 60 %}
+                                                        <td class="text-center" data-title="Type" style="color: #c12e2a">{{ answersheet.score }}</td>
+                                                    {% else %}
+                                                        <td class="text-center" data-title="Type">{{ answersheet.score }}</td>
+                                                    {% endif %}
+                                                    <td class="text-center" data-title="Finish Time">{{ answersheet.finish_time|date:'Y/m/d, H:i' }}</td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row justify-content-center">
+                            <div class="col-md-12">
+                                <h5>Reading Practice Records</h5>
+
+                                <div class="table-responsive-md">
+                                    <table class="table table-hover table-bordered table-striped table-mc-light-blue">
+                                        <thead class="thead-light">
+                                            <tr>
+                                                <th class="text-center">Name.</th>
+                                                <th class="text-center">Score.</th>
+                                                <th class="text-center">Finish Time.</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            {% for answersheet in answer_sheets_reading %}
+                                                <tr style="cursor: pointer" onclick="window.location.href='{% url 'view_answersheet_content' answersheet.id %}'">
+                                                    <td class="text-center" data-title="Name">{{ answersheet.exam }}</td>
+                                                    {% if answersheet.score  < 60 %}
+                                                        <td class="text-center" data-title="Type" style="color: #c12e2a">{{ answersheet.score }}</td>
+                                                    {% else %}
+                                                        <td class="text-center" data-title="Type">{{ answersheet.score }}</td>
+                                                    {% endif %}
+                                                    <td class="text-center" data-title="Finish Time">{{ answersheet.finish_time|date:'Y/m/d, H:i' }}</td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row justify-content-center">
+                            <div class="col-md-12">
+                                <h5>Listening Score Records</h5>
+
+                                <div class="table-responsive-md">
+                                    <table class="table table-hover table-bordered table-striped table-mc-light-blue">
+                                        <thead class="thead-light">
+                                            <tr>
+                                                <th class="text-center">Name.</th>
+                                                <th class="text-center">Score.</th>
+                                                <th class="text-center">Finish Time.</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            {% for answersheet in answer_sheets_listening %}
                                                 <tr style="cursor: pointer" onclick="window.location.href='{% url 'view_answersheet_content' answersheet.id %}'">
                                                     <td class="text-center" data-title="Name">{{ answersheet.exam }}</td>
                                                     {% if answersheet.score  < 60 %}
@@ -65,39 +129,14 @@
                         <div class="row justify-content-center">
                             <div class="col-md-12">
                                 {% autoescape off %}
-                                    {{ bar_chart }}
+                                    {{ exam_bar_chart }}
                                 {% endautoescape %}
-
-
-                                <!-- <script>
-                                    google.charts.load('current', {'packages':['corechart']});
-                                    google.charts.setOnLoadCallback(drawChart);
-
-                                    function drawChart() {
-                                        var data = google.visualization.arrayToDataTable([
-                                            ['Task', 'Times', {role: 'style'}, { role: 'annotation' }],
-                                            ['0~10', {{ one }}, "color: rgb(255, 0, 0)", '{{ one }}'],
-                                            ['10~20', {{ two }}, "color: rgb(255, 64, 0)", '{{ two }}'],
-                                            ['20~30', {{ three }}, "color: rgb(255, 128, 0)", '{{ three }}'],
-                                            ['30~40', {{ four }}, "color: rgb(255, 191, 0)", '{{ four }}'],
-                                            ['40~50', {{ five }}, "color: rgb(0, 255, 0)", '{{ five }}'],
-                                            ['50~60', {{ six }}, "color: rgb(0, 255, 64)", '{{ six }}'],
-                                            ['60~70', {{ seven }}, "color: rgb(0, 255, 128)", '{{ seven }}'],
-                                            ['70~80', {{ eight }}, "color: rgb(0, 128, 255)", '{{ eight }}'],
-                                            ['80~90', {{ nine }}, "color: rgb(0, 64, 255)", '{{ nine }}'],
-                                            ['90~100', {{ ten }}, "color: rgb(128, 0, 255)", '{{ ten }}'],
-                                        ]);
-
-                                        var options = {
-                                            title: 'My Score Bar Chart',
-                                            width: 900,
-                                            height: 450
-                                        };
-
-                                        var chart = new google.visualization.ColumnChart(document.getElementById('bar-chart-container'));
-                                        chart.draw(data, options);
-                                    }
-                                </script> -->
+                                {% autoescape off %}
+                                    {{ reading_bar_chart }}
+                                {% endautoescape %}
+                                {% autoescape off %}
+                                    {{ listening_bar_chart }}
+                                {% endautoescape %}
                             </div>
                         </div>
                     </div>
@@ -108,34 +147,14 @@
                         <div class="row justify-content-center">
                             <div class="col-md-12">
                               {% autoescape off %}
-                                  {{ pie_chart }}
+                                  {{ exam_pie_chart }}
                               {% endautoescape %}
-                                <!-- <h2>Pie Chart.</h2>
-                                <div id="pie-chart-container" style="width: 100%; height: 100%"></div>
-
-                                <script type="text/javascript">
-                                    google.charts.load('current', {'packages':['corechart']});
-                                    google.charts.setOnLoadCallback(drawChart);
-
-                                    function drawChart() {
-                                        var data = google.visualization.arrayToDataTable([
-                                            ['Task', 'Times'],
-                                            ['及格', {{ qualified }}],
-                                            ['不及格', {{ unqualified }}],
-                                        ]);
-
-                                        var options = {
-                                            title: 'Qualified Rate',
-                                            width: 900,
-                                            height: 450,
-                                            is3D: true,
-                                        };
-
-                                        var chart = new google.visualization.PieChart(document.getElementById('pie-chart-container'));
-
-                                        chart.draw(data, options);
-                                    }
-                                </script> -->
+                              {% autoescape off %}
+                                  {{ reading_pie_chart }}
+                              {% endautoescape %}
+                              {% autoescape off %}
+                                  {{ listening_pie_chart }}
+                              {% endautoescape %}
                             </div>
                         </div>
                     </div>
