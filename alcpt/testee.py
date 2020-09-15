@@ -20,6 +20,7 @@ import plotly.offline as pyo
 import plotly.graph_objs as go
 import pandas as pd
 
+
 @permission_check(UserType.Testee)
 def exam_list(request):
     examList = []
@@ -38,62 +39,114 @@ def exam_list(request):
 @permission_check(UserType.Testee)
 @require_http_methods(["GET"])
 def score_list(request):
-    qualified = 0
-    unqualified = 0
-    answer_sheets = AnswerSheet.objects.all().filter(user=request.user).order_by('-exam__created_time')
+    answer_sheets = AnswerSheet.objects.all().filter(user=request.user)
+    answer_sheets_all = answer_sheets.order_by('-exam__created_time')
+    answer_sheets_reading = answer_sheets.filter(exam__name__contains="閱讀練習")
+    answer_sheets_listening = answer_sheets.filter(exam__name__contains="聽力練習")
+    answer_sheets_exam = answer_sheets.exclude(exam__name__contains="閱讀練習").exclude(exam__name__contains="聽力練習")
+
     page = request.GET.get('page', 1)
     paginator = Paginator(answer_sheets, 10)
 
-    for answer_sheet in answer_sheets:
+    EXAM_QUALIFICATION = {'qualified': 0,'unqualified': 0}
+    READING_QUALIFICATION = {'qualified': 0,'unqualified': 0}
+    LISTENING_QUALIFICATION = {'qualified': 0,'unqualified': 0}
+
+    EXAM_SCORE_RANGE = {'one': 0,'two': 0,'three': 0,'four': 0,'five': 0,'six': 0,'seven': 0,'eight': 0,'nine': 0,'ten': 0}
+    READING_SCORE_RANGE = {'one': 0,'two': 0,'three': 0,'four': 0,'five': 0,'six': 0,'seven': 0,'eight': 0,'nine': 0,'ten': 0}
+    LISTENING_SCORE_RANGE = {'one': 0,'two': 0,'three': 0,'four': 0,'five': 0,'six': 0,'seven': 0,'eight': 0,'nine': 0,'ten': 0}
+
+    #EXAM
+    #計算是否及格
+    for answer_sheet in answer_sheets_exam:
         if answer_sheet.score is None:
             pass
         elif answer_sheet.score >= 60:
-            qualified += 1
+            EXAM_QUALIFICATION['qualified'] += 1
         else:
-            unqualified += 1
+            EXAM_QUALIFICATION['unqualified'] += 1
 
-    one, two, three, four, five, six, seven, eight, nine, ten = 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-    for answer_sheet in answer_sheets:
+    #計算成績分布
+    for answer_sheet in answer_sheets_exam:
+        count = 0
         if answer_sheet.score is None:
             pass
         else:
-            if 0 <= answer_sheet.score <= 10:
-                one += 1
-            elif 10 < answer_sheet.score <= 20:
-                two += 1
-            elif 20 < answer_sheet.score <= 30:
-                three += 1
-            elif 30 < answer_sheet.score <= 40:
-                four += 1
-            elif 40 < answer_sheet.score <= 50:
-                five += 1
-            elif 50 < answer_sheet.score <= 60:
-                six += 1
-            elif 60 < answer_sheet.score <= 70:
-                seven += 1
-            elif 70 < answer_sheet.score <= 80:
-                eight += 1
-            elif 80 < answer_sheet.score <= 90:
-                nine += 1
-            elif 90 < answer_sheet.score <= 100:
-                ten += 1
+            if count <= answer_sheet.score <= count + 10:
+                EXAM_SCORE_RANGE['one'] += 1
+            else:
+                count += 10
+                for name in list(SCORE_RANGE.keys())[1:]:
+                    if count < answer_sheet.score <= count + 10:
+                        EXAM_SCORE_RANGE[name] += 1
+                        break
+                    else:
+                        count += 10
 
-    try:
-        answersheetList = paginator.page(page)
-    except PageNotAnInteger:
-        answersheetList = paginator.page(1)
-    except EmptyPage:
-        answersheetList = paginator.page(paginator.num_pages)
+    #READING
+    #計算是否及格
+    for answer_sheet in answer_sheets_reading:
+        if answer_sheet.score is None:
+            pass
+        elif answer_sheet.score >= 60:
+            READING_QUALIFICATION['qualified'] += 1
+        else:
+            READING_QUALIFICATION['unqualified'] += 1
 
+    #計算成績分布
+    for answer_sheet in answer_sheets_reading:
+        count = 0
+        if answer_sheet.score is None:
+            pass
+        else:
+            if count <= answer_sheet.score <= count + 10:
+                READING_SCORE_RANGE['one'] += 1
+            else:
+                count += 10
+                for name in list(READING_SCORE_RANGE.keys())[1:]:
+                    if count < answer_sheet.score <= count + 10:
+                        READING_SCORE_RANGE[name] += 1
+                        break
+                    else:
+                        count += 10
+    #LISTENING
+    #計算是否及格
+    for answer_sheet in answer_sheets_listening:
+        if answer_sheet.score is None:
+            pass
+        elif answer_sheet.score >= 60:
+            LISTENING_QUALIFICATION['qualified'] += 1
+        else:
+            LISTENING_QUALIFICATION['unqualified'] += 1
+
+    #計算成績分布
+    for answer_sheet in answer_sheets_listening:
+        count = 0
+        if answer_sheet.score is None:
+            pass
+        else:
+            if count <= answer_sheet.score <= count + 10:
+                LISTENING_SCORE_RANGE['one'] += 1
+            else:
+                count += 10
+                for name in list(LISTENING_SCORE_RANGE.keys())[1:]:
+                    if count < answer_sheet.score <= count + 10:
+                        LISTENING_SCORE_RANGE[name] += 1
+                        break
+                    else:
+                        count += 10
     # xaxis : Score
     # yaxis : Times
     # Line chart
-    x_data = ['10', '20', '30', '40', '50', '60', '70', '80', '90', '100']
-    y_data = [one, two, three, four, five, six, seven, eight, nine, ten]
+    x_data = [ str(num) for num in range(10, 101, 10)]
+    y_exam_data = list(EXAM_SCORE_RANGE.values())
+    y_reading_data = list(READING_SCORE_RANGE.values())
+    y_listening_data = list(LISTENING_SCORE_RANGE.values())
     color = ['#FF0000','#FF5B00','#FF7900','#FFB600','#FFE700','#E1FF00','#B6FF00','#86FF00','#55FF00','#18FF00']
 
+    #Exam
+    df = pd.DataFrame(list(zip(x_data,y_exam_data)))
 
-    df = pd.DataFrame(list(zip(x_data,y_data)))
     df['color'] = color
     df = df.rename(columns={0: 'score', 1: 'time'})
 
@@ -103,25 +156,63 @@ def score_list(request):
                 marker_color=df['color'])
     data=[trace]
     layout = go.Layout(
-        title='歷史練習成績',
+        title='Exam考試總成績分佈',
         xaxis = dict(title = '成績'),
         yaxis = dict(title = '考試成績範圍次數')
     )
     fig = go.Figure(data=data, layout=layout)
-    bar_chart = pyo.plot(fig, output_type='div')
+    exam_bar_chart = pyo.plot(fig, output_type='div')
 
-    #Pie chart
+    #Reading
+    df = pd.DataFrame(list(zip(x_data,y_reading_data)))
+
+    df['color'] = color
+    df = df.rename(columns={0: 'score', 1: 'time'})
+
+
+    trace = go.Bar(x=df['score'], y=df['time'],
+                opacity=0.8,
+                marker_color=df['color'])
+    data=[trace]
+    layout = go.Layout(
+        title='Reading練習總成績分佈',
+        xaxis = dict(title = '成績'),
+        yaxis = dict(title = '考試成績範圍次數')
+    )
+    fig = go.Figure(data=data, layout=layout)
+    reading_bar_chart = pyo.plot(fig, output_type='div')
+
+    #Listening
+    df = pd.DataFrame(list(zip(x_data,y_listening_data)))
+
+    df['color'] = color
+    df = df.rename(columns={0: 'score', 1: 'time'})
+
+
+    trace = go.Bar(x=df['score'], y=df['time'],
+                opacity=0.8,
+                marker_color=df['color'])
+    data=[trace]
+    layout = go.Layout(
+        title='Listeing練習總成績分佈',
+        xaxis = dict(title = '成績'),
+        yaxis = dict(title = '考試成績範圍次數')
+    )
+    fig = go.Figure(data=data, layout=layout)
+    listening_bar_chart = pyo.plot(fig, output_type='div')
+
+    # Pie chart
     qualify = ['合格', '不合格']
-    qualify_count = [qualified, unqualified]
     colors = ['green', 'red']
+    #Exam
     trace = go.Pie(labels = qualify,
-                   values = qualify_count,
+                   values = list(EXAM_QUALIFICATION.values()),
                    hole = .4,
                    type= 'pie')
 
     data = [trace]
     layout = go.Layout({
-        'title': '合格率分析',
+        'title': 'Exam考試合格率分析',
         'annotations': [
              {
                 'font': {
@@ -135,8 +226,62 @@ def score_list(request):
     )
     fig = go.Figure(data=data, layout=layout)
     fig.update_traces(marker=dict(colors=colors))
-    pie_chart = pyo.plot(fig, output_type='div')
+    exam_pie_chart = pyo.plot(fig, output_type='div')
+    #Reading
+    trace = go.Pie(labels = qualify,
+                   values = list(READING_QUALIFICATION.values()),
+                   hole = .4,
+                   type= 'pie')
 
+    data = [trace]
+    layout = go.Layout({
+        'title': 'Reading練習合格率分析',
+        'annotations': [
+             {
+                'font': {
+                   'size': 20
+                },
+                'showarrow': False,
+                'text': '合格率',
+             },
+          ]
+        }
+    )
+    fig = go.Figure(data=data, layout=layout)
+    fig.update_traces(marker=dict(colors=colors))
+    reading_pie_chart = pyo.plot(fig, output_type='div')
+
+    #Listening
+    trace = go.Pie(labels = qualify,
+                   values = list(LISTENING_QUALIFICATION.values()),
+                   hole = .4,
+                   type= 'pie')
+
+    data = [trace]
+    layout = go.Layout({
+        'title': 'Listening練習合格率分析',
+        'annotations': [
+             {
+                'font': {
+                   'size': 20
+                },
+                'showarrow': False,
+                'text': '合格率',
+             },
+          ]
+        }
+    )
+    fig = go.Figure(data=data, layout=layout)
+    fig.update_traces(marker=dict(colors=colors))
+    listening_pie_chart = pyo.plot(fig, output_type='div')
+
+
+    try:
+        answersheetList = paginator.page(page)
+    except PageNotAnInteger:
+        answersheetList = paginator.page(1)
+    except EmptyPage:
+        answersheetList = paginator.page(paginator.num_pages)
 
     return render(request, 'testee/score_list.html', locals())
 

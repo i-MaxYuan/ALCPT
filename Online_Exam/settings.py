@@ -96,7 +96,7 @@ CAPTCHA_NOISE_FUNCTIONS = (
 
 # CAPTCHA_IMAGE_SIZE = (150, 200)    # 驗證碼圖片大小
 
-CAPTCHA_BACKGROUND_COLOR = '#000fff'  # 驗證碼顏色
+CAPTCHA_BACKGROUND_COLOR = 'white'  # 驗證碼顏色
 
 # CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.math_challenge' 數學計算式驗證碼
 
