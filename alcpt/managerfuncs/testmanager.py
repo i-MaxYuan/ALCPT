@@ -110,6 +110,8 @@ def manual_pick(question_type: int):
     return questions
 
 
+
+
 def calculate_score(exam_id: int, answer_sheet: AnswerSheet):
     answers = answer_sheet.answer_set.all()
 
@@ -128,7 +130,7 @@ def calculate_score(exam_id: int, answer_sheet: AnswerSheet):
                 answer.question.q_time += 1
             else:
                 answer.question.q_time += 1
-                #在這裡把錯的題目寄到資料庫
+                #在這裡把錯的題目記到資料庫
             #correct_freq正確率 = 答對次數/總答本題次數
             answer.question.correct_freq = (answer.question.q_correct_time / answer.question.q_time)*100
             #正確率 轉 難易度

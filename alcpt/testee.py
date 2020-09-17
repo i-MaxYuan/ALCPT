@@ -45,6 +45,7 @@ def score_list(request):
     answer_sheets_listening = answer_sheets.filter(exam__name__contains="聽力練習")
     answer_sheets_exam = answer_sheets.exclude(exam__name__contains="閱讀練習").exclude(exam__name__contains="聽力練習")
 
+
     page = request.GET.get('page', 1)
     paginator = Paginator(answer_sheets, 10)
 
@@ -76,7 +77,7 @@ def score_list(request):
                 EXAM_SCORE_RANGE['one'] += 1
             else:
                 count += 10
-                for name in list(SCORE_RANGE.keys())[1:]:
+                for name in list(EXAM_SCORE_RANGE.keys())[1:]:
                     if count < answer_sheet.score <= count + 10:
                         EXAM_SCORE_RANGE[name] += 1
                         break
@@ -329,6 +330,11 @@ def view_answersheet_content(request, answersheet_id):
         return redirect('testee_score_list')
 
     if answersheet.is_finished:
+        #return 那題題目 is True or False 的 list
+        answer = answersheet.answer_set.all()
+        result_list = viewer.question_correction(answersheet)
+        answers_results = zip(answer, result_list)
+
         return render(request, 'testee/answersheet_content.html', locals())
     else:
         messages.warning(request, 'Does not finished this practice. Reject your request.')
