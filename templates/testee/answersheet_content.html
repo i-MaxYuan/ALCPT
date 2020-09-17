@@ -106,7 +106,7 @@
                             </thead>
 
                             <tbody>
-                                {% for answer in answersheet.answer_set.all %}
+                                {% for answer, result in answers_results %}
                                     <tr id="mainData{{ forloop.counter }}">
                                         <td id="angle_right_btn_{{ forloop.counter }}" onclick="toggle('{{ forloop.counter }}')" style="cursor: pointer;"><i class="fa fa-angle-right"></i></td>
                                         <td>{{ forloop.counter }}</td>
@@ -128,15 +128,13 @@
                                         <td class="text-right">
                                             {% if answer.question.state == 5 %}
                                                 <i class="fa fa-exclamation-circle" style="color: red; font-size: 20px"></i>
-                                            {% else %}
-                                                {% if answer.selected == -1 %}
+                                            {% elif answer.selected == -1 %}
                                                     <i class="fa fa-question" style="color: red; font-size: 20px"></i>
+                                            {% else %}
+                                                {% if result %}
+                                                    <i class="fa fa-check" style="color: green; font-size: 20px"></i>
                                                 {% else %}
-                                                    {% for option in answer.question.choice_set.all %}
-                                                        {% if answer.selected == forloop.counter and option.is_answer %}
-                                                            <i class="fa fa-check" style="color: green; font-size: 20px"></i>
-                                                        {% endif %}
-                                                    {% endfor %}
+                                                    <i class="fa fa-times" style="color: red; font-size: 20px"></i>
                                                 {% endif %}
                                             {% endif %}
                                         </td>
