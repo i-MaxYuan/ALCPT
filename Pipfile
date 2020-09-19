@@ -37,6 +37,7 @@ django-plotly-dash = "*"
 channels = "*"
 channels-redis = "*"
 pandas = "*"
+jinja2 = "*"
 
 [requires]
 python_version = "3.8"
