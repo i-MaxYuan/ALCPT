@@ -340,6 +340,25 @@ def view_answersheet_content(request, answersheet_id):
         messages.warning(request, 'Does not finished this practice. Reject your request.')
         return redirect('testee_score_list')
 
+@permission_check(UserType.Testee)
+def favorite_question(request, question_id, answersheet_id):
+    try:
+        favorite_question = Question.objects.get(id=question_id)
+        if favorite_question.is_favorite == False:
+            favorite_question.is_favorite = True
+            favorite_question.save()
+            messages.success(request, 'Question has added to your favorite!')
+            return redirect('view_answersheet_content', answersheet_id)
+        else:
+            favorite_question.is_favorite = False
+            favorite_question.save()
+            messages.warning(request, 'Question has removed from your favorite...')
+            return redirect('view_answersheet_content', answersheet_id)
+    except ObjectDoesNotExist:
+        messages.warning(request, 'Question has not found!')
+        return redirect('view_answersheet_content', answersheet_id)
+    return redirect('view_answersheet_content', answersheet_id)
+
 
 @permission_check(UserType.Testee)
 @require_http_methods(["GET"])

@@ -126,16 +126,22 @@
                                             {% endif %}
                                         </td>
                                         <td class="text-right">
+                                          <!-- <p>{{ answer.question.difficulty | readable_question_difficulty }}</p> -->
                                             {% if answer.question.state == 5 %}
-                                                <i class="fa fa-exclamation-circle" style="color: red; font-size: 20px"></i>
+                                                <i class="fa fa-exclamation-circle" style="color: red; font-size: 25px"></i>
                                             {% elif answer.selected == -1 %}
-                                                    <i class="fa fa-question" style="color: red; font-size: 20px"></i>
+                                                    <i class="fa fa-question" style="color: red; font-size: 25px"></i>
                                             {% else %}
                                                 {% if result %}
-                                                    <i class="fa fa-check" style="color: green; font-size: 20px"></i>
+                                                    <i class="fa fa-check" style="color: green; font-size: 25px"></i>
                                                 {% else %}
-                                                    <i class="fa fa-times" style="color: red; font-size: 20px"></i>
+                                                    <i class="fa fa-times" style="color: red; font-size: 25px">      </i>
                                                 {% endif %}
+                                            {% endif %}
+                                            {% if answer.question.is_favorite == True %}
+                                            <a href="{% url 'favorite_question' question_id=answer.question.id  answersheet_id=answersheet.id %}"><i class="fas fa-heart" style="color: red; font-size: 25px; padding-left: 10px;"></i></a>
+                                            {% else %}
+                                            <a href="{% url 'favorite_question' question_id=answer.question.id  answersheet_id=answersheet.id %}"><i class="far fa-heart" style="color: red; font-size: 25px; padding-left: 10px;"></i></a>
                                             {% endif %}
                                         </td>
                                     </tr>
@@ -170,7 +176,7 @@
                         </table>
 
                         <div class="text-center">
-                            <button type="button" class="btn btn-primary" onclick="self.location=document.referrer;">OK</button>
+                            <button type="button" class="btn btn-primary" onclick="window.location.href='{% url 'testee_score_list' %}'">OK</button>
                         </div>
                     </div>
                 </div>

@@ -201,7 +201,7 @@ class Question(models.Model):
     update_time = models.DateTimeField(auto_now=True)
     last_updated_by = models.ForeignKey('User', on_delete=models.SET_NULL, blank=True, null=True,
                                         related_name='last_updated')
-    is_valid = models.BooleanField(default=False)       # 似乎沒用到
+    is_favorite = models.BooleanField(default=False)       # 似乎沒用到
     faulted_reason = models.CharField(max_length=255, blank=True, null=True, default="")
     STATES_CHOICES = (
         (1, '審核通過'),
