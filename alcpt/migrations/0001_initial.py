@@ -55,8 +55,6 @@ class Migration(migrations.Migration):
                 ('difficulty', models.PositiveSmallIntegerField(default=0)),
                 ('issued_freq', models.IntegerField(default=0)),
                 ('correct_freq', models.IntegerField(default=0)),
-                ('q_time', models.IntegerField(default=0)),
-                ('q_correct_time', models.IntegerField(default=0)),
                 ('created_time', models.DateTimeField(auto_now_add=True)),
                 ('update_time', models.DateTimeField(auto_now=True)),
                 ('is_valid', models.BooleanField(default=False)),

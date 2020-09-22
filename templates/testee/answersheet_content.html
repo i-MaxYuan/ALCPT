@@ -106,7 +106,7 @@
                             </thead>
 
                             <tbody>
-                                {% for answer, result in answers_results %}
+                                {% for answer, result, favorite in answers_results_favorites %}
                                     <tr id="mainData{{ forloop.counter }}">
                                         <td id="angle_right_btn_{{ forloop.counter }}" onclick="toggle('{{ forloop.counter }}')" style="cursor: pointer;"><i class="fa fa-angle-right"></i></td>
                                         <td>{{ forloop.counter }}</td>
@@ -138,10 +138,10 @@
                                                     <i class="fa fa-times" style="color: red; font-size: 25px">      </i>
                                                 {% endif %}
                                             {% endif %}
-                                            {% if answer.question.is_favorite == True %}
-                                            <a href="{% url 'favorite_question' question_id=answer.question.id  answersheet_id=answersheet.id %}"><i class="fas fa-heart" style="color: red; font-size: 25px; padding-left: 10px;"></i></a>
+                                            {% if favorite %}
+                                                <a href="{% url 'favorite_question' question_id=answer.question.id  answersheet_id=answersheet.id %}"><i class="fas fa-heart" style="color: red; font-size: 25px; padding-left: 10px;"></i></a>
                                             {% else %}
-                                            <a href="{% url 'favorite_question' question_id=answer.question.id  answersheet_id=answersheet.id %}"><i class="far fa-heart" style="color: red; font-size: 25px; padding-left: 10px;"></i></a>
+                                                <a href="{% url 'favorite_question' question_id=answer.question.id  answersheet_id=answersheet.id %}"><i class="far fa-heart" style="color: red; font-size: 25px; padding-left: 10px;"></i></a>
                                             {% endif %}
                                         </td>
                                     </tr>
