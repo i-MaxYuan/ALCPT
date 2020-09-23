@@ -41,13 +41,11 @@ def exam_list(request):
 def score_list(request):
     answer_sheets = AnswerSheet.objects.all().filter(user=request.user)
     answer_sheets_all = answer_sheets.order_by('-exam__created_time')
-    answer_sheets_reading = answer_sheets.filter(exam__name__contains="閱讀練習")
-    answer_sheets_listening = answer_sheets.filter(exam__name__contains="聽力練習")
-    answer_sheets_exam = answer_sheets.exclude(exam__name__contains="閱讀練習").exclude(exam__name__contains="聽力練習")
+    answer_sheets_reading = answer_sheets.filter(exam__name__contains="閱讀練習").order_by('-exam__created_time')
+    answer_sheets_listening = answer_sheets.filter(exam__name__contains="聽力練習").order_by('-exam__created_time')
+    answer_sheets_exam = answer_sheets.exclude(exam__name__contains="閱讀練習").exclude(exam__name__contains="聽力練習").order_by('-exam__created_time')
 
 
-    page = request.GET.get('page', 1)
-    paginator = Paginator(answer_sheets, 10)
 
     EXAM_QUALIFICATION = {'qualified': 0,'unqualified': 0}
     READING_QUALIFICATION = {'qualified': 0,'unqualified': 0}
@@ -195,7 +193,7 @@ def score_list(request):
                 marker_color=df['color'])
     data=[trace]
     layout = go.Layout(
-        title='Listeing練習總成績分佈',
+        title='Listening練習總成績分佈',
         xaxis = dict(title = '成績'),
         yaxis = dict(title = '考試成績範圍次數')
     )
@@ -276,6 +274,8 @@ def score_list(request):
     fig.update_traces(marker=dict(colors=colors))
     listening_pie_chart = pyo.plot(fig, output_type='div')
 
+    page = request.GET.get('page', 1)
+    paginator = Paginator(answer_sheets, 10)
 
     try:
         answersheetList = paginator.page(page)
