@@ -13,23 +13,22 @@
         <div class="container">
             <ul class="nav nav-tabs" id="newTab" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link active" id="data-list-tab" data-toggle="tab" href="#data-list" role="tab" aria-controls="data-list" aria-selected="true"><i class="fa fa-list-ul"></i></a>
+                    <a class="nav-link activate" id="exam-list-tab" data-toggle="tab" href="#exam-data-list" role="tab" aria-controls="data-list" aria-selected="true">模擬考成績</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="bar-chart-tab" data-toggle="tab" href="#bar-chart" role="tab" aria-controls="bar-chart" aria-selected="false"><i class="fa fa-bar-chart"></i></a>
+                    <a class="nav-link" id="reading-list-tab" data-toggle="tab" href="#reading-data-list" role="tab" aria-controls="data-list" aria-selected="false">閱讀練習成績</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="pie-chart-tab" data-toggle="tab" href="#pie-chart" role="tab" aria-controls="pie-chart" aria-selected="false"><i class="fa fa-pie-chart"></i></a>
+                    <a class="nav-link" id="listening-list-tab" data-toggle="tab" href="#listening-data-list" role="tab" aria-controls="data-list" aria-selected="false">聽力練習成績</a>
                 </li>
             </ul>
 
             <div class="tab-content" id="tabContent">
-                <div class="tab-pane fade show active" id="data-list" role="tabpanel" aria-labelledby="data-list-tab">
+                <div class="tab-pane fade show active" id="exam-data-list" role="tabpanel" aria-labelledby="exam-list-tab">
                     <div class="container">
-                        <div class="row justify-content-center">
-                            <div class="col-md-12">
-                                <h5>Exam Score Records</h5>
-
+                        <div class="row justify-content-center" style="padding-top: 40px">
+                            <div class="col-md-6">
+                                <h3>模擬考成績</h3>
                                 <div class="table-responsive-md">
                                     <table class="table table-hover table-bordered table-striped table-mc-light-blue">
                                         <thead class="thead-light">
@@ -56,11 +55,26 @@
                                     </table>
                                 </div>
                             </div>
-                        </div>
+                                <div class="col-md-6">
+                                    {% autoescape off %}
+                                        {{ exam_bar_chart }}
+                                    {% endautoescape %}
+                                    {% autoescape off %}
+                                        {{ exam_pie_chart }}
+                                    {% endautoescape %}
+                                </div>
+                            </div>
 
-                        <div class="row justify-content-center">
-                            <div class="col-md-12">
-                                <h5>Reading Practice Records</h5>
+                        </div>
+                    </div>
+
+
+
+                <div class="tab-pane fade show" id="reading-data-list" role="tabpanel" aria-labelledby="reading-list-tab">
+                    <div class="container">
+                        <div class="row justify-content-center" style="padding-top: 40px">
+                            <div class="col-md-6">
+                                <h3>閱讀練習成績</h3>
 
                                 <div class="table-responsive-md">
                                     <table class="table table-hover table-bordered table-striped table-mc-light-blue">
@@ -88,12 +102,23 @@
                                     </table>
                                 </div>
                             </div>
+                            <div class="col-md-6">
+                                {% autoescape off %}
+                                    {{ reading_bar_chart }}
+                                {% endautoescape %}
+                                {% autoescape off %}
+                                    {{ reading_pie_chart }}
+                                {% endautoescape %}
+                            </div>
                         </div>
+                    </div>
+                </div>
 
-                        <div class="row justify-content-center">
-                            <div class="col-md-12">
-                                <h5>Listening Score Records</h5>
-
+                <div class="tab-pane fade show" id="listening-data-list" role="tabpanel" aria-labelledby="listening-list-tab">
+                    <div class="container">
+                        <div class="row justify-content-center" style="padding-top: 40px">
+                            <div class="col-md-6">
+                                <h3>聽力練習成績</h3>
                                 <div class="table-responsive-md">
                                     <table class="table table-hover table-bordered table-striped table-mc-light-blue">
                                         <thead class="thead-light">
@@ -120,41 +145,13 @@
                                     </table>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="tab-pane fade" id="bar-chart" role="tabpanel" aria-labelledby="bar-chart-tab">
-                    <div class="container">
-                        <div class="row justify-content-center">
-                            <div class="col-md-12">
-                                {% autoescape off %}
-                                    {{ exam_bar_chart }}
-                                {% endautoescape %}
-                                {% autoescape off %}
-                                    {{ reading_bar_chart }}
-                                {% endautoescape %}
+                            <div class="col-md-6">
                                 {% autoescape off %}
                                     {{ listening_bar_chart }}
                                 {% endautoescape %}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="tab-pane fade" id="pie-chart" role="tabpanel" aria-labelledby="pie-chart-tab">
-                    <div class="container">
-                        <div class="row justify-content-center">
-                            <div class="col-md-12">
-                              {% autoescape off %}
-                                  {{ exam_pie_chart }}
-                              {% endautoescape %}
-                              {% autoescape off %}
-                                  {{ reading_pie_chart }}
-                              {% endautoescape %}
-                              {% autoescape off %}
-                                  {{ listening_pie_chart }}
-                              {% endautoescape %}
+                                {% autoescape off %}
+                                    {{ listening_pie_chart }}
+                                {% endautoescape %}
                             </div>
                         </div>
                     </div>
