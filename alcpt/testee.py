@@ -332,13 +332,13 @@ def view_answersheet_content(request, answersheet_id):
     if answersheet.is_finished:
         #return 那題題目 is True or False 的 list
         answers = answersheet.answer_set.all()
-        user = User.objects.all().filter(id=request.user.id)
+        questions = Question.objects.all().filter(favorite=request.user)
         result_list = viewer.question_correction(answersheet)
         is_favorite = []
 
         for answer in answers:
             try:
-                user.get(question__id=answer.question.id)
+                questions.get(id=answer.question.id)
                 is_favorite.append(1)
 
             except ObjectDoesNotExist:
@@ -351,6 +351,28 @@ def view_answersheet_content(request, answersheet_id):
 
 @permission_check(UserType.Testee)
 def favorite_question(request, question_id, answersheet_id):
+    question = Question.objects.get(id=question_id)
+    try:
+        testee = User.objects.all().filter(id=request.user.id)
+        testee.get(question__id=question_id)
+        user = User.objects.get(id=request.user.id)
+        question.favorite.remove(user)
+        messages.warning(request, 'Question has removed from your favorite...')
+
+    except ObjectDoesNotExist:
+        user = User.objects.get(id=request.user.id)
+        question.favorite.add(user)
+        messages.success(request, 'Question has added to your favorite!')
+    return redirect('view_answersheet_content', answersheet_id)
+
+@permission_check(UserType.Testee)
+def favorite_question_list(request):
+    favorite_questions = Question.objects.all().filter(favorite=request.user)
+
+    return render(request, 'testee/favorite_question_list.html', locals())
+
+@permission_check(UserType.Testee)
+def favorite_question_delete(request, question_id):
     user = User.objects.get(id=request.user.id)
     question = Question.objects.get(id=question_id)
     try:
@@ -358,14 +380,9 @@ def favorite_question(request, question_id, answersheet_id):
         testee.get(question__id=question_id)
         question.favorite.remove(user)
         messages.warning(request, 'Question has removed from your favorite...')
-
+        return redirect('favorite_question_list')
     except ObjectDoesNotExist:
-        question.favorite.add(user)
-        messages.success(request, 'Question has added to your favorite!')
-
-    return redirect('view_answersheet_content', answersheet_id)
-
-
+        return redirect('favorite_question_list')
 
 @permission_check(UserType.Testee)
 @require_http_methods(["GET"])

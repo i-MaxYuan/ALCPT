@@ -174,6 +174,8 @@ urlpatterns = [
     re_path(r'^testee/', include([
         re_path(r'^exam/', include([
             re_path(r'^list$', testee.exam_list, name='testee_exam_list'),
+            re_path(r'^favorite_question_list$', testee.favorite_question_list, name='favorite_question_list'),
+            re_path(r'^favorite_question_delete/(?P<question_id>[0-9]+)$', testee.favorite_question_delete, name='favorite_question_delete'),
             re_path(r'^start/(?P<exam_id>[0-9]+)$', testee.start_exam, name='testee_start_exam'),
             re_path(r'^favorite_question/(?P<question_id>[0-9]+)/(?P<answersheet_id>[0-9]+)$', testee.favorite_question, name='favorite_question'),
             re_path(r'^answering/(?P<exam_id>[0-9]+)/(?P<answer_id>[0-9]+)$', testee.answering, name='testee_answering'),
