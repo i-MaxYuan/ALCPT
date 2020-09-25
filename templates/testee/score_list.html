@@ -1,9 +1,5 @@
 {% extends 'new_base.html' %}
 
-{% block scripts %}
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>   <!--for chart-->
-{% endblock %}
-
 {% block path %}
     <li class="breadcrumb-item active" aria-current="page">Score Record</li>
 {% endblock %}
@@ -49,6 +45,10 @@
                                                         <td class="text-center" data-title="Type">{{ answersheet.score }}</td>
                                                     {% endif %}
                                                     <td class="text-center" data-title="Finish Time">{{ answersheet.finish_time|date:'Y/m/d, H:i' }}</td>
+                                                </tr>
+                                            {% empty %}
+                                                <tr>
+                                                    <td class="text-center" colspan="5">No Data</td>
                                                 </tr>
                                             {% endfor %}
                                         </tbody>
@@ -97,6 +97,10 @@
                                                     {% endif %}
                                                     <td class="text-center" data-title="Finish Time">{{ answersheet.finish_time|date:'Y/m/d, H:i' }}</td>
                                                 </tr>
+                                            {% empty %}
+                                                <tr style="cursor: pointer" onclick="window.location.href='{% url 'testee_practice_create' 'reading' %}'">
+                                                    <td class="text-center" colspan="5">No Data... <a href=" {% url 'testee_practice_create' 'reading' %}">Start your first listening practice !</a></td>
+                                                </tr>
                                             {% endfor %}
                                         </tbody>
                                     </table>
@@ -140,7 +144,11 @@
                                                     {% endif %}
                                                     <td class="text-center" data-title="Finish Time">{{ answersheet.finish_time|date:'Y/m/d, H:i' }}</td>
                                                 </tr>
-                                            {% endfor %}
+                                              {% empty %}
+                                                  <tr style="cursor: pointer" onclick="window.location.href='{% url 'testee_practice_create' 'listening' %}'">
+                                                      <td class="text-center" colspan="5">No Data... <a href=" {% url 'testee_practice_create' 'listening' %}">Start your first listening practice !</a></td>
+                                                  </tr>
+                                              {% endfor %}
                                         </tbody>
                                     </table>
                                 </div>

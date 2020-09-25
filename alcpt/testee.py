@@ -1,6 +1,7 @@
 import json
 import random
 from datetime import datetime
+from string import punctuation
 
 from django.shortcuts import render, redirect
 from django.http.response import HttpResponse
@@ -14,7 +15,7 @@ from .models import Question, AnswerSheet, Student, User, Exam, TestPaper, Answe
 from .exceptions import *
 from .decorators import permission_check
 from .definitions import UserType, QuestionType, ExamType
-from .managerfuncs import viewer, practicemanager, testmanager
+from .managerfuncs import practicemanager, testmanager, testee
 
 import plotly.offline as pyo
 import plotly.graph_objs as go
@@ -330,12 +331,12 @@ def view_answersheet_content(request, answersheet_id):
         return redirect('testee_score_list')
 
     if answersheet.is_finished:
-        #return 那題題目 is True or False 的 list
         answers = answersheet.answer_set.all()
         questions = Question.objects.all().filter(favorite=request.user)
-        result_list = viewer.question_correction(answersheet)
+        result_list = testee.question_correction(answersheet)
         is_favorite = []
 
+        #return 那題題目 is True or False 的 list
         for answer in answers:
             try:
                 questions.get(id=answer.question.id)
@@ -365,9 +366,46 @@ def favorite_question(request, question_id, answersheet_id):
         messages.success(request, 'Question has added to your favorite!')
     return redirect('view_answersheet_content', answersheet_id)
 
+
 @permission_check(UserType.Testee)
 def favorite_question_list(request):
-    favorite_questions = Question.objects.all().filter(favorite=request.user)
+    favorite_questions_search = Question.objects.all().filter(favorite=request.user)
+    question_types = [_ for _ in QuestionType]
+
+    difficulty_choices =[
+        (1, 'Easy'),
+        (2, 'Medium'),
+        (3, 'Hard')
+    ]
+
+    keywords = {
+        'testee': request.user,
+        'question_content': request.GET.get('question_content'),
+    }
+
+    for keyword in ['question_type', 'difficulty']:
+        try:
+            keywords[keyword] = int(request.GET.get(keyword))
+        except (KeyError, TypeError, ValueError):
+            keywords[keyword] = None
+
+    if keywords['question_content'] and any(char in punctuation for char in keywords['question_content']):
+        keywords['question_content'] = None
+        messages.warning(request, "Name cannot contains any special character.")
+
+        # 使用搜尋功能，系統會至後端資料庫filter出符合條件的題目。所以，頁面會有重新載入的效果。
+        # 若是使用Javascript，因是使用cache檔案，所以不會有進入後端抓資料一樣的問題。
+    query_content, favorite_questions_search = testee.query_questions(**keywords)
+
+    page = request.GET.get('page', 1)
+    paginator = Paginator(favorite_questions_search, 20)  # the second parameter is used to display how many items. Now is display 10
+
+    try:
+        questionList = paginator.page(page)
+    except PageNotAnInteger:
+        questionList = paginator.page(1)
+    except EmptyPage:
+        questionList = paginator.page(paginator.num_pages)
 
     return render(request, 'testee/favorite_question_list.html', locals())
 
