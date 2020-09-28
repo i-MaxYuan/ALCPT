@@ -1,236 +1,263 @@
-{% load web_filters %}
-
+<!DOCTYPE html>
 <header class="header">
     <nav class="navbar navbar-expand-lg navbar-light navbar-laravel" color>
         <div class="container">
-            <a class="navbar-brand" href="{% url "Homepage" %}"><i class="fa fa-book"></i>｜ALCPT</a>
+            <a class="navbar-brand" href="{{ url('Homepage') }}"><i class="fa fa-book"></i>｜ALCPT</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ml-auto">
-                    {% if request.user|has_perm:'SystemManager' %}
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                SystemManager
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="{% url 'user_list' %}">User List</a>
-                                <a class="dropdown-item" href="{% url 'unit_list' %}">Unit List</a>
-                                <a class="dropdown-item" href="{% url 'report_category_list' %}">ReportCategory List</a>
-                                {% if request.user|get_SystemManager_report_notification == 0 %}
-                                    <a class="dropdown-item" href="{% url 'responsible_report_list' 'SystemManager' %}">User Response Handling</a>
-                                {% else %}
-                                    <a class="dropdown-item" href="{% url 'responsible_report_list' 'SystemManager' %}">User Response Handling<label class="notification-badge">{{ request.user|get_SystemManager_report_notification }}</label></a>
-                                {% endif %}
-                            </div>
-                        </li>
-                    {% endif %}
-
-                    {% if request.user|has_perm:'TestManager' %}
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                TestManager
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="{% url 'exam_list' %}">Exam List</a>
-                                <a class="dropdown-item" href="{% url 'testpaper_list' %}">TestPaper List</a>
-                                <a class="dropdown-item" href="{% url 'testee_group_list' %}">Testee Group List</a>
-                                {% if request.user|get_TestManager_report_notification == 0 %}
-                                    <a class="dropdown-item" href="{% url 'responsible_report_list' 'TestManager' %}">User Response Handling</a>
-                                {% else %}
-                                    <a class="dropdown-item" href="{% url 'responsible_report_list' 'TestManager' %}">User Response Handling<label class="notification-badge">{{ request.user|get_TestManager_report_notification }}</label></a>
-                                {% endif %}
-                            </div>
-                        </li>
-                    {% endif %}
-
-                    {% if request.user|has_perm:'TBManager' %}
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                TBManager
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="{% url 'tbmanager_question_list' %}">Question List</a>
-                                <a class="dropdown-item" href="{% url 'question_review' %}">Question Review</a>
-                                {% if request.user|get_TBManager_report_notification == 0 %}
-                                    <a class="dropdown-item" href="{% url 'responsible_report_list' 'TBManager' %}">User Response Handling</a>
-                                {% else %}
-                                    <a class="dropdown-item" href="{% url 'responsible_report_list' 'TBManager' %}">User Response Handling<label class="notification-badge">{{ request.user|get_TBManager_report_notification }}</label></a>
-                                {% endif %}
-                            </div>
-                        </li>
-                    {% endif %}
-
-                    {% if request.user|has_perm:'TBOperator' %}
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                TBOperator
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="{% url 'tboperator_question_list' %}">Question List</a>
-                                <a class="dropdown-item" href="{% url 'question_create' 'listening' %}">Create Listening Question</a>
-                                <a class="dropdown-item" href="{% url 'question_create' 'reading' %}">Create Reading Question</a>
-                            </div>
-                        </li>
-                    {% endif %}
-
-                    {% if request.user|has_perm:'Viewer' %}
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Viewer
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="{% url 'exam_score_list' %}">View Testee Score</a>
-                            </div>
-                        </li>
-                    {% endif %}
-
-                    {% if request.user|has_perm:'Testee' %}
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Testee
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="{% url 'favorite_question_list' %}">Favorite Question</a>
-                                <a class="dropdown-item" href="{% url 'testee_exam_list' %}">Exam Record</a>
-                                <a class="dropdown-item" href="{% url 'testee_score_list' %}">Score Record</a>
-                                <a class="dropdown-item" href="{% url 'testee_practice_create' 'listening' %}">Listening Practice</a>
-                                <a class="dropdown-item" href="{% url 'testee_practice_create' 'reading' %}">Reading Practice</a>
-                            </div>
-                        </li>
-                    {% endif %}
-
-                    {% if user.is_authenticated %}
-                        <!-- Button trigger modal for personal notification center -->
-                        <button type="button" class="btn" data-toggle="modal" data-target="#NotificationCenter">
-                            <i class="fa fa-bell"></i>
-                            {% if request.user.proclamation_set.all|unread_count != 0 %}
-                                <label class="notification-custom"><sup>{{ request.user.proclamation_set.all|unread_count }}</sup></label>
+                    {% if request.user|has_perm('SystemManager') %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            SystemManager
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{{ url('user_list') }}">User List</a>
+                            <a class="dropdown-item" href="{{ url('unit_list') }}">Unit List</a>
+                            <a class="dropdown-item" href="{{ url('report_category_list') }}">ReportCategory List</a>
+                            {% if request.user|get_SystemManager_report_notification == 0 %}
+                            <a class="dropdown-item" href="{{ url('responsible_report_list', args=['SystemManager']) }}">User Response Handling</a>
+                            {% else %}
+                            <a class="dropdown-item" href="{{ url('responsible_report_list', args=['SystemManager']) }}">User Response Handling<label class="notification-badge">{{ request.user|get_SystemManager_report_notification
+                  }}</label></a>
                             {% endif %}
-                        </button>
+                        </div>
+                    </li>
+                    {% endif %} {% if request.user|has_perm('TestManager') %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            TestManager
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{{ url('exam_list') }}">Exam List</a>
+                            <a class="dropdown-item" href="{{ url('testpaper_list') }}">TestPaper List</a>
+                            <a class="dropdown-item" href="{{ url('testee_group_list') }}">Testee Group List</a>
+                            {% if request.user|get_TestManager_report_notification == 0 %}
+                            <a class="dropdown-item" href="{{ url('responsible_report_list', args=['TestManager']) }}">User Response Handling</a>
+                            {% else %}
+                            <a class="dropdown-item" href="{{ url('responsible_report_list', args=['TestManager']) }}">User Response Handling<label class="notification-badge">{{ request.user|get_TestManager_report_notification }}</label></a>
+                            {% endif %}
+                        </div>
+                    </li>
+                    {% endif %} {% if request.user|has_perm('TBManager') %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            TBManager
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{{ url('tbmanager_question_list') }}">Question List</a>
+                            <a class="dropdown-item" href="{{ url('question_review') }}">Question Review</a>
+                            {% if request.user|get_TBManager_report_notification == 0 %}
+                            <a class="dropdown-item" href="{{ url('responsible_report_list', args=['TBManager']) }}">User Response Handling</a>
+                            {% else %}
+                            <a class="dropdown-item" href="{{ url('responsible_report_list', args=['TBManager']) }}">User Response Handling<label class="notification-badge">{{ request.user|get_TBManager_report_notification }}</label></a>
+                            {% endif %}
+                        </div>
+                    </li>
+                    {% endif %} {% if request.user|has_perm('TBOperator') %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            TBOperator
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{{ url('tboperator_question_list') }}">Question List</a>
+                            <a class="dropdown-item" href="{{ url('question_create', args=['listening']) }}">Create Listening Question</a>
+                            <a class="dropdown-item" href="{{ url('question_create', args=['reading']) }}">Create Reading Question</a>
+                        </div>
+                    </li>
+                    {% endif %} {% if request.user|has_perm('Viewer') %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Viewer
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{{ url('exam_score_list') }}">View Testee Score</a>
+                        </div>
+                    </li>
+                    {% endif %} {% if request.user|has_perm('Testee') %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Testee
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{{ url('favorite_question_list') }}">Favorite Question</a>
+                            <a class="dropdown-item" href="{{ url('testee_exam_list') }}">Exam Record</a>
+                            <a class="dropdown-item" href="{{ url('testee_score_list') }}">Score Record</a>
+                            <a class="dropdown-item" href="{{ url('testee_practice_create', args=['listening']) }}">Listening Practice</a>
+                            <a class="dropdown-item" href="{{ url('testee_practice_create', args=['reading']) }}">Reading Practice</a>
+                        </div>
+                    </li>
+                    {% endif %} {% if user.is_authenticated %}
+                    <!-- Button trigger modal for personal notification center -->
+                    <button type="button" class="btn" data-toggle="modal" data-target="#NotificationCenter">
+                        <i class="fa fa-bell"></i>
+                        {% if request.user.proclamation_set.all()|unread_count != 0 %}
+                        <label class="notification-custom"><sup>{{ request.user.proclamation_set.all()|unread_count }}</sup></label>
+                        {% endif %}
+                    </button>
 
-                        <!-- Modal for notification center -->
-                        <form id="notificationForm" name="notificationForm" method="post">
-                            {% csrf_token %}
-                            <div class="modal fade" id="NotificationCenter" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header text-center">
-                                            <h5 class="modal-title" id="ModalLongTitle">Notification Center（Total: {{ request.user.proclamation_set.count }} ）</h5>
-                                        </div>
-
-                                        <div id="modal-menu">
-                                            <table class="table table-hover">
-                                                <tbody>
-                                                    {% for proclamation in request.user.proclamation_set.all %}
-                                                        <tr class="text-left" style="{% if forloop.counter != request.user.proclamation_set.count %}border-bottom-style: solid; border-bottom-width: 1px; border-bottom-color: rgb(200, 200, 200);{% endif %} {% if not proclamation.is_read %}background-color: rgb(220,220,220);{% endif %}">
-                                                            <td class="align-middle"><input type="checkbox" name="proclamation" value="{{ proclamation.id }}"></td>
-                                                            <td class="align-middle">
-                                                                <h5>{{ proclamation.title }}</h5>
-                                                                <p>
-                                                                    {{ proclamation.text|linebreaksbr }}<br>
-                                                                    <span class="text-muted float-right">-by {{ proclamation.created_by }} in {{ proclamation.created_time }}</span>
-                                                                </p>
-                                                            </td>
-                                                            <td class="align-middle" style="cursor: pointer;" onclick="window.location.href='{% url 'proclamation_detail' proclamation.id %}'"><i class="fa fa-angle-right"></i></td>
-                                                        </tr>
-                                                    {% empty %}
-                                                        <tr>
-                                                            <td><h3 class="text-center" style="font-weight: 200">No notification.</h3></td>
-                                                        </tr>
-                                                    {% endfor %}
-                                                </tbody>
-                                            </table>
-                                        </div>
-
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" onclick="set_action('read');">Read</button>
-                                            <button type="button" class="btn btn-light" onclick="set_action('delete');">Delete</button>
-                                            <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                            <script>
-                                                function set_action(action){
-                                                    var form = document.getElementById('notificationForm');
-                                                    if (action === 'read'){
-                                                        form.action = '/proclamation/read/toggle';
-                                                    }else{
-                                                        form.action = '/proclamation/delete/toggle';
-                                                    }
-                                                    form.submit();
-                                                }
-                                            </script>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                        <!-- Button trigger modal for user functions menu -->
-                        <button type="button" class="btn" data-toggle="modal" data-target="#ModalCenter">
-                            <i class="fa fa-user"></i>
-                        </button>
-
-                        <!-- Modal for functions menu -->
-                        <div class="modal fade" id="ModalCenter" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered" role="document">
+                    <!-- Modal for notification center -->
+                    <form id="notificationForm" name="notificationForm" method="post">
+                        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
+                        <div class="modal fade" id="NotificationCenter" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header text-center">
-                                        <h5 class="modal-title" id="ModalLongTitle">User: {{ request.user.reg_id }}</h5>
+                                        <h5 class="modal-title" id="ModalLongTitle">
+                                            Notification Center（Total: {{
+                      request.user.proclamation_set.count() }} ）
+                                        </h5>
                                     </div>
 
                                     <div id="modal-menu">
-                                        <button onclick="window.location.href='{% url 'profile' %}'">User Profile</button>
-                                        <div class="dropdown-divider custom"></div>
-                                        <button onclick="window.location.href='{% url 'profile_edit' %}'">Profile Update</button>
-                                        <div class="dropdown-divider custom"></div>
-                                        <button onclick="window.location.href='{% url 'email' %}'">Email</button>
-                                        <div class="dropdown-divider custom"></div>
-                                        <button onclick="window.location.href='{% url 'password_change' %}'">Password Change</button>
-                                        <div class="dropdown-divider custom"></div>
-                                        <button onclick="alert('Function is developing. Stay tuned.🤪');">Real Exam Record</button>
-                                        <div class="dropdown-divider custom"></div>
-                                        <button onclick="window.location.href='{% url 'report' %}'">Report</button>
-                                        <div class="dropdown-divider custom"></div>
-                                        <button onclick="window.location.href='{% url 'about' %}'">About</button>
+                                        <table class="table table-hover">
+                                            <tbody>
+                                                {% for proclamation in
+                        request.user.proclamation_set.all() %}
+                                                <tr class="text-left"
+                                                    style="{% if loop.index != request.user.proclamation_set.count %}border-bottom-style: solid; border-bottom-width: 1px; border-bottom-color: rgb(200, 200, 200);{% endif %} {% if not proclamation.is_read %}background-color: rgb(220,220,220);{% endif %}">
+                                                    <td class="align-middle">
+                                                        <input type="checkbox" name="proclamation" value="{{ proclamation.id }}" />
+                                                    </td>
+                                                    <td class="align-middle">
+                                                        <h5>{{ proclamation.title }}</h5>
+                                                        <p>
+                                                            {{ proclamation.text|linebreaksbr }}<br />
+                                                            <span class="text-muted float-right">-by {{ proclamation.created_by }} in {{
+                                proclamation.created_time }}</span>
+                                                        </p>
+                                                    </td>
+                                                    <td class="align-middle" style="cursor: pointer" onclick="window.location.href='{{ url('proclamation_detail', args=[proclamation.id]) }}'">
+                                                        <i class="fa fa-angle-right"></i>
+                                                    </td>
+                                                </tr>
+                                                {% else %}
+                                                <tr>
+                                                    <td>
+                                                        <h3 class="text-center" style="font-weight: 200">
+                                                            No notification.
+                                                        </h3>
+                                                    </td>
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
                                     </div>
 
                                     <div class="modal-footer">
-                                        <a class="btn btn-light" href="{% url 'logout' %}" onclick="return confirm('Sure to logout?')">Logout</a>
-                                        <a class="btn btn-secondary" style="color: white" data-dismiss="modal">Cancel</a>
+                                        <button type="button" class="btn btn-secondary" onclick="set_action('read');">
+                                            Read
+                                        </button>
+                                        <button type="button" class="btn btn-light" onclick="set_action('delete');">
+                                            Delete
+                                        </button>
+                                        <button class="btn btn-secondary" data-dismiss="modal">
+                                            Cancel
+                                        </button>
+                                        <script>
+                                            function set_action(action) {
+                                                var form = document.getElementById("notificationForm");
+                                                if (action === "read") {
+                                                    form.action = "/proclamation/read/toggle";
+                                                } else {
+                                                    form.action = "/proclamation/delete/toggle";
+                                                }
+                                                form.submit();
+                                            }
+                                        </script>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    </form>
+                    <!-- Button trigger modal for user functions menu -->
+                    <button type="button" class="btn" data-toggle="modal" data-target="#ModalCenter">
+                        <i class="fa fa-user"></i>
+                    </button>
+
+                    <!-- Modal for functions menu -->
+                    <div class="modal fade" id="ModalCenter" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header text-center">
+                                    <h5 class="modal-title" id="ModalLongTitle">
+                                        User: {{ request.user.reg_id }}
+                                    </h5>
+                                </div>
+
+                                <div id="modal-menu">
+                                    <button onclick="window.location.href='{{ url('profile') }}'">
+                                        User Profile
+                                    </button>
+                                    <div class="dropdown-divider custom"></div>
+                                    <button onclick="window.location.href='{{ url('profile_edit') }}'">
+                                        Profile Update
+                                    </button>
+                                    <div class="dropdown-divider custom"></div>
+                                    <button onclick="window.location.href='{{ url('email') }}'">
+                                        Email
+                                    </button>
+                                    <div class="dropdown-divider custom"></div>
+                                    <button onclick="window.location.href='{{ url('password_change') }}'">
+                                        Password Change
+                                    </button>
+                                    <div class="dropdown-divider custom"></div>
+                                    <button onclick="alert('Function is developing. Stay tuned.🤪');">
+                                        Real Exam Record
+                                    </button>
+                                    <div class="dropdown-divider custom"></div>
+                                    <button onclick="window.location.href='{{ url('report') }}'">
+                                        Report
+                                    </button>
+                                    <div class="dropdown-divider custom"></div>
+                                    <button onclick="window.location.href='{{ url('about') }}'">
+                                        About
+                                    </button>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <a class="btn btn-light" href="{{ url('logout') }}" onclick="return confirm('Sure to logout?')">Logout</a>
+                                    <a class="btn btn-secondary" style="color: white" data-dismiss="modal">Cancel</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     {% else %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'login' %}">Login.</a>
-                        </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url('login') }}">Login.</a>
+                    </li>
                     {% endif %}
 
                     <style>
-                        .modal{
+                        .modal {
                             outline: none;
                         }
-                        .modal a{
+
+                        .modal a {
                             outline: none;
                             text-decoration: none;
                         }
-                        .modal #modal-menu button{
+
+                        .modal #modal-menu button {
                             width: 100%;
 
                             text-align: center;
                             padding: 14px;
-                            color: #2C3232;
+                            color: #2c3232;
                             background-color: #fff;
 
                             border: none;
                             outline: none;
                         }
-                        .modal #modal-menu button:active{
+
+                        .modal #modal-menu button:active {
                             width: 100%;
 
                             padding: 10px;
-                            color: #2C3232;
+                            color: #2c3232;
                             background-color: rgb(200, 200, 200);
 
                             border-bottom-style: solid;
@@ -239,18 +266,20 @@
 
                             outline: none;
                         }
+
                         .modal #modal-menu button::-moz-focus-inner,
-                            [type="button"]::-moz-focus-inner,
-                            [type="reset"]::-moz-focus-inner,
-                            [type="submit"]::-moz-focus-inner {
-                              padding: 0;
-                              border-style: none;
+                        [type="button"]::-moz-focus-inner,
+                        [type="reset"]::-moz-focus-inner,
+                        [type="submit"]::-moz-focus-inner {
+                            padding: 0;
+                            border-style: none;
                         }
-                        .modal .custom{
+
+                        .modal .custom {
                             margin: 0px;
                         }
 
-                        .notification-custom{
+                        .notification-custom {
                             width: 15px;
                             height: 15px;
                             background-color: red;

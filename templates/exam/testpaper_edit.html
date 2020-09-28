@@ -1,65 +1,90 @@
-{% extends 'new_base.html' %}
+{% extends 'new_base.html' %} {% block scripts %}
+<script type="text/javascript">
+  passName = true;
+</script>
+{% endblock %} {% block path %}
+<li class="breadcrumb-item" aria-current="page">
+  <a href="{{ url('testpaper_list') }}">TestPaper List</a>
+</li>
+<li class="breadcrumb-item active" aria-current="page">TestPaper Edit</li>
+{% endblock %} {% block content %}
+<main class="testpaper-edit-form">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-12">
+        <h2>TestPaper Edit</h2>
 
-{% load web_filters %}
-
-{% block scripts %}
-    <script type="text/javascript">
-        passName = true;
-
-    </script>
-{% endblock %}
-
-{% block path %}
-    <li class="breadcrumb-item" aria-current="page"><a href="{% url 'testpaper_list' %}">TestPaper List</a></li>
-    <li class="breadcrumb-item active" aria-current="page">TestPaper Edit</li>
-{% endblock %}
-
-{% block content %}
-    <main class="testpaper-edit-form">
-        <div class="container">
+        <form
+          action="{{ url('testpaper_edit', args=[testpaper.id]) }}"
+          method="post"
+        >
+          <input
+            type="hidden"
+            name="csrfmiddlewaretoken"
+            value="{{ csrf_token }}"
+          />
+          <div class="container">
             <div class="row justify-content-center">
-                <div class="col-lg-12">
-                    <h2>TestPaper Edit</h2>
+              <h5>TestPaper Name.</h5>
+              <input
+                class="form-control"
+                type="text"
+                name="testpaper_name"
+                value="{{ testpaper.name }}"
+              />
 
-                    <form action="{% url 'testpaper_edit' testpaper.id %}" method="post">
-                        {% csrf_token %}
-                        <div class="container">
-                            <div class="row justify-content-center">
-                                <h5>TestPaper Name.</h5>
-                                <input class="form-control" type="text" name="testpaper_name" value="{{ testpaper.name }}">
+              {% for question_type, question_type_count,
+              selected_question_type_num in testpaper_data %}
+              <div class="card text-center m-1">
+                <div class="card-header">{{ question_type.value.1 }}</div>
 
-                                {% for question_type, question_type_count, selected_question_type_num in testpaper_data %}
-                                    <div class="card text-center m-1">
-                                        <div class="card-header">{{ question_type.value.1 }}</div>
-
-                                        <div class="card-body">
-                                            <p class="card-context">Total: {{ question_type_count }}，Selected: {{ selected_question_type_num }}</p>
-                                        </div>
-
-                                        <div class="card-footer text-center">
-                                            <div class="p-2">
-                                                <a class="btn btn-primary" href="{% url 'manual_pick' testpaper.id question_type.value.0 %}" class="card-link" >&nbsp;&nbsp; Manual&nbsp;&nbsp; </a>
-                                            </div>
-                                            <div>
-                                                {% if selected_question_type_num == question_type_count %}
-                                                    <button class="btn btn-danger" disabled>Automatic</button>
-                                                {% else %}
-                                                    <a class="btn btn-warning" href="{% url 'auto_pick' testpaper.id question_type.value.0 %}" class="card-link" >Automatic</a>
-                                                {% endif %}
-                                            </div>
-                                        </div>
-                                    </div>
-                                {% endfor %}
-                            </div>
-                        </div>
-
-                        <div class="text-center">
-                            <button type="submit" class="btn btn-primary">OK</button>
-                            <button type="button" class="btn btn-secondary" onclick="self.location=document.referrer;">Cancel</button>
-                        </div>
-                    </form>
+                <div class="card-body">
+                  <p class="card-context">
+                    Total: {{ question_type_count }}，Selected: {{
+                    selected_question_type_num }}
+                  </p>
                 </div>
+
+                <div class="card-footer text-center">
+                  <div class="p-2">
+                    <a
+                      class="btn btn-primary"
+                      href="{{ url('manual_pick', args=[testpaper.id, question_type.value.0]) }}"
+                      class="card-link"
+                      >&nbsp;&nbsp; Manual&nbsp;&nbsp;
+                    </a>
+                  </div>
+                  <div>
+                    {% if selected_question_type_num == question_type_count %}
+                    <button class="btn btn-danger" disabled>Automatic</button>
+                    {% else %}
+                    <a
+                      class="btn btn-warning"
+                      href="{{ url('auto_pick', args=[testpaper.id, question_type.value.0]) }}"
+                      class="card-link"
+                      >Automatic</a
+                    >
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
             </div>
-        </div>
-    </main>
+          </div>
+
+          <div class="text-center">
+            <button type="submit" class="btn btn-primary">OK</button>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              onclick="self.location=document.referrer;"
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
 {% endblock %}

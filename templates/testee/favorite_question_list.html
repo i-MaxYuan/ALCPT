@@ -1,205 +1,203 @@
 {% extends 'new_base.html' %}
 
-{% load web_filters %}
-
 {% block scripts %}
-    <script>
-        function toggle(index){
-            var angle_right_btnIndex = 'angle_right_btn_'+index;
-            var angle_right_btn = document.getElementById(angle_right_btnIndex);
-            var dataIndex = 'detailData'+index;
-            var data = document.getElementById(dataIndex);
-            var iconRightIndex = 'iconRight'+index;
-            var iconRight = document.getElementById(iconRightIndex);
-            var iconDownIndex = 'iconDown'+index;
-            var iconDown = document.getElementById(iconDownIndex);
+<script>
+    function toggle(index) {
+        var angle_right_btnIndex = 'angle_right_btn_' + index;
+        var angle_right_btn = document.getElementById(angle_right_btnIndex);
+        var dataIndex = 'detailData' + index;
+        var data = document.getElementById(dataIndex);
+        var iconRightIndex = 'iconRight' + index;
+        var iconRight = document.getElementById(iconRightIndex);
+        var iconDownIndex = 'iconDown' + index;
+        var iconDown = document.getElementById(iconDownIndex);
 
-            if (data.style.display === "none"){
-                angle_right_btn.innerHTML = '<i class="fa fa-angle-down"></i>';
-                data.style.display = "table-row";
-                iconRight.style.display = "none";
-                iconDown.style.display = "block";
-            } else {
-                angle_right_btn.innerHTML = '<i class="fa fa-angle-right"></i>';
-                data.style.display = "none";
-                iconRight.style.display = "block";
-                iconDown.style.display = "none";
-            }
+        if (data.style.display === "none") {
+            angle_right_btn.innerHTML = '<i class="fa fa-angle-down"></i>';
+            data.style.display = "table-row";
+            iconRight.style.display = "none";
+            iconDown.style.display = "block";
+        } else {
+            angle_right_btn.innerHTML = '<i class="fa fa-angle-right"></i>';
+            data.style.display = "none";
+            iconRight.style.display = "block";
+            iconDown.style.display = "none";
         }
-    </script>
+    }
+</script>
 {% endblock %}
 
 {% block path %}
-    <li class="breadcrumb-item active" aria-current="page">Favorite Question</li>
+<li class="breadcrumb-item active" aria-current="page">Favorite Question</li>
 {% endblock %}
 
 {% block content %}
-    <main class="testee-score-list">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <!-- 搜尋 -->
-                    <form class="form-inline md-form form-group-sm mt-0" method="get">
-                        <input class="form-control" type="text" name="question_content" {% if keywords.question_content %}value="{{ keywords.question_content }}"{% else %}value=""{% endif %} placeholder="Search" aria-label="Search">
+<main class="testee-score-list">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <!-- 搜尋 -->
+                <form class="form-inline md-form form-group-sm mt-0" method="get">
+                    <input class="form-control" type="text" name="question_content" {% if keywords.question_content %}value="{{ keywords.question_content }}" {% else %}value="" {% endif %} placeholder="Search" aria-label="Search">
 
-                        <label class="mr-sm-2" for="inlineFormCustomSelect" style="padding-left: 10px">Type.</label>
-                        <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" name="question_type" style="padding-right: 5px">
-                            <option value="" selected>Select All.</option>
-                            {% for q_type in question_types %}
-                                <option value="{{ q_type.value.0 }}" {% if q_type.value.0 == keywords.question_type %} selected {% endif %}>{{ q_type.value.1 }}</option>
-                            {% endfor %}
-                        </select>
+                    <label class="mr-sm-2" for="inlineFormCustomSelect" style="padding-left: 10px">Type.</label>
+                    <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" name="question_type" style="padding-right: 5px">
+                        <option value="" selected>Select All.</option>
+                        {% for q_type in question_types %}
+                        <option value="{{ q_type.value.0 }}" {% if q_type.value.0 == keywords.question_type %} selected {% endif %}>{{ q_type.value.1 }}</option>
+                        {% endfor %}
+                    </select>
 
 
-                        {% if request.user|has_perm:'Testee' %}
-                            <label class="mr-sm-2" for="inlineFormCustomSelect">Difficulty.</label>
-                            <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" name="difficulty">
-                                <option value="" selected>Select All</option>
-                                {% for difficulty in difficulty_choices %}
-                                    <option value="{{ difficulty.0 }}" {% if difficulty.0 == keywords.difficulty %} selected {% endif %}>{{ difficulty.1 }}</option>
-                                {% endfor %}
-                            </select>
-                        {% endif %}
+                    {% if request.user|has_perm('Testee') %}
+                    <label class="mr-sm-2" for="inlineFormCustomSelect">Difficulty.</label>
+                    <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" name="difficulty">
+                        <option value="" selected>Select All</option>
+                        {% for difficulty in difficulty_choices %}
+                        <option value="{{ difficulty.0 }}" {% if difficulty.0 == keywords.difficulty %} selected {% endif %}>{{ difficulty.1 }}</option>
+                        {% endfor %}
+                    </select>
+                    {% endif %}
 
-                        <button class="btn btn-primary btn-group-justified" type="submit">
-                            <i class="fa fa-search"></i>
-                        </button>
-                    </form>
-                </div>
+                    <button class="btn btn-primary btn-group-justified" type="submit">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </form>
             </div>
-            <div class="row justify-content-center">
-                <div class="col-md-12">
-                    <h2>Favorite Question</h2>
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-striped table-hover table-mc-light-blue">
-                            <thead class="thead-light">
-                                <tr>
-                                    <th></th>
-                                    <th scope="col">Serial.</th>
-                                    <th scope="col">Content.</th>
-                                    <th scope="col" class="text-right">
-                                        <button type="button" class="btn" data-toggle="modal" data-target="#promptContent">
-                                            <i class="fa fa-question-circle"></i>
-                                        </button>
-                                        <div class="modal fade text-left" id="promptContent" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
-                                            <div class="modal-dialog modal-dialog-centered" role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-header text-center">
-                                                        <h5 class="modal-title" id="ModalLongTitle">Tips</h5>
-                                                    </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                <h2>Favorite Question</h2>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped table-hover table-mc-light-blue">
+                        <thead class="thead-light">
+                            <tr>
+                                <th></th>
+                                <th scope="col">Serial.</th>
+                                <th scope="col">Content.</th>
+                                <th scope="col" class="text-right">
+                                    <button type="button" class="btn" data-toggle="modal" data-target="#promptContent">
+                                        <i class="fa fa-question-circle"></i>
+                                    </button>
+                                    <div class="modal fade text-left" id="promptContent" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header text-center">
+                                                    <h5 class="modal-title" id="ModalLongTitle">Tips</h5>
+                                                </div>
 
-                                                    <div class="modal-body" style="font-size: 20px">
-                                                        <ul>
-                                                            <li>
-                                                                <p>
-                                                                    If your <u>answer is correct</u>, then it will display only one color in all choices and
-                                                                    there will display <i class="fa fa-check" style="color: green"></i> behind the question.
-                                                                </p>
-                                                            </li>
-                                                            <li>
-                                                                <p>
-                                                                    If you <u>didn't answer the question</u>, then it will display only one color in all choices and
-                                                                    also display <i class="fa fa-question" style="color: red"></i> behind the question.
-                                                                </p>
-                                                            </li>
-                                                            <li>
-                                                                <p>
-                                                                    The question has been reported as an error, but after processing by the TBManager, then it will
-                                                                    display <i class="fa fa-exclamation-circle" style="color: red"></i> behind the question.
-                                                                </p>
-                                                            </li>
-                                                            <li>
-                                                                <p style="color: red">
-                                                                    Red color means your selected the wrong answer on the exam.
-                                                                </p>
-                                                            </li>
-                                                            <li>
-                                                                <p style="color: green">
-                                                                    Green color means the sentence is correct but you miss it.
-                                                                </p>
-                                                            </li>
-                                                            <li>
-                                                                <p>
-                                                                    If you think there is a problem with the question, you can click <i class="fa fa-exclamation-triangle"></i> to report it.
-                                                                </p>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
+                                                <div class="modal-body" style="font-size: 20px">
+                                                    <ul>
+                                                        <li>
+                                                            <p>
+                                                                If your <u>answer is correct</u>, then it will display only one color in all choices and
+                                                                there will display <i class="fa fa-check" style="color: green"></i> behind the question.
+                                                            </p>
+                                                        </li>
+                                                        <li>
+                                                            <p>
+                                                                If you <u>didn't answer the question</u>, then it will display only one color in all choices and
+                                                                also display <i class="fa fa-question" style="color: red"></i> behind the question.
+                                                            </p>
+                                                        </li>
+                                                        <li>
+                                                            <p>
+                                                                The question has been reported as an error, but after processing by the TBManager, then it will
+                                                                display <i class="fa fa-exclamation-circle" style="color: red"></i> behind the question.
+                                                            </p>
+                                                        </li>
+                                                        <li>
+                                                            <p style="color: red">
+                                                                Red color means your selected the wrong answer on the exam.
+                                                            </p>
+                                                        </li>
+                                                        <li>
+                                                            <p style="color: green">
+                                                                Green color means the sentence is correct but you miss it.
+                                                            </p>
+                                                        </li>
+                                                        <li>
+                                                            <p>
+                                                                If you think there is a problem with the question, you can click <i class="fa fa-exclamation-triangle"></i> to report it.
+                                                            </p>
+                                                        </li>
+                                                    </ul>
+                                                </div>
 
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
-                                                    </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
                                                 </div>
                                             </div>
                                         </div>
-                                    </th>
-                                </tr>
-                            </thead>
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
 
-                            <tbody>
-                                {% for favorite_question in favorite_questions_search %}
-                                    <tr id="mainData{{ forloop.counter }}">
-                                        <td id="angle_right_btn_{{ forloop.counter }}" onclick="toggle('{{ forloop.counter }}')" style="cursor: pointer;"><i class="fa fa-angle-right"></i></td>
-                                        <td>{{ forloop.counter }}</td>
-                                        <td class="text-left">
-                                            {% if favorite_question.q_file %}
-                                                <audio controls preload="none">
-                                                    <source src="{{ favorite_question.q_file.url }}" type="audio/mpeg">
-                                                    Your browser does not support the audio tag.
-                                                </audio>
-                                            {% else %}
-                                                <div id="summary_Q_content{{ forloop.counter }}">
-                                                    {{ favorite_question.q_content|summary:110 }}
-                                                </div>
-                                                <div id="full_Q_content{{ forloop.counter }}" style="display: none">
-                                                    {{ favorite_question.q_content|linebreaksbr }}
-                                                </div>
-                                            {% endif %}
-                                        </td>
-                                        <td class="text-right">
+                        <tbody>
+                            {% for favorite_question in favorite_questions_search %}
+                            <tr id="mainData{{ loop.index }}">
+                                <td id="angle_right_btn_{{ loop.index }}" onclick="toggle('{{ loop.index }}')" style="cursor: pointer;"><i class="fa fa-angle-right"></i></td>
+                                <td>{{ loop.index }}</td>
+                                <td class="text-left">
+                                    {% if favorite_question.q_file %}
+                                    <audio controls preload="none">
+                                        <source src="{{ favorite_question.q_file.url }}" type="audio/mpeg">
+                                        Your browser does not support the audio tag.
+                                    </audio>
+                                    {% else %}
+                                    <div id="summary_Q_content{{ loop.index }}">
+                                        {{ favorite_question.q_content|summary(110) }}
+                                    </div>
+                                    <div id="full_Q_content{{ loop.index }}" style="display: none">
+                                        {{ favorite_question.q_content|linebreaksbr }}
+                                    </div>
+                                    {% endif %}
+                                </td>
+                                <td class="text-right">
 
-                                            <a href="{% url 'favorite_question_delete' question_id=favorite_question.id %}"><i class="fas fa-heart" style="color: red; font-size: 25px; padding-left: 10px;"></i></a>
-                                        </td>
-                                    </tr>
+                                    <a href="{{ url('favorite_question_delete', args=[favorite_question.id]) }}"><i class="fas fa-heart" style="color: red; font-size: 25px; padding-left: 10px;"></i></a>
+                                </td>
+                            </tr>
 
-                                    <tr id="detailData{{ forloop.counter }}" style="display: none;">
-                                        <td></td>
-                                        <td colspan="2" style="text-align: left">
-                                            <ol type="A">
-                                                {% for option in favorite_question.choice_set.all %}
-                                                    {% if option.is_answer %}
-                                                        <li style="color: green">{{ option }}</li>
-                                                    {% else %}
-                                                        <li>{{ option }}</li>
-                                                    {% endif %}
-                                                {% endfor %}
-                                            </ol>
-                                        </td>
-                                        <td class="text-right">
-                                            {% if favorite_question.state == 5 %}
-                                                <i class="fa fa-exclamation-triangle" style="cursor: pointer;" onclick="alert('This question had been modified.')"></i>
-                                            {% else %}
-                                                <i class="fa fa-exclamation-triangle" style="cursor: pointer;" onclick="window.location.href='{% url 'report_question' question_id=favorite_question.id %}'"></i>
-                                            {% endif %}
-                                        </td>
-                                    </tr>
-                                    {% empty %}
-                                        <tr>
-                                            <td class="text-center" colspan="5">You have no favorite question now...</td>
-                                        </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
+                            <tr id="detailData{{ loop.index }}" style="display: none;">
+                                <td></td>
+                                <td colspan="2" style="text-align: left">
+                                    <ol type="A">
+                                        {% for option in favorite_question.choice_set.all() %}
+                                        {% if option.is_answer %}
+                                        <li style="color: green">{{ option }}</li>
+                                        {% else %}
+                                        <li>{{ option }}</li>
+                                        {% endif %}
+                                        {% endfor %}
+                                    </ol>
+                                </td>
+                                <td class="text-right">
+                                    {% if favorite_question.state == 5 %}
+                                    <i class="fa fa-exclamation-triangle" style="cursor: pointer;" onclick="alert('This question had been modified.')"></i>
+                                    {% else %}
+                                    <i class="fa fa-exclamation-triangle" style="cursor: pointer;" onclick="window.location.href='{{ url('report_question', args=[favorite_question.id]) }}'"></i>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td class="text-center" colspan="5">You have no favorite question now...</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
-    </main>
-    <style>
-        .testee-score-list table > thead > tr > th,
-        .testee-score-list table > tbody > tr > td{
-            text-align: center;
-            vertical-align: middle;
-        }
-    </style>
+    </div>
+</main>
+<style>
+    .testee-score-list table>thead>tr>th,
+    .testee-score-list table>tbody>tr>td {
+        text-align: center;
+        vertical-align: middle;
+    }
+</style>
 {% endblock %}

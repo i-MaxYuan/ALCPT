@@ -1,111 +1,135 @@
-{% extends 'new_base.html' %}
+{% extends 'new_base.html' %} {% block path %}
+<li class="breadcrumb-item active" aria-current="page">Answering...</li>
+{% endblock %} {% block content %}
+<script type="text/javascript">
+  function checkTime(){
+      var now=new Date();
+      var h=now.getHours();//小時
+      var m=now.getMinutes();//分鐘
+      if(({{ hour }} - h == 0)&&({{ minute }} - m <= 0)){
+          alert("Time's up");
+          document.location.href="{{ url('testee_settle_exam', args=[exam.id]) }}";
+      }
+      setTimeout(checkTime,1000);//每間隔1秒就呼叫自已一次
+  }
+  checkTime();
+</script>
+<main class="answering-page">
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="col-lg-3 col-md-12">
+        <h4>Question Number.</h4>
+        <table>
+          <tr>
+            {% for answer in answers %}
+            <td>
+              {% if answer.selected != -1 %}
+              <div class="bit">{{ loop.index }}</div>
+              {% else %}
+              <div class="bit">
+                <a
+                  href="{{ url('testee_answering', args=[exam.id, answer.id]) }}"
+                  >{{ loop.index }}</a
+                >
+              </div>
+              {% endif %}
+            </td>
+            {% if loop.index % 10 == 0 %}
+          </tr>
+          <tr>
+            {% endif %} {% endfor %}
+          </tr>
+        </table>
+      </div>
 
-{% load web_filters %}
+      <div class="col-lg-9 col-md-12 table-responsive">
+        <h2>Answering.</h2>
+        <form
+          action="{{ url('testee_answering', args=[exam.id, answer.id]) }}"
+          method="post"
+        >
+          <input
+            type="hidden"
+            name="csrfmiddlewaretoken"
+            value="{{ csrf_token }}"
+          />
 
-{% block path %}
-    <li class="breadcrumb-item active" aria-current="page">Answering...</li>
-{% endblock %}
+          <table style="font-size: 24px">
+            <tr>
+              {% if answer.question.q_type|question_kind == 'listening' %}
+              <td style="text-align: left; vertical-align: middle">
+                <audio controls preload="none">
+                  <source
+                    src="{{ answer.question.q_file.url }}"
+                    type="audio/mpeg"
+                  />
+                  Your browser does not support the audio tag.
+                </audio>
+              </td>
+              {% elif answer.question.q_type|question_kind == 'reading' %}
+              <td style="vertical-align: middle; text-align: left">
+                {{ answer.question }}
+              </td>
+              {% else %}
+              <td style="vertical-align: middle; text-align: center">
+                Unknown
+              </td>
+              {% endif %}
+            </tr>
 
-{% block content %}
-    <script type="text/javascript">
-        function checkTime(){
-            var now=new Date();
-            var h=now.getHours();//小時
-            var m=now.getMinutes();//分鐘
-            if(({{ hour }} - h == 0)&&({{ minute }} - m <= 0)){
-                alert("Time's up");
-                document.location.href="{% url 'testee_settle_exam' exam.id %}";
-            }
-            setTimeout(checkTime,1000);//每間隔1秒就呼叫自已一次
-        }
-        checkTime();
-    </script>
-    <main class="answering-page">
-        <div class="container-fluid">
-            <div class="row justify-content-center">
-                <div class="col-lg-3 col-md-12">
-                    <h4>Question Number.</h4>
-                        <table>
-                            <tr>
-                            {% for answer in answers %}
-                                <td>
-                                    {% if answer.selected != -1 %}
-                                        <div class="bit">{{ forloop.counter }}</div>
-                                    {% else %}
-                                        <div class="bit"><a href="{% url 'testee_answering' exam.id answer.id %}">{{ forloop.counter }}</a></div>
-                                    {% endif %}
-                                </td>
-                                {% if forloop.counter|divisibleby:10 %}
-                                    </tr><tr>
-                                {% endif %}
-                            {% endfor %}
-                        </table>
+            <tr>
+              <td>
+                <ol type="A">
+                  {% for option in answer.question.choice_set.all() %}
+                  <li>
+                    <input type="radio" name="answer_{{ answer.id }}" value="{{
+                    loop.index }}" {% if loop.index == answer.selected
+                    %}checked{% endif %} required>{{ option }}
+                  </li>
+                  {% endfor %}
+                </ol>
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                <div class="">
+                  <button type="submit" class="btn btn-primary">Next</button>
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    onclick="window.location.href='{{ url('testee_exam_list') }}'"
+                  >
+                    Leave
+                  </button>
                 </div>
+              </td>
+            </tr>
+          </table>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
+<style>
+  .answering-page .col-md-4 .card .card-body table > tr > td {
+    text-align: center;
+  }
+  .bit {
+    text-align: center;
+    vertical-align: middle;
 
-                <div class="col-lg-9 col-md-12 table-responsive">
-                    <h2>Answering.</h2>
-                    <form action="{% url 'testee_answering' exam.id answer.id %}" method="post">
-                        {% csrf_token %}
+    width: 25px;
+    height: 25px;
 
-                        <table style="font-size: 24px">
-                            <tr>
-                                {% if answer.question.q_type|question_kind == 'listening' %}
-                                    <td style="text-align: left; vertical-align:middle;">
-                                        <audio controls preload="none">
-                                            <source src="{{ answer.question.q_file.url }}" type="audio/mpeg">
-                                            Your browser does not support the audio tag.
-                                        </audio>
-                                    </td>
-                                {% elif answer.question.q_type|question_kind == 'reading' %}
-                                    <td style="vertical-align:middle; text-align: left">{{ answer.question }}</td>
-                                {% else %}
-                                    <td style="vertical-align:middle; text-align: center">Unknown</td>
-                                {% endif %}
-                            </tr>
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgb(240, 240, 240);
 
-                            <tr>
-                                <td>
-                                    <ol type="A">
-                                        {% for option in answer.question.choice_set.all %}
-                                            <li><input type="radio" name="answer_{{ answer.id }}" value="{{ forloop.counter }}" {% if forloop.counter == answer.selected %}checked{% endif %} required>{{ option }}</li>
-                                        {% endfor %}
-                                    </ol>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td>
-                                    <div class="">
-                                        <button type="submit" class="btn btn-primary">Next</button>
-                                        <button type="button" class="btn btn-secondary" onclick="window.location.href='{% url 'testee_exam_list' %}'">Leave</button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </table>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </main>
-    <style>
-        .answering-page .col-md-4 .card .card-body table > tr > td{
-            text-align: center;
-        }
-        .bit{
-            text-align: center;
-            vertical-align: middle;
-
-            width: 25px;
-            height: 25px;
-
-            border-style: solid;
-            border-width: 1px;
-            border-color: rgb(240, 240, 240);
-
-            background-color: rgb(250, 250, 250);
-        }
-    .bit a{
-        text-decoration: none;
-    }
-    </style>
+    background-color: rgb(250, 250, 250);
+  }
+  .bit a {
+    text-decoration: none;
+  }
+</style>
 {% endblock %}

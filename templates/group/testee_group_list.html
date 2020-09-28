@@ -1,89 +1,131 @@
-{% extends 'new_base.html' %}
-
-{% block path %}
-    <li class="breadcrumb-item active" aria-current="page">Testee Group List</li>
-{% endblock %}
-
-{% block content %}
-    <main class="testee-group-list">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-12 table-responsive-md">
-                    <h2>Testee Group List.</h2>
-                    <table class="table table-hover table-bordered table-striped table-mc-light-blue">
-                        <thead class="thead-light">
-                            <tr>
-                                <th class="text-center">Name.</th>
-                                <th class="text-center"><i class="fa fa-users"></i></th>
-                                <th class="text-center">Created Time.</th>
-                                <th class="text-center">Last Update.</th>
-                                <th class="text-center">Creator</th>
-                                <th class="text-center">
-                                    <div class="add">
-                                        <button type="button" class="btn btn-secondary" onclick="window.location.href='{% url 'testee_group_create' %}'"><i class="fa fa-plus"></i></button>
-                                    </div>
-                                </th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            <div class="add-secret">
-                                <button type="button" class="btn btn-secondary" onclick="window.location.href='{% url 'testee_group_create' %}'"><i class="fa fa-plus"></i></button>
-                            </div>
-                            {% if groupList %}
-                                {% for group in groupList %}
-                                    <tr style="cursor: pointer" onclick="window.location.href='{% url 'testee_group_member_list' group.id %}'">
-                                        <td class="text-center" data-title="Name">{{ group.name }}</td>
-                                        <td class="text-center" data-title="People">{{ group.member.count }}</td>
-                                        <td class="text-center" data-title="Created Time">{{ group.created_time|date:'Y/m/d, H:i' }}</td>
-                                        <td class="text-center" data-title="Last Update">{{ group.update_time|date:'Y/m/d, H:i' }}</td>
-                                        <td class="text-center" data-title="Creator">{{ group.created_by.name }}</td>
-                                        <td class="text-center">
-                                            <a href="{% url 'testee_group_edit' group.id %}"><i class="fa fa-pencil-square-o fa-fw mb-2"></i></a>
-                                            <a href="{% url 'testee_group_delete' group.id %}" onclick="return confirm('Sure to delete？')"><i class="fa fa-trash fa-fw mb-2"></i></a>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                            {% else %}
-                                <tr>
-                                    <td class="text-center" colspan="6">No Data.</td>
-                                </tr>
-                            {% endif %}
-                        </tbody>
-                    </table>
+{% extends 'new_base.html' %} {% block path %}
+<li class="breadcrumb-item active" aria-current="page">Testee Group List</li>
+{% endblock %} {% block content %}
+<main class="testee-group-list">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-12 table-responsive-md">
+        <h2>Testee Group List.</h2>
+        <table
+          class="table table-hover table-bordered table-striped table-mc-light-blue"
+        >
+          <thead class="thead-light">
+            <tr>
+              <th class="text-center">Name.</th>
+              <th class="text-center"><i class="fa fa-users"></i></th>
+              <th class="text-center">Created Time.</th>
+              <th class="text-center">Last Update.</th>
+              <th class="text-center">Creator</th>
+              <th class="text-center">
+                <div class="add">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    onclick="window.location.href='{{ url('testee_group_create') }}'"
+                  >
+                    <i class="fa fa-plus"></i>
+                  </button>
                 </div>
+              </th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <div class="add-secret">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                onclick="window.location.href='{{ url('testee_group_create') }}'"
+              >
+                <i class="fa fa-plus"></i>
+              </button>
             </div>
-        </div>
-    </main>
-
-{% endblock %}
-
-{% block pagination %}
-    <ul class="pagination justify-content-center">
-        <li class="page-item"><a class="page-link" href="?page=1"><i class="fa fa-angle-double-left"></i></a></li>
-
-        <li class="page-item {% if not groupList.has_previous %}disable{% endif %}">
-            {% if groupList.has_previous %}
-                <a class="page-link" href="?page={{ groupList.previous_page_number }}" tabindex="-1"><i class="fa fa-angle-left"></i></a>
-            {% else %}
-                <a class="page-link" href="javascript:void(0);"><i class="fa fa-angle-left"></i></a>
+            {% if groupList %} {% for group in groupList %}
+            <tr
+              style="cursor: pointer"
+              onclick="window.location.href='{{ url('testee_group_member_list', args=[group.id]) }}'"
+            >
+              <td class="text-center" data-title="Name">{{ group.name }}</td>
+              <td class="text-center" data-title="People">
+                {{ group.member.count() }}
+              </td>
+              <td class="text-center" data-title="Created Time">
+                {{ group.created_time.strftime('%Y/%m/%d %H:%M') }}
+              </td>
+              <td class="text-center" data-title="Last Update">
+                {{ group.update_time.strftime('%Y/%m/%d %H:%M') }}
+              </td>
+              <td class="text-center" data-title="Creator">
+                {{ group.created_by.name }}
+              </td>
+              <td class="text-center">
+                <a href="{{ url('testee_group_edit', args=[group.id]) }}"
+                  ><i class="fa fa-pencil-square-o fa-fw mb-2"></i
+                ></a>
+                <a
+                  href="{{ url('testee_group_delete', args=[group.id]) }}"
+                  onclick="return confirm('Sure to delete？')"
+                  ><i class="fa fa-trash fa-fw mb-2"></i
+                ></a>
+              </td>
+            </tr>
+            {% endfor %} {% else %}
+            <tr>
+              <td class="text-center" colspan="6">No Data.</td>
+            </tr>
             {% endif %}
-        </li>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</main>
 
-        {% for page in paginator.page_range %}
-            <li class="page-item">
-                <a class="page-link" href="?page={{ page }}">{{ page }}</a>
-            </li>
-        {% endfor %}
+{% endblock %} {% block pagination %}
+<ul class="pagination justify-content-center">
+  <li class="page-item">
+    <a class="page-link" href="?page=1"
+      ><i class="fa fa-angle-double-left"></i
+    ></a>
+  </li>
 
-        <li class="page-item {% if not groupList.has_next %}disable{% endif %}">
-            {% if groupList.has_next %}
-                <a class="page-link" href="?page={{ groupList.next_page_number }}"><i class="fa fa-angle-right"></i></a>
-            {% else %}
-                <a class="page-link" href="javascript:void(0);"><i class="fa fa-angle-right"></i></a>
-            {% endif %}
-        </li>
+  <li class="page-item {% if not groupList.has_previous %}disable{% endif %}">
+    {% if groupList.has_previous %}
+    <a
+      class="page-link"
+      href="?page={{ groupList.previous_page_number }}"
+      tabindex="-1"
+      ><i class="fa fa-angle-left"></i
+    ></a>
+    {% else %}
+    <a class="page-link" href="javascript:void(0);"
+      ><i class="fa fa-angle-left"></i
+    ></a>
+    {% endif %}
+  </li>
 
-        <li class="page-item"><a class="page-link" href="?page={{ groupList.paginator.num_pages }}"><i class="fa fa-angle-double-right"></i></a></li>
-    </ul>
+  {% for page in paginator.page_range %}
+  <li class="page-item">
+    <a class="page-link" href="?page={{ page }}">{{ page }}</a>
+  </li>
+  {% endfor %}
+
+  <li class="page-item {% if not groupList.has_next %}disable{% endif %}">
+    {% if groupList.has_next %}
+    <a class="page-link" href="?page={{ groupList.next_page_number }}"
+      ><i class="fa fa-angle-right"></i
+    ></a>
+    {% else %}
+    <a class="page-link" href="javascript:void(0);"
+      ><i class="fa fa-angle-right"></i
+    ></a>
+    {% endif %}
+  </li>
+
+  <li class="page-item">
+    <a class="page-link" href="?page={{ groupList.paginator.num_pages }}"
+      ><i class="fa fa-angle-double-right"></i
+    ></a>
+  </li>
+</ul>
 {% endblock %}

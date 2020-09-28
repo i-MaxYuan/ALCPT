@@ -37,18 +37,18 @@
 
                                     <tbody>
                                         {% for answersheet in answer_sheets_exam %}
-                                        <tr style="cursor: pointer" onclick="window.location.href='{% url 'view_answersheet_content' answersheet.id %}'">
+                                        <tr style="cursor: pointer" onclick="window.location.href='{{ url('view_answersheet_content', args=[answersheet.id]) }}'">
                                             <td class="text-center" data-title="Name">{{ answersheet.exam }}</td>
-                                            {% if answersheet.is_tested is False %}
+                                            {% if answersheet.is_tested == False %}
                                             <td class="text-center" data-title="Type" style="color: #c12e2a">未進行測驗</td>
                                             {% elif answersheet.score  < 60 %}
                                             <td class="text-center" data-title="Type" style="color: #c12e2a">{{ answersheet.score }}</td>
                                             {% else %}
-                                            <td class="text-center" data-title="Type">{{ answersheet.score }}</td>
+                                            <td class="text-center" data-title="Type" style="color: #00A600">{{ answersheet.score }}</td>
                                             {% endif %}
-                                            <td class="text-center" data-title="Finish Time">{{ answersheet.finish_time|date:'Y/m/d, H:i' }}</td>
+                                            <td class=" text-center" data-title="Finish Time">{{ answersheet.finish_time.strftime('%Y/%m/%d %H:%M') }}</td>
                                         </tr>
-                                        {% empty %}
+                                        {% else %}
                                         <tr>
                                             <td class="text-center" colspan="5">No Data</td>
                                         </tr>
@@ -90,18 +90,18 @@
 
                                     <tbody>
                                         {% for answersheet in answer_sheets_reading %}
-                                        <tr style="cursor: pointer" onclick="window.location.href='{% url 'view_answersheet_content' answersheet.id %}'">
+                                        <tr style="cursor: pointer" onclick="window.location.href='{{ url('view_answersheet_content', args=[answersheet.id]) }}'">
                                             <td class="text-center" data-title="Name">{{ answersheet.exam }}</td>
                                             {% if answersheet.score  < 60 %}
                                             <td class="text-center" data-title="Type" style="color: #c12e2a">{{ answersheet.score }}</td>
                                             {% else %}
                                             <td class="text-center" data-title="Type">{{ answersheet.score }}</td>
                                             {% endif %}
-                                            <td class="text-center" data-title="Finish Time">{{ answersheet.finish_time|date:'Y/m/d, H:i' }}</td>
+                                            <td class="text-center" data-title="Finish Time">{{ answersheet.finish_time.strftime('%Y/%m/%d %H:%M') }}</td>
                                         </tr>
-                                        {% empty %}
-                                        <tr style="cursor: pointer" onclick="window.location.href='{% url 'testee_practice_create' 'reading' %}'">
-                                            <td class="text-center" colspan="5">No Data... <a href=" {% url 'testee_practice_create' 'reading' %}">Start your first reading practice !</a></td>
+                                        {% else %}
+                                        <tr style="cursor: pointer" onclick="window.location.href='{{ url('testee_practice_create', args=['reading']) }}'">
+                                            <td class="text-center" colspan="5">No Data... <a href=" {{ url('testee_practice_create', args=['reading']) }}">Start your first reading practice !</a></td>
                                         </tr>
                                         {% endfor %}
                                     </tbody>
@@ -137,18 +137,18 @@
 
                                     <tbody>
                                         {% for answersheet in answer_sheets_listening %}
-                                        <tr style="cursor: pointer" onclick="window.location.href='{% url 'view_answersheet_content' answersheet.id %}'">
+                                        <tr style="cursor: pointer" onclick="window.location.href='{{ url('view_answersheet_content', args=[answersheet.id]) }}'">
                                             <td class="text-center" data-title="Name">{{ answersheet.exam }}</td>
                                             {% if answersheet.score  < 60 %}
                                             <td class="text-center" data-title="Type" style="color: #c12e2a">{{ answersheet.score }}</td>
                                             {% else %}
                                             <td class="text-center" data-title="Type">{{ answersheet.score }}</td>
                                             {% endif %}
-                                            <td class="text-center" data-title="Finish Time">{{ answersheet.finish_time|date:'Y/m/d, H:i' }}</td>
+                                            <td class="text-center" data-title="Finish Time">{{ answersheet.finish_time.strftime('%Y/%m/%d %H:%M') }}</td>
                                         </tr>
-                                        {% empty %}
-                                        <tr style="cursor: pointer" onclick="window.location.href='{% url 'testee_practice_create' 'listening' %}'">
-                                            <td class="text-center" colspan="5">No Data... <a href=" {% url 'testee_practice_create' 'listening' %}">Start your first listening practice !</a></td>
+                                        {% else %}
+                                        <tr style="cursor: pointer" onclick="window.location.href='{{ url('testee_practice_create', args=['listening']) }}'">
+                                            <td class="text-center" colspan="5">No Data... <a href=" {{ url('testee_practice_create', args=['listening']) }}">Start your first listening practice !</a></td>
                                         </tr>
                                         {% endfor %}
                                     </tbody>
@@ -174,11 +174,11 @@
         vertical-align: middle;
     }
 </style>
-{% endblock %}
-
-{% block pagination %}
+{% endblock %} {% block pagination %}
 <ul class="pagination justify-content-center">
-    <li class="page-item"><a class="page-link" href="?page=1"><i class="fa fa-angle-double-left"></i></a></li>
+    <li class="page-item">
+        <a class="page-link" href="?page=1"><i class="fa fa-angle-double-left"></i></a>
+    </li>
 
     <li class="page-item {% if not answersheetList.has_previous %}disable{% endif %}">
         {% if answersheetList.has_previous %}
@@ -188,8 +188,7 @@
         {% endif %}
     </li>
 
-    {% for page in paginator.page_range %}
-    {% if page == answersheetList.number %}
+    {% for page in paginator.page_range %} {% if page == answersheetList.number %}
     <li class="page-item active">
         <a class="page-link" href="?page={{ page }}">{{ page }}</a>
     </li>
@@ -197,8 +196,7 @@
     <li class="page-item">
         <a class="page-link" href="?page={{ page }}">{{ page }}</a>
     </li>
-    {% endif %}
-    {% endfor %}
+    {% endif %} {% endfor %}
 
     <li class="page-item {% if not answersheetList.has_next %}disable{% endif %}">
         {% if answersheetList.has_next %}
@@ -208,6 +206,8 @@
         {% endif %}
     </li>
 
-    <li class="page-item"><a class="page-link" href="?page={{ answersheetList.paginator.num_pages }}"><i class="fa fa-angle-double-right"></i></a></li>
+    <li class="page-item">
+        <a class="page-link" href="?page={{ answersheetList.paginator.num_pages }}"><i class="fa fa-angle-double-right"></i></a>
+    </li>
 </ul>
 {% endblock %}

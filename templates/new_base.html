@@ -1,27 +1,24 @@
-{% load static %}
-{% load web_filters %}
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>線上英文考試系統</title>
-    <link rel="stylesheet" type="text/css" href="{% static '/css/loginstyle.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static '/css/table.css' %}">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" type="text/css" href="{{ static('/css/loginstyle.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ static('/css/table.css') }}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 
     <!-- Fonts -->
-    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600" rel="stylesheet" type="text/css">
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+    <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600" rel="stylesheet" type="text/css" />
 
-    <link rel="icon" href="Favicon.png">
+    <link rel="icon" href="Favicon.png" />
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <!-- fontawesome 4 -->
-    <!-- <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous"> -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous" />
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
 
     <!--new-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
@@ -34,17 +31,12 @@
     <script src="https://kit.fontawesome.com/e59152e245.js" crossorigin="anonymous"></script>
 
     <style>
-        *{
+        * {
             outline: none;
         }
     </style>
 
-    {% block stylesheets %}
-    {% endblock %}
-
-    {% block scripts %}
-    {% endblock %}
-
+    {% block stylesheets %} {% endblock %} {% block scripts %} {% endblock %}
 </head>
 
 {% include 'header.html' %}
@@ -54,36 +46,42 @@
     <div id="path">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item active" aria-current="page"><a href="{% url 'Homepage' %}">Home</a></li>
-                {% block path %}
-                {% endblock %}
+                <li class="breadcrumb-item active" aria-current="page">
+                    <a href="{{ url('Homepage') }}">Home</a>
+                </li>
+                {% block path %} {% endblock %}
             </ol>
         </nav>
     </div>
     <style>
-        #path a{
+        #path a {
             text-decoration: none;
         }
     </style>
 
     <!--主要資料區-->
     <div id="main-block">
-        {% block content %}
-        {% endblock %}
+        {% block content %} {% endblock %}
 
         <div class="space"></div>
     </div>
     <style>
-        #main-block{
-            {#height: 65vh;#}
+        #main-block {
+                {
+                #height: 65vh;
+                #
+            }
         }
-        .add button{
+
+        .add button {
             border-radius: 24px;
         }
-        .add button:hover{
+
+        .add button:hover {
             box-shadow: 2px 4px 10px 0px rgb(44, 50, 50);
         }
-        .notification-badge{
+
+        .notification-badge {
             width: 25px;
             height: 25px;
             background-color: red;
@@ -91,7 +89,8 @@
             color: white;
             text-align: center;
         }
-        .space{
+
+        .space {
             margin-bottom: 1rem;
         }
     </style>
@@ -100,20 +99,17 @@
     <div id="pagination">
         <div class="container-fluid">
             <div class="row justify-content-center">
-                <div class="col-xs-12">
-                    {% block pagination %}
-                    {% endblock %}
-                </div>
+                <div class="col-xs-12">{% block pagination %} {% endblock %}</div>
             </div>
         </div>
         <h5 class="featurette-divider"></h5>
     </div>
     <style>
         .featurette-divider {
-          margin: 5rem 0; /* Space out the Bootstrap <hr> more */
+            margin: 5rem 0;
+            /* Space out the Bootstrap <hr> more */
         }
     </style>
-
 </body>
 
 {% include "footer.html" %}

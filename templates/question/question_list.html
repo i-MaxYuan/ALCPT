@@ -1,259 +1,272 @@
-{% extends 'new_base.html' %}
+{% extends 'new_base.html' %} {% block scripts %}
+<script>
+    function toggle(index) {
+        var mainDataIndex = "mainData" + index;
+        var mainData = document.getElementById(mainDataIndex);
+        var dataIndex = "detailData" + index;
+        var data = document.getElementById(dataIndex);
+        var iconRightIndex = "iconRight" + index;
+        var summaryIndex = "summary_Q_content" + index;
+        var summary_Q_content = document.getElementById(summaryIndex);
+        var fullIndex = "full_Q_content" + index;
+        var full_Q_content = document.getElementById(fullIndex);
+        var iconRight = document.getElementById(iconRightIndex);
+        var iconDownIndex = "iconDown" + index;
+        var iconDown = document.getElementById(iconDownIndex);
 
-{% load web_filters %}
-
-{% block scripts %}
-    <script>
-        function toggle(index){
-            var mainDataIndex = 'mainData'+index;
-            var mainData = document.getElementById(mainDataIndex);
-            var dataIndex = 'detailData'+index;
-            var data = document.getElementById(dataIndex);
-            var iconRightIndex = 'iconRight'+index;
-            var summaryIndex = 'summary_Q_content'+index;
-            var summary_Q_content = document.getElementById(summaryIndex);
-            var fullIndex = 'full_Q_content'+index;
-            var full_Q_content = document.getElementById(fullIndex);
-            var iconRight = document.getElementById(iconRightIndex);
-            var iconDownIndex = 'iconDown'+index;
-            var iconDown = document.getElementById(iconDownIndex);
-
-            if (data.style.display === "none"){
-                data.style.display = "table-row";
-                iconRight.style.display = "none";
-                iconDown.style.display = "block";
-                summary_Q_content.style.display = 'none';
-                full_Q_content.style.display = 'block';
-            } else {
-                data.style.display = "none";
-                iconRight.style.display = "block";
-                iconDown.style.display = "none";
-                summary_Q_content.style.display = 'block';
-                full_Q_content.style.display = 'none';
-            }
+        if (data.style.display === "none") {
+            data.style.display = "table-row";
+            iconRight.style.display = "none";
+            iconDown.style.display = "block";
+            summary_Q_content.style.display = "none";
+            full_Q_content.style.display = "block";
+        } else {
+            data.style.display = "none";
+            iconRight.style.display = "block";
+            iconDown.style.display = "none";
+            summary_Q_content.style.display = "block";
+            full_Q_content.style.display = "none";
         }
-    </script>
-{% endblock %}
+    }
+</script>
+{% endblock %} {% block path %}
+<li class="breadcrumb-item active" aria-current="page">Question List</li>
+{% endblock %} {% block content%}
+<main class="question-list">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <!-- 搜尋 -->
+                <form class="form-inline md-form form-group-sm mt-0" method="get">
+                    <input class="form-control" type="text" name="question_content" {%
+            if
+            keywords.question_content
+            %}value="{{ keywords.question_content }}" {%
+            else
+            %}value="" {%
+            endif
+            %} placeholder="Search" aria-label="Search" />
 
-{% block path %}
-    <li class="breadcrumb-item active" aria-current="page">Question List</li>
-{% endblock %}
+                    <label class="mr-sm-2" for="inlineFormCustomSelect">Type.</label>
+                    <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" name="question_type">
+                        <option value="" selected>Select All.</option>
+                        {% for q_type in question_types %}
+                        <option value="{{ q_type.value.0 }}" {% if q_type.value.0 == keywords.question_type %} selected {% endif %}>{{ q_type.value.1 }}</option>
+                        {% endfor %}
+                    </select>
 
-{% block content%}
-    <main class="question-list">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-12">
-                    <!-- 搜尋 -->
-                    <form class="form-inline md-form form-group-sm mt-0" method="get">
-                        <input class="form-control" type="text" name="question_content" {% if keywords.question_content %}value="{{ keywords.question_content }}"{% else %}value=""{% endif %} placeholder="Search" aria-label="Search">
+                    {% if request.user|has_perm('TBManager') %}
+                    <label class="mr-sm-2" for="inlineFormCustomSelect">Difficulty.</label>
+                    <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" name="difficulty">
+                        <option value="" selected>Select All</option>
+                        {% for difficulty in difficulty_choices %}
+                        <option value="{{ difficulty.0 }}" {% if difficulty.0 == keywords.difficulty %} selected {% endif %}>{{ difficulty.1 }}</option>
+                        {% endfor %}
+                    </select>
+                    {% endif %}
 
-                        <label class="mr-sm-2" for="inlineFormCustomSelect">Type.</label>
-                        <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" name="question_type">
-                            <option value="" selected>Select All.</option>
-                            {% for q_type in question_types %}
-                                <option value="{{ q_type.value.0 }}" {% if q_type.value.0 == keywords.question_type %} selected {% endif %}>{{ q_type.value.1 }}</option>
-                            {% endfor %}
-                        </select>
+                    <label class="mr-sm-2" for="inlineFormCustomSelect">State.</label>
+                    <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" name="state">
+                        <option value="" selected>Select All.</option>
+                        {% for state in state_choices %}
+                        <option value="{{ state.0 }}" {% if state.0 == keywords.state %} selected {% endif %}>{{ state.1 }}</option>
+                        {% endfor %}
+                    </select>
 
-
-                        {% if request.user|has_perm:'TBManager' %}
-                            <label class="mr-sm-2" for="inlineFormCustomSelect">Difficulty.</label>
-                            <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" name="difficulty">
-                                <option value="" selected>Select All</option>
-                                {% for difficulty in difficulty_choices %}
-                                    <option value="{{ difficulty.0 }}" {% if difficulty.0 == keywords.difficulty %} selected {% endif %}>{{ difficulty.1 }}</option>
-                                {% endfor %}
-                            </select>
-                        {% endif %}
-
-
-                        <label class="mr-sm-2" for="inlineFormCustomSelect">State.</label>
-                        <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" name="state">
-                            <option value="" selected>Select All.</option>
-                            {% for state in state_choices %}
-                                <option value="{{ state.0 }}" {% if state.0 == keywords.state %} selected {% endif %}>{{ state.1 }}</option>
-                            {% endfor %}
-                        </select>
-
-                        <button class="btn btn-primary btn-group-justified" type="submit">
-                            <i class="fa fa-search"></i>
-                        </button>
-                    </form>
-                </div>
+                    <button class="btn btn-primary btn-group-justified" type="submit">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </form>
             </div>
+        </div>
 
-            <div class="row justify-content-center">
-                <div class="col-lg-12">
-                    <div class="table-responsive-md">
-                        <h2>Question List.（Total: {{ questions.count }}）</h2>
-                        <table class="table table-hover table-striped table-bordered table-mc-light-blue">
-                            <thead class="thead-light">
-                                <tr>
-                                    <th scope="col"></th>
-                                    <th scope="col">Serial.</th>
-                                    <th scope="col">Content.</th>
-                                    <th scope="col">Type.</th>
-                                    <th scope="col">State.</th>
-                                    <th scope="col">Other.</th>
-                                </tr>
-                            </thead>
+        <div class="row justify-content-center">
+            <div class="col-lg-12">
+                <div class="table-responsive-md">
+                    <h2>Question List.（Total: {{ questions.count() }}）</h2>
+                    <table class="table table-hover table-striped table-bordered table-mc-light-blue">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Serial.</th>
+                                <th scope="col">Content.</th>
+                                <th scope="col">Type.</th>
+                                <th scope="col">State.</th>
+                                <th scope="col">Other.</th>
+                            </tr>
+                        </thead>
 
-                            <tbody>
-                                {% if questions %}
-                                    {% for question in questionList %}
-                                        <tr>
-                                            <td class="text-center" id="mainData{{ forloop.counter }}" onclick="toggle('{{ forloop.counter }}')" style="cursor: pointer;">
-                                                <i id="iconRight{{ forloop.counter }}" class="fa fa-angle-right"></i>
-                                                <i id="iconDown{{ forloop.counter }}" class="fa fa-angle-down" style="display: none"></i>
-                                            </td>
+                        <tbody>
+                            {% if questions %} {% for question in questionList %}
+                            <tr>
+                                <td class="text-center" id="mainData{{ loop.index }}" onclick="toggle('{{ loop.index }}')" style="cursor: pointer">
+                                    <i id="iconRight{{ loop.index }}" class="fa fa-angle-right"></i>
+                                    <i id="iconDown{{ loop.index }}" class="fa fa-angle-down" style="display: none"></i>
+                                </td>
 
-                                            <td class="text-center">{{ question.id }}</td>
+                                <td class="text-center">{{ question.id }}</td>
 
-                                            <td style="text-align: left;">
-                                                {% if question.q_file %}
-                                                    <audio controls preload="none">
-                                                        <source src="{{ question.q_file.url }}" type="audio/mpeg">
-                                                        Your browser does not support the audio tag.
-                                                    </audio>
-                                                {% else %}
-                                                    <div id="summary_Q_content{{ forloop.counter }}">
-                                                        {{ question.q_content|summary:90 }}
-                                                    </div>
-                                                    <div id="full_Q_content{{ forloop.counter }}" style="display: none">
-                                                        {{ question.q_content|linebreaksbr }}
-                                                    </div>
-                                                {% endif %}
-                                            </td>
+                                <td style="text-align: left">
+                                    {% if question.q_file %}
+                                    <audio controls preload="none">
+                                        <source src="{{ question.q_file.url }}" type="audio/mpeg" />
+                                        Your browser does not support the audio tag.
+                                    </audio>
+                                    {% else %}
+                                    <div id="summary_Q_content{{ loop.index }}">
+                                        {{ question.q_content|summary(90) }}
+                                    </div>
+                                    <div id="full_Q_content{{ loop.index }}" style="display: none">
+                                        {{ question.q_content|linebreaksbr }}
+                                    </div>
+                                    {% endif %}
+                                </td>
 
-                                            <td style="text-align: left;">{{ question.q_type|readable_question_type }}</td>
+                                <td style="text-align: left">
+                                    {{ question.q_type|readable_question_type }}
+                                </td>
 
-                                            <td>
-                                                <button type="button"
-                                                {% if question.state == 1 %}
-                                                    class="btn btn-success"
-                                                {% elif question.state == 2 or question.state == 4 %}
-                                                    class="btn btn-danger"
-                                                {% elif question.state == 3 %}
-                                                    class="btn btn-light"
-                                                {% elif question.state == 5 %}
-                                                    class="btn btn-dark"
-                                                {% elif question.state == 6 %}
-                                                    class="btn btn-secondary"
-                                                {% endif %}
-                                                 disabled>{{ question.state|readable_state }}</button>
-                                            </td>
+                                <td>
+                                    <button type="button" {% if question.state == 1 %} class="btn
+                  btn-success" {% elif question.state == 2 or question.state ==
+                  4 %} class="btn btn-danger" {% elif question.state == 3 %} class="btn btn-light" {% elif question.state == 5 %} class="btn btn-dark" {% elif question.state == 6 %} class="btn
+                  btn-secondary" {% endif %} disabled>{{ question.state|readable_state }}</button>
+                                </td>
 
-                                            <td class="functions-btn">
-                                                {% if request.user|has_perm:"TBManager" %}
-                                                    {% if question.state == 1 %}
-                                                        <button class="btn btn-primary" id="submit" type="button" onclick="window.location.href='{% url 'question_submit' question.id %}'" disabled>Submit</button>
-                                                        <button class="btn btn-warning" id="edit" type="button" onclick="window.location.href='{% url 'question_edit' question.id %}'" disabled>Edit</button>
-                                                        <button class="btn btn-danger" id="delete" type="button" onclick="window.location.href='{% url 'question_delete' question.id %}'" disabled>Delete</button>
-                                                    {% elif question.state == 4 %}
-                                                        <button class="btn btn-primary" id="submit" type="button" onclick="window.location.href='{% url 'question_submit' question.id %}'" disabled>Submit</button>
-                                                        <button class="btn btn-warning" id="edit" type="button" onclick="window.location.href='{% url 'question_edit' question.id %}'">Edit</button>
-                                                        <button class="btn btn-danger" id="delete" type="button" onclick="window.location.href='{% url 'question_delete' question.id %}'" disabled>Delete</button>
-                                                    {% else %}
-                                                        <button class="btn btn-warning" id="edit" type="button" onclick="window.location.href='{% url 'question_edit' question.id %}'" disabled>Edit</button>
-                                                        <button class="btn btn-danger" id="delete" type="button" onclick="window.location.href='{% url 'question_delete' question.id %}'" disabled>Delete</button>
-                                                    {% endif %}
+                                <td class="functions-btn">
+                                    {% if request.user|has_perm('TBManager') %} {% if question.state == 1 %}
+                                    <button class="btn btn-primary" id="submit" type="button" onclick="window.location.href='{{ url('question_submit', args=[question.id]) }}'" disabled>
+                                        Submit
+                                    </button>
+                                    <button class="btn btn-warning" id="edit" type="button" onclick="window.location.href='{{ url('question_edit', args=[question.id]) }}'" disabled>
+                                        Edit
+                                    </button>
+                                    <button class="btn btn-danger" id="delete" type="button" onclick="window.location.href='{{ url('question_delete', args=[question.id]) }}'" disabled>
+                                        Delete
+                                    </button>
+                                    {% elif question.state == 4 %}
+                                    <button class="btn btn-primary" id="submit" type="button" onclick="window.location.href='{{ url('question_submit', args=[question.id]) }}'" disabled>
+                                        Submit
+                                    </button>
+                                    <button class="btn btn-warning" id="edit" type="button" onclick="window.location.href='{{ url('question_edit', args=[question.id]) }}'">
+                                        Edit
+                                    </button>
+                                    <button class="btn btn-danger" id="delete" type="button" onclick="window.location.href='{{ url('question_delete', args=[question.id]) }}'" disabled>
+                                        Delete
+                                    </button>
+                                    {% else %}
+                                    <button class="btn btn-warning" id="edit" type="button" onclick="window.location.href='{{ url('question_edit', args=[question.id]) }}'" disabled>
+                                        Edit
+                                    </button>
+                                    <button class="btn btn-danger" id="delete" type="button" onclick="window.location.href='{{ url('question_delete', args=[question.id]) }}'" disabled>
+                                        Delete
+                                    </button>
+                                    {% endif %} {% elif request.user|has_perm('TBOperator') %} {% if question.state == 2 %}
+                                    <button class="btn btn-success" id="submit" disabled>
+                                        Submit
+                                    </button>
+                                    {% else %}
+                                    <a href='{{ url('question_submit', args=[question.id]) }}' class="btn btn-success" id="submit" onclick="return confirm('Sure to submit?')">Submit</a>
+                                    {% endif %}
+                                    <button class="btn btn-warning" id="edit" type="button" onclick="window.location.href='{{ url('operator_edit', args=[question.id]) }}'">
+                                        Edit
+                                    </button>
+                                    <a href="{{ url('question_delete', args=[question.id]) }}" class="btn btn-danger" id="delete" onclick="return confirm('Sure to delete?')">Delete</a>
+                                    {% endif %}
+                                </td>
+                            </tr>
 
-                                                {% elif request.user|has_perm:"TBOperator" %}
-                                                    {% if question.state == 2 %}
-                                                        <button class="btn btn-success" id="submit" disabled>Submit</button>
-                                                    {% else %}
-                                                        <a href='{% url 'question_submit' question.id %}' class="btn btn-success" id="submit" onclick="return confirm('Sure to submit?')">Submit</a>
-                                                    {% endif %}
-                                                    <button class="btn btn-warning" id="edit" type="button" onclick="window.location.href='{% url 'operator_edit' question.id %}'">Edit</button>
-                                                    <a href="{% url 'question_delete' question.id %}" class="btn btn-danger" id="delete" onclick="return confirm('Sure to delete?')">Delete</a>
-                                                {% endif %}
-                                            </td>
-                                        </tr>
-
-                                        <tr id="detailData{{ forloop.counter }}" style="display: none;">
-                                            <td colspan="2"></td>
-                                            <td style="text-align: left;">
-                                                <ol type="A">
-                                                    {% for option in question.choice_set.all %}
-                                                        {% if option.is_answer %}
-                                                            <li style="color: red">{{ option }}</li>
-                                                        {% else %}
-                                                            <li>{{ option }}</li>
-                                                        {% endif %}
-                                                    {% endfor %}
-                                                </ol>
-                                            </td>
-                                            <td style="font-size: 14px; text-align: left">
-                                                {% if question.faulted_reason %}
-                                                    {{ question.faulted_reason }}
-                                                {% endif %}
-                                            </td>
-                                            <td colspan="2" style="text-align: left; font-size: 14px">
-                                                <ul style="font-size: 14px; list-style: none">
-                                                    <li>Update:{{ question.update_time|date:'H:i, Y/m/d' }}</li>
-                                                    <li>Issued:{{ question.issued_freq }}</li>
-                                                    <li>Difficulty:{{ question.difficulty|readable_question_difficulty }}</li>
-                                                    <li>Creator:{{ question.created_by.name }}</li>
-                                                    <li>Last Update:{{ question.last_updated_by.name }}</li>
-                                                </ul>
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                {% else %}
-                                    <tr><td colspan="6">Cannot query these conditions「{{ query_content|readable_question_query_content }}」questions。</td></tr>
-                                {% endif %}
-                            </tbody>
-                        </table>
-                    </div>
+                            <tr id="detailData{{ loop.index }}" style="display: none">
+                                <td colspan="2"></td>
+                                <td style="text-align: left">
+                                    <ol type="A">
+                                        {% for option in question.choice_set.all() %} {% if option.is_answer %}
+                                        <li style="color: red">{{ option }}</li>
+                                        {% else %}
+                                        <li>{{ option }}</li>
+                                        {% endif %} {% endfor %}
+                                    </ol>
+                                </td>
+                                <td style="font-size: 14px; text-align: left">
+                                    {% if question.faulted_reason %} {{ question.faulted_reason }}
+                                    {% endif %}
+                                </td>
+                                <td colspan="2" style="text-align: left; font-size: 14px">
+                                    <ul style="font-size: 14px; list-style: none">
+                                        <li>
+                                            Update:{{ question.update_time.strftime('%Y/%m/%d %H:%M')
+                      }}
+                                        </li>
+                                        <li>Issued:{{ question.issued_freq }}</li>
+                                        <li>
+                                            Difficulty:{{
+                      question.difficulty|readable_question_difficulty }}
+                                        </li>
+                                        <li>Creator:{{ question.created_by.name }}</li>
+                                        <li>Last Update:{{ question.last_updated_by.name }}</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            {% endfor %} {% else %}
+                            <tr>
+                                <td colspan="6">
+                                    Cannot query these conditions「{{
+                  query_content|readable_question_query_content }}」questions。
+                                </td>
+                            </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
-    </main>
+    </div>
+</main>
 
-    <style>
-        .question-list .table > thead > tr > th{
-            text-align: center;
-        }
-        .question-list .table > tbody > tr > td{
-            text-align: center;
-            vertical-align: middle;
-        }
-    </style>
-{% endblock %}
+<style>
+    .question-list .table>thead>tr>th {
+        text-align: center;
+    }
 
-{% block pagination %}
-    <ul class="pagination justify-content-center">
-        <li class="page-item"><a class="page-link" href="?page=1{{ query_content }}"><i class="fa fa-angle-double-left"></i></a></li>
+    .question-list .table>tbody>tr>td {
+        text-align: center;
+        vertical-align: middle;
+    }
+</style>
+{% endblock %} {% block pagination %}
+<ul class="pagination justify-content-center">
+    <li class="page-item">
+        <a class="page-link" href="?page=1{{ query_content }}"><i class="fa fa-angle-double-left"></i></a>
+    </li>
 
-        <li class="page-item {% if not questionList.has_previous %}disable{% endif %}">
-            {% if questionList.has_previous %}
-                <a class="page-link" href="?page={{ questionList.previous_page_number }}{{ query_content }}" tabindex="-1"><i class="fa fa-angle-left"></i></a>
-            {% else %}
-                <a class="page-link" href="javascript:void(0);"><i class="fa fa-angle-left"></i></a>
-            {% endif %}
-        </li>
+    <li class="page-item {% if not questionList.has_previous %}disable{% endif %}">
+        {% if questionList.has_previous %}
+        <a class="page-link" href="?page={{ questionList.previous_page_number }}{{ query_content }}" tabindex="-1"><i class="fa fa-angle-left"></i></a>
+        {% else %}
+        <a class="page-link" href="javascript:void(0);"><i class="fa fa-angle-left"></i></a>
+        {% endif %}
+    </li>
 
-        {% for page in paginator.page_range %}
-            {% if page == questionList.number %}
-                <li class="page-item active">
-                    <a class="page-link" href="?page={{ page }}{{ query_content }}">{{ page }}</a>
-                </li>
-            {% else %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ page }}{{ query_content }}">{{ page }}</a>
-                </li>
-            {% endif %}
-        {% endfor %}
+    {% for page in paginator.page_range %} {% if page == questionList.number %}
+    <li class="page-item active">
+        <a class="page-link" href="?page={{ page }}{{ query_content }}">{{ page }}</a>
+    </li>
+    {% else %}
+    <li class="page-item">
+        <a class="page-link" href="?page={{ page }}{{ query_content }}">{{ page }}</a>
+    </li>
+    {% endif %} {% endfor %}
 
-        <li class="page-item {% if not questionList.has_next %}disable{% endif %}">
-            {% if questionList.has_next %}
-                <a class="page-link" href="?page={{ questionList.next_page_number }}{{ query_content }}"><i class="fa fa-angle-right"></i></a>
-            {% else %}
-                <a class="page-link" href="javascript:void(0);"><i class="fa fa-angle-right"></i></a>
-            {% endif %}
-        </li>
+    <li class="page-item {% if not questionList.has_next %}disable{% endif %}">
+        {% if questionList.has_next %}
+        <a class="page-link" href="?page={{ questionList.next_page_number }}{{ query_content }}"><i class="fa fa-angle-right"></i></a>
+        {% else %}
+        <a class="page-link" href="javascript:void(0);"><i class="fa fa-angle-right"></i></a>
+        {% endif %}
+    </li>
 
-        <li class="page-item"><a class="page-link" href="?page={{ questionList.paginator.num_pages }}{{ query_content }}"><i class="fa fa-angle-double-right"></i></a></li>
-    </ul>
+    <li class="page-item">
+        <a class="page-link" href="?page={{ questionList.paginator.num_pages }}{{ query_content }}"><i class="fa fa-angle-double-right"></i></a>
+    </li>
+</ul>
 {% endblock %}
