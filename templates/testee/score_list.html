@@ -1,75 +1,124 @@
-{% extends 'new_base.html' %}
+{% extends 'new_base.html' %} {% block scripts %}
+<script
+  type="text/javascript"
+  src="https://www.gstatic.com/charts/loader.js"
+></script>
+<!--for chart-->
+{% endblock %} {% block path %}
+<li class="breadcrumb-item active" aria-current="page">Score Record</li>
+{% endblock %} {% block content %}
+<main class="score-record">
+  <div class="container">
+    <ul class="nav nav-tabs" id="newTab" role="tablist">
+      <li class="nav-item">
+        <a
+          class="nav-link active"
+          id="data-list-tab"
+          data-toggle="tab"
+          href="#data-list"
+          role="tab"
+          aria-controls="data-list"
+          aria-selected="true"
+          ><i class="fa fa-list-ul"></i
+        ></a>
+      </li>
+      <li class="nav-item">
+        <a
+          class="nav-link"
+          id="bar-chart-tab"
+          data-toggle="tab"
+          href="#bar-chart"
+          role="tab"
+          aria-controls="bar-chart"
+          aria-selected="false"
+          ><i class="fa fa-bar-chart"></i
+        ></a>
+      </li>
+      <li class="nav-item">
+        <a
+          class="nav-link"
+          id="pie-chart-tab"
+          data-toggle="tab"
+          href="#pie-chart"
+          role="tab"
+          aria-controls="pie-chart"
+          aria-selected="false"
+          ><i class="fa fa-pie-chart"></i
+        ></a>
+      </li>
+    </ul>
 
-{% block scripts %}
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>   <!--for chart-->
-{% endblock %}
-
-{% block path %}
-    <li class="breadcrumb-item active" aria-current="page">Score Record</li>
-{% endblock %}
-
-{% block content %}
-    <main class="score-record">
+    <div class="tab-content" id="tabContent">
+      <div
+        class="tab-pane fade show active"
+        id="data-list"
+        role="tabpanel"
+        aria-labelledby="data-list-tab"
+      >
         <div class="container">
-            <ul class="nav nav-tabs" id="newTab" role="tablist">
-                <li class="nav-item">
-                    <a class="nav-link active" id="data-list-tab" data-toggle="tab" href="#data-list" role="tab" aria-controls="data-list" aria-selected="true"><i class="fa fa-list-ul"></i></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="bar-chart-tab" data-toggle="tab" href="#bar-chart" role="tab" aria-controls="bar-chart" aria-selected="false"><i class="fa fa-bar-chart"></i></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="pie-chart-tab" data-toggle="tab" href="#pie-chart" role="tab" aria-controls="pie-chart" aria-selected="false"><i class="fa fa-pie-chart"></i></a>
-                </li>
-            </ul>
+          <div class="row justify-content-center">
+            <div class="col-md-12">
+              <h2>Score Record List.</h2>
 
-            <div class="tab-content" id="tabContent">
-                <div class="tab-pane fade show active" id="data-list" role="tabpanel" aria-labelledby="data-list-tab">
-                    <div class="container">
-                        <div class="row justify-content-center">
-                            <div class="col-md-12">
-                                <h2>Score Record List.</h2>
+              <div class="table-responsive-md">
+                <table
+                  class="table table-hover table-bordered table-striped table-mc-light-blue"
+                >
+                  <thead class="thead-light">
+                    <tr>
+                      <th class="text-center">Name.</th>
+                      <th class="text-center">Score.</th>
+                      <th class="text-center">Finish Time.</th>
+                    </tr>
+                  </thead>
 
-                                <div class="table-responsive-md">
-                                    <table class="table table-hover table-bordered table-striped table-mc-light-blue">
-                                        <thead class="thead-light">
-                                            <tr>
-                                                <th class="text-center">Name.</th>
-                                                <th class="text-center">Score.</th>
-                                                <th class="text-center">Finish Time.</th>
-                                            </tr>
-                                        </thead>
+                  <tbody>
+                    {% for answersheet in answer_sheets %}
+                    <tr
+                      style="cursor: pointer"
+                      onclick="window.location.href='{{ url('view_answersheet_content', args=[answersheet.id]) }}'"
+                    >
+                      <td class="text-center" data-title="Name">
+                        {{ answersheet.exam }}
+                      </td>
+                      {% if answersheet.score < 60 %}
+                      <td
+                        class="text-center"
+                        data-title="Type"
+                        style="color: #c12e2a"
+                      >
+                        {{ answersheet.score }}
+                      </td>
+                      {% else %}
+                      <td class="text-center" data-title="Type">
+                        {{ answersheet.score }}
+                      </td>
+                      {% endif %}
+                      <td class="text-center" data-title="Finish Time">
+                        {{ answersheet.finish_time.strftime('%Y/%m/%d %H:%M') }}
+                      </td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-                                        <tbody>
-                                            {% for answersheet in answer_sheets %}
-                                                <tr style="cursor: pointer" onclick="window.location.href='{% url 'view_answersheet_content' answersheet.id %}'">
-                                                    <td class="text-center" data-title="Name">{{ answersheet.exam }}</td>
-                                                    {% if answersheet.score  < 60 %}
-                                                        <td class="text-center" data-title="Type" style="color: #c12e2a">{{ answersheet.score }}</td>
-                                                    {% else %}
-                                                        <td class="text-center" data-title="Type">{{ answersheet.score }}</td>
-                                                    {% endif %}
-                                                    <td class="text-center" data-title="Finish Time">{{ answersheet.finish_time|date:'Y/m/d, H:i' }}</td>
-                                                </tr>
-                                            {% endfor %}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+      <div
+        class="tab-pane fade"
+        id="bar-chart"
+        role="tabpanel"
+        aria-labelledby="bar-chart-tab"
+      >
+        <div class="container">
+          <div class="row justify-content-center">
+            <div class="col-md-12">
+              {% autoescape off %} {{ bar_chart }} {% endautoescape %}
 
-                <div class="tab-pane fade" id="bar-chart" role="tabpanel" aria-labelledby="bar-chart-tab">
-                    <div class="container">
-                        <div class="row justify-content-center">
-                            <div class="col-md-12">
-                                {% autoescape off %}
-                                    {{ bar_chart }}
-                                {% endautoescape %}
-
-
-                                <!-- <script>
+              <!-- <script>
                                     google.charts.load('current', {'packages':['corechart']});
                                     google.charts.setOnLoadCallback(drawChart);
 
@@ -98,19 +147,22 @@
                                         chart.draw(data, options);
                                     }
                                 </script> -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-                <div class="tab-pane fade" id="pie-chart" role="tabpanel" aria-labelledby="pie-chart-tab">
-                    <div class="container">
-                        <div class="row justify-content-center">
-                            <div class="col-md-12">
-                              {% autoescape off %}
-                                  {{ pie_chart }}
-                              {% endautoescape %}
-                                <!-- <h2>Pie Chart.</h2>
+      <div
+        class="tab-pane fade"
+        id="pie-chart"
+        role="tabpanel"
+        aria-labelledby="pie-chart-tab"
+      >
+        <div class="container">
+          <div class="row justify-content-center">
+            <div class="col-md-12">
+              {% autoescape off %} {{ pie_chart }} {% endautoescape %}
+              <!-- <h2>Pie Chart.</h2>
                                 <div id="pie-chart-container" style="width: 100%; height: 100%"></div>
 
                                 <script type="text/javascript">
@@ -136,52 +188,69 @@
                                         chart.draw(data, options);
                                     }
                                 </script> -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
+          </div>
         </div>
-    </main>
-    <style>
-        .exam-record .container #tabContent table > tbody > tr > td{
-            vertical-align: middle;
-        }
-    </style>
-{% endblock %}
+      </div>
+    </div>
+  </div>
+</main>
+<style>
+  .exam-record .container #tabContent table > tbody > tr > td {
+    vertical-align: middle;
+  }
+</style>
+{% endblock %} {% block pagination %}
+<ul class="pagination justify-content-center">
+  <li class="page-item">
+    <a class="page-link" href="?page=1"
+      ><i class="fa fa-angle-double-left"></i
+    ></a>
+  </li>
 
-{% block pagination %}
-    <ul class="pagination justify-content-center">
-        <li class="page-item"><a class="page-link" href="?page=1"><i class="fa fa-angle-double-left"></i></a></li>
+  <li
+    class="page-item {% if not answersheetList.has_previous %}disable{% endif %}"
+  >
+    {% if answersheetList.has_previous %}
+    <a
+      class="page-link"
+      href="?page={{ answersheetList.previous_page_number }}"
+      tabindex="-1"
+      ><i class="fa fa-angle-left"></i
+    ></a>
+    {% else %}
+    <a class="page-link" href="javascript:void(0);"
+      ><i class="fa fa-angle-left"></i
+    ></a>
+    {% endif %}
+  </li>
 
-        <li class="page-item {% if not answersheetList.has_previous %}disable{% endif %}">
-            {% if answersheetList.has_previous %}
-                <a class="page-link" href="?page={{ answersheetList.previous_page_number }}" tabindex="-1"><i class="fa fa-angle-left"></i></a>
-            {% else %}
-                <a class="page-link" href="javascript:void(0);"><i class="fa fa-angle-left"></i></a>
-            {% endif %}
-        </li>
+  {% for page in paginator.page_range %} {% if page == answersheetList.number %}
+  <li class="page-item active">
+    <a class="page-link" href="?page={{ page }}">{{ page }}</a>
+  </li>
+  {% else %}
+  <li class="page-item">
+    <a class="page-link" href="?page={{ page }}">{{ page }}</a>
+  </li>
+  {% endif %} {% endfor %}
 
-        {% for page in paginator.page_range %}
-            {% if page == answersheetList.number %}
-                <li class="page-item active">
-                    <a class="page-link" href="?page={{ page }}">{{ page }}</a>
-                </li>
-            {% else %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ page }}">{{ page }}</a>
-                </li>
-            {% endif %}
-        {% endfor %}
+  <li class="page-item {% if not answersheetList.has_next %}disable{% endif %}">
+    {% if answersheetList.has_next %}
+    <a class="page-link" href="?page={{ answersheetList.next_page_number }}"
+      ><i class="fa fa-angle-right"></i
+    ></a>
+    {% else %}
+    <a class="page-link" href="javascript:void(0);"
+      ><i class="fa fa-angle-right"></i
+    ></a>
+    {% endif %}
+  </li>
 
-        <li class="page-item {% if not answersheetList.has_next %}disable{% endif %}">
-            {% if answersheetList.has_next %}
-                <a class="page-link" href="?page={{ answersheetList.next_page_number }}"><i class="fa fa-angle-right"></i></a>
-            {% else %}
-                <a class="page-link" href="javascript:void(0);"><i class="fa fa-angle-right"></i></a>
-            {% endif %}
-        </li>
-
-        <li class="page-item"><a class="page-link" href="?page={{ answersheetList.paginator.num_pages }}"><i class="fa fa-angle-double-right"></i></a></li>
-    </ul>
+  <li class="page-item">
+    <a class="page-link" href="?page={{ answersheetList.paginator.num_pages }}"
+      ><i class="fa fa-angle-double-right"></i
+    ></a>
+  </li>
+</ul>
 {% endblock %}

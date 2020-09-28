@@ -1,72 +1,80 @@
-{% extends 'new_base.html' %}
+{% extends 'new_base.html' %} {% block path %}
+<li class="breadcrumb-item" aria-current="page">
+  <a href="{{ url('exam_score_list') }}">View Testee Score</a>
+</li>
+<li class="breadcrumb-item" aria-current="page">
+  <a href="{{ url('exam_score_detail', args=[exam.id]) }}"
+    >View - {{ exam.name }}</a
+  >
+</li>
+<li class="breadcrumb-item active" aria-current="page">View Testee Info</li>
+{% endblock %} {% block content %}
+<main class="view-testee-info">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-4">
+        <div class="card">
+          <div class="card-header">Student Profile.</div>
 
-{#{% load static %}#}
+          <div class="card-body">
+            <h5 class="subtitle mb-2 text-muted">Student ID.</h5>
+            <p>{{ viewed_testee.student.stu_id }}</p>
+            <h5 class="subtitle mb-2 text-muted">Department.</h5>
+            <p>{{ viewed_testee.student.department }}</p>
+            <h5 class="subtitle mb-2 text-muted">Squadron.</h5>
+            <p>{{ viewed_testee.student.squadron }}</p>
+            <h5 class="subtitle mb-2 text-muted">Grade.</h5>
+            <p>{{ viewed_testee.student.grade }}</p>
+          </div>
 
-{% block path %}
-    <li class="breadcrumb-item" aria-current="page"><a href="{% url 'exam_score_list' %}">View Testee Score</a></li>
-    <li class="breadcrumb-item" aria-current="page"><a href="{% url 'exam_score_detail' exam.id %}">View - {{ exam.name }}</a></li>
-    <li class="breadcrumb-item active" aria-current="page">View Testee Info</li>
-{% endblock %}
-
-{% block content %}
-    <main class="view-testee-info">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-header">Student Profile.</div>
-
-                        <div class="card-body">
-                            <h5 class="subtitle mb-2 text-muted">Student ID.</h5>
-                            <p>{{ viewed_testee.student.stu_id }}</p>
-                            <h5 class="subtitle mb-2 text-muted">Department.</h5>
-                            <p>{{ viewed_testee.student.department }}</p>
-                            <h5 class="subtitle mb-2 text-muted">Squadron.</h5>
-                            <p>{{ viewed_testee.student.squadron }}</p>
-                            <h5 class="subtitle mb-2 text-muted">Grade.</h5>
-                            <p>{{ viewed_testee.student.grade }}</p>
-                        </div>
-
-                        <div class="card-footer text-muted">
-                            <h5 class="subtitle mb-2 text-muted">Last Login.</h5>
-                            <p>{{ viewed_testee.last_login|date:'Y/m/d, H:i' }}</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-8">
-                    <div class="card">
-                        <div class="card-header">Exam Record.</div>
-
-                        <div class="card-body" style="height: 50vh; overflow-x: scroll">
-                            <table class="table table-hover">
-                                <thead class="thead-light">
-                                    <th class="text-center">Exam Name.</th>
-                                    <th class="text-center">Finish Time.</th>
-                                    <th class="text-center">Score.</th>
-                                </thead>
-                                <tbody>
-                                    {% for answer_sheet in answer_sheets %}
-                                        <tr>
-                                            <td class="text-center">{{ answer_sheet.exam }}</td>
-                                            <td class="text-center">{{ answer_sheet.finish_time|date:'Y/m/d, H:i' }}</td>
-                                            <td class="text-center">{{ answer_sheet.score }}</td>
-                                        </tr>
-                                    {% empty %}
-                                        <tr>
-                                            <td class="text-center" colspan="3">No Data.</td>
-                                        </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <div class="card-footer text-right">
-                            <button type="button" class="btn btn-primary" onclick="history.go(-1)">OK</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+          <div class="card-footer text-muted">
+            <h5 class="subtitle mb-2 text-muted">Last Login.</h5>
+            <p>{{ viewed_testee.last_login.strftime('%Y/%m/%d %H:%M') }}</p>
+          </div>
         </div>
-    </main>
+      </div>
+
+      <div class="col-md-8">
+        <div class="card">
+          <div class="card-header">Exam Record.</div>
+
+          <div class="card-body" style="height: 50vh; overflow-x: scroll">
+            <table class="table table-hover">
+              <thead class="thead-light">
+                <th class="text-center">Exam Name.</th>
+                <th class="text-center">Finish Time.</th>
+                <th class="text-center">Score.</th>
+              </thead>
+              <tbody>
+                {% for answer_sheet in answer_sheets %}
+                <tr>
+                  <td class="text-center">{{ answer_sheet.exam }}</td>
+                  <td class="text-center">
+                    {{ answer_sheet.finish_time.strftime('%Y/%m/%d %H:%M') }}
+                  </td>
+                  <td class="text-center">{{ answer_sheet.score }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                  <td class="text-center" colspan="3">No Data.</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+
+          <div class="card-footer text-right">
+            <button
+              type="button"
+              class="btn btn-primary"
+              onclick="history.go(-1)"
+            >
+              OK
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
 {% endblock %}

@@ -1,50 +1,66 @@
-{% extends 'OperationManual_base.html' %}
+{% extends 'OperationManual_base.html' %} {% block content %}
+<main id="om-content">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-12 text-left">
+        <h1>成績檢閱者說明</h1>
+        <ul>
+          <p>
+            <li>
+              主要使用者是老師或隊職官長官，藉此觀看學生對於此練習平台的使用、練習狀況。
+            </li>
+            <li style="color: red">Data Analysis（持續開發中...）</li>
+            <img
+              src="{{ static('/images/om/viewer/om-viewer01.png') }}"
+              width="50%"
+            />
+          </p>
+          <ul>
+            <li>Exam Score List：測驗成績列表</li>
+          </ul>
+        </ul>
 
-{% load static %}
+        <hr />
 
-{% block content %}
-    <main id="om-content">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-md-12 text-left">
-                    <h1>成績檢閱者說明</h1>
-                    <p>
-                        <ul>
-                            <li>主要使用者是老師或隊職官長官，藉此觀看學生對於此練習平台的使用、練習狀況。</li>
-                            <li style="color: red">Data Analysis（持續開發中...）</li>
-                            <img src="{% static '/images/om/viewer/om-viewer01.png' %}" width="50%">
-                            <ul>
-                                <li>Exam Score List：測驗成績列表</li>
-                            </ul>
-                        </ul>
-                    </p>
+        <h3>Exam Score List：測驗成績列表</h3>
+        <img
+          src="{{ static('/images/om/viewer/om-viewer02.png') }}"
+          width="80%"
+        />
+        <ul>
+          <li>
+            <i class="fa fa-users" style="font-size: 24px"></i>：代表該次測驗<a
+              href="{{ url('OM_Testee') }}"
+              >受測者</a
+            >人數。
+          </li>
 
-                    <hr>
+          <h4>點擊檢閱測驗資訊</h4>
+          <img
+            src="{{ static('/images/om/viewer/om-viewer03.png') }}"
+            width="70%"
+          />
+          <ul>
+            <p>
+              <li>
+                「Score.」欄位顯示<code>未進行測驗</code>可能情況如下：
+                <ol type="1">
+                  <li>該次測驗尚未開始。</li>
+                  <li>該受測者在測驗結束之前都未進行測驗。</li>
+                </ol>
+              </li>
+              <li>
+                「Pie
+                Chart.」主要顯示該測驗的「Qualified」（及格人數）、「Unqualified」（不及格人數）及「Not
+                tested」（未進行測驗人數）所組成的圓餅圖來表示該次測驗的及格率。
+              </li>
+            </p>
+          </ul>
+        </ul>
 
-                    <h3>Exam Score List：測驗成績列表</h3>
-                    <img src="{% static '/images/om/viewer/om-viewer02.png' %}" width="80%">
-                    <p>
-                        <ul>
-                            <li><i class="fa fa-users" style="font-size: 24px"></i>：代表該次測驗<a href="{% url 'OM_Testee' %}">受測者</a>人數。</li>
-
-                            <h4>點擊檢閱測驗資訊</h4>
-                            <img src="{% static '/images/om/viewer/om-viewer03.png' %}" width="70%">
-                            <ul>
-                                <li>
-                                    「Score.」欄位顯示<code>未進行測驗</code>可能情況如下：
-                                    <ol type="1">
-                                        <li>該次測驗尚未開始。</li>
-                                        <li>該受測者在測驗結束之前都未進行測驗。</li>
-                                    </ol>
-                                </li>
-                                <li>「Pie Chart.」主要顯示該測驗的「Qualified」（及格人數）、「Unqualified」（不及格人數）及「Not tested」（未進行測驗人數）所組成的圓餅圖來表示該次測驗的及格率。</li>
-                            </ul>
-                        </ul>
-                    </p>
-
-                    <hr class="featurette-divider">
-                </div>
-            </div>
-        </div>
-    </main>
+        <hr class="featurette-divider" />
+      </div>
+    </div>
+  </div>
+</main>
 {% endblock %}

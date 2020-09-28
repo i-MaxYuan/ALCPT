@@ -1,148 +1,198 @@
-{% extends 'new_base.html' %}
+{% extends 'new_base.html' %} {% block scripts %}
+<script type="text/javascript">
+  var passPrivilege = true;
+  var passFile = false;
 
-{% load web_filters %}
+  function privilege_not_empty() {
+    var privilegeInvalid = document.getElementById("privilege_invalid");
+    var system = document.getElementById("32");
+    var testM = document.getElementById("16");
+    var tbM = document.getElementById("8");
+    var tbO = document.getElementById("4");
+    var viewer = document.getElementById("2");
+    var testee = document.getElementById("1");
 
-{% block scripts %}
-    <script type="text/javascript">
-        var passPrivilege = true;
-        var passFile = false;
+    if (
+      system.checked === false &&
+      testM.checked === false &&
+      tbM.checked === false &&
+      tbO.checked === false &&
+      viewer.checked === false &&
+      testee.checked === false
+    ) {
+      privilegeInvalid.innerHTML =
+        "<span style='color: red; font-size: 14px'>Choose one privilege at least</span>";
+      passPrivilege = false;
+    } else {
+      privilegeInvalid.innerHTML = "";
+      privilegeInvalid.style.display = "none";
+      passPrivilege = true;
+    }
+    is_valid();
+  }
 
-        function privilege_not_empty() {
-            var privilegeInvalid = document.getElementById('privilege_invalid');
-            var system = document.getElementById('32');
-            var testM = document.getElementById('16');
-            var tbM = document.getElementById('8');
-            var tbO = document.getElementById('4');
-            var viewer = document.getElementById('2');
-            var testee = document.getElementById('1');
+  function file_not_empty() {
+    if (document.getElementById("users_file")) {
+      passFile = true;
+    } else {
+      passFile = false;
+    }
+    is_valid();
+  }
 
-            if (system.checked === false && testM.checked === false && tbM.checked === false &&
-                tbO.checked === false && viewer.checked === false && testee.checked === false) {
-                privilegeInvalid.innerHTML = "<span style='color: red; font-size: 14px'>Choose one privilege at least</span>";
-                passPrivilege = false;
-            } else {
-                privilegeInvalid.innerHTML = '';
-                privilegeInvalid.style.display = 'none';
-                passPrivilege = true;
-            }
-            is_valid();
-        }
+  function is_valid() {
+    var submit = document.getElementById("submit");
 
-        function file_not_empty(){
-            if (document.getElementById('users_file')){
-                passFile = true;}
-            else{
-                passFile = false;}
-            is_valid();
-        }
+    if (passFile === true && passPrivilege === true) {
+      submit.disabled = false;
+    } else {
+      submit.disabled = true;
+    }
+    document.getElementById("test").innerHTML = "~";
+  }
+</script>
+{% endblock %} {% block path %}
+<li class="breadcrumb-item" aria-current="page">
+  <a href="{{ url('user_list') }}">User List</a>
+</li>
+<li class="breadcrumb-item active" aria-current="page">
+  User Create（Multiple）
+</li>
+{% endblock %} {% block content %}
+<main class="multi-create-user-form">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-10">
+        <form method="post" enctype="multipart/form-data">
+          <input
+            type="hidden"
+            name="csrfmiddlewaretoken"
+            value="{{ csrf_token }}"
+          />
 
-        function is_valid() {
-            var submit = document.getElementById('submit');
+          <div class="card">
+            <div class="card-header">Multiple Create User.</div>
 
-            if(passFile === true && passPrivilege === true){
-                submit.disabled = false;
-            } else{
-                submit.disabled = true;
-            }
-            document.getElementById('test').innerHTML =  "~";
-        }
-    </script>
-{% endblock %}
-
-{% block path %}
-    <li class="breadcrumb-item" aria-current="page"><a href="{% url 'user_list' %}">User List</a></li>
-    <li class="breadcrumb-item active" aria-current="page">User Create（Multiple）</li>
-{% endblock %}
-
-{% block content %}
-    <main class="multi-create-user-form">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-md-10">
-                    <form method="post" enctype="multipart/form-data">
-                        {% csrf_token %}
-
-                        <div class="card">
-                            <div class="card-header">Multiple Create User.</div>
-
-                            <div class="card-body">
-                                <h5 class="subtitle mb-2 text-muted">Upload File.</h5>
-                                <div class="input-group">
-                                    <div class="custom-file">
-                                        <input type="file" class="custom-file-input" id="users_file" name="users_file" accept=".xls, .xlsx" onchange="file_not_empty()">
-                                        <label class="custom-file-label" for="users_file">Select .xls and .xlsx file</label>
-                                    </div>
-                                    <div class="input-group-append">
-                                        <button type="submit" id="submit" class="btn btn-outline-secondary" disabled><i class="fa fa-upload"></i></button>
-                                    </div>
-                                </div>
-                                <script>
-                                    // to change the label, the selected file name will display
-                                    $(".custom-file-input").on("change", function() {
-                                        var fileName = $(this).val().split("\\").pop();
-                                        $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
-                                    });
-                                </script>
-
-                                <h5 class="subtitle mb-2 text-muted">Privilege.<span id="privilege_invalid" class="privilege_invalid"></span></h5>
-                                <div class="container">
-                                    <div class="row">
-                                        <div class="col-lg-12">
-                                            <div class="button-group">
-                                                <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
-                                                    <i class="fa fa-gears"></i>
-                                                </button>
-                                                <ul class="dropdown-menu">
-                                                    <li>Privilege Setting.</li>
-                                                    {% for privilege in privileges.values %}
-                                                        <li><input type="checkbox" id="{{ privilege.value.0 }}" name="{{ privilege }}" onchange="privilege_not_empty()" {% if privilege == privilege.Testee %} checked {% endif %}>&nbsp;{{ privilege.value.1 }}</li>
-                                                    {% endfor %}
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <h5 class="card-subtitle mb-2 text-muted">File Criteria.</h5>
-                                <p class="card-text">
-                                    <p style="color: red">&ast;Field Order：Account／Name／Identity</p>
-                                    <p style="color: red">&ast;Account do not accept these specific characters： ' or " or ; or \ or / or , or # or *</p>
-                                </p>
-
-                                <h5 class="card-subtitle mb-2 text-muted">Tips.</h5>
-                                <p class="card-text mark">
-                                    <strong>identity.</strong><br>
-                                    1 -> Visitor<br>
-                                    2 -> Student<br>
-                                    3 -> Teacher<br>
-                                </p>
-
-                                <div class="dropdown-divider"></div>
-
-                                <div class="text-center">
-                                    <button type="button" class="btn btn-secondary" onclick="history.go(-1)">Cancel</button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
+            <div class="card-body">
+              <h5 class="subtitle mb-2 text-muted">Upload File.</h5>
+              <div class="input-group">
+                <div class="custom-file">
+                  <input
+                    type="file"
+                    class="custom-file-input"
+                    id="users_file"
+                    name="users_file"
+                    accept=".xls, .xlsx"
+                    onchange="file_not_empty()"
+                  />
+                  <label class="custom-file-label" for="users_file"
+                    >Select .xls and .xlsx file</label
+                  >
                 </div>
+                <div class="input-group-append">
+                  <button
+                    type="submit"
+                    id="submit"
+                    class="btn btn-outline-secondary"
+                    disabled
+                  >
+                    <i class="fa fa-upload"></i>
+                  </button>
+                </div>
+              </div>
+              <script>
+                // to change the label, the selected file name will display
+                $(".custom-file-input").on("change", function () {
+                  var fileName = $(this).val().split("\\").pop();
+                  $(this)
+                    .siblings(".custom-file-label")
+                    .addClass("selected")
+                    .html(fileName);
+                });
+              </script>
+
+              <h5 class="subtitle mb-2 text-muted">
+                Privilege.<span
+                  id="privilege_invalid"
+                  class="privilege_invalid"
+                ></span>
+              </h5>
+              <div class="container">
+                <div class="row">
+                  <div class="col-lg-12">
+                    <div class="button-group">
+                      <button
+                        type="button"
+                        class="btn btn-default btn-sm dropdown-toggle"
+                        data-toggle="dropdown"
+                      >
+                        <i class="fa fa-gears"></i>
+                      </button>
+                      <ul class="dropdown-menu">
+                        <li>Privilege Setting.</li>
+                        {% for privilege in privileges.values() %}
+                        <li>
+                          <input type="checkbox" id="{{ privilege.value.0 }}"
+                          name="{{ privilege }}"
+                          onchange="privilege_not_empty()" {% if privilege ==
+                          privilege.Testee %} checked {% endif %}>&nbsp;{{
+                          privilege.value.1 }}
+                        </li>
+                        {% endfor %}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <h5 class="card-subtitle mb-2 text-muted">File Criteria.</h5>
+              <p class="card-text" style="color: red">
+                &ast;Field Order：Account／Name／Identity
+              </p>
+              <p class="card-text" style="color: red">
+                &ast;Account do not accept these specific characters： ' or " or
+                ; or \ or / or , or # or *
+              </p>
+
+              <h5 class="card-subtitle mb-2 text-muted">Tips.</h5>
+              <p class="card-text mark">
+                <strong>identity.</strong><br />
+                1 -> Visitor<br />
+                2 -> Student<br />
+                3 -> Teacher<br />
+              </p>
+
+              <div class="dropdown-divider"></div>
+
+              <div class="text-center">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  onclick="history.go(-1)"
+                >
+                  Cancel
+                </button>
+              </div>
             </div>
-        </div>
-    </main>
-    <style>
-        .multi-create-user-form .container .card .card-body .button-group ul{
-            padding-left: 10px;
-        }
-        .mark{
-            background-color: rgb(248, 248, 248);
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
+<style>
+  .multi-create-user-form .container .card .card-body .button-group ul {
+    padding-left: 10px;
+  }
+  .mark {
+    background-color: rgb(248, 248, 248);
 
-            border-left-style: solid;
-            border-left-width: 4px;
-            border-left-color: rgb(200, 200, 200);
-            opacity: 0.6;
+    border-left-style: solid;
+    border-left-width: 4px;
+    border-left-color: rgb(200, 200, 200);
+    opacity: 0.6;
 
-            padding-left: 10px;
-        }
-    </style>
+    padding-left: 10px;
+  }
+</style>
 {% endblock %}
-

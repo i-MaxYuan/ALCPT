@@ -1,190 +1,259 @@
-{% extends 'new_base.html' %}
+{% extends 'new_base.html' %} {% block scripts %}
+<script>
+  $(document).ready(function () {
+    $(".mdb-select").materialSelect();
+  });
+</script>
+{% endblock %} {% block path %}
+<li class="breadcrumb-item active" aria-current="page">User List</li>
+{% endblock %} {% block content %}
+<main class="user-list">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-12">
+        <!-- 搜尋 -->
+        <form class="form-inline md-form form-group-sm mt-0" method="get">
+          <input
+            class="form-control"
+            type="text"
+            name="name"
+            {%
+            if
+            keywords.name
+            %}value="{{ keywords.name }}"
+            {%
+            endif
+            %}
+            placeholder="Search"
+            aria-label="Search"
+          />
 
-{% load web_filters %}
+          <label class="mr-sm-2" for="inlineFormCustomSelect"
+            >Department.</label
+          >
+          <select
+            class="custom-select mr-sm-2"
+            id="inlineFormCustomSelect"
+            name="department"
+          >
+            <option value="" selected>All</option>
+            {% for department in departments %} 
+			<option value="{{ department.id }}" {% if department.id == keywords.department.id %} selected {% endif %}>{{ department.name }}</option>
+			{% endfor %}
+          </select>
 
-{% block scripts %}
-    <script>
-        $(document).ready(function() {
-            $('.mdb-select').materialSelect();
-        });
-    </script>
-{% endblock %}
+          <label class="mr-sm-2" for="inlineFormCustomSelect">Squadron.</label>
+          <select
+            class="custom-select mr-sm-2"
+            id="inlineFormCustomSelect"
+            name="squadron"
+          >
+            <option value="" selected>All</option>
+            {% for squadron in squadrons %}
+		   	<option value="{{ squadron.id }}" {% if squadron.id == keywords.squadron.id %} selected {% endif %}>{{ squadron.name }}</option>
+			{% endfor %}
+          </select>
 
-{% block path %}
-    <li class="breadcrumb-item active" aria-current="page">User List</li>
-{% endblock %}
+          <label class="mr-sm-2" for="inlineFormCustomSelect">Grade.</label>
+          <input
+            class="form-control"
+            type="number"
+            name="grade"
+            {%
+            if
+            keywords.grade
+            %}value="{{ keywords.grade }}"
+            {%
+            endif
+            %}
+            placeholder="grade..."
+          />
 
-{% block content %}
-    <main class="user-list">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-12">
-                    <!-- 搜尋 -->
-                    <form class="form-inline md-form form-group-sm mt-0" method="get">
-                    <input class="form-control" type="text" name="name" {% if keywords.name %}value="{{ keywords.name }}"{% endif %} placeholder="Search" aria-label="Search">
+          <button class="btn btn-primary btn-group-justified" type="submit">
+            <i class="fa fa-search"></i>
+          </button>
+        </form>
+      </div>
+    </div>
 
-                    <label class="mr-sm-2" for="inlineFormCustomSelect">Department.</label>
-                    <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" name="department">
-                        <option value="" selected>All</option>
-                        {% for department in departments %}
-                            <option value="{{ department.id }}" {% if department.id == keywords.department.id %} selected {% endif %}>{{ department.name }}</option>
-                        {% endfor %}
-                    </select>
-
-
-                    <label class="mr-sm-2" for="inlineFormCustomSelect">Squadron.</label>
-                    <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" name="squadron">
-                        <option value="" selected>All</option>
-                        {% for squadron in squadrons %}
-                            <option value="{{ squadron.id }}" {% if squadron.id == keywords.squadron.id %} selected {% endif %}>{{ squadron.name }}</option>
-                        {% endfor %}
-                    </select>
-
-
-                    <label class="mr-sm-2" for="inlineFormCustomSelect">Grade.</label>
-                    <input class="form-control" type="number" name="grade" {% if keywords.grade %}value="{{ keywords.grade }}"{% endif %} placeholder="grade...">
-
-                    <button class="btn btn-primary btn-group-justified" type="submit">
-                        <i class="fa fa-search"></i>
-                    </button>
-                </form>
+    <div class="row">
+      <!--資料區塊-->
+      <div class="col-md-12 table-responsive-md">
+        <h2>User List.（Total: {{ users.count() }}）</h2>
+        <table
+          class="table table-bordered table-striped table-hover table-mc-light-blue"
+        >
+          <thead class="thead-light">
+            <tr>
+              <th class="text-center">Account.</th>
+              <th class="text-center">Name.</th>
+              <th class="text-center">Identity.</th>
+              <th class="text-center">Privilege.</th>
+              <th class="text-center">Last Login.</th>
+              <th>
+                <div class="add">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    onclick="window.location.href='{{ url('user_create') }}'"
+                  >
+                    <i class="fa fa-plus"></i>
+                  </button>
                 </div>
+              </th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <div class="add-secret">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                onclick="window.location.href='{{ url('testee_group_create') }}'"
+              >
+                <i class="fa fa-plus"></i>
+              </button>
             </div>
+            {% if userList %} {% for user in userList %}
+            <tr
+              class="align-center"
+              style="cursor: pointer"
+              onclick="window.location.href='{{ url('view_profile', args=[user.reg_id]) }}'"
+            >
+              <td class="text-center" data-title="Account：、">
+                {{ user.reg_id }}
+              </td>
 
-            <div class="row">
-                <!--資料區塊-->
-                <div class="col-md-12 table-responsive-md">
-                    <h2>User List.（Total: {{ users.count }}）</h2>
-                    <table class="table table-bordered table-striped table-hover table-mc-light-blue">
-                        <thead class="thead-light">
-                            <tr>
-                                <th class="text-center">Account.</th>
-                                <th class="text-center">Name.</th>
-                                <th class="text-center">Identity.</th>
-                                <th class="text-center">Privilege.</th>
-                                <th class="text-center">Last Login.</th>
-                                <th>
-                                    <div class="add">
-                                        <button type="button" class="btn btn-secondary" onclick="window.location.href='{% url 'user_create' %}'"><i class="fa fa-plus"></i></button>
-                                    </div>
-                                </th>
-                            </tr>
-                        </thead>
+              <td class="text-center" data-title="Name：">{{ user.name }}</td>
 
-                        <tbody>
-                            <div class="add-secret">
-                                <button type="button" class="btn btn-secondary" onclick="window.location.href='{% url 'testee_group_create' %}'"><i class="fa fa-plus"></i></button>
-                            </div>
-                            {% if userList %}
-                                {% for user in userList %}
-                                    <tr class="align-center" style="cursor: pointer" onclick="window.location.href='{% url "view_profile" user.reg_id %}'">
-                                        <td class="text-center" data-title="Account：、">{{ user.reg_id }}</td>
+              <td class="text-center" data-title="Identity：">
+                {% if user.identity %} {{ user.identity|readableIdentity }} {%
+                else %} 尚未設定 {% endif %}
+              </td>
 
-                                        <td class="text-center" data-title="Name：">{{ user.name }}</td>
+              <td data-title="Privilege：">
+                {% if user|has_perms(privileges.SystemManager) %}
+                <span class="badge alert-danger"
+                  >{{ privileges.SystemManager.value.1 }}</span
+                >
+                {% endif %} {% if user|has_perms(privileges.TestManager) %}
+                <span class="badge alert-warning"
+                  >{{ privileges.TestManager.value.1 }}</span
+                >
+                {% endif %} {% if user|has_perms(privileges.TBManager) %}
+                <span class="badge badge-primary"
+                  >{{ privileges.TBManager.value.1 }}</span
+                >
+                {% endif %} {% if user|has_perms(privileges.TBOperator) %}
+                <span class="badge alert-success"
+                  >{{ privileges.TBOperator.value.1 }}</span
+                >
+                {% endif %} {% if user|has_perms(privileges.Viewer) %}
+                <span class="badge alert-info"
+                  >{{ privileges.Viewer.value.1 }}</span
+                >
+                {% endif %} {% if user|has_perms(privileges.Testee) %}
+                <span class="badge alert-dark"
+                  >{{ privileges.Testee.value.1 }}</span
+                >
+                {% endif %}
+              </td>
 
-                                        <td class="text-center" data-title="Identity：">
-                                            {% if user.identity %}
-                                                {{ user.identity|readableIdentity }}
-                                            {% else %}
-                                                尚未設定
-                                            {% endif %}
-                                        </td>
+              <td data-title="Last Login：">
+                {% if user.last_login %} {{ user.last_login.strftime('%Y/%m/%d
+                %H:%M') }} {% else %} Not logged in {% endif %}
+              </td>
 
-                                        <td data-title="Privilege：">
-                                            {% if user|has_perms:privileges.SystemManager %}
-                                                <span class="badge alert-danger">{{ privileges.SystemManager.value.1 }}</span>
-                                            {% endif %}
-                                            {% if user|has_perms:privileges.TestManager %}
-                                                <span class="badge alert-warning">{{ privileges.TestManager.value.1 }}</span>
-                                            {% endif %}
-                                            {% if user|has_perms:privileges.TBManager %}
-                                                <span class="badge badge-primary">{{ privileges.TBManager.value.1 }}</span>
-                                            {% endif %}
-                                            {% if user|has_perms:privileges.TBOperator %}
-                                                <span class="badge alert-success">{{ privileges.TBOperator.value.1 }}</span>
-                                            {% endif %}
-                                            {% if user|has_perms:privileges.Viewer %}
-                                                <span class="badge alert-info">{{ privileges.Viewer.value.1 }}</span>
-                                            {% endif %}
-                                            {% if user|has_perms:privileges.Testee %}
-                                                <span class="badge alert-dark">{{ privileges.Testee.value.1 }}</span>
-                                            {% endif %}
-                                        </td>
-
-                                        <td data-title="Last Login：">
-                                            {% if user.last_login %}
-                                                {{ user.last_login|date:'Y/m/d, H:i' }}
-                                            {% else %}
-                                                Not logged in
-                                            {% endif %}
-                                        </td>
-
-                                        <td>
-                                            <a href="{% url 'user_edit' user.reg_id %}"><i class="fa fa-pencil-square-o"></i></a>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                            {% else %}
-                                <tr>
-                                    <td class="text-center" colspan="8">
-                                        {% if query_content and not users %}
-                                            Cannot query these conditions「{{ query_content|readable_user_query_content }}」users。
-                                        {% endif %}
-                                    </td>
-                                </tr>
-                            {% endif %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <style>
-        .user-list table > tbody > tr > td{
-            vertical-align: middle;
-        }
-        .user-list .table-responsive-md tr > td > a{
-            display: none;
-        }
-        .user-list .table-responsive-md tr:hover > td > a{
-            display: block;
-        }
-    </style>
-{% endblock %}
-
-{% block pagination %}
-    <ul class="pagination justify-content-center">
-        <li class="page-item"><a class="page-link" href="?page=1{{ query_content }}"><i class="fa fa-angle-double-left"></i></a></li>
-
-        <li class="page-item {% if not userList.has_previous %}disable{% endif %}">
-            {% if userList.has_previous %}
-                <a class="page-link" href="?page={{ userList.previous_page_number }}{{ query_content }}" tabindex="-1"><i class="fa fa-angle-left"></i></a>
-            {% else %}
-                <a class="page-link" href="javascript:void(0);"><i class="fa fa-angle-left"></i></a>
+              <td>
+                <a href="{{ url('user_edit', args=[user.reg_id]) }}"
+                  ><i class="fa fa-pencil-square-o"></i
+                ></a>
+              </td>
+            </tr>
+            {% endfor %} {% else %}
+            <tr>
+              <td class="text-center" colspan="8">
+                {% if query_content and not users %} Cannot query these
+                conditions「{{ query_content|readable_user_query_contents
+                }}」users。 {% endif %}
+              </td>
+            </tr>
             {% endif %}
-        </li>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</main>
 
-        {% for page in paginator.page_range %}
-            {% if page == userList.number %}
-                <li class="page-item active">
-                    <a class="page-link" href="?page={{ page }}{{ query_content }}">{{ page }}</a>
-                </li>
-            {% else %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ page }}{{ query_content }}">{{ page }}</a>
-                </li>
-            {% endif %}
-        {% endfor %}
+<style>
+  .user-list table > tbody > tr > td {
+    vertical-align: middle;
+  }
+  .user-list .table-responsive-md tr > td > a {
+    display: none;
+  }
+  .user-list .table-responsive-md tr:hover > td > a {
+    display: block;
+  }
+</style>
+{% endblock %} {% block pagination %}
+<ul class="pagination justify-content-center">
+  <li class="page-item">
+    <a class="page-link" href="?page=1{{ query_content }}"
+      ><i class="fa fa-angle-double-left"></i
+    ></a>
+  </li>
 
-        <li class="page-item {% if not userList.has_next %}disable{% endif %}">
-            {% if userList.has_next %}
-                <a class="page-link" href="?page={{ userList.next_page_number }}{{ query_content }}"><i class="fa fa-angle-right"></i></a>
-            {% else %}
-                <a class="page-link" href="javascript:void(0);"><i class="fa fa-angle-right"></i></a>
-            {% endif %}
-        </li>
+  <li class="page-item {% if not userList.has_previous %}disable{% endif %}">
+    {% if userList.has_previous %}
+    <a
+      class="page-link"
+      href="?page={{ userList.previous_page_number }}{{ query_content }}"
+      tabindex="-1"
+      ><i class="fa fa-angle-left"></i
+    ></a>
+    {% else %}
+    <a class="page-link" href="javascript:void(0);"
+      ><i class="fa fa-angle-left"></i
+    ></a>
+    {% endif %}
+  </li>
 
-        <li class="page-item"><a class="page-link" href="?page={{ userList.paginator.num_pages }}{{ query_content }}"><i class="fa fa-angle-double-right"></i></a></li>
-    </ul>
+  {% for page in paginator.page_range %} {% if page == userList.number %}
+  <li class="page-item active">
+    <a class="page-link" href="?page={{ page }}{{ query_content }}"
+      >{{ page }}</a
+    >
+  </li>
+  {% else %}
+  <li class="page-item">
+    <a class="page-link" href="?page={{ page }}{{ query_content }}"
+      >{{ page }}</a
+    >
+  </li>
+  {% endif %} {% endfor %}
+
+  <li class="page-item {% if not userList.has_next %}disable{% endif %}">
+    {% if userList.has_next %}
+    <a
+      class="page-link"
+      href="?page={{ userList.next_page_number }}{{ query_content }}"
+      ><i class="fa fa-angle-right"></i
+    ></a>
+    {% else %}
+    <a class="page-link" href="javascript:void(0);"
+      ><i class="fa fa-angle-right"></i
+    ></a>
+    {% endif %}
+  </li>
+
+  <li class="page-item">
+    <a
+      class="page-link"
+      href="?page={{ userList.paginator.num_pages }}{{ query_content }}"
+      ><i class="fa fa-angle-double-right"></i
+    ></a>
+  </li>
+</ul>
 {% endblock %}

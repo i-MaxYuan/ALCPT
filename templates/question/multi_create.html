@@ -1,99 +1,123 @@
-{% extends 'new_base.html' %}
+{% extends 'new_base.html' %} {% block scripts %}
+<script type="text/javascript">
+  function file_not_empty() {
+    if (document.getElementById("questions_file")) {
+      document.getElementById("submit").disabled = false;
+    } else {
+      document.getElementById("submit").disabled = true;
+    }
+  }
+</script>
+{% endblock %} {% block path %}
+<li class="breadcrumb-item active" aria-current="page">
+  Create {% if kind == 'listening' %}Listening {% else %}Reading {% endif
+  %}（Multiple）
+</li>
+{% endblock %} {% block content %}
+<main class="multiple-question-create-form">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <form enctype="multipart/form-data" method="post">
+          <input
+            type="hidden"
+            name="csrfmiddlewaretoken"
+            value="{{ csrf_token }}"
+          />
 
-{% load web_filters %}
+          <div class="card">
+            <div class="card-header">Create Question.(Multiple)</div>
 
-{% block scripts %}
-    <script type="text/javascript">
-        function file_not_empty(){
-            if (document.getElementById('questions_file')){
-                document.getElementById('submit').disabled = false;
-            }
-            else{
-                document.getElementById('submit').disabled = true;
-            }
-        }
-    </script>
-{% endblock %}
-
-{% block path %}
-    <li class="breadcrumb-item active" aria-current="page">Create {% if kind == 'listening' %}Listening {% else %}Reading {% endif %}（Multiple）</li>
-{% endblock %}
-
-{% block content %}
-    <main class="multiple-question-create-form">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-8">
-                    <form enctype="multipart/form-data" method="post">
-                        {% csrf_token %}
-
-                        <div class="card">
-                            <div class="card-header">Create Question.(Multiple)</div>
-
-                            <div class="card-body">
-                                <h5 class="card-subtitle mb-2 text-muted">File.</h5>
-                                <p class="card-text">
-                                    <div class="input-group">
-                                        <div class="custom-file">
-                                            <input type="file" class="custom-file-input" id="questions_file" name="questions_file" accept=".xls, .xlsx" onchange="file_not_empty()">
-                                            <label class="custom-file-label" for="questions_file">Select .xls and .xlsx file</label>
-                                        </div>
-                                        <div class="input-group-append">
-                                            <button type="submit" id="submit" class="btn btn-outline-secondary" disabled><i class="fa fa-upload"></i></button>
-                                        </div>
-                                    </div>
-                                    <script>
-                                        // to change the label, the selected file name will display
-                                        $(".custom-file-input").on("change", function() {
-                                            var fileName = $(this).val().split("\\").pop();
-                                            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
-                                        });
-                                    </script>
-                                </p>
-
-                                <h5 class="card-subtitle mb-2 text-muted">File Criteria.</h5>
-                                <p class="card-text">
-                                    <p style="color: red">*Only accept「.xls」or「.xlsx」file.</p>
-                                    <p style="color: red">&ast;Field Order：Content／Option1／Option2／Option3／Option4／Answer／Type／Difficulty</p>
-                                </p>
-
-                                <h5 class="card-subtitle mb-2 text-muted">Tips.</h5>
-                                <p class="card-text mark">
-                                    <strong>Type.</strong><br>
-                                    1 -> Grammar<br>
-                                    2 -> Phrase<br>
-                                    3 -> Paragraph Understanding<br>
-                                    <hr>
-                                </p>
-                                <p class="card-text mark">
-                                    <strong>Difficulty.</strong><br>
-                                    1 -> Easy<br>
-                                    2 -> Medium<br>
-                                    3 -> Hard<br>
-                                </p>
-                            </div>
-
-                            <footer class="card-footer">
-                                <div class="text-center">
-                                    <button type="button" class="btn btn-secondary" onclick="history.go(-1);">Cancel</button>
-                                </div>
-                            </footer>
-                        </div>
-                    </form>
+            <div class="card-body">
+              <h5 class="card-subtitle mb-2 text-muted">File.</h5>
+              <div class="input-group">
+                <div class="custom-file">
+                  <input
+                    type="file"
+                    class="custom-file-input"
+                    id="questions_file"
+                    name="questions_file"
+                    accept=".xls, .xlsx"
+                    onchange="file_not_empty()"
+                  />
+                  <label class="custom-file-label" for="questions_file"
+                    >Select .xls and .xlsx file</label
+                  >
                 </div>
+                <div class="input-group-append">
+                  <button
+                    type="submit"
+                    id="submit"
+                    class="btn btn-outline-secondary"
+                    disabled
+                  >
+                    <i class="fa fa-upload"></i>
+                  </button>
+                </div>
+              </div>
+              <script>
+                // to change the label, the selected file name will display
+                $(".custom-file-input").on("change", function () {
+                  var fileName = $(this).val().split("\\").pop();
+                  $(this)
+                    .siblings(".custom-file-label")
+                    .addClass("selected")
+                    .html(fileName);
+                });
+              </script>
+              <p class="card-text"></p>
+
+              <h5 class="card-subtitle mb-2 text-muted">File Criteria.</h5>
+              <p style="color: red">*Only accept「.xls」or「.xlsx」file.</p>
+              <p style="color: red">
+                &ast;Field
+                Order：Content／Option1／Option2／Option3／Option4／Answer／Type／Difficulty
+              </p>
+              <p class="card-text"></p>
+
+              <h5 class="card-subtitle mb-2 text-muted">Tips.</h5>
+              <p class="card-text mark">
+                <strong>Type.</strong><br />
+                1 -> Grammar<br />
+                2 -> Phrase<br />
+                3 -> Paragraph Understanding<br />
+              </p>
+              <hr />
+              <p class="card-text mark">
+                <strong>Difficulty.</strong><br />
+                1 -> Easy<br />
+                2 -> Medium<br />
+                3 -> Hard<br />
+              </p>
             </div>
-        </div>
-    </main>
-    <style>
-        .mark{
-            background-color: rgb(248, 248, 248);
 
-            border-left-style: solid;
-            border-left-width: 4px;
-            border-left-color: rgb(200, 200, 200);
-            opacity: 0.6;
+            <footer class="card-footer">
+              <div class="text-center">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  onclick="history.go(-1);"
+                >
+                  Cancel
+                </button>
+              </div>
+            </footer>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
+<style>
+  .mark {
+    background-color: rgb(248, 248, 248);
 
-            padding-left: 10px;
-        }
-    </style>
+    border-left-style: solid;
+    border-left-width: 4px;
+    border-left-color: rgb(200, 200, 200);
+    opacity: 0.6;
+
+    padding-left: 10px;
+  }
+</style>
 {% endblock %}

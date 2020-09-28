@@ -1,215 +1,262 @@
-{% extends 'OperationManual_base.html' %}
+{% extends 'OperationManual_base.html' %} {% block content %}
+<main id="om-content">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-12 text-left">
+        <h1>系統管理員說明</h1>
+        <ul>
+          <p>
+            <li>主要負責控制本系統中屬於類別類的相關資料</li>
+            <img src="{{ static('/images/om/sm/om-sm01.png') }}" width="50%" />
+          </p>
+          <ul>
+            <p>
+              <li>User List：使用者列表</li>
+              <li>Unit List：單位列表</li>
+              <li>ReportCategory List：問題類別列表</li>
+              <li>Report List：問題列表</li>
+            </p>
+          </ul>
+        </ul>
 
-{% load static %}
+        <hr />
 
-{% block content %}
-    <main id="om-content">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-md-12 text-left">
-                    <h1>系統管理員說明</h1>
-                    <p>
-                        <ul>
-                            <li>主要負責控制本系統中屬於類別類的相關資料</li>
-                            <img src="{% static '/images/om/sm/om-sm01.png' %}" width="50%">
-                            <ul>
-                                <li>User List：使用者列表</li>
-                                <li>Unit List：單位列表</li>
-                                <li>ReportCategory List：問題類別列表</li>
-                                <li>Report List：問題列表</li>
-                            </ul>
-                        </ul>
-                    </p>
+        <h3>User List：使用者列表</h3>
+        <img src="{{ static('/images/om/sm/om-sm02.png') }}" width="60%" />
+        <p></p>
+        <ul>
+          <li>
+            表格內主要顯示使用者的「Account.」、「Name.」、「Identity.」、「Privilege.」、「Last
+            Login.」。
+          </li>
+          <li>
+            身份<code>Identity</code>區分為：
+            <ul>
+              <li>Visitor：訪客／一般使用者</li>
+              <li>Student：學生</li>
+              <li>Teacher：老師</li>
+            </ul>
+          </li>
+          <li>
+            權限<code>Privilege</code>區分為：
+            <ul>
+              <li>
+                <a href="{{ url('OM_SystemManager') }}">SystemManager</a
+                >：系統管理員
+              </li>
+              <li>
+                <a href="{{ url('OM_TestManager') }}">TestManager</a
+                >：考試管理員
+              </li>
+              <li>
+                <a href="{{ url('OM_TBManager') }}">TBManager</a>：題庫管理員
+              </li>
+              <li>
+                <a href="{{ url('OM_TBOperator') }}">TBOperator</a>：題庫操作員
+              </li>
+              <li><a href="{{ url('OM_Viewer') }}">Viewer</a>：成績檢閱者</li>
+              <li><a href="{{ url('OM_Testee') }}">Testee</a>：受測者</li>
+            </ul>
+          </li>
+          <li>
+            「搜尋」功能列：可進行「Account./Name.」、「Department.」、「Squadron.」、「Grade.」的條件式搜尋。
+          </li>
+          <li>「新增使用者」：可進行使用者的新增。</li>
 
-                    <hr>
+          <h4>檢視使用者個人資料</h4>
+          <img src="{{ static('/images/om/sm/om-sm09.png') }}" width="45%" />
+          <img src="{{ static('/images/om/sm/om-sm08.png') }}" width="45%" />
+          <ul>
+            <p>
+              <li>若該使用者為「Student」，才會顯示右邊學生基本資料。</li>
+            </p>
+          </ul>
 
-                    <h3>User List：使用者列表</h3>
-                    <img src="{% static '/images/om/sm/om-sm02.png' %}" width="60%">
-                    <p>
-                        <ul>
-                            <li>表格內主要顯示使用者的「Account.」、「Name.」、「Identity.」、「Privilege.」、「Last Login.」。</li>
-                            <li>
-                                身份<code>Identity</code>區分為：
-                                <ul>
-                                    <li>Visitor：訪客／一般使用者</li>
-                                    <li>Student：學生</li>
-                                    <li>Teacher：老師</li>
-                                </ul>
-                            </li>
-                            <li>
-                                權限<code>Privilege</code>區分為：
-                                <ul>
-                                    <li><a href="{% url 'OM_SystemManager' %}">SystemManager</a>：系統管理員</li>
-                                    <li><a href="{% url 'OM_TestManager' %}">TestManager</a>：考試管理員</li>
-                                    <li><a href="{% url 'OM_TBManager'%}">TBManager</a>：題庫管理員</li>
-                                    <li><a href="{% url 'OM_TBOperator'%}">TBOperator</a>：題庫操作員</li>
-                                    <li><a href="{% url 'OM_Viewer'%}">Viewer</a>：成績檢閱者</li>
-                                    <li><a href="{% url 'OM_Testee'%}">Testee</a>：受測者</li>
-                                </ul>
-                            </li>
-                            <li>「搜尋」功能列：可進行「Account./Name.」、「Department.」、「Squadron.」、「Grade.」的條件式搜尋。</li>
-                            <li>「新增使用者」：可進行使用者的新增。</li>
+          <h4>編輯使用者個人資料</h4>
+          <img src="{{ static('/images/om/sm/om-sm10.png') }}" width="45%" />
+          <ul>
+            <p>
+              <li>
+                此圖以身份為「Student」的使用者為例，若身份為非「Student」之使用者，則不會有右邊學生基本資料可進行編輯。
+              </li>
+              <li>
+                系統管理員可編輯使用者的「Register
+                ID.」、「Name.」、「Email.」、「Gender.」、「Identity.」、「Privilege.」。
+              </li>
+              <li>
+                若該使用者擁有「Student」，即可編輯「Student
+                ID.」、「Department.」、「Squadron.」、「Grade.」。
+              </li>
+            </p>
+          </ul>
 
-                            <h4>檢視使用者個人資料</h4>
-                            <img src="{% static '/images/om/sm/om-sm09.png' %}" width="45%">
-                            <img src="{% static '/images/om/sm/om-sm08.png' %}" width="45%">
-                            <p>
-                                <ul>
-                                    <li>若該使用者為「Student」，才會顯示右邊學生基本資料。</li>
-                                </ul>
-                            </p>
+          <h4>新增使用者</h4>
+          <img src="{{ static('/images/om/sm/om-sm03.png') }}" width="70%" />
+          <ul>
+            <p>
+              <li>
+                左方表格進行使用者基本資料的填寫。需輸入「Reg
+                ID.」、選擇「Identity.」及權限設置。
+              </li>
+              <li>
+                若「身份」選擇<code>Student</code>，則右邊的表格需填寫學生相關資料。需輸入「Student
+                ID.」，其餘「Department.」、「Squadron.」、「Grade.」，可選擇填寫或不填寫。
+              </li>
+              <li>
+                欲一次性新增多個使用者可點擊「<code>Multiple Creation？</code
+                >」的連結。
+              </li>
+            </p>
+          </ul>
 
-                            <h4>編輯使用者個人資料</h4>
-                            <img src="{% static '/images/om/sm/om-sm10.png' %}" width="45%">
-                            <p>
-                                <ul>
-                                    <li>此圖以身份為「Student」的使用者為例，若身份為非「Student」之使用者，則不會有右邊學生基本資料可進行編輯。</li>
-                                    <li>系統管理員可編輯使用者的「Register ID.」、「Name.」、「Email.」、「Gender.」、「Identity.」、「Privilege.」。</li>
-                                    <li>若該使用者擁有「Student」，即可編輯「Student ID.」、「Department.」、「Squadron.」、「Grade.」。</li>
-                                </ul>
-                            </p>
+          <h4>多重新增使用者</h4>
+          <img src="{{ static('/images/om/sm/om-sm04.png') }}" width="60%" />
+          <ul>
+            <p>
+              <li>輸入多個帳號同時建立使用者。</li>
+              <li>
+                方法如下：
+                <ol type="1">
+                  <li>透過表格內的輸入框進行輸入。</li>
+                  <li>透過檔案匯入來建立多個使用者。</li>
+                </ol>
+              </li>
+            </p>
+          </ul>
+          <p class="mark">
+            <strong>Tip.</strong><br />
+            １.輸入框輸入時，帳號與帳號之間須加<strong>" , "</strong
+            >進行區隔。<br />
+            ２.使用檔案匯入來建立使用者時，系統只接受xls、xlsx。<br />
+            ３.只能選用上述兩種方式的其中一種。<br />
+          </p>
+        </ul>
 
-                            <h4>新增使用者</h4>
-                            <img src="{% static '/images/om/sm/om-sm03.png' %}" width="70%">
-                            <p>
-                                <ul>
-                                    <li>左方表格進行使用者基本資料的填寫。需輸入「Reg ID.」、選擇「Identity.」及權限設置。</li>
-                                    <li>若「身份」選擇<code>Student</code>，則右邊的表格需填寫學生相關資料。需輸入「Student ID.」，其餘「Department.」、「Squadron.」、「Grade.」，可選擇填寫或不填寫。</li>
-                                    <li>欲一次性新增多個使用者可點擊「<code>Multiple Creation？</code>」的連結。</li>
-                                </ul>
-                            </p>
+        <hr />
 
-                            <h4>多重新增使用者</h4>
-                            <img src="{% static '/images/om/sm/om-sm04.png' %}" width="60%">
-                            <p>
-                                <ul>
-                                    <li>輸入多個帳號同時建立使用者。</li>
-                                    <li>
-                                        方法如下：
-                                        <ol type="1">
-                                            <li>透過表格內的輸入框進行輸入。</li>
-                                            <li>透過檔案匯入來建立多個使用者。</li>
-                                        </ol>
-                                    </li>
-                                </ul>
-                            </p>
-                            <p class="mark">
-                                <strong>Tip.</strong><br>
-                                １.輸入框輸入時，帳號與帳號之間須加<strong>" , "</strong>進行區隔。<br>
-                                ２.使用檔案匯入來建立使用者時，系統只接受xls、xlsx。<br>
-                                ３.只能選用上述兩種方式的其中一種。<br>
-                            </p>
-                        </ul>
-                    </p>
+        <h3>Unit List：單位列表</h3>
+        <img src="{{ static('/images/om/sm/om-sm05.png') }}" width="60%" />
+        <ul>
+          <li>「標籤」：可進行「科系列表」與「中隊列表」的切換。</li>
+          <li>「新增單位」：進行單位（科系、中隊）的新增。</li>
+          <li>「編輯單位」：進行單位（科系、中隊）的編輯。</li>
 
-                    <hr>
+          <h4>檢視單位人員</h4>
+          <img src="{{ static('/images/om/sm/om-sm11.png') }}" width="40%" />
+          <ul>
+            <p>
+              <li>點選該欄位可檢視該欄位人員個人資料。</li>
+            </p>
+          </ul>
 
-                    <h3>Unit List：單位列表</h3>
-                    <img src="{% static '/images/om/sm/om-sm05.png' %}" width="60%">
-                    <p>
-                        <ul>
-                            <li>「標籤」：可進行「科系列表」與「中隊列表」的切換。</li>
-                            <li>「新增單位」：進行單位（科系、中隊）的新增。</li>
-                            <li>「編輯單位」：進行單位（科系、中隊）的編輯。</li>
+          <h4>新增單位</h4>
+          <img src="{{ static('/images/om/sm/om-sm06.png') }}" width="40%" />
+          <ul>
+            <p>
+              <li>
+                需先選擇所要新增的項目（科系、中隊），之後才能進行單位名稱的命名。
+              </li>
+            </p>
+          </ul>
 
-                            <h4>檢視單位人員</h4>
-                            <img src="{% static '/images/om/sm/om-sm11.png' %}" width="40%">
-                            <p>
-                                <ul>
-                                    <li>點選該欄位可檢視該欄位人員個人資料。</li>
-                                </ul>
-                            </p>
+          <h4>編輯單位</h4>
+          <img src="{{ static('/images/om/sm/om-sm07.png') }}" width="40%" />
+          <ul>
+            <p>
+              <li>僅能對該單位的名稱進行編輯。</li>
+            </p>
+          </ul>
+        </ul>
 
-                            <h4>新增單位</h4>
-                            <img src="{% static '/images/om/sm/om-sm06.png' %}" width="40%">
-                            <p>
-                                <ul>
-                                    <li>需先選擇所要新增的項目（科系、中隊），之後才能進行單位名稱的命名。</li>
-                                </ul>
-                            </p>
+        <hr />
 
-                            <h4>編輯單位</h4>
-                            <img src="{% static '/images/om/sm/om-sm07.png' %}" width="40%">
-                            <p>
-                                <ul>
-                                    <li>僅能對該單位的名稱進行編輯。</li>
-                                </ul>
-                            </p>
-                        </ul>
-                    </p>
+        <h3>ReportCategory List：問題類別列表</h3>
+        <img src="{{ static('/images/om/sm/om-sm12.png') }}" width="60%" />
+        <p></p>
+        <ul>
+          <li>「問題類別列表」主要用於歸類被使用者回報的問題種類。</li>
+          <li>
+            使用者在「問題回報」時，若遇到現有類別不足以歸類之情況，則可選擇其他；系統管理員在檢視這些問題回報時，若覺得某些問題經常出現，則可以使用「新增問題類別」的功能去增加一個新的類別種類。但是，原先的使用者問題回報之種類不做更改。
+          </li>
+          <li>
+            列表中的<code>Responsibility.</code>是顯示該問題類別所負責的權限。
+          </li>
+          <li>
+            列表中的<code>Number.</code>是顯示該類別已存在的問題回報數量。
+          </li>
 
-                    <hr>
+          <h4>檢視該類別的問題回報</h4>
+          <img src="{{ static('/images/om/sm/om-sm13.png') }}" width="60%" />
+          <ul>
+            <li><code>Content.</code>顯示使用者問題回報的概略內容。</li>
+            <li>
+              <code>State.</code>顯示該問題回報的狀態。
+              <ul>
+                <p>
+                  <li>pending：等待處理</li>
+                  <li>processing：處理中</li>
+                  <li>solved：已解決</li>
+                </p>
+              </ul>
+            </li>
+          </ul>
 
-                    <h3>ReportCategory List：問題類別列表</h3>
-                    <img src="{% static '/images/om/sm/om-sm12.png' %}" width="60%">
-                    <p>
-                        <ul>
-                            <li>「問題類別列表」主要用於歸類被使用者回報的問題種類。</li>
-                            <li>使用者在「問題回報」時，若遇到現有類別不足以歸類之情況，則可選擇其他；系統管理員在檢視這些問題回報時，若覺得某些問題經常出現，則可以使用「新增問題類別」的功能去增加一個新的類別種類。但是，原先的使用者問題回報之種類不做更改。</li>
-                            <li>列表中的<code>Responsibility.</code>是顯示該問題類別所負責的權限。</li>
-                            <li>列表中的<code>Number.</code>是顯示該類別已存在的問題回報數量。</li>
+          <h4>檢視問題回報</h4>
+          <img src="{{ static('/images/om/sm/om-sm14.png') }}" width="60%" />
+          <ul>
+            <li>
+              左邊區塊右下角會顯示該回報的狀態。
+              <ul>
+                <p>
+                  <li><button class="btn btn-danger">Processing.</button></li>
+                  <li><button class="btn btn-success">Solved.</button></li>
+                </p>
+              </ul>
+            </li>
+            <li>右邊區塊可檢視處理人員與使用者之間的對話。</li>
+          </ul>
 
-                            <h4>檢視該類別的問題回報</h4>
-                            <img src="{% static '/images/om/sm/om-sm13.png' %}" width="60%">
-                            <p>
-                                <ul>
-                                    <li><code>Content.</code>顯示使用者問題回報的概略內容。</li>
-                                    <li><code>State.</code>顯示該問題回報的狀態。
-                                        <ul>
-                                            <li>pending：等待處理</li>
-                                            <li>processing：處理中</li>
-                                            <li>solved：已解決</li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </p>
+          <h4>新增問題類別</h4>
+          <img src="{{ static('/images/om/sm/om-sm15.png') }}" width="40%" />
+          <ul>
+            <p>
+              <li>
+                輸入所要創建的問題類別名稱及設置所負責的單位後即可提交建立。
+              </li>
+            </p>
+          </ul>
 
-                            <h4>檢視問題回報</h4>
-                            <img src="{% static '/images/om/sm/om-sm14.png' %}" width="60%">
-                            <p>
-                                <ul>
-                                    <li>左邊區塊右下角會顯示該回報的狀態。
-                                        <ul>
-                                            <li><button class="btn btn-danger">Processing.</button></li>
-                                            <li><button class="btn btn-success">Solved.</button></li>
-                                        </ul>
-                                    </li>
-                                    <li>右邊區塊可檢視處理人員與使用者之間的對話。</li>
-                                </ul>
-                            </p>
+          <h4>編輯問題類別</h4>
+          <img src="{{ static('/images/om/sm/om-sm16.png') }}" width="40%" />
+          <ul>
+            <p>
+              <li>更改所要編輯的問題類別名稱及所負責的單位後即可提交更改。</li>
+              <li>
+                無論在「新增問題類別」或是「編輯問題類別」，除<a
+                  href="{{ url('OM_SystemManager') }}"
+                  >系統管理員</a
+                >、<a href="{{ url('OM_TestManager') }}">考試管理員</a>、<a
+                  href="{{ url('OM_TBManager') }}"
+                  >題庫管理員</a
+                >外其餘權限皆不得設置為問題類別的負責單位。
+              </li>
+              <li style="color: red">若無必要性，不建議做更改。</li>
+            </p>
+          </ul>
+        </ul>
 
-                            <h4>新增問題類別</h4>
-                            <img src="{% static '/images/om/sm/om-sm15.png' %}" width="40%">
-                            <p>
-                                <ul>
-                                    <li>輸入所要創建的問題類別名稱及設置所負責的單位後即可提交建立。</li>
-                                </ul>
-                            </p>
+        <hr />
 
-                            <h4>編輯問題類別</h4>
-                            <img src="{% static '/images/om/sm/om-sm16.png' %}" width="40%">
-                            <p>
-                                <ul>
-                                    <li>更改所要編輯的問題類別名稱及所負責的單位後即可提交更改。</li>
-                                    <li>無論在「新增問題類別」或是「編輯問題類別」，除<a href="{% url 'OM_SystemManager' %}">系統管理員</a>、<a href="{% url 'OM_TestManager' %}">考試管理員</a>、<a href="{% url 'OM_TBManager' %}">題庫管理員</a>外其餘權限皆不得設置為問題類別的負責單位。</li>
-                                    <li style="color: red">若無必要性，不建議做更改。</li>
-                                </ul>
-                            </p>
-                        </ul>
-                    </p>
+        <h3>Report List：問題列表</h3>
+        <ul>
+          <p>
+            <li>請參閱<a href="{{ url('OM_Report') }}">問題回報</a>。</li>
+          </p>
+        </ul>
 
-                    <hr>
-
-                    <h3>Report List：問題列表</h3>
-                    <p>
-                        <ul>
-                            <li>請參閱<a href="{% url 'OM_Report' %}">問題回報</a>。</li>
-                        </ul>
-                    </p>
-
-                    <hr class="featurette-divider">
-                </div>
-            </div>
-        </div>
-    </main>
+        <hr class="featurette-divider" />
+      </div>
+    </div>
+  </div>
+</main>
 {% endblock %}
