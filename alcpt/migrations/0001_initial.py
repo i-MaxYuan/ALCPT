@@ -205,6 +205,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('finish_time', models.DateTimeField(auto_now_add=True)),
+                ('is_tested', models.BooleanField(default=False)),
                 ('is_finished', models.BooleanField(default=False)),
                 ('score', models.PositiveSmallIntegerField(null=True)),
                 ('exam', models.ForeignKey(blank=True, on_delete=django.db.models.deletion.CASCADE, to='alcpt.Exam')),

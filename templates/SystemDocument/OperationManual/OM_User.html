@@ -1,109 +1,181 @@
-{% extends 'OperationManual_base.html' %}
+{% extends 'OperationManual_base.html' %} {% block content %}
+<main id="om-content">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-12 text-left">
+        <h1>使用者說明</h1>
+        <ul>
+          <p>
+            <li>當以訪客身分進入時，僅能查看公告及系統相關介紹。</li>
+            <li>
+              當使用者登入後，在上方導覽列會顯示該使用者所擁有的權限（此圖為擁有所有權限之使用者）。
+            </li>
+            <li>
+              權限區分為：
+              <ul>
+                <li>
+                  <a href="{{ url('OM_SystemManager') }}">SystemManager</a
+                  >：系統管理員
+                </li>
+                <li>
+                  <a href="{{ url('OM_TestManager') }}">TestManager</a
+                  >：考試管理員
+                </li>
+                <li>
+                  <a href="{{ url('OM_TBManager') }}">TBManager</a>：題庫管理員
+                </li>
+                <li>
+                  <a href="{{ url('OM_TBOperator') }}">TBOperator</a
+                  >：題庫操作員
+                </li>
+                <li><a href="{{ url('OM_Viewer') }}">Viewer</a>：成績檢閱者</li>
+                <li><a href="{{ url('OM_Testee') }}">Testee</a>：受測者</li>
+              </ul>
+            </li>
+            <img
+              src="{{ static('/images/om/user/om-user01.png') }}"
+              width="80%"
+              height="80%"
+            />
 
-{% load static %}
+            <li>點擊右上角的「使用者」圖示，即可查看一般使用者功能表。</li>
+            <img
+              src="{{ static('/images/om/user/om-user02.png') }}"
+              width="30%"
+              height="30%"
+            />
+            <img
+              src="{{ static('/images/om/user/om-user03.png') }}"
+              width="30%"
+              height="30%"
+            />
+            <li>
+              使用者選單說明，如下：
+              <ul>
+                <li>User Profile：檢視個人資料</li>
+                <li>Profile Update：更新個人資料</li>
+                <li>Email：電子郵件</li>
+                <li>Password Change：更改密碼</li>
+                <li>Report：問題回報</li>
+                <li>About：關於系統</li>
+              </ul>
+            </li>
+            <li>
+              點擊「Logout」可登出系統，點擊「Cancel」可關閉此功能表；點擊各項使用者功能則會跳轉至相對應的功能頁面。
+            </li>
+          </p>
+        </ul>
 
-{% block content %}
-    <main id="om-content">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-md-12 text-left">
-                    <h1>使用者說明</h1>
-                    <p>
-                        <ul>
-                            <li>當以訪客身分進入時，僅能查看公告及系統相關介紹。</li>
-                            <li>當使用者登入後，在上方導覽列會顯示該使用者所擁有的權限（此圖為擁有所有權限之使用者）。</li>
-                            <li>
-                                權限區分為：
-                                <ul>
-                                    <li><a href="{% url 'OM_SystemManager' %}">SystemManager</a>：系統管理員</li>
-                                    <li><a href="{% url 'OM_TestManager' %}">TestManager</a>：考試管理員</li>
-                                    <li><a href="{% url 'OM_TBManager'%}">TBManager</a>：題庫管理員</li>
-                                    <li><a href="{% url 'OM_TBOperator'%}">TBOperator</a>：題庫操作員</li>
-                                    <li><a href="{% url 'OM_Viewer'%}">Viewer</a>：成績檢閱者</li>
-                                    <li><a href="{% url 'OM_Testee'%}">Testee</a>：受測者</li>
-                                </ul>
-                            </li>
-                            <img src="{% static '/images/om/user/om-user01.png' %}" width="80%" height="80%">
+        <hr />
 
-                            <li>點擊右上角的「使用者」圖示，即可查看一般使用者功能表。</li>
-                            <img src="{% static '/images/om/user/om-user02.png' %}" width="30%" height="30%">
-                            <img src="{% static '/images/om/user/om-user03.png' %}" width="30%" height="30%">
-                            <li>
-                                使用者選單說明，如下：
-                                <ul>
-                                    <li>User Profile：檢視個人資料</li>
-                                    <li>Profile Update：更新個人資料</li>
-                                    <li>Email：電子郵件</li>
-                                    <li>Password Change：更改密碼</li>
-                                    <li>Report：問題回報</li>
-                                    <li>About：關於系統</li>
-                                </ul>
-                            </li>
-                            <li>點擊「Logout」可登出系統，點擊「Cancel」可關閉此功能表；點擊各項使用者功能則會跳轉至相對應的功能頁面。</li>
-                        </ul>
-                    </p>
+        <h3>檢視個人資料</h3>
+        <ul>
+          <p>
+            <li>
+              於一般使用者功能表點擊「User
+              Profile」，可以查看個人資料，包括：「Reg
+              ID.」、「Name.」、「Email.」、「Gender.」、「Identity.」、「Privilege.」。
+            </li>
+            <li>
+              若使用者身份為「Student」，則會多顯示學生基本資料，其中有：「Student
+              ID.」、「Department.」、「Squadron.」、「Grade.」。
+            </li>
+            <img
+              src="{{ static('/images/om/user/om-user04.png') }}"
+              width="45%"
+              height="45%"
+            />
+            <img
+              src="{{ static('/images/om/user/om-user05.png') }}"
+              width="45%"
+              height="45%"
+            />
+          </p>
+        </ul>
 
-                    <hr>
+        <hr />
 
-                    <h3>檢視個人資料</h3>
-                    <p>
-                        <ul>
-                            <li>於一般使用者功能表點擊「User Profile」，可以查看個人資料，包括：「Reg ID.」、「Name.」、「Email.」、「Gender.」、「Identity.」、「Privilege.」。</li>
-                            <li>若使用者身份為「Student」，則會多顯示學生基本資料，其中有：「Student ID.」、「Department.」、「Squadron.」、「Grade.」。</li>
-                            <img src="{% static '/images/om/user/om-user04.png' %}" width="45%" height="45%">
-                            <img src="{% static '/images/om/user/om-user05.png' %}" width="45%" height="45%">
-                        </ul>
-                    </p>
+        <h3>更新個人資料</h3>
+        <ul>
+          <p>
+            <li>
+              於一般使用者功能表點擊「Profile
+              Update」，可以個人資料的更改，可更改項目有：「Name.」、「Gender.」、「Personal
+              Photo.」及「Personal Introduction.」。
+            </li>
+            <li>
+              若使用者身份為「Student」，則會多顯示學生基本資料，可更改項目有：「Department.」、「Squadron.」、「Grade.」。
+            </li>
+            <img
+              src="{{ static('/images/om/user/om-user06.png') }}"
+              width="45%"
+              height="45%"
+            />
+            <img
+              src="{{ static('/images/om/user/om-user07.png') }}"
+              width="45%"
+              height="45%"
+            />
+            <li>完成更改後，點擊「Update」即可完成更新。</li>
+          </p>
+        </ul>
 
-                    <hr>
+        <hr />
 
-                    <h3>更新個人資料</h3>
-                    <p>
-                        <ul>
-                            <li>於一般使用者功能表點擊「Profile Update」，可以個人資料的更改，可更改項目有：「Name.」、「Gender.」、「Personal Photo.」及「Personal Introduction.」。</li>
-                            <li>若使用者身份為「Student」，則會多顯示學生基本資料，可更改項目有：「Department.」、「Squadron.」、「Grade.」。</li>
-                            <img src="{% static '/images/om/user/om-user06.png' %}" width="45%" height="45%">
-                            <img src="{% static '/images/om/user/om-user07.png' %}" width="45%" height="45%">
-                            <li>完成更改後，點擊「Update」即可完成更新。</li>
-                        </ul>
-                    </p>
+        <h3>Email</h3>
+        <ul>
+          <p>
+            <li>於一般使用者功能表點擊「Email」，可進行Email的相關操作。</li>
+            <img
+              src="{{ static('/images/om/user/om-user08.png') }}"
+              width="45%"
+              height="45%"
+            />
+            <li>尚未進行Email的更改，該輸入欄位會顯示「None」。</li>
+            <li>
+              已完成驗證的Email在個人資料的Email欄位會看見旁邊有<i
+                class="fa fa-check-circle"
+                style="color: green; font-size: 24px"
+              ></i
+              >。
+            </li>
+            <li>
+              亦可進行已完成驗證的信箱進行更改，但須至電子郵件信箱進行相關驗證程序進行驗證。
+            </li>
+          </p>
+        </ul>
 
-                    <hr>
+        <hr />
 
-                    <h3>Email</h3>
-                    <p>
-                        <ul>
-                            <li>於一般使用者功能表點擊「Email」，可進行Email的相關操作。</li>
-                            <img src="{% static '/images/om/user/om-user08.png' %}" width="45%" height="45%">
-                            <li>尚未進行Email的更改，該輸入欄位會顯示「None」。</li>
-                            <li>已完成驗證的Email在個人資料的Email欄位會看見旁邊有<i class="fa fa-check-circle" style="color: green; font-size: 24px"></i>。</li>
-                            <li>亦可進行已完成驗證的信箱進行更改，但須至電子郵件信箱進行相關驗證程序進行驗證。</li>
-                        </ul>
-                    </p>
+        <h3>更改密碼</h3>
+        <ul>
+          <p>
+            <li>
+              於一般使用者功能表點擊「Password Change」，可進行密碼的更改。
+            </li>
+            <img
+              src="{{ static('/images/om/user/om-user09.png') }}"
+              width="45%"
+              height="45%"
+            />
+            <li>
+              若使用者完成密碼更改後，系統會自動登出。此時，使用者需使用新密碼重新進行登入。
+            </li>
+          </p>
+        </ul>
 
-                    <hr>
+        <hr />
 
-                    <h3>更改密碼</h3>
-                    <p>
-                        <ul>
-                            <li>於一般使用者功能表點擊「Password Change」，可進行密碼的更改。</li>
-                            <img src="{% static '/images/om/user/om-user09.png' %}" width="45%" height="45%">
-                            <li>若使用者完成密碼更改後，系統會自動登出。此時，使用者需使用新密碼重新進行登入。</li>
-                        </ul>
-                    </p>
+        <h4>問題列表</h4>
+        <ul>
+          <p>
+            <li>請參閱<a href="{{ url('OM_Report') }}">問題回報</a></li>
+          </p>
+        </ul>
 
-                    <hr>
-
-                    <h4>問題列表</h4>
-                    <p>
-                        <ul>
-                            <li>請參閱<a href="{% url 'OM_Report' %}">問題回報</a></li>
-                        </ul>
-                    </p>
-
-                    <hr class="featurette-divider">
-                </div>
-            </div>
-        </div>
-    </main>
+        <hr class="featurette-divider" />
+      </div>
+    </div>
+  </div>
+</main>
 {% endblock %}

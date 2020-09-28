@@ -1,64 +1,110 @@
-{% extends 'new_base.html' %}
+{% extends 'new_base.html' %} {% block path %}
+<li class="breadcrumb-item" aria-current="page">
+  <a {% if request.user|has_perm('TBManager') %}href="{{ url('question_review') }}">Review{% else %}href="{{ url('tboperator_question_list') }}">Question List{% endif %}
+  </a>
+</li>
+<li class="breadcrumb-item active" aria-current="page">Question Edit</li>
+{% endblock %} {% block content %}
+<main class="question-edit-form">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-10">
+        <form method="post" enctype="multipart/form-data">
+          <input
+            type="hidden"
+            name="csrfmiddlewaretoken"
+            value="{{ csrf_token }}"
+          />
 
-{% load web_filters %}
+          <div class="card">
+            <div class="card-header">Question Edit.</div>
 
-{% block path %}
-    <li class="breadcrumb-item" aria-current="page"><a {% if request.user|has_perm:'TBManager' %}href="{% url 'question_review' %}">Review{% else %}href="{% url 'tboperator_question_list' %}">Question List{% endif %}</a></li>
-    <li class="breadcrumb-item active" aria-current="page">Question Edit</li>
-{% endblock %}
+            <div class="card-body">
+              {% if question.q_file %}
+              <h5 class="subtitle mb-2 text-muted">Question File.</h5>
+              <p class="card-text">
+                <audio controls preload="none">
+                  <source src="{{ question.q_file.url }}" type="audio/mpeg" />
+                  Your browser does not support the audio tag.
+                </audio>
+              </p>
 
-{% block content %}
-    <main class="question-edit-form">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-md-10">
-                    <form method="post" enctype="multipart/form-data">
-                        {% csrf_token %}
+              {% else %}
+              <h5 class="subtitle mb-2 text-muted">Question Content.</h5>
+              <p class="card-text">
+                <textarea
+                  class="form-control"
+                  name="q_content"
+                  cols="55"
+                  rows="4"
+                  onkeyup="ChangeJudgementButton('{{ question_q_content }}', this)"
+                >
+{{ question.q_content }}</textarea
+                >
+              </p>
 
-                        <div class="card">
-                            <div class="card-header">Question Edit.</div>
+              {% endif %}
 
-                            <div class="card-body">
-                                {% if question.q_file %}
-                                    <h5 class="subtitle mb-2 text-muted">Question File.</h5>
-                                    <p class="card-text">
-                                        <audio controls preload="none">
-                                            <source src="{{ question.q_file.url }}" type="audio/mpeg">
-                                            Your browser does not support the audio tag.
-                                        </audio>
-                                    </p>
+              <h5 class="subtitle mb-2 text-muted">Set Answer.</h5>
+              <ol type="A">
+                <p class="card-text">
+                  {% for choice in question.choice_set.all() %}
+                  <li>
+                    <input
+                      type="radio"
+                      name="answer_choice"
+                      value="{{ choice.id }}"
+                      {%
+                      if
+                      choice.is_answer
+                      %}checked{%
+                      endif
+                      %}
+                    />&nbsp;{{ choice }}
+                  </li>
+                  {% endfor %}
+                </p>
+              </ol>
 
-                                {% else %}
-                                    <h5 class="subtitle mb-2 text-muted">Question Content.</h5>
-                                    <p class="card-text">
-                                        <textarea class="form-control" name="q_content" cols="55" rows="4" onkeyup="ChangeJudgementButton('{{ question_q_content }}', this)">{{ question.q_content }}</textarea>
-                                    </p>
-
-                                {% endif %}
-
-                                <h5 class="subtitle mb-2 text-muted">Set Answer.</h5>
-                                <p class="card-text">
-                                    <ol type="A">
-                                        {% for choice in question.choice_set.all %}
-                                            <li><input type="radio" name="answer_choice" value="{{ choice.id }}" {% if choice.is_answer %}checked{% endif %}>&nbsp;{{ choice }}</li>
-                                        {% endfor %}
-                                    </ol>
-                                </p>
-
-                                <div class="text-center">
-                                    {% if question.state == 3 %}
-                                        <button type="submit" id="submit" class="btn btn-primary" onclick="return confirm('Sure to update this question and let it pass?')">Update</button>
-                                    {% else %}
-                                        <a href="{% url 'question_pass' question.id %}" class="btn btn-success" onclick="return confirm('Sure to pass?')">Pass</a>
-                                        <button type="submit" id="submit" class="btn btn-primary" onclick="return confirm('Sure to change the answer of this question and modified its state into handled?')">Update</button>
-                                    {% endif %}
-                                    <button type="button" class="btn btn-secondary" onclick="history.go(-1);">Cancel</button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+              <div class="text-center">
+                {% if question.state == 3 %}
+                <button
+                  type="submit"
+                  id="submit"
+                  class="btn btn-primary"
+                  onclick="return confirm('Sure to update this question and let it pass?')"
+                >
+                  Update
+                </button>
+                {% else %}
+                <a
+                  href="{{ url('question_pass', args=[question.id]) }}"
+                  class="btn btn-success"
+                  onclick="return confirm('Sure to pass?')"
+                  >Pass</a
+                >
+                <button
+                  type="submit"
+                  id="submit"
+                  class="btn btn-primary"
+                  onclick="return confirm('Sure to change the answer of this question and modified its state into handled?')"
+                >
+                  Update
+                </button>
+                {% endif %}
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  onclick="history.go(-1);"
+                >
+                  Cancel
+                </button>
+              </div>
             </div>
-        </div>
-    </main>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
 {% endblock %}

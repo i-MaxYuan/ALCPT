@@ -1,93 +1,143 @@
-{% extends 'new_base.html' %}
+{% extends 'new_base.html' %} {% block path %}
+<li class="breadcrumb-item active" aria-current="page">TestPaper List</li>
+{% endblock %} {% block content %}
+<main class="testpaper-list">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-12 table-responsive-md">
+        <h2>TestPaper List.</h2>
 
-{% block path %}
-    <li class="breadcrumb-item active" aria-current="page">TestPaper List</li>
-{% endblock %}
-
-{% block content %}
-    <main class="testpaper-list">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-12 table-responsive-md">
-                    <h2>TestPaper List.</h2>
-
-                    <table class="table table-hover table-bordered table-striped table-mc-light-blue">
-                        <thead class="thead-light">
-                            <tr>
-                                <th class="text-center">Testpaper Name.</th>
-                                <th class="text-center">Valid.</th>
-                                <th class="text-center">Used.</th>
-                                <th class="text-center">Last Update.</th>
-                                <th class="text-center">Creator.</th>
-                                <th class="text-center">
-                                    <div class="add">
-                                        <button type="button" class="btn btn-secondary" onclick="window.location.href='{% url 'testpaper_create' %}'"><i class="fa fa-plus"></i></button>
-                                    </div>
-                                </th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            <div class="add-secret">
-                                <button type="button" class="btn btn-secondary" onclick="window.location.href='{% url 'testee_group_create' %}'"><i class="fa fa-plus"></i></button>
-                            </div>
-                            {% if testpapers %}
-                                {% for testpaper in testpaperList %}
-                                    <tr style="cursor: pointer" onclick="window.location.href=('{% url 'view_testpaper_content' testpaper.id %}')">
-                                        <td class="text-center" data-title="Name">{{ testpaper.name }}</td>
-                                        <td class="text-center" data-title="Valid">{{ testpaper.valid }}</td>
-                                        <td class="text-center" data-title="Used">{{ testpaper.is_used }}</td>
-                                        <td class="text-center" data-title="Last Update">{{ testpaper.update_time|date:'Y/m/d, H:i' }}</td>
-                                        <td class="text-center" data-title="Creator">{{ testpaper.created_by.name }}</td>
-                                        <td class="text-center">
-                                            {% if testpaper.is_testpaper %}
-                                                <a href="{% url 'testpaper_valid' testpaper.id %}"><i class="fa fa-check-circle"></i></a>
-                                                <a href="{% url 'testpaper_unvalid' testpaper.id %}"><i class="fa fa-times"></i></a>
-                                                <a href="{% url 'testpaper_edit' testpaper.id %}"><i class="fa fa-pencil-square-o fa-fw mb-2"></i></a>
-                                                <a href="{% url 'testpaper_delete' testpaper.id %}" onclick="return confirm('Sure to delete？');"><i class="fa fa-trash" aria-hidden="true"></i></a>
-                                            {% endif %}
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                            {% else %}
-                                <tr>
-                                    <td class="text-center" colspan="6">No Data.</td>
-                                </tr>
-                            {% endif %}
-                        </tbody>
-                    </table>
+        <table
+          class="table table-hover table-bordered table-striped table-mc-light-blue"
+        >
+          <thead class="thead-light">
+            <tr>
+              <th class="text-center">Testpaper Name.</th>
+              <th class="text-center">Valid.</th>
+              <th class="text-center">Used.</th>
+              <th class="text-center">Last Update.</th>
+              <th class="text-center">Creator.</th>
+              <th class="text-center">
+                <div class="add">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    onclick="window.location.href='{{ url('testpaper_create') }}'"
+                  >
+                    <i class="fa fa-plus"></i>
+                  </button>
                 </div>
+              </th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <div class="add-secret">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                onclick="window.location.href='{{ url('testee_group_create') }}'"
+              >
+                <i class="fa fa-plus"></i>
+              </button>
             </div>
-        </div>
-    </main>
-{% endblock %}
-
-{% block pagination %}
-    <ul class="pagination justify-content-center">
-        <li class="page-item"><a class="page-link" href="?page=1"><i class="fa fa-angle-double-left"></i></a></li>
-
-        <li class="page-item {% if not testpaperList.has_previous %}disable{% endif %}">
-            {% if testpaperList.has_previous %}
-                <a class="page-link" href="?page={{ testpaperList.previous_page_number }}" tabindex="-1"><i class="fa fa-angle-left"></i></a>
-            {% else %}
-                <a class="page-link" href="javascript:void(0);"><i class="fa fa-angle-left"></i></a>
+            {% if testpapers %} {% for testpaper in testpaperList %}
+            <tr
+              style="cursor: pointer"
+              onclick="window.location.href=('{{ url('view_testpaper_content', args=[testpaper.id]) }}')"
+            >
+              <td class="text-center" data-title="Name">
+                {{ testpaper.name }}
+              </td>
+              <td class="text-center" data-title="Valid">
+                {{ testpaper.valid }}
+              </td>
+              <td class="text-center" data-title="Used">
+                {{ testpaper.is_used }}
+              </td>
+              <td class="text-center" data-title="Last Update">
+                {{ testpaper.update_time.strftime('%Y/%m/%d %H:%M') }}
+              </td>
+              <td class="text-center" data-title="Creator">
+                {{ testpaper.created_by.name }}
+              </td>
+              <td class="text-center">
+                {% if testpaper.is_testpaper %}
+                <a href="{{ url('testpaper_valid', args=[testpaper.id]) }}"
+                  ><i class="fa fa-check-circle"></i
+                ></a>
+                <a href="{{ url('testpaper_unvalid', args=[testpaper.id]) }}"
+                  ><i class="fa fa-times"></i
+                ></a>
+                <a href="{{ url('testpaper_edit', args=[testpaper.id]) }}"
+                  ><i class="fa fa-pencil-square-o fa-fw mb-2"></i
+                ></a>
+                <a
+                  href="{{ url('testpaper_delete', args=[testpaper.id]) }}"
+                  onclick="return confirm('Sure to delete？');"
+                  ><i class="fa fa-trash" aria-hidden="true"></i
+                ></a>
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %} {% else %}
+            <tr>
+              <td class="text-center" colspan="6">No Data.</td>
+            </tr>
             {% endif %}
-        </li>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock %} {% block pagination %}
+<ul class="pagination justify-content-center">
+  <li class="page-item">
+    <a class="page-link" href="?page=1"
+      ><i class="fa fa-angle-double-left"></i
+    ></a>
+  </li>
 
-        {% for page in paginator.page_range %}
-            <li class="page-item">
-                <a class="page-link" href="?page={{ page }}">{{ page }}</a>
-            </li>
-        {% endfor %}
+  <li
+    class="page-item {% if not testpaperList.has_previous %}disable{% endif %}"
+  >
+    {% if testpaperList.has_previous %}
+    <a
+      class="page-link"
+      href="?page={{ testpaperList.previous_page_number }}"
+      tabindex="-1"
+      ><i class="fa fa-angle-left"></i
+    ></a>
+    {% else %}
+    <a class="page-link" href="javascript:void(0);"
+      ><i class="fa fa-angle-left"></i
+    ></a>
+    {% endif %}
+  </li>
 
-        <li class="page-item {% if not testpaperList.has_next %}disable{% endif %}">
-            {% if testpaperList.has_next %}
-                <a class="page-link" href="?page={{ testpaperList.next_page_number }}"><i class="fa fa-angle-right"></i></a>
-            {% else %}
-                <a class="page-link" href="javascript:void(0);"><i class="fa fa-angle-right"></i></a>
-            {% endif %}
-        </li>
+  {% for page in paginator.page_range %}
+  <li class="page-item">
+    <a class="page-link" href="?page={{ page }}">{{ page }}</a>
+  </li>
+  {% endfor %}
 
-        <li class="page-item"><a class="page-link" href="?page={{ testpaperList.paginator.num_pages }}"><i class="fa fa-angle-double-right"></i></a></li>
-    </ul>
+  <li class="page-item {% if not testpaperList.has_next %}disable{% endif %}">
+    {% if testpaperList.has_next %}
+    <a class="page-link" href="?page={{ testpaperList.next_page_number }}"
+      ><i class="fa fa-angle-right"></i
+    ></a>
+    {% else %}
+    <a class="page-link" href="javascript:void(0);"
+      ><i class="fa fa-angle-right"></i
+    ></a>
+    {% endif %}
+  </li>
+
+  <li class="page-item">
+    <a class="page-link" href="?page={{ testpaperList.paginator.num_pages }}"
+      ><i class="fa fa-angle-double-right"></i
+    ></a>
+  </li>
+</ul>
 {% endblock %}

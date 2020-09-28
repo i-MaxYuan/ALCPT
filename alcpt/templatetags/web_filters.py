@@ -1,24 +1,49 @@
-from django import template
+import re
 
+from django import template
 from django.core.exceptions import ObjectDoesNotExist
 
-from alcpt.definitions import UserType, QuestionType, ExamType
 from alcpt.models import User, Student, Question, ReportCategory, Exam, Report
 from alcpt.utility import set_query_parameter
 from alcpt.exceptions import IllegalArgumentError, ObjectNotFoundError
+from alcpt.definitions import UserType, QuestionType, ExamType
+
+from jinja2 import evalcontextfilter, Markup, escape
+
+# jinja2 custom filters
+
+_paragraph_re = re.compile(r'(?:\r\n|\r|\n){2,}')
+
+
+@evalcontextfilter
+def linebreaksbr(eval_ctx, value):
+    result = u'\n\n'.join(u'<p>%s</p>' % p.replace('\n', Markup('<br>\n'))
+                          for p in _paragraph_re.split(escape(value)))
+    if eval_ctx.autoescape:
+        result = Markup(result)
+    return result
+
+
+# Django custom filters
 
 register = template.Library()
 
 
-# Returns True if the user has the specified permission, where perm is in the format "<app label>.<permission codename>"
 @register.filter(name='has_perm')
 def has_perm(user: User, required_privilege: UserType):
+    """
+    Returns True if the user has the specified permission,
+    where perm is in the format "<app label>.<permission codename>"
+    """
     return user.has_perm(UserType[required_privilege])
 
 
-# Returns True if the user has the specified permission, where perm is in the format "<app label>.<permission codename>"
 @register.filter(name='has_perms')
 def has_perms(user: User, required_privilege: UserType):
+    """
+    Returns True if the user has the specified permission,
+    where perm is in the format "<app label>.<permission codename>"
+    """
     return user.has_perm(required_privilege)
 
 
@@ -27,14 +52,16 @@ def has_permission(user: User, privilege: UserType):
     return user.privilege & privilege.value[0] > 0
 
 
-# check whether question_type is readable question_type
 @register.filter(name='readable_question_type')
 def readable_question_type(question_type: int):
+    """ check whether question_type is readable question_type """
+
     for q in QuestionType.__members__.values():
         if question_type is q.value[0]:
             return q.value[1]
     else:
-        raise IllegalArgumentError(message='Unknown question type {}.'.format(question_type))
+        raise IllegalArgumentError(
+            message='Unknown question type {}.'.format(question_type))
 
 
 @register.filter(name='readable_question_difficulty')
@@ -49,14 +76,15 @@ def readable_question_difficulty(difficulty: int):
     return DIFFICULTY[difficulty][1]
 
 
-# check whether user_type is readable user_type(int or str)
 @register.filter(name='readable_privilege')
 def readable_user_type(privilege):
-    if type(privilege) is str:
+    """ check whether user_type is readable user_type(int or str) """
+
+    if isinstance(privilege, str):
         for u_type in UserType.__members__.values():
             if u_type.name == privilege:
                 return u_type.value[1]
-    elif type(privilege) is int:
+    elif isinstance(privilege, int):
         for u_type in UserType.__members__.values():
             if u_type is UserType.Admin:
                 if privilege is UserType.SystemManager.value[0]:
@@ -64,19 +92,23 @@ def readable_user_type(privilege):
             elif (privilege & u_type.value[0]) > 0:
                 return u_type.value[1]
         else:
-            raise IllegalArgumentError(message='Unknown user type {}.'.format(privilege))
+            raise IllegalArgumentError(
+                message='Unknown user type {}.'.format(privilege))
     else:
-        raise IllegalArgumentError(message='Unknown user type argument which type is {}'.format(type(privilege)))
+        raise IllegalArgumentError(
+            message='Unknown user type argument which type is {}'.format(
+                type(privilege)))
 
 
-# check whether exam_type is readable type
 @register.filter(name='readable_exam_type')
-def readable_state(exam_type: int):
+def readable_exam_type(exam_type: int):
+    """ check whether exam_type is readable type """
     for et in ExamType.__members__.values():
         if exam_type is et.value[0]:
             return et.value[1]
     else:
-        raise IllegalArgumentError(message='Unknown question type {}.'.format(exam_type))
+        raise IllegalArgumentError(
+            message='Unknown question type {}.'.format(exam_type))
 
 
 @register.filter(name='replace_page')
@@ -90,13 +122,13 @@ def range_to(from_val: int, to_val: int):
 
 
 @register.filter(name='lookup')
-def range_to(arr: list, i: int):
+def loop_up(arr: list, i: int):
     return arr[i]
 
 
-# check whether user is student
 @register.filter(name='is_student')
 def is_student(user: User):
+    """ check whether user is student """
     try:
         student = Student.objects.get(user=user)
         return student
@@ -130,11 +162,7 @@ def student_data(user: User):
 
 @register.filter(name='check_correct')
 def check_correct(option: str, question: Question):
-    if question.option.index(option) == question.answer:
-        return True
-
-    else:
-        return False
+    return bool(question.option.index(option) == question.answer)
 
 
 @register.filter(name='readable_state')
@@ -176,16 +204,16 @@ def responsible_unit(category: ReportCategory, required_privilege: UserType):
 def question_kind(question_type: int):
     if question_type == QuestionType.QA.value[0]:
         return 'listening'
-    elif question_type == QuestionType.ShortConversation.value[0]:
+    if question_type == QuestionType.ShortConversation.value[0]:
         return 'listening'
-    elif question_type == QuestionType.Grammar.value[0]:
+    if question_type == QuestionType.Grammar.value[0]:
         return 'reading'
-    elif question_type == QuestionType.Phrase.value[0]:
+    if question_type == QuestionType.Phrase.value[0]:
         return 'reading'
-    elif question_type == QuestionType.ParagraphUnderstanding.value[0]:
+    if question_type == QuestionType.ParagraphUnderstanding.value[0]:
         return 'reading'
-    else:
-        return 'unknown'
+
+    return 'unknown'
 
 
 @register.filter(name='is_finished')
@@ -194,8 +222,7 @@ def is_finished(exam: Exam, user: User):
         answer_sheet = exam.answersheet_set.get(user_id=user.id)
         if answer_sheet.score is None:
             return False
-        else:
-            return True
+        return True
     except ObjectDoesNotExist:
         return False
 
@@ -209,8 +236,7 @@ def belongs_to(category: ReportCategory, privilege: UserType):
 def summary(completed_string: str, wanted: int):
     if len(completed_string) > wanted:
         return completed_string[:wanted] + '...'
-    else:
-        return completed_string
+    return completed_string
 
 
 @register.filter(name='readable_question_query_content')
@@ -238,21 +264,16 @@ def readable_question_query_content(question_query_content: str):
             readable_query_content += '+"question_content="' + item[1] + '"'
 
         elif 'question_type' in item:
-            TYPE = (
-                (0, ''),
-                (1, 'Listening/QA'),
-                (2, 'Listening/Conversation'),
-                (3, 'Reading/Grammar'),
-                (4, 'Reading/Phrase'),
-                (5, 'Reading/Paragraph')
-            )
+            TYPE = ((0, ''), (1, 'Listening/QA'),
+                    (2, 'Listening/Conversation'), (3, 'Reading/Grammar'),
+                    (4, 'Reading/Phrase'), (5, 'Reading/Paragraph'))
             readable_query_content += '+"type="' + TYPE[int(item[1])][1] + '"'
 
     return readable_query_content
 
 
-@register.filter(name='readable_user_query_content')
-def readable_user_query_content(user_query_content: str):
+@register.filter(name='readable_user_query_contents')
+def readable_user_query_contents(user_query_content: str):
     user_query = [_.split('=') for _ in user_query_content.split('&')]
     readable_user_query_content = ''
 

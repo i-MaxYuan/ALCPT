@@ -1,274 +1,258 @@
-{% extends 'new_profile_base.html' %}
+{% extends 'new_profile_base.html' %} {% block path %}
+<li class="breadcrumb-item active" aria-current="page">Profile</li>
+{% endblock %} {% block content %}
+<style>
+  #profile {
+    color: rgb(150, 150, 150);
+    opacity: 0.3;
+  }
+</style>
 
-{% load web_filters %}
+<div class="container">
+  {% if user.student %}
+  <div class="row">
+    <div class="col-lg-4">
+      <div class="card mb-3">
+        <div class="card-header">User Photo.</div>
 
-{% block path %}
-    <li class="breadcrumb-item active" aria-current="page">Profile</li>
-{% endblock %}
-
-{% block content %}
-    <style>
-        #profile{
-            color: rgb(150, 150, 150);
-            opacity: 0.3;
-        }
-    </style>
-
-    <div class="container">
-        {% if user.student %}
-            <div class="row">
-                <div class="col-lg-4">
-                    <div class="card mb-3">
-                        <div class="card-header">
-                            User Photo.
-                        </div>
-
-                        {% if user.photo %}
-                            <img class="card-img-top" src="{{ user.photo.url }}" alt="{{ user.name }}">
-                        {% else %}
-                            <img class="card-img-top" src="..." alt="{{ user.name }}">
-                        {% endif %}
-
-                        <div class="card-body">
-                            <p class="card-text">
-                                {% if user.introduction %}
-                                    {{ user.introduction|linebreaksbr }}
-                                {% else %}
-                                    Unset
-                                {% endif %}
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-5">
-                    <div class="card mb-3">
-                        <div class="card-header">
-                            User Profile.
-                        </div>
-
-                        <div class="card-body text-left">
-                            <h5 class="card-subtitle mb-2 text-muted">Register ID.</h5>
-                            <h4 class="card-text">{{ user.reg_id }}</h4>
-
-                            <h5 class="card-subtitle mb-2 text-muted">Name.</h5>
-                            <p class="card-text">
-                                {% if user.name %}
-                                    {{ user.name }}
-                                {% else %}
-                                    Unset
-                                {% endif %}
-                            </p>
-
-                            <h5 class="card-subtitle mb-2 text-muted">Email.{% if user.email_is_verified %}<i class="fa fa-check-circle" style="color: green"></i>{% endif %}</h5>
-                            <p class="card-text">
-                                {% if user.email %}
-                                    {{ user.email }}
-                                {% else %}
-                                    Unset
-                                {% endif %}
-                            </p>
-
-                            <h5 class="card-subtitle mb-2 text-muted">Gender.</h5>
-                            <p class="card-text">
-                                {% if user.gender == 1 %}Male
-                                {% elif user.gender == 2 %}Female
-                                {% elif user.gender == 3 %}Privacy
-                                {% else %}Unset
-                                {% endif %}
-                            </p>
-
-                            <h5 class="card-subtitle mb-2 text-muted">Identity.</h5>
-                            <p class="card-text">
-                                {% if user.identity %}
-                                    {{ user.identity|readableIdentity }}
-                                {% else %}
-                                    Unset
-                                {% endif %}
-                            </p>
-
-                            <h5 class="card-subtitle mb-2 text-muted">Privilege.</h5>
-                            <p class="card-text">
-                                {% if user|has_perms:privileges.SystemManager %}
-                                    <span class="badge alert-danger">{{ privileges.SystemManager.value.1 }}</span>
-                                {% endif %}
-                                {% if user|has_perms:privileges.TestManager %}
-                                    <span class="badge alert-warning">{{ privileges.TestManager.value.1 }}</span>
-                                {% endif %}
-                                {% if user|has_perms:privileges.TBManager %}
-                                    <span class="badge badge-primary">{{ privileges.TBManager.value.1 }}</span>
-                                {% endif %}
-                                {% if user|has_perms:privileges.TBOperator %}
-                                    <span class="badge alert-success">{{ privileges.TBOperator.value.1 }}</span>
-                                {% endif %}
-                                {% if user|has_perms:privileges.Viewer %}
-                                    <span class="badge alert-info">{{ privileges.Viewer.value.1 }}</span>
-                                {% endif %}
-                                {% if user|has_perms:privileges.Testee %}
-                                    <span class="badge alert-dark">{{ privileges.Testee.value.1 }}</span>
-                                {% endif %}
-                            </p>
-                        </div>
-
-                        <div class="card-footer text-muted">
-                            <span style="font-size: 12px">Last login - {{ user.last_login }}<br></span>
-                            <span style="font-size: 12px">Create time - {{ user.created_time }}<br></span>
-                            <span style="font-size: 12px">
-                                Status -
-                                {% if user.is_active %}
-                                    active
-                                {% elif user.is_staff %}
-                                    staff
-                                {% elif user.is_superuser %}
-                                    superuser
-                                {% endif %}
-                            </span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-3">
-                    <div class="card mb-3">
-                        <div class="card-header">
-                            Student Profile.
-                        </div>
-
-                        <div class="card-body text-left">
-                            <h5 class="card-subtitle mb-2 text-muted">Student ID.</h5>
-                            <h4 class="card-text">{{ user.student.stu_id }}</h4>
-
-                            <h5 class="card-subtitle mb-2 text-muted">Department.</h5>
-                            <p class="card-text">{{ user.student.department }}</p>
-
-                            <h5 class="card-subtitle mb-2 text-muted">Squadron.</h5>
-                            <p class="card-text">{{ user.student.squadron }}</p>
-
-                            <h5 class="card-subtitle mb-2 text-muted">Grade.</h5>
-                            <p class="card-text">{{ user.student.grade }}</p>
-                        </div>
-
-                        <div class="card-footer text-right">
-                            <button onclick="self.location=document.referrer;" class="btn btn-primary">OK</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        {% if user.photo %}
+        <img
+          class="card-img-top"
+          src="{{ user.photo.url }}"
+          alt="{{ user.name }}"
+        />
         {% else %}
-            <div class="row">
-                <div class="col-lg-4">
-                    <div class="card mb-3">
-                        <div class="card-header">
-                            User Photo.
-                        </div>
-
-                        {% if user.photo %}
-                            <img class="card-img-top" src="{{ user.photo.url }}" alt="{{ user.name }}">
-                        {% else %}
-                            <img class="card-img-top" src="..." alt="{{ user.name }}">
-                        {% endif %}
-
-                        <div class="card-body">
-                            <p class="card-text">
-                                {% if user.introduction %}
-                                    {{ user.introduction }}
-                                {% else %}
-                                    Unset
-                                {% endif %}
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-8">
-                    <div class="card mb-3">
-                <div class="card-header">
-                    User Profile.
-                </div>
-
-                <div class="card-body">
-                    <h5 class="card-subtitle mb-2 text-muted">Reg ID.</h5>
-                    <h4 class="card-text">{{ user.reg_id }}</h4>
-
-                    <h5 class="card-subtitle mb-2 text-muted">Name.</h5>
-                    <p class="card-text">
-                        {% if user.name %}
-                            {{ user.name }}
-                        {% else %}
-                            Unset
-                        {% endif %}
-                    </p>
-
-                    <h5 class="card-subtitle mb-2 text-muted">Email.{% if user.email_is_verified %}<i class="fa fa-check-circle" style="color: green"></i>{% endif %}</h5></h5>
-                    <p class="card-text">
-                        {% if user.email %}
-                            {{ user.email }}
-                        {% else %}
-                            Unset
-                        {% endif %}
-                    </p>
-
-                    <h5 class="card-subtitle mb-2 text-muted">Gender.</h5>
-                    <p class="card-text">
-                        {% if user.gender == 1 %}Male
-                        {% elif user.gender == 2 %}Female
-                        {% elif user.gender == 3 %}Privacy
-                        {% else %}Unset
-                        {% endif %}
-                    </p>
-
-                    <h5 class="card-subtitle mb-2 text-muted">Identity.</h5>
-                    <p class="card-text">
-                        {% if user.identity %}
-                            {{ user.identity|readableIdentity }}
-                        {% else %}
-                            Unset
-                        {% endif %}
-                    </p>
-
-                    <h5 class="card-subtitle mb-2 text-muted">Privilege.</h5>
-                    <p class="card-text">
-                        {% if user|has_perms:privileges.SystemManager %}
-                            <span class="badge alert-danger">{{ privileges.SystemManager.value.1 }}</span>
-                        {% endif %}
-                        {% if user|has_perms:privileges.TestManager %}
-                            <span class="badge alert-warning">{{ privileges.TestManager.value.1 }}</span>
-                        {% endif %}
-                        {% if user|has_perms:privileges.TBManager %}
-                            <span class="badge badge-primary">{{ privileges.TBManager.value.1 }}</span>
-                        {% endif %}
-                        {% if user|has_perms:privileges.TBOperator %}
-                            <span class="badge alert-success">{{ privileges.TBOperator.value.1 }}</span>
-                        {% endif %}
-                        {% if user|has_perms:privileges.Viewer %}
-                            <span class="badge alert-info">{{ privileges.Viewer.value.1 }}</span>
-                        {% endif %}
-                        {% if user|has_perms:privileges.Testee %}
-                            <span class="badge alert-dark">{{ privileges.Testee.value.1 }}</span>
-                        {% endif %}
-                    </p>
-                </div>
-
-                <div class="card-footer text-muted">
-                    <span style="font-size: 12px">Last login - {{ user.last_login }}<br></span>
-                    <span style="font-size: 12px">Create time - {{ user.created_time }}<br></span>
-                    <span style="font-size: 12px">
-                        Status -
-                        {% if user.is_active %}
-                            active
-                        {% elif user.is_staff %}
-                            staff
-                        {% elif user.is_superuser %}
-                            superuser
-                        {% endif %}
-                    </span>
-
-                    <div class="text-right">
-                        <button onclick="self.location=document.referrer;" class="btn btn-primary">OK</button>
-                    </div>
-                </div>
-            </div>
-                </div>
-            </div>
+        <img class="card-img-top" src="..." alt="{{ user.name }}" />
         {% endif %}
+
+        <div class="card-body">
+          <p class="card-text">
+            {% if user.introduction %} {{ user.introduction|linebreaksbr }} {%
+            else %} Unset {% endif %}
+          </p>
+        </div>
+      </div>
     </div>
+
+    <div class="col-lg-5">
+      <div class="card mb-3">
+        <div class="card-header">User Profile.</div>
+
+        <div class="card-body text-left">
+          <h5 class="card-subtitle mb-2 text-muted">Register ID.</h5>
+          <h4 class="card-text">{{ user.reg_id }}</h4>
+
+          <h5 class="card-subtitle mb-2 text-muted">Name.</h5>
+          <p class="card-text">
+            {% if user.name %} {{ user.name }} {% else %} Unset {% endif %}
+          </p>
+
+          <h5 class="card-subtitle mb-2 text-muted">
+            Email.{% if user.email_is_verified %}<i
+              class="fa fa-check-circle"
+              style="color: green"
+            ></i
+            >{% endif %}
+          </h5>
+          <p class="card-text">
+            {% if user.email %} {{ user.email }} {% else %} Unset {% endif %}
+          </p>
+
+          <h5 class="card-subtitle mb-2 text-muted">Gender.</h5>
+          <p class="card-text">
+            {% if user.gender == 1 %}Male {% elif user.gender == 2 %}Female {%
+            elif user.gender == 3 %}Privacy {% else %}Unset {% endif %}
+          </p>
+
+          <h5 class="card-subtitle mb-2 text-muted">Identity.</h5>
+          <p class="card-text">
+            {% if user.identity %} {{ user.identity|readableIdentity }} {% else
+            %} Unset {% endif %}
+          </p>
+
+          <h5 class="card-subtitle mb-2 text-muted">Privilege.</h5>
+          <p class="card-text">
+            {% if user|has_perms(privileges.SystemManager) %}
+            <span class="badge alert-danger"
+              >{{ privileges.SystemManager.value.1 }}</span
+            >
+            {% endif %} {% if user|has_perms(privileges.TestManager) %}
+            <span class="badge alert-warning"
+              >{{ privileges.TestManager.value.1 }}</span
+            >
+            {% endif %} {% if user|has_perms(privileges.TBManager) %}
+            <span class="badge badge-primary"
+              >{{ privileges.TBManager.value.1 }}</span
+            >
+            {% endif %} {% if user|has_perms(privileges.TBOperator) %}
+            <span class="badge alert-success"
+              >{{ privileges.TBOperator.value.1 }}</span
+            >
+            {% endif %} {% if user|has_perms(privileges.Viewer) %}
+            <span class="badge alert-info"
+              >{{ privileges.Viewer.value.1 }}</span
+            >
+            {% endif %} {% if user|has_perms(privileges.Testee) %}
+            <span class="badge alert-dark"
+              >{{ privileges.Testee.value.1 }}</span
+            >
+            {% endif %}
+          </p>
+        </div>
+
+        <div class="card-footer text-muted">
+          <span style="font-size: 12px"
+            >Last login - {{ user.last_login }}<br
+          /></span>
+          <span style="font-size: 12px"
+            >Create time - {{ user.created_time }}<br
+          /></span>
+          <span style="font-size: 12px">
+            Status - {% if user.is_active %} active {% elif user.is_staff %}
+            staff {% elif user.is_superuser %} superuser {% endif %}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-3">
+      <div class="card mb-3">
+        <div class="card-header">Student Profile.</div>
+
+        <div class="card-body text-left">
+          <h5 class="card-subtitle mb-2 text-muted">Student ID.</h5>
+          <h4 class="card-text">{{ user.student.stu_id }}</h4>
+
+          <h5 class="card-subtitle mb-2 text-muted">Department.</h5>
+          <p class="card-text">{{ user.student.department }}</p>
+
+          <h5 class="card-subtitle mb-2 text-muted">Squadron.</h5>
+          <p class="card-text">{{ user.student.squadron }}</p>
+
+          <h5 class="card-subtitle mb-2 text-muted">Grade.</h5>
+          <p class="card-text">{{ user.student.grade }}</p>
+        </div>
+
+        <div class="card-footer text-right">
+          <button
+            onclick="self.location=document.referrer;"
+            class="btn btn-primary"
+          >
+            OK
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% else %}
+  <div class="row">
+    <div class="col-lg-4">
+      <div class="card mb-3">
+        <div class="card-header">User Photo.</div>
+
+        {% if user.photo %}
+        <img
+          class="card-img-top"
+          src="{{ user.photo.url }}"
+          alt="{{ user.name }}"
+        />
+        {% else %}
+        <img class="card-img-top" src="..." alt="{{ user.name }}" />
+        {% endif %}
+
+        <div class="card-body">
+          <p class="card-text">
+            {% if user.introduction %} {{ user.introduction }} {% else %} Unset
+            {% endif %}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-8">
+      <div class="card mb-3">
+        <div class="card-header">User Profile.</div>
+
+        <div class="card-body">
+          <h5 class="card-subtitle mb-2 text-muted">Reg ID.</h5>
+          <h4 class="card-text">{{ user.reg_id }}</h4>
+
+          <h5 class="card-subtitle mb-2 text-muted">Name.</h5>
+          <p class="card-text">
+            {% if user.name %} {{ user.name }} {% else %} Unset {% endif %}
+          </p>
+
+          <h5 class="card-subtitle mb-2 text-muted">Email.{% if user.email_is_verified %}<i class="fa fa-check-circle" style="color: green"></i>{% endif %}</h5></h5>
+          <p class="card-text">
+            {% if user.email %} {{ user.email }} {% else %} Unset {% endif %}
+          </p>
+
+          <h5 class="card-subtitle mb-2 text-muted">Gender.</h5>
+          <p class="card-text">
+            {% if user.gender == 1 %}Male {% elif user.gender == 2 %}Female {%
+            elif user.gender == 3 %}Privacy {% else %}Unset {% endif %}
+          </p>
+
+          <h5 class="card-subtitle mb-2 text-muted">Identity.</h5>
+          <p class="card-text">
+            {% if user.identity %} {{ user.identity|readableIdentity }} {% else
+            %} Unset {% endif %}
+          </p>
+
+          <h5 class="card-subtitle mb-2 text-muted">Privilege.</h5>
+          <p class="card-text">
+            {% if user|has_perms(privileges.SystemManager) %}
+            <span class="badge alert-danger"
+              >{{ privileges.SystemManager.value.1 }}</span
+            >
+            {% endif %} {% if user|has_perms(privileges.TestManager) %}
+            <span class="badge alert-warning"
+              >{{ privileges.TestManager.value.1 }}</span
+            >
+            {% endif %} {% if user|has_perms(privileges.TBManager) %}
+            <span class="badge badge-primary"
+              >{{ privileges.TBManager.value.1 }}</span
+            >
+            {% endif %} {% if user|has_perms(privileges.TBOperator) %}
+            <span class="badge alert-success"
+              >{{ privileges.TBOperator.value.1 }}</span
+            >
+            {% endif %} {% if user|has_perms(privileges.Viewer) %}
+            <span class="badge alert-info"
+              >{{ privileges.Viewer.value.1 }}</span
+            >
+            {% endif %} {% if user|has_perms(privileges.Testee) %}
+            <span class="badge alert-dark"
+              >{{ privileges.Testee.value.1 }}</span
+            >
+            {% endif %}
+          </p>
+        </div>
+
+        <div class="card-footer text-muted">
+          <span style="font-size: 12px"
+            >Last login - {{ user.last_login }}<br
+          /></span>
+          <span style="font-size: 12px"
+            >Create time - {{ user.created_time }}<br
+          /></span>
+          <span style="font-size: 12px">
+            Status - {% if user.is_active %} active {% elif user.is_staff %}
+            staff {% elif user.is_superuser %} superuser {% endif %}
+          </span>
+
+          <div class="text-right">
+            <button
+              onclick="self.location=document.referrer;"
+              class="btn btn-primary"
+            >
+              OK
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+</div>
 {% endblock %}

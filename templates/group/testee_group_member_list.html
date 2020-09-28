@@ -1,95 +1,106 @@
-{% extends 'new_base.html' %}
-
-{% block scripts %}
-    <script>
-        function searchFunction() {
-        var input, filter, table, tr, td, td2, i, txtValue, txtValue2;
-        input = document.getElementById("search");
-        filter = input.value.toUpperCase();
-        table = document.getElementById("table");
-        tr = table.getElementsByTagName("tr");
-            for (i = 0; i < tr.length; i++) {
-                td = tr[i].getElementsByTagName("td")[0];
-                td2 = tr[i].getElementsByTagName("td")[1];
-                if (td) {
-                    txtValue = td.innerText;
-                    txtValue2 = td2.innerText;
-                    if (txtValue.toUpperCase().indexOf(filter) > -1 || txtValue2.toUpperCase().indexOf(filter) > -1) {
-                        tr[i].style.display = "";
-                    } else {
-                        tr[i].style.display = "none";
-                    }
-                }
-            }
+{% extends 'new_base.html' %} {% block scripts %}
+<script>
+  function searchFunction() {
+    var input, filter, table, tr, td, td2, i, txtValue, txtValue2;
+    input = document.getElementById("search");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("table");
+    tr = table.getElementsByTagName("tr");
+    for (i = 0; i < tr.length; i++) {
+      td = tr[i].getElementsByTagName("td")[0];
+      td2 = tr[i].getElementsByTagName("td")[1];
+      if (td) {
+        txtValue = td.innerText;
+        txtValue2 = td2.innerText;
+        if (
+          txtValue.toUpperCase().indexOf(filter) > -1 ||
+          txtValue2.toUpperCase().indexOf(filter) > -1
+        ) {
+          tr[i].style.display = "";
+        } else {
+          tr[i].style.display = "none";
         }
-    </script>
-{% endblock %}
+      }
+    }
+  }
+</script>
+{% endblock %} {% block path %}
+<li class="breadcrumb-item" aria-current="page">
+  <a href="{{ url('testee_group_list') }}">Testee Group List</a>
+</li>
+<li class="breadcrumb-item active" aria-current="page">
+  Testee Group Member List
+</li>
+{% endblock %} {% block content %}
+<main class="testee-group-member-list">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-12">
+        <h2>Testee Group Member List.</h2>
 
-{% block path %}
-    <li class="breadcrumb-item" aria-current="page"><a href="{% url 'testee_group_list' %}">Testee Group List</a></li>
-    <li class="breadcrumb-item active" aria-current="page">Testee Group Member List</li>
-{% endblock %}
-
-{% block content %}
-    <main class="testee-group-member-list">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-12">
-                    <h2>Testee Group Member List.</h2>
-
-                    <div class="search_bar">
-                        <input class="form-control" type="text" id="search" onkeyup="searchFunction()" placeholder="Search by ID or Name...">
-                    </div>
-
-                    <div class="table-responsive">
-                        <table class="table table-hover" id="table">
-                            <thead class="thead-light">
-                                <tr>
-                                    <th>Account./StudentID.</th>
-                                    <th>Name.</th>
-                                    <th>Department.</th>
-                                    <th>Squadron.</th>
-                                    <th>Grade.</th>
-                                </tr>
-                            </thead>
-
-                            <tbody id="group-members">
-                                {% if group_members %}
-                                    {% for member in group_members %}
-                                        <tr>
-                                            {% if member.student %}
-                                                <td>{{ member.student.stu_id }}</td>
-                                                <td>{{ member.name }}</td>
-                                                <td>{{ member.student.department }}</td>
-                                                <td>{{ member.student.squadron }}</td>
-                                                <td>{{ member.student.grade }}</td>
-                                            {% else %}
-                                                <td>{{ member.reg_id }}</td>
-                                                <td>{{ member.name }}</td>
-                                                <td colspan="3">None</td>
-                                            {% endif %}
-                                        </tr>
-                                    {% endfor %}
-                                {% else %}
-                                    <tr>
-                                        <td colspan="5" class="text-center">No Data.</td>
-                                    </tr>
-                                {% endif %}
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div class="text-center">
-                        <button type="button" class="btn btn-primary" onclick="self.location=document.referrer;">OK</button>
-                    </div>
-                </div>
-            </div>
+        <div class="search_bar">
+          <input
+            class="form-control"
+            type="text"
+            id="search"
+            onkeyup="searchFunction()"
+            placeholder="Search by ID or Name..."
+          />
         </div>
-    </main>
-    <style>
-        .testee-group-member-list .table-responsive table > thead > tr > th,
-        .testee-group-member-list .table-responsive table > tbody > tr > td{
-            text-align: center;
-        }
-    </style>
+
+        <div class="table-responsive">
+          <table class="table table-hover" id="table">
+            <thead class="thead-light">
+              <tr>
+                <th>Account./StudentID.</th>
+                <th>Name.</th>
+                <th>Department.</th>
+                <th>Squadron.</th>
+                <th>Grade.</th>
+              </tr>
+            </thead>
+
+            <tbody id="group-members">
+              {% if group_members %} {% for member in group_members %}
+              <tr>
+                {% if member.student %}
+                <td>{{ member.student.stu_id }}</td>
+                <td>{{ member.name }}</td>
+                <td>{{ member.student.department }}</td>
+                <td>{{ member.student.squadron }}</td>
+                <td>{{ member.student.grade }}</td>
+                {% else %}
+                <td>{{ member.reg_id }}</td>
+                <td>{{ member.name }}</td>
+                <td colspan="3">None</td>
+                {% endif %}
+              </tr>
+              {% endfor %} {% else %}
+              <tr>
+                <td colspan="5" class="text-center">No Data.</td>
+              </tr>
+              {% endif %}
+            </tbody>
+          </table>
+        </div>
+
+        <div class="text-center">
+          <button
+            type="button"
+            class="btn btn-primary"
+            onclick="self.location=document.referrer;"
+          >
+            OK
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+<style>
+  .testee-group-member-list .table-responsive table > thead > tr > th,
+  .testee-group-member-list .table-responsive table > tbody > tr > td {
+    text-align: center;
+  }
+</style>
 {% endblock %}

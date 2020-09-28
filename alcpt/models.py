@@ -242,6 +242,7 @@ class Choice(models.Model):
 # exam: this answer sheet is related to what exam
 # user: this answer sheet is related to what user
 # finish_time: finished time of the answer sheet
+# is_tested: 是否有作答 AnswerSheet
 # is_finished: if value is False that this answer sheet does not finish; True is the opposite
 # score: score of the answer sheet
 class AnswerSheet(models.Model):

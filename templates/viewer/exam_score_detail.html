@@ -1,8 +1,12 @@
 {% extends 'new_base.html' %}
 
 {% block path %}
-<li class="breadcrumb-item" aria-current="page"><a href="{% url 'exam_score_list' %}">View Testee Score</a></li>
-<li class="breadcrumb-item active" aria-current="page">View - {{ exam.name }}</li>
+<li class="breadcrumb-item" aria-current="page">
+    <a href="{{ url('exam_score_list') }}">View Testee Score</a>
+</li>
+<li class="breadcrumb-item active" aria-current="page">
+    View - {{ exam.name }}
+</li>
 {% endblock %}
 
 {% block content %}
@@ -31,16 +35,18 @@
                                     {% endif %}
                                 </td>
                                 <td class="text-center">{{ testee.name }}</td>
-                                <td class="text-center">
-                                    {% if answer_sheet.is_tested is False %}
-                                    未進行測驗
-                                    {% else %}
-                                    {{ answer_sheet.score }}
-                                    {% endif %}
-                                </td>
+
+                                {% if answer_sheet.is_tested == False %}
+                                <td class="text-center" data-title="Type" style="color: #c12e2a">未進行測驗</td>
+                                {% elif answer_sheet.score  < 60 %}
+                                <td class="text-center" data-title="Type" style="color: #c12e2a">{{ answer_sheet.score }}</td>
+                                {% else %}
+                                <td class="text-center" data-title="Type" style="color: #00A600">{{ answer_sheet.score }}</td>
+                                {% endif %}
+
                                 <td class="text-right">
                                     {% if testee.student %}
-                                    <a href="{% url 'view_testee_info' exam.id testee.reg_id %}">&rightarrow;</a>
+                                    <a href="{{ url('view_testee_info', args=[exam.id, testee.reg_id]) }}">&rightarrow;</a>
                                     {% endif %}
                                 </td>
                             </tr>

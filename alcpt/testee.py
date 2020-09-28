@@ -30,9 +30,10 @@ def exam_list(request):
         examList.append(exam)
 
     practiceList = []
-    practices = Exam.objects.filter(is_public=False).filter(created_by=request.user)
+    practices = Exam.objects.filter(is_public=False).filter(
+        created_by=request.user)
     for practice in practices:
-            practiceList.append(practice)
+        practiceList.append(practice)
 
     return render(request, 'testee/exam_list.html', locals())
 
@@ -214,16 +215,15 @@ def score_list(request):
     layout = go.Layout({
         'title': 'Exam考試合格率分析',
         'annotations': [
-             {
+            {
                 'font': {
-                   'size': 20
+                    'size': 20
                 },
                 'showarrow': False,
                 'text': '合格率',
-             },
-          ]
-        }
-    )
+            },
+        ]
+    })
     fig = go.Figure(data=data, layout=layout)
     fig.update_traces(marker=dict(colors=colors))
     exam_pie_chart = pyo.plot(fig, output_type='div')
@@ -298,20 +298,25 @@ def practice_create(request, kind):
 
         practice_type = ExamType.Listening if kind == 'listening' else ExamType.Reading
 
-        selected_types = request.POST.getlist('question_type',)     # getlist's element type is str.
+        # getlist's element type is str.
+        selected_types = request.POST.getlist('question_type', )
         question_types = []
-        for item in selected_types:                                 # Here, it turn all elements to int
+        for item in selected_types:  # Here, it turn all elements to int
             question_types.append(int(item))
 
-        q_types = []    # element's type is QuestionType
+        q_types = []  # element's type is QuestionType
         for valid_type in QuestionType:
             if valid_type.value[0] in question_types:
                 q_types.append(valid_type)
 
-        practice_exam = practicemanager.create_practice(user=user, practice_type=practice_type,
-                                                        question_types=selected_types, question_num=question_num)
+        practice_exam = practicemanager.create_practice(
+            user=user,
+            practice_type=practice_type,
+            question_types=selected_types,
+            question_num=question_num)
 
-        messages.success(request, 'Create successfully, {}'.format(practice_exam))
+        messages.success(request,
+                         'Create successfully, {}'.format(practice_exam))
         return redirect('testee_exam_list')
     else:
         return render(request, 'practice/select.html', locals())
@@ -327,7 +332,9 @@ def view_answersheet_content(request, answersheet_id):
                 return redirect('testee_score_list')
 
     except ObjectDoesNotExist:
-        messages.error(request, 'Answer sheet does not exist, answersheet_id: {}'.format(answersheet_id))
+        messages.error(
+            request, 'Answer sheet does not exist, answersheet_id: {}'.format(
+                answersheet_id))
         return redirect('testee_score_list')
 
     if answersheet.is_finished:
@@ -347,7 +354,8 @@ def view_answersheet_content(request, answersheet_id):
         answers_results_favorites = zip(answers, result_list, is_favorite)
         return render(request, 'testee/answersheet_content.html', locals())
     else:
-        messages.warning(request, 'Does not finished this practice. Reject your request.')
+        messages.warning(
+            request, 'Does not finished this practice. Reject your request.')
         return redirect('testee_score_list')
 
 @permission_check(UserType.Testee)
@@ -441,7 +449,8 @@ def start_exam(request, exam_id):
             return redirect('testee_exam_list')
 
     except ObjectDoesNotExist:
-        messages.error(request, 'Exam does not exist, Exam id: {}'.format(exam_id))
+        messages.error(request,
+                       'Exam does not exist, Exam id: {}'.format(exam_id))
         return redirect('testee_exam_list')
 
     answer_sheet = AnswerSheet.objects.get(exam=exam, user=request.user)
@@ -455,6 +464,48 @@ def start_exam(request, exam_id):
         return redirect('testee_answering',
                     exam_id=exam.id,
                     answer_id=Answer.objects.filter(answer_sheet=answer_sheet)[0].id)   # transfer the first question
+
+@permission_check(UserType.Testee)
+@require_http_methods(["GET"])
+def start_practice(request, exam_id):
+    try:
+        exam = Exam.objects.get(id=exam_id)
+
+        now_time = datetime.now()
+        if not exam.is_public:
+            pass
+        elif exam.start_time < now_time < exam.finish_time:
+            pass
+        elif now_time < exam.start_time:
+            messages.warning(request, 'Exam does not start.')
+            return redirect('testee_exam_list')
+        elif now_time > exam.finish_time:
+            messages.warning(request, 'Exam had finished.')
+            return redirect('testee_exam_list')
+
+    except ObjectDoesNotExist:
+        messages.error(request, 'Exam does not exist, Exam id: {}'.format(exam_id))
+        return redirect('testee_exam_list')
+
+    try:
+        answer_sheet = AnswerSheet.objects.get(exam=exam, user=request.user)
+        if answer_sheet.is_finished:
+            messages.warning(request, 'You had done this exam.')
+            return redirect('testee_exam_list')
+    except ObjectDoesNotExist:
+        answer_sheet = AnswerSheet.objects.create(exam=exam, user=request.user)
+        answer_sheet.is_tested = True
+
+        all_questions = list(exam.testpaper.question_list.all())
+        random.shuffle(all_questions)
+
+        for question in all_questions:
+            Answer.objects.create(answer_sheet=answer_sheet, question=question)
+
+        return redirect('testee_answering',
+                        exam_id=exam.id,
+                        answer_id=Answer.objects.filter(answer_sheet=answer_sheet)[0].id)   # transfer the first question
+
 
 @permission_check(UserType.Testee)
 @require_http_methods(["GET", "POST"])
@@ -472,18 +523,28 @@ def answering(request, exam_id, answer_id):
             return redirect('testee_score_list')
         if answer not in answer_sheet.answer_set.all():
             messages.warning(request, 'Not your answer: {}'.format(answer_id))
-            return redirect('testee_answering', exam_id=exam.id, answer_id=list(answer_sheet.answer_set.all())[0].id)
+            return redirect('testee_answering',
+                            exam_id=exam.id,
+                            answer_id=list(
+                                answer_sheet.answer_set.all())[0].id)
 
     except ObjectDoesNotExist:
-        messages.error(request, 'Answer id error, answer id: {}'.format(answer_id))
+        messages.error(request,
+                       'Answer id error, answer id: {}'.format(answer_id))
         return redirect('testee_exam_list')
 
     try:
-        the_next_question = Answer.objects.filter(answer_sheet=answer_sheet).filter(selected=-1)[0]
+        the_next_question = Answer.objects.filter(
+            answer_sheet=answer_sheet).filter(selected=-1)[0]
 
         if answer.selected != -1:
-            messages.warning(request, 'This question had answered, please answer from answer id: {}'.format(the_next_question.id))
-            return redirect('testee_answering', exam_id=exam_id, answer_id=the_next_question.id)
+            messages.warning(
+                request,
+                'This question had answered, please answer from answer id: {}'.
+                format(the_next_question.id))
+            return redirect('testee_answering',
+                            exam_id=exam_id,
+                            answer_id=the_next_question.id)
 
     except:
         messages.success(request, 'You had finished the exam.')
@@ -498,16 +559,22 @@ def answering(request, exam_id, answer_id):
         answering_ans.selected = selected_answer
         answering_ans.save()
 
-        if len(Answer.objects.filter(answer_sheet=answer_sheet).filter(selected=-1)) == 0:
+        if len(
+                Answer.objects.filter(answer_sheet=answer_sheet).filter(
+                    selected=-1)) == 0:
             messages.success(request, 'You had finished the exam.')
             score = testmanager.calculate_score(exam.id, answer_sheet)
             return redirect('testee_score_list')
         else:
-            the_next_question = list(Answer.objects.filter(answer_sheet=answer_sheet).filter(selected=-1)).pop(0)
+            the_next_question = list(
+                Answer.objects.filter(answer_sheet=answer_sheet).filter(
+                    selected=-1)).pop(0)
 
         answers = answer_sheet.answer_set.all()
 
-        return redirect('testee_answering', exam_id=exam_id, answer_id=the_next_question.id)
+        return redirect('testee_answering',
+                        exam_id=exam_id,
+                        answer_id=the_next_question.id)
     else:
         answers = answer_sheet.answer_set.all()
 
@@ -520,12 +587,17 @@ def settle(request, exam_id):
     try:
         exam = Exam.objects.get(id=exam_id)
         try:
-            answer_sheet = AnswerSheet.objects.get(exam=exam, user=request.user)
+            answer_sheet = AnswerSheet.objects.get(exam=exam,
+                                                   user=request.user)
             score = testmanager.calculate_score(exam.id, answer_sheet)
-            messages.success(request, "You have settled this exam score directly. You got {} point in this exam.".format(score))
+            messages.success(
+                request,
+                "You have settled this exam score directly. You got {} point in this exam."
+                .format(score))
             return redirect('testee_score_list')
         except ObjectDoesNotExist:
-            messages.error(request, "Query failed, you may not start this exam.")
+            messages.error(request,
+                           "Query failed, you may not start this exam.")
             return redirect('testee_exam_list')
 
     except ObjectDoesNotExist:
@@ -537,22 +609,27 @@ def settle(request, exam_id):
 def report_question(request, question_id):
     if request.method == 'POST':
         try:
-            category = ReportCategory.objects.get(id=int(request.POST.get('category')))
+            category = ReportCategory.objects.get(
+                id=int(request.POST.get('category')))
             Question.objects.filter(id=question_id).update(state=4)
             reported_question = Question.objects.get(id=question_id)
 
             supplement_note = request.POST.get('supplement_note')
 
-            question_report = Report.objects.create(staff_notification=True,
-                                                    category=category,
-                                                    question=reported_question,
-                                                    supplement_note=supplement_note,
-                                                    created_by=request.user,
-                                                    state=1)
+            question_report = Report.objects.create(
+                staff_notification=True,
+                category=category,
+                question=reported_question,
+                supplement_note=supplement_note,
+                created_by=request.user,
+                state=1)
 
             question_report.save()
 
-            messages.success(request, 'Thanks for your report, we will review this question as soon as possible.')
+            messages.success(
+                request,
+                'Thanks for your report, we will review this question as soon as possible.'
+            )
 
             return redirect('testee_score_list')
 
@@ -565,6 +642,7 @@ def report_question(request, question_id):
         categories = ReportCategory.objects.all()
         reported_question = Question.objects.get(id=question_id)
         if reported_question.state == 4:
-            messages.warning(request, "This question had been reported, thank you.")
+            messages.warning(request,
+                             "This question had been reported, thank you.")
             return redirect(request.META.get('HTTP_REFERER'))
         return render(request, 'testee/report_question.html', locals())
