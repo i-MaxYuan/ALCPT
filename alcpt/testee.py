@@ -444,21 +444,15 @@ def start_exam(request, exam_id):
         messages.error(request, 'Exam does not exist, Exam id: {}'.format(exam_id))
         return redirect('testee_exam_list')
 
-    try:
-        answer_sheet = AnswerSheet.objects.get(exam=exam, user=request.user)
-        if answer_sheet.is_finished:
-            messages.warning(request, 'You had done this exam.')
-            return redirect('testee_exam_list')
-    except ObjectDoesNotExist:
-        answer_sheet = AnswerSheet.objects.create(exam=exam, user=request.user)
-
-        all_questions = list(exam.testpaper.question_list.all())
-        random.shuffle(all_questions)
-
-        for question in all_questions:
-            Answer.objects.create(answer_sheet=answer_sheet, question=question)
-
-    return redirect('testee_answering',
+    answer_sheet = AnswerSheet.objects.get(exam=exam, user=request.user)
+    if answer_sheet.is_finished:
+        messages.warning(request, 'You had done this exam.')
+        return redirect('testee_exam_list')
+    else:
+        exam = Exam.objects.get(id=exam_id)
+        answer_sheet.is_tested = True
+        answer_sheet.save()
+        return redirect('testee_answering',
                     exam_id=exam.id,
                     answer_id=Answer.objects.filter(answer_sheet=answer_sheet)[0].id)   # transfer the first question
 

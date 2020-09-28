@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+import random
 
 from django.shortcuts import render, redirect
 
@@ -12,10 +13,9 @@ from alcpt.managerfuncs import testmanager
 from alcpt.decorators import permission_check
 from alcpt.proclamation import notify
 from alcpt.definitions import UserType, QuestionType, QuestionTypeCounts, ExamType
-from alcpt.models import User, Exam, TestPaper, Group, Question, Proclamation
+from alcpt.models import User, Exam, TestPaper, Group, Question, Proclamation, AnswerSheet, Answer
 from alcpt.email import notification_mail
 from alcpt.exceptions import *
-
 
 @permission_check(UserType.TestManager)
 @require_http_methods(["GET"])
@@ -70,10 +70,21 @@ def exam_create(request):
                                         "This is an automatic notification mail from system, " \
                                         "please do not reply directly.\n" + \
                                         "Thanks for your cooperation, hope you get good grades."
-            # add the testee into the exam.
+
             for testee in selected_group.member.all():
+                # add the testee into the exam.
                 exam.testeeList.add(testee)
-            exam.save()
+                exam.save()
+
+                # create empty answersheet for each testee
+                AnswerSheet.objects.create(exam=exam, user=testee)
+                answer_sheet = AnswerSheet.objects.get(exam=exam, user=testee)
+                exams = Exam.objects.get(id=exam.id)
+                all_questions = list(exams.testpaper.question_list.all())
+                random.shuffle(all_questions)
+
+                for question in all_questions:
+                    Answer.objects.create(answer_sheet=answer_sheet, question=question)
 
             # notification_mail(list(selected_group.member.all()), notification_mail_content)
 
@@ -90,8 +101,8 @@ def exam_create(request):
                    users=list(User.objects.filter(exam__testeeList__exam=exam).distinct()))
 
             messages.success(request, "Successfully created a new exam - {}.".format(exam.name))
-        except:
-            messages.error(request, "Failed created, exam name had been used - {}".format(exam_name))
+        except ObjectDoesNotExist as f:
+            messages.error(request, "Failed created, exam name had been used - {}"+f.format(exam_name))
 
         return redirect('exam_list')
     else:

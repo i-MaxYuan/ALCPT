@@ -1,78 +1,75 @@
 {% extends 'new_base.html' %}
 
-{% block scripts %}
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>   <!--for chart-->
-{% endblock %}
-
 {% block path %}
-    <li class="breadcrumb-item" aria-current="page"><a href="{% url 'exam_score_list' %}">View Testee Score</a></li>
-    <li class="breadcrumb-item active" aria-current="page">View - {{ exam.name }}</li>
+<li class="breadcrumb-item" aria-current="page"><a href="{% url 'exam_score_list' %}">View Testee Score</a></li>
+<li class="breadcrumb-item active" aria-current="page">View - {{ exam.name }}</li>
 {% endblock %}
 
 {% block content %}
-    <main class="view-exam-score-detail">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-md-6">
-                    <h2>{{ exam.name }}.</h2>
-                    <div class="table-responsive" style="height: 65vh">
-                        <table class="table table-hover">
-                            <thead class="thead-light">
-                                <th class="text-center">ID.</th>
-                                <th class="text-center">Name.</th>
-                                <th class="text-center">Score.</th>
-                                <th class="text-right"></th>
-                            </thead>
+<main class="view-exam-score-detail">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <h2>{{ exam.name }}.</h2>
+                <div class="table-responsive" style="height: 65vh">
+                    <table class="table table-hover">
+                        <thead class="thead-light">
+                            <th class="text-center">ID.</th>
+                            <th class="text-center">Name.</th>
+                            <th class="text-center">Score.</th>
+                            <th class="text-right"></th>
+                        </thead>
 
-                            <tbody>
-                                {% for testee, answer_sheet in testeeData %}
-                                    <tr>
-                                        <td class="text-center">
-                                            {% if testee.student %}
-                                                {{ testee.student.stu_id }}
-                                            {% else %}
-                                                {{ testee.reg_id }}
-                                            {% endif %}
-                                        </td>
-                                        <td class="text-center">{{ testee.name }}</td>
-                                        <td class="text-center">
-                                            {% if answer_sheet.score is none %}
-                                                未進行測驗
-                                            {% else %}
-                                                {{ answer_sheet.score }}
-                                            {% endif %}
-                                        </td>
-                                        <td class="text-right">
-                                            {% if testee.student %}
-                                                <a href="{% url 'view_testee_info' exam.id testee.reg_id %}">&rightarrow;</a>
-                                            {% endif %}
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="float-right">
-                        <button class="btn btn-primary" onclick="history.go(-1)">OK</button>
-                    </div>
+                        <tbody>
+                            {% for testee, answer_sheet in testeeData %}
+                            <tr>
+                                <td class="text-center">
+                                    {% if testee.student %}
+                                    {{ testee.student.stu_id }}
+                                    {% else %}
+                                    {{ testee.reg_id }}
+                                    {% endif %}
+                                </td>
+                                <td class="text-center">{{ testee.name }}</td>
+                                <td class="text-center">
+                                    {% if answer_sheet.is_tested is False %}
+                                    未進行測驗
+                                    {% else %}
+                                    {{ answer_sheet.score }}
+                                    {% endif %}
+                                </td>
+                                <td class="text-right">
+                                    {% if testee.student %}
+                                    <a href="{% url 'view_testee_info' exam.id testee.reg_id %}">&rightarrow;</a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
+            </div>
 
-                    <div class="col-md-6">
-                        {% autoescape off %}
-                        {{ pie_chart }}
-                        {% endautoescape %}
-                        <p>平均分數：{{ testee_score_means }}</p>
-                    </div>
+            <div class="col-md-6">
+                {% autoescape off %}
+                {{ pie_chart }}
+                {% endautoescape %}
+                <p>平均分數：{{ testee_score_means }}</p>
+            </div>
+            <div class="float-right">
+                <button class="btn btn-primary" onclick="history.go(-1)">OK</button>
             </div>
         </div>
-    </main>
-    <style>
-        .view-exam-score-detail .container .row .col-md-6 table > tbody > tr > td > a{
-            text-decoration: none;
-            visibility: hidden;
-        }
-        .view-exam-score-detail .container .row .col-md-6 table > tbody > tr:hover > td > a{
-            visibility: visible;
-        }
-    </style>
+    </div>
+</main>
+<style>
+    .view-exam-score-detail .container .row .col-md-6 table>tbody>tr>td>a {
+        text-decoration: none;
+        visibility: hidden;
+    }
+
+    .view-exam-score-detail .container .row .col-md-6 table>tbody>tr:hover>td>a {
+        visibility: visible;
+    }
+</style>
 {% endblock %}

@@ -248,6 +248,7 @@ class AnswerSheet(models.Model):
     exam = models.ForeignKey('Exam', on_delete=models.CASCADE, blank=True)
     user = models.ForeignKey('User', on_delete=models.CASCADE)      # Student -> User
     finish_time = models.DateTimeField(auto_now_add=True)
+    is_tested = models.BooleanField(default=False)
     is_finished = models.BooleanField(default=False)
     score = models.PositiveSmallIntegerField(null=True)
 
