@@ -58,6 +58,7 @@ CREATE TABLE `alcpt_answersheet` (
   `score` smallint unsigned DEFAULT NULL,
   `exam_id` int NOT NULL,
   `user_id` int NOT NULL,
+  `is_tested` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `alcpt_answersheet_exam_id_147bc9a1_fk_alcpt_exam_id` (`exam_id`),
   KEY `alcpt_answersheet_user_id_8e290a44_fk_alcpt_user_id` (`user_id`),
@@ -826,7 +827,7 @@ CREATE TABLE `captcha_captchastore` (
   `expiration` datetime(6) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `hashkey` (`hashkey`)
-) ENGINE=InnoDB AUTO_INCREMENT=404 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=406 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -835,7 +836,7 @@ CREATE TABLE `captcha_captchastore` (
 
 LOCK TABLES `captcha_captchastore` WRITE;
 /*!40000 ALTER TABLE `captcha_captchastore` DISABLE KEYS */;
-INSERT INTO `captcha_captchastore` VALUES (403,'BRLH','brlh','964f4fa76e9c1371db45745e5ee44e190e7515cf','2020-09-24 11:43:45.907214');
+INSERT INTO `captcha_captchastore` VALUES (403,'BRLH','brlh','964f4fa76e9c1371db45745e5ee44e190e7515cf','2020-09-24 11:43:45.907214'),(404,'NTTY','ntty','3ffaa1903ddb96e9e1373c2b8cbe58f7a914d56d','2020-09-28 23:36:04.796195'),(405,'KCHO','kcho','b00f473fadcba98bccbee68898be823fbcaabdf2','2020-09-28 23:36:06.158629');
 /*!40000 ALTER TABLE `captcha_captchastore` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -911,7 +912,7 @@ CREATE TABLE `django_migrations` (
   `name` varchar(255) NOT NULL,
   `applied` datetime(6) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -920,7 +921,7 @@ CREATE TABLE `django_migrations` (
 
 LOCK TABLES `django_migrations` WRITE;
 /*!40000 ALTER TABLE `django_migrations` DISABLE KEYS */;
-INSERT INTO `django_migrations` VALUES (1,'contenttypes','0001_initial','2020-02-11 12:55:28.154105'),(2,'alcpt','0001_initial','2020-02-11 12:55:29.436003'),(3,'admin','0001_initial','2020-02-11 12:55:29.523835'),(4,'admin','0002_logentry_remove_auto_add','2020-02-11 12:55:29.551044'),(5,'contenttypes','0002_remove_content_type_name','2020-02-11 12:55:29.627345'),(6,'auth','0001_initial','2020-02-11 12:55:29.799531'),(7,'auth','0002_alter_permission_name_max_length','2020-02-11 12:55:29.834748'),(8,'auth','0003_alter_user_email_max_length','2020-02-11 12:55:29.852611'),(9,'auth','0004_alter_user_username_opts','2020-02-11 12:55:29.861920'),(10,'auth','0005_alter_user_last_login_null','2020-02-11 12:55:29.871194'),(11,'auth','0006_require_contenttypes_0002','2020-02-11 12:55:29.873803'),(12,'auth','0007_alter_validators_add_error_messages','2020-02-11 12:55:29.887929'),(13,'auth','0008_alter_user_username_max_length','2020-02-11 12:55:29.896072'),(14,'captcha','0001_initial','2020-02-11 12:55:29.918277'),(15,'sessions','0001_initial','2020-02-11 12:55:29.945620'),(16,'alcpt','0002_auto_20200211_1457','2020-02-11 14:57:20.133290'),(17,'alcpt','0002_auto_20200212_2312','2020-02-12 23:13:10.729115'),(18,'alcpt','0003_testpaper_is_used','2020-02-12 23:32:05.156396'),(19,'alcpt','0004_auto_20200214_0950','2020-02-14 09:50:44.665963'),(20,'alcpt','0005_auto_20200216_0016','2020-02-18 11:44:28.056102'),(21,'alcpt','0006_remove_question_used_freq','2020-02-18 11:44:28.218210'),(22,'alcpt','0007_auto_20200219_0102','2020-02-19 01:02:20.889312'),(23,'alcpt','0008_auto_20200220_0855','2020-02-20 08:55:12.109729'),(24,'alcpt','0009_auto_20200223_0054','2020-02-23 00:54:56.335952'),(25,'alcpt','0010_user_introduction','2020-02-24 01:48:36.068849'),(26,'alcpt','0011_auto_20200228_0224','2020-02-28 02:24:43.896742'),(27,'alcpt','0012_user_photo','2020-03-02 11:23:51.184589'),(28,'admin','0003_logentry_add_action_flag_choices','2020-03-06 00:28:02.820436'),(29,'auth','0009_alter_user_last_name_max_length','2020-03-06 00:28:02.858645'),(30,'auth','0010_alter_group_name_max_length','2020-03-06 00:28:02.935353'),(31,'auth','0011_update_proxy_permissions','2020-03-06 00:28:02.962196'),(32,'alcpt','0013_exam_testeelist','2020-03-12 00:41:54.833163'),(33,'alcpt','0014_delete_testeelist','2020-03-12 00:41:54.982885'),(34,'alcpt','0015_notification','2020-03-17 19:04:42.665041'),(35,'alcpt','0015_auto_20200318_0845','2020-03-18 08:45:45.492761'),(36,'alcpt','0016_auto_20200318_1708','2020-03-19 01:08:23.122393'),(37,'alcpt','0017_auto_20200319_0108','2020-03-19 01:08:23.212788'),(38,'auth','0012_alter_user_first_name_max_length','2020-09-24 11:36:35.280240'),(39,'django_plotly_dash','0001_initial','2020-09-24 11:36:35.324549'),(40,'django_plotly_dash','0002_add_examples','2020-09-24 11:36:35.344285'),(41,'alcpt','0002_auto_20200924_1137','2020-09-24 11:37:25.837784');
+INSERT INTO `django_migrations` VALUES (1,'contenttypes','0001_initial','2020-02-11 12:55:28.154105'),(2,'alcpt','0001_initial','2020-02-11 12:55:29.436003'),(3,'admin','0001_initial','2020-02-11 12:55:29.523835'),(4,'admin','0002_logentry_remove_auto_add','2020-02-11 12:55:29.551044'),(5,'contenttypes','0002_remove_content_type_name','2020-02-11 12:55:29.627345'),(6,'auth','0001_initial','2020-02-11 12:55:29.799531'),(7,'auth','0002_alter_permission_name_max_length','2020-02-11 12:55:29.834748'),(8,'auth','0003_alter_user_email_max_length','2020-02-11 12:55:29.852611'),(9,'auth','0004_alter_user_username_opts','2020-02-11 12:55:29.861920'),(10,'auth','0005_alter_user_last_login_null','2020-02-11 12:55:29.871194'),(11,'auth','0006_require_contenttypes_0002','2020-02-11 12:55:29.873803'),(12,'auth','0007_alter_validators_add_error_messages','2020-02-11 12:55:29.887929'),(13,'auth','0008_alter_user_username_max_length','2020-02-11 12:55:29.896072'),(14,'captcha','0001_initial','2020-02-11 12:55:29.918277'),(15,'sessions','0001_initial','2020-02-11 12:55:29.945620'),(16,'alcpt','0002_auto_20200211_1457','2020-02-11 14:57:20.133290'),(17,'alcpt','0002_auto_20200212_2312','2020-02-12 23:13:10.729115'),(18,'alcpt','0003_testpaper_is_used','2020-02-12 23:32:05.156396'),(19,'alcpt','0004_auto_20200214_0950','2020-02-14 09:50:44.665963'),(20,'alcpt','0005_auto_20200216_0016','2020-02-18 11:44:28.056102'),(21,'alcpt','0006_remove_question_used_freq','2020-02-18 11:44:28.218210'),(22,'alcpt','0007_auto_20200219_0102','2020-02-19 01:02:20.889312'),(23,'alcpt','0008_auto_20200220_0855','2020-02-20 08:55:12.109729'),(24,'alcpt','0009_auto_20200223_0054','2020-02-23 00:54:56.335952'),(25,'alcpt','0010_user_introduction','2020-02-24 01:48:36.068849'),(26,'alcpt','0011_auto_20200228_0224','2020-02-28 02:24:43.896742'),(27,'alcpt','0012_user_photo','2020-03-02 11:23:51.184589'),(28,'admin','0003_logentry_add_action_flag_choices','2020-03-06 00:28:02.820436'),(29,'auth','0009_alter_user_last_name_max_length','2020-03-06 00:28:02.858645'),(30,'auth','0010_alter_group_name_max_length','2020-03-06 00:28:02.935353'),(31,'auth','0011_update_proxy_permissions','2020-03-06 00:28:02.962196'),(32,'alcpt','0013_exam_testeelist','2020-03-12 00:41:54.833163'),(33,'alcpt','0014_delete_testeelist','2020-03-12 00:41:54.982885'),(34,'alcpt','0015_notification','2020-03-17 19:04:42.665041'),(35,'alcpt','0015_auto_20200318_0845','2020-03-18 08:45:45.492761'),(36,'alcpt','0016_auto_20200318_1708','2020-03-19 01:08:23.122393'),(37,'alcpt','0017_auto_20200319_0108','2020-03-19 01:08:23.212788'),(38,'auth','0012_alter_user_first_name_max_length','2020-09-24 11:36:35.280240'),(39,'django_plotly_dash','0001_initial','2020-09-24 11:36:35.324549'),(40,'django_plotly_dash','0002_add_examples','2020-09-24 11:36:35.344285'),(41,'alcpt','0002_auto_20200924_1137','2020-09-24 11:37:25.837784'),(42,'alcpt','0002_answersheet_is_tested','2020-09-28 23:32:35.553236');
 /*!40000 ALTER TABLE `django_migrations` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1018,4 +1019,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-09-24 11:41:21
+-- Dump completed on 2020-09-28 23:36:23
