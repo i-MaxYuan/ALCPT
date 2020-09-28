@@ -166,7 +166,10 @@ def public_exam_average_score(exam: Exam):
     total_score = 0
 
     for answer_sheet in exam.answersheet_set.all():
-        total_score += answer_sheet.score
+        if answer_sheet.score is None:
+            continue
+        else:
+            total_score += answer_sheet.score
 
     exam.average_score = total_score / exam.answersheet_set.all().count()
     exam.save()

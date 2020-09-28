@@ -1,211 +1,213 @@
 {% extends 'new_base.html' %}
 
 {% block path %}
-    <li class="breadcrumb-item active" aria-current="page">Score Record</li>
+<li class="breadcrumb-item active" aria-current="page">Score Record</li>
 {% endblock %}
 
 {% block content %}
-    <main class="score-record">
-        <div class="container">
-            <ul class="nav nav-tabs" id="newTab" role="tablist">
-                <li class="nav-item">
-                    <a class="nav-link activate" id="exam-list-tab" data-toggle="tab" href="#exam-data-list" role="tab" aria-controls="data-list" aria-selected="true">模擬考成績</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="reading-list-tab" data-toggle="tab" href="#reading-data-list" role="tab" aria-controls="data-list" aria-selected="false">閱讀練習成績</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="listening-list-tab" data-toggle="tab" href="#listening-data-list" role="tab" aria-controls="data-list" aria-selected="false">聽力練習成績</a>
-                </li>
-            </ul>
+<main class="score-record">
+    <div class="container">
+        <ul class="nav nav-tabs" id="newTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link activate" id="exam-list-tab" data-toggle="tab" href="#exam-data-list" role="tab" aria-controls="data-list" aria-selected="true">模擬考成績</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="reading-list-tab" data-toggle="tab" href="#reading-data-list" role="tab" aria-controls="data-list" aria-selected="false">閱讀練習成績</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="listening-list-tab" data-toggle="tab" href="#listening-data-list" role="tab" aria-controls="data-list" aria-selected="false">聽力練習成績</a>
+            </li>
+        </ul>
 
-            <div class="tab-content" id="tabContent">
-                <div class="tab-pane fade show active" id="exam-data-list" role="tabpanel" aria-labelledby="exam-list-tab">
-                    <div class="container">
-                        <div class="row justify-content-center" style="padding-top: 40px">
-                            <div class="col-md-6">
-                                <h3>模擬考成績</h3>
-                                <div class="table-responsive-md">
-                                    <table class="table table-hover table-bordered table-striped table-mc-light-blue">
-                                        <thead class="thead-light">
-                                            <tr>
-                                                <th class="text-center">Name.</th>
-                                                <th class="text-center">Score.</th>
-                                                <th class="text-center">Finish Time.</th>
-                                            </tr>
-                                        </thead>
+        <div class="tab-content" id="tabContent">
+            <div class="tab-pane fade show active" id="exam-data-list" role="tabpanel" aria-labelledby="exam-list-tab">
+                <div class="container">
+                    <div class="row justify-content-center" style="padding-top: 40px">
+                        <div class="col-md-6">
+                            <h3>模擬考成績</h3>
+                            <div class="table-responsive-md">
+                                <table class="table table-hover table-bordered table-striped table-mc-light-blue">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th class="text-center">Name.</th>
+                                            <th class="text-center">Score.</th>
+                                            <th class="text-center">Finish Time.</th>
+                                        </tr>
+                                    </thead>
 
-                                        <tbody>
-                                            {% for answersheet in answer_sheets_exam %}
-                                                <tr style="cursor: pointer" onclick="window.location.href='{% url 'view_answersheet_content' answersheet.id %}'">
-                                                    <td class="text-center" data-title="Name">{{ answersheet.exam }}</td>
-                                                    {% if answersheet.score  < 60 %}
-                                                        <td class="text-center" data-title="Type" style="color: #c12e2a">{{ answersheet.score }}</td>
-                                                    {% else %}
-                                                        <td class="text-center" data-title="Type">{{ answersheet.score }}</td>
-                                                    {% endif %}
-                                                    <td class="text-center" data-title="Finish Time">{{ answersheet.finish_time|date:'Y/m/d, H:i' }}</td>
-                                                </tr>
-                                            {% empty %}
-                                                <tr>
-                                                    <td class="text-center" colspan="5">No Data</td>
-                                                </tr>
-                                            {% endfor %}
-                                        </tbody>
-                                    </table>
-                                </div>
+                                    <tbody>
+                                        {% for answersheet in answer_sheets_exam %}
+                                        <tr style="cursor: pointer" onclick="window.location.href='{% url 'view_answersheet_content' answersheet.id %}'">
+                                            <td class="text-center" data-title="Name">{{ answersheet.exam }}</td>
+                                            {% if answersheet.is_tested is False %}
+                                            <td class="text-center" data-title="Type" style="color: #c12e2a">未進行測驗</td>
+                                            {% elif answersheet.score  < 60 %}
+                                            <td class="text-center" data-title="Type" style="color: #c12e2a">{{ answersheet.score }}</td>
+                                            {% else %}
+                                            <td class="text-center" data-title="Type">{{ answersheet.score }}</td>
+                                            {% endif %}
+                                            <td class="text-center" data-title="Finish Time">{{ answersheet.finish_time|date:'Y/m/d, H:i' }}</td>
+                                        </tr>
+                                        {% empty %}
+                                        <tr>
+                                            <td class="text-center" colspan="5">No Data</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
                             </div>
-                                <div class="col-md-6">
-                                    {% autoescape off %}
-                                        {{ exam_bar_chart }}
-                                    {% endautoescape %}
-                                    {% autoescape off %}
-                                        {{ exam_pie_chart }}
-                                    {% endautoescape %}
-                                </div>
-                            </div>
-
+                        </div>
+                        <div class="col-md-6">
+                            {% autoescape off %}
+                            {{ exam_bar_chart }}
+                            {% endautoescape %}
+                            {% autoescape off %}
+                            {{ exam_pie_chart }}
+                            {% endautoescape %}
                         </div>
                     </div>
 
+                </div>
+            </div>
 
 
-                <div class="tab-pane fade show" id="reading-data-list" role="tabpanel" aria-labelledby="reading-list-tab">
-                    <div class="container">
-                        <div class="row justify-content-center" style="padding-top: 40px">
-                            <div class="col-md-6">
-                                <h3>閱讀練習成績</h3>
 
-                                <div class="table-responsive-md">
-                                    <table class="table table-hover table-bordered table-striped table-mc-light-blue">
-                                        <thead class="thead-light">
-                                            <tr>
-                                                <th class="text-center">Name.</th>
-                                                <th class="text-center">Score.</th>
-                                                <th class="text-center">Finish Time.</th>
-                                            </tr>
-                                        </thead>
+            <div class="tab-pane fade show" id="reading-data-list" role="tabpanel" aria-labelledby="reading-list-tab">
+                <div class="container">
+                    <div class="row justify-content-center" style="padding-top: 40px">
+                        <div class="col-md-6">
+                            <h3>閱讀練習成績</h3>
 
-                                        <tbody>
-                                            {% for answersheet in answer_sheets_reading %}
-                                                <tr style="cursor: pointer" onclick="window.location.href='{% url 'view_answersheet_content' answersheet.id %}'">
-                                                    <td class="text-center" data-title="Name">{{ answersheet.exam }}</td>
-                                                    {% if answersheet.score  < 60 %}
-                                                        <td class="text-center" data-title="Type" style="color: #c12e2a">{{ answersheet.score }}</td>
-                                                    {% else %}
-                                                        <td class="text-center" data-title="Type">{{ answersheet.score }}</td>
-                                                    {% endif %}
-                                                    <td class="text-center" data-title="Finish Time">{{ answersheet.finish_time|date:'Y/m/d, H:i' }}</td>
-                                                </tr>
-                                            {% empty %}
-                                                <tr style="cursor: pointer" onclick="window.location.href='{% url 'testee_practice_create' 'reading' %}'">
-                                                    <td class="text-center" colspan="5">No Data... <a href=" {% url 'testee_practice_create' 'reading' %}">Start your first listening practice !</a></td>
-                                                </tr>
-                                            {% endfor %}
-                                        </tbody>
-                                    </table>
-                                </div>
+                            <div class="table-responsive-md">
+                                <table class="table table-hover table-bordered table-striped table-mc-light-blue">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th class="text-center">Name.</th>
+                                            <th class="text-center">Score.</th>
+                                            <th class="text-center">Finish Time.</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        {% for answersheet in answer_sheets_reading %}
+                                        <tr style="cursor: pointer" onclick="window.location.href='{% url 'view_answersheet_content' answersheet.id %}'">
+                                            <td class="text-center" data-title="Name">{{ answersheet.exam }}</td>
+                                            {% if answersheet.score  < 60 %}
+                                            <td class="text-center" data-title="Type" style="color: #c12e2a">{{ answersheet.score }}</td>
+                                            {% else %}
+                                            <td class="text-center" data-title="Type">{{ answersheet.score }}</td>
+                                            {% endif %}
+                                            <td class="text-center" data-title="Finish Time">{{ answersheet.finish_time|date:'Y/m/d, H:i' }}</td>
+                                        </tr>
+                                        {% empty %}
+                                        <tr style="cursor: pointer" onclick="window.location.href='{% url 'testee_practice_create' 'reading' %}'">
+                                            <td class="text-center" colspan="5">No Data... <a href=" {% url 'testee_practice_create' 'reading' %}">Start your first reading practice !</a></td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
                             </div>
-                            <div class="col-md-6">
-                                {% autoescape off %}
-                                    {{ reading_bar_chart }}
-                                {% endautoescape %}
-                                {% autoescape off %}
-                                    {{ reading_pie_chart }}
-                                {% endautoescape %}
-                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            {% autoescape off %}
+                            {{ reading_bar_chart }}
+                            {% endautoescape %}
+                            {% autoescape off %}
+                            {{ reading_pie_chart }}
+                            {% endautoescape %}
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="tab-pane fade show" id="listening-data-list" role="tabpanel" aria-labelledby="listening-list-tab">
-                    <div class="container">
-                        <div class="row justify-content-center" style="padding-top: 40px">
-                            <div class="col-md-6">
-                                <h3>聽力練習成績</h3>
-                                <div class="table-responsive-md">
-                                    <table class="table table-hover table-bordered table-striped table-mc-light-blue">
-                                        <thead class="thead-light">
-                                            <tr>
-                                                <th class="text-center">Name.</th>
-                                                <th class="text-center">Score.</th>
-                                                <th class="text-center">Finish Time.</th>
-                                            </tr>
-                                        </thead>
+            <div class="tab-pane fade show" id="listening-data-list" role="tabpanel" aria-labelledby="listening-list-tab">
+                <div class="container">
+                    <div class="row justify-content-center" style="padding-top: 40px">
+                        <div class="col-md-6">
+                            <h3>聽力練習成績</h3>
+                            <div class="table-responsive-md">
+                                <table class="table table-hover table-bordered table-striped table-mc-light-blue">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th class="text-center">Name.</th>
+                                            <th class="text-center">Score.</th>
+                                            <th class="text-center">Finish Time.</th>
+                                        </tr>
+                                    </thead>
 
-                                        <tbody>
-                                            {% for answersheet in answer_sheets_listening %}
-                                                <tr style="cursor: pointer" onclick="window.location.href='{% url 'view_answersheet_content' answersheet.id %}'">
-                                                    <td class="text-center" data-title="Name">{{ answersheet.exam }}</td>
-                                                    {% if answersheet.score  < 60 %}
-                                                        <td class="text-center" data-title="Type" style="color: #c12e2a">{{ answersheet.score }}</td>
-                                                    {% else %}
-                                                        <td class="text-center" data-title="Type">{{ answersheet.score }}</td>
-                                                    {% endif %}
-                                                    <td class="text-center" data-title="Finish Time">{{ answersheet.finish_time|date:'Y/m/d, H:i' }}</td>
-                                                </tr>
-                                              {% empty %}
-                                                  <tr style="cursor: pointer" onclick="window.location.href='{% url 'testee_practice_create' 'listening' %}'">
-                                                      <td class="text-center" colspan="5">No Data... <a href=" {% url 'testee_practice_create' 'listening' %}">Start your first listening practice !</a></td>
-                                                  </tr>
-                                              {% endfor %}
-                                        </tbody>
-                                    </table>
-                                </div>
+                                    <tbody>
+                                        {% for answersheet in answer_sheets_listening %}
+                                        <tr style="cursor: pointer" onclick="window.location.href='{% url 'view_answersheet_content' answersheet.id %}'">
+                                            <td class="text-center" data-title="Name">{{ answersheet.exam }}</td>
+                                            {% if answersheet.score  < 60 %}
+                                            <td class="text-center" data-title="Type" style="color: #c12e2a">{{ answersheet.score }}</td>
+                                            {% else %}
+                                            <td class="text-center" data-title="Type">{{ answersheet.score }}</td>
+                                            {% endif %}
+                                            <td class="text-center" data-title="Finish Time">{{ answersheet.finish_time|date:'Y/m/d, H:i' }}</td>
+                                        </tr>
+                                        {% empty %}
+                                        <tr style="cursor: pointer" onclick="window.location.href='{% url 'testee_practice_create' 'listening' %}'">
+                                            <td class="text-center" colspan="5">No Data... <a href=" {% url 'testee_practice_create' 'listening' %}">Start your first listening practice !</a></td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
                             </div>
-                            <div class="col-md-6">
-                                {% autoescape off %}
-                                    {{ listening_bar_chart }}
-                                {% endautoescape %}
-                                {% autoescape off %}
-                                    {{ listening_pie_chart }}
-                                {% endautoescape %}
-                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            {% autoescape off %}
+                            {{ listening_bar_chart }}
+                            {% endautoescape %}
+                            {% autoescape off %}
+                            {{ listening_pie_chart }}
+                            {% endautoescape %}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </main>
-    <style>
-        .exam-record .container #tabContent table > tbody > tr > td{
-            vertical-align: middle;
-        }
-    </style>
+    </div>
+</main>
+<style>
+    .exam-record .container #tabContent table>tbody>tr>td {
+        vertical-align: middle;
+    }
+</style>
 {% endblock %}
 
 {% block pagination %}
-    <ul class="pagination justify-content-center">
-        <li class="page-item"><a class="page-link" href="?page=1"><i class="fa fa-angle-double-left"></i></a></li>
+<ul class="pagination justify-content-center">
+    <li class="page-item"><a class="page-link" href="?page=1"><i class="fa fa-angle-double-left"></i></a></li>
 
-        <li class="page-item {% if not answersheetList.has_previous %}disable{% endif %}">
-            {% if answersheetList.has_previous %}
-                <a class="page-link" href="?page={{ answersheetList.previous_page_number }}" tabindex="-1"><i class="fa fa-angle-left"></i></a>
-            {% else %}
-                <a class="page-link" href="javascript:void(0);"><i class="fa fa-angle-left"></i></a>
-            {% endif %}
-        </li>
+    <li class="page-item {% if not answersheetList.has_previous %}disable{% endif %}">
+        {% if answersheetList.has_previous %}
+        <a class="page-link" href="?page={{ answersheetList.previous_page_number }}" tabindex="-1"><i class="fa fa-angle-left"></i></a>
+        {% else %}
+        <a class="page-link" href="javascript:void(0);"><i class="fa fa-angle-left"></i></a>
+        {% endif %}
+    </li>
 
-        {% for page in paginator.page_range %}
-            {% if page == answersheetList.number %}
-                <li class="page-item active">
-                    <a class="page-link" href="?page={{ page }}">{{ page }}</a>
-                </li>
-            {% else %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ page }}">{{ page }}</a>
-                </li>
-            {% endif %}
-        {% endfor %}
+    {% for page in paginator.page_range %}
+    {% if page == answersheetList.number %}
+    <li class="page-item active">
+        <a class="page-link" href="?page={{ page }}">{{ page }}</a>
+    </li>
+    {% else %}
+    <li class="page-item">
+        <a class="page-link" href="?page={{ page }}">{{ page }}</a>
+    </li>
+    {% endif %}
+    {% endfor %}
 
-        <li class="page-item {% if not answersheetList.has_next %}disable{% endif %}">
-            {% if answersheetList.has_next %}
-                <a class="page-link" href="?page={{ answersheetList.next_page_number }}"><i class="fa fa-angle-right"></i></a>
-            {% else %}
-                <a class="page-link" href="javascript:void(0);"><i class="fa fa-angle-right"></i></a>
-            {% endif %}
-        </li>
+    <li class="page-item {% if not answersheetList.has_next %}disable{% endif %}">
+        {% if answersheetList.has_next %}
+        <a class="page-link" href="?page={{ answersheetList.next_page_number }}"><i class="fa fa-angle-right"></i></a>
+        {% else %}
+        <a class="page-link" href="javascript:void(0);"><i class="fa fa-angle-right"></i></a>
+        {% endif %}
+    </li>
 
-        <li class="page-item"><a class="page-link" href="?page={{ answersheetList.paginator.num_pages }}"><i class="fa fa-angle-double-right"></i></a></li>
-    </ul>
+    <li class="page-item"><a class="page-link" href="?page={{ answersheetList.paginator.num_pages }}"><i class="fa fa-angle-double-right"></i></a></li>
+</ul>
 {% endblock %}

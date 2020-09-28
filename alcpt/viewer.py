@@ -44,7 +44,7 @@ def exam_score_detail(request, exam_id):
         for testee in testees:
             try:
                 answer_sheet = AnswerSheet.objects.get(exam=exam, user_id=testee.id)
-                if answer_sheet.score is None:
+                if answer_sheet.is_tested is False:
                     not_tested += 1
                 elif answer_sheet.score >= 60:
                     testee_scores.append(answer_sheet.score)
