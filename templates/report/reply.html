@@ -1,115 +1,159 @@
- {% extends 'new_base.html' %}
-
-{% load web_filters %}
-
-{% block path %}
-    <li class="breadcrumb-item" aria-current="page"><a href="{% url 'responsible_report_list' permission %}">Report List</a></li>
-    <li class="breadcrumb-item active" aria-current="page">Replying...</li>
-{% endblock %}
-
-{% block content %}
-    <main class="reply">
-        <div class="original-report-card">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-5">
-                        <div class="card">
-                            <div class="card-header">{{ replying_report.category }}#{{ replying_report.id }}</div>
-
-                            <div class="card-body">
-                                {% if replying_report.question %}
-                                    <h5>Question Content<a href="{% url 'question_edit' replying_report.question.id %}"><i class="fa fa-link"></i></a></h5>
-                                    {% if replying_report.question.q_file %}
-                                        <audio controls preload="none">
-                                            <source src="{{ replying_report.question.q_file.url }}" type="audio/mpeg">
-                                            Your browser does not support the audio tag.
-                                        </audio>
-                                    {% else %}
-                                        <div>
-                                            {{ replying_report.question.q_content|linebreaksbr }}
-                                        </div>
-                                    {% endif %}
-                                    <h5>Choice</h5>
-                                    <ol type="A">
-                                        {% for choice in replying_report.question.choice_set.all %}
-                                            <li {% if choice.is_answer %}style="color: green"{% endif %}>{{ choice }}</li>
-                                        {% endfor %}
-                                    </ol>
-                                {% endif %}
-
-                                <h5>Supplement Note</h5>
-                                <div class="dropdown-divider"></div>
-                                <p>{{ replying_report.supplement_note }}</p>
-                            </div>
-
-                            <div class="card-footer">
-                                <footer class="blockquote-footer">
-                                    <cite title="Source Title">
-                                        {% if request.user|has_perm:'SystemManager' %}
-                                            <a href="{% url 'view_profile' replying_report.created_by %}">{{ replying_report.created_by }}</a> in {{ replying_report.created_time }}<br>
-                                        {% else %}
-                                            {{ replying_report.created_by }} in {{ replying_report.created_time }}<br>
-                                        {% endif %}
-                                    </cite>
-                                    {% if replying_report.state == 2 %}
-                                        <label class="btn btn-danger float-right">Processing</label>
-                                    {% elif replying_report.state == 3 %}
-                                        <cite title="Source Title">Resolved by {{ replying_report.resolved_by }} in {{ replying_report.resolved_time }}</cite>
-                                        <label class="btn btn-success float-right">Solved</label>
-                                    {% endif %}
-                                </footer>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-7">
-                        <div class="card" style="height: 75vh">
-                            <div class="card-header">Reply</div>
-
-                            <div id="reply-content" class="card-body">
-                                <div class="reply-content" data-spy="scroll" data-target="#navbar-example2" data-offset="0">
-                                    {% if replies %}
-                                        {% for reply in replies %}
-                                            {% if reply.created_by == replying_report.created_by %}
-                                                <div class="message-box">
-                                                    {{ reply.created_by }}：<br>{{ reply.content }}<footer class="blockquote-footer"><cite title="Source Title">{{ reply.created_time|date:"H:i, Y/m/d" }}</cite></footer>
-                                                </div>
-                                            {% else %}
-                                                <div class="message-box text-right">
-                                                    ：{{ reply.created_by }}<br>{{ reply.content }}<footer class="blockquote-footer"><cite title="Source Title">{{ reply.created_time|date:"H:i, Y/m/d" }}</cite></footer>
-                                                </div>
-                                            {% endif %}
-                                            <hr>
-                                        {% endfor %}
-                                    {% else %}
-                                        No message...
-                                    {% endif %}
-                                </div>
-                            </div>
-
-                            <div class="card-footer">
-                                <form action="" method="post">
-                                    {% csrf_token %}
-                                    <textarea class="form-control" name="reply" rows="4" placeholder="Reply..." {% if replying_report.state == 3 %}disabled{% endif %}></textarea>
-
-                                    <div class="text-right">
-                                        <button type="submit" class="btn btn-primary" {% if replying_report.state == 3 %}disabled{% endif %}>Comment</button>
-                                        <button type="button" class="btn btn-secondary" onclick="window.location=document.referrer;">Cancel</button>
-                                        {% if replying_report.state != 3 %}
-                                            <button type="button" class="btn btn-success" onclick="window.location.href='{% url 'report_done' replying_report.id %}'">Close</button>
-                                        {% endif %}
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                    <style>
-                        #reply-content{
-                            overflow-x: scroll;
-                        }
-                    </style>
-                </div>
+{% extends 'new_base.html' %} {% block path %}
+<li class="breadcrumb-item" aria-current="page">
+  <a href="{{ url('responsible_report_list', args=[permission]) }}"
+    >Report List</a
+  >
+</li>
+<li class="breadcrumb-item active" aria-current="page">Replying...</li>
+{% endblock %} {% block content %}
+<main class="reply">
+  <div class="original-report-card">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-5">
+          <div class="card">
+            <div class="card-header">
+              {{ replying_report.category }}#{{ replying_report.id }}
             </div>
+
+            <div class="card-body">
+              {% if replying_report.question %}
+              <h5>
+                Question Content<a
+                  href="{{ url('question_edit', args=[replying_report.question.id]) }}"
+                  ><i class="fa fa-link"></i
+                ></a>
+              </h5>
+              {% if replying_report.question.q_file %}
+              <audio controls preload="none">
+                <source
+                  src="{{ replying_report.question.q_file.url }}"
+                  type="audio/mpeg"
+                />
+                Your browser does not support the audio tag.
+              </audio>
+              {% else %}
+              <div>{{ replying_report.question.q_content|linebreaksbr }}</div>
+              {% endif %}
+              <h5>Choice</h5>
+              <ol type="A">
+                {% for choice in replying_report.question.choice_set.all %}
+                <li {% if choice.is_answer %}style="color: green" {% endif %}>
+                  {{ choice }}
+                </li>
+                {% endfor %}
+              </ol>
+              {% endif %}
+
+              <h5>Supplement Note</h5>
+              <div class="dropdown-divider"></div>
+              <p>{{ replying_report.supplement_note }}</p>
+            </div>
+
+            <div class="card-footer">
+              <footer class="blockquote-footer">
+                <cite title="Source Title">
+                  {% if request.user|has_perm('SystemManager') %}
+                  <a
+                    href="{{ url('view_profile', args=[replying_report.created_by]) }}"
+                    >{{ replying_report.created_by }}</a
+                  >
+                  in {{ replying_report.created_time }}<br />
+                  {% else %} {{ replying_report.created_by }} in {{
+                  replying_report.created_time }}<br />
+                  {% endif %}
+                </cite>
+                {% if replying_report.state == 2 %}
+                <label class="btn btn-danger float-right">Processing</label>
+                {% elif replying_report.state == 3 %}
+                <cite title="Source Title"
+                  >Resolved by {{ replying_report.resolved_by }} in {{
+                  replying_report.resolved_time }}</cite
+                >
+                <label class="btn btn-success float-right">Solved</label>
+                {% endif %}
+              </footer>
+            </div>
+          </div>
         </div>
-    </main>
+
+        <div class="col-lg-7">
+          <div class="card" style="height: 75vh">
+            <div class="card-header">Reply</div>
+
+            <div id="reply-content" class="card-body">
+              <div
+                class="reply-content"
+                data-spy="scroll"
+                data-target="#navbar-example2"
+                data-offset="0"
+              >
+                {% if replies %} {% for reply in replies %} {% if
+                reply.created_by == replying_report.created_by %}
+                <div class="message-box">
+                  {{ reply.created_by }}：<br />{{ reply.content }}
+                  <footer class="blockquote-footer">
+                    <cite title="Source Title"
+                      >{{ reply.created_time.strftime('%H:%M, %Y/%m/%d')
+                      }}</cite
+                    >
+                  </footer>
+                </div>
+                {% else %}
+                <div class="message-box text-right">
+                  ：{{ reply.created_by }}<br />{{ reply.content }}
+                  <footer class="blockquote-footer">
+                    <cite title="Source Title"
+                      >{{ reply.created_time.strftime('%H:%M, %Y/%m/%d')
+                      }}</cite
+                    >
+                  </footer>
+                </div>
+                {% endif %}
+                <hr />
+                {% endfor %} {% else %} No message... {% endif %}
+              </div>
+            </div>
+
+            <div class="card-footer">
+              <form action="" method="post">
+                <input
+                  type="hidden"
+                  name="csrfmiddlewaretoken"
+                  value="{{ csrf_token }}"
+                />
+
+                <textarea class="form-control" name="reply" rows="4" placeholder="Reply..." {% if replying_report.state == 3 %}disabled{% endif %}></textarea>
+                <div class="text-right">
+                  <button type="submit" class="btn btn-primary" {% if replying_report.state == 3 %}disabled{% endif %}>Comment</button>
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    onclick="window.location=document.referrer;"
+                  >
+                    Cancel
+                  </button>
+                  {% if replying_report.state != 3 %}
+                  <button
+                    type="button"
+                    class="btn btn-success"
+                    onclick="window.location.href='{{ url('report_done', args=[replying_report.id]) }}'"
+                  >
+                    Close
+                  </button>
+                  {% endif %}
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <style>
+          #reply-content {
+            overflow-x: scroll;
+          }
+        </style>
+      </div>
+    </div>
+  </div>
+</main>
 {% endblock %}

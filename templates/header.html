@@ -160,12 +160,12 @@
               >
               <a
                 class="dropdown-item"
-                href="{{ url('question_create' 'listening') }}"
+                href="{{ url('question_create', args=['listening']) }}"
                 >Create Listening Question</a
               >
               <a
                 class="dropdown-item"
-                href="{{ url('question_create' 'reading') }}"
+                href="{{ url('question_create', args=['reading']) }}"
                 >Create Reading Question</a
               >
             </div>
@@ -259,7 +259,7 @@
                   <div class="modal-header text-center">
                     <h5 class="modal-title" id="ModalLongTitle">
                       Notification Center（Total: {{
-                      request.user.proclamation_set.count }} ）
+                      request.user.proclamation_set.count() }} ）
                     </h5>
                   </div>
 

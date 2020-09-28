@@ -1,118 +1,193 @@
-{% extends 'new_base.html' %}
+{% extends 'new_base.html' %} {% block path %}
+<li class="breadcrumb-item active" aria-current="page">Unit List</li>
+{% endblock %} {% block content %}
+<main class="user-list">
+  <div class="container">
+    <ul class="nav nav-tabs" id="newTab" role="tablist">
+      <li class="nav-item">
+        <a
+          class="nav-link active"
+          id="department-tab"
+          data-toggle="tab"
+          href="#department"
+          role="tab"
+          aria-controls="department"
+          aria-selected="true"
+          >Department.</a
+        >
+      </li>
+      <li class="nav-item">
+        <a
+          class="nav-link"
+          id="squadron-tab"
+          data-toggle="tab"
+          href="#squadron"
+          role="tab"
+          aria-controls="squadron"
+          aria-selected="false"
+          >Squadron.</a
+        >
+      </li>
+    </ul>
 
-{% block path %}
-    <li class="breadcrumb-item active" aria-current="page">Unit List</li>
-{% endblock %}
-
-{% block content %}
-    <main class="user-list">
+    <div class="tab-content" id="tabContent">
+      <div
+        class="tab-pane fade show active"
+        id="department"
+        role="tabpanel"
+        aria-labelledby="department-tab"
+      >
         <div class="container">
-            <ul class="nav nav-tabs" id="newTab" role="tablist">
-                <li class="nav-item">
-                    <a class="nav-link active" id="department-tab" data-toggle="tab" href="#department" role="tab" aria-controls="department" aria-selected="true">Department.</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="squadron-tab" data-toggle="tab" href="#squadron" role="tab" aria-controls="squadron" aria-selected="false">Squadron.</a>
-                </li>
-            </ul>
+          <div class="row justify-content-center">
+            <div class="col-md-12">
+              <h2>Department List.</h2>
 
-            <div class="tab-content" id="tabContent">
-                <div class="tab-pane fade show active" id="department" role="tabpanel" aria-labelledby="department-tab">
-                    <div class="container">
-                        <div class="row justify-content-center">
-                            <div class="col-md-12">
-                                <h2>Department List.</h2>
-
-                                <div class="table-responsive-md">
-                                    <table class="table table-bordered table-striped table-hover table-mc-light-blue">
-                                        <thead class="thead-light">
-                                            <tr>
-                                                <th class="text-center">Serial.</th>
-                                                <th class="text-center">Name.</th>
-                                                <th class="text-center"><i class="fa fa-users"></i></th>
-                                                <th class="text-center">
-                                                    <div class="add">
-                                                        <button type="button" class="btn btn-secondary" onclick="window.location.href='{% url 'unit_create' %}'"><i class="fa fa-plus"></i></button>
-                                                    </div>
-                                                </th>
-                                            </tr>
-                                        </thead>
-
-                                        <tbody>
-                                            <div class="add-secret">
-                                                <button type="button" class="btn btn-secondary" onclick="window.location.href='{% url 'testee_group_create' %}'"><i class="fa fa-plus"></i></button>
-                                            </div>
-                                            {% for department in departments %}
-                                                <tr style="cursor: pointer" onclick="window.location.href='{% url 'unit_member_list' 'department' department.name %}'">
-                                                    <td class="text-center" data-title="Serial">{{ department.id }}</td>
-                                                    <td class="text-center" data-title="Name">{{ department.name }}</td>
-                                                    <td class="text-center" data-title="People">{{ department.student_set.all.count }}</td>
-                                                    <td class="text-center">
-                                                        <a href="{% url 'unit_edit' 'department' department.name %}"><i class="fa fa-pencil-square-o fa-fw mb-2"></i></a>
-                                                    </td>
-                                                </tr>
-                                            {% empty %}
-                                                <tr>
-                                                    <td class="text-center" colspan="4">No Data.</td>
-                                                </tr>
-                                            {% endfor %}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
+              <div class="table-responsive-md">
+                <table
+                  class="table table-bordered table-striped table-hover table-mc-light-blue"
+                >
+                  <thead class="thead-light">
+                    <tr>
+                      <th class="text-center">Serial.</th>
+                      <th class="text-center">Name.</th>
+                      <th class="text-center"><i class="fa fa-users"></i></th>
+                      <th class="text-center">
+                        <div class="add">
+                          <button
+                            type="button"
+                            class="btn btn-secondary"
+                            onclick="window.location.href='{{ url('unit_create') }}'"
+                          >
+                            <i class="fa fa-plus"></i>
+                          </button>
                         </div>
+                      </th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <div class="add-secret">
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        onclick="window.location.href='{{ url('testee_group_create') }}'"
+                      >
+                        <i class="fa fa-plus"></i>
+                      </button>
                     </div>
-                </div>
-
-                <div class="tab-pane fade" id="squadron" role="tabpanel" aria-labelledby="squadron-tab">
-                    <div class="container">
-                        <div class="row justify-content-center">
-                            <div class="col-md-12">
-                                <h2>Squadron List.</h2>
-
-                                <div class="table-responsive-md">
-                                    <table class="table table-bordered table-striped table-hover table-mc-light-blue">
-                                        <thead class="thead-light">
-                                            <tr>
-                                                <tr>
-                                                    <th class="text-center">Serial.</th>
-                                                    <th class="text-center">Name.</th>
-                                                    <th class="text-center"><i class="fa fa-users"></i></th>
-                                                    <th class="text-center">
-                                                        <div class="add">
-                                                            <button type="button" class="btn btn-secondary" onclick="window.location.href='{% url 'unit_create' %}'"><i class="fa fa-plus"></i></button>
-                                                        </div>
-                                                    </th>
-                                                </tr>
-                                            </tr>
-                                        </thead>
-
-                                        <tbody>
-                                            <div class="add-secret">
-                                                <button type="button" class="btn btn-secondary" onclick="window.location.href='{% url 'testee_group_create' %}'"><i class="fa fa-plus"></i></button>
-                                            </div>
-                                            {% for squadron in squadrons %}
-                                                <tr style="cursor: pointer" onclick="window.location.href='{% url 'unit_member_list' 'squadron' squadron.name %}'">
-                                                    <td class="text-center" data-title="Serial : ">{{ squadron.id }}</td>
-                                                    <td class="text-center" data-title="Name : ">{{ squadron.name }}</td>
-                                                    <td class="text-center" data-title="People : ">{{ squadron.student_set.all.count }}</td>
-                                                    <td class="text-center">
-                                                        <a href="{% url 'unit_edit' 'squadron' squadron.name %}"><i class="fa fa-pencil-square-o fa-fw mb-2"></i></a>
-                                                    </td>
-                                                </tr>
-                                                {% empty %}
-                                                <tr>
-                                                    <td class="text-center" colspan="4">No Data.</td>
-                                                </tr>
-                                            {% endfor %}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                    {% for department in departments %}
+                    <tr
+                      style="cursor: pointer"
+                      onclick="window.location.href='{{ url('unit_member_list', args=['department', department.name]) }}'"
+                    >
+                      <td class="text-center" data-title="Serial">
+                        {{ department.id }}
+                      </td>
+                      <td class="text-center" data-title="Name">
+                        {{ department.name }}
+                      </td>
+                      <td class="text-center" data-title="People">
+                        {{ department.student_set.all().count() }}
+                      </td>
+                      <td class="text-center">
+                        <a
+                          href="{{ url('unit_edit', args=['department', department.name]) }}"
+                          ><i class="fa fa-pencil-square-o fa-fw mb-2"></i
+                        ></a>
+                      </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                      <td class="text-center" colspan="4">No Data.</td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
         </div>
-    </main>
+      </div>
 
-{% endblock %}
+      <div
+        class="tab-pane fade"
+        id="squadron"
+        role="tabpanel"
+        aria-labelledby="squadron-tab"
+      >
+        <div class="container">
+          <div class="row justify-content-center">
+            <div class="col-md-12">
+              <h2>Squadron List.</h2>
+
+              <div class="table-responsive-md">
+                <table
+                  class="table table-bordered table-striped table-hover table-mc-light-blue"
+                >
+                  <thead class="thead-light">
+                    <tr>
+                      <th class="text-center">Serial.</th>
+                      <th class="text-center">Name.</th>
+                      <th class="text-center"><i class="fa fa-users"></i></th>
+                      <th class="text-center">
+                        <div class="add">
+                          <button
+                            type="button"
+                            class="btn btn-secondary"
+                            onclick="window.location.href='{{ url('unit_create') }}'"
+                          >
+                            <i class="fa fa-plus"></i>
+                          </button>
+                        </div>
+                      </th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <div class="add-secret">
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        onclick="window.location.href='{{ url('testee_group_create') }}'"
+                      >
+                        <i class="fa fa-plus"></i>
+                      </button>
+                    </div>
+                    {% for squadron in squadrons %}
+                    <tr
+                      style="cursor: pointer"
+                      onclick="window.location.href='{{ url('unit_member_list', args=['squadron', squadron.name]) }}'"
+                    >
+                      <td class="text-center" data-title="Serial : ">
+                        {{ squadron.id }}
+                      </td>
+                      <td class="text-center" data-title="Name : ">
+                        {{ squadron.name }}
+                      </td>
+                      <td class="text-center" data-title="People : ">
+                        {{ squadron.student_set.all().count() }}
+                      </td>
+                      <td class="text-center">
+                        <a
+                          href="{{ url('unit_edit', args=['squadron', squadron.name]) }}"
+                          ><i class="fa fa-pencil-square-o fa-fw mb-2"></i
+                        ></a>
+                      </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                      <td class="text-center" colspan="4">No Data.</td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {% endblock %}
+  </div>
+</main>

@@ -1,81 +1,111 @@
-{% extends 'new_base.html' %}
+{% extends 'new_base.html' %} {% block path %}
+<li class="breadcrumb-item" aria-current="page">
+  <a href="{{ url('exam_list') }}">Exam List</a>
+</li>
+<li class="breadcrumb-item active" aria-current="page">Exam Content</li>
+{% endblock %} {% block content %}
+<main class="exam-content">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-10">
+        <div class="card">
+          <div class="card-header">{{ exam.name }} - Content.</div>
 
-{% block path %}
-    <li class="breadcrumb-item" aria-current="page"><a href="{% url 'exam_list' %}">Exam List</a></li>
-    <li class="breadcrumb-item active" aria-current="page">Exam Content</li>
-{% endblock %}
+          <div class="card-body">
+            <h5 class="subtitle mb-2 text-muted">Test paper.</h5>
+            <p class="card-text">
+              <a
+                href="{{ url('view_testpaper_content', args=[exam.testpaper.id]) }}"
+                >{{ exam.testpaper }}</a
+              >
+            </p>
 
-{% block content %}
-    <main class="exam-content">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-md-10">
-                    <div class="card">
-                        <div class="card-header">{{ exam.name }} - Content.</div>
+            <h5 class="subtitle mb-2 text-muted">Start Time.</h5>
+            <p class="card-text">{{ exam.start_time }}</p>
 
-                        <div class="card-body">
-                            <h5 class="subtitle mb-2 text-muted">Test paper.</h5>
-                            <p class="card-text">
-                                <a href="{% url 'view_testpaper_content' exam.testpaper.id %}">{{ exam.testpaper }}</a>
-                            </p>
+            <h5 class="subtitle mb-2 text-muted">Duration.(minutes)</h5>
+            <p class="card-text">{{ exam.duration }} min</p>
 
-                            <h5 class="subtitle mb-2 text-muted">Start Time.</h5>
-                            <p class="card-text">
-                                {{ exam.start_time }}
-                            </p>
+            <h5 class="subtitle mb-2 text-muted">Finish Time.</h5>
+            <p class="card-text">{{ exam.finish_time }}</p>
 
-                            <h5 class="subtitle mb-2 text-muted">Duration.(minutes)</h5>
-                            <p class="card-text">
-                                {{ exam.duration }} min
-                            </p>
+            <h5 class="subtitle mb-2 text-muted">Created.</h5>
+            <p class="card-text">
+              {{ exam.created_time }} —— by {{ exam.created_by.name }}
+            </p>
 
-                            <h5 class="subtitle mb-2 text-muted">Finish Time.</h5>
-                            <p class="card-text">
-                                {{ exam.finish_time }}
-                            </p>
+            <h5 class="subtitle mb-2 text-muted">Testee List.</h5>
+            <p class="card-text">
+              <button
+                type="button"
+                class="btn btn-info"
+                data-toggle="modal"
+                data-target="#TesteeListModalLong"
+              >
+                View
+              </button>
+            </p>
 
-                            <h5 class="subtitle mb-2 text-muted">Created.</h5>
-                            <p class="card-text">
-                                {{ exam.created_time }} —— by {{ exam.created_by.name }}
-                            </p>
+            <div
+              class="modal fade"
+              id="TesteeListModalLong"
+              tabindex="-1"
+              role="dialog"
+              aria-labelledby="TesteeListModalLongTitle"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="TesteeListModalLongTitle">
+                      <p class="card-text">Testee List.</p>
+                    </h5>
+                    <button
+                      type="button"
+                      class="close"
+                      data-dismiss="modal"
+                      aria-label="Close"
+                    >
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
 
-                            <h5 class="subtitle mb-2 text-muted">Testee List.</h5>
-                            <p class="card-text">
-                                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#TesteeListModalLong">View</button>
-
-                                <div class="modal fade" id="TesteeListModalLong" tabindex="-1" role="dialog" aria-labelledby="TesteeListModalLongTitle" aria-hidden="true">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="TesteeListModalLongTitle">Testee List.</h5>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-
-                                            <div class="modal-body">
-                                                <ol type="1">
-                                                    {% for testee in exam.testeeList.all %}
-                                                        <li>{{ testee.name }}</li>
-                                                    {% endfor %}
-                                                </ol>
-                                            </div>
-
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </p>
-                        </div>
-
-                        <div class="card-footer text-right">
-                            <button type="button" class="btn btn-primary" onclick="history.go(-1)">OK</button>
-                        </div>
-                    </div>
+                  <div class="modal-body">
+                    <ol type="1">
+                      {% for testee in exam.testeeList.all() %}
+                      <p class="card-text"><li>{{ testee.name }}</li></p>
+                      {% endfor %}
+                    </ol>
+                  </div>
+                  <div class="modal-footer">
+                    <p class="card-text">
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-dismiss="modal"
+                      >
+                        Close
+                      </button>
+                    </p>
+                  </div>
                 </div>
+              </div>
             </div>
+          </div>
+          <div class="card-footer text-right">
+            <p class="card-text">
+              <button
+                type="button"
+                class="btn btn-primary"
+                onclick="history.go(-1)"
+              >
+                OK
+              </button>
+            </p>
+          </div>
         </div>
-    </main>
+      </div>
+    </div>
+  </div>
+</main>
 {% endblock %}

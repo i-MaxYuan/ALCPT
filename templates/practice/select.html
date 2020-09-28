@@ -1,81 +1,132 @@
-{% extends 'new_base.html' %}
+{% extends 'new_base.html' %} {% block scripts %}
+<script type="text/javascript">
+  function ChangeButton() {
+    var questionNum = document.getElementById("question_num");
+    var submit = document.getElementById("submit");
+    var types = document.getElementsByName("question_type");
 
-{% block scripts %}
-    <script type="text/javascript">
-        function ChangeButton() {
-            var questionNum = document.getElementById('question_num');
-            var submit = document.getElementById('submit');
-            var types = document.getElementsByName('question_type');
+    var click = "";
 
-            var click = '';
+    for (var i = 0; i < types.length; i++) {
+      if (types[i].checked === true) {
+        click += types[i].value;
+      }
+    }
+    if (click === "" || questionNum.value === "") {
+      submit.disabled = true;
+    } else {
+      submit.disabled = false;
+    }
+  }
+</script>
 
-            for (var i = 0; i < types.length; i++) {
-                if (types[i].checked === true) {
-                    click += types[i].value;
-                }
-            }
-            if(click === '' || questionNum.value === ''){
-                submit.disabled = true;
-            } else {
-                submit.disabled = false;
-            }
-        }
-    </script>
+{% endblock %} {% block path %}
+<li class="breadcrumb-item active" aria-current="page">
+  {% if kind == 'listening' %}Listening{% else %}Reading{% endif %} Select
+</li>
+{% endblock %} {% block content %}
+<main class="practice-select-form">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-10">
+        <form method="post">
+          <input
+            type="hidden"
+            name="csrfmiddlewaretoken"
+            value="{{ csrf_token }}"
+          />
 
-{% endblock %}
+          <div class="card">
+            <div class="card-header">Practice Select.</div>
 
-{% block path %}
-    <li class="breadcrumb-item active" aria-current="page">{% if kind == 'listening' %}Listening{% else %}Reading{% endif %} Select</li>
-{% endblock %}
+            <div class="card-body">
+              {% if kind == 'listening' %}
+              <h5 class="card-subtitle mb-2 text-muted">
+                Listening Type.(Multiple Select)
+              </h5>
+              <p class="card-text">
+                <input
+                  type="checkbox"
+                  name="question_type"
+                  onclick="ChangeButton()"
+                  value="1"
+                />QA
+                <input
+                  type="checkbox"
+                  name="question_type"
+                  onclick="ChangeButton()"
+                  value="2"
+                />ShortConversation
+              </p>
+              {% else %}
+              <h5 class="card-subtitle mb-2 text-muted">
+                Reading Type.(Multiple Select)
+              </h5>
+              <p class="card-text">
+                <input
+                  type="checkbox"
+                  name="question_type"
+                  onclick="ChangeButton()"
+                  value="3"
+                />Grammar
+                <input
+                  type="checkbox"
+                  name="question_type"
+                  onclick="ChangeButton()"
+                  value="4"
+                />Phrase
+                <input
+                  type="checkbox"
+                  name="question_type"
+                  onclick="ChangeButton()"
+                  value="5"
+                />ParagraphUnderstanding
+              </p>
+              {% endif %}
 
-{% block content %}
-    <main class="practice-select-form">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-10">
-                    <form method="post">
-                        {% csrf_token %}
+              <h5 class="card-subtitle mb-2 text-muted">Question Number.</h5>
+              <p class="card-text">
+                <select
+                  class="custom-select custom-select-sm"
+                  name="question_num"
+                  id="question_num"
+                  onchange="ChangeButton()"
+                  required
+                >
+                  <option value="" disabled selected hidden>
+                    Choose the number of your test paper
+                  </option>
+                  <option value="10">10</option>
+                  <option value="20">20</option>
+                  <option value="30">30</option>
+                </select>
+              </p>
 
-                        <div class="card">
-                            <div class="card-header">Practice Select.</div>
-
-                            <div class="card-body">
-                                {% if kind == 'listening' %}
-                                    <h5 class="card-subtitle mb-2 text-muted">Listening Type.(Multiple Select)</h5>
-                                    <p class="card-text">
-                                        <input type="checkbox" name="question_type" onclick="ChangeButton()" value="1">QA
-                                        <input type="checkbox" name="question_type" onclick="ChangeButton()" value="2">ShortConversation
-                                    </p>
-                                {% else %}
-                                    <h5 class="card-subtitle mb-2 text-muted">Reading Type.(Multiple Select)</h5>
-                                    <p class="card-text">
-                                        <input type="checkbox" name="question_type" onclick="ChangeButton()" value="3">Grammar
-                                        <input type="checkbox" name="question_type" onclick="ChangeButton()" value="4">Phrase
-                                        <input type="checkbox" name="question_type" onclick="ChangeButton()" value="5">ParagraphUnderstanding
-                                    </p>
-                                {% endif %}
-
-                                <h5 class="card-subtitle mb-2 text-muted">Question Number.</h5>
-                                <p class="card-text">
-                                    <select class="custom-select custom-select-sm" name="question_num" id="question_num" onchange="ChangeButton()" required>
-                                        <option value="" disabled selected hidden>Choose the number of your test paper</option>
-                                        <option value="10">10</option>
-                                        <option value="20">20</option>
-                                        <option value="30">30</option>
-                                    </select>
-                                </p>
-
-                                <div class="text-center">
-                                    <button type="submit" id="submit" class="btn btn-primary" onclick="alert('You can start to practice.')" disabled>Submit</button>
-                                    <button type="reset" class="btn btn-light">Reset</button>
-                                    <button type="button" class="btn btn-secondary" onclick="self.location=document.referrer;">Cancel</button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+              <div class="text-center">
+                <button
+                  type="submit"
+                  id="submit"
+                  class="btn btn-primary"
+                  onclick="alert('You can start to practice.')"
+                  disabled
+                >
+                  Submit
+                </button>
+                <button type="reset" class="btn btn-light">Reset</button>
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  onclick="self.location=document.referrer;"
+                >
+                  Cancel
+                </button>
+              </div>
             </div>
-        </div>
-    </main>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
 
 {% endblock %}

@@ -272,7 +272,7 @@ def readable_question_query_content(question_query_content: str):
     return readable_query_content
 
 
-@register.filter(name='readable_user_query_content')
+@register.filter(name='readable_user_query_contents')
 def readable_user_query_contents(user_query_content: str):
     user_query = [_.split('=') for _ in user_query_content.split('&')]
     readable_user_query_content = ''

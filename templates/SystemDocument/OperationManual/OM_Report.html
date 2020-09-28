@@ -1,94 +1,140 @@
-{% extends 'OperationManual_base.html' %}
+{% extends 'OperationManual_base.html' %} {% block content %}
+<main id="om-content">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-12 text-left">
+        <h1>問題回報系統說明</h1>
+        <ul>
+          <p>
+            <li>問題回報是為了讓使用者與管理員能有順暢的問題反映管道。</li>
+            <li>
+              使用者在使用本系統時所遇到的所有問題皆可透過問題回報系統來向管理人員或是開發人員來做反應，以達到更好的系統體驗。
+            </li>
+          </p>
+        </ul>
 
-{% load static %}
+        <h3>使用者問題回報</h3>
+        <img
+          src="{{ static('/images/om/report/om-report01.png') }}"
+          width="30%"
+        />
+        <img
+          src="{{ static('/images/om/report/om-report02.png') }}"
+          width="40%"
+        />
+        <ul>
+          <p>
+            <li>
+              可由<a href="{{ url('OM_User')}}">一般使用者</a
+              >功能表或是進入個人資料頁面，左方導覽列的「Report」頁面中的「新增回報」按鈕來進行問題回報。
+            </li>
+          </p>
+        </ul>
 
-{% block content %}
-    <main id="om-content">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-md-12 text-left">
-                    <h1>問題回報系統說明</h1>
-                    <p>
-                        <ul>
-                            <li>問題回報是為了讓使用者與管理員能有順暢的問題反映管道。</li>
-                            <li>使用者在使用本系統時所遇到的所有問題皆可透過問題回報系統來向管理人員或是開發人員來做反應，以達到更好的系統體驗。</li>
-                        </ul>
-                    </p>
+        <h3>問題回報</h3>
+        <img
+          src="{{ static('/images/om/report/om-report03.png') }}"
+          width="40%"
+        />
+        <ul>
+          <p>
+            <li>
+              選擇「Report Category.」及填寫「Supplement Note.」後即可送出。
+            </li>
+            <li>
+              完成回報後，使用者可在左方導覽列的「Report」去查看自己所做的所有問題回報。
+            </li>
+          </p>
+        </ul>
+        <p class="mark">
+          <strong>Tip.</strong><br />
+          １.Report Category.
+          只做了大致上的歸類，若當中沒有符合您所遇到的狀況類別，請選擇「其他」。<br />
+          ２.Supplement Note.
+          為補充說明，請多加敘述您在操作本系統時所遇到的問題，讓管理員能更有效地為您解決問題。<br />
+        </p>
 
-                    <h3>使用者問題回報</h3>
-                    <img src="{% static '/images/om/report/om-report01.png' %}" width="30%">
-                    <img src="{% static '/images/om/report/om-report02.png' %}" width="40%">
-                    <p>
-                        <ul>
-                            <li>可由<a href="{% url 'OM_User' %}">一般使用者</a>功能表或是進入個人資料頁面，左方導覽列的「Report」頁面中的「新增回報」按鈕來進行問題回報。</li>
-                        </ul>
-                    </p>
+        <hr />
 
-                    <h3>問題回報</h3>
-                    <img src="{% static '/images/om/report/om-report03.png' %}" width="40%">
-                    <p>
-                        <ul>
-                            <li>選擇「Report Category.」及填寫「Supplement Note.」後即可送出。</li>
-                            <li>完成回報後，使用者可在左方導覽列的「Report」去查看自己所做的所有問題回報。</li>
-                        </ul>
-                    </p>
-                    <p class="mark">
-                        <strong>Tip.</strong><br>
-                        １.Report Category. 只做了大致上的歸類，若當中沒有符合您所遇到的狀況類別，請選擇「其他」。<br>
-                        ２.Supplement Note. 為補充說明，請多加敘述您在操作本系統時所遇到的問題，讓管理員能更有效地為您解決問題。<br>
-                    </p>
+        <h1>問題回報處理</h1>
+        <ul>
+          <p>
+            <li>
+              經由使用者對於所遇到問題所做的問題回報，應有相關負責的權限來進行處理，故有設計問題類別的責任歸屬。
+              請參閱<a href="{( url('OM_SystemManager') }}">系統管理員</a
+              >的<code>ReportCategory List</code
+              >，其中有對於問題類別進一步的相關說明。
+            </li>
+          </p>
+        </ul>
+        <img
+          src="{{ static('/images/om/report/om-report04.png') }}"
+          width="20%"
+        />
+        <ul>
+          <p>
+            <li>
+              若有使用者進行問題回報，而該回報類別屬於某一個權限的管理員，則會有
+              <label class="notification-badge">1</label> 的標示，
+              用來提醒該管理員有多少個問題回報尚未讀取。
+            </li>
+          </p>
+        </ul>
+        <img
+          src="{{ static('/images/om/report/om-report05.png') }}"
+          width="60%"
+        />
+        <ul>
+          <p>
+            <li>若尚未讀取該問題回報，該欄位會顏色相對較深，若已讀則較淡。</li>
+            <li>點擊該欄位則可檢視及回覆使用者所提出的問題。</li>
+          </p>
+        </ul>
+        <img
+          src="{{ static('/images/om/report/om-report06.png') }}"
+          width="60%"
+        />
+        <ul>
+          <p>
+            <li>左邊區塊是顯示使用者問題回報的相關資訊</li>
+            <li>
+              右邊區塊是管理員與使用者的對話框，在下方輸入框輸入所要回覆的內容，點擊「回覆」按鈕即可回覆使用者。
+            </li>
+            <img
+              src="{{ static('/images/om/report/om-report07.png') }}"
+              width="60%"
+            />
+            <li>
+              若管理員已回覆使用者的問題回報，則在使用者的頁面會看到「Report」的旁邊有
+              <label class="notification-badge">1</label>
+              的標示；而已回覆的問題回報也會與其他欄位有不同的顏色區隔。
+            </li>
+            <li>
+              若管理員認為本次的問題回報是簡已處理完成，即可點擊「關閉」按鈕來結束本次的問題回報。本次回報也會更改狀態為<code>Solved</code>。
+            </li>
+            <img
+              src="{{ static('/images/om/report/om-report08.png') }}"
+              width="60%"
+            />
+            <li>
+              若本次問題回報被管理員「Close」的話，代表本次回報已處理完成，使用者也無法繼續回覆。
+            </li>
+          </p>
+        </ul>
 
-                    <hr>
-
-                    <h1>問題回報處理</h1>
-                    <p>
-                        <ul>
-                            <li>經由使用者對於所遇到問題所做的問題回報，應有相關負責的權限來進行處理，故有設計問題類別的責任歸屬。
-                                請參閱<a href="{% url 'OM_SystemManager' %}">系統管理員</a>的<code>ReportCategory List</code>，其中有對於問題類別進一步的相關說明。</li>
-                        </ul>
-                    </p>
-                    <img src="{% static '/images/om/report/om-report04.png' %}" width="20%">
-                    <p>
-                        <ul>
-                            <li>若有使用者進行問題回報，而該回報類別屬於某一個權限的管理員，則會有 <label class="notification-badge">1</label> 的標示，
-                                用來提醒該管理員有多少個問題回報尚未讀取。</li>
-                        </ul>
-                    </p>
-                    <img src="{% static '/images/om/report/om-report05.png' %}" width="60%">
-                    <p>
-                        <ul>
-                            <li>若尚未讀取該問題回報，該欄位會顏色相對較深，若已讀則較淡。</li>
-                            <li>點擊該欄位則可檢視及回覆使用者所提出的問題。</li>
-                        </ul>
-                    </p>
-                    <img src="{% static '/images/om/report/om-report06.png' %}" width="60%">
-                    <p>
-                        <ul>
-                            <li>左邊區塊是顯示使用者問題回報的相關資訊</li>
-                            <li>右邊區塊是管理員與使用者的對話框，在下方輸入框輸入所要回覆的內容，點擊「回覆」按鈕即可回覆使用者。</li>
-                            <img src="{% static '/images/om/report/om-report07.png' %}" width="60%">
-                            <li>若管理員已回覆使用者的問題回報，則在使用者的頁面會看到「Report」的旁邊有 <label class="notification-badge">1</label> 的標示；而已回覆的問題回報也會與其他欄位有不同的顏色區隔。</li>
-                            <li>若管理員認為本次的問題回報是簡已處理完成，即可點擊「關閉」按鈕來結束本次的問題回報。本次回報也會更改狀態為<code>Solved</code>。</li>
-                            <img src="{% static '/images/om/report/om-report08.png' %}" width="60%">
-                            <li>若本次問題回報被管理員「Close」的話，代表本次回報已處理完成，使用者也無法繼續回覆。</li>
-                        </ul>
-                    </p>
-
-
-
-                    <hr class="featurette-divider">
-                </div>
-            </div>
-        </div>
-    </main>
-    <style>
-        .notification-badge{
-            width: 25px;
-            height: 25px;
-            background-color: red;
-            border-radius: 24px;
-            color: white;
-            text-align: center;
-        }
-    </style>
+        <hr class="featurette-divider" />
+      </div>
+    </div>
+  </div>
+</main>
+<style>
+  .notification-badge {
+    width: 25px;
+    height: 25px;
+    background-color: red;
+    border-radius: 24px;
+    color: white;
+    text-align: center;
+  }
+</style>
 {% endblock %}
