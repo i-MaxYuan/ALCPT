@@ -324,18 +324,28 @@ def practice_create(request, kind):
 
 @permission_check(UserType.Testee)
 def view_answersheet_content(request, answersheet_id):
+    now_time = datetime.now()
     try:
         answersheet = AnswerSheet.objects.get(id=answersheet_id)
         if answersheet.exam.is_public:
-            if datetime.now() < answersheet.exam.finish_time:
+            if answersheet.is_finished == False:
+                messages.warning(request, 'This exam does not finish. Keep working on! ')
+                return redirect('testee_exam_list')
+            elif datetime.now() < answersheet.exam.finish_time:
                 messages.warning(request, 'This exam does not finish.')
                 return redirect('testee_score_list')
+            elif answersheet.is_tested == False:
+                messages.warning(request, "You hadn't take this exam! ")
+                return redirect('testee_score_list')
+
 
     except ObjectDoesNotExist:
         messages.error(
             request, 'Answer sheet does not exist, answersheet_id: {}'.format(
                 answersheet_id))
         return redirect('testee_score_list')
+
+
 
     if answersheet.is_finished:
         answers = answersheet.answer_set.all()
@@ -353,9 +363,11 @@ def view_answersheet_content(request, answersheet_id):
                 is_favorite.append(0)
         answers_results_favorites = zip(answers, result_list, is_favorite)
         return render(request, 'testee/answersheet_content.html', locals())
+    elif answersheet.is_finished  == False and now_time > answersheet.finish_time:
+        messages.success(request, "You hadn't finish your test, please keep answering the exam")
+        return redirect('testee_exam_list')
     else:
-        messages.warning(
-            request, 'Does not finished this practice. Reject your request.')
+        messages.warning(request, 'Does not finished this practice. Reject your request.')
         return redirect('testee_score_list')
 
 @permission_check(UserType.Testee)
@@ -435,6 +447,7 @@ def favorite_question_delete(request, question_id):
 def start_exam(request, exam_id):
     try:
         exam = Exam.objects.get(id=exam_id)
+        answer_sheet = AnswerSheet.objects.get(exam=exam, user=request.user)
 
         now_time = datetime.now()
         if not exam.is_public:
@@ -444,9 +457,17 @@ def start_exam(request, exam_id):
         elif now_time < exam.start_time:
             messages.warning(request, 'Exam does not start.')
             return redirect('testee_exam_list')
-        elif now_time > exam.finish_time:
-            messages.warning(request, 'Exam had finished.')
-            return redirect('testee_exam_list')
+
+        elif now_time > exam.finish_time and answer_sheet.is_tested == False:
+            answer_sheet.is_finished = True
+            answer_sheet.save()
+            messages.warning(request, "You hadn't take this exam!")
+            return redirect('testee_score_list')
+
+        elif now_time > exam.finish_time and answer_sheet.is_tested == True:
+            score = testmanager.calculate_score(exam_id, answer_sheet)
+            messages.warning(request, 'You had not complete this exam. Your score is {}'.format(score))
+            return redirect('testee_score_list')
 
     except ObjectDoesNotExist:
         messages.error(request,
@@ -489,12 +510,14 @@ def start_practice(request, exam_id):
 
     try:
         answer_sheet = AnswerSheet.objects.get(exam=exam, user=request.user)
+
         if answer_sheet.is_finished:
             messages.warning(request, 'You had done this exam.')
             return redirect('testee_exam_list')
     except ObjectDoesNotExist:
         answer_sheet = AnswerSheet.objects.create(exam=exam, user=request.user)
         answer_sheet.is_tested = True
+        answer_sheet.save()
 
         all_questions = list(exam.testpaper.question_list.all())
         random.shuffle(all_questions)
@@ -502,10 +525,9 @@ def start_practice(request, exam_id):
         for question in all_questions:
             Answer.objects.create(answer_sheet=answer_sheet, question=question)
 
-        return redirect('testee_answering',
+    return redirect('testee_answering',
                         exam_id=exam.id,
                         answer_id=Answer.objects.filter(answer_sheet=answer_sheet)[0].id)   # transfer the first question
-
 
 @permission_check(UserType.Testee)
 @require_http_methods(["GET", "POST"])

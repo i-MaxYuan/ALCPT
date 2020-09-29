@@ -41,7 +41,9 @@
                                             <td class="text-center" data-title="Name">{{ answersheet.exam }}</td>
                                             {% if answersheet.is_tested == False %}
                                             <td class="text-center" data-title="Type" style="color: #c12e2a">未進行測驗</td>
-                                            {% elif answersheet.score  < 60 %}
+                                            {% elif answersheet.is_finished == False and answersheet.is_tested == True %}
+                                            <td class="text-center" data-title="Type" style="color: #c12e2a">考試尚未結束</td>
+                                            {% elif answersheet.is_finished == True and answersheet.score  < 60 %}
                                             <td class="text-center" data-title="Type" style="color: #c12e2a">{{ answersheet.score }}</td>
                                             {% else %}
                                             <td class="text-center" data-title="Type" style="color: #00A600">{{ answersheet.score }}</td>
@@ -92,7 +94,9 @@
                                         {% for answersheet in answer_sheets_reading %}
                                         <tr style="cursor: pointer" onclick="window.location.href='{{ url('view_answersheet_content', args=[answersheet.id]) }}'">
                                             <td class="text-center" data-title="Name">{{ answersheet.exam }}</td>
-                                            {% if answersheet.score  < 60 %}
+                                            {% if answersheet.is_finished == False and answersheet.is_tested == True %}
+                                            <td class="text-center" data-title="Type" style="color: #c12e2a">尚未答題結束</td>
+                                            {% elif answersheet.is_finished == True and answersheet.score  < 60 %}
                                             <td class="text-center" data-title="Type" style="color: #c12e2a">{{ answersheet.score }}</td>
                                             {% else %}
                                             <td class="text-center" data-title="Type">{{ answersheet.score }}</td>
@@ -139,7 +143,9 @@
                                         {% for answersheet in answer_sheets_listening %}
                                         <tr style="cursor: pointer" onclick="window.location.href='{{ url('view_answersheet_content', args=[answersheet.id]) }}'">
                                             <td class="text-center" data-title="Name">{{ answersheet.exam }}</td>
-                                            {% if answersheet.score  < 60 %}
+                                            {% if answersheet.is_finished == False and answersheet.is_tested == True %}
+                                            <td class="text-center" data-title="Type" style="color: #c12e2a">尚未答題結束</td>
+                                            {% elif answersheet.is_finished == True and answersheet.score  < 60 %}
                                             <td class="text-center" data-title="Type" style="color: #c12e2a">{{ answersheet.score }}</td>
                                             {% else %}
                                             <td class="text-center" data-title="Type">{{ answersheet.score }}</td>
