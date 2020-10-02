@@ -1,88 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     {% include 'head.html' %}
     <style>
-      * {
-        outline: none;
-      }
+        * {
+            outline: none;
+        }
     </style>
 
     {% block stylesheets %} {% endblock %} {% block scripts %} {% endblock %}
-  </head>
+</head>
 
-  {% include 'header.html' %}
+{% include 'header.html' %}
 
-  <body>
+<body>
     <!--路徑-->
     <div id="path">
-      <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item active" aria-current="page">
-            <a href="{{ url('Homepage') }}">Home</a>
-          </li>
-          {% block path %} {% endblock %}
-        </ol>
-      </nav>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item active" aria-current="page">
+                    <a href="{{ url('Homepage') }}">Home</a>
+                </li>
+                {% block path %} {% endblock %}
+            </ol>
+        </nav>
     </div>
     <style>
-      #path a {
-        text-decoration: none;
-      }
+        #path a {
+            text-decoration: none;
+        }
     </style>
 
     <!--主要資料區-->
     <div id="main-block">
-      {% block content %} {% endblock %}
+        {% block content %} {% endblock %}
 
-      <div class="space"></div>
+        <div class="space"></div>
     </div>
     <style>
-      #main-block {
-              {
-              #height: 65vh;
-              #
-          }
-      }
+        #main-block {
+                {
+                #height: 65vh;
+                #
+            }
+        }
 
-      .add button {
-          border-radius: 24px;
-      }
+        .add button {
+            border-radius: 24px;
+        }
 
-      .add button:hover {
-          box-shadow: 2px 4px 10px 0px rgb(44, 50, 50);
-      }
+        .add button:hover {
+            box-shadow: 2px 4px 10px 0px rgb(44, 50, 50);
+        }
 
-      .notification-badge {
-          width: 25px;
-          height: 25px;
-          background-color: red;
-          border-radius: 24px;
-          color: white;
-          text-align: center;
-      }
+        .notification-badge {
+            width: 25px;
+            height: 25px;
+            background-color: red;
+            border-radius: 24px;
+            color: white;
+            text-align: center;
+        }
 
-      .space {
-          margin-bottom: 1rem;
-      }
+        .space {
+            margin-bottom: 1rem;
+        }
     </style>
 
     <!--分頁-->
     <div id="pagination">
-      <div class="container-fluid">
-        <div class="row justify-content-center">
-          <div class="col-xs-12">{% block pagination %} {% endblock %}</div>
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="col-xs-12">{% block pagination %} {% endblock %}</div>
+            </div>
         </div>
-      </div>
-      <h5 class="featurette-divider"></h5>
+        <h5 class="featurette-divider"></h5>
     </div>
     <style>
-      .featurette-divider {
-        margin: 5rem 0;
-        /* Space out the Bootstrap <hr> more */
-      }
+        .featurette-divider {
+            margin: 5rem 0;
+            /* Space out the Bootstrap <hr> more */
+        }
     </style>
-  </body>
+</body>
 
-  {% include "footer.html" %}
+{% include "footer.html" %}
+
 </html>

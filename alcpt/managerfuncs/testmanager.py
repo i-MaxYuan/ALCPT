@@ -2,6 +2,7 @@ from django.db.models import Q
 from django.utils import timezone
 import random
 
+
 from alcpt.models import User, TestPaper, Question, Exam, AnswerSheet
 from alcpt.definitions import QuestionType, ExamType, QuestionTypeCounts
 
@@ -164,12 +165,15 @@ def calculate_score(exam_id: int, answer_sheet: AnswerSheet):
 
 def public_exam_average_score(exam: Exam):
     total_score = 0
+    count = 0
 
     for answer_sheet in exam.answersheet_set.all():
         if answer_sheet.score is None:
             continue
         else:
             total_score += answer_sheet.score
+            count += 1
 
-    exam.average_score = total_score / exam.answersheet_set.all().count()
+
+    exam.average_score = total_score / count
     exam.save()

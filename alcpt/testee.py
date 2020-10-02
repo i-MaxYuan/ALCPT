@@ -138,7 +138,7 @@ def score_list(request):
                         count += 10
     # xaxis : Score
     # yaxis : Times
-    # Line chart
+    # Bar chart
     x_data = [ str(num) for num in range(10, 101, 10)]
     y_exam_data = list(EXAM_SCORE_RANGE.values())
     y_reading_data = list(READING_SCORE_RANGE.values())

@@ -1,77 +1,85 @@
 <!DOCTYPE html>
 <html>
-  <head>
+
+<head>
     <title></title>
 
     <style>
-      .footer {
-        position: fixed;
-        left: 0;
-        bottom: 0;
-        text-align: center;
+        .footer {
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            text-align: center;
 
-        width: 100%;
-        z-index: 9999;
+            width: 100%;
+            z-index: 9999;
 
-        font-size: 18px;
-        color: white;
-      }
-      .footer #footer-info {
-        background-color: rgb(44, 50, 50);
+            font-size: 18px;
+            color: white;
+        }
 
-        padding: 5px;
-      }
-      .footer #footer-info a {
-        text-decoration: none;
-      }
+        .footer #footer-info {
+            background-color: rgb(44, 50, 50);
 
-      .prompt_container #prompt {
-        text-align: left;
-        height: 27px;
-      }
-      .prompt_container #danger {
-        color: rgb(44, 50, 50);
-        background-color: rgb(220, 53, 69, 0.3);
-      }
-      .prompt_container #success {
-        color: rgb(44, 50, 50);
-        background-color: rgb(40, 167, 69, 0.3);
-      }
-      .prompt_container #warning {
-        color: rgb(44, 50, 50);
-        background-color: rgb(255, 193, 7, 0.3);
-      }
+            padding: 5px;
+        }
+
+        .footer #footer-info a {
+            text-decoration: none;
+        }
+
+        .prompt_container #prompt {
+            text-align: left;
+            height: 27px;
+        }
+
+        .prompt_container #danger {
+            color: rgb(44, 50, 50);
+            background-color: rgb(220, 53, 69, 0.3);
+        }
+
+        .prompt_container #success {
+            color: rgb(44, 50, 50);
+            background-color: rgb(40, 167, 69, 0.3);
+        }
+
+        .prompt_container #warning {
+            color: rgb(44, 50, 50);
+            background-color: rgb(255, 193, 7, 0.3);
+        }
     </style>
-  </head>
-  <body>
+</head>
+
+<body>
     <footer class="footer">
-      <div class="prompt_container">
-        {% if messages %} {% for message in messages %} {% if message.tags ==
+        <div class="prompt_container">
+            {% if messages %} {% for message in messages %} {% if message.tags ==
         "error" %}
-        <div id="prompt">
-          <div id="danger" role="alert">{{ message }}</div>
+            <div id="prompt">
+                <div id="danger" role="alert">{{ message }}</div>
+            </div>
+            {% elif message.tags == "success" %}
+            <div id="prompt">
+                <div id="success" role="alert">{{ message }}</div>
+            </div>
+            {% elif message.tags == "warning" %}
+            <div id="prompt">
+                <div id="warning" role="alert">{{ message }}</div>
+            </div>
+            {% endif %} {% endfor %} {% endif %}
         </div>
-        {% elif message.tags == "success" %}
-        <div id="prompt">
-          <div id="success" role="alert">{{ message }}</div>
+        <div id="footer-info">
+            ALCPT © 2019 IM, Management College, NDU. Version 13.2
+            <a href="{{ url('about') }}">About.</a>
         </div>
-        {% elif message.tags == "warning" %}
-        <div id="prompt">
-          <div id="warning" role="alert">{{ message }}</div>
-        </div>
-        {% endif %} {% endfor %} {% endif %}
-      </div>
-      <div id="footer-info">
-        ALCPT © 2019 IM, Management College, NDU. Version 13.2
-        <a href="{{ url('about') }}">About.</a>
-      </div>
     </footer>
     <script type="text/javascript">
-      var timer = window.setInterval(disappear, 4000); // display 3 seconds , then disappear
-      function disappear() {
-        document.getElementById("prompt").style.height = "0";
-        document.getElementById("prompt").style.transition = "0.1s";
-      }
+        var timer = window.setInterval(disappear, 4000); // display 3 seconds , then disappear
+        function disappear() {
+            document.getElementById("prompt").style.height = "0";
+            document.getElementById("prompt").style.transition = "0.1s";
+        }
     </script>
-  </body>
+</body>
+
 </html>
