@@ -2,50 +2,46 @@
 <li class="breadcrumb-item active" aria-current="page">View Testee Score</li>
 {% endblock %} {% block content %}
 <main class="exam-score-list">
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-md-12">
-        <h2>Exam Score List.</h2>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-12 table-responsive-md">
+                <h2>Exam Score List.</h2>
 
-        <div class="table-responsive">
-          <table class="table table-hover">
-            <thead class="thead-light">
-              <tr>
-                <th class="text-center">Name.</th>
-                <th class="text-center">Average.</th>
-                <th class="text-center"><i class="fa fa-users"></i></th>
-                <th class="text-center">Start Time.</th>
-                <th class="text-center">Finish Time.</th>
-                <th class="text-center">Duration.(min)</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for exam in exams %}
-              <tr
-                style="cursor: pointer"
-                onclick="window.location.href='{{ url('exam_score_detail', args=[exam.id]) }}'"
-              >
-                <td class="text-center">{{ exam.name }}</td>
-                <td class="text-center">{{ exam.average_score }}</td>
-                <td class="text-center">{{ exam.testeeList.count() }}</td>
-                <td class="text-center">
-                  {{ exam.start_time.strftime('%Y/%m/%d %H:%M') }}
-                </td>
-                <td class="text-center">
-                  {{ exam.finish_time.strftime('%Y/%m/%d %H:%M') }}
-                </td>
-                <td class="text-center">{{ exam.duration }}</td>
-              </tr>
-              {% else %}
-              <tr>
-                <td colspan="6" class="text-center">No Data.</td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
+
+                <table class="table table-hover table-striped table-bordered table-mc-light-blue">
+                    <thead class="thead-light">
+                        <tr>
+                            <th class="text-center">Name.</th>
+                            <th class="text-center">Average.</th>
+                            <th class="text-center"><i class="fa fa-users"></i></th>
+                            <th class="text-center">Start Time.</th>
+                            <th class="text-center">Finish Time.</th>
+                            <th class="text-center">Duration.(min)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for exam in exams %}
+                        <tr style="cursor: pointer" onclick="window.location.href='{{ url('exam_score_detail', args=[exam.id]) }}'">
+                            <td class="text-center" data-title="Name">{{ exam.name }}</td>
+                            <td class="text-center" data-title="Average">{{ exam.average_score }}</td>
+                            <td class="text-center" data-title="users">{{ exam.testeeList.count() }}</td>
+                            <td class="text-center" data-title="Start Time">
+                                {{ exam.start_time.strftime('%Y/%m/%d %H:%M') }}
+                            </td>
+                            <td class="text-center" data-title="Finish Time">
+                                {{ exam.finish_time.strftime('%Y/%m/%d %H:%M') }}
+                            </td>
+                            <td class="text-center" data-title="Duration">{{ exam.duration }}</td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="6" class="text-center">No Data.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 </main>
 {% endblock %}
