@@ -31,7 +31,8 @@
                                 <i class="fa fa-plus"></i>
                             </button>
                         </div>
-                        {% if exams %} {% for exam in examList %}
+                        {% if exams %}
+                        {% for exam in examList %}
                         <tr style="cursor: pointer" onclick="window.location.href='{{ url('exam_content', args=[exam.id]) }}'">
                             <td class="text-center" data-title="Exam Name">
                                 {{ exam.name }}
@@ -48,12 +49,13 @@
                             <td class="text-center" data-title="Creator">
                                 {{ exam.created_by.name }}
                             </td>
-                            <td>
+                            <td class="text-center">
                                 <a href="{{ url('exam_edit', args=[exam.id]) }}"><i class="fa fa-pencil-square-o"></i></a>
                                 <a href="{{ url('exam_delete', args=[exam.id]) }}" onclick="return confirm('Sure to delete？');"><i class="fa fa-trash"></i></a>
                             </td>
                         </tr>
-                        {% endfor %} {% else %}
+                        {% endfor %}
+                        {% else %}
                         <tr>
                             <td class="text-center" colspan="6">No Data.</td>
                         </tr>

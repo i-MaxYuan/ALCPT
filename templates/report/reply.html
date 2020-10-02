@@ -29,7 +29,7 @@
                             {% endif %}
                             <h5>Choice</h5>
                             <ol type="A">
-                                {% for choice in replying_report.question.choice_set.all %}
+                                {% for choice in replying_report.question.choice_set.all() %}
                                 <li {% if choice.is_answer %}style="color: green" {% endif %}>
                                     {{ choice }}
                                 </li>
@@ -48,15 +48,13 @@
                                     {% if request.user|has_perm('SystemManager') %}
                                     <a href="{{ url('view_profile', args=[replying_report.created_by]) }}">{{ replying_report.created_by }}</a>
                                     in {{ replying_report.created_time }}<br />
-                                    {% else %} {{ replying_report.created_by }} in {{
-                  replying_report.created_time }}<br />
+                                    {% else %} {{ replying_report.created_by }} in {{ replying_report.created_time }}<br />
                                     {% endif %}
                                 </cite>
                                 {% if replying_report.state == 2 %}
                                 <label class="btn btn-danger float-right">Processing</label>
                                 {% elif replying_report.state == 3 %}
-                                <cite title="Source Title">Resolved by {{ replying_report.resolved_by }} in {{
-                  replying_report.resolved_time }}</cite>
+                                <cite title="Source Title">Resolved by {{ replying_report.resolved_by }} in {{ replying_report.resolved_time }}</cite>
                                 <label class="btn btn-success float-right">Solved</label>
                                 {% endif %}
                             </footer>
@@ -70,21 +68,18 @@
 
                         <div id="reply-content" class="card-body">
                             <div class="reply-content" data-spy="scroll" data-target="#navbar-example2" data-offset="0">
-                                {% if replies %} {% for reply in replies %} {% if
-                reply.created_by == replying_report.created_by %}
+                                {% if replies %} {% for reply in replies %} {% if reply.created_by == replying_report.created_by %}
                                 <div class="message-box">
                                     {{ reply.created_by }}：<br />{{ reply.content }}
                                     <footer class="blockquote-footer">
-                                        <cite title="Source Title">{{ reply.created_time.strftime('%H:%M, %Y/%m/%d')
-                      }}</cite>
+                                        <cite title="Source Title">{{ reply.created_time.strftime('%H:%M, %Y/%m/%d') }}</cite>
                                     </footer>
                                 </div>
                                 {% else %}
                                 <div class="message-box text-right">
                                     ：{{ reply.created_by }}<br />{{ reply.content }}
                                     <footer class="blockquote-footer">
-                                        <cite title="Source Title">{{ reply.created_time.strftime('%H:%M, %Y/%m/%d')
-                      }}</cite>
+                                        <cite title="Source Title">{{ reply.created_time.strftime('%H:%M, %Y/%m/%d') }}</cite>
                                     </footer>
                                 </div>
                                 {% endif %}
