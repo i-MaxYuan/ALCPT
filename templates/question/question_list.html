@@ -127,10 +127,8 @@
                                 </td>
 
                                 <td>
-                                    <button type="button" {% if question.state == 1 %} class="btn
-                  btn-success" {% elif question.state == 2 or question.state ==
-                  4 %} class="btn btn-danger" {% elif question.state == 3 %} class="btn btn-light" {% elif question.state == 5 %} class="btn btn-dark" {% elif question.state == 6 %} class="btn
-                  btn-secondary" {% endif %}>{{ question.state|readable_state }}</button>
+                                    <button type="button" {% if question.state == 1 %} class="btn btn-success" {% elif question.state == 2 or question.state == 4 %} class="btn btn-danger" {% elif question.state == 3 %} class="btn btn-light"
+                                        {% elif question.state == 5 %} class="btn btn-dark" {% elif question.state == 6 %} class="btn btn-secondary" {% endif %}>{{ question.state|readable_state }}</button>
                                 </td>
 
                                 <td class="functions-btn">
@@ -194,13 +192,11 @@
                                 <td colspan="2" style="text-align: left; font-size: 14px">
                                     <ul style="font-size: 14px; list-style: none">
                                         <li>
-                                            Update:{{ question.update_time.strftime('%Y/%m/%d %H:%M')
-                      }}
+                                            Update:{{ question.update_time.strftime('%Y/%m/%d %H:%M') }}
                                         </li>
                                         <li>Issued:{{ question.issued_freq }}</li>
                                         <li>
-                                            Difficulty:{{
-                      question.difficulty|readable_question_difficulty }}
+                                            Difficulty:{{ question.difficulty|readable_question_difficulty }}
                                         </li>
                                         <li>Creator:{{ question.created_by.name }}</li>
                                         <li>Last Update:{{ question.last_updated_by.name }}</li>
@@ -210,8 +206,7 @@
                             {% endfor %} {% else %}
                             <tr>
                                 <td colspan="6">
-                                    Cannot query these conditions「{{
-                  query_content|readable_question_query_content }}」questions。
+                                    Cannot query these conditions「{{ query_content|readable_question_query_content }}」questions。
                                 </td>
                             </tr>
                             {% endif %}
@@ -233,7 +228,8 @@
         vertical-align: middle;
     }
 </style>
-{% endblock %} {% block pagination %}
+{% endblock %}
+{% block pagination %}
 <ul class="pagination justify-content-center">
     <li class="page-item">
         <a class="page-link" href="?page=1{{ query_content }}"><i class="fa fa-angle-double-left"></i></a>
