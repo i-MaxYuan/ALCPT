@@ -131,7 +131,7 @@
                 else %} 尚未設定 {% endif %}
               </td>
 
-              <td data-title="Privilege：">
+              <td class="text-center" data-title="Privilege：">
                 {% if user|has_perms(privileges.SystemManager) %}
                 <span class="badge alert-danger"
                   >{{ privileges.SystemManager.value.1 }}</span
@@ -159,12 +159,12 @@
                 {% endif %}
               </td>
 
-              <td data-title="Last Login：">
+              <td class="text-center" data-title="Last Login：">
                 {% if user.last_login %} {{ user.last_login.strftime('%Y/%m/%d
                 %H:%M') }} {% else %} Not logged in {% endif %}
               </td>
 
-              <td>
+              <td class="text-center">
                 <a href="{{ url('user_edit', args=[user.reg_id]) }}"
                   ><i class="fa fa-pencil-square-o"></i
                 ></a>
@@ -186,17 +186,6 @@
   </div>
 </main>
 
-<style>
-  .user-list table > tbody > tr > td {
-    vertical-align: middle;
-  }
-  .user-list .table-responsive-md tr > td > a {
-    display: none;
-  }
-  .user-list .table-responsive-md tr:hover > td > a {
-    display: block;
-  }
-</style>
 {% endblock %} {% block pagination %}
 <ul class="pagination justify-content-center">
   <li class="page-item">
