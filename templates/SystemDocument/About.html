@@ -1,46 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <title>線上英文考試系統</title>
-    <!-- CSS -->
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="{{ static('/css/loginstyle.css') }}"
-    />
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="{{ static('/css/aboutstyle.css') }}"
-    />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
-    <link
-      href="{{ static('/fontawesome/css/all.min.css') }}"
-      rel="stylesheet"
-    />
-    <link
-      href="{{ static('/bootstrap/css/bootstrap.min.css') }}"
-      rel="stylesheet"
-    />
-
-    <!--<link-->
-    <!--href="{{ static('/css/About/fonts.css') }}"-->
-    <!--rel="stylesheet"-->
-    <!--type="text/css"-->
-    <!--/>-->
-
-    <!-- js -->
-    <script src="{{ static('/javascript/jquery.slim.min.js') }}"></script>
-    <script src="{{ static('/bootstrap/js/bootstrap.min.js') }}"></script>
-
-    <!--<script src="{{ static('/popper/src/popper.js') }}"></script>-->
-    <!--<script src="{{ static('/javascript/Chart.min.js') }}"></script>-->
-
-    <!--<link rel="icon" href="Favicon.png" />-->
+    {% include 'head.html' %}
   </head>
   <body>
     {% block stylesheets %} {% endblock %} {% block scripts %}
