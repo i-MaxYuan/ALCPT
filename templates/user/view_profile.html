@@ -46,16 +46,12 @@
 
                         <h5 class="card-subtitle mb-2 text-muted">Gender.</h5>
                         <p class="card-text">
-                            {% if viewed_user.gender == 1 %}Male {% elif viewed_user.gender ==
-              2 %}Female {% elif viewed_user.gender == 3 %}Privacy {% else
-              %}Unset {% endif %}
+                            {% if viewed_user.gender == 1 %}Male {% elif viewed_user.gender == 2 %}Female {% elif viewed_user.gender == 3 %}Privacy {% else %}Unset {% endif %}
                         </p>
 
                         <h5 class="card-subtitle mb-2 text-muted">Identity.</h5>
                         <p class="card-text">
-                            {% if viewed_user.identity %} {{
-              viewed_user.identity|readableIdentity }} {% else %} Unset {% endif
-              %}
+                            {% if viewed_user.identity %} {{ viewed_user.identity|readableIdentity }} {% else %} Unset {% endif %}
                         </p>
 
                         <h5 class="card-subtitle mb-2 text-muted">Privilege.</h5>
@@ -160,16 +156,12 @@
 
                         <h5 class="card-subtitle mb-2 text-muted">Gender.</h5>
                         <p class="card-text">
-                            {% if viewed_user.gender == 1 %}Male {% elif viewed_user.gender ==
-              2 %}Female {% elif viewed_user.gender == 3 %}Privacy {% else
-              %}Unset {% endif %}
+                            {% if viewed_user.gender == 1 %}Male {% elif viewed_user.gender == 2 %}Female {% elif viewed_user.gender == 3 %}Privacy {% else %}Unset {% endif %}
                         </p>
 
                         <h5 class="card-subtitle mb-2 text-muted">Identity.</h5>
                         <p class="card-text">
-                            {% if viewed_user.identity %} {{
-              viewed_user.identity|readableIdentity }} {% else %} Unset {% endif
-              %}
+                            {% if viewed_user.identity %} {{ viewed_user.identity|readableIdentity }} {% else %} Unset {% endif %}
                         </p>
 
                         <h5 class="card-subtitle mb-2 text-muted">Privilege.</h5>
@@ -178,7 +170,7 @@
                             <span class="badge alert-danger">{{ privileges.SystemManager.value.1 }}</span>
                             {% endif %} {% if viewed_user|has_perms(privileges.TestManager) %}
                             <span class="badge alert-warning">{{ privileges.TestManager.value.1 }}</span>
-                            {% endif %} {% if viewed_user|has_perms(privileges.TBManageri) %}
+                            {% endif %} {% if viewed_user|has_perms(privileges.TBManager) %}
                             <span class="badge badge-primary">{{ privileges.TBManager.value.1 }}</span>
                             {% endif %} {% if viewed_user|has_perms(privileges.TBOperator) %}
                             <span class="badge alert-success">{{ privileges.TBOperator.value.1 }}</span>

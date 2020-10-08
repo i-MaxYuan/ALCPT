@@ -21,8 +21,7 @@
                             {% if request.user|get_SystemManager_report_notification == 0 %}
                             <a class="dropdown-item" href="{{ url('responsible_report_list', args=['SystemManager']) }}">User Response Handling</a>
                             {% else %}
-                            <a class="dropdown-item" href="{{ url('responsible_report_list', args=['SystemManager']) }}">User Response Handling<label class="notification-badge">{{ request.user|get_SystemManager_report_notification
-                  }}</label></a>
+                            <a class="dropdown-item" href="{{ url('responsible_report_list', args=['SystemManager']) }}">User Response Handling<label class="notification-badge">{{ request.user|get_SystemManager_report_notification }}</label></a>
                             {% endif %}
                         </div>
                     </li>
@@ -107,17 +106,15 @@
                                 <div class="modal-content">
                                     <div class="modal-header text-center">
                                         <h5 class="modal-title" id="ModalLongTitle">
-                                            Notification Center（Total: {{
-                      request.user.proclamation_set.count() }} ）
+                                            Notification Center（Total: {{ request.user.proclamation_set.count() }} ）
                                         </h5>
                                     </div>
 
                                     <div id="modal-menu">
                                         <table class="table table-hover">
                                             <tbody>
-                                                {% for proclamation in
-                        request.user.proclamation_set.all() %}
-                                                <tr class="text-left"
+                                                {% for proclamation in request.user.proclamation_set.all() %}
+                                                <tr class="text-left" style="cursor: pointer" onclick="window.location.href='{{ url('proclamation_detail', args=[proclamation.id]) }}'"
                                                     style="{% if loop.index != request.user.proclamation_set.count %}border-bottom-style: solid; border-bottom-width: 1px; border-bottom-color: rgb(200, 200, 200);{% endif %} {% if not proclamation.is_read %}background-color: rgb(220,220,220);{% endif %}">
                                                     <td class="align-middle">
                                                         <input type="checkbox" name="proclamation" value="{{ proclamation.id }}" />
@@ -126,11 +123,10 @@
                                                         <h5>{{ proclamation.title }}</h5>
                                                         <p>
                                                             {{ proclamation.text|linebreaksbr }}<br />
-                                                            <span class="text-muted float-right">-by {{ proclamation.created_by }} in {{
-                                proclamation.created_time }}</span>
+                                                            <span class="text-muted float-right">-by {{ proclamation.created_by }} in {{ proclamation.created_time }}</span>
                                                         </p>
                                                     </td>
-                                                    <td class="align-middle" style="cursor: pointer" onclick="window.location.href='{{ url('proclamation_detail', args=[proclamation.id]) }}'">
+                                                    <td class="align-middle">
                                                         <i class="fa fa-angle-right"></i>
                                                     </td>
                                                 </tr>

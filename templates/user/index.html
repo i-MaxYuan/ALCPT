@@ -81,7 +81,7 @@
                         </div>
                         {% if userList %} {% for user in userList %}
                         <tr class="align-center" style="cursor: pointer" onclick="window.location.href='{{ url('view_profile', args=[user.reg_id]) }}'">
-                            <td class="text-center" data-title="Account：、">
+                            <td class="text-center" data-title="Account：">
                                 {{ user.reg_id }}
                             </td>
 
