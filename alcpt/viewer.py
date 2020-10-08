@@ -92,7 +92,7 @@ def exam_score_detail(request, exam_id):
         else:
             testee_score_means = '無考試成績'
 
-        testeeData = zip(testees, answer_sheets)
+        testeeData = list(zip(testees, answer_sheets))
 
         #Bar Chart
         #xaxis: score

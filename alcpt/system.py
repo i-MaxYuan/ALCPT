@@ -74,21 +74,44 @@ def user_list(request):
 @permission_check(UserType.SystemManager)
 def user_create(request):
     if request.method == 'POST':
-        reg_id = request.POST.get('reg_id',)
-
-        privilege_value = 0
-        for privilege in UserType.__members__.values():
-            if privilege and request.POST.get('{}'.format(privilege)):
-                privilege_value |= privilege.value[0]
-
         try:
-            identity = int(request.POST.get('identity'))
-            if identity == 2:
-                if request.POST.get('stu_id'):
-                    new_user = User.objects.create_user(reg_id=reg_id, privilege=privilege_value, password=reg_id)
-                    new_user.identity = identity
+            reg_id = request.POST.get('reg_id')
+            stu_id = request.POST.get('stu_id')
+            messages.error(request, "Existed user, register ID - {}".format(reg_id, stu_id))
 
-                    new_user_stu = Student.objects.create(stu_id=request.POST.get('stu_id'), user=new_user)
+            return redirect('user_create')
+
+        except ObjectDoesNotExist:
+            reg_id = request.POST.get('reg_id')
+            stu_id = request.POST.get('stu_id')
+            privilege_value = 0
+            for privilege in UserType.__members__.values():
+                if privilege and request.POST.get('{}'.format(privilege)):
+                    privilege_value |= privilege.value[0]
+
+            try:
+                identity = int(request.POST.get('identity'))
+                if identity == 2:
+
+                    if re.search(r"\W", reg_id) == None:
+                        new_user = User.objects.create_user(reg_id=reg_id, privilege=privilege_value, password=reg_id)
+                        new_user.identity = identity
+                    else:
+                        messages.error(request, "Do not have the special characters in your Register ID {}".format(reg_id))
+                        return redirect('user_create')
+
+                    if stu_id:
+                        pass
+                    else:
+                        messages.warning(request, 'Please input the student ID.')
+                        return redirect('user_create')
+
+                    if re.search(r"\W", stu_id) == None:
+                        new_user_stu = Student.objects.create(stu_id=stu_id, user=new_user)
+                    else:
+                        messages.error(request, "Do not have the special characters in your student ID {}".format(stu_id))
+                        return redirect('user_create')
+
                     if request.POST.get('department'):
                         new_user_stu.department = Department.objects.get(id=int(request.POST.get('department')))
                     if request.POST.get('squadron'):
@@ -96,44 +119,36 @@ def user_create(request):
                     if request.POST.get('grade'):
                         new_user_stu.grade = request.POST.get('grade')
 
-                    new_user.save()
-                    new_user_stu.save()
-                    messages.success(request, 'Successfully Created - User, Student')
-                    return redirect('user_list')
+                        new_user.save()
+                        new_user_stu.save()
+                        messages.success(request, 'Successfully Created - User, Student')
+                        return redirect('user_list')
 
                 else:
-                    messages.warning(request, 'Please input the student ID.')
-                    privileges = UserType.__members__
-                    identities = Identity.__members__.values()
-                    departments = Department.objects.all()
-                    squadrons = Squadron.objects.all()
-                    return render(request, 'user/create_user.html', locals())
+                    new_user = User.objects.create_user(reg_id=reg_id, privilege=privilege_value, password=reg_id)
+                    new_user.identity = identity
+                    new_user.save()
+                    messages.success(request, 'Successfully Created - User')
 
-            else:
-                new_user = User.objects.create_user(reg_id=reg_id, privilege=privilege_value, password=reg_id)
-                new_user.identity = identity
-                new_user.save()
-                messages.success(request, 'Successfully Created - User')
+                    if request.POST.get('stu_id'):
+                        messages.warning(request, 'You are not student.')
 
-                if request.POST.get('stu_id'):
-                    messages.warning(request, 'You are not student.')
+                    return redirect('user_list')
 
-                return redirect('user_list')
+            except IntegrityError:
+                messages.error(request, "Existed user, register ID - {}".format(reg_id))
+                # privileges = UserType.__members__
+                # identities = Identity.__members__.values()
+                # departments = Department.objects.all()
+                # squadrons = Squadron.objects.all()
+                return redirect('user_create')
 
-        except IntegrityError:
-            messages.error(request, "Existed user, register ID - {}".format(reg_id))
-            privileges = UserType.__members__
+        else:
+            privileges = UserType.__members__.values()
             identities = Identity.__members__.values()
             departments = Department.objects.all()
             squadrons = Squadron.objects.all()
             return render(request, 'user/create_user.html', locals())
-
-    else:
-        privileges = UserType.__members__.values()
-        identities = Identity.__members__.values()
-        departments = Department.objects.all()
-        squadrons = Squadron.objects.all()
-        return render(request, 'user/create_user.html', locals())
 
 
 # 新增使用者（多重）
