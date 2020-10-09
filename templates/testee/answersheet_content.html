@@ -162,8 +162,7 @@
                                 <td></td>
                                 <td colspan="2" style="text-align: left">
                                     <ol type="A">
-                                        {% for option in answer.question.choice_set.all() %} {% if
-                    answer.selected == loop.index and option.is_answer %}
+                                        {% for option in answer.question.choice_set.all() %} {% if answer.selected == loop.index and option.is_answer %}
                                         <span style="color: green">
                                             <li>{{ option }}</li>
                                         </span>
@@ -182,7 +181,7 @@
                                 </td>
                                 <td class="text-right">
                                     {% if answer.question.state == 5 %}
-                                    <i class="fa fa-exclamation-triangle" style="cursor: pointer" onclick="alert('This question had been modified.')"></i>
+                                    <i class="btn btn-outline-success" style="cursor: pointer" onclick="alert('This question had been modified.')"></i>
                                     {% else %}
                                     <i class="fa fa-exclamation-triangle" style="cursor: pointer" onclick="window.location.href='{{ url('report_question', args=[answer.question.id]) }}'"></i>
                                     {% endif %}

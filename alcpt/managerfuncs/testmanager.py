@@ -175,5 +175,5 @@ def public_exam_average_score(exam: Exam):
             count += 1
 
 
-    exam.average_score = total_score / count
+    exam.average_score = format(total_score / count, '.3f')
     exam.save()

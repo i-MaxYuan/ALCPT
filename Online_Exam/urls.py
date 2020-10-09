@@ -358,6 +358,10 @@ urlpatterns = [
                         r'^answering/(?P<exam_id>[0-9]+)/(?P<answer_id>[0-9]+)$',
                         testee.answering,
                         name='testee_answering'),
+                    re_path(
+                        r'^submit_answersheet/(?P<exam_id>[0-9]+)$',
+                        testee.submit_answersheet,
+                        name='submit_answersheet'),
                     re_path(r'^(?P<exam_id>[0-9]+)/settle$',
                             testee.settle,
                             name='testee_settle_exam'),
