@@ -2,134 +2,138 @@
 <li class="breadcrumb-item active" aria-current="page">Answering...</li>
 {% endblock %} {% block content %}
 <script type="text/javascript">
-  function checkTime(){
-      var now=new Date();
-      var h=now.getHours();//小時
-      var m=now.getMinutes();//分鐘
-      if(({{ hour }} - h == 0)&&({{ minute }} - m <= 0)){
-          alert("Time's up");
-          document.location.href="{{ url('testee_settle_exam', args=[exam.id]) }}";
-      }
-      setTimeout(checkTime,1000);//每間隔1秒就呼叫自已一次
-  }
-  checkTime();
+    function checkTime() {
+        var now = new Date();
+        var h = now.getHours(); //小時
+        var m = now.getMinutes(); //分鐘
+        if (({
+                {
+                    hour
+                }
+            } - h == 0) && ({
+                {
+                    minute
+                }
+            } - m <= 0)) {
+            alert("Time's up");
+            document.location.href = "{{ url('testee_settle_exam', args=[exam.id]) }}";
+        }
+        setTimeout(checkTime, 1000); //每間隔1秒就呼叫自已一次
+    }
+    checkTime();
 </script>
 <main class="answering-page">
-  <div class="container-fluid">
-    <div class="row justify-content-center">
-      <div class="col-lg-3 col-md-12">
-        <h4>Question Number.</h4>
-        <table>
-          <tr>
-            {% for answer in answers %}
-            <td>
-              {% if answer.selected != -1 %}
-              <div class="bit">{{ loop.index }}</div>
-              {% else %}
-              <div class="bit">
-                <a
-                  href="{{ url('testee_answering', args=[exam.id, answer.id]) }}"
-                  >{{ loop.index }}</a
-                >
-              </div>
-              {% endif %}
-            </td>
-            {% if loop.index % 10 == 0 %}
-          </tr>
-          <tr>
-            {% endif %} {% endfor %}
-          </tr>
-        </table>
-      </div>
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-lg-3 col-md-12">
+                <h4>Question Number.</h4>
+                <table>
+                    <tr>
+                        {% for answer in answers %}
+                        <td>
+                            {% if answer.selected != -1 and answer.id == selected_answer.id%}
+                            <div class="bit" style="background-color: dimgrey">
+                                <a href=" {{ url('testee_answering', args=[exam.id, answer.id]) }}">{{ loop.index }}</a>
+                            </div>
+                            {% elif answer.selected != -1 %}
+                            <div class="bit" style="background-color: darkgrey">
+                                <a href=" {{ url('testee_answering', args=[exam.id, answer.id]) }}">{{ loop.index }}</a>
+                            </div>
+                            {% elif answer.id == selected_answer.id %}
+                            <div class="bit" style="background-color: lightblue">
+                                <a href=" {{ url('testee_answering', args=[exam.id, answer.id]) }}">{{ loop.index }}</a>
+                            </div>
+                            {% else %}
+                            <div class="bit">
+                                <a href="{{ url('testee_answering', args=[exam.id, answer.id]) }}">{{ loop.index }}</a>
+                            </div>
+                            {% endif %}
+                        </td>
+                        {% if loop.index % 10 == 0 %}
+                    </tr>
+                    <tr>
+                        {% endif %} {% endfor %}
+                    </tr>
+                </table>
+            </div>
 
-      <div class="col-lg-9 col-md-12 table-responsive">
-        <h2>Answering.</h2>
-        <form
-          action="{{ url('testee_answering', args=[exam.id, answer.id]) }}"
-          method="post"
-        >
-          <input
-            type="hidden"
-            name="csrfmiddlewaretoken"
-            value="{{ csrf_token }}"
-          />
+            <div class="col-lg-9 col-md-12 table-responsive">
+                <h2>Answering.</h2>
+                <form action="{{ url('testee_answering', args=[exam.id, answer.id]) }}" method="post">
+                    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
 
-          <table style="font-size: 24px">
-            <tr>
-              {% if answer.question.q_type|question_kind == 'listening' %}
-              <td style="text-align: left; vertical-align: middle">
-                <audio controls preload="none">
-                  <source
-                    src="{{ answer.question.q_file.url }}"
-                    type="audio/mpeg"
-                  />
-                  Your browser does not support the audio tag.
-                </audio>
-              </td>
-              {% elif answer.question.q_type|question_kind == 'reading' %}
-              <td style="vertical-align: middle; text-align: left">
-                {{ answer.question }}
-              </td>
-              {% else %}
-              <td style="vertical-align: middle; text-align: center">
-                Unknown
-              </td>
-              {% endif %}
-            </tr>
+                    <table style="font-size: 24px">
+                        <tr>
+                            {% if answer.question.q_type|question_kind == 'listening' %}
+                            <td style="text-align: left; vertical-align: middle">
+                                <audio controls preload="none">
+                                    <source src="{{ answer.question.q_file.url }}" type="audio/mpeg" />
+                                    Your browser does not support the audio tag.
+                                </audio>
+                            </td>
+                            {% elif answer.question.q_type|question_kind == 'reading' %}
+                            <td style="vertical-align: middle; text-align: left">
+                                {{ answer.question }}
+                            </td>
+                            {% else %}
+                            <td style="vertical-align: middle; text-align: center">
+                                Unknown
+                            </td>
+                            {% endif %}
+                        </tr>
 
-            <tr>
-              <td>
-                <ol type="A">
-                  {% for option in answer.question.choice_set.all() %}
-                  <li>
-                    <input type="radio" name="answer_{{ answer.id }}" value="{{
-                    loop.index }}" {% if loop.index == answer.selected
-                    %}checked{% endif %} required>{{ option }}
-                  </li>
-                  {% endfor %}
-                </ol>
-              </td>
-            </tr>
+                        <tr>
+                            <td>
 
-            <tr>
-              <td>
-                <div class="">
-                  <button type="submit" class="btn btn-primary">Next</button>
-                  <button
-                    type="button"
-                    class="btn btn-secondary"
-                    onclick="window.location.href='{{ url('testee_exam_list') }}'"
-                  >
-                    Leave
-                  </button>
+                                {% for option in answer.question.choice_set.all() %}
+
+                                {% if loop.index == answer.selected %}
+                                <button type="submit" class="btn btn-primary btn-lg btn-block" name="answer_{{ answer.id }}" value="{{ loop.index }}" style="text-align: left; border-radius: 30px">{{ loop.index }}. {{ option }} </button>
+                                {% else %}
+                                <button type="submit" class="btn btn-outline-primary btn-lg btn-block" name="answer_{{ answer.id }}" value="{{ loop.index }}" style="text-align: left; border-radius: 30px">{{ loop.index }}. {{ option }} </button>
+                                {% endif %}
+
+                                {% endfor %}
+
+                            </td>
+                        </tr>
+
+
+                    </table>
+                </form>
+                <div class="col-md-6">
+                    {% if answer_count == 0 %}
+                    <button type="submit" class="btn btn-outline-success" style="cursor: pointer; float:right; margin: 10px" onclick="window.location.href='{{ url('submit_answersheet', args=[exam.id]) }}'">Submit</button>
+                    {% endif %}
+                    <button type="button" class="btn btn-secondary" style="cursor: pointer; float:right; margin: 10px" onclick="window.location.href='{{ url('testee_exam_list') }}'">
+                        Leave
+                    </button>
                 </div>
-              </td>
-            </tr>
-          </table>
-        </form>
-      </div>
+            </div>
+        </div>
     </div>
-  </div>
 </main>
 <style>
-  .answering-page .col-md-4 .card .card-body table > tr > td {
-    text-align: center;
-  }
-  .bit {
-    text-align: center;
-    vertical-align: middle;
+    .answering-page .col-md-4 .card .card-body table>tr>td {
+        text-align: center;
+    }
 
-    width: 25px;
-    height: 25px;
+    .bit {
+        text-align: center;
+        vertical-align: middle;
 
-    border-style: solid;
-    border-width: 1px;
-    border-color: rgb(240, 240, 240);
+        width: 25px;
+        height: 25px;
 
-    background-color: rgb(250, 250, 250);
-  }
-  .bit a {
-    text-decoration: none;
-  }
+        border-style: solid;
+        border-width: 1px;
+        border-color: rgb(240, 240, 240);
+
+        background-color: rgb(250, 250, 250);
+    }
+
+    .bit a {
+        text-decoration: none;
+    }
 </style>
 {% endblock %}

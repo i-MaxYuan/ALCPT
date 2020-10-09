@@ -539,7 +539,9 @@ def answering(request, exam_id, answer_id):
     try:
         exam = Exam.objects.get(id=exam_id)
         answer = Answer.objects.get(id=answer_id)
+        selected_answer = Answer.objects.get(id=answer_id)
         answer_sheet = AnswerSheet.objects.get(exam=exam, user=request.user)
+        answers = answer_sheet.answer_set.all()
         if answer_sheet.is_finished:
             messages.warning(request, "You had completed this exam.")
             return redirect('testee_score_list')
@@ -547,61 +549,50 @@ def answering(request, exam_id, answer_id):
             messages.warning(request, 'Not your answer: {}'.format(answer_id))
             return redirect('testee_answering',
                             exam_id=exam.id,
-                            answer_id=list(
-                                answer_sheet.answer_set.all())[0].id)
+                            answer_id=list(answer_sheet.answer_set.all())[0].id)
 
     except ObjectDoesNotExist:
         messages.error(request,
                        'Answer id error, answer id: {}'.format(answer_id))
         return redirect('testee_exam_list')
 
-    try:
-        the_next_question = Answer.objects.filter(
-            answer_sheet=answer_sheet).filter(selected=-1)[0]
-
-        if answer.selected != -1:
-            messages.warning(
-                request,
-                'This question had answered, please answer from answer id: {}'.
-                format(the_next_question.id))
-            return redirect('testee_answering',
-                            exam_id=exam_id,
-                            answer_id=the_next_question.id)
-
-    except:
-        messages.success(request, 'You had finished the exam.')
-        score = testmanager.calculate_score(exam.id, answer_sheet)
-        return redirect('testee_exam_list')
+    answer_count  = len(Answer.objects.filter(answer_sheet=answer_sheet).filter(selected=-1))
 
     if request.method == 'POST':
-
         answering_ans = Answer.objects.get(id=answer_id)
         selected_answer = request.POST.get('answer_{}'.format(answer_id))
 
         answering_ans.selected = selected_answer
         answering_ans.save()
 
-        if len(
-                Answer.objects.filter(answer_sheet=answer_sheet).filter(
-                    selected=-1)) == 0:
-            messages.success(request, 'You had finished the exam.')
-            score = testmanager.calculate_score(exam.id, answer_sheet)
-            return redirect('testee_score_list')
-        else:
+        answer_count  = len(Answer.objects.filter(answer_sheet=answer_sheet).filter(selected=-1))
+
+        #還有題目尚未回答
+        #answer_count == 0 : 所有題目已答題
+        #answer_count != 0 : 還有題目未答題
+        if answer_count != 0:
             the_next_question = list(
-                Answer.objects.filter(answer_sheet=answer_sheet).filter(
-                    selected=-1)).pop(0)
+                    Answer.objects.filter(answer_sheet=answer_sheet).filter(selected=-1)).pop(0)
+            return redirect('testee_answering',
+                            exam_id=exam_id,
+                            answer_id=the_next_question.id)
 
-        answers = answer_sheet.answer_set.all()
-
-        return redirect('testee_answering',
-                        exam_id=exam_id,
-                        answer_id=the_next_question.id)
+        else:
+            messages.warning(request, 'You have finished your Test, please submit your answesheet')
+            return redirect('testee_answering',
+                            exam_id=exam_id,
+                            answer_id=answer_id)
     else:
-        answers = answer_sheet.answer_set.all()
-
         return render(request, 'testee/answering.html', locals())
 
+@permission_check(UserType.Testee)
+@require_http_methods(["GET", "POST"])
+def submit_answersheet(request, exam_id):
+    exam = Exam.objects.get(id=exam_id)
+    answer_sheet = AnswerSheet.objects.get(exam=exam, user=request.user)
+    score = testmanager.calculate_score(exam.id, answer_sheet)
+    messages.success(request, 'You had finished the exam.')
+    return redirect('testee_score_list')
 
 # Settle exam score directly.
 @permission_check(UserType.Testee)
