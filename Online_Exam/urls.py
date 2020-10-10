@@ -246,6 +246,10 @@ urlpatterns = [
                         r'^(?P<testpaper_id>[0-9]+)/(?P<question_type>[0-9]+)/manual_pick',
                         exam.manual_pick,
                         name='manual_pick'),
+                    re_path(
+                        r'^(?P<testpaper_id>[0-9]+)/(?P<question_type>[0-9]+)/reset_pick',
+                        exam.reset_pick,
+                        name='reset_pick'),
                 ])),
             re_path(r'^testee_group$',
                     group.group_list,

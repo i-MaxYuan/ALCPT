@@ -131,11 +131,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
-
-CRISPY_TEMPLATE_PACK = 'bootstap4'
-
-# USE_TZ = True
+USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
