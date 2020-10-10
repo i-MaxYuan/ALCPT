@@ -40,10 +40,14 @@
                                     </div>
                                     <div>
                                         {% if selected_question_type_num == 0 %}
-                                        <a class="btn btn-warning" href="{{ url('auto_pick', args=[testpaper.id, question_type.value.0]) }}" class="card-link" onclick="alert('Questions has been selected.')">Automatic</a>
+                                        <a class="btn btn-warning" href="{{ url('auto_pick', args=[testpaper.id, question_type.value.0]) }}" class="card-link" onclick="alert('Questions have been selected.')">Automatic</a>
                                         {% else %}
                                         <a class="btn btn-warning" href="{{ url('auto_pick', args=[testpaper.id, question_type.value.0]) }}" class="card-link" onclick="alert('Selected Questions has been reselected.')">Automatic</a>
                                         {% endif %}
+                                    </div>
+                                    <div class="p-2">
+                                        <a class="btn btn-secondary" href="{{ url('reset_pick', args=[testpaper.id, question_type.value.0]) }}" class="card-link" onclick="alert('Questions have been reset.')">&nbsp;&nbsp; Reset&nbsp;&nbsp;
+                                        </a>
                                     </div>
                                 </div>
                             </div>

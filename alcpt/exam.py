@@ -439,3 +439,23 @@ def auto_pick(request, testpaper_id, question_type):
         messages.error(request, 'Test paper does not exist, test paper id - {}'.format(testpaper_id))
 
     return redirect('/exam/testpaper/{}/edit'.format(testpaper_id))
+
+
+@permission_check(UserType.TestManager)
+def reset_pick(request, testpaper_id, question_type):
+    QUESTION_TYPE = {
+        '1':'Listening／QA',
+        '2':'Listening／Conversation',
+        '3':'Reading／Grammar',
+        '4':'Reading／Phrase',
+        '5':'Reading／Paragraph',
+    }
+    try:
+        testpaper = TestPaper.objects.get(id=testpaper_id)
+        for question in testpaper.question_list.all().filter(q_type=question_type):
+            testpaper.question_list.remove(question)
+        messages.success(request, "{} has been reset".format(QUESTION_TYPE[question_type]))
+    except ObjectDoesNotExist:
+        messages.error(request, 'Test paper does not exist, test paper id - {}'.format(testpaper_id))
+
+    return redirect('/exam/testpaper/{}/edit'.format(testpaper_id))
