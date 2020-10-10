@@ -12,10 +12,10 @@
                     {% if request.user|has_perm('SystemManager') %}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            SystemManager
+                            {{ trans("SystemManager") }}
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="{{ url('user_list') }}">User List</a>
+                            <a class="dropdown-item" href="{{ url('user_list') }}">{{ trans("User List") }}</a>
                             <a class="dropdown-item" href="{{ url('unit_list') }}">Unit List</a>
                             <a class="dropdown-item" href="{{ url('report_category_list') }}">ReportCategory List</a>
                             {% if request.user|get_SystemManager_report_notification == 0 %}
@@ -28,7 +28,7 @@
                     {% endif %} {% if request.user|has_perm('TestManager') %}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            TestManager
+                            {{ trans("TestManager") }}
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="{{ url('exam_list') }}">Exam List</a>
