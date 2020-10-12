@@ -81,7 +81,7 @@
             </td>
 
             {% if request.user|has_perm('SystemManager') %}
-            <td>
+            <td class="text-center">
               <a href="{{ url('proclamation_edit', args=[pro.id]) }}"
                 ><i class="fa fa-pencil-square-o"></i
               ></a>
