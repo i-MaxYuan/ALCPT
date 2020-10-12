@@ -114,7 +114,7 @@
                                         <table class="table table-hover">
                                             <tbody>
                                                 {% for proclamation in request.user.proclamation_set.all() %}
-                                                <tr class="text-left" style="cursor: pointer" onclick="window.location.href='{{ url('proclamation_detail', args=[proclamation.id]) }}'"
+                                                <tr class="text-left"
                                                     style="{% if loop.index != request.user.proclamation_set.count %}border-bottom-style: solid; border-bottom-width: 1px; border-bottom-color: rgb(200, 200, 200);{% endif %} {% if not proclamation.is_read %}background-color: rgb(220,220,220);{% endif %}">
                                                     <td class="align-middle">
                                                         <input type="checkbox" name="proclamation" value="{{ proclamation.id }}" />
@@ -127,7 +127,7 @@
                                                         </p>
                                                     </td>
                                                     <td class="align-middle">
-                                                        <i class="fa fa-angle-right"></i>
+                                                        <a href="{{ url('proclamation_detail', args=[proclamation.id]) }}"><i class="fa fa-angle-right"></i></a>
                                                     </td>
                                                 </tr>
                                                 {% else %}

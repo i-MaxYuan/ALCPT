@@ -1,243 +1,167 @@
 {% extends 'new_base.html'%} {% block scripts %}
 <script type="text/javascript">
-  var questionFile = document.getElementById("question_file");
-  var questionTypeListening = document.getElementById(
-    "question_type_listening"
-  );
+    var questionFile = document.getElementById("question_file");
+    var questionTypeListening = document.getElementById(
+        "question_type_listening"
+    );
 
-  var questionTypeReading = document.getElementById("question_type_reading");
-  var questionContent = document.getElementById("question_content");
+    var questionTypeReading = document.getElementById("question_type_reading");
+    var questionContent = document.getElementById("question_content");
 
-  var choice1 = document.getElementById("choice1");
-  var choice2 = document.getElementById("choice2");
-  var choice3 = document.getElementById("choice3");
-  var choice4 = document.getElementById("choice4");
+    var choice1 = document.getElementById("choice1");
+    var choice2 = document.getElementById("choice2");
+    var choice3 = document.getElementById("choice3");
+    var choice4 = document.getElementById("choice4");
 
-  var submit = document.getElementById("submit");
+    var submit = document.getElementById("submit");
 
-  var repeat = document.getElementById("repeat");
+    var repeat = document.getElementById("repeat");
 
-  function OpenButton(kind) {
-    if (kind === "reading") {
-      Repeated();
-      if (
-        choice1.value === "" ||
-        choice2.value === "" ||
-        choice3.value === "" ||
-        choice4.value === "" ||
-        questionTypeReading.value === "" ||
-        questionContent.value === ""
-      ) {
-        submit.disabled = true;
-        submit.style.backgroundColor = "grey";
-      } else {
-        submit.disabled = false;
-        submit.style.backgroundColor = "#4CCABD";
-      }
-    } else {
-      if (
-        choice1.value === "" ||
-        choice2.value === "" ||
-        choice3.value === "" ||
-        choice4.value === "" ||
-        questionTypeListening.value === "" ||
-        questionFile.value === ""
-      ) {
-        submit.disabled = true;
-      } else {
-        submit.disabled = false;
-      }
+    function OpenButton(kind) {
+        if (kind === "reading") {
+            Repeated();
+            if (
+                choice1.value === "" ||
+                choice2.value === "" ||
+                choice3.value === "" ||
+                choice4.value === "" ||
+                questionTypeReading.value === "" ||
+                questionContent.value === ""
+            ) {
+                submit.disabled = true;
+                submit.style.backgroundColor = "grey";
+            } else {
+                submit.disabled = false;
+                submit.style.backgroundColor = "#4CCABD";
+            }
+        } else {
+            if (
+                choice1.value === "" ||
+                choice2.value === "" ||
+                choice3.value === "" ||
+                choice4.value === "" ||
+                questionTypeListening.value === "" ||
+                questionFile.value === ""
+            ) {
+                submit.disabled = true;
+            } else {
+                submit.disabled = false;
+            }
+        }
     }
-  }
 </script>
 {% endblock %} {% block path %}
 <li class="breadcrumb-item active" aria-current="page">
-  Create {% if kind == 'listening' %}Listening {% else %}Reading{% endif %}
-  Question
+    Create {% if kind == 'listening' %}Listening {% else %}Reading{% endif %}
+    Question
 </li>
 {% endblock %} {% block content %}
 <main class="question-create-form">
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-lg-10">
-        <form enctype="multipart/form-data" method="post">
-          <input
-            type="hidden"
-            name="csrfmiddlewaretoken"
-            value="{{ csrf_token }}"
-          />
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <form enctype="multipart/form-data" method="post">
+                    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
 
-          <div class="card">
-            <div class="card-header">
-              Create {% if kind == 'listening' %}Listening{% else %}Reading{%
-              endif %} Question.
+                    <div class="card">
+                        <div class="card-header">
+                            Create {% if kind == 'listening' %}Listening{% else %}Reading{% endif %} Question.
+                        </div>
+
+                        <div class="card-body">
+                            {% if kind == 'listening' %}
+                            <h5 class="card-subtitle mb-2 text-muted">File.</h5>
+                            <div class="input-group">
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="question_file" name="question_file" accept="audio/mpeg" onchange="OpenButton('listening')" />
+                                    <label class="custom-file-label" for="question_file">Select mpeg file</label>
+                                </div>
+                            </div>
+                            <script>
+                                // to change the label, the selected file name will display
+                                $(".custom-file-input").on("change", function() {
+                                    var fileName = $(this).val().split("\\").pop();
+                                    $(this)
+                                        .siblings(".custom-file-label")
+                                        .addClass("selected")
+                                        .html(fileName);
+                                });
+                            </script>
+                            <p class="card-text"></p>
+
+                            <h5 class="card-subtitle mb-2 text-muted">Type.</h5>
+                            <p class="card-text">
+                                <select class="custom-select custom-select-sm" name="question_type" id="question_type_listening" onkeyup="OpenButton('listening')" required>
+                                    <option value="" disabled selected>
+                                        Choose the question type
+                                    </option>
+                                    <option value="1">QA</option>
+                                    <option value="2">ShortConversation</option>
+                                </select>
+                            </p>
+
+                            {% elif kind == 'reading' %}
+                            <h5 class="card-subtitle mb-2 text-muted">Question Content.</h5>
+                            <p class="card-text">
+                                <textarea class="form-control" cols="100" rows="5" name="question_content" id="question_content" onkeyup="OpenButton('reading')" placeholder="Enter the question content..." required></textarea>
+                            </p>
+
+                            <h5 class="card-subtitle mb-2 text-muted">Type.</h5>
+                            <p class="card-text">
+                                <select class="custom-select custom-select-sm" name="question_type" id="question_type_listening" onkeyup="OpenButton('listening')" required>
+                                    <option value="" disabled selected>
+                                        Choose the question type
+                                    </option>
+                                    <option value="3">Grammar</option>
+                                    <option value="4">Phrase</option>
+                                    <option value="5">ParagraphUnderstanding</option>
+                                </select>
+                            </p>
+                            {% endif %}
+
+                            <h5 class="card-subtitle mb-2 text-muted">Difficulty.</h5>
+                            <p class="card-text">
+                                <select class="custom-select custom-select-sm" name="question_difficulty">
+                                    <option value="1" selected>Easy</option>
+                                    <option value="2">Medium</option>
+                                    <option value="3">Hard</option>
+                                </select>
+                            </p>
+
+                            <h5 class="card-subtitle mb-2 text-muted">Question Option.</h5>
+                            <p>
+                                Ａ.<input class="form-control" type="text" name="choice1" id="choice1" onkeyup="OpenButton('{{ kind }}')" placeholder="Enter Choice content..." required />
+                            </p>
+                            <p>
+                                Ｂ.<input class="form-control" type="text" name="choice2" id="choice2" onkeyup="OpenButton('{{ kind }}')" placeholder="Enter Choice content..." required />
+                            </p>
+                            <p>
+                                Ｃ.<input class="form-control" type="text" name="choice3" id="choice3" onkeyup="OpenButton('{{ kind }}')" placeholder="Enter Choice content..." required />
+                            </p>
+                            <p>
+                                Ｄ.<input class="form-control" type="text" name="choice4" id="choice4" onkeyup="OpenButton('{{ kind }}')" placeholder="Enter Choice content..." required />
+                            </p>
+
+                            {% if kind == 'reading' %}
+                            <div class="text-right">
+                                <a href="{{ url('question_multiCreate') }}">Multiple Creation?</a>
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <footer class="card-footer text-right">
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                                <button type="reset" class="btn btn-light">Reset</button>
+                                <button type="button" class="btn btn-secondary" onclick="history.go(-1);">
+                                    Cancel
+                                </button>
+                            </div>
+                        </footer>
+                    </div>
+                </form>
             </div>
-
-            <div class="card-body">
-              {% if kind == 'listening' %}
-              <h5 class="card-subtitle mb-2 text-muted">File.</h5>
-              <div class="input-group">
-                <div class="custom-file">
-                  <input
-                    type="file"
-                    class="custom-file-input"
-                    id="question_file"
-                    name="question_file"
-                    accept="audio/mpeg"
-                    onchange="OpenButton('listening')"
-                  />
-                  <label class="custom-file-label" for="question_file"
-                    >Select mpeg file</label
-                  >
-                </div>
-              </div>
-              <script>
-                // to change the label, the selected file name will display
-                $(".custom-file-input").on("change", function () {
-                  var fileName = $(this).val().split("\\").pop();
-                  $(this)
-                    .siblings(".custom-file-label")
-                    .addClass("selected")
-                    .html(fileName);
-                });
-              </script>
-              <p class="card-text"></p>
-
-              <h5 class="card-subtitle mb-2 text-muted">Type.</h5>
-              <p class="card-text">
-                <select
-                  class="custom-select custom-select-sm"
-                  name="question_type"
-                  id="question_type_listening"
-                  onkeyup="OpenButton('listening')"
-                  required
-                >
-                  <option value="" disabled selected>
-                    Choose the question type
-                  </option>
-                  <option value="1">QA</option>
-                  <option value="2">ShortConversation</option>
-                </select>
-              </p>
-
-              {% elif kind == 'reading' %}
-              <h5 class="card-subtitle mb-2 text-muted">Question Content.</h5>
-              <p class="card-text">
-                <textarea
-                  class="form-control"
-                  cols="100"
-                  rows="5"
-                  name="question_content"
-                  id="question_content"
-                  onkeyup="OpenButton('reading')"
-                  placeholder="Enter the question content..."
-                  required
-                ></textarea>
-              </p>
-
-              <h5 class="card-subtitle mb-2 text-muted">Type.</h5>
-              <p class="card-text">
-                <select
-                  class="custom-select custom-select-sm"
-                  name="question_type"
-                  id="question_type_listening"
-                  onkeyup="OpenButton('listening')"
-                  required
-                >
-                  <option value="" disabled selected>
-                    Choose the question type
-                  </option>
-                  <option value="3">Grammar</option>
-                  <option value="4">Phrase</option>
-                  <option value="5">ParagraphUnderstanding</option>
-                </select>
-              </p>
-              {% endif %}
-
-              <h5 class="card-subtitle mb-2 text-muted">Difficulty.</h5>
-              <p class="card-text">
-                <select
-                  class="custom-select custom-select-sm"
-                  name="question_difficulty"
-                >
-                  <option value="1" selected>Easy</option>
-                  <option value="2">Medium</option>
-                  <option value="3">Hard</option>
-                </select>
-              </p>
-
-              <h5 class="card-subtitle mb-2 text-muted">Question Option.</h5>
-              <p>
-                Ａ.<input
-                  class="form-control"
-                  type="text"
-                  name="choice1"
-                  id="choice1"
-                  onkeyup="OpenButton('{{ kind }}')"
-                  placeholder="Enter Choice content..."
-                  required
-                />
-              </p>
-              <p>
-                Ｂ.<input
-                  class="form-control"
-                  type="text"
-                  name="choice2"
-                  id="choice2"
-                  onkeyup="OpenButton('{{ kind }}')"
-                  placeholder="Enter Choice content..."
-                  required
-                />
-              </p>
-              <p>
-                Ｃ.<input
-                  class="form-control"
-                  type="text"
-                  name="choice3"
-                  id="choice3"
-                  onkeyup="OpenButton('{{ kind }}')"
-                  placeholder="Enter Choice content..."
-                  required
-                />
-              </p>
-              <p>
-                Ｄ.<input
-                  class="form-control"
-                  type="text"
-                  name="choice4"
-                  id="choice4"
-                  onkeyup="OpenButton('{{ kind }}')"
-                  placeholder="Enter Choice content..."
-                  required
-                />
-              </p>
-
-              {% if kind == 'reading' %}
-              <div class="text-right">
-                <a href="{{ url('question_multiCreate') }}"
-                  >Multiple Creation?</a
-                >
-              </div>
-              {% endif %}
-            </div>
-
-            <footer class="card-footer text-right">
-              <div class="text-center">
-                <button type="submit" class="btn btn-primary">Submit</button>
-                <button type="reset" class="btn btn-light">Reset</button>
-                <button
-                  type="button"
-                  class="btn btn-secondary"
-                  onclick="history.go(-1);"
-                >
-                  Cancel
-                </button>
-              </div>
-            </footer>
-          </div>
-        </form>
-      </div>
+        </div>
     </div>
-  </div>
 </main>
 {% endblock %}
