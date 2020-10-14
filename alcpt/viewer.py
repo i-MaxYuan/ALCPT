@@ -87,10 +87,10 @@ def exam_score_detail(request, exam_id):
 
 
         #平均分數
-        if testee_scores:
-            testee_score_means = np.mean(testee_scores)
-        else:
-            testee_score_means = '無考試成績'
+        # if testee_scores:
+        #     testee_score_means = np.mean(testee_scores)
+        # else:
+        #     testee_score_means = '無考試成績'
 
         testeeData = list(zip(testees, answer_sheets))
 
