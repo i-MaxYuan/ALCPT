@@ -54,10 +54,18 @@ def query_questions(question_type: int, difficulty: int, testee: int, question_c
     return query_content, favorite_questions_search
 
 
+# QA = (1, '聽力／問答')
+# ShortConversation = (2, '聽力／簡短對話')
+# Grammar = (3, '閱讀／文法')
+# Phrase = (4, '閱讀／名詞片語')
+# ParagraphUnderstanding = (5, '閱讀／段落理解')
 
 def question_correction(answer_sheet: AnswerSheet):
     answers = answer_sheet.answer_set.all()
     correction_list = []
+    q_type_list = []
+    # listening, listening_correct ,reading, reading_correct = 0, 0, 0, 0
+    # listening_correct_percent, reading_correct_percent = 0, 0
     for answer in answers:
         if answer.selected == -1:
             pass
@@ -66,9 +74,14 @@ def question_correction(answer_sheet: AnswerSheet):
             for choice in answer.question.choice_set.all():
                 tmp.append(choice)
 
-
             if tmp[answer.selected-1].is_answer:
                 correction_list.append(1)
+                q_type_list.append(answer.question.q_type)
+
             else:
                 correction_list.append(0)
-    return correction_list
+                q_type_list.append(answer.question.q_type)
+    # listening_correct_percent = int(listening_correct / listening) * 100
+    # reading_correct_percent = int(reading_correct / reading) *  100
+
+    return correction_list, q_type_list

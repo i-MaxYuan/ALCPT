@@ -327,6 +327,8 @@ def view_answersheet_content(request, answersheet_id):
     now_time = datetime.now()
     try:
         answersheet = AnswerSheet.objects.get(id=answersheet_id)
+
+
         if answersheet.exam.is_public:
             if answersheet.is_finished == False:
                 messages.warning(request, 'This exam does not finish. Keep working on! ')
@@ -348,11 +350,28 @@ def view_answersheet_content(request, answersheet_id):
 
 
     if answersheet.is_finished:
+        if answersheet.exam.exam_type == 1:
+            exam_average_score = answersheet.exam.average_score #平均成績
+            #PR = (100/有考試成績的人數*贏過的人數)+(100/有考試成績的人數*1/2)
+            exam_score_list = list(AnswerSheet.objects.filter(exam = answersheet.exam.id).order_by("score").exclude(score=None))
+            testee_count = len(exam_score_list) #有考試成績的人數
+
+
+            testee_surpassed = 0
+            for exam_score in exam_score_list:
+                if request.user.id != exam_score.user_id:
+                    testee_surpassed+=1
+                else:
+                    break
+
+            PR = int((100/testee_count*testee_surpassed)+(100/testee_count*1/2))
+            rank = testee_count - testee_surpassed
+
+
         answers = answersheet.answer_set.all()
         questions = Question.objects.all().filter(favorite=request.user)
-        result_list = testee.question_correction(answersheet)
+        question_correction_list, q_type_list= testee.question_correction(answersheet)
         is_favorite = []
-
         #return 那題題目 is True or False 的 list
         for answer in answers:
             try:
@@ -361,8 +380,99 @@ def view_answersheet_content(request, answersheet_id):
 
             except ObjectDoesNotExist:
                 is_favorite.append(0)
-        answers_results_favorites = zip(answers, result_list, is_favorite)
-        return render(request, 'testee/answersheet_content.html', locals())
+                answers_correction_favorites = zip(answers, question_correction_list, is_favorite)
+
+        y_data = []
+        x_data1 = []
+        x_data2 = []
+        listening, listening_correct = 0, 0
+        reading, reading_correct = 0, 0
+        listening_correct_percentage, listening_wrong_percentage = 0, 0
+        reading_correct_percentage, reading_wrong_percentage = 0, 0
+
+        for question_correction, q_type in zip(question_correction_list, q_type_list):
+            if question_correction:
+                if q_type == 1 or q_type == 2:
+                    listening += 1
+                    listening_correct += 1
+                else:
+                    reading += 1
+                    reading_correct += 1
+            else:
+                if q_type == 1 or q_type == 2:
+                    listening += 1
+                else:
+                    reading += 1
+        #沒聽力也沒閱讀
+        if listening == 0 and reading == 0:
+            return render(request, 'testee/answersheet_content.html', locals())
+
+        else:
+            #有聽力有閱讀
+            if listening != 0 and reading != 0:
+                listening_correct_percentage  = int(listening_correct/ listening * 100)
+                listening_wrong_percentage = 100 - listening_correct_percentage
+                reading_correct_percentage = int(reading_correct/ reading * 100)
+                reading_wrong_percentage = 100 - reading_correct_percentage
+                y_data = ['Listening', 'Reading']
+                x_data1 = [listening_correct_percentage, reading_correct_percentage]
+                x_data2 = [listening_wrong_percentage, reading_wrong_percentage]
+                width=[0.5, 0.5]
+
+            #沒有閱讀題，代表只有聽力
+            elif reading == 0:
+                listening_correct_percentage  = int(listening_correct/ listening * 100)
+                listening_wrong_percentage = 100 - listening_correct_percentage
+                y_data = ['Listening']
+                x_data1 = [listening_correct_percentage]
+                x_data2 = [listening_wrong_percentage]
+                width=[0.25, 0.25]
+
+            #沒有聽力題，代表只有閱讀
+            if listening == 0:
+                reading_correct_percentage = int(reading_correct/ reading * 100)
+                reading_wrong_percentage = 100 - reading_correct_percentage
+                y_data = ['Reading']
+                x_data1 = [reading_correct_percentage]
+                x_data2 = [reading_wrong_percentage]
+                width=[0.25, 0.25]
+
+
+            #x_axis: category of Listening or READING
+            #y_axis: correction percentage
+
+
+            trace1 = go.Bar(
+                y = y_data,
+                x = x_data1,
+                width=width,
+                name = '正確率',
+                orientation = 'h',
+                marker=dict(color='#44E18F',
+                            line=dict(width=1)
+                            )
+            )
+
+            trace2 = go.Bar(
+                y = y_data,
+                x = x_data2,
+                width=width,
+                name = '錯誤率',
+                orientation = 'h',
+                marker=dict(color='#FA483C',
+                            line=dict(width=1)
+                            )
+                            )
+            data = [trace1, trace2]
+
+            layout = go.Layout(
+                title="本次答題正確率",
+                barmode = 'stack'
+            )
+            fig = go.Figure(data=data, layout=layout)
+            correction_bar_chart = pyo.plot(fig, output_type='div')
+
+            return render(request, 'testee/answersheet_content.html', locals())
     elif answersheet.is_finished  == False and now_time > answersheet.finish_time:
         messages.success(request, "You hadn't finish your test, please keep answering the exam")
         return redirect('testee_exam_list')
@@ -584,6 +694,81 @@ def answering(request, exam_id, answer_id):
                             answer_id=answer_id)
     else:
         return render(request, 'testee/answering.html', locals())
+
+
+# @permission_check(UserType.Testee)
+# @require_http_methods(["GET", "POST"])
+# def unmodified_answering(request, exam_id, answer_id):
+#     exam = Exam.objects.get(id=exam_id)
+#     if exam.exam_type == 1:
+#         hour = exam.finish_time.hour
+#         minute = exam.finish_time.minute
+#     try:
+#         exam = Exam.objects.get(id=exam_id)
+#         answer = Answer.objects.get(id=answer_id)
+#         answer_sheet = AnswerSheet.objects.get(exam=exam, user=request.user)
+#         if answer_sheet.is_finished:
+#             messages.warning(request, "You had completed this exam.")
+#             return redirect('testee_score_list')
+#         if answer not in answer_sheet.answer_set.all():
+#             messages.warning(request, 'Not your answer: {}'.format(answer_id))
+#             return redirect('testee_answering',
+#                                     exam_id=exam.id,
+#                                     answer_id=list(
+#                                         answer_sheet.answer_set.all())[0].id)
+#
+#     except ObjectDoesNotExist:
+#         messages.error(request,
+#                                'Answer id error, answer id: {}'.format(answer_id))
+#         return redirect('testee_exam_list')
+#
+#     try:
+#         the_next_question = Answer.objects.filter(
+#                     answer_sheet=answer_sheet).filter(selected=-1)[0]
+#
+#         if answer.selected != -1:
+#             messages.warning(
+#                         request,
+#                         'This question had answered, please answer from answer id: {}'.
+#                         format(the_next_question.id))
+#             return redirect('testee_answering',
+#                                     exam_id=exam_id,
+#                                     answer_id=the_next_question.id)
+#
+#     except:
+#         messages.success(request, 'You had finished the exam.')
+#         score = testmanager.calculate_score(exam.id, answer_sheet)
+#         return redirect('testee_exam_list')
+#
+#     if request.method == 'POST':
+#
+#         answering_ans = Answer.objects.get(id=answer_id)
+#         selected_answer = request.POST.get('answer_{}'.format(answer_id))
+#
+#         answering_ans.selected = selected_answer
+#         answering_ans.save()
+#
+#         if len(
+#                         Answer.objects.filter(answer_sheet=answer_sheet).filter(
+#                             selected=-1)) == 0:
+#             messages.success(request, 'You had finished the exam.')
+#             score = testmanager.calculate_score(exam.id, answer_sheet)
+#             return redirect('testee_score_list')
+#         else:
+#             the_next_question = list(
+#                         Answer.objects.filter(answer_sheet=answer_sheet).filter(
+#                             selected=-1)).pop(0)
+#
+#         answers = answer_sheet.answer_set.all()
+#
+#         return redirect('testee_answering',
+#                                 exam_id=exam_id,
+#                                 answer_id=the_next_question.id)
+#     else:
+#         answers = answer_sheet.answer_set.all()
+#
+#         return render(request, 'testee/answering.html', locals())
+
 
 @permission_check(UserType.Testee)
 @require_http_methods(["GET", "POST"])
