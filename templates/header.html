@@ -22,7 +22,7 @@
                             <a class="dropdown-item" href="{{ url('responsible_report_list', args=['SystemManager']) }}"><i class="fas fa-comment-dots" style="padding-right: 5px; color: grey"></i>User Response Handling</a>
                             {% else %}
                             <a class="dropdown-item" href="{{ url('responsible_report_list', args=['SystemManager']) }}"><i class="fas fa-comment-dots" style="padding-right: 5px; color: grey"></i>User Response Handling&ensp;<label
-                                    class="notification-badge">{{ request.user|get_SystemManager_report_notification }}</label></a>z
+                                    class="notification-badge">{{ request.user|get_SystemManager_report_notification }}</label></a>
                             {% endif %}
                         </div>
                     </li>
@@ -187,24 +187,24 @@
                                         {% if request.user.name != None %}
                                         {{ request.user.name }}
                                         {% else %}
-                                        User: {{ request.user.reg_id }}
+                                        {{ request.user.reg_id }}
                                         {% endif %}
                                         <script>
                                             now = new Date(), hour = now.getHours()
                                             if (hour < 6) {
                                                 document.write("凌晨好！")
                                             } else if (hour < 9) {
-                                                document.write("早上好！")
+                                                document.write("早安！")
                                             } else if (hour < 12) {
                                                 document.write("上午好！")
                                             } else if (hour < 14) {
-                                                document.write("中午好！")
+                                                document.write("午安！")
                                             } else if (hour < 17) {
                                                 document.write("下午好！")
                                             } else if (hour < 19) {
                                                 document.write("傍晚好！")
                                             } else if (hour < 22) {
-                                                document.write("晚上好！")
+                                                document.write("晚安！")
                                             } else {
                                                 document.write("夜里好！")
                                             }
@@ -218,7 +218,7 @@
                                     </button>
                                     <div class="dropdown-divider custom"></div>
                                     <button onclick="window.location.href='{{ url('profile_edit') }}'">
-                                        <i class="fas fa-user-edit" style="padding-right: 5px"></i>Profile Update
+                                        <i class="fas fa-user-edit" style="padding-right: 5px"></i>Edit Profile
                                     </button>
                                     <div class=" dropdown-divider custom">
                                     </div>
@@ -273,8 +273,9 @@
                         .modal #modal-menu button {
                             width: 100%;
 
-                            text-align: center;
+                            text-align: left;
                             padding: 14px;
+                            padding-left: 40%;
                             color: #2c3232;
                             background-color: #fff;
 
@@ -285,7 +286,8 @@
                         .modal #modal-menu button:active {
                             width: 100%;
 
-                            padding: 10px;
+                            padding: 14px;
+                            padding-left: 40%;
                             color: #2c3232;
                             background-color: rgb(200, 200, 200);
 
