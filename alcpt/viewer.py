@@ -160,7 +160,7 @@ def view_testee_info(request, exam_id, reg_id):
         try:
             viewed_testee = User.objects.get(reg_id=reg_id)
 
-            answer_sheets = AnswerSheet.objects.filter(user=viewed_testee)
+            answer_sheets = AnswerSheet.objects.filter(user=viewed_testee).order_by("-finish_time")
 
             if viewed_testee.last_login == None:
                 messages.error(request, "User hasn't login before, user register id - {}".format(reg_id))

@@ -21,8 +21,8 @@
                             {% if request.user|get_SystemManager_report_notification == 0 %}
                             <a class="dropdown-item" href="{{ url('responsible_report_list', args=['SystemManager']) }}"><i class="fas fa-comment-dots" style="padding-right: 5px; color: grey"></i>User Response Handling</a>
                             {% else %}
-                            <a class="dropdown-item" href="{{ url('responsible_report_list', args=['SystemManager']) }}"><i class="fas fa-comment-dots" style="padding-right: 5px; color: grey"></i>User Response Handling<label
-                                    class="notification-badge">{{ request.user|get_SystemManager_report_notification }}</label></a>
+                            <a class="dropdown-item" href="{{ url('responsible_report_list', args=['SystemManager']) }}"><i class="fas fa-comment-dots" style="padding-right: 5px; color: grey"></i>User Response Handling&ensp;<label
+                                    class="notification-badge">{{ request.user|get_SystemManager_report_notification }}</label></a>z
                             {% endif %}
                         </div>
                     </li>
@@ -38,8 +38,8 @@
                             {% if request.user|get_TestManager_report_notification == 0 %}
                             <a class="dropdown-item" href="{{ url('responsible_report_list', args=['TestManager']) }}"><i class="fas fa-comment-dots" style="padding-right: 5px; color: grey"></i>User Response Handling</a>
                             {% else %}
-                            <a class="dropdown-item" href="{{ url('responsible_report_list', args=['TestManager']) }}"><i class="fas fa-comment-dots" style="padding-right: 5px; color: grey"></i>User Response Handling<label
-                                    class="notification-badge">{{ request.user|get_TestManager_report_notification }}</label></a>
+                            <a class="dropdown-item" href="{{ url('responsible_report_list', args=['TestManager']) }}"><i class="fas fa-comment-dots" style="padding-right: 5px; color: grey"></i>User Response Handling&ensp;<label
+                                    class="notification-badge">&ensp;{{ request.user|get_TestManager_report_notification }}</label></a>
                             {% endif %}
                         </div>
                     </li>
@@ -54,7 +54,7 @@
                             {% if request.user|get_TBManager_report_notification == 0 %}
                             <a class="dropdown-item" href="{{ url('responsible_report_list', args=['TBManager']) }}"><i class="fas fa-comment-dots" style="padding-right: 5px; color: grey"></i> User Response Handling</a>
                             {% else %}
-                            <a class="dropdown-item" href="{{ url('responsible_report_list', args=['TBManager']) }}"><i class="fas fa-comment-dots" style="padding-right: 5px; color: grey"></i> User Response Handling<label
+                            <a class="dropdown-item" href="{{ url('responsible_report_list', args=['TBManager']) }}"><i class="fas fa-comment-dots" style="padding-right: 5px; color: grey"></i> User Response Handling&ensp;<label
                                     class="notification-badge">{{ request.user|get_TBManager_report_notification }}</label></a>
                             {% endif %}
                         </div>
@@ -184,37 +184,62 @@
                             <div class="modal-content">
                                 <div class="modal-header text-center">
                                     <h5 class="modal-title" id="ModalLongTitle">
+                                        {% if request.user.name != None %}
+                                        {{ request.user.name }}
+                                        {% else %}
                                         User: {{ request.user.reg_id }}
+                                        {% endif %}
+                                        <script>
+                                            now = new Date(), hour = now.getHours()
+                                            if (hour < 6) {
+                                                document.write("凌晨好！")
+                                            } else if (hour < 9) {
+                                                document.write("早上好！")
+                                            } else if (hour < 12) {
+                                                document.write("上午好！")
+                                            } else if (hour < 14) {
+                                                document.write("中午好！")
+                                            } else if (hour < 17) {
+                                                document.write("下午好！")
+                                            } else if (hour < 19) {
+                                                document.write("傍晚好！")
+                                            } else if (hour < 22) {
+                                                document.write("晚上好！")
+                                            } else {
+                                                document.write("夜里好！")
+                                            }
+                                        </script>
                                     </h5>
                                 </div>
 
                                 <div id="modal-menu">
                                     <button onclick="window.location.href='{{ url('profile') }}'">
-                                        User Profile
+                                        <i class="fas fa-user" style="padding-right: 5px"></i>Profile
                                     </button>
                                     <div class="dropdown-divider custom"></div>
                                     <button onclick="window.location.href='{{ url('profile_edit') }}'">
-                                        Profile Update
+                                        <i class="fas fa-user-edit" style="padding-right: 5px"></i>Profile Update
                                     </button>
-                                    <div class="dropdown-divider custom"></div>
+                                    <div class=" dropdown-divider custom">
+                                    </div>
                                     <button onclick="window.location.href='{{ url('email') }}'">
-                                        Email
+                                        <i class="fas fa-envelope" style="padding-right: 5px;"></i>Email
                                     </button>
                                     <div class="dropdown-divider custom"></div>
                                     <button onclick="window.location.href='{{ url('password_change') }}'">
-                                        Password Change
+                                        <i class="fas fa-key" style="padding-right: 5px"></i>Password Change
                                     </button>
                                     <div class="dropdown-divider custom"></div>
                                     <button onclick="alert('Function is developing. Stay tuned.🤪');">
-                                        Real Exam Record
+                                        <i class="fas fa-file-alt" style="padding-right: 5px"></i>Real Exam Record
                                     </button>
                                     <div class="dropdown-divider custom"></div>
                                     <button onclick="window.location.href='{{ url('report') }}'">
-                                        Report
+                                        <i class="fas fa-exclamation-triangle" style="padding-right: 5px"></i>Report
                                     </button>
                                     <div class="dropdown-divider custom"></div>
                                     <button onclick="window.location.href='{{ url('about') }}'">
-                                        About
+                                        <i class="fas fa-question" style="padding-right: 5px"></i>About
                                     </button>
                                 </div>
 
