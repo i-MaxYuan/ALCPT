@@ -16,10 +16,10 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="{{ url('user_list') }}">{{ trans("User List") }}</a>
-                            <a class="dropdown-item" href="{{ url('unit_list') }}">Unit List</a>
-                            <a class="dropdown-item" href="{{ url('report_category_list') }}">ReportCategory List</a>
+                            <a class="dropdown-item" href="{{ url('unit_list') }}">{{ trans("Unit List") }}</a>
+                            <a class="dropdown-item" href="{{ url('report_category_list') }}">{{ trans("ReportCategory List") }}</a>
                             {% if request.user|get_SystemManager_report_notification == 0 %}
-                            <a class="dropdown-item" href="{{ url('responsible_report_list', args=['SystemManager']) }}">User Response Handling</a>
+                            <a class="dropdown-item" href="{{ url('responsible_report_list', args=['SystemManager']) }}">{{ trans("User Response Handling") }}</a>
                             {% else %}
                             <a class="dropdown-item" href="{{ url('responsible_report_list', args=['SystemManager']) }}">User Response Handling<label class="notification-badge">{{ request.user|get_SystemManager_report_notification }}</label></a>
                             {% endif %}
@@ -31,11 +31,11 @@
                             {{ trans("TestManager") }}
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="{{ url('exam_list') }}">Exam List</a>
-                            <a class="dropdown-item" href="{{ url('testpaper_list') }}">TestPaper List</a>
-                            <a class="dropdown-item" href="{{ url('testee_group_list') }}">Testee Group List</a>
+                            <a class="dropdown-item" href="{{ url('exam_list') }}">{{ trans("Exam List") }}</a>
+                            <a class="dropdown-item" href="{{ url('testpaper_list') }}">{{ trans("TestPaper List") }}</a>
+                            <a class="dropdown-item" href="{{ url('testee_group_list') }}">{{ trans("Testee Group List") }}</a>
                             {% if request.user|get_TestManager_report_notification == 0 %}
-                            <a class="dropdown-item" href="{{ url('responsible_report_list', args=['TestManager']) }}">User Response Handling</a>
+                            <a class="dropdown-item" href="{{ url('responsible_report_list', args=['TestManager']) }}">{{ trans("User Response Handling") }}</a>
                             {% else %}
                             <a class="dropdown-item" href="{{ url('responsible_report_list', args=['TestManager']) }}">User Response Handling<label class="notification-badge">{{ request.user|get_TestManager_report_notification }}</label></a>
                             {% endif %}
@@ -44,13 +44,13 @@
                     {% endif %} {% if request.user|has_perm('TBManager') %}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            TBManager
+                            {{ trans("TBManager") }}
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="{{ url('tbmanager_question_list') }}">Question List</a>
-                            <a class="dropdown-item" href="{{ url('question_review') }}">Question Review</a>
+                            <a class="dropdown-item" href="{{ url('tbmanager_question_list') }}">{{ trans("Question List") }}</a>
+                            <a class="dropdown-item" href="{{ url('question_review') }}">{{ trans("Question Review") }}</a>
                             {% if request.user|get_TBManager_report_notification == 0 %}
-                            <a class="dropdown-item" href="{{ url('responsible_report_list', args=['TBManager']) }}">User Response Handling</a>
+                            <a class="dropdown-item" href="{{ url('responsible_report_list', args=['TBManager']) }}">{{ trans("User Response Handling") }}</a>
                             {% else %}
                             <a class="dropdown-item" href="{{ url('responsible_report_list', args=['TBManager']) }}">User Response Handling<label class="notification-badge">{{ request.user|get_TBManager_report_notification }}</label></a>
                             {% endif %}
@@ -59,34 +59,34 @@
                     {% endif %} {% if request.user|has_perm('TBOperator') %}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            TBOperator
+                            {{ trans("TBOperator") }}
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="{{ url('tboperator_question_list') }}">Question List</a>
-                            <a class="dropdown-item" href="{{ url('question_create', args=['listening']) }}">Create Listening Question</a>
-                            <a class="dropdown-item" href="{{ url('question_create', args=['reading']) }}">Create Reading Question</a>
+                            <a class="dropdown-item" href="{{ url('tboperator_question_list') }}">{{ trans("Question List") }}</a>
+                            <a class="dropdown-item" href="{{ url('question_create', args=['listening']) }}">{{ trans("Create Listening Question") }}</a>
+                            <a class="dropdown-item" href="{{ url('question_create', args=['reading']) }}">{{ trans("Create Reading Question") }}</a>
                         </div>
                     </li>
                     {% endif %} {% if request.user|has_perm('Viewer') %}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Viewer
+                            {{ trans("Viewer") }}
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="{{ url('exam_score_list') }}">View Testee Score</a>
+                            <a class="dropdown-item" href="{{ url('exam_score_list') }}">{{ trans("View Testee Score") }}</a>
                         </div>
                     </li>
                     {% endif %} {% if request.user|has_perm('Testee') %}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Testee
+                            {{ trans("Testee") }}
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="{{ url('favorite_question_list') }}">Favorite Question</a>
-                            <a class="dropdown-item" href="{{ url('testee_exam_list') }}">Exam Record</a>
-                            <a class="dropdown-item" href="{{ url('testee_score_list') }}">Score Record</a>
-                            <a class="dropdown-item" href="{{ url('testee_practice_create', args=['listening']) }}">Listening Practice</a>
-                            <a class="dropdown-item" href="{{ url('testee_practice_create', args=['reading']) }}">Reading Practice</a>
+                            <a class="dropdown-item" href="{{ url('favorite_question_list') }}">{{ trans("Favorite Question") }}</a>
+                            <a class="dropdown-item" href="{{ url('testee_exam_list') }}">{{ trans("Exam Record") }}</a>
+                            <a class="dropdown-item" href="{{ url('testee_score_list') }}">{{ trans("Score Record") }}</a>
+                            <a class="dropdown-item" href="{{ url('testee_practice_create', args=['listening']) }}">{{ trans("Listening Practice") }}</a>
+                            <a class="dropdown-item" href="{{ url('testee_practice_create', args=['reading']) }}">{{ trans("Reading Practice") }}</a>
                         </div>
                     </li>
                     {% endif %} {% if user.is_authenticated %}
@@ -105,8 +105,9 @@
                             <div class="modal-dialog modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header text-center">
-                                        <h5 class="modal-title" id="ModalLongTitle">
-                                            Notification Center（Total: {{ request.user.proclamation_set.count() }} ）
+                                        <h5 class="modal-title" id="ModalLongTitle">{{ trans("Notification Center") }}
+                                            （
+                                            {{trans("Total")}}: {{ request.user.proclamation_set.count() }} ）
                                         </h5>
                                     </div>
 
@@ -145,13 +146,13 @@
 
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" onclick="set_action('read');">
-                                            Read
+                                            {{ trans("Read") }}
                                         </button>
                                         <button type="button" class="btn btn-light" onclick="set_action('delete');">
-                                            Delete
+                                            {{ trans("Delete") }}
                                         </button>
                                         <button class="btn btn-secondary" data-dismiss="modal">
-                                            Cancel
+                                            {{ trans("Cancel") }}
                                         </button>
                                         <script>
                                             function set_action(action) {
@@ -180,50 +181,50 @@
                             <div class="modal-content">
                                 <div class="modal-header text-center">
                                     <h5 class="modal-title" id="ModalLongTitle">
-                                        User: {{ request.user.reg_id }}
+                                        {{trans("User")}}: {{ request.user.reg_id }}
                                     </h5>
                                 </div>
 
                                 <div id="modal-menu">
                                     <button onclick="window.location.href='{{ url('profile') }}'">
-                                        User Profile
+                                        {{trans("User Profile")}}
                                     </button>
                                     <div class="dropdown-divider custom"></div>
                                     <button onclick="window.location.href='{{ url('profile_edit') }}'">
-                                        Profile Update
+                                        {{trans("Profile Update")}}
                                     </button>
                                     <div class="dropdown-divider custom"></div>
                                     <button onclick="window.location.href='{{ url('email') }}'">
-                                        Email
+                                        {{trans("Email")}}
                                     </button>
                                     <div class="dropdown-divider custom"></div>
                                     <button onclick="window.location.href='{{ url('password_change') }}'">
-                                        Password Change
+                                        {{trans("Password Change")}}
                                     </button>
                                     <div class="dropdown-divider custom"></div>
                                     <button onclick="alert('Function is developing. Stay tuned.🤪');">
-                                        Real Exam Record
+                                        {{trans("Real Exam Record")}}
                                     </button>
                                     <div class="dropdown-divider custom"></div>
                                     <button onclick="window.location.href='{{ url('report') }}'">
-                                        Report
+                                        {{trans("Report")}}
                                     </button>
                                     <div class="dropdown-divider custom"></div>
                                     <button onclick="window.location.href='{{ url('about') }}'">
-                                        About
+                                        {{trans("About")}}
                                     </button>
                                 </div>
 
                                 <div class="modal-footer">
-                                    <a class="btn btn-light" href="{{ url('logout') }}" onclick="return confirm('Sure to logout?')">Logout</a>
-                                    <a class="btn btn-secondary" style="color: white" data-dismiss="modal">Cancel</a>
+                                    <a class="btn btn-light" href="{{ url('logout') }}" onclick="return confirm('Sure to logout?')">{{trans("Logout")}}</a>
+                                    <a class="btn btn-secondary" style="color: white" data-dismiss="modal">{{trans("Cancel")}}</a>
                                 </div>
                             </div>
                         </div>
                     </div>
                     {% else %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url('login') }}">Login.</a>
+                        <a class="nav-link" href="{{ url('login') }}">{{trans("Login")}}</a>
                     </li>
                     {% endif %}
 

@@ -1,8 +1,8 @@
 {% extends 'new_base.html' %} {% block path %}
 <li class="breadcrumb-item" aria-current="page">
-  <a href="{{ url('report_category_list') }}">ReportCategory List</a>
+  <a href="{{ url('report_category_list') }}">{{trans("ReportCategory List")}}</a>
 </li>
-<li class="breadcrumb-item active" aria-current="page">View Report Detail</li>
+<li class="breadcrumb-item active" aria-current="page">{{trans("View Report Detail")}}</li>
 {% endblock %} {% block content %}
 <main class="reply">
   <div class="original-report-card">
@@ -38,7 +38,7 @@
               </ol>
               {% endif %}
 
-              <h5>Supplement Note</h5>
+              <h5>{{trans("Supplement Note")}}</h5>
               <div class="dropdown-divider"></div>
               <p>{{ viewed_report.supplement_note }}</p>
             </div>
@@ -56,7 +56,7 @@
                   >Resolved by {{ viewed_report.resolved_by }} in {{
                   viewed_report.resolved_time }}</cite
                 >
-                <label class="btn btn-success float-right">Solved</label>
+                <label class="btn btn-success float-right">{{trans("Solved")}}</label>
                 {% endif %}
               </footer>
             </div>
@@ -65,7 +65,7 @@
 
         <div class="col-lg-7">
           <div class="card" style="height: 700px">
-            <div class="card-header">Reply.</div>
+            <div class="card-header">{{trans("Reply")}}</div>
 
             <div id="reply-content" class="card-body">
               <div
@@ -95,7 +95,7 @@
                     >
                   </footer>
                 </div>
-                {% endif %} {% endfor %} {% else %} No message... {% endif %}
+                {% endif %} {% endfor %} {% else %} {{trans("No message")}}... {% endif %}
               </div>
             </div>
 
@@ -105,7 +105,7 @@
                 class="btn btn-primary float-right"
                 onclick="window.location=document.referrer;"
               >
-                OK
+              {{trans("OK")}}
               </button>
             </div>
           </div>

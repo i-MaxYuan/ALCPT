@@ -27,9 +27,9 @@
 </script>
 {% endblock %} {% block path %}
 <li class="breadcrumb-item" aria-current="page">
-    <a href="{{ url('unit_list') }}">Unit List</a>
+    <a href="{{ url('unit_list') }}">{{trans("Unit List")}}</a>
 </li>
-<li class="breadcrumb-item active" aria-current="page">Create Unit</li>
+<li class="breadcrumb-item active" aria-current="page">{{trans("Create Unit")}}</li>
 {% endblock %} {% block content %}
 <main class="unit-create-form">
     <div class="container">
@@ -38,33 +38,33 @@
                 <form method="post">
                     <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
                     <div class="card">
-                        <div class="card-header">Unit Create.</div>
+                        <div class="card-header">{{trans("Create Unit")}}</div>
 
                         <div class="card-body">
-                            <h5 class="card-subtitle mb-2 text-muted">Unit.</h5>
+                            <h5 class="card-subtitle mb-2 text-muted">{{trans("Unit")}}</h5>
                             <p class="card-text">
                                 <select class="custom-select custom-select-sm" id="unit" name="unit" onchange="is_selected();" required>
                                     <option value="" selected disabled hidden>
-                                        Choose the Unit
+                                        {{trans("Choose the Unit")}}
                                     </option>
-                                    <option value="department">Department</option>
-                                    <option value="squadron">Squadron</option>
+                                    <option value="department">{{trans("Department")}}</option>
+                                    <option value="squadron">{{trans("Squadron")}}</option>
                                 </select>
                             </p>
 
                             <h5 class="card-subtitle mb-2 text-muted">
-                                Unit Name.<label id="invalid"></label>
+                                {{trans("Unit Name")}}<label id="invalid"></label>
                             </h5>
                             <p class="card-text">
-                                <input class="form-control" type="text" id="unit_name" name="unit_name" onkeyup="valid_name(this)" placeholder="Enter the name of the unit..." required disabled />
+                                <input class="form-control" type="text" id="unit_name" name="unit_name" onkeyup="valid_name(this)" placeholder="{{trans("Enter the name of the unit")}}..." required disabled />
                             </p>
 
                             <div class="float-right">
                                 <button class="btn btn-primary" type="submit" id="submit" disabled>
-                                    Submit
+                                    {{trans("Submit")}}
                                 </button>
                                 <button class="btn btn-secondary" type="button" onclick="self.location=document.referrer;">
-                                    Cancel
+                                    {{trans("Cancel")}}
                                 </button>
                             </div>
                         </div>

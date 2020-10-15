@@ -6,18 +6,18 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">Report.</div>
+                    <div class="card-header">{{trans("Report")}}</div>
 
                     <div class="card-body">
                         <form method="post">
                             <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
 
                             <div class="form-group row">
-                                <label for="p_title" class="col-md-4 col-form-label text-md-right">Report Category.</label>
+                                <label for="p_title" class="col-md-4 col-form-label text-md-right">{{trans("Report Category")}}</label>
                                 <div class="col-md-6">
                                     <select class="custom-select custom-select-sm" name="category" required>
                                         <option value="" disabled selected>
-                                            What is your problem？
+                                            {{trans("What is your problem")}}？
                                         </option>
                                         {% for category in categories %}
                                         <option value="{{ category.id }}">{{ category }}</option>
@@ -27,19 +27,19 @@
                             </div>
 
                             <div class="form-group row">
-                                <label for="p_text" class="col-md-4 col-form-label text-md-right">Supplement Note.</label>
+                                <label for="p_text" class="col-md-4 col-form-label text-md-right">{{trans("Supplement Note")}}</label>
                                 <div class="col-md-6">
-                                    <textarea class="form-control" name="supplement_note" cols="100" rows="8" placeholder="Describe your situation what happened..." required></textarea>
+                                    <textarea class="form-control" name="supplement_note" cols="100" rows="8" placeholder="{{trans("Describe your situation what happened")}}..." required></textarea>
                                 </div>
                             </div>
 
                             <div class="text-center">
                                 <button type="submit" class="btn btn-primary" onclick="return confirm('Sure to report?')">
-                                    Submit
+                                    {{trans("Submit")}}
                                 </button>
-                                <button type="reset" class="btn btn-light">Reset</button>
+                                <button type="reset" class="btn btn-light">{{trans("Reset")}}</button>
                                 <button type="button" class="btn btn-secondary" onclick="history.go(-1)">
-                                    Cancel
+                                    {{trans("Cancel")}}
                                 </button>
                             </div>
                         </form>
