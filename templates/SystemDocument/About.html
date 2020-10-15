@@ -5,6 +5,7 @@
     {% include 'head.html' %}
 </head>
 
+
 <body>
     {% block stylesheets %} {% endblock %}
     {% block scripts %}
@@ -22,10 +23,11 @@
     </script>
     {% endblock %}
     {% include 'header.html' %}
+
     <main class="about" role="main">
         <div class="jumbotron">
             <h1 class="display-2" style="font-weight: 400">
-                Welcome to ALCPT線上練習平台
+                {{ trans("Welcome to ALCPT Online Platform") }}
             </h1>
             <p class="lead">
                 This is a place where we try to build some interesting stuff about a

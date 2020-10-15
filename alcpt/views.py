@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import FileResponse
+from django.utils.translation import gettext as _ #translation
 
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 

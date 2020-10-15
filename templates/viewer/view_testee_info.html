@@ -1,11 +1,11 @@
 {% extends 'new_base.html' %} {% block path %}
 <li class="breadcrumb-item" aria-current="page">
-    <a href="{{ url('exam_score_list') }}">View Testee Score</a>
+    <a href="{{ url('exam_score_list') }}">{{trans("View Testee Score")}}</a>
 </li>
 <li class="breadcrumb-item" aria-current="page">
-    <a href="{{ url('exam_score_detail', args=[exam.id]) }}">View - {{ exam.name }}</a>
+    <a href="{{ url('exam_score_detail', args=[exam.id]) }}">{{trans("View")}} - {{ exam.name }}</a>
 </li>
-<li class="breadcrumb-item active" aria-current="page">View Testee Info</li>
+<li class="breadcrumb-item active" aria-current="page">{{ trans("View Testee Info") }}</li>
 {% endblock %}
 
 {% block content %}
@@ -14,21 +14,21 @@
         <div class="row justify-content-center">
             <div class="col-md-4">
                 <div class="card">
-                    <div class="card-header">Student Profile.</div>
+                    <div class="card-header">{{trans("Student Profile")}}</div>
 
                     <div class="card-body">
-                        <h5 class="subtitle mb-2 text-muted">Student ID.</h5>
+                        <h5 class="subtitle mb-2 text-muted">{{trans("Student ID")}}</h5>
                         <p>{{ viewed_testee.student.stu_id }}</p>
-                        <h5 class="subtitle mb-2 text-muted">Department.</h5>
+                        <h5 class="subtitle mb-2 text-muted">{{trans("Department")}}</h5>
                         <p>{{ viewed_testee.student.department }}</p>
-                        <h5 class="subtitle mb-2 text-muted">Squadron.</h5>
+                        <h5 class="subtitle mb-2 text-muted">{{trans("Squadron")}}</h5>
                         <p>{{ viewed_testee.student.squadron }}</p>
-                        <h5 class="subtitle mb-2 text-muted">Grade.</h5>
+                        <h5 class="subtitle mb-2 text-muted">{{trans("Grade")}}</h5>
                         <p>{{ viewed_testee.student.grade }}</p>
                     </div>
 
                     <div class="card-footer text-muted">
-                        <h5 class="subtitle mb-2 text-muted">Last Login.</h5>
+                        <h5 class="subtitle mb-2 text-muted">{{trans("Last Login")}}</h5>
                         <p>{{ viewed_testee.last_login.strftime('%Y/%m/%d %H:%M') }}</p>
                     </div>
                 </div>
@@ -36,14 +36,14 @@
 
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">Exam Record.</div>
+                    <div class="card-header">{{trans("Exam Record")}}</div>
 
                     <div class="card-body" style="height: 50vh; overflow-x: scroll">
                         <table class="table table-hover">
                             <thead class="thead-light">
-                                <th class="text-center">Exam Name.</th>
-                                <th class="text-center">Finish Time.</th>
-                                <th class="text-center">Score.</th>
+                                <th class="text-center">{{trans("Exam Name")}}</th>
+                                <th class="text-center">{{trans("Finish Time")}}</th>
+                                <th class="text-center">{{trans("Score")}}</th>
                             </thead>
                             <tbody>
                                 {% for answer_sheet in answer_sheets %}
@@ -60,7 +60,7 @@
                                 </tr>
                                 {% else %}
                                 <tr>
-                                    <td class="text-center" colspan="3">No Data.</td>
+                                    <td class="text-center" colspan="3">{{trans("No Data")}}</td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -69,7 +69,7 @@
 
                     <div class="card-footer text-right">
                         <button type="button" class="btn btn-primary" onclick="history.go(-1)">
-                            OK
+                            {{trans("OK")}}
                         </button>
                     </div>
                 </div>

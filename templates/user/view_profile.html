@@ -1,8 +1,8 @@
 {% extends 'new_base.html' %} {% block path %}
 <li class="breadcrumb-item" aria-current="page">
-    <a href="{{ url('user_list') }}">User List</a>
+    <a href="{{ url('user_list') }}">{{trans("User List")}}</a>
 </li>
-<li class="breadcrumb-item active" aria-current="page">View Profile</li>
+<li class="breadcrumb-item active" aria-current="page">{{trans("View Profile")}}</li>
 {% endblock %} {% block content %}
 <main class="view-profile">
     <div class="container">
@@ -10,7 +10,7 @@
         <div class="row">
             <div class="col-lg-3">
                 <div class="card mb-3">
-                    <div class="card-header">User Photo.</div>
+                    <div class="card-header">{{trans("User Photo")}}</div>
 
                     {% if viewed_user.photo %}
                     <img class="card-img-top" src="{{ viewed_user.photo.url }}" alt="{{ viewed_user.name }}" />
@@ -26,35 +26,35 @@
 
             <div class="col-lg-6">
                 <div class="card mb-3">
-                    <div class="card-header">User Profile.</div>
+                    <div class="card-header">{{trans("User Profile")}}</div>
 
                     <div class="card-body text-left">
-                        <h5 class="card-subtitle mb-2 text-muted">Register ID.</h5>
+                        <h5 class="card-subtitle mb-2 text-muted">{{trans("Register ID")}}</h5>
                         <h3 class="card-text">{{ viewed_user.reg_id }}</h3>
 
-                        <h5 class="card-subtitle mb-2 text-muted">Name.</h5>
+                        <h5 class="card-subtitle mb-2 text-muted">{{trans("Name")}}</h5>
                         <p class="card-text">
-                            {% if viewed_user.name %} {{ viewed_user.name }} {% else %} Unset
+                            {% if viewed_user.name %} {{ viewed_user.name }} {% else %} {{trans("Unset")}}
                             {% endif %}
                         </p>
 
-                        <h5 class="card-subtitle mb-2 text-muted">Email.</h5>
+                        <h5 class="card-subtitle mb-2 text-muted">{{trans("Email")}}</h5>
                         <p class="card-text">
                             {% if viewed_user.email %} {{ viewed_user.email }} {% else %}
                             Unset {% endif %}
                         </p>
 
-                        <h5 class="card-subtitle mb-2 text-muted">Gender.</h5>
+                        <h5 class="card-subtitle mb-2 text-muted">{{trans("Gender")}}</h5>
                         <p class="card-text">
-                            {% if viewed_user.gender == 1 %}Male {% elif viewed_user.gender == 2 %}Female {% elif viewed_user.gender == 3 %}Privacy {% else %}Unset {% endif %}
+                            {% if viewed_user.gender == 1 %}{{trans("Male")}} {% elif viewed_user.gender == 2 %}{{trans("Female ")}} {% elif viewed_user.gender == 3 %}{{trans("Privacy")}} {% else %}{{trans("Unset")}}{% endif %}
                         </p>
 
-                        <h5 class="card-subtitle mb-2 text-muted">Identity.</h5>
+                        <h5 class="card-subtitle mb-2 text-muted">{{trans("Identity")}}</h5>
                         <p class="card-text">
-                            {% if viewed_user.identity %} {{ viewed_user.identity|readableIdentity }} {% else %} Unset {% endif %}
+                            {% if viewed_user.identity %} {{ viewed_user.identity|readableIdentity }} {% else %} {{trans("Unset")}} {% endif %}
                         </p>
 
-                        <h5 class="card-subtitle mb-2 text-muted">Privilege.</h5>
+                        <h5 class="card-subtitle mb-2 text-muted">{{trans("Privilege")}}</h5>
                         <p class="card-text">
                             {% if viewed_user|has_perms(privileges.SystemManager) %}
                             <span class="badge alert-danger">{{ privileges.SystemManager.value.1 }}</span>
@@ -74,18 +74,18 @@
 
                     <div class="card-footer text-muted">
                         <p style="font-size: 12px">
-                            Last login - {{ viewed_user.last_login }}
+                            {{trans("Last login")}} - {{ viewed_user.last_login }}
                         </p>
                         <p style="font-size: 12px">
-                            Create time - {{ viewed_user.created_time }}
+                            {{trans("Create time")}} - {{ viewed_user.created_time }}
                         </p>
                         <p style="font-size: 12px">
-                            Status - {% if viewed_user.is_active %}
-                            <span>active</span>
+                            {{trans("Status")}} - {% if viewed_user.is_active %}
+                            <span>{{trans("active")}}</span>
                             {% elif viewed_user.is_staff %}
-                            <span>staff</span>
+                            <span>{{trans("staff")}}</span>
                             {% elif viewed_user.is_superuser %}
-                            <span>superuser</span>
+                            <span>{{trans("superuser")}}</span>
                             {% endif %}
                         </p>
                     </div>
@@ -94,24 +94,24 @@
 
             <div class="col-lg-3">
                 <div class="card mb-3">
-                    <div class="card-header">Student Profile.</div>
+                    <div class="card-header">{{trans("Student Profile")}}</div>
 
                     <div class="card-body text-left">
-                        <h5 class="card-subtitle mb-2 text-muted">Student ID.</h5>
+                        <h5 class="card-subtitle mb-2 text-muted">{{trans("Student ID")}}</h5>
                         <h3 class="card-text">{{ viewed_user.student.stu_id }}</h3>
 
-                        <h5 class="card-subtitle mb-2 text-muted">Department.</h5>
+                        <h5 class="card-subtitle mb-2 text-muted">{{trans("Department")}}</h5>
                         <p class="card-text">{{ viewed_user.student.department }}</p>
 
-                        <h5 class="card-subtitle mb-2 text-muted">Squadron.</h5>
+                        <h5 class="card-subtitle mb-2 text-muted">{{trans("Squadron")}}</h5>
                         <p class="card-text">{{ viewed_user.student.squadron }}</p>
 
-                        <h5 class="card-subtitle mb-2 text-muted">Grade.</h5>
+                        <h5 class="card-subtitle mb-2 text-muted">{{trans("Grade")}}</h5>
                         <p class="card-text">{{ viewed_user.student.grade }}</p>
                     </div>
 
                     <div class="card-footer text-right">
-                        <button onclick="history.back()" class="btn btn-primary">OK</button>
+                        <button onclick="history.back()" class="btn btn-primary">{{trans("OK")}}</button>
                     </div>
                 </div>
             </div>
@@ -120,7 +120,7 @@
         <div class="row">
             <div class="col-lg-4">
                 <div class="card mb-3">
-                    <div class="card-header">User Photo.</div>
+                    <div class="card-header">{{trans("User Photo")}}</div>
 
                     {% if viewed_user.photo %}
                     <img class="card-img-top" src="{{ viewed_user.photo.url }}" alt="{{ viewed_user.name }}" />
@@ -136,35 +136,35 @@
 
             <div class="col-lg-8">
                 <div class="card mb-3">
-                    <div class="card-header">User Profile.</div>
+                    <div class="card-header">{{trans("User Profile")}}</div>
 
                     <div class="card-body">
-                        <h5 class="card-subtitle mb-2 text-muted">Reg ID.</h5>
+                        <h5 class="card-subtitle mb-2 text-muted">{{trans("Reg ID")}}</h5>
                         <h3 class="card-text">{{ viewed_user.reg_id }}</h3>
 
-                        <h5 class="card-subtitle mb-2 text-muted">Name.</h5>
+                        <h5 class="card-subtitle mb-2 text-muted">{{trans("Name")}}</h5>
                         <p class="card-text">
-                            {% if viewed_user.name %} {{ viewed_user.name }} {% else %} Unset
+                            {% if viewed_user.name %} {{ viewed_user.name }} {% else %} {{trans("Unset")}}
                             {% endif %}
                         </p>
 
                         <h5 class="card-subtitle mb-2 text-muted">Email.</h5>
                         <p class="card-text">
                             {% if viewed_user.email %} {{ viewed_user.email }} {% else %}
-                            Unset {% endif %}
+                            {{trans("Unset")}} {% endif %}
                         </p>
 
-                        <h5 class="card-subtitle mb-2 text-muted">Gender.</h5>
+                        <h5 class="card-subtitle mb-2 text-muted">{{trans("Gender")}}</h5>
                         <p class="card-text">
-                            {% if viewed_user.gender == 1 %}Male {% elif viewed_user.gender == 2 %}Female {% elif viewed_user.gender == 3 %}Privacy {% else %}Unset {% endif %}
+                            {% if viewed_user.gender == 1 %}{{trans("Male")}} {% elif viewed_user.gender == 2 %}{{trans("Female")}} {% elif viewed_user.gender == 3 %}{{trans("Privacy")}} {% else %}{{trans("Unset")}} {% endif %}
                         </p>
 
-                        <h5 class="card-subtitle mb-2 text-muted">Identity.</h5>
+                        <h5 class="card-subtitle mb-2 text-muted">{{trans("Identity")}}</h5>
                         <p class="card-text">
-                            {% if viewed_user.identity %} {{ viewed_user.identity|readableIdentity }} {% else %} Unset {% endif %}
+                            {% if viewed_user.identity %} {{ viewed_user.identity|readableIdentity }} {% else %} {{trans("Unset")}} {% endif %}
                         </p>
 
-                        <h5 class="card-subtitle mb-2 text-muted">Privilege.</h5>
+                        <h5 class="card-subtitle mb-2 text-muted">{{trans("Privilege")}}</h5>
                         <p class="card-text">
                             {% if viewed_user|has_perms(privileges.SystemManager) %}
                             <span class="badge alert-danger">{{ privileges.SystemManager.value.1 }}</span>
@@ -184,24 +184,24 @@
 
                     <div class="card-footer text-muted">
                         <p style="font-size: 12px">
-                            Last login - {{ viewed_user.last_login }}
+                            {{trans("Last login")}} - {{ viewed_user.last_login }}
                         </p>
                         <p style="font-size: 12px">
-                            Create time - {{ viewed_user.created_time }}
+                            {{trans("Create time")}} - {{ viewed_user.created_time }}
                         </p>
                         <p style="font-size: 12px">
-                            Status - {% if viewed_user.is_active %}
-                            <span>active</span>
+                            {{trans("Status")}} - {% if viewed_user.is_active %}
+                            <span>{{trans("active")}}</span>
                             {% elif viewed_user.is_staff %}
-                            <span>staff</span>
+                            <span>{{trans("staff")}}</span>
                             {% elif viewed_user.is_superuser %}
-                            <span>superuser</span>
+                            <span>{{trans("superuser")}}</span>
                             {% endif %}
                         </p>
 
                         <div class="text-right">
                             <button onclick="history.back()" class="btn btn-primary">
-                                OK
+                                {trans("OK")}}
                             </button>
                         </div>
                     </div>

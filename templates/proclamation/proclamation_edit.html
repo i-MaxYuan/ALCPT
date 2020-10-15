@@ -1,25 +1,25 @@
 {% extends 'new_base.html' %} {% block path %}
-<li class="breadcrumb-item active" aria-current="page">Proclamation Edit</li>
+<li class="breadcrumb-item active" aria-current="page">{{trans("Proclamation Edit")}}</li>
 {% endblock %} {% block content %}
 <main class="proclamation-edit-form">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">Proclamation Edit.</div>
+                    <div class="card-header">{{ trans("Proclamation Edit") }}</div>
                     <div class="card-body">
                         <form method="post">
                             <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
 
                             <div class="form-group row">
-                                <label for="p_title" class="col-md-4 col-form-label text-md-right">Title.</label>
+                                <label for="p_title" class="col-md-4 col-form-label text-md-right">{{ trans("Title") }}</label>
                                 <div class="col-md-6">
                                     <input type="text" id="p_title" class="form-control" name="p_title" value="{{ proclamation.title }}" placeholder="Proclamation Title..." required autofocus />
                                 </div>
                             </div>
 
                             <div class="form-group row">
-                                <label for="p_text" class="col-md-4 col-form-label text-md-right">Content.</label>
+                                <label for="p_text" class="col-md-4 col-form-label text-md-right">{{ trans("Content") }}</label>
                                 <div class="col-md-6">
                                     <textarea class="form-control" name="p_text" cols="100" rows="8" placeholder="Proclamation Content..." required>
                                     {{ proclamation.text }}
@@ -29,10 +29,10 @@
 
                             <div class="col-md-6 offset-md-4">
                                 <button type="submit" class="btn btn-primary" onclick="return confirm('確認更改？')">
-                                    Update
+                                    {{ trans("Update") }}
                                 </button>
                                 <button type="button" class="btn btn-secondary" onclick="self.location=document.referrer;">
-                                    Cancel
+                                    {{ trans("Cancel") }}
                                 </button>
                             </div>
                         </form>

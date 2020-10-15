@@ -5,7 +5,7 @@
     });
 </script>
 {% endblock %} {% block path %}
-<li class="breadcrumb-item active" aria-current="page">User List</li>
+<li class="breadcrumb-item active" aria-current="page">{{trans("User List")}}</li>
 {% endblock %} {% block content %}
 <main class="user-list">
     <div class="container">
@@ -18,31 +18,31 @@
             keywords.name
             %}value="{{ keywords.name }}" {%
             endif
-            %} placeholder="Search" aria-label="Search" />
+            %} placeholder="{{trans("Search")}}" aria-label="Search" />
 
-                    <label class="mr-sm-2" for="inlineFormCustomSelect" style="padding-left: 10px">Department.</label>
+                    <label class="mr-sm-2" for="inlineFormCustomSelect" style="padding-left: 10px">{{trans("Department")}}</label>
                     <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" name="department">
-                        <option value="" selected>All</option>
+                        <option value="" selected>{{trans("All")}}</option>
                         {% for department in departments %}
                         <option value="{{ department.id }}" {% if department.id == keywords.department.id %} selected {% endif %}>{{ department.name }}</option>
                         {% endfor %}
                     </select>
 
-                    <label class="mr-sm-2" for="inlineFormCustomSelect">Squadron.</label>
+                    <label class="mr-sm-2" for="inlineFormCustomSelect">{{trans("Squadron")}}</label>
                     <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" name="squadron">
-                        <option value="" selected>All</option>
+                        <option value="" selected>{{trans("All")}}</option>
                         {% for squadron in squadrons %}
                         <option value="{{ squadron.id }}" {% if squadron.id == keywords.squadron.id %} selected {% endif %}>{{ squadron.name }}</option>
                         {% endfor %}
                     </select>
 
-                    <label class="mr-sm-2" for="inlineFormCustomSelect">Grade.</label>
+                    <label class="mr-sm-2" for="inlineFormCustomSelect">{{trans("Grade")}}</label>
                     <input class="form-control" type="number" name="grade" {%
             if
             keywords.grade
             %}value="{{ keywords.grade }}" {%
             endif
-            %} placeholder="grade..." />
+            %} placeholder="{{trans("grade")}}..." />
 
                     <button class="btn btn-primary btn-group-justified" type="submit">
                         <i class="fa fa-search"></i>
@@ -54,15 +54,15 @@
         <div class="row">
             <!--資料區塊-->
             <div class="col-md-12 table-responsive-md">
-                <h2>User List.（Total: {{ users.count() }}）</h2>
+                <h2>{{trans("User List")}}（{{trans("Total")}}: {{ users.count() }}）</h2>
                 <table class="table table-bordered table-striped table-hover table-mc-light-blue">
                     <thead class="thead-light">
                         <tr>
-                            <th class="text-center">Account.</th>
-                            <th class="text-center">Name.</th>
-                            <th class="text-center">Identity.</th>
-                            <th class="text-center">Privilege.</th>
-                            <th class="text-center">Last Login.</th>
+                            <th class="text-center">{{trans("Account")}}</th>
+                            <th class="text-center">{{trans("Name")}}</th>
+                            <th class="text-center">{{trans("Identity")}}</th>
+                            <th class="text-center">{{trans("Privilege")}}</th>
+                            <th class="text-center">{{trans("Last login")}}</th>
                             <th>
                                 <div class="add">
                                     <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ url('user_create') }}'">
@@ -108,7 +108,7 @@
                             </td>
 
                             <td class="text-center" data-title="Last Login：">
-                                {% if user.last_login %} {{ user.last_login.strftime('%Y/%m/%d %H:%M') }} {% else %} Not logged in {% endif %}
+                                {% if user.last_login %} {{ user.last_login.strftime('%Y/%m/%d %H:%M') }} {% else %}{{trans(" Not logged in ")}}{% endif %}
                             </td>
 
                             <td class="text-center">

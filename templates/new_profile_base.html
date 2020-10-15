@@ -14,7 +14,7 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item active" aria-current="page">
-                    <a href="{{ url('Homepage') }}">Home</a>
+                    <a href="{{ url('Homepage') }}">{{trans("Home")}}</a>
                 </li>
                 {% block path %} {% endblock %}
             </ol>
@@ -32,23 +32,23 @@
             <div class="row justify-content-center">
                 <div class="col-lg-2" id="sidebar-content">
                     <button id="profile" onclick="window.location.href='{{ url('profile') }}'">
-                        Profile
+                        {{trans("Profile")}}
                     </button>
                     <button id="edit_profile" onclick="window.location.href='{{ url('profile_edit') }}'">
-                        Edit Profile
+                        {{trans("Edit Profile")}}
                     </button>
                     <button id="email" onclick="window.location.href='{{ url('email') }}'">
-                        Email
+                        {{trans("Email")}}
                     </button>
                     <button id="password_change" onclick="window.location.href='{{ url('password_change') }}'">
-                        Password Change
+                        {{trans("Password Change")}}
                     </button>
                     <button id="real_exam_record" onclick="alert('Function is developing. Stay tuned.🤪');">
-                        Real Exam Record
+                        {{trans("Real Exam Record")}}
                     </button>
                     {% if request.user|get_report_notification == 0 %}
                     <button id="report" onclick="window.location.href='{{ url('report_list') }}'">
-                        Report
+                        {{trans("Report")}}
                     </button>
                     {% else %}
                     <button id="report" onclick="window.location.href='{{ url('report_list') }}'">

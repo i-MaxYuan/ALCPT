@@ -1,6 +1,6 @@
 {% extends 'new_base.html' %} {% block path %}
 <li class="breadcrumb-item" aria-current="page">
-  <a href="{{ url('report_category_list') }}">ReportCategory List</a>
+  <a href="{{ url('report_category_list') }}">{{trans("ReportCategory List")}}</a>
 </li>
 <li class="breadcrumb-item active" aria-current="page">{{ category.name }}</li>
 {% endblock %} {% block content %}
@@ -9,18 +9,18 @@
     <div class="row justify-content-center">
       <div class="col-md-12">
         <div class="card">
-          <div class="card-header">ReportCategory Detail.</div>
+          <div class="card-header">{{trans("ReportCategory Detail")}}</div>
 
           <div class="card-body">
             <div class="table-responsive">
               <table class="table table-hover">
                 <thead class="thead-light">
                   <tr>
-                    <th>Serial Number.</th>
-                    <th>Account.</th>
-                    <th>Report Category.</th>
-                    <th>Content.</th>
-                    <th>State.</th>
+                    <th>{{trans("Serial Number")}}</th>
+                    <th>{{trans("Account")}}</th>
+                    <th>{{trans("Report Category")}}</th>
+                    <th>{{trans("Content")}}</th>
+                    <th>{{trans("State")}}</th>
                   </tr>
                 </thead>
 
@@ -39,7 +39,7 @@
                   </tr>
                   {% endfor %} {% else %}
                   <tr>
-                    <td colspan="5" class="text-center">No Dara.</td>
+                    <td colspan="5" class="text-center">{{trans("No Data")}}</td>
                   </tr>
                   {% endif %}
                 </tbody>
@@ -53,7 +53,7 @@
               class="btn btn-primary float-right"
               onclick="history.go(-1)"
             >
-              OK
+            {{trans("OK")}}
             </button>
           </div>
         </div>
