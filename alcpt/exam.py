@@ -253,9 +253,9 @@ def testpaper_list(request):
     testpaper_name = request.GET.get('testpaper_name')
 
     if testpaper_name:
-        testpapers = TestPaper.objects.filter(is_testpaper=True).filter(name__contains=testpaper_name)
+        testpapers = TestPaper.objects.filter(is_testpaper=True).filter(name__contains=testpaper_name).order_by("-created_time")
     else:
-        testpapers = TestPaper.objects.filter(is_testpaper=True)
+        testpapers = TestPaper.objects.filter(is_testpaper=True).order_by("-created_time")
 
     page = request.GET.get('page', 0)
     paginator = Paginator(testpapers, 10)  # the second parameter is used to display how many items. Now is display 10

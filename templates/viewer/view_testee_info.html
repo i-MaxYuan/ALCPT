@@ -6,7 +6,9 @@
     <a href="{{ url('exam_score_detail', args=[exam.id]) }}">View - {{ exam.name }}</a>
 </li>
 <li class="breadcrumb-item active" aria-current="page">View Testee Info</li>
-{% endblock %} {% block content %}
+{% endblock %}
+
+{% block content %}
 <main class="view-testee-info">
     <div class="container">
         <div class="row justify-content-center">
@@ -50,7 +52,11 @@
                                     <td class="text-center">
                                         {{ answer_sheet.finish_time.strftime('%Y/%m/%d %H:%M') }}
                                     </td>
+                                    {% if answer_sheet.score == None %}
+                                    <td class="text-center" style="color: red">未進行測驗</td>
+                                    {% else %}
                                     <td class="text-center">{{ answer_sheet.score }}</td>
+                                    {% endif %}
                                 </tr>
                                 {% else %}
                                 <tr>

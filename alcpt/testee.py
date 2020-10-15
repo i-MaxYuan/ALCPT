@@ -440,8 +440,6 @@ def view_answersheet_content(request, answersheet_id):
 
             #x_axis: category of Listening or READING
             #y_axis: correction percentage
-
-
             trace1 = go.Bar(
                 y = y_data,
                 x = x_data1,

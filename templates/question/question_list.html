@@ -132,44 +132,57 @@
                                 </td>
 
                                 <td class="functions-btn">
+                                    <!-- pass -->
                                     {% if request.user|has_perm('TBManager') %} {% if question.state == 1 %}
-                                    <button class="btn btn-primary" id="submit" type="button" onclick="window.location.href='{{ url('question_submit', args=[question.id]) }}'">
+                                    <!-- <button class="btn btn-primary" id="submit" type="button" onclick="window.location.href='{{ url('question_submit', args=[question.id]) }}'">
                                         Submit
-                                    </button>
-                                    <button class="btn btn-warning" id="edit" type="button" onclick="window.location.href='{{ url('question_edit', args=[question.id]) }}'">
+                                    </button> -->
+                                    <!-- <button class="btn btn-warning" id="edit" type="button" onclick="window.location.href='{{ url('question_edit', args=[question.id]) }}'">
                                         Edit
-                                    </button>
-                                    <button class="btn btn-danger" id="delete" type="button" onclick="window.location.href='{{ url('question_delete', args=[question.id]) }}'">
+                                    </button> -->
+                                    <!-- <button class="btn btn-danger" id="delete" type="button" onclick="window.location.href='{{ url('question_delete', args=[question.id]) }}'">
                                         Delete
-                                    </button>
+                                    </button> -->
+                                    <!-- Faulty -->
                                     {% elif question.state == 4 %}
-                                    <button class="btn btn-primary" id="submit" type="button" onclick="window.location.href='{{ url('question_submit', args=[question.id]) }}'">
+                                    <!-- <button class="btn btn-primary" id="submit" type="button" onclick="window.location.href='{{ url('question_submit', args=[question.id]) }}'">
                                         Submit
-                                    </button>
+                                    </button> -->
                                     <button class="btn btn-warning" id="edit" type="button" onclick="window.location.href='{{ url('question_edit', args=[question.id]) }}'">
                                         Edit
                                     </button>
-                                    <button class="btn btn-danger" id="delete" type="button" onclick="window.location.href='{{ url('question_delete', args=[question.id]) }}'">
+                                    <!-- <button class="btn btn-danger" id="delete" type="button" onclick="window.location.href='{{ url('question_delete', args=[question.id]) }}'">
                                         Delete
-                                    </button>
+                                    </button> -->
+                                    <!-- handle -->
+                                    {% elif question.state == 5 %}
+
                                     {% else %}
                                     <button class="btn btn-warning" id="edit" type="button" onclick="window.location.href='{{ url('question_edit', args=[question.id]) }}'">
                                         Edit
                                     </button>
-                                    <button class="btn btn-danger" id="delete" type="button" onclick="window.location.href='{{ url('question_delete', args=[question.id]) }}'">
-                                        Delete
-                                    </button>
-                                    {% endif %} {% elif request.user|has_perm('TBOperator') %} {% if question.state == 2 %}
+
+                                    {% endif %}
+                                    {% elif request.user|has_perm('TBOperator') %}
+                                    <!-- Reject -->
+                                    {% if question.state == 2 %}
                                     <button class="btn btn-success" id="submit">
                                         Submit
                                     </button>
-                                    {% else %}
-                                    <a href='{{ url('question_submit', args=[question.id]) }}' class="btn btn-success" id="submit" onclick="return confirm('Sure to submit?')">Submit</a>
-                                    {% endif %}
                                     <button class="btn btn-warning" id="edit" type="button" onclick="window.location.href='{{ url('operator_edit', args=[question.id]) }}'">
                                         Edit
                                     </button>
                                     <a href="{{ url('question_delete', args=[question.id]) }}" class="btn btn-danger" id="delete" onclick="return confirm('Sure to delete?')">Delete</a>
+                                    {% elif question.state == 4 %}
+
+                                    {% else %}
+                                    <a href='{{ url('question_submit', args=[question.id]) }}' class="btn btn-success" id="submit" onclick="return confirm('Sure to submit?')">Submit</a>
+                                    <button class="btn btn-warning" id="edit" type="button" onclick="window.location.href='{{ url('operator_edit', args=[question.id]) }}'">
+
+                                        Edit
+                                    </button>
+                                    <a href="{{ url('question_delete', args=[question.id]) }}" class="btn btn-danger" id="delete" onclick="return confirm('Sure to delete?')">Delete</a>
+                                    {% endif %}
                                     {% endif %}
                                 </td>
                             </tr>
