@@ -281,9 +281,9 @@
 </script>
 {% endblock %} {% block path %}
 <li class="breadcrumb-item" aria-current="page">
-    <a href="{{ url('user_list') }}">User List</a>
+    <a href="{{ url('user_list') }}">{{trans("User List")}}</a>
 </li>
-<li class="breadcrumb-item active" aria-current="page">User Edit</li>
+<li class="breadcrumb-item active" aria-current="page">{{trans("User Edit")}}</li>
 {% endblock %} {% block content %}
 <main class="edit-user-form">
     <form method="post">
@@ -294,8 +294,9 @@
             <div class="row">
                 <div class="col-lg-3">
                     <div class="card mb-3">
-                        <div class="card-header">User Photo.</div>
+                        <div class="card-header">{{trans("User")}}{{trans("Photo")}}</div>
 
+                    
                         {% if edited_user.photo %}
                         <img class="card-img-top" src="{{ edited_user.photo.url }}" alt="{{ edited_user.name }}" />
                         {% else %}
@@ -312,18 +313,18 @@
 
                 <div class="col-lg-6">
                     <div class="card mb-3">
-                        <div class="card-header">User Profile.</div>
+                        <div class="card-header">{{trans("User Profile")}}</div>
 
                         <div class="card-body text-left">
                             <h5 class="card-subtitle mb-2 text-muted">
-                                Register ID.<label id="reg_id_invalid" class="reg_id_invalid"></label>
+                                {{trans("Register ID")}}<label id="reg_id_invalid" class="reg_id_invalid"></label>
                             </h5>
                             <p>
                                 <input class="form-control" type="text" name="reg_id" id="reg_id" value="{{ edited_user.reg_id }}" onkeyup="reg_id_valid('{{ edited_user.reg_id }}', this)" required />
                             </p>
 
                             <h5 class="card-subtitle mb-2 text-muted">
-                                Name.<label id="name_invalid" class="name_invalid"></label>
+                                {{trans("Name")}}<label id="name_invalid" class="name_invalid"></label>
                             </h5>
                             <p class="card-text">
                                 <input class="form-control" type="text" name="name" {%
@@ -331,11 +332,11 @@
                   edited_user.name
                   %}value="{{ edited_user.name }}" {%
                   endif
-                  %} onkeyup="name_valid('{{ edited_user.name }}', this)" placeholder="Name..." required />
+                  %} onkeyup="name_valid('{{ edited_user.name }}', this)" placeholder="{{trans("Name")}}..." required />
                             </p>
 
                             <h5 class="card-subtitle mb-2 text-muted">
-                                Email.<label id="email_invalid" class="email_invalid"></label>
+                                {{trans("Email")}}<label id="email_invalid" class="email_invalid"></label>
                             </h5>
                             <p class="card-text">
                                 <input class="form-control" type="text" name="email" {%
@@ -343,27 +344,27 @@
                   edited_user.email
                   %}value="{{ edited_user.email }}" {%
                   endif
-                  %} onkeyup="email_valid('{{ edited_user.email }}', this)" placeholder="Email..." required />
+                  %} onkeyup="email_valid('{{ edited_user.email }}', this)" placeholder="{{trans("Email")}}..." required />
                             </p>
 
                             <h5 class="card-subtitle mb-2 text-muted">
-                                Gender.<label id="gender_invalid" class="gender_invalid"></label>
+                                {{trans("Gender")}}<label id="gender_invalid" class="gender_invalid"></label>
                             </h5>
                             <p class="card-text">
                                 <select class="custom-select custom-select-sm" name="gender" id="gender" onchange="gender_valid('{{ edited_user.gender }}', document.getElementById('gender'))" required>
-                                    <option value="" disabled selected>Choose Gender.</option>
-                                    <option value="1" {% if edited_user.gender == 1 %}selected{% endif %}>Male</option>
-                                    <option value="2" {% if edited_user.gender == 2 %}selected{% endif %}>Female</option>
-                                    <option value="3" {% if edited_user.gender == 3 %}selected{% endif %}>Privacy</option>
+                                    <option value="" disabled selected>{{trans("Choose")}}{{trans("Gender")}}</option>
+                                    <option value="1" {% if edited_user.gender == 1 %}selected{% endif %}>{{trans("Male")}}</option>
+                                    <option value="2" {% if edited_user.gender == 2 %}selected{% endif %}>{{trans("Female")}}</option>
+                                    <option value="3" {% if edited_user.gender == 3 %}selected{% endif %}>{{trans("Privacy")}}</option>
                                 </select>
                             </p>
 
                             <h5 class="card-subtitle mb-2 text-muted">
-                                Identity.<label id="identity_invalid" class="identity_invalid"></label>
+                                {{trans("Identity")}}<label id="identity_invalid" class="identity_invalid"></label>
                             </h5>
                             <p class="card-text">
                                 <select class="custom-select custom-select-sm" name="identity" id="identity" onchange="identity_valid('{{ edited_user.identity }}', document.getElementById('identity'))" required>
-                                    <option value="" disabled selected>Choose Identity.</option>
+                                    <option value="" disabled selected>{{trans("Choose Identity")}}</option>
                                     {% for identity in identities %}
                                     <option value="{{ identity.value.0 }}" {% if edited_user.identity == identity.value.0 %}selected{% endif %}>{{ identity.value.1 }}</option>
                                     {% endfor %}
@@ -371,7 +372,7 @@
                             </p>
 
                             <h5 class="card-subtitle mb-2 text-muted">
-                                Privilege.<label id="privilege_invalid" class="privilege_invalid"></label>
+                                {{trans("Privilege")}}<label id="privilege_invalid" class="privilege_invalid"></label>
                             </h5>
                             <div class="container">
                                 <div class="row">
@@ -382,7 +383,7 @@
                                             </button>
                                             <ul class="dropdown-menu">
                                                 <p class="card-text">
-                                                    <li class="dropdown-header">Privilege Setting.</li>
+                                                    <li class="dropdown-header">{{trans("Privilege Setting")}}</li>
                                                     {% for privilege in privileges %}
                                                     <li data-value="{{ privilege.value.0 }}">
                                                         <input type="checkbox" id="{{ privilege.value.1 }}" name="{{ privilege }}" onclick="privilege_valid()" {%
@@ -402,11 +403,11 @@
                         </div>
 
                         <div class="card-footer text-muted">
-                            <span style="font-size: 12px">Last login - {{ user.last_login }}<br /></span>
-                            <span style="font-size: 12px">Create time - {{ user.created_time }}<br /></span>
+                            <span style="font-size: 12px">{{trans("Last login")}} - {{ user.last_login }}<br /></span>
+                            <span style="font-size: 12px">{{trans("Create time")}} - {{ user.created_time }}<br /></span>
                             <span style="font-size: 12px">
-                                Status - {% if user.is_active %} active {% elif user.is_staff %}
-                                staff {% elif user.is_superuser %} superuser {% endif %}
+                                {{trans("Status")}} - {% if user.is_active %} {{trans("active")}}{% elif user.is_staff %}
+                                {{trans("staff")}} {% elif user.is_superuser %} {{trans("superuser")}} {% endif %}
                             </span>
                         </div>
                     </div>
@@ -414,22 +415,22 @@
 
                 <div class="col-lg-3">
                     <div class="card lg-3">
-                        <div class="card-header">Student Profile.</div>
+                        <div class="card-header">{{trans("Student Profile")}}</div>
 
                         <div class="card-body text-left">
                             <h5 class="card-subtitle mb-2 text-muted">
-                                Student ID.<span id="stu_id_invalid" class="stu_id_invalid"></span>
+                                {{trans("Student ID")}}<span id="stu_id_invalid" class="stu_id_invalid"></span>
                             </h5>
                             <h3 class="card-title">
                                 <input class="form-control" type="text" name="stu_id" value="{{ edited_user.student.stu_id }}" onkeyup="stu_id_valid('{{ edited_user.student.stu_id }}', {{ stu_ids }}, this)" required />
                             </h3>
 
                             <h5 class="card-subtitle mb-2 text-muted">
-                                Department.<label id="department_invalid" class="department_invalid"></label>
+                                {{trans("Department")}}<label id="department_invalid" class="department_invalid"></label>
                             </h5>
                             <p class="card-text">
                                 <select class="custom-select custom-select-sm" name="department" id="department" onchange="department_valid('{{ edited_user.student.department.id }}', document.getElementById('department'))">
-                                    <option value="" disabled selected>Choose Department.</option>
+                                    <option value="" disabled selected>{{trans("Choose Department")}}</option>
                                     {% for department in departments %}
                                     <option value="{{ department.id }}" {% if department == edited_user.student.department %}selected{% endif %}>{{ department }}</option>
                                     {% endfor %}
@@ -437,11 +438,11 @@
                             </p>
 
                             <h5 class="card-subtitle mb-2 text-muted">
-                                Squadron.<label id="squadron_invalid" class="squadron_invalid"></label>
+                                {{trans("Squadron")}}<label id="squadron_invalid" class="squadron_invalid"></label>
                             </h5>
                             <p class="card-text">
                                 <select class="custom-select custom-select-sm" name="squadron" id="squadron" onchange="squadron_valid('{{ edited_user.student.squadron.id }}', document.getElementById('squadron'))">
-                                    <option value="" disabled selected>Choose Squadron.</option>
+                                    <option value="" disabled selected>{{trans("Choose Squadron")}}</option>
                                     {% for squadron in squadrons %}
                                     <option value="{{ squadron.id }}" {% if squadron == edited_user.student.squadron %}selected{% endif %}>{{ squadron }}</option>
                                     {% endfor %}
@@ -449,7 +450,7 @@
                             </p>
 
                             <h5 class="card-subtitle mb-2 text-muted">
-                                Grade.<label id="grade_invalid" class="grade_invalid"></label>
+                                {{trans("Grade")}}<label id="grade_invalid" class="grade_invalid"></label>
                             </h5>
                             <p class="card-text">
                                 <input class="form-control" type="text" name="grade" value="{{ edited_user.student.grade }}" onkeyup="grade_valid('{{ edited_user.student.grade }}', this)" required />
@@ -458,10 +459,10 @@
 
                         <div class="card-footer text-right">
                             <button type="submit" class="btn btn-primary" id="submit" disabled>
-                                Update
+                                {{trans("Update")}}
                             </button>
                             <button type="button" class="btn btn-secondary" onclick="history.back()">
-                                Cancel
+                                {{trans("Cancel")}}
                             </button>
                         </div>
                     </div>
@@ -471,7 +472,7 @@
             <div class="row">
                 <div class="col-lg-4">
                     <div class="card mb-3">
-                        <div class="card-header">User Photo.</div>
+                        <div class="card-header">{{trans("User Photo")}}</div>
 
                         {% if edited_user.photo %}
                         <img class="card-img-top" src="{{ edited_user.photo.url }}" alt="{{ edited_user.name }}" />
@@ -489,18 +490,18 @@
 
                 <div class="col-lg-8">
                     <div class="card mb-3">
-                        <div class="card-header">User Profile.</div>
+                        <div class="card-header">{{trans("User Profile")}}</div>
 
                         <div class="card-body text-left">
                             <h5 class="card-subtitle mb-2 text-muted">
-                                Register ID.<label id="reg_id_invalid" class="reg_id_invalid"></label>
+                                {{trans("Register ID")}}<label id="reg_id_invalid" class="reg_id_invalid"></label>
                             </h5>
                             <p>
                                 <input class="form-control" type="text" name="reg_id" id="reg_id" value="{{ edited_user.reg_id }}" onkeyup="reg_id_valid('{{ edited_user.reg_id }}', this)" required />
                             </p>
 
                             <h5 class="card-subtitle mb-2 text-muted">
-                                Name.<label id="name_invalid" class="name_invalid"></label>
+                                {{trans("Name")}}<label id="name_invalid" class="name_invalid"></label>
                             </h5>
                             <p class="card-text">
                                 <input class="form-control" type="text" name="name" {%
@@ -512,7 +513,7 @@
                             </p>
 
                             <h5 class="card-subtitle mb-2 text-muted">
-                                Email.<label id="email_invalid" class="email_invalid"></label>
+                                {{trans("Email")}}<label id="email_invalid" class="email_invalid"></label>
                             </h5>
                             <p class="card-text">
                                 <input class="form-control" type="text" name="email" {%
@@ -520,23 +521,23 @@
                   edited_user.email
                   %}value="{{ edited_user.email }}" {%
                   endif
-                  %} onkeyup="email_valid('{{ edited_user.email }}', this)" placeholder="Email..." required />
+                  %} onkeyup="email_valid('{{ edited_user.email }}', this)" placeholder="{{trans("Email")}}..." required />
                             </p>
 
                             <h5 class="card-subtitle mb-2 text-muted">
-                                Gender.<label id="gender_invalid" class="gender_invalid"></label>
+                                {{trans("Gender")}}<label id="gender_invalid" class="gender_invalid"></label>
                             </h5>
                             <p class="card-text">
                                 <select class="custom-select custom-select-sm" name="gender" id="gender" onchange="gender_valid('{{ edited_user.gender }}', document.getElementById('gender'))" required>
-                                    <option value="" disabled selected>Choose Gender.</option>
-                                    <option value="1" {% if edited_user.gender == 1 %}selected{% endif %}>Male</option>
-                                    <option value="2" {% if edited_user.gender == 2 %}selected{% endif %}>Female</option>
-                                    <option value="3" {% if edited_user.gender == 3 %}selected{% endif %}>Privacy</option>
+                                    <option value="" disabled selected>{{trans("Choose Gender")}}</option>
+                                    <option value="1" {% if edited_user.gender == 1 %}selected{% endif %}>{{trans("Male")}}</option>
+                                    <option value="2" {% if edited_user.gender == 2 %}selected{% endif %}>{{trans("Female")}}</option>
+                                    <option value="3" {% if edited_user.gender == 3 %}selected{% endif %}>{{trans("Privacy")}}</option>
                                 </select>
                             </p>
 
                             <h5 class="card-subtitle mb-2 text-muted">
-                                Identity.<label id="identity_invalid" class="identity_invalid"></label>
+                                {{trans("Identity")}}<label id="identity_invalid" class="identity_invalid"></label>
                             </h5>
                             <p class="card-text">
                                 <select class="custom-select custom-select-sm" name="identity" id="identity" onchange="identity_valid('{{ edited_user.identity }}', document.getElementById('identity'))" required>
@@ -548,7 +549,7 @@
                             </p>
 
                             <h5 class="card-subtitle mb-2 text-muted">
-                                Privilege.<label id="privilege_invalid" class="privilege_invalid"></label>
+                                {{trans("Privilege")}}<label id="privilege_invalid" class="privilege_invalid"></label>
                             </h5>
                             <div class="container">
                                 <div class="row">
@@ -559,7 +560,7 @@
                                             </button>
                                             <ul class="dropdown-menu">
                                                 <p class="card-text">
-                                                    <li class="dropdown-header">Privilege Setting.</li>
+                                                    <li class="dropdown-header">{{trans("Privilege Setting")}}</li>
                                                     {% for privilege in privileges %}
                                                     <li data-value="{{ privilege.value.0 }}">
                                                         <input type="checkbox" id="{{ privilege.value.1 }}" name="{{ privilege }}" onclick="privilege_valid()" {%
@@ -579,8 +580,8 @@
                         </div>
 
                         <div class="card-footer text-muted">
-                            <span style="font-size: 12px">Last login - {{ user.last_login }}<br /></span>
-                            <span style="font-size: 12px">Create time - {{ user.created_time }}<br /></span>
+                            <span style="font-size: 12px">{{trans("Last login")}} - {{ user.last_login }}<br /></span>
+                            <span style="font-size: 12px">{{trans("Create time")}} - {{ user.created_time }}<br /></span>
                             <span style="font-size: 12px">
                                 Status - {% if user.is_active %} active {% elif user.is_staff %}
                                 staff {% elif user.is_superuser %} superuser {% endif %}
@@ -588,10 +589,10 @@
 
                             <div class="text-right">
                                 <button type="submit" id="submit" class="btn btn-primary" disabled>
-                                    Update
+                                    {{trans("Update")}}
                                 </button>
                                 <button type="button" onclick="history.go(-1)" class="btn btn-secondary">
-                                    Cancel
+                                    {{trans("Cancel")}}
                                 </button>
                             </div>
                         </div>

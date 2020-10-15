@@ -56,10 +56,10 @@
 </script>
 {% endblock %} {% block path %}
 <li class="breadcrumb-item active" aria-current="page">
-  <a href="{{ url('report_category_list') }}">ReportCategory List</a>
+  <a href="{{ url('report_category_list') }}">{{trans("ReportCategory List")}}</a>
 </li>
 <li class="breadcrumb-item active" aria-current="page">
-  ReportCategory Create
+  {{trans("ReportCategory Create")}}
 </li>
 {% endblock %} {% block content %}
 <main class="report-category-create-form">
@@ -67,7 +67,7 @@
     <div class="row justify-content-center">
       <div class="col-md-8">
         <div class="card">
-          <div class="card-header">ReportCategory Create.</div>
+          <div class="card-header">{{trans("ReportCategory Create")}}</div>
 
           <div class="card-body">
             <form method="post">
@@ -81,7 +81,7 @@
                 <label
                   for="p_title"
                   class="col-md-4 col-form-label text-md-right"
-                  >ReportCategory Name.</label
+                  >{{trans("ReportCategory Name")}}</label
                 >
                 <div class="col-md-6">
                   <input
@@ -89,7 +89,7 @@
                     type="text"
                     name="category_name"
                     onkeyup="unique_name(this)"
-                    placeholder="ReportCategory Name..."
+                    placeholder="{{trans("ReportCategory Name")}}..."
                     required
                   />
                   <label id="name_invalid" class="name_invalid"></label>
@@ -100,7 +100,7 @@
                 <label
                   for="p_title"
                   class="col-md-4 col-form-label text-md-right"
-                  >Privilege.</label
+                  >{{trans("Privilege")}}</label
                 >
                 <div class="col-md-6">
                   <div class="container">
@@ -115,7 +115,7 @@
                             <i class="fa fa-gears align-middle"></i>
                           </button>
                           <ul class="dropdown-menu">
-                            <li class="dropdown-header">Privilege Setting</li>
+                            <li class="dropdown-header">{{trans("Privilege Setting")}}</li>
                             {% for privilege in privileges %} {% if loop.index
                             <= 3 %}
                             <li>
@@ -159,13 +159,13 @@
                 >
                   Submit
                 </button>
-                <button type="reset" class="btn btn-light">Reset</button>
+                <button type="reset" class="btn btn-light">{{trans("Reset")}}</button>
                 <button
                   type="button"
                   class="btn btn-secondary"
                   onclick="history.go(-1)"
                 >
-                  Cancel
+                {{trans("Cancel")}}
                 </button>
               </div>
             </form>

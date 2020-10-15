@@ -8,10 +8,10 @@
         <thead class="thead-light">
           <tr>
             {% if request.user|has_perm('SystemManager') %}
-            <th class="text-center">Title.</th>
-            <th class="text-center">Content.</th>
-            <th class="text-center">Announcer.</th>
-            <th class="text-center">Release Time.</th>
+            <th class="text-center">{{trans("Title")}}</th>
+            <th class="text-center">{{trans("Content")}}</th>
+            <th class="text-center">{{trans("Announcer")}}</th>
+            <th class="text-center">{{trans("Release Time")}}</th>
             <th class="text-center">
               {% if request.user|has_perm('SystemManager') %}
               <div class="add">
@@ -26,10 +26,10 @@
               {% endif %}
             </th>
             {% else %}
-            <th class="text-center">Title.</th>
-            <th class="text-center">Content.</th>
-            <th class="text-center">Announcer.</th>
-            <th class="text-center">Release Time.</th>
+            <th class="text-center">Title</th>
+            <th class="text-center">Content</th>
+            <th class="text-center">Announcer</th>
+            <th class="text-center">Release Time</th>
             {% endif %}
           </tr>
         </thead>
@@ -129,7 +129,7 @@
                       class="btn btn-primary"
                       data-dismiss="modal"
                     >
-                      OK
+                      {{trans("OK")}}
                     </button>
                   </div>
                 </div>
@@ -138,7 +138,7 @@
           </tr>
           {% else %}
           <tr>
-            <td class="text-center" colspan="5">No News.</td>
+            <td class="text-center" colspan="5">{{trans("No News")}}</td>
           </tr>
           {% endfor %}
         </tbody>

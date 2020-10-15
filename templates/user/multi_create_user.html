@@ -53,10 +53,10 @@
 </script>
 {% endblock %} {% block path %}
 <li class="breadcrumb-item" aria-current="page">
-  <a href="{{ url('user_list') }}">User List</a>
+  <a href="{{ url('user_list') }}">{{trans("User List")}}</a>
 </li>
 <li class="breadcrumb-item active" aria-current="page">
-  User Create（Multiple）
+  {{trans("User Create")}}（{{trans("Multiple")}}）
 </li>
 {% endblock %} {% block content %}
 <main class="multi-create-user-form">
@@ -71,10 +71,10 @@
           />
 
           <div class="card">
-            <div class="card-header">Multiple Create User.</div>
+            <div class="card-header">{{trans("Multiple Create User")}}</div>
 
             <div class="card-body">
-              <h5 class="subtitle mb-2 text-muted">Upload File.</h5>
+              <h5 class="subtitle mb-2 text-muted">{{trans("Upload File")}}</h5>
               <div class="input-group">
                 <div class="custom-file">
                   <input
@@ -86,7 +86,7 @@
                     onchange="file_not_empty()"
                   />
                   <label class="custom-file-label" for="users_file"
-                    >Select .xls and .xlsx file</label
+                    >{{trans("Select .xls and .xlsx file")}}</label
                   >
                 </div>
                 <div class="input-group-append">
@@ -112,7 +112,7 @@
               </script>
 
               <h5 class="subtitle mb-2 text-muted">
-                Privilege.<span
+                {{trans("Privilege")}}<span
                   id="privilege_invalid"
                   class="privilege_invalid"
                 ></span>
@@ -129,7 +129,7 @@
                         <i class="fa fa-gears"></i>
                       </button>
                       <ul class="dropdown-menu">
-                        <li>Privilege Setting.</li>
+                        <li>{{trans("Privilege Setting")}}</li>
                         {% for privilege in privileges.values() %}
                         <li>
                           <input type="checkbox" id="{{ privilege.value.0 }}"
@@ -145,21 +145,20 @@
                 </div>
               </div>
 
-              <h5 class="card-subtitle mb-2 text-muted">File Criteria.</h5>
+              <h5 class="card-subtitle mb-2 text-muted">{{trans("File Criteria")}}</h5>
               <p class="card-text" style="color: red">
-                &ast;Field Order：Account／Name／Identity
+                &ast;{{trans("Field Order")}}：{{trans("Account")}}／{{trans("Name")}}／{{trans("Identity")}}
               </p>
               <p class="card-text" style="color: red">
-                &ast;Account do not accept these specific characters： ' or " or
-                ; or \ or / or , or # or *
+                &ast;{{trans("Account do not accept these specific characters")}}： ' {{trans("or")}} " {{trans("or")}} ; {{trans("or")}} \ {{trans("or")}} / {{trans("or")}} , {{trans("or")}} # {{trans("or")}} *
               </p>
 
-              <h5 class="card-subtitle mb-2 text-muted">Tips.</h5>
+              <h5 class="card-subtitle mb-2 text-muted">{{trans("Tips")}}</h5>
               <p class="card-text mark">
-                <strong>identity.</strong><br />
-                1 -> Visitor<br />
-                2 -> Student<br />
-                3 -> Teacher<br />
+                <strong>{{trans("Identity")}}</strong><br />
+                1 -> {{trans("Visitor")}}<br />
+                2 -> {{trans("Student")}}<br />
+                3 -> {{trans("Teacher")}}<br />
               </p>
 
               <div class="dropdown-divider"></div>
@@ -170,7 +169,7 @@
                   class="btn btn-secondary"
                   onclick="history.go(-1)"
                 >
-                  Cancel
+                {{trans("Cancel")}}
                 </button>
               </div>
             </div>
