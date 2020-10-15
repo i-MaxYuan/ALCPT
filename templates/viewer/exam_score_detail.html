@@ -2,10 +2,10 @@
 
 {% block path %}
 <li class="breadcrumb-item" aria-current="page">
-    <a href="{{ url('exam_score_list') }}">View Testee Score</a>
+    <a href="{{ url('exam_score_list') }}">{{trans("View Testee Score")}}</a>
 </li>
 <li class="breadcrumb-item active" aria-current="page">
-    View - {{ exam.name }}
+    {{trans("View")}} - {{ exam.name }}
 </li>
 {% endblock %}
 
@@ -14,13 +14,13 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-6">
-                <h2>{{ exam.name }}.</h2>
+                <h2>{{ exam.name }}</h2>
                 <div class="table-responsive" style="height: 65vh">
                     <table class="table table-hover">
                         <thead class="thead-light">
-                            <th class="text-center">ID.</th>
-                            <th class="text-center">Name.</th>
-                            <th class="text-center">Score.</th>
+                            <th class="text-center">{{trans("Account ID")}}</th>
+                            <th class="text-center">{{trans("Name")}}</th>
+                            <th class="text-center">{{trans("Score")}}</th>
                             <th class="text-right"></th>
                         </thead>
 
@@ -90,7 +90,7 @@
                 {% endautoescape %}
             </div>
             <div class="float-right">
-                <button class="btn btn-primary" onclick="history.go(-1)">OK</button>
+                <button class="btn btn-primary" onclick="history.go(-1)">{{trans("OK")}}</button>
             </div>
         </div>
     </div>

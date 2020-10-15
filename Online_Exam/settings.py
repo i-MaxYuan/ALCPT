@@ -42,6 +42,7 @@ INSTALLED_APPS = (
 
 MIDDLEWARE = (
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -65,6 +66,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.i18n',
             ],
             'autoescape':
             True,
@@ -123,7 +125,7 @@ CAPTCHA_BACKGROUND_COLOR = 'white'  # 驗證碼顏色
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+
 
 TIME_ZONE = 'Asia/Taipei'
 
@@ -135,6 +137,19 @@ USE_L10N = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
+
+
+
+
+LANGUAGES = {
+    ('en-us', 'English'),
+    ('zh', '中文繁體'),
+}
+LANGUAGE_CODE = 'zh'#'en-us'
+LOCALE_PATHS = [
+os.path.join(BASE_DIR, 'locale'),
+]
+
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [

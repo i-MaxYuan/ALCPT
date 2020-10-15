@@ -1,0 +1,499 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-10-10 08:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+
+msgid "Welcome to ALCPT Online Platform"
+msgstr "歡迎來到ALCPT線上測驗平台"
+
+msgid  "SystemManager"
+msgstr "系統管理員"
+
+msgid "User List"
+msgstr "使用者列表"
+
+msgid "TestManager"
+msgstr "考試管理員"
+
+msgid  "TBManager"
+msgstr "題庫管理員"
+
+msgid  "TBOperator"
+msgstr "題庫操作員"
+
+msgid  "Viewer"
+msgstr "成績檢閱者"
+
+msgid  "Testee"
+msgstr "受測者"
+
+msgid  "Unit List"
+msgstr "單位列表"
+
+msgid  "ReportCategory List"
+msgstr "問題類別列表"
+
+msgid  "User Response Handling"
+msgstr "使用者問題處理進度"
+
+msgid  "Exam List"
+msgstr "測驗列表"
+
+msgid  "TestPaper List"
+msgstr "試卷列表"
+
+msgid  "Testee Group List"
+msgstr "受測者群組列表"
+
+msgid  "Question List"
+msgstr "試題列表"
+
+msgid  "Question Review"
+msgstr "審核試題"
+
+msgid  "Create Listening Question"
+msgstr "建立聽力試題"
+
+msgid  "Create Reading Question"
+msgstr "建立閱讀試題"
+
+msgid  "View Testee Score"
+msgstr "測驗成績列表"
+
+msgid  "Favorite Question"
+msgstr "問題收藏本"
+
+msgid  "Exam Record"
+msgstr "測驗紀錄"
+
+msgid  "Score Record"
+msgstr "成績紀錄"
+
+msgid  "Listening Practice"
+msgstr "聽力練習"
+
+msgid  "Reading Practice"
+msgstr "閱讀練習"
+
+msgid  "User"
+msgstr "使用者"
+
+msgid  "Profile"
+msgstr "檢視個人資料"
+
+msgid  "Edit Profile"
+msgstr "更新個人資料"
+
+msgid  "Email"
+msgstr "電子郵件"
+
+msgid  "Password Change"
+msgstr "更改密碼"
+
+msgid  "Real Exam Record"
+msgstr "真實成績紀錄"
+
+msgid  "Report"
+msgstr "問題回報"
+
+msgid  "About"
+msgstr "關於系統"
+
+msgid  "Logout"
+msgstr "登出"
+
+msgid  "Login"
+msgstr "登入"
+
+msgid  "Notification Center"
+msgstr "通知中心"
+
+msgid  "Read"
+msgstr "已讀"
+
+msgid  "Delete"
+msgstr "刪除"
+
+msgid  "Cancel"
+msgstr "取消"
+
+msgid  "Total"
+msgstr "總計"
+
+msgid  "Password Reset"
+msgstr "重設密碼"
+
+msgid  "Account ID"
+msgstr "學號"
+
+msgid  "Profile"
+msgstr "個人資料"
+
+msgid  "Edit Profile"
+msgstr "編輯個人資料"
+
+msgid  "Title"
+msgstr "主題"
+
+msgid  "Content"
+msgstr "內容"
+
+msgid  "Proclamation Create"
+msgstr "創建公告"
+
+msgid  "Proclamation Title"
+msgstr "公告主題"
+
+msgid  "Proclamation Content"
+msgstr "公告內容"
+
+msgid  "Submit"
+msgstr "提交"
+
+msgid  "Reset"
+msgstr "重置"
+
+msgid  "OK"
+msgstr "關閉"
+
+msgid  "Proclamation Edit"
+msgstr "編輯公告"
+
+msgid  "Update"
+msgstr "更新"
+
+msgid  "Announcer"
+msgstr "發佈人"
+
+msgid  "Release Time"
+msgstr "發佈時間"
+
+msgid  "User Create"
+msgstr "創建使用者"
+
+msgid  "Single"
+msgstr "單人"
+
+msgid  "Reg ID"
+msgstr "註冊ID"
+
+msgid  "Register ID"
+msgstr "註冊ID"
+
+msgid  "Identity"
+msgstr "身份"
+
+msgid  "Choose Identity"
+msgstr "選擇身份"
+
+msgid  "Privilege"
+msgstr "權限"
+
+msgid  "Privilege Setting"
+msgstr "權限設定"
+
+msgid  "Multiple Creation"
+msgstr "創建多人"
+
+msgid  "Create Student"
+msgstr "創建學生"
+
+msgid  "Student ID"
+msgstr "學生ID"
+
+msgid  "Department"
+msgstr "科系"
+
+msgid  "Choose"
+msgstr "選擇"
+
+msgid  "Choose Department"
+msgstr "選擇科系"
+
+msgid  "Choose Squadron"
+msgstr "選擇中隊"
+
+msgid  "Squadron"
+msgstr "中隊"
+
+msgid  "User Edit"
+msgstr "編輯使用者"
+
+msgid  "Photo"
+msgstr "照片"
+
+msgid  "Name"
+msgstr "名字"
+
+msgid  "Gender"
+msgstr "性別"
+
+msgid  "Male"
+msgstr "男生"
+
+msgid  "Female"
+msgstr "女生"
+
+msgid  "Privacy"
+msgstr "隱私"
+
+msgid  "Last login"
+msgstr "最後登入"
+
+msgid  "Create time"
+msgstr "創建時間"
+
+msgid  "Student"
+msgstr "學生"
+
+msgid  "User Photo"
+msgstr "使用者照片"
+
+msgid  "Choose Gender"
+msgstr "選擇性別"
+
+msgid  "Grade"
+msgstr "年級"
+
+msgid  "grade"
+msgstr "年級"
+
+msgid  "Status"
+msgstr "狀態"
+
+msgid  "active"
+msgstr "活躍"
+
+msgid  "staff"
+msgstr "員工"
+
+msgid  "superuser"
+msgstr "超級使用者"
+
+msgid  "Required"
+msgstr "必填"
+
+msgid  "All"
+msgstr "全部"
+
+msgid  " Not logged in "
+msgstr "沒有登入"
+
+msgid  "Account"
+msgstr "帳號"
+
+msgid  "Multiple"
+msgstr "多人"
+
+msgid  "Multiple Create User"
+msgstr "創建多個使用者"
+
+msgid  "Upload File"
+msgstr "上傳檔案"
+
+msgid  "Select .xls and .xlsx file"
+msgstr "選擇 .xls 或 .xlsx 的檔案"
+
+msgid  "File Criteria"
+msgstr "檔案準則"
+
+msgid  "Visitor"
+msgstr "訪客"
+
+msgid  "Teacher"
+msgstr "老師"
+
+msgid  "Tips"
+msgstr "提示"
+
+msgid  "Field Order"
+msgstr "領域順序"
+
+msgid  "Account do not accept these specific characters"
+msgstr "帳號不接受這些特定字元"
+
+msgid "or"
+msgstr "或"
+
+msgid "Edit Unit"
+msgstr "編輯單位"
+
+msgid "Unit Name"
+msgstr "單位名稱"
+
+msgid "Department List"
+msgstr "科系列表"
+
+msgid "Serial"
+msgstr "序列"
+
+msgid "No Data"
+msgstr "沒有資料"
+
+msgid "Squadron List"
+msgstr "中隊列表"
+
+msgid "Search"
+msgstr "搜尋"
+
+msgid "Create Unit"
+msgstr "創建單位"
+
+msgid "Unit"
+msgstr "單位"
+
+msgid "Choose the Unit"
+msgstr "選擇單位"
+
+msgid "Enter the name of the unit"
+msgstr "輸入單位名稱"
+
+msgid "View Profile"
+msgstr "觀看個人資料 "
+
+msgid "Unset"
+msgstr "尚未設定"
+
+msgid "Student Profile"
+msgstr "學生個人資料"
+
+msgid "Home"
+msgstr "首頁"
+
+msgid "ReportCategory Create"
+msgstr "創建問題回報類別"
+
+msgid "ReportCategory Name"
+msgstr "問題回報類別名稱"
+
+msgid "Report List"
+msgstr "問題回報列表"
+
+msgid "Replying"
+msgstr "回覆"
+
+msgid "Question Content"
+msgstr "試題"
+
+msgid "Your browser does not support the audio tag"
+msgstr "您的瀏覽器不支援這個音檔"
+
+msgid "Supplement Note"
+msgstr "反映事項"
+
+msgid "Solved"
+msgstr "已解決"
+
+msgid "Reply"
+msgstr "回覆"
+
+msgid "No message"
+msgstr "沒有資料"
+
+msgid "Comment"
+msgstr "評論"
+
+msgid "Choice"
+msgstr "選項"
+
+msgid "Processing"
+msgstr "處理中"
+
+msgid "Close"
+msgstr "關閉"
+
+msgid "ReportCategory Detail"
+msgstr "問題類別細節"
+
+msgid "Report Category"
+msgstr "問題回報類別"
+
+msgid "Serial Number"
+msgstr "序列號碼"
+
+msgid "State"
+msgstr "狀態"
+
+msgid "ReportCategory Edit"
+msgstr "問題回報編輯"
+
+msgid "Number"
+msgstr "數量"
+
+msgid "Responsibility"
+msgstr "責任歸屬"
+
+msgid "Category ID"
+msgstr "類別ID"
+
+msgid "View Report Detail"
+msgstr "查看問題回報資料"
+
+msgid "What is your problem"
+msgstr "您要反映的問題"
+
+msgid "Describe your situation what happened"
+msgstr "描述你描述你的狀況問題"
+
+msgid "Category"
+msgstr "種類"
+
+msgid "Time"
+msgstr "時間"
+
+msgid "No News"
+msgstr "沒有公告"
+
+msgid "View"
+msgstr "測驗成績"
+
+msgid "Score"
+msgstr "成績"
+
+msgid "Exam Score List"
+msgstr "考試成績列表"
+
+msgid "Start Time"
+msgstr "開始時間"
+
+msgid "Average"
+msgstr "平均"
+
+msgid "Finish Time"
+msgstr "結束時間"
+
+msgid "Duration"
+msgstr "考試時間"
+
+msgid "min"
+msgstr "分鐘"
+
+msgid "View Testee Info"
+msgstr "查看測驗者資料"
+
+msgid "Exam Name"
+msgstr "測驗名稱"
+
+msgid "Last Login"
+msgstr "最後登入時間"
+
+
+##msgid  ""
+##msgstr ""
+##{{trans("Identity")}}
+##{{trans("")}}

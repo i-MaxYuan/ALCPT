@@ -19,9 +19,9 @@
 </script>
 {% endblock %} {% block path %}
 <li class="breadcrumb-item" aria-current="page">
-  <a href="{{ url('unit_list') }}">Unit List</a>
+  <a href="{{ url('unit_list') }}">{{trans("Unit List")}}</a>
 </li>
-<li class="breadcrumb-item active" aria-current="page">Edit Unit</li>
+<li class="breadcrumb-item active" aria-current="page">{{trans("Edit Unit")}}"</li>
 {% endblock %} {% block content %}
 <main class="unit-edit-form">
   <div class="container">
@@ -34,11 +34,11 @@
             value="{{ csrf_token }}"
           />
           <div class="card">
-            <div class="card-header">Unit Edit.</div>
+            <div class="card-header">{{trans("Edit Unit")}}</div>
 
             <div class="card-body">
               <h5 class="card-subtitle mb-2 text-muted">
-                Unit Name.<label id="invalid"></label>
+                {{trans("Unit Name")}}<label id="invalid"></label>
               </h5>
               <p class="card-text">
                 <input
@@ -58,14 +58,14 @@
                   class="btn btn-primary"
                   disabled
                 >
-                  Update
+                {{trans("Update")}}
                 </button>
                 <button
                   type="button"
                   class="btn btn-secondary"
                   onclick="self.location=document.referrer;"
                 >
-                  Cancel
+                {{trans("Cancel")}}
                 </button>
               </div>
             </div>
