@@ -1,49 +1,34 @@
 {% extends 'new_base.html' %} {% block path %}
 <li class="breadcrumb-item" aria-current="page">
-  <a href="{{ url('testee_group_list') }}">Testee Group List</a>
+    <a href="{{ url('testee_group_list') }}">Testee Group List</a>
 </li>
 <li class="breadcrumb-item active" aria-current="page">Testee Group Create</li>
 
 {% endblock %} {% block content %}
 <main class="testee-group-create">
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-lg-8">
-        <form method="post">
-          <input
-            type="hidden"
-            name="csrfmiddlewaretoken"
-            value="{{ csrf_token }}"
-          />
-          <div class="card">
-            <div class="card-header">Testee Group Create.</div>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <form method="post">
+                    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
+                    <div class="card">
+                        <div class="card-header">Testee Group Create.</div>
 
-            <div class="card-body">
-              <h5 class="card-subtitle mb-2 text-muted">Name.</h5>
-              <input
-                class="form-control"
-                type="text"
-                name="group_name"
-                onkeyup="data_unique({{ groups_names }}, this)"
-                placeholder="Enter the group name..."
-                required
-              />
-              <p class="card-text"></p>
-              <div class="text-center">
-                <button type="submit" class="btn btn-primary">Submit</button>
-                <button
-                  type="button"
-                  class="btn btn-secondary"
-                  onclick="self.location=document.referrer;"
-                >
-                  Cancel
-                </button>
-              </div>
+                        <div class="card-body">
+                            <h5 class="card-subtitle mb-2 text-muted">Name.</h5>
+                            <input class="form-control" type="text" name="group_name" onkeyup="data_unique({{ groups_names }}, this)" placeholder="Enter the group name..." required />
+                            <p class="card-text"></p>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                                <button type="button" class="btn btn-secondary" onclick="self.location=document.referrer;">
+                                    Cancel
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </div>
-          </div>
-        </form>
-      </div>
+        </div>
     </div>
-  </div>
 </main>
 {% endblock %}

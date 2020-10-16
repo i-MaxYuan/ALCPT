@@ -1,29 +1,14 @@
-{% extends 'new_base.html' %} {% block scripts %}
-<script>
-    function toggle(index) {
-        var angle_right_btnIndex = "angle_right_btn_" + index;
-        var angle_right_btn = document.getElementById(angle_right_btnIndex);
-        var dataIndex = "detailData" + index;
-        var data = document.getElementById(dataIndex);
-        var iconRightIndex = "iconRight" + index;
-        var iconRight = document.getElementById(iconRightIndex);
-        var iconDownIndex = "iconDown" + index;
-        var iconDown = document.getElementById(iconDownIndex);
+{% extends 'new_base.html' %}
 
-        if (data.style.display === "none") {
-            angle_right_btn.innerHTML = '<i class="fa fa-angle-down"></i>';
-            data.style.display = "table-row";
-            iconRight.style.display = "none";
-            iconDown.style.display = "block";
-        } else {
-            angle_right_btn.innerHTML = '<i class="fa fa-angle-right"></i>';
-            data.style.display = "none";
-            iconRight.style.display = "block";
-            iconDown.style.display = "none";
-        }
-    }
-</script>
-{% endblock %} {% block path %}
+{% block stylesheets %}
+<link rel="stylesheet" type="text/css" href="{{ static('/css/testee/answersheet_content.css') }}" />
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ static('/javascript/toggle.js') }}"></script>
+{% endblock %}
+
+{% block path %}
 <li class="breadcrumb-item" aria-current="page">
     <a href="{{ url('testee_score_list') }}">Score List</a>
 </li>
@@ -53,14 +38,14 @@
                                                     <h5 class="modal-title" id="ModalLongTitle">Tips</h5>
                                                 </div>
 
-                                                <div class="modal-body" style="font-size: 20px">
+                                                <div class="modal-body">
                                                     <ul>
                                                         <li>
                                                             <p>
                                                                 If your <u>answer is correct</u>, then it will
                                                                 display only one color in all choices and there
                                                                 will display
-                                                                <i class="fa fa-check" style="color: green"></i>
+                                                                <i class="fa fa-check"></i>
                                                                 behind the question.
                                                             </p>
                                                         </li>
@@ -69,7 +54,7 @@
                                                                 If you <u>didn't answer the question</u>, then
                                                                 it will display only one color in all choices
                                                                 and also display
-                                                                <i class="fa fa-question" style="color: red"></i>
+                                                                <i class="fa fa-question"></i>
                                                                 behind the question.
                                                             </p>
                                                         </li>
@@ -78,20 +63,19 @@
                                                                 The question has been reported as an error, but
                                                                 after processing by the TBManager, then it will
                                                                 display
-                                                                <i class="fa fa-exclamation-circle" style="color: red"></i>
+                                                                <i class="fa fa-exclamation-circle"></i>
                                                                 behind the question.
                                                             </p>
                                                         </li>
                                                         <li>
                                                             <p style="color: red">
-                                                                Red color means your selected the wrong answer
+                                                                Red color means you selected the wrong answer
                                                                 on the exam.
                                                             </p>
                                                         </li>
                                                         <li>
                                                             <p style="color: green">
-                                                                Green color means the sentence is correct but
-                                                                you miss it.
+                                                                Green color means the correct answer.
                                                             </p>
                                                         </li>
                                                         <li>
@@ -142,20 +126,20 @@
                                 <td class="text-right">
                                     <!-- <p>{{ answer.question.difficulty | readable_question_difficulty }}</p> -->
                                     {% if answer.question.state == 5 %}
-                                    <i class="fa fa-exclamation-circle" style="color: red; font-size: 25px; padding-right: 23px"></i>
+                                    <i class="fa fa-exclamation-circle"></i>
                                     {% elif answer.selected == -1 %}
-                                    <i class="fa fa-question" style="color: red; font-size: 25px; padding-right: 23px"></i>
+                                    <i class="fa fa-question"></i>
                                     {% else %}
                                     {% if question_correction %}
-                                    <i class="fa fa-check" style="color: green; font-size: 25px;padding-right: 23px"></i>
+                                    <i class="fa fa-check"></i>
                                     {% else %}
-                                    <i class="fa fa-times" style="color: red; font-size: 25px; padding-right: 23px"> </i>
+                                    <i class="fa fa-times"></i>
                                     {% endif %}
                                     {% endif %}
                                     {% if favorite %}
-                                    <a href="{{ url('favorite_question', args=[answer.question.id, answersheet.id]) }}"><i class="fas fa-heart" style="color: red; font-size: 25px; padding-right: 20px;"></i></a>
+                                    <a href="{{ url('favorite_question', args=[answer.question.id, answersheet.id]) }}"><i class="fas fa-heart"></i></a>
                                     {% else %}
-                                    <a href="{{ url('favorite_question', args=[answer.question.id, answersheet.id]) }}"><i class="far fa-heart" style="color: red; font-size: 25px; padding-right: 20px;"></i></a>
+                                    <a href="{{ url('favorite_question', args=[answer.question.id, answersheet.id]) }}"><i class="far fa-heart"></i></a>
                                     {% endif %}
                                 </td>
                             </tr>
@@ -204,25 +188,25 @@
 
                     <tbody>
                         <tr>
-                            <td class="text-center" data-title="Type">你的成績：</td>
-                            <td class="text-left" data-title="Type">{{ answersheet.score }}</td>
+                            <td class="text-center">你的成績：</td>
+                            <td class="text-left">{{ answersheet.score }}</td>
                         </tr>
                         {% if answersheet.exam.exam_type == 1 and testee_count > 1%}
                         <tr>
-                            <td class="text-center" data-title="Type">平均分數：</td>
-                            <td class="text-left" data-title="Type">{{ exam_average_score }}</td>
+                            <td class="text-center">本次測驗總平均：</td>
+                            <td class="text-left">{{ exam_average_score }}</td>
                         </tr>
                         <tr>
-                            <td class="text-center" data-title="Type">考生人數：</td>
-                            <td class="text-left" data-title="Type">{{ testee_count }}</td>
+                            <td class="text-center">考生人數：</td>
+                            <td class="text-left">{{ testee_count }}</td>
                         </tr>
                         <tr>
-                            <td class="text-center" data-title="Type">名次：</td>
-                            <td class="text-left" data-title="Type">{{ rank }}</td>
+                            <td class="text-center">名次：</td>
+                            <td class="text-left">{{ rank }}</td>
                         </tr>
                         <tr>
-                            <td class="text-center" data-title="Type"">PR：</td>
-                            <td class=" text-left" data-title="Type" style="color: #c12e2a">{{ PR }}</td>
+                            <td class="text-center">PR：</td>
+                            <td class=" text-left">{{ PR }}</td>
                         </tr>
                         {% endif %}
 
@@ -241,11 +225,5 @@
     </div>
 
 </main>
-<style>
-    .testee-score-list table>thead>tr>th,
-    .testee-score-list table>tbody>tr>td {
-        text-align: center;
-        vertical-align: middle;
-    }
-</style>
+
 {% endblock %}

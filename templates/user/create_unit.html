@@ -1,31 +1,10 @@
-{% extends 'new_base.html' %} {% block scripts %}
-<script type="text/javascript">
-    function is_selected() {
-        var unitName = document.getElementById("unit_name");
-        var unit = document.getElementById("unit");
+{% extends 'new_base.html' %}
 
-        if (unit.value === "department" || unit.value === "squadron") {
-            unitName.disabled = false;
-        } else {
-            unitName.disabled = true;
-        }
-    }
+{% block scripts %}
+<script src="{{ static('/javascript/user/create_unit.js') }}"></script>
+{% endblock %}
 
-    function valid_name(input_unit) {
-        var invalid = document.getElementById("invalid");
-        var submit = document.getElementById("submit");
-
-        if (input_unit.value === "") {
-            invalid.innerHTML =
-                "<span style='color: red; font-size: 14px'>Require</span>";
-            submit.disabled = true;
-        } else {
-            invalid.innerHTML = "";
-            submit.disabled = false;
-        }
-    }
-</script>
-{% endblock %} {% block path %}
+{% block path %}
 <li class="breadcrumb-item" aria-current="page">
     <a href="{{ url('unit_list') }}">{{trans("Unit List")}}</a>
 </li>

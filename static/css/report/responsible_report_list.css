@@ -1,0 +1,8 @@
+.responsible-report-list .container {
+    height: 70vh;
+}
+
+.responsible-report-list .container table>tbody>tr {
+    cursor: pointer;
+    opacity: 0.6;
+}

@@ -21,15 +21,13 @@
                             <h5>TestPaper Name.</h5>
                             <input class="form-control" type="text" name="testpaper_name" value="{{ testpaper.name }}" />
 
-                            {% for question_type, question_type_count,
-              selected_question_type_num in testpaper_data %}
+                            {% for question_type, question_type_count, selected_question_type_num in testpaper_data %}
                             <div class="card text-center m-1">
                                 <div class="card-header">{{ question_type.value.1 }}</div>
 
                                 <div class="card-body">
                                     <p class="card-context">
-                                        Total: {{ question_type_count }}，Selected: {{
-                    selected_question_type_num }}
+                                        Total: {{ question_type_count }}，Selected: {{ selected_question_type_num }}
                                     </p>
                                 </div>
 

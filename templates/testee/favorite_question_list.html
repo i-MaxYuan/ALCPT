@@ -1,30 +1,11 @@
 {% extends 'new_base.html' %}
 
-{% block scripts %}
-<script>
-    function toggle(index) {
-        var angle_right_btnIndex = 'angle_right_btn_' + index;
-        var angle_right_btn = document.getElementById(angle_right_btnIndex);
-        var dataIndex = 'detailData' + index;
-        var data = document.getElementById(dataIndex);
-        var iconRightIndex = 'iconRight' + index;
-        var iconRight = document.getElementById(iconRightIndex);
-        var iconDownIndex = 'iconDown' + index;
-        var iconDown = document.getElementById(iconDownIndex);
+{% block stylesheets %}
+<link rel="stylesheet" type="text/css" href="{{ static('/css/testee/favorite_question_list.css') }}" />
+{% endblock %}
 
-        if (data.style.display === "none") {
-            angle_right_btn.innerHTML = '<i class="fa fa-angle-down"></i>';
-            data.style.display = "table-row";
-            iconRight.style.display = "none";
-            iconDown.style.display = "block";
-        } else {
-            angle_right_btn.innerHTML = '<i class="fa fa-angle-right"></i>';
-            data.style.display = "none";
-            iconRight.style.display = "block";
-            iconDown.style.display = "none";
-        }
-    }
-</script>
+{% block scripts %}
+<script src="{{ static('/javascript/toggle.js') }}"></script>
 {% endblock %}
 
 {% block path %}
@@ -40,7 +21,7 @@
                 <form class="form-inline md-form form-group-sm mt-0" method="get">
                     <input class="form-control" type="text" name="question_content" {% if keywords.question_content %}value="{{ keywords.question_content }}" {% else %}value="" {% endif %} placeholder="Search" aria-label="Search">
 
-                    <label class="mr-sm-2" for="inlineFormCustomSelect" style="padding-left: 10px">Type.</label>
+                    <label class="mr-sm-2" for="inlineFormCustomSelect">Type.</label>
                     <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" name="question_type" style="padding-right: 5px">
                         <option value="" selected>Select All.</option>
                         {% for q_type in question_types %}
@@ -50,7 +31,7 @@
 
 
                     {% if request.user|has_perm('Testee') %}
-                    <label class="mr-sm-2" for="inlineFormCustomSelect">Difficulty.</label>
+                    <label class="mr-sm-2" for="inlineFormCustomSelect">Difficulty</label>
                     <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" name="difficulty">
                         <option value="" selected>Select All</option>
                         {% for difficulty in difficulty_choices %}
@@ -73,8 +54,8 @@
                         <thead class="thead-light">
                             <tr>
                                 <th></th>
-                                <th scope="col">Serial.</th>
-                                <th scope="col">Content.</th>
+                                <th scope="col">Serial</th>
+                                <th scope="col">Content</th>
                                 <th scope="col" class="text-right">
                                     <button type="button" class="btn" data-toggle="modal" data-target="#promptContent">
                                         <i class="fa fa-question-circle"></i>
@@ -86,39 +67,16 @@
                                                     <h5 class="modal-title" id="ModalLongTitle">Tips</h5>
                                                 </div>
 
-                                                <div class="modal-body" style="font-size: 20px">
+                                                <div class="modal-body">
                                                     <ul>
                                                         <li>
-                                                            <p>
-                                                                If your <u>answer is correct</u>, then it will display only one color in all choices and
-                                                                there will display <i class="fa fa-check" style="color: green"></i> behind the question.
-                                                            </p>
-                                                        </li>
-                                                        <li>
-                                                            <p>
-                                                                If you <u>didn't answer the question</u>, then it will display only one color in all choices and
-                                                                also display <i class="fa fa-question" style="color: red"></i> behind the question.
-                                                            </p>
-                                                        </li>
-                                                        <li>
-                                                            <p>
-                                                                The question has been reported as an error, but after processing by the TBManager, then it will
-                                                                display <i class="fa fa-exclamation-circle" style="color: red"></i> behind the question.
-                                                            </p>
-                                                        </li>
-                                                        <li>
-                                                            <p style="color: red">
-                                                                Red color means your selected the wrong answer on the exam.
-                                                            </p>
-                                                        </li>
-                                                        <li>
                                                             <p style="color: green">
-                                                                Green color means the sentence is correct but you miss it.
+                                                                Green color means the correct answer.
                                                             </p>
                                                         </li>
                                                         <li>
                                                             <p>
-                                                                If you think there is a problem with the question, you can click <i class="fa fa-exclamation-triangle"></i> to report it.
+                                                                If you have any problem with the question, you can click <i class="fa fa-exclamation-triangle"></i> to report it.
                                                             </p>
                                                         </li>
                                                     </ul>
@@ -156,7 +114,7 @@
                                 </td>
                                 <td class="text-right">
 
-                                    <a href="{{ url('favorite_question_delete', args=[favorite_question.id]) }}"><i class="fas fa-heart" style="color: red; font-size: 25px; padding-left: 10px;"></i></a>
+                                    <a href="{{ url('favorite_question_delete', args=[favorite_question.id]) }}"><i class="fas fa-heart"></i></a>
                                 </td>
                             </tr>
 
@@ -175,9 +133,9 @@
                                 </td>
                                 <td class="text-right">
                                     {% if favorite_question.state == 5 %}
-                                    <i class="fa fa-exclamation-triangle" style="cursor: pointer;" onclick="alert('This question had been modified.')"></i>
+                                    <i class="fa fa-exclamation-triangle" onclick="alert('This question had been modified.')"></i>
                                     {% else %}
-                                    <i class="fa fa-exclamation-triangle" style="cursor: pointer;" onclick="window.location.href='{{ url('report_question', args=[favorite_question.id]) }}'"></i>
+                                    <i class="fa fa-exclamation-triangle" onclick="window.location.href='{{ url('report_question', args=[favorite_question.id]) }}'"></i>
                                     {% endif %}
                                 </td>
                             </tr>
@@ -193,11 +151,5 @@
         </div>
     </div>
 </main>
-<style>
-    .testee-score-list table>thead>tr>th,
-    .testee-score-list table>tbody>tr>td {
-        text-align: center;
-        vertical-align: middle;
-    }
-</style>
+
 {% endblock %}

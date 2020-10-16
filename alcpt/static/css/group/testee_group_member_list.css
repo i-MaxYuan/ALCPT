@@ -1,0 +1,4 @@
+.testee-group-member-list .table-responsive table>thead>tr>th,
+.testee-group-member-list .table-responsive table>tbody>tr>td {
+    text-align: center;
+}

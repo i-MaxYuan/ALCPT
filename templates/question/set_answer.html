@@ -1,86 +1,60 @@
-{% extends 'new_base.html' %} {% block path %}
+{% extends 'new_base.html' %}
+
+{% block path %}
 <li class="breadcrumb-item" aria-current="page">
-  Create {% if kind == 'listening' %}Listening {% else %}Reading {% endif
-  %}（Single）
+    Create {% if kind == 'listening' %}Listening {% else %}Reading {% endif %}（Single）
 </li>
 <li class="breadcrumb-item active" aria-current="page">Set Answer</li>
-{% endblock %} {% block content %}
+{% endblock %}
+
+{% block content %}
 <main class="set-answer-form">
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-md-12">
-        <form method="post">
-          <input
-            type="hidden"
-            name="csrfmiddlewaretoken"
-            value="{{ csrf_token }}"
-          />
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                <form method="post">
+                    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
 
-          <div class="card">
-            <div class="card-header">Set Answer</div>
+                    <div class="card">
+                        <div class="card-header">Set Answer</div>
 
-            <div class="card-body">
-              <h5 class="card-subtitle mb-2 text-muted">Question Content.</h5>
-              <p class="card-text">
-                {% if reading_question %} {{
-                reading_question.q_content|linebreaksbr }} {% elif
-                listening_question %}
-                <audio controls preload="none">
-                  <source
-                    src="{{ listening_question.q_file }}"
-                    type="audio/mpeg"
-                  />
-                  Your browser does not support the audio tag.
-                </audio>
-                {% endif %}
-              </p>
+                        <div class="card-body">
+                            <h5 class="card-subtitle mb-2 text-muted">Question Content.</h5>
+                            <p class="card-text">
+                                {% if reading_question %} {{ reading_question.q_content|linebreaksbr }} {% elif listening_question %}
+                                <audio controls preload="none">
+                                    <source src="{{ listening_question.q_file }}" type="audio/mpeg" />
+                                    Your browser does not support the audio tag.
+                                </audio>
+                                {% endif %}
+                            </p>
 
-              <h5 class="card-subtitle mb-2 text-muted">Set Answer.</h5>
-              <ol type="A">
-                <p class="card-text">
-                  <li>
-                    <input
-                      type="radio"
-                      name="is_answer"
-                      id="is_answer"
-                      value="{{ option1.id }}"
-                    />{{ option1 }}
-                  </li>
-                  <li>
-                    <input
-                      type="radio"
-                      name="is_answer"
-                      id="is_answer"
-                      value="{{ option2.id }}"
-                    />{{ option2 }}
-                  </li>
-                  <li>
-                    <input
-                      type="radio"
-                      name="is_answer"
-                      id="is_answer"
-                      value="{{ option3.id }}"
-                    />{{ option3 }}
-                  </li>
-                  <li>
-                    <input
-                      type="radio"
-                      name="is_answer"
-                      id="is_answer"
-                      value="{{ option4.id }}"
-                    />{{ option4 }}
-                  </li>
-                </p>
-              </ol>
+                            <h5 class="card-subtitle mb-2 text-muted">Set Answer.</h5>
+                            <ol type="A">
+                                <p class="card-text">
+                                    <li>
+                                        <input type="radio" name="is_answer" id="is_answer" value="{{ option1.id }}" />{{ option1 }}
+                                    </li>
+                                    <li>
+                                        <input type="radio" name="is_answer" id="is_answer" value="{{ option2.id }}" />{{ option2 }}
+                                    </li>
+                                    <li>
+                                        <input type="radio" name="is_answer" id="is_answer" value="{{ option3.id }}" />{{ option3 }}
+                                    </li>
+                                    <li>
+                                        <input type="radio" name="is_answer" id="is_answer" value="{{ option4.id }}" />{{ option4 }}
+                                    </li>
+                                </p>
+                            </ol>
 
-              <div>
-                <button type="submit" class="btn btn-primary">Submit</button>
-              </div>
+                            <div>
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </div>
-          </div>
-        </form>
-      </div>
+        </div>
     </div>
-  </div>
 </main>
 {% endblock %}

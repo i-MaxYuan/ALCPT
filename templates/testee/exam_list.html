@@ -1,14 +1,22 @@
-{% extends 'new_base.html' %} {% block path %}
+{% extends 'new_base.html' %}
+
+{% block stylesheets %}
+<link rel="stylesheet" type="text/css" href="{{ static('/css/testee/exam_list.css') }}" />
+{% endblock %}
+
+{% block path %}
 <li class="breadcrumb-item active" aria-current="page">Exam Record</li>
-{% endblock %} {% block content %}
+{% endblock %}
+
+{% block content %}
 <main class="exam-record">
     <div class="container">
         <ul class="nav nav-tabs" id="newTab" role="tablist">
             <li class="nav-item">
-                <a class="nav-link active" id="practice-tab" data-toggle="tab" href="#practice" role="tab" aria-controls="practice" aria-selected="true">Practice.</a>
+                <a class="nav-link active" id="practice-tab" data-toggle="tab" href="#practice" role="tab" aria-controls="practice" aria-selected="true">Practice</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" id="exam-tab" data-toggle="tab" href="#exam" role="tab" aria-controls="exam" aria-selected="false">Exam.</a>
+                <a class="nav-link" id="exam-tab" data-toggle="tab" href="#exam" role="tab" aria-controls="exam" aria-selected="false">Exam</a>
             </li>
         </ul>
 
@@ -17,15 +25,15 @@
                 <div class="container">
                     <div class="row justify-content-center">
                         <div class="col-md-12">
-                            <h2>Practice Record List.</h2>
+                            <h2>Practice Record List</h2>
 
                             <div class="table-responsive-md">
                                 <table class="table table-hover table-bordered table-striped table-mc-light-blue">
                                     <thead class="thead-light">
                                         <tr>
-                                            <th class="text-center">Name.</th>
-                                            <th class="text-center">Type.</th>
-                                            <th class="text-center">Other.</th>
+                                            <th class="text-center">Name</th>
+                                            <th class="text-center">Type</th>
+                                            <th class="text-center">Other</th>
                                         </tr>
                                     </thead>
 
@@ -53,7 +61,7 @@
                                         </tr>
                                         {% else %}
                                         <tr>
-                                            <td class="text-center" colspan="3">No Data.</td>
+                                            <td class="text-center" colspan="3">No Data</td>
                                         </tr>
                                         {% endfor %}
                                     </tbody>
@@ -120,9 +128,5 @@
         </div>
     </div>
 </main>
-<style>
-    .exam-record .container #tabContent table>tbody>tr>td {
-        vertical-align: middle;
-    }
-</style>
+
 {% endblock %}

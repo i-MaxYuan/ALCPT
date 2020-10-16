@@ -1,72 +1,57 @@
-{% extends 'new_base.html' %} {% block path %}
+{% extends 'new_base.html' %}
+
+{% block stylesheets %}
+<link rel="stylesheet" type="text/css" href="{{ static('/css/report/report_category_list.css') }}" />
+{% endblock %}
+
+{% block path %}
 <li class="breadcrumb-item active" aria-current="page">
-  {{trans("User Response Handling")}}
+    {{trans("User Response Handling")}}
 </li>
 {% endblock %} {% block content %}
 <main class="responsible-report-list">
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-lg-12 col-md-8 col-sm-5 col-xs-2">
-        <h2>{{trans("User Response Handling")}}</h2>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-12 col-md-8 col-sm-5 col-xs-2">
+                <h2>{{trans("User Response Handling")}}</h2>
 
-        <div class="table-responsive-md">
-          <table
-            class="table table-hover table-bordered table-striped table-mc-light-blue"
-          >
-            <thead class="thead-light">
-              <tr>
-                <th class="text-center">{{trans("Category")}}</th>
-                <th class="text-center">{{trans("Content")}}</th>
-                <th class="text-center">{{trans("State")}}</th>
-                <th class="text-center">{{trans("Time")}}</th>
-              </tr>
-            </thead>
+                <div class="table-responsive-md">
+                    <table class="table table-hover table-bordered table-striped table-mc-light-blue">
+                        <thead class="thead-light">
+                            <tr>
+                                <th class="text-center">{{trans("Category")}}</th>
+                                <th class="text-center">{{trans("Content")}}</th>
+                                <th class="text-center">{{trans("State")}}</th>
+                                <th class="text-center">{{trans("Time")}}</th>
+                            </tr>
+                        </thead>
 
-            <tbody>
-              {% if reports %} {% for report in reports %}
-              <tr
-                {%
-                if
-                report.staff_notification
-                %}style="opacity: 1"
-                {%
-                endif
-                %}
-                onclick="window.location.href='{{ url('report_reply', args=[report.id]) }}'"
-              >
-                <td class="text-center" data-title="Category">
-                  {{ report.category }}
-                </td>
-                <td class="text-center" data-title="Content">
-                  {{ report.supplement_note|safe|summary(51) }}
-                </td>
-                <td class="text-center" data-title="State">
-                  {{ report.state|readable_report_state }}
-                </td>
-                <td class="text-center" data-title="Time">
-                  {{ report.created_time.strftime('%Y年%m月%d日, %H時%M分') }}
-                </td>
-              </tr>
-              {% endfor %} {% else %}
-              <tr>
-                <td colspan="4" class="text-center">{{trans("No Data")}}</td>
-              </tr>
-              {% endif %}
-            </tbody>
-          </table>
+                        <tbody>
+                            {% if reports %} {% for report in reports %}
+                            <tr {% if report.staff_notification %}style="opacity: 1" {% endif %} onclick="window.location.href='{{ url('report_reply', args=[report.id]) }}'">
+                                <td class="text-center" data-title="Category">
+                                    {{ report.category }}
+                                </td>
+                                <td class="text-center" data-title="Content">
+                                    {{ report.supplement_note|safe|summary(51) }}
+                                </td>
+                                <td class="text-center" data-title="State">
+                                    {{ report.state|readable_report_state }}
+                                </td>
+                                <td class="text-center" data-title="Time">
+                                    {{ report.created_time.strftime('%Y年%m月%d日, %H時%M分') }}
+                                </td>
+                            </tr>
+                            {% endfor %} {% else %}
+                            <tr>
+                                <td colspan="4" class="text-center">{{trans("No Data")}}</td>
+                            </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 </main>
-
-<style>
-  .responsible-report-list .container {
-    height: 70vh;
-  }
-  .responsible-report-list .container table > tbody > tr {
-    cursor: pointer;
-    opacity: 0.6;
-  }
-</style>
 {% endblock %}

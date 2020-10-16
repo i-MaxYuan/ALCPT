@@ -1,4 +1,10 @@
-{% extends 'new_base.html' %} {% block path %}
+{% extends 'new_base.html' %}
+
+{% block stylesheets %}
+<link rel="stylesheet" type="text/css" href="{{ static('/css/report/reply.css') }}" />
+{% endblock %}
+
+{% block path %}
 <li class="breadcrumb-item" aria-current="page">
     <a href="{{ url('responsible_report_list', args=[permission]) }}">{{trans("Report List")}}</a>
 </li>
@@ -22,7 +28,7 @@
                             {% if replying_report.question.q_file %}
                             <audio controls preload="none">
                                 <source src="{{ replying_report.question.q_file.url }}" type="audio/mpeg" />{{trans("Your browser does not support the audio tag")}}
-                                
+
                             </audio>
                             {% else %}
                             <div>{{ replying_report.question.q_content|linebreaksbr }}</div>
@@ -63,7 +69,7 @@
                 </div>
 
                 <div class="col-lg-7">
-                    <div class="card" style="height: 75vh">
+                    <div class="card">
                         <div class="card-header">{{trans("Reply")}}</div>
 
                         <div id="reply-content" class="card-body">
@@ -108,11 +114,7 @@
                         </div>
                     </div>
                 </div>
-                <style>
-                    #reply-content {
-                        overflow-x: scroll;
-                    }
-                </style>
+
             </div>
         </div>
     </div>

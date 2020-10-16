@@ -1,0 +1,115 @@
+.i {
+    padding-right: 5px;
+}
+
+.header nav {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .04);
+    background-color: #4ccabd;
+}
+
+.modal {
+    outline: none;
+}
+
+.modal a {
+    outline: none;
+    text-decoration: none;
+}
+
+.modal #modal-menu button {
+    width: 100%;
+    text-align: left;
+    padding: 14px;
+    padding-left: 40%;
+    color: #2c3232;
+    background-color: #fff;
+    border: none;
+    outline: none;
+}
+
+.modal #modal-menu button:active {
+    width: 100%;
+    padding: 14px;
+    padding-left: 40%;
+    color: #2c3232;
+    background-color: rgb(200, 200, 200);
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-bottom-color: rgb(250, 250, 250);
+    outline: none;
+}
+
+.modal #modal-menu button>i.fas {
+    padding-right: 5px;
+    color: default;
+}
+
+.modal #modal-menu table>tbody>tr>td>h3 {
+    font-weight: 200;
+}
+
+.modal #modal-menu button::-moz-focus-inner,
+[type="button"]::-moz-focus-inner,
+[type="reset"]::-moz-focus-inner,
+[type="submit"]::-moz-focus-inner {
+    padding: 0;
+    border-style: none;
+}
+
+.modal #modal-menu .modal-footer .btn.btn-secondary {
+    color: white;
+}
+
+.modal .custom {
+    margin: 0px;
+}
+
+.notification-custom {
+    width: 15px;
+    height: 15px;
+    background-color: red;
+    border-radius: 24px;
+    color: white;
+    text-align: center;
+}
+
+i.fas {
+    padding-right: 5px;
+}
+
+.fa-users {
+    color: darkkhaki;
+}
+
+.fa-school {
+    color: darkcyan;
+}
+
+.fa-heart {
+    color: red;
+}
+
+.fa-comment-dots,
+.fa-file-contract {
+    color: grey;
+}
+
+.fa-file-signature {
+    color: darksalmon;
+}
+
+.fa-file-alt,
+.fa-list,
+.a-list-ol,
+.fa-headphones-alt,
+.fa-tasks {
+    padding-right: 5px;
+}
+
+.fa-layer-group {
+    color: darkblue;
+}
+
+.fa-tasks {
+    color: blue;
+}

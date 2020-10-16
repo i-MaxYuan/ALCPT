@@ -1,16 +1,20 @@
-{% extends 'new_profile_base.html' %} {% block path %}
+{% extends 'new_profile_base.html' %}
+
+{% block stylesheets %}
+<link rel="stylesheet" type="text/css" href="{{ static('/css/registration/edit_profile.css') }}" />
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ static('/javascript/registration/edit_profile.js') }}"></script>
+{% endblock %}
+
+
+{% block path %}
 <li class="breadcrumb-item" aria-current="page">
     <a href="{{ url('profile') }}">Profile</a>
 </li>
 <li class="breadcrumb-item active" aria-current="page">Update Profile</li>
 {% endblock %} {% block content %}
-<style>
-    #edit_profile {
-        color: rgb(150, 150, 150);
-        opacity: 0.3;
-    }
-</style>
-
 <main class="edit-user-form">
     <form enctype="multipart/form-data" action="{{ url('profile_edit') }}" method="post">
         <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
@@ -19,7 +23,7 @@
             {% if user.student %}
             <div class="row">
                 <div class="col-lg-4">
-                    <div class="card mb-3" style="height: 95%">
+                    <div class="card mb-3">
                         <div class="card-header">User Photo.</div>
 
                         {% if user.photo %}
@@ -46,15 +50,14 @@
 
                         <div class="card-body">
                             <p class="card-text">
-                                <textarea class="form-control" rows="4" name="introduction" placeholder="Introduce yourself...">
-{% if user.introduction %}{{ user.introduction }}{% endif %}</textarea>
+                                <textarea class="form-control" rows="4" name="introduction" placeholder="Introduce yourself..."> {% if user.introduction %}{{ user.introduction }}{% endif %}</textarea>
                             </p>
                         </div>
                     </div>
                 </div>
 
                 <div class="col-lg-5">
-                    <div class="card mb-3" style="height: 95%">
+                    <div class="card mb-3">
                         <div class="card-header">User Profile.</div>
 
                         <div class="card-body text-left">
@@ -74,7 +77,7 @@
                             </p>
 
                             <h5 class="card-subtitle mb-2 text-muted">
-                                Email.{% if user.email_is_verified %}<i class="fa fa-check-circle" style="color: green"></i>{% endif %}
+                                Email.{% if user.email_is_verified %}<i class="fa fa-check-circle"></i>{% endif %}
                             </h5>
                             <p class="card-text">
                                 {% if user.email %} {{ user.email }} {% else %} Unset {% endif
@@ -122,9 +125,9 @@
                         </div>
 
                         <div class="card-footer text-muted">
-                            <span style="font-size: 12px">Last login - {{ user.last_login }}<br /></span>
-                            <span style="font-size: 12px">Create time - {{ user.created_time }}<br /></span>
-                            <span style="font-size: 12px">
+                            <span>Last login - {{ user.last_login }}<br /></span>
+                            <span>Create time - {{ user.created_time }}<br /></span>
+                            <span>
                                 Status - {% if user.is_active %} active {% elif user.is_staff %}
                                 staff {% elif user.is_superuser %} superuser {% endif %}
                             </span>
@@ -132,12 +135,12 @@
                     </div>
                 </div>
 
-                <div class="col-lg-3 ">
-                    <div class="card lg-3" style="height: 95%">
-                        <div class="card-header">Student Profile.</div>
+                <div class="col-lg-3">
+                    <div class="card mb-3">
+                        <div class="card-header">Student Profile</div>
 
                         <div class="card-body text-left">
-                            <h5 class="card-subtitle mb-2 text-muted">Student ID.</h5>
+                            <h5 class="card-subtitle mb-2 text-muted">Student ID</h5>
                             <h4 class="card-text">{{ user.student.stu_id }}</h4>
 
                             <h5 class="card-subtitle mb-2 text-muted">
@@ -176,11 +179,11 @@
                             </p>
                         </div>
 
-                        <div class="card-footer text-right">
-                            <button type="submit" class="btn btn-primary" id="submit" style="font-size: 12px">
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-primary" id="submit">
                                 Update
                             </button>
-                            <button type="button" class="btn btn-secondary" style="font-size: 12px" onclick="self.location=document.referrer;">
+                            <button type="button" class="btn btn-secondary" onclick="self.location=document.referrer;">
                                 Cancel
                             </button>
                         </div>
@@ -190,7 +193,7 @@
             {% else %}
             <div class="row">
                 <div class="col-lg-4">
-                    <div class="card mb-3" style="height: 95%">
+                    <div class="card mb-3">
                         <div class="card-header">User Photo.</div>
 
                         {% if user.photo %}
@@ -210,7 +213,7 @@
                 </div>
 
                 <div class="col-lg-8">
-                    <div class="card mb-3" style="height: 95%">
+                    <div class="card mb-3">
                         <div class="card-header">User Profile.</div>
 
                         <div class="card-body text-left">
@@ -230,7 +233,7 @@
                             </p>
 
                             <h5 class="card-subtitle mb-2 text-muted">
-                                Email.{% if user.email_is_verified %}<i class="fa fa-check-circle" style="color: green"></i>{% endif %}
+                                Email.{% if user.email_is_verified %}<i class="fa fa-check-circle"></i>{% endif %}
                             </h5>
                             <p class="card-text">
                                 {% if user.email %} {{ user.email }} {% else %} Unset {% endif
@@ -276,18 +279,18 @@
                         </div>
 
                         <div class="card-footer text-muted">
-                            <span style="font-size: 12px">Last login - {{ user.last_login }}<br /></span>
-                            <span style="font-size: 12px">Create time - {{ user.created_time }}<br /></span>
-                            <span style="font-size: 12px">
+                            <span>Last login - {{ user.last_login }}<br /></span>
+                            <span>Create time - {{ user.created_time }}<br /></span>
+                            <span>
                                 Status - {% if user.is_active %} active {% elif user.is_staff %}
                                 staff {% elif user.is_superuser %} superuser {% endif %}
                             </span>
 
                             <div class="text-right">
-                                <button type="submit" id="submit" class="btn btn-primary" style="font-size: 12px">
+                                <button type="submit" id="submit" class="btn btn-primary">
                                     Update
                                 </button>
-                                <button type="button" class="btn btn-secondary" style="font-size: 12px" onclick="self.location=document.referrer;">
+                                <button type="button" class="btn btn-secondary" onclick="self.location=document.referrer;">
                                     Cancel
                                 </button>
                             </div>
