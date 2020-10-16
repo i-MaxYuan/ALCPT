@@ -1,143 +1,10 @@
-{% extends 'new_base.html' %} {% block scripts %}
-<script type="text/javascript">
-    var passRegId = false;
-    var passIdentity = false;
-    var passPrivilege = true;
-    var passStuID = false;
+{% extends 'new_base.html' %}
 
-    function valid_ID(input) {
-        var invalid_id = document.getElementById("invalid_id");
+{% block scripts %}
+<script src="{{ static('/javascript/user/create_user.js') }}"></script>
+{% endblock %}
 
-        if (input.value === "") {
-            invalid_id.innerHTML =
-                "<span style='color: red; font-size: 14px'>Required</span>";
-            invalid_id.style.display = "block";
-            passRegId = false;
-        } else if (input.value.length <= 8) {
-            invalid_id.innerHTML =
-                "<span style='color: red; font-size: 14px'>ID is too short.</span>";
-            invalid_id.style.display = "block";
-            passRegId = false;
-        } else {
-            invalid_id.innerHTML = "";
-            invalid_id.style.display = "none";
-            passRegId = true;
-        }
-        data_valid();
-    }
-
-    function valid_stuID(input) {
-        var invalid_stu_id = document.getElementById("invalid_stu_id");
-
-        if (input.value === "") {
-            invalid_stu_id.innerHTML =
-                "<span style='color: red; font-size: 14px'>Required</span>";
-            invalid_stu_id.style.display = "block";
-            passStuID = false;
-        } else if (input.value.length <= 8) {
-            invalid_stu_id.innerHTML =
-                "<span style='color: red; font-size: 14px'>ID is too short.</span>";
-            invalid_stu_id.style.display = "block";
-            passStuID = false;
-        } else {
-            invalid_stu_id.innerHTML = "";
-            invalid_stu_id.style.display = "none";
-            passStuID = true;
-        }
-        data_valid();
-    }
-
-
-    // Checkout whether privilege is empty.
-    function privilege_not_empty() {
-        var privilegeInvalid = document.getElementById("privilege_invalid");
-        var system = document.getElementById("SystemManager");
-        var testM = document.getElementById("TestManager");
-        var tbM = document.getElementById("TBManager");
-        var tbO = document.getElementById("TBOperator");
-        var viewer = document.getElementById("Viewer");
-        var testee = document.getElementById("Testee");
-
-        if (
-            system.checked === false &&
-            testM.checked === false &&
-            tbM.checked === false &&
-            tbO.checked === false &&
-            viewer.checked === false &&
-            testee.checked === false
-        ) {
-            privilegeInvalid.innerHTML =
-                "<span style='color: red; font-size: 14px'>Choose one privilege at least.</span>";
-            privilegeInvalid.style.display = "block";
-            passPrivilege = false;
-        } else {
-            privilegeInvalid.innerHTML = "";
-            privilegeInvalid.style.display = "none";
-            passPrivilege = true;
-        }
-        data_valid();
-    }
-
-    function is_student() {
-        var stuID = document.getElementById("stu_id");
-        var department = document.getElementById("department");
-        var squadron = document.getElementById("squadron");
-        var grade = document.getElementById("grade");
-        var identity = document.getElementById("identity");
-
-        if (identity.value === "2") {
-            stuID.disabled = false;
-            department.disabled = false;
-            squadron.disabled = false;
-            grade.disabled = false;
-            passIdentity = true;
-        } else {
-            stuID.disabled = true;
-            stuID.value = "";
-            department.disabled = true;
-            department.value = "";
-            squadron.disabled = true;
-            squadron.value = "";
-            grade.disabled = true;
-            grade.value = "";
-            passIdentity = true;
-            document.getElementById("invalid_stu_id").innerHTML = "";
-            document.getElementById("invalid_stu_id").style.display = "none";
-        }
-        data_valid();
-    }
-
-    function data_valid() {
-        var submit = document.getElementById("submit");
-        var identity = document.getElementById("identity");
-
-        if (identity.value === "2") {
-            if (
-                passRegId === true &&
-                passIdentity === true &&
-                passPrivilege === true &&
-                passStuID === true
-            ) {
-                submit.disabled = false;
-            } else {
-                submit.disabled = true;
-            }
-        } else if (identity.value === "1" || identity.value === "3") {
-            if (
-                passRegId === true &&
-                passIdentity === true &&
-                passPrivilege === true
-            ) {
-                submit.disabled = false;
-            } else {
-                submit.disabled = true;
-            }
-        } else {
-            submit.disabled = true;
-        }
-    }
-</script>
-{% endblock %} {% block path %}
+{% block path %}
 <li class="breadcrumb-item" aria-current="page">
     <a href="{{ url('user_list') }}">{{trans("User List")}}</a>
 </li>
@@ -155,7 +22,7 @@
                         <div class="card-header">{{trans("User Create")}}</div>
                         <div class="card-body">
                             <div class="form-group row">
-                                <label for="reg_id" class="col-md-4 col-form-label text-md-right">{{trans("Reg ID")}}\</label>
+                                <label for="reg_id" class="col-md-4 col-form-label text-md-right">{{trans("Reg ID")}}</label>
                                 <div class="col-md-6">
                                     <input class="form-control" type="text" id="reg_id" name="reg_id" placeholder="{{trans("Register ID")}}..." onkeyup="valid_ID(this)" required />
                                     <label class="unique_id" id="invalid_id" style="display: none"></label>
@@ -190,10 +57,8 @@
                                                         <li>{{trans("Privilege Setting")}}</li>
                                                         {% for privilege in privileges %}
                                                         <li>
-                                                            <input type="checkbox" id="{{ privilege.value.1
-                              }}" name="{{ privilege }}" onclick="privilege_not_empty()" {% if privilege ==
-                              privilege.Testee %} checked {% endif %}>&nbsp;{{
-                              privilege.value.1 }}
+                                                            <input type="checkbox" id="{{ privilege.value.1 }}" name="{{ privilege }}" onclick="privilege_not_empty()" {% if privilege == privilege.Testee %} checked
+                                                                {% endif %}>&nbsp;{{ privilege.value.1 }}
                                                         </li>
                                                         {% endfor %}
                                                     </ul>

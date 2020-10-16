@@ -1,0 +1,7 @@
+#reply-content {
+    overflow-x: scroll;
+}
+
+.col-lg-7 .card {
+    height: 75vh;
+}

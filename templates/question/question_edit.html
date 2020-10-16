@@ -1,10 +1,14 @@
-{% extends 'new_base.html' %} {% block path %}
+{% extends 'new_base.html' %}
+
+{% block path %}
 <li class="breadcrumb-item" aria-current="page">
     <a {% if request.user|has_perm('TBManager') %}href="{{ url('question_review') }}">Review{% else %}href="{{ url('tboperator_question_list') }}">Question List{% endif %}
     </a>
 </li>
 <li class="breadcrumb-item active" aria-current="page">Question Edit</li>
-{% endblock %} {% block content %}
+{% endblock %}
+
+{% block content %}
 <main class="question-edit-form">
     <div class="container">
         <div class="row justify-content-center">
@@ -39,12 +43,7 @@
                                 <p class="card-text">
                                     {% for choice in question.choice_set.all() %}
                                     <li>
-                                        <input type="radio" name="answer_choice" value="{{ choice.id }}" {%
-                      if
-                      choice.is_answer
-                      %}checked{%
-                      endif
-                      %} />&nbsp;{{ choice }}
+                                        <input type="radio" name="answer_choice" value="{{ choice.id }}" {% if choice.is_answer %}checked{% endif %} />&nbsp;{{ choice }}
                                     </li>
                                     {% endfor %}
                                 </p>

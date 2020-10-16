@@ -1,0 +1,23 @@
+.testee-score-list table>thead>tr>th,
+.testee-score-list table>tbody>tr>td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.modal-body {
+    font-size: 20px;
+}
+
+.fa-heart {
+    color: red;
+    font-size: 25px;
+    padding-left: 10px;
+}
+
+.fa-exclamation-triangle {
+    cursor: pointer;
+}
+
+.testee-score-list label {
+    padding-left: 10px;
+}

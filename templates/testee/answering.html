@@ -1,27 +1,20 @@
-{% extends 'new_base.html' %} {% block path %}
+{% extends 'new_base.html' %}
+
+{% block stylesheets %}
+<link rel="stylesheet" type="text/css" href="{{ static('/css/testee/answering.css') }}" />
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ static('/javascript/testee/answering.js') }}"></script>
+{% endblock %}
+
+
+{% block path %}
 <li class="breadcrumb-item active" aria-current="page">Answering...</li>
-{% endblock %} {% block content %}
-<script type="text/javascript">
-    function checkTime() {
-        var now = new Date();
-        var h = now.getHours(); //小時
-        var m = now.getMinutes(); //分鐘
-        if (({
-                {
-                    hour
-                }
-            } - h == 0) && ({
-                {
-                    minute
-                }
-            } - m <= 0)) {
-            alert("Time's up");
-            document.location.href = "{{ url('testee_settle_exam', args=[exam.id]) }}";
-        }
-        setTimeout(checkTime, 1000); //每間隔1秒就呼叫自已一次
-    }
-    checkTime();
-</script>
+{% endblock %}
+
+{% block content %}
+
 <main class="answering-page">
     <div class="container-fluid">
         <div class="row justify-content-center">
@@ -32,15 +25,15 @@
                         {% for answer in answers %}
                         <td>
                             {% if answer.selected != -1 and answer.id == selected_answer.id%}
-                            <div class="bit" style="background-color: dimgrey">
+                            <div class="bit one">
                                 <a href=" {{ url('testee_answering', args=[exam.id, answer.id]) }}">{{ loop.index }}</a>
                             </div>
                             {% elif answer.selected != -1 %}
-                            <div class="bit" style="background-color: darkgrey">
+                            <div class="bit two">
                                 <a href=" {{ url('testee_answering', args=[exam.id, answer.id]) }}">{{ loop.index }}</a>
                             </div>
                             {% elif answer.id == selected_answer.id %}
-                            <div class="bit" style="background-color: lightblue">
+                            <div class="bit three">
                                 <a href=" {{ url('testee_answering', args=[exam.id, answer.id]) }}">{{ loop.index }}</a>
                             </div>
                             {% else %}
@@ -62,21 +55,21 @@
                 <form action="{{ url('testee_answering', args=[exam.id, answer.id]) }}" method="post">
                     <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
 
-                    <table style="font-size: 24px">
+                    <table>
                         <tr>
                             {% if answer.question.q_type|question_kind == 'listening' %}
-                            <td style="text-align: left; vertical-align: middle">
+                            <td>
                                 <audio controls preload="none">
                                     <source src="{{ answer.question.q_file.url }}" type="audio/mpeg" />
                                     Your browser does not support the audio tag.
                                 </audio>
                             </td>
                             {% elif answer.question.q_type|question_kind == 'reading' %}
-                            <td style="vertical-align: middle; text-align: left">
+                            <td>
                                 {{ answer.question }}
                             </td>
                             {% else %}
-                            <td style="vertical-align: middle; text-align: center">
+                            <td>
                                 Unknown
                             </td>
                             {% endif %}
@@ -88,9 +81,9 @@
                                 {% for option in answer.question.choice_set.all() %}
 
                                 {% if loop.index == answer.selected %}
-                                <button type="submit" class="btn btn-primary btn-lg btn-block" name="answer_{{ answer.id }}" value="{{ loop.index }}" style="text-align: left; border-radius: 30px">{{ loop.index }}. {{ option }} </button>
+                                <button type="submit" class="btn btn-primary btn-lg btn-block" name="answer_{{ answer.id }}" value="{{ loop.index }}">{{ loop.index }}. {{ option }} </button>
                                 {% else %}
-                                <button type="submit" class="btn btn-outline-primary btn-lg btn-block" name="answer_{{ answer.id }}" value="{{ loop.index }}" style="text-align: left; border-radius: 30px">{{ loop.index }}. {{ option }} </button>
+                                <button type="submit" class="btn btn-outline-primary btn-lg btn-block" name="answer_{{ answer.id }}" value="{{ loop.index }}">{{ loop.index }}. {{ option }} </button>
                                 {% endif %}
 
                                 {% endfor %}
@@ -103,9 +96,9 @@
                 </form>
                 <div class="col-md-6">
                     {% if answer_count == 0 %}
-                    <button type="submit" class="btn btn-outline-success" style="cursor: pointer; float:right; margin: 10px" onclick="window.location.href='{{ url('submit_answersheet', args=[exam.id]) }}'">Submit</button>
+                    <button type="submit" class="btn btn-outline-success" onclick="window.location.href='{{ url('submit_answersheet', args=[exam.id]) }}'">Submit</button>
                     {% endif %}
-                    <button type="button" class="btn btn-secondary" style="cursor: pointer; float:right; margin: 10px" onclick="window.location.href='{{ url('testee_exam_list') }}'">
+                    <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ url('testee_exam_list') }}'">
                         Leave
                     </button>
                 </div>
@@ -113,27 +106,5 @@
         </div>
     </div>
 </main>
-<style>
-    .answering-page .col-md-4 .card .card-body table>tr>td {
-        text-align: center;
-    }
 
-    .bit {
-        text-align: center;
-        vertical-align: middle;
-
-        width: 25px;
-        height: 25px;
-
-        border-style: solid;
-        border-width: 1px;
-        border-color: rgb(240, 240, 240);
-
-        background-color: rgb(250, 250, 250);
-    }
-
-    .bit a {
-        text-decoration: none;
-    }
-</style>
 {% endblock %}

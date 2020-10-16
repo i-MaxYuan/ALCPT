@@ -1,0 +1,37 @@
+#sidebar .container .row {
+    height: 76vh;
+}
+
+#sidebar nav>ul {
+    display: inline;
+    font-size: 20px;
+    padding: 2px;
+}
+
+#sidebar nav>ul>li {
+    padding: 10px;
+}
+
+#sidebar nav>ul>li>a {
+    text-decoration: none;
+    color: white;
+}
+
+#sidebar nav>ul>li>a:hover {
+    background-color: rgb(108, 117, 125);
+    opacity: 0.1;
+}
+
+.testpaper-content .container table {
+    width: 100%;
+}
+
+.testpaper-content .container table>thead>tr>th,
+.testpaper-content .container table>tbody>tr>td {
+    text-align: center;
+}
+
+#data-content {
+    height: 76vh;
+    overflow-x: scroll;
+}

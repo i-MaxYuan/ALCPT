@@ -1,40 +1,17 @@
-{% extends 'new_base.html' %} {% block scripts %}
-<script type="text/javascript">
-    function selectAll() {
-        //變數checkItem為checkbox的集合
-        var checkItem = document.getElementsByName("testee");
-        for (var i = 0; i < checkItem.length; i++) {
-            checkItem[i].checked = true;
-        }
-    }
+{% extends 'new_base.html' %}
 
-    function cancelAll() {
-        //變數checkItem為checkbox的集合
-        var checkItem = document.getElementsByName("testee");
-        for (var i = 0; i < checkItem.length; i++) {
-            checkItem[i].checked = false;
-        }
-    }
+{% block scripts %}
+<script src="{{ static('/javascript/group/testee_group_edit.js') }}"></script>
+{% endblock %}
 
-    function reverseSelect() {
-        //變數checkItem為checkbox的集合
-        var checkItem = document.getElementsByName("testee");
-        for (var i = 0; i < checkItem.length; i++) {
-            checkItem[i].checked = !checkItem[i].checked;
-        }
-    }
-
-    function selectRow(row) {
-        var firstInput = row.getElementsByTagName("input")[0];
-        firstInput.checked = !firstInput.checked;
-    }
-</script>
-{% endblock %} {% block path %}
+{% block path %}
 <li class="breadcrumb-item" aria-current="page">
     <a href="{{ url('testee_group_list') }}" onclick="return confirm('Sure to leave and abandon editing？')">Testee Group List</a>
 </li>
 <li class="breadcrumb-item active">Testee Group Edit - {{ group.name }}</li>
-{% endblock %} {% block content %}
+{% endblock %}
+
+{% block content %}
 <main class="testee-group-edit-form">
     <div class="container">
         <div class="row justify-content-center">

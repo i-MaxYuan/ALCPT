@@ -1,269 +1,124 @@
-{% extends 'new_base.html' %} {% block scripts %}
-<script>
-  var clickNum = 1;
+{% extends 'new_base.html' %}
 
-  function toggle(index) {
-    var mainDataIndex = "mainData" + index;
-    var mainData = document.getElementById(mainDataIndex);
-    var dataIndex = "detailData" + index;
-    var data = document.getElementById(dataIndex);
-    var iconRightIndex = "iconRight" + index;
-    var iconRight = document.getElementById(iconRightIndex);
-    var iconDownIndex = "iconDown" + index;
-    var iconDown = document.getElementById(iconDownIndex);
-    var summaryIndex = "summary_Q_content" + index;
-    var summary_Q_content = document.getElementById(summaryIndex);
-    var fullIndex = "full_Q_content" + index;
-    var full_Q_content = document.getElementById(fullIndex);
+{% block stylesheets %}
+<link rel="stylesheet" type="text/css" href="{{ static('/css/exam/testpaper_content.css') }}" />
+{% endblock %}
 
-    if (data.style.display === "none") {
-      mainData.style.backgroundColor = "rgb(220, 220, 220, 0.5)";
-      data.style.display = "table-row";
-      iconRight.style.display = "none";
-      iconDown.style.display = "block";
-      summary_Q_content.style.display = "none";
-      full_Q_content.style.display = "block";
-    } else {
-      mainData.style.backgroundColor = "rgb(220, 220, 220, 0)";
-      data.style.display = "none";
-      iconRight.style.display = "block";
-      iconDown.style.display = "none";
-      summary_Q_content.style.display = "block";
-      full_Q_content.style.display = "none";
-    }
-  }
+{% block scripts %}
+<script src="{{ static('/javascript/exam/testpaper_content.js') }}"></script>
+{% endblock %}
 
-  function toggle_visibility(type) {
-    clickNum += 1;
-    var all_types = [
-      "QA",
-      "ShortConversation",
-      "Grammar",
-      "Phrase",
-      "ParagraphUnderstanding",
-    ];
-    if (type === "all") {
-      for (var i = 0; i < all_types.length; i++) {
-        var tmp = document.getElementsByClassName(all_types[i]);
-        for (var j = 0; j < tmp.length; j++) {
-          tmp[j].style.display = "table-row";
-        }
-      }
-    } else {
-      var show_type = document.getElementsByClassName(type);
-
-      for (var i = 0; i < all_types.length; i++) {
-        var tmp = document.getElementsByClassName(all_types[i]);
-        for (var j = 0; j < tmp.length; j++) {
-          tmp[j].style.display = "none";
-        }
-      }
-
-      for (var i = 0; i < show_type.length; i++) {
-        show_type[i].style.display = "table-row";
-      }
-    }
-  }
-
-  function back() {
-    history.go(-clickNum);
-  }
-</script>
-{% endblock %} {% block path %}
+{% block path %}
 <li class="breadcrumb-item" aria-current="page">
-  <a href="{{ url('testpaper_list') }}">TestPaper List</a>
+    <a href="{{ url('testpaper_list') }}">TestPaper List</a>
 </li>
 <li class="breadcrumb-item active" aria-current="page">TestPaper Content</li>
-{% endblock %} {% block content %}
+{% endblock %}
+{% block content %}
 <main class="testpaper-content">
-  <div id="sidebar">
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-lg-3 bg-secondary">
-          <nav>
-            <ul class="nav nav-stacked">
-              <li>
-                <a id="all" href="#" onclick="toggle_visibility('all')">All</a>
-              </li>
-              <li>
-                <a id="QA" href="#QA" onclick="toggle_visibility('QA')"
-                  >Listening/QA</a
-                >
-              </li>
-              <li>
-                <a
-                  id="ShortConversation"
-                  href="#ShortConversation"
-                  onclick="toggle_visibility('ShortConversation')"
-                  >Listening/ShortConversation</a
-                >
-              </li>
-              <li>
-                <a
-                  id="Grammar"
-                  href="#Grammar"
-                  onclick="toggle_visibility('Grammar')"
-                  >Reading/Grammar</a
-                >
-              </li>
-              <li>
-                <a
-                  id="Phrase"
-                  href="#Phrase"
-                  onclick="toggle_visibility('Phrase')"
-                  >Reading/Phrase</a
-                >
-              </li>
-              <li>
-                <a
-                  id="ParagraphUnderstanding"
-                  href="#ParagraphUnderstanding"
-                  onclick="toggle_visibility('ParagraphUnderstanding')"
-                  >Reading/paragraph</a
-                >
-              </li>
-            </ul>
-          </nav>
-        </div>
+    <div id="sidebar">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-3 bg-secondary">
+                    <nav>
+                        <ul class="nav nav-stacked">
+                            <li>
+                                <a id="all" href="#" onclick="toggle_visibility('all')">All</a>
+                            </li>
+                            <li>
+                                <a id="QA" href="#QA" onclick="toggle_visibility('QA')">Listening/QA</a>
+                            </li>
+                            <li>
+                                <a id="ShortConversation" href="#ShortConversation" onclick="toggle_visibility('ShortConversation')">Listening/ShortConversation</a>
+                            </li>
+                            <li>
+                                <a id="Grammar" href="#Grammar" onclick="toggle_visibility('Grammar')">Reading/Grammar</a>
+                            </li>
+                            <li>
+                                <a id="Phrase" href="#Phrase" onclick="toggle_visibility('Phrase')">Reading/Phrase</a>
+                            </li>
+                            <li>
+                                <a id="ParagraphUnderstanding" href="#ParagraphUnderstanding" onclick="toggle_visibility('ParagraphUnderstanding')">Reading/paragraph</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
 
-        <div class="col-lg-9 bg-light">
-          <div class="table-responsive" id="data-content">
-            <table class="table-hover">
-              <thead class="thead-light">
-                <tr>
-                  <th>#</th>
-                  <th>Serial.</th>
-                  <th>Content.</th>
-                  <th>Type.</th>
-                </tr>
-              </thead>
+                <div class="col-lg-9 bg-light">
+                    <div class="table-responsive" id="data-content">
+                        <table class="table-hover">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Serial.</th>
+                                    <th>Content.</th>
+                                    <th>Type.</th>
+                                </tr>
+                            </thead>
 
-              <tbody>
-                {% for question in questions %}
-                <tr
-                  style="cursor: pointer"
-                  id="mainData{{ loop.index }}"
-                  class="{{ question.q_type|question_type_transfer_to_original_data }}"
-                  onclick="toggle('{{ loop.index }}')"
-                >
-                  <td>
-                    <i
-                      id="iconRight{{ loop.index }}"
-                      class="fa fa-angle-right"
-                    ></i>
-                    <i
-                      id="iconDown{{ loop.index }}"
-                      class="fa fa-angle-down"
-                      style="display: none"
-                    ></i>
-                  </td>
+                            <tbody>
+                                {% for question in questions %}
+                                <tr style="cursor: pointer" id="mainData{{ loop.index }}" class="{{ question.q_type|question_type_transfer_to_original_data }}" onclick="toggle('{{ loop.index }}')">
+                                    <td>
+                                        <i id="iconRight{{ loop.index }}" class="fa fa-angle-right"></i>
+                                        <i id="iconDown{{ loop.index }}" class="fa fa-angle-down" style="display: none"></i>
+                                    </td>
 
-                  <td>{{ loop.index }}</td>
+                                    <td>{{ loop.index }}</td>
 
-                  {% if question.q_type|question_kind == 'listening' %}
-                  <td style="text-align: left">
-                    <audio controls preload="none">
-                      <source
-                        src="{{ question.q_file.url }}"
-                        type="audio/mpeg"
-                      />
-                      Your browser does not support the audio tag.
-                    </audio>
-                  </td>
+                                    {% if question.q_type|question_kind == 'listening' %}
+                                    <td style="text-align: left">
+                                        <audio controls preload="none">
+                                            <source src="{{ question.q_file.url }}" type="audio/mpeg" />
+                                            Your browser does not support the audio tag.
+                                        </audio>
+                                    </td>
 
-                  {% elif question.q_type|question_kind == 'reading' %}
-                  <td style="text-align: left">
-                    <div id="summary_Q_content{{ loop.index }}">
-                      {{ question.q_content|summary(70) }}
+                                    {% elif question.q_type|question_kind == 'reading' %}
+                                    <td style="text-align: left">
+                                        <div id="summary_Q_content{{ loop.index }}">
+                                            {{ question.q_content|summary(70) }}
+                                        </div>
+                                        <div id="full_Q_content{{ loop.index }}" style="display: none">
+                                            {{ question.q_content|linebreaksbr }}
+                                        </div>
+                                    </td>
+
+                                    {% else %}
+                                    <td>Unknown</td>
+
+                                    {% endif %}
+
+                                    <td>{{ question.q_type|readable_question_type }}</td>
+                                </tr>
+
+                                <tr id="detailData{{ loop.index }}" style="display: none">
+                                    <td colspan="4" style="padding-left: 30px">
+                                        <ol type="A" style="text-align: left">
+                                            {% for choice in question.choice_set.all() %}
+                                            <li {% if choice.is_answer %}style="color: red" {%  endif %}>
+                                                {{ choice }}
+                                            </li>
+                                            {% endfor %}
+                                        </ol>
+                                    </td>
+                                </tr>
+                                {% else %}
+                                <tr>
+                                    <td colspan="4">No Data.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                        <button type="button" class="btn btn-primary float-right" onclick="back()">
+                            OK
+                        </button>
                     </div>
-                    <div
-                      id="full_Q_content{{ loop.index }}"
-                      style="display: none"
-                    >
-                      {{ question.q_content|linebreaksbr }}
-                    </div>
-                  </td>
-
-                  {% else %}
-                  <td>Unknown</td>
-
-                  {% endif %}
-
-                  <td>{{ question.q_type|readable_question_type }}</td>
-                </tr>
-
-                <tr id="detailData{{ loop.index }}" style="display: none">
-                  <td colspan="4" style="padding-left: 30px">
-                    <ol type="A" style="text-align: left">
-                      {% for choice in question.choice_set.all() %}
-                      <li
-                        {%
-                        if
-                        choice.is_answer
-                        %}style="color: red"
-                        {%
-                        endif
-                        %}
-                      >
-                        {{ choice }}
-                      </li>
-                      {% endfor %}
-                    </ol>
-                  </td>
-                </tr>
-                {% else %}
-                <tr>
-                  <td colspan="4">No Data.</td>
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-
-            <button
-              type="button"
-              class="btn btn-primary float-right"
-              onclick="back()"
-            >
-              OK
-            </button>
-          </div>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
-  <style>
-    #sidebar .container .row {
-      height: 76vh;
-    }
-    #sidebar nav > ul {
-      display: inline;
-      font-size: 20px;
-      padding: 2px;
-    }
-    #sidebar nav > ul > li {
-      padding: 10px;
-    }
-    #sidebar nav > ul > li > a {
-      text-decoration: none;
-      color: white;
-    }
-    #sidebar nav > ul > li > a:hover {
-      background-color: rgb(108, 117, 125);
-      opacity: 0.1;
-    }
 
-    .testpaper-content .container table {
-      width: 100%;
-    }
-    .testpaper-content .container table > thead > tr > th,
-    .testpaper-content .container table > tbody > tr > td {
-      text-align: center;
-    }
-
-    #data-content {
-      height: 76vh;
-      overflow-x: scroll;
-    }
-  </style>
 </main>
 {% endblock %}

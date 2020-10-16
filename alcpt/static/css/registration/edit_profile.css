@@ -1,0 +1,22 @@
+#edit_profile {
+    color: rgb(150, 150, 150);
+    opacity: 0.3;
+}
+
+.card.mb-3 {
+    height: 95%;
+}
+
+.fa-check-circle {
+    color: green;
+}
+
+.card-footer.text-muted {
+    font-size: 12px;
+}
+
+.card-footer>button {
+    text-align: center;
+    font-size: 12px;
+    margin: 5px;
+}

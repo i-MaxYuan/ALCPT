@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <header class="header">
-    <nav class="navbar navbar-expand-lg navbar-light navbar-laravel" color>
+    <nav class="navbar navbar-expand-lg navbar-light navbar-laravel">
         <div class="container">
             <a class="navbar-brand" href="{{ url('Homepage') }}"><i class="fa fa-book"></i>｜ALCPT</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -15,14 +15,14 @@
                             {{ trans("SystemManager") }}
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="{{ url('user_list') }}"><i class="fas fa-users" style="padding-right: 5px; color: darkkhaki"></i>{{ trans("User List") }}</a>
-                            <a class="dropdown-item" href="{{ url('unit_list') }}"><i class="fas fa-school" style="padding-right: 5px; color: darkcyan"></i>{{ trans("Unit List") }}</a>
-                            <a class="dropdown-item" href="{{ url('report_category_list') }}"><i class="fas fa-question" style="padding-right: 5px; color: red"></i>{{ trans("ReportCategory List") }}</a>
+                            <a class="dropdown-item" href="{{ url('user_list') }}"><i class="fas fa-users"></i>{{ trans("User List") }}</a>
+                            <a class="dropdown-item" href="{{ url('unit_list') }}"><i class="fas fa-school"></i>{{ trans("Unit List") }}</a>
+                            <a class="dropdown-item" href="{{ url('report_category_list') }}"><i class="fas fa-question"></i>{{ trans("ReportCategory List") }}</a>
                             {% if request.user|get_SystemManager_report_notification == 0 %}
-                            <a class="dropdown-item" href="{{ url('responsible_report_list', args=['SystemManager']) }}"><i class="fas fa-comment-dots" style="padding-right: 5px; color: grey"></i>{{ trans("User Response Handling") }}</a>
+                            <a class="dropdown-item" href="{{ url('responsible_report_list', args=['SystemManager']) }}"><i class="fas fa-comment-dots"></i>{{ trans("User Response Handling") }}</a>
                             {% else %}
                             <a class="dropdown-item" href="{{ url('responsible_report_list', args=['SystemManager']) }}">
-                                <i class="fas fa-comment-dots" style="padding-right: 5px; color: grey"></i>{{ trans("User Response Handling") }}&ensp;
+                                <i class="fas fa-comment-dots"></i>{{ trans("User Response Handling") }}&ensp;
                                 <label class="notification-badge">{{ request.user|get_SystemManager_report_notification }}</label></a>
                             {% endif %}
 
@@ -34,13 +34,13 @@
                             {{ trans("TestManager") }}
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="{{ url('exam_list') }}"><i class="fas fa-file-signature" style="padding-right: 5px; color: darksalmon"></i>{{ trans("Exam List") }}</a>
-                            <a class="dropdown-item" href="{{ url('testpaper_list') }}"><i class="fas fa-file-alt" style="padding-right: 5px"></i>{{ trans("TestPaper List") }}</a>
-                            <a class="dropdown-item" href="{{ url('testee_group_list') }}"><i class="fas fa-layer-group" style="padding-right: 5px; color: darkblue"></i>{{ trans("Testee Group List") }}</a>
+                            <a class="dropdown-item" href="{{ url('exam_list') }}"><i class="fas fa-file-signature"></i>{{ trans("Exam List") }}</a>
+                            <a class="dropdown-item" href="{{ url('testpaper_list') }}"><i class="fas fa-file-alt"></i>{{ trans("TestPaper List") }}</a>
+                            <a class="dropdown-item" href="{{ url('testee_group_list') }}"><i class="fas fa-layer-group"></i>{{ trans("Testee Group List") }}</a>
                             {% if request.user|get_TestManager_report_notification == 0 %}
-                            <a class="dropdown-item" href="{{ url('responsible_report_list', args=['TestManager']) }}"><i class="fas fa-comment-dots" style="padding-right: 5px; color: grey"></i>{{ trans("User Response Handling") }}</a>
+                            <a class="dropdown-item" href="{{ url('responsible_report_list', args=['TestManager']) }}"><i class="fas fa-comment-dots"></i>{{ trans("User Response Handling") }}</a>
                             {% else %}
-                            <a class="dropdown-item" href="{{ url('responsible_report_list', args=['TestManager']) }}"><i class="fas fa-comment-dots" style="padding-right: 5px; color: grey"></i>{{ trans("User Response Handling") }}&ensp;
+                            <a class="dropdown-item" href="{{ url('responsible_report_list', args=['TestManager']) }}"><i class="fas fa-comment-dots"></i>{{ trans("User Response Handling") }}&ensp;
                                 <label class="notification-badge">{{ request.user|get_SystemManager_report_notification }}</label></a>
                             {% endif %}
                         </div>
@@ -51,12 +51,12 @@
                             {{ trans("TBManager") }}
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="{{ url('tbmanager_question_list') }}"><i class="fas fa-file-contract" style="padding-right: 5px; color: grey"></i>{{ trans("Question List") }}</a>
-                            <a class="dropdown-item" href="{{ url('question_review') }}"><i class="fas fa-list" style="padding-right: 5px"></i>{{ trans("Question Review") }}</a>
+                            <a class="dropdown-item" href="{{ url('tbmanager_question_list') }}"><i class="fas fa-file-contract"></i>{{ trans("Question List") }}</a>
+                            <a class="dropdown-item" href="{{ url('question_review') }}"><i class="fas fa-list"></i>{{ trans("Question Review") }}</a>
                             {% if request.user|get_TBManager_report_notification == 0 %}
-                            <a class="dropdown-item" href="{{ url('responsible_report_list', args=['TBManager']) }}"><i class="fas fa-comment-dots" style="padding-right: 5px; color: grey"></i>{{ trans("User Response Handling") }}</a>
+                            <a class="dropdown-item" href="{{ url('responsible_report_list', args=['TBManager']) }}"><i class="fas fa-comment-dots"></i>{{ trans("User Response Handling") }}</a>
                             {% else %}
-                            <a class="dropdown-item" href="{{ url('responsible_report_list', args=['TBManager']) }}"><i class="fas fa-comment-dots" style="padding-right: 5px; color: grey"></i> {{ trans("User Response Handling") }}&ensp;
+                            <a class="dropdown-item" href="{{ url('responsible_report_list', args=['TBManager']) }}"><i class="fas fa-comment-dots"></i> {{ trans("User Response Handling") }}&ensp;
                                 <label class="notification-badge">{{ request.user|get_TBManager_report_notification }}</label></a>
                             {% endif %}
                         </div>
@@ -67,9 +67,9 @@
                             {{ trans("TBOperator") }}
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="{{ url('tboperator_question_list') }}"><i class="fas fa-list-ol" style="padding-right: 5px"></i>{{ trans("Question List") }}</a>
-                            <a class="dropdown-item" href="{{ url('question_create', args=['listening']) }}"><i class="fas fa-headphones-alt" style="padding-right: 5px"></i>{{ trans("Create Listening Question") }}</a>
-                            <a class="dropdown-item" href="{{ url('question_create', args=['reading']) }}"><i class="fas fa-book" style="padding-right: 5px; color: brown"></i>{{ trans("Create Reading Question") }}</a>
+                            <a class="dropdown-item" href="{{ url('tboperator_question_list') }}"><i class="fas fa-list-ol"></i>{{ trans("Question List") }}</a>
+                            <a class="dropdown-item" href="{{ url('question_create', args=['listening']) }}"><i class="fas fa-headphones-alt"></i>{{ trans("Create Listening Question") }}</a>
+                            <a class="dropdown-item" href="{{ url('question_create', args=['reading']) }}"><i class="fas fa-book"></i>{{ trans("Create Reading Question") }}</a>
                         </div>
                     </li>
                     {% endif %} {% if request.user|has_perm('Viewer') %}
@@ -79,7 +79,7 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
 
-                            <a class="dropdown-item" href="{{ url('exam_score_list') }}"><i class="fas fa-tasks" style="padding-right: 5px"></i>{{ trans("View Testee Score") }}</a>
+                            <a class="dropdown-item" href="{{ url('exam_score_list') }}"><i class="fas fa-tasks"></i>{{ trans("View Testee Score") }}</a>
                         </div>
                     </li>
                     {% endif %} {% if request.user|has_perm('Testee') %}
@@ -88,11 +88,11 @@
                             {{ trans("Testee") }}
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="{{ url('favorite_question_list') }}"> <i class="fas fa-heart" style="padding-right: 5px; color: red"></i>{{ trans("Favorite Question") }}</a>
-                            <a class="dropdown-item" href="{{ url('testee_exam_list') }}"><i class="fas fa-list" style="padding-right: 5px"></i>{{ trans("Exam Record") }}</a>
-                            <a class="dropdown-item" href="{{ url('testee_score_list') }}"><i class="fas fa-tasks" style="padding-right: 5px; color: blue"></i>{{ trans("Score Record") }}</a>
-                            <a class="dropdown-item" href="{{ url('testee_practice_create', args=['listening']) }}"><i class="fas fa-headphones-alt" style="padding-right: 5px"></i>{{ trans("Listening Practice") }}</a>
-                            <a class="dropdown-item" href="{{ url('testee_practice_create', args=['reading']) }}"><i class="fas fa-book" style="padding-right: 5px; color: brown"></i>{{ trans("Reading Practice") }}</a>
+                            <a class="dropdown-item" href="{{ url('favorite_question_list') }}"> <i class="fas fa-heart"></i>{{ trans("Favorite Question") }}</a>
+                            <a class="dropdown-item" href="{{ url('testee_exam_list') }}"><i class="fas fa-list"></i>{{ trans("Exam Record") }}</a>
+                            <a class="dropdown-item" href="{{ url('testee_score_list') }}"><i class="fas fa-tasks"></i>{{ trans("Score Record") }}</a>
+                            <a class="dropdown-item" href="{{ url('testee_practice_create', args=['listening']) }}"><i class="fas fa-headphones-alt"></i>{{ trans("Listening Practice") }}</a>
+                            <a class="dropdown-item" href="{{ url('testee_practice_create', args=['reading']) }}"><i class="fas fa-book"></i>{{ trans("Reading Practice") }}</a>
                         </div>
                     </li>
                     {% endif %} {% if user.is_authenticated %}
@@ -140,7 +140,7 @@
                                                 {% else %}
                                                 <tr>
                                                     <td>
-                                                        <h3 class="text-center" style="font-weight: 200">
+                                                        <h3 class="text-center">
                                                             No notification.
                                                         </h3>
                                                     </td>
@@ -160,17 +160,6 @@
                                         <button class="btn btn-secondary" data-dismiss="modal">
                                             {{ trans("Cancel") }}
                                         </button>
-                                        <script>
-                                            function set_action(action) {
-                                                var form = document.getElementById("notificationForm");
-                                                if (action === "read") {
-                                                    form.action = "/proclamation/read/toggle";
-                                                } else {
-                                                    form.action = "/proclamation/delete/toggle";
-                                                }
-                                                form.submit();
-                                            }
-                                        </script>
                                     </div>
                                 </div>
                             </div>
@@ -193,135 +182,56 @@
                                         {{ request.user.reg_id }}
                                         {% endif %}
                                         <script>
-                                            now = new Date(), hour = now.getHours()
-                                            if (hour < 6) {
-                                                document.write("凌晨好！")
-                                            } else if (hour < 9) {
-                                                document.write("早安！")
-                                            } else if (hour < 12) {
-                                                document.write("上午好！")
-                                            } else if (hour < 14) {
-                                                document.write("午安！")
-                                            } else if (hour < 17) {
-                                                document.write("下午好！")
-                                            } else if (hour < 19) {
-                                                document.write("傍晚好！")
-                                            } else if (hour < 22) {
-                                                document.write("晚安！")
-                                            } else {
-                                                document.write("夜里好！")
-                                            }
+                                            say_hello();
                                         </script>
                                     </h5>
                                 </div>
 
                                 <div id="modal-menu">
                                     <button onclick="window.location.href='{{ url('profile') }}'">
-                                        <i class="fas fa-user" style="padding-right: 5px"></i>{{ trans("Profile") }}
+                                        <i class="fas fa-user"></i>{{ trans("Profile") }}
                                     </button>
                                     <div class="dropdown-divider custom"></div>
                                     <button onclick="window.location.href='{{ url('profile_edit') }}'">
-                                        <i class="fas fa-user-edit" style="padding-right: 5px"></i>{{ trans("Edit Profile") }}
+                                        <i class="fas fa-user-edit"></i>{{ trans("Edit Profile") }}
                                     </button>
                                     <div class=" dropdown-divider custom">
                                     </div>
                                     <button onclick="window.location.href='{{ url('email') }}'">
-                                        <i class="fas fa-envelope" style="padding-right: 5px;"></i>Email
+                                        <i class="fas fa-envelope"></i>Email
                                     </button>
                                     <div class="dropdown-divider custom"></div>
                                     <button onclick="window.location.href='{{ url('password_change') }}'">
-                                        <i class="fas fa-key" style="padding-right: 5px"></i>{{ trans("Password Change") }}
+                                        <i class="fas fa-key"></i>{{ trans("Password Change") }}
                                     </button>
                                     <div class="dropdown-divider custom"></div>
                                     <button onclick="alert('Function is developing. Stay tuned.🤪');">
-                                        <i class="fas fa-file-alt" style="padding-right: 5px"></i>{{ trans("Real Exam Record") }}
+                                        <i class="fas fa-file-alt"></i>{{ trans("Real Exam Record") }}
                                     </button>
                                     <div class="dropdown-divider custom"></div>
                                     <button onclick="window.location.href='{{ url('report') }}'">
-                                        <i class="fas fa-exclamation-triangle" style="padding-right: 5px"></i>{{ trans("Report") }}
+                                        <i class="fas fa-exclamation-triangle"></i>{{ trans("Report") }}
                                     </button>
                                     <div class="dropdown-divider custom"></div>
                                     <button onclick="window.location.href='{{ url('about') }}'">
-                                        <i class="fas fa-question" style="padding-right: 5px"></i>{{ trans("About") }}
+                                        <i class="fas fa-question"></i>{{ trans("About") }}
                                     </button>
                                 </div>
 
                                 <div class="modal-footer">
                                     <a class="btn btn-light" href="{{ url('logout') }}" onclick="return confirm('Sure to logout?')">{{trans("Logout")}}</a>
-                                    <a class="btn btn-secondary" style="color: white" data-dismiss="modal">{{trans("Cancel")}}</a>
+                                    <a class="btn btn-secondary" data-dismiss="modal">{{trans("Cancel")}}</a>
                                 </div>
                             </div>
                         </div>
                     </div>
                     {% else %}
+
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url('login') }}">{{trans("Login")}}</a>
                     </li>
                     {% endif %}
 
-                    <style>
-                        .i {
-                            padding-right: 5px;
-                        }
-
-                        .modal {
-                            outline: none;
-                        }
-
-                        .modal a {
-                            outline: none;
-                            text-decoration: none;
-                        }
-
-                        .modal #modal-menu button {
-                            width: 100%;
-
-                            text-align: left;
-                            padding: 14px;
-                            padding-left: 40%;
-                            color: #2c3232;
-                            background-color: #fff;
-
-                            border: none;
-                            outline: none;
-                        }
-
-                        .modal #modal-menu button:active {
-                            width: 100%;
-
-                            padding: 14px;
-                            padding-left: 40%;
-                            color: #2c3232;
-                            background-color: rgb(200, 200, 200);
-
-                            border-bottom-style: solid;
-                            border-bottom-width: 1px;
-                            border-bottom-color: rgb(250, 250, 250);
-
-                            outline: none;
-                        }
-
-                        .modal #modal-menu button::-moz-focus-inner,
-                        [type="button"]::-moz-focus-inner,
-                        [type="reset"]::-moz-focus-inner,
-                        [type="submit"]::-moz-focus-inner {
-                            padding: 0;
-                            border-style: none;
-                        }
-
-                        .modal .custom {
-                            margin: 0px;
-                        }
-
-                        .notification-custom {
-                            width: 15px;
-                            height: 15px;
-                            background-color: red;
-                            border-radius: 24px;
-                            color: white;
-                            text-align: center;
-                        }
-                    </style>
                 </ul>
             </div>
         </div>

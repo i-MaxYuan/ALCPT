@@ -1,72 +1,59 @@
-{% extends 'new_profile_base.html' %} {% block path %}
+{% extends 'new_profile_base.html' %}
+
+{% block stylesheets %}
+<link rel="stylesheet" type="text/css" href="{{ static('/css/registration/report_list.css') }}" />
+{% endblock %}
+
+{% block path %}
 <li class="breadcrumb-item" aria-current="page">
-  <a href="{{ url('profile') }}">Profile</a>
+    <a href="{{ url('profile') }}">Profile</a>
 </li>
 <li class="breadcrumb-item active" aria-current="page">Report</li>
-{% endblock %} {% block content %}
-<style>
-  #report {
-    color: rgb(150, 150, 150);
-    opacity: 0.3;
-  }
-</style>
+{% endblock %}
 
+{% block content %}
 <main class="report-list">
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-lg-12 table-responsive">
-        <h2>Report List.</h2>
-        <table class="table table-hover">
-          <thead class="thead-light">
-            <tr>
-              <th class="text-center">Serial.</th>
-              <th>Category.</th>
-              <th>Content.</th>
-              <th>State.</th>
-              <th>
-                <div class="add text-right">
-                  <button
-                    class="btn btn-secondary"
-                    type="button"
-                    onclick="window.location.href='{{ url('report') }}'"
-                  >
-                    <i class="fa fa-plus"></i>
-                  </button>
-                </div>
-              </th>
-            </tr>
-          </thead>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-12 table-responsive">
+                <h2>Report List.</h2>
+                <table class="table table-hover">
+                    <thead class="thead-light">
+                        <tr>
+                            <th class="text-center">Serial.</th>
+                            <th>Category.</th>
+                            <th>Content.</th>
+                            <th>State.</th>
+                            <th>
+                                <div class="add text-right">
+                                    <button class="btn btn-secondary" type="button" onclick="window.location.href='{{ url('report') }}'">
+                                        <i class="fa fa-plus"></i>
+                                    </button>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
 
-          <tbody>
-            {% if reports %} {% for report in reports %}
-            <tr
-              {%
-              if
-              report.user_notification
-              %}class="table-active"
-              {%
-              endif
-              %}
-              style="cursor: pointer"
-              onclick="window.location.href='{{ url('report_detail', args=[report.id]) }}'"
-            >
-              <td class="text-center">{{ report.id }}</td>
-              <td>{{ report.category }}</td>
-              <td>{{ report.supplement_note|safe|summary(44) }}</td>
-              <td>{{ report.state|readable_report_state }}</td>
-              <td class="text-right">
-                {{ report.created_time.strftime('%H:%M, %m/%d/%Y') }}
-              </td>
-            </tr>
-            {% endfor %} {% else %}
-            <tr>
-              <td class="text-center" colspan="5">No Data.</td>
-            </tr>
-            {% endif %}
-          </tbody>
-        </table>
-      </div>
+                    <tbody>
+                        {% if reports %} {% for report in reports %}
+                        <tr {% if report.user_notification %}class="table-active" {% endif %} style="cursor: pointer" onclick="window.location.href='{{ url('report_detail', args=[report.id]) }}'">
+                            <td class="text-center">{{ report.id }}</td>
+                            <td>{{ report.category }}</td>
+                            <td>{{ report.supplement_note|safe|summary(44) }}</td>
+                            <td>{{ report.state|readable_report_state }}</td>
+                            <td class="text-right">
+                                {{ report.created_time.strftime('%H:%M, %m/%d/%Y') }}
+                            </td>
+                        </tr>
+                        {% endfor %} {% else %}
+                        <tr>
+                            <td class="text-center" colspan="5">No Data.</td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
-  </div>
 </main>
 {% endblock %}

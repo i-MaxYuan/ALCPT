@@ -1,122 +1,99 @@
-{% extends 'new_base.html' %} {% block path %}
+{% extends 'new_base.html' %}
+
+{% block stylesheets %}
+<link rel="stylesheet" type="text/css" href="{{ static('/css/report/report_detail.css') }}" />
+{% endblock %}
+
+{% block path %}
 <li class="breadcrumb-item" aria-current="page">
-  <a href="{{ url('report_category_list') }}">{{trans("ReportCategory List")}}</a>
+    <a href="{{ url('report_category_list') }}">{{trans("ReportCategory List")}}</a>
 </li>
 <li class="breadcrumb-item active" aria-current="page">{{trans("View Report Detail")}}</li>
 {% endblock %} {% block content %}
 <main class="reply">
-  <div class="original-report-card">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-5">
-          <div class="card">
-            <div class="card-header">
-              {{ viewed_report.category }}#{{ viewed_report.id }}
-            </div>
+    <div class="original-report-card">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-5">
+                    <div class="card">
+                        <div class="card-header">
+                            {{ viewed_report.category }}#{{ viewed_report.id }}
+                        </div>
 
-            <div class="card-body">
-              {% if viewed_report.question %}
-              <h5>Question Content</h5>
-              {% if viewed_report.question.q_file %}
-              <audio controls preload="none">
-                <source
-                  src="{{ viewed_report.question.q_file.url }}"
-                  type="audio/mpeg"
-                />
-                Your browser does not support the audio tag.
-              </audio>
-              {% else %}
-              <div>{{ viewed_report.question.q_content|linebreaksbr }}</div>
-              {% endif %}
-              <h5>Choice</h5>
-              <ol type="A">
-                {% for choice in viewed_report.question.choice_set.all() %}
-                <li {% if choice.is_answer %}style="color: green" {% endif %}>
-                  {{ choice }}
-                </li>
-                {% endfor %}
-              </ol>
-              {% endif %}
+                        <div class="card-body">
+                            {% if viewed_report.question %}
+                            <h5>Question Content</h5>
+                            {% if viewed_report.question.q_file %}
+                            <audio controls preload="none">
+                                <source src="{{ viewed_report.question.q_file.url }}" type="audio/mpeg" />
+                                Your browser does not support the audio tag.
+                            </audio>
+                            {% else %}
+                            <div>{{ viewed_report.question.q_content|linebreaksbr }}</div>
+                            {% endif %}
+                            <h5>Choice</h5>
+                            <ol type="A">
+                                {% for choice in viewed_report.question.choice_set.all() %}
+                                <li {% if choice.is_answer %}style="color: green" {% endif %}>
+                                    {{ choice }}
+                                </li>
+                                {% endfor %}
+                            </ol>
+                            {% endif %}
 
-              <h5>{{trans("Supplement Note")}}</h5>
-              <div class="dropdown-divider"></div>
-              <p>{{ viewed_report.supplement_note }}</p>
-            </div>
+                            <h5>{{trans("Supplement Note")}}</h5>
+                            <div class="dropdown-divider"></div>
+                            <p>{{ viewed_report.supplement_note }}</p>
+                        </div>
 
-            <div class="card-footer">
-              <footer class="blockquote-footer">
-                <cite title="Source Title"
-                  >{{ viewed_report.created_by }} in {{
-                  viewed_report.created_time }}<br
-                /></cite>
-                {% if viewed_report.state == 2 %}
-                <label class="btn btn-danger float-right">Processing</label>
-                {% elif viewed_report.state == 3 %}
-                <cite title="Source Title"
-                  >Resolved by {{ viewed_report.resolved_by }} in {{
-                  viewed_report.resolved_time }}</cite
-                >
-                <label class="btn btn-success float-right">{{trans("Solved")}}</label>
-                {% endif %}
-              </footer>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-7">
-          <div class="card" style="height: 700px">
-            <div class="card-header">{{trans("Reply")}}</div>
-
-            <div id="reply-content" class="card-body">
-              <div
-                class="reply-content"
-                data-spy="scroll"
-                data-target="#navbar-example2"
-                data-offset="0"
-              >
-                {% if replies %} {% for reply in replies %} {% if
-                reply.created_by == viewed_report.created_by %}
-                <div>
-                  {{ reply.created_by }}：<br />{{ reply.content }}
-                  <footer class="blockquote-footer">
-                    <cite title="Source Title"
-                      >{{ reply.created_time.strftime('%H:%M, %Y/%m/%d')
-                      }}</cite
-                    >
-                  </footer>
+                        <div class="card-footer">
+                            <footer class="blockquote-footer">
+                                <cite title="Source Title">{{ viewed_report.created_by }} in {{ viewed_report.created_time }}<br /></cite>
+                                {% if viewed_report.state == 2 %}
+                                <label class="btn btn-danger float-right">Processing</label>
+                                {% elif viewed_report.state == 3 %}
+                                <cite title="Source Title">Resolved by {{ viewed_report.resolved_by }} in {{ viewed_report.resolved_time }}</cite>
+                                <label class="btn btn-success float-right">{{trans("Solved")}}</label>
+                                {% endif %}
+                            </footer>
+                        </div>
+                    </div>
                 </div>
-                {% else %}
-                <div class="text-right">
-                  ：{{ reply.created_by }}<br />{{ reply.content }}
-                  <footer class="blockquote-footer">
-                    <cite title="Source Title"
-                      >{{ reply.created_time.strftime('%H:%M, %Y/%m/%d')
-                      }}</cite
-                    >
-                  </footer>
-                </div>
-                {% endif %} {% endfor %} {% else %} {{trans("No message")}}... {% endif %}
-              </div>
-            </div>
 
-            <div class="card-footer">
-              <button
-                type="button"
-                class="btn btn-primary float-right"
-                onclick="window.location=document.referrer;"
-              >
-              {{trans("OK")}}
-              </button>
+                <div class="col-lg-7">
+                    <div class="card" style="height: 700px">
+                        <div class="card-header">{{trans("Reply")}}</div>
+
+                        <div id="reply-content" class="card-body">
+                            <div class="reply-content" data-spy="scroll" data-target="#navbar-example2" data-offset="0">
+                                {% if replies %} {% for reply in replies %} {% if reply.created_by == viewed_report.created_by %}
+                                <div>
+                                    {{ reply.created_by }}：<br />{{ reply.content }}
+                                    <footer class="blockquote-footer">
+                                        <cite title="Source Title">{{ reply.created_time.strftime('%H:%M, %Y/%m/%d') }}</cite>
+                                    </footer>
+                                </div>
+                                {% else %}
+                                <div class="text-right">
+                                    ：{{ reply.created_by }}<br />{{ reply.content }}
+                                    <footer class="blockquote-footer">
+                                        <cite title="Source Title">{{ reply.created_time.strftime('%H:%M, %Y/%m/%d') }}</cite>
+                                    </footer>
+                                </div>
+                                {% endif %} {% endfor %} {% else %} {{trans("No message")}}... {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="card-footer">
+                            <button type="button" class="btn btn-primary float-right" onclick="window.location=document.referrer;">
+                                {{trans("OK")}}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
             </div>
-          </div>
         </div>
-        <style>
-          #reply-content {
-            overflow-x: scroll;
-          }
-        </style>
-      </div>
     </div>
-  </div>
 </main>
 {% endblock %}

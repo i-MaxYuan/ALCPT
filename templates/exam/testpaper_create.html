@@ -3,48 +3,34 @@
 <li class="breadcrumb-item active" aria-current="page">TestPaper Create</li>
 {% endblock %} {% block content %}
 <main class="testpaper-create-form">
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-lg-8">
-        <form method="post">
-          <input
-            type="hidden"
-            name="csrfmiddlewaretoken"
-            value="{{ csrf_token }}"
-          />
-          <div class="card">
-            <div class="card-header">TestPaper Create.</div>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <form method="post">
+                    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
+                    <div class="card">
+                        <div class="card-header">TestPaper Create.</div>
 
-            <div class="card-body">
-              <h5 class="card-subtitle mb-2 text-muted">
-                TestPaper Name.<span class="invalid" id="invalid"></span>
-              </h5>
-              <p class="card-text">
-                <input
-                  class="form-control"
-                  type="text"
-                  name="testpaper_name"
-                  onkeyup="data_unique({{ testpaper_names }}, this)"
-                  required
-                />
-              </p>
+                        <div class="card-body">
+                            <h5 class="card-subtitle mb-2 text-muted">
+                                TestPaper Name.<span class="invalid" id="invalid"></span>
+                            </h5>
+                            <p class="card-text">
+                                <input class="form-control" type="text" name="testpaper_name" onkeyup="data_unique({{ testpaper_names }}, this)" required />
+                            </p>
 
-              <div class="float-right">
-                <button type="submit" class="btn btn-primary">Submit</button>
-                <button type="reset" class="btn btn-light">Reset</button>
-                <button
-                  type="button"
-                  class="btn btn-secondary"
-                  onclick="history.go(-1)"
-                >
-                  Back
-                </button>
-              </div>
+                            <div class="float-right">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                                <button type="reset" class="btn btn-light">Reset</button>
+                                <button type="button" class="btn btn-secondary" onclick="history.go(-1)">
+                                    Back
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </div>
-          </div>
-        </form>
-      </div>
+        </div>
     </div>
-  </div>
 </main>
 {% endblock %}
