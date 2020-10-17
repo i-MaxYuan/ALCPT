@@ -838,8 +838,7 @@ button:focus {
     border-radius: 35px;
     text-transform: inherit;
     text-align: left;
-    padding: 15px 80px;
-    width: 195px;
+    padding: 15px 80 width: 195px;
     height: 65px;
     line-height: 18px;
     margin-right: 35px;
@@ -929,9 +928,7 @@ button:focus {
 /* ==========================================================================
    Showcase
    ========================================================================== */
-#showcase {
-    padding-bottom: 375px;
-}
+#showcase {}
 
 #showcase .right-position {
     position: relative;
@@ -941,7 +938,7 @@ button:focus {
     position: absolute;
     width: 97%;
     z-index: 12;
-    top: 260px;
+    /* top: 260px; */
     margin: 0px auto;
 }
 
@@ -1055,7 +1052,7 @@ button:focus {
    Testimonial section
    ========================================================================== */
 #testimonial {
-    margin-bottom: 270px;
+    margin-bottom: 20%;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -1070,7 +1067,7 @@ button:focus {
     position: absolute;
     width: 100%;
     z-index: 12;
-    top: 260px;
+    /* top: 260px; */
     margin: 0px auto;
 }
 
@@ -1750,7 +1747,7 @@ button:focus {
    Contact section
    ========================================================================== */
 #contact form#contactForm .form-group {
-    margin-bottom: 30px;
+    margin-bottom: 20%;
 }
 
 #contact form#contactForm input[type=text], #contact form#contactForm input[type=email] {
