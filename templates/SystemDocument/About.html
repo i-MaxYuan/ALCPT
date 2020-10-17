@@ -33,6 +33,9 @@
                         <li class="nav-item">
                             <a class="nav-link page-scroll" href="#showcase">Showcase</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link page-scroll" href="#testimonial">Review</a>
+                        </li>
 
                         <li class="nav-item">
                             <a class="nav-link page-scroll" href="#team">Team</a>
@@ -297,7 +300,6 @@
     </section>
     <!-- Cool Fetatures Section End -->
 
-
     <!-- Recent Showcase Section Start -->
     <section id="showcase">
         <div class="container-fluid right-position">
@@ -331,9 +333,89 @@
 
 
     <!-- Client Testimoninals Section Start -->
+    <section id="testimonial" class="section">
+        <div class="container right-position">
+            <!-- Start Row -->
 
+            <!-- End Row -->
+
+            <!-- Start Row -->
+            <div class="row justify-content-center testimonial-area">
+                <h2 class="section-title">User Review</h2>
+                <div class="col-lg-10 col-md-12 col-sm-12 col-xs-12 pr-20 " style="overflow: hidden;padding-bottom: 60px">
+
+                    <div id="client-testimonial" class="text-center owl-carousel">
+
+                        <div class="item">
+                            <div class="testimonial-item">
+                                <div class="content-inner">
+                                    <img src="{{ static('/about/img/nav-logo-line.png') }}" class="img-fluid" width="500px" style="opacity:0.8" alt="">
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="item">
+                            <div class="testimonial-item">
+                                <div class="content-inner">
+                                    <p class="description">想放假zzz</p>
+                                    <div class="author-info">
+                                        <h5>劉昀昕 | <span> Project Manager</span></h5>
+                                    </div>
+                                </div>
+                                <div class="client-thumb">
+                                    <img src="{{ static('/images/劉昀昕.jpg') }}" width="50px" style="border-radius: 50%;" alt="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="testimonial-item">
+                                <div class="content-inner">
+                                    <p class="description">Peko peko peko?</p>
+                                    <div class="author-info">
+                                        <h5>黃柏豪 | <span>Back-end Developer</span></h5>
+                                    </div>
+                                </div>
+                                <div class="client-thumb">
+                                    <img src="{{ static('/images/黃柏豪.png') }}" width="50px" style="border-radius: 50%;" alt="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="testimonial-item">
+                                <div class="content-inner">
+                                    <p class="description">好厭世zzzZZ</p>
+                                    <div class="author-info">
+                                        <h5>黃子祐 | <span>Front-end Developer; Tester</span></h5>
+                                    </div>
+                                </div>
+                                <div class="client-thumb">
+                                    <img src="{{ static('/images/黃子祐.png') }}" width="50px" style="border-radius: 50%;" alt="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="testimonial-item">
+                                <div class="content-inner">
+                                    <p class="description">想睡覺了zzz</p>
+                                    <div class="author-info">
+                                        <h5>賴昱婷 | <span> Front-end Developer; Translator</span></h5>
+                                    </div>
+                                </div>
+                                <div class="client-thumb">
+                                    <img src="{{ static('/images/賴昱婷.jpg') }}" width="50px" style="border-radius: 50%;" alt="">
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+            <!-- End Row -->
+        </div>
+    </section>
     <!-- Client Testimoninals Section End -->
-
 
     <!-- Team section Start -->
     <section id="team" class="section">
@@ -383,7 +465,7 @@
                 <div class="col-lg-3 col-md-6 col-xs-12">
                     <div class="single-team">
                         <div class="team-thumb">
-                            <img src="{{ static('/images/黃柏豪.jpg') }}" class="img-fluid" style="opacity:0.8" alt="">
+                            <img src="{{ static('/images/黃柏豪.png') }}" class="img-fluid" style="opacity:0.8" alt="">
                         </div>
 
                         <div class="team-details">
@@ -407,7 +489,7 @@
                 <div class="col-lg-3 col-md-6 col-xs-12">
                     <div class="single-team">
                         <div class="team-thumb">
-                            <img src="{{ static('/images/黃子祐.jpg') }}" class="img-fluid" style="opacity:0.8" alt="">
+                            <img src="{{ static('/images/黃子祐.png') }}" class="img-fluid" style="opacity:0.8" alt="">
                         </div>
 
                         <div class="team-details">
@@ -457,6 +539,8 @@
         </div>
     </section>
     <!-- Team section End -->
+
+
 
 
     <!-- Blog Section -->
@@ -578,6 +662,13 @@
             <div class="row">
                 <!-- Start Col -->
                 <div class="col-lg-6 col-md-12">
+                    <div class="contact-img">
+                        <img src="{{ static('nav-logo.png') }}" class="img-fluid" alt="">
+                    </div>
+                </div>
+                <!-- End Col -->
+                <!-- Start Col -->
+                <div class="col-lg-6 col-md-12">
                     <form id="contactForm">
                         <div class="row">
                             <div class="col-md-6">
@@ -605,7 +696,7 @@
                                     <div class="help-block with-errors"></div>
                                 </div>
                                 <div class="submit-button">
-                                    <button class="btn btn-common" id="submit" type="submit">Submit</button>
+                                    <button class="btn btn-common float-right" id="submit" type="submit">Submit</button>
                                     <div id="msgSubmit" class="h3 hidden"></div>
                                     <div class="clearfix"></div>
                                 </div>
@@ -619,13 +710,7 @@
 
                 </div>
                 <!-- End Col -->
-                <!-- Start Col -->
-                <div class="col-lg-4 col-md-12">
-                    <div class="contact-img">
-                        <img src="{{ static('nav-logo.png') }}" class="img-fluid" alt="">
-                    </div>
-                </div>
-                <!-- End Col -->
+
                 <!-- Start Col -->
                 <div class="col-lg-1">
                 </div>
