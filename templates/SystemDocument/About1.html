@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% include 'head.html' %}
+</head>
+
+<body>
+    {% block stylesheets %} {% endblock %}
+    {% block scripts %}
+    <script type="text/javascript">
+        function dropdown_toggle(kind) {
+            var dropdownKind = "dropdown-menu-" + kind;
+            var dropdown_menu = document.getElementById(dropdownKind);
+
+            if (dropdown_menu.style.display === "none") {
+                dropdown_menu.style.display = "block";
+            } else {
+                dropdown_menu.style.display = "none";
+            }
+        }
+    </script>
+    {% endblock %}
+    {% include 'header.html' %}
+    <main class="about" role="main">
+        <div class="jumbotron">
+            <h1 class="display-2" style="font-weight: 400">
+                Welcome to ALCPT線上練習平台
+            </h1>
+            <p class="lead">
+                This is a place where we try to build some interesting stuff about a
+                web system for ALCPT. Hope you can improve your ability of English via
+                this system.
+            </p>
+            <hr class="my-4" />
+            <p>
+                If you have any suggestions, please leave us a message. Thank you for
+                your using.
+            </p>
+            <a class="btn btn-primary" href="{{ url('Homepage') }}" role="button">Start</a>
+            <a class="btn btn-secondary" href="{{ url('download_system_pdf') }}" data-toggle="tooltip" data-placement="top" title="Download System PDF">About System</a>
+            <a class="btn btn-light" data-toggle="modal" data-target="#ModalOperationManual">Operation Manual</a>
+            <div class="modal fade" id="ModalOperationManual" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header text-center">
+                            <h5 class="modal-title" id="ModalLongTitle">
+                                Operation Manual
+                            </h5>
+                        </div>
+                        <div id="modal-menu">
+                            <button onclick="window.location.href='{{ url('OM_System') }}'">
+                                System
+                            </button>
+                            <div class="dropdown-divider custom"></div>
+                            <button onclick="window.location.href='{{ url('OM_User') }}'">
+                                User
+                            </button>
+                            <div class="dropdown-divider custom"></div>
+                            <button onclick="window.location.href='{{ url('OM_Report') }}'">
+                                Report
+                            </button>
+                            <div class="dropdown-divider custom"></div>
+                            <button onclick="window.location.href='{{ url('OM_SystemManager') }}'">
+                                System Manager
+                            </button>
+                            <div class="dropdown-divider custom"></div>
+                            <button onclick="window.location.href='{{ url('OM_TestManager') }}'">
+                                Test Manager
+                            </button>
+                            <div class="dropdown-divider custom"></div>
+                            <button onclick="window.location.href='{{ url('OM_TBManager') }}'">
+                                TB Manager
+                            </button>
+                            <div class="dropdown-divider custom"></div>
+                            <button onclick="window.location.href='{{ url('OM_TBOperator') }}'">
+                                TB Operator
+                            </button>
+                            <div class="dropdown-divider custom"></div>
+                            <button onclick="window.location.href='{{ url('OM_Viewer') }}'">
+                                Viewer
+                            </button>
+                            <div class="dropdown-divider custom"></div>
+                            <button onclick="window.location.href='{{ url('OM_Testee') }}'">
+                                Testee
+                            </button>
+                            <div class="dropdown-divider custom"></div>
+                            <button onclick="window.location.href='{{ url('download_OM_pdf') }}'" data-toggle="tooltip" data-placement="top" title="Download OM PDF">
+                                Download Operation Manual
+                            </button>
+                        </div>
+                        <div class="modal-footer">
+                            <a class="btn btn-secondary" style="color: white" data-dismiss="modal">Cancel</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr class="featurette-divider" />
+        <div class="system-concept-introduction">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <h1>A free practice platform for Military Academy Students.</h1>
+                    <h4 class="text-muted text-center" style="font-weight: 400">
+                        ALCPT is short for American Language Course Placement Test.<br />
+                        ALCPT distinguishes multiple user permissions, and students can
+                        focus on their own permissions to practice.<br />
+                        This system will also generate some simple statistical graphs to
+                        make it easier for users to understand their practice status.
+                    </h4>
+                </div>
+            </div>
+        </div>
+        <hr class="featurette-divider" />
+        <div class="system-concept-introduction">
+            <div class="container">
+                <h2 style="color: red">＃Top 5</h2>
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
+                        <div class="leaderboard">
+                            <div class="card">
+                                <div class="card-header">Board - Most Practice</div>
+                                <div class="card-body">
+                                    <table width="100%">
+                                        <tbody>
+                                            {% for user, answersheet_num in sorted_Data %}
+                                            <tr>
+                                                <td class="text-center">{{ loop.index }}</td>
+                                                <td class="text-left">{{ user }}</td>
+                                                <td class="text-center">{{ answersheet_num }}</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="leaderboard">
+                            <div class="card">
+                                <div class="card-header">Board - High Score</div>
+                                <div class="card-body">
+                                    <table width="100%">
+                                        <tbody>
+                                            {% for user, answersheet_num in average_score_sortedData %}
+                                            <tr>
+                                                <td class="text-center">{{ loop.index }}</td>
+                                                <td class="text-left">{{ user }}</td>
+                                                <td class="text-center">{{ answersheet_num }}</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr class="featurette-divider" />
+        <!--Introduce System Manager.-->
+        <div class="privilege-intro">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-5">
+                        <h2 class="featurette-heading">
+                            System Manager.
+                            <span class="text-muted">Controlling about system.</span>
+                        </h2>
+                        <p class="lead">
+                            The main task of the system manager is to control some personal
+                            information of users on the system. Like personal information,
+                            student information, etc.
+                        </p>
+                        <div>
+                            <button type="button" class="btn btn-primary" onclick="window.location.href='{{ url('OM_SystemManager') }}'">
+                                More
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <img class="img-responsive" src="{{ static('/images/system.svg') }}" width="90%" height="90%" alt="Responsive image" />
+                    </div>
+                </div>
+                <hr class="featurette-divider" />
+            </div>
+        </div>
+        <!--Introduce Test Manager.-->
+        <div class="privilege-intro">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-3">
+                        <img class="img-responsive" src="{{ static('/images/checklist.svg') }}" width="90%" height="90%" alt="Responsive image" />
+                    </div>
+                    <div class="col-md-5">
+                        <h2 class="featurette-heading">
+                            Test Manager.
+                            <span class="text-muted">Controlling about exam.</span>
+                        </h2>
+                        <p class="lead">
+                            The main task of the test manager is to create and edit test
+                            papers, and to create groups of testees. Use these test papers
+                            to create mock tests to test specific groups of subjects.
+                        </p>
+                        <div class="text-right">
+                            <button type="button" class="btn btn-primary" onclick="window.location.href='{{ url('OM_TestManager') }}'">
+                                More
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <hr class="featurette-divider" />
+            </div>
+        </div>
+        <!--Introduce TB Manager.-->
+        <div class="privilege-intro">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-5">
+                        <h2 class="featurette-heading">
+                            TB Manager.
+                            <span class="text-muted">Maintain and review questions</span>
+                        </h2>
+                        <p class="lead">
+                            The main task of the TB manager is to review the questions
+                            submitted by the question operator and to maintain these
+                            questions.
+                        </p>
+                        <div>
+                            <button type="button" class="btn btn-primary" onclick="window.location.href='{{ url('OM_TBManager') }}'">
+                                More
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <img class="img-responsive" src="{{ static('/images/file-check.svg') }}" width="90%" height="90%" alt="Responsive image" />
+                    </div>
+                </div>
+                <hr class="featurette-divider" />
+            </div>
+        </div>
+        <!--Introduce TB Operator.-->
+        <div class="privilege-intro">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-3">
+                        <img class="img-responsive" src="{{ static('/images/file.svg') }}" width="90%" height="90%" alt="Responsive image" />
+                    </div>
+                    <div class="col-md-5">
+                        <h2 class="featurette-heading">
+                            TB Operator.
+                            <span class="text-muted">Create new questions.</span>
+                        </h2>
+                        <p class="lead">
+                            The main job of the problem operator is to add new questions and
+                            submit them to the bank manager for review.
+                        </p>
+                        <div class="text-right">
+                            <button type="button" class="btn btn-primary" onclick="window.location.href='{{ url('OM_TBOperator') }}'">
+                                More
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <hr class="featurette-divider" />
+            </div>
+        </div>
+        <!--Introduce Viewer.-->
+        <div class="privilege-intro">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-5">
+                        <h2 class="featurette-heading">
+                            Viewer.
+                            <span class="text-muted">Watch the test status of users via this system</span>
+                        </h2>
+                        <p class="lead">
+                            This permission is mainly designed for the chief or teacher to
+                            watch the testee's practice status through this system and
+                            evaluate whether there is a tendency to improve their English
+                            ability.
+                        </p>
+                        <div>
+                            <button type="button" class="btn btn-primary" onclick="window.location.href='{{ url('OM_Viewer') }}'">
+                                More
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <img class="img-responsive" src="{{ static('/images/data-scientist.svg') }}" width="90%" height="90%" alt="Responsive image" />
+                    </div>
+                </div>
+                <hr class="featurette-divider" />
+            </div>
+        </div>
+        <!--Introduce Testee.-->
+        <div class="privilege-intro">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-3">
+                        <img class="img-responsive" src="{{ static('/images/examinee.svg') }}" width="90%" height="90%" alt="Responsive image" />
+                    </div>
+                    <div class="col-md-5">
+                        <h2 class="featurette-heading">
+                            Testee.
+                            <span class="text-muted">Main users of this system</span>
+                        </h2>
+                        <p class="lead">
+                            Users can practice listening and reading exercises in English
+                            through this system. There are also mock tests designed to be
+                            performed by administrators. Allows users to use these tests to
+                            improve their understanding of English test questions.
+                        </p>
+                        <div class="text-right">
+                            <button type="button" class="btn btn-primary" onclick="window.location.href='{{ url('OM_Testee') }}'">
+                                More
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <hr class="featurette-divider" />
+            </div>
+        </div>
+        <div class="contact-us">
+            <div class="container">
+                <div class="row">
+                    <h3 class="text-muted">Contact Us.</h3>
+                </div>
+                <hr class="featurette-divider" />
+            </div>
+        </div>
+    </main>
+    {% include "footer.html" %}
+</body>
+
+</html>

@@ -2,339 +2,663 @@
 <html lang="en">
 
 <head>
-    {% include 'head.html' %}
+    {% include 'about_head.html' %}
 </head>
 
-
 <body>
-    {% block stylesheets %} {% endblock %}
-    {% block scripts %}
-    <script type="text/javascript">
-        function dropdown_toggle(kind) {
-            var dropdownKind = "dropdown-menu-" + kind;
-            var dropdown_menu = document.getElementById(dropdownKind);
 
-            if (dropdown_menu.style.display === "none") {
-                dropdown_menu.style.display = "block";
-            } else {
-                dropdown_menu.style.display = "none";
-            }
-        }
-    </script>
-    {% endblock %}
-    {% include 'header.html' %}
+    <!-- Header Section Start -->
+    <header id="home" class="hero-area">
+        <div class="overlay">
+            <span></span>
+            <span></span>
+        </div>
+        <nav class="navbar navbar-expand-md bg-inverse fixed-top scrolling-navbar">
+            <div class="container">
+                <a href="{{ url('Homepage') }}" class="navbar-brand"><img src="{{ static('nav-logo.png') }}" style="width:150px" alt=""></a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="lni-menu"></i>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                    <ul class="navbar-nav mr-auto w-100 justify-content-end">
+                        <li class="nav-item">
+                            <a class="nav-link page-scroll" href="#home">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link page-scroll" href="#services">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link page-scroll" href="#features">User</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link page-scroll" href="#showcase">Showcase</a>
+                        </li>
 
-    <main class="about" role="main">
-        <div class="jumbotron">
-            <h1 class="display-2" style="font-weight: 400">
-                {{ trans("Welcome to ALCPT Online Platform") }}
-            </h1>
-            <p class="lead">
-                This is a place where we try to build some interesting stuff about a
-                web system for ALCPT. Hope you can improve your ability of English via
-                this system.
-            </p>
-            <hr class="my-4" />
-            <p>
-                If you have any suggestions, please leave us a message. Thank you for
-                your using.
-            </p>
-            <a class="btn btn-primary" href="{{ url('Homepage') }}" role="button">Start</a>
-            <a class="btn btn-secondary" href="{{ url('download_system_pdf') }}" data-toggle="tooltip" data-placement="top" title="Download System PDF">About System</a>
-            <a class="btn btn-light" data-toggle="modal" data-target="#ModalOperationManual">Operation Manual</a>
-            <div class="modal fade" id="ModalOperationManual" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header text-center">
-                            <h5 class="modal-title" id="ModalLongTitle">
-                                Operation Manual
-                            </h5>
+                        <li class="nav-item">
+                            <a class="nav-link page-scroll" href="#team">Team</a>
+                        </li>
+                        <!-- <li class="nav-item">
+                            <a class="nav-link page-scroll" href="#blog">Blog</a>
+                        </li> -->
+                        <li class="nav-item">
+                            <a class="nav-link page-scroll" href="#contact">Contact</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="btn btn-singin" href="{{ url('Homepage') }}">Start</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="container">
+            <div class="row space-100">
+                <div class="col-lg-6 col-md-12 col-xs-12">
+                    <div class="contents">
+                        <h2 class="head-title">{{ trans("Welcome to ALCPT Online Platform") }}</h2>
+                        <p>This is a place where we try to build some interesting stuff about a
+                            web system for ALCPT. Hope you can improve your ability of English via
+                            this system.</p>
+
+                        <p>
+                            If you have any suggestions, please leave us a message. Thank you for
+                            your using.
+                        </p>
+                        <div class="header-button">
+                            <a href="{{ url('download_system_pdf') }}" rel="nofollow" target="_blank" class="btn btn-border-filled">About System</a>
+                            <a href="{{ url('download_OM_pdf') }}" rel="nofollow" target="_blank" class="btn btn-border-filled">Operation Manual</a>
+
+                            <!-- <a href="{{ url('download_OM_pdf') }}" rel="nofollow" target="_blank" class="btn btn-border page-scroll">Operation Manual</a> -->
+
                         </div>
-                        <div id="modal-menu">
-                            <button onclick="window.location.href='{{ url('OM_System') }}'">
-                                System
-                            </button>
-                            <div class="dropdown-divider custom"></div>
-                            <button onclick="window.location.href='{{ url('OM_User') }}'">
-                                User
-                            </button>
-                            <div class="dropdown-divider custom"></div>
-                            <button onclick="window.location.href='{{ url('OM_Report') }}'">
-                                Report
-                            </button>
-                            <div class="dropdown-divider custom"></div>
-                            <button onclick="window.location.href='{{ url('OM_SystemManager') }}'">
-                                System Manager
-                            </button>
-                            <div class="dropdown-divider custom"></div>
-                            <button onclick="window.location.href='{{ url('OM_TestManager') }}'">
-                                Test Manager
-                            </button>
-                            <div class="dropdown-divider custom"></div>
-                            <button onclick="window.location.href='{{ url('OM_TBManager') }}'">
-                                TB Manager
-                            </button>
-                            <div class="dropdown-divider custom"></div>
-                            <button onclick="window.location.href='{{ url('OM_TBOperator') }}'">
-                                TB Operator
-                            </button>
-                            <div class="dropdown-divider custom"></div>
-                            <button onclick="window.location.href='{{ url('OM_Viewer') }}'">
-                                Viewer
-                            </button>
-                            <div class="dropdown-divider custom"></div>
-                            <button onclick="window.location.href='{{ url('OM_Testee') }}'">
-                                Testee
-                            </button>
-                            <div class="dropdown-divider custom"></div>
-                            <button onclick="window.location.href='{{ url('download_OM_pdf') }}'" data-toggle="tooltip" data-placement="top" title="Download OM PDF">
-                                Download Operation Manual
-                            </button>
-                        </div>
-                        <div class="modal-footer">
-                            <a class="btn btn-secondary" style="color: white" data-dismiss="modal">Cancel</a>
-                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-12 col-xs-12 p-0">
+                    <div class="intro-img">
+                        <img src="{{ static('images/about/intro.png') }}" alt="">
                     </div>
                 </div>
             </div>
         </div>
-        <hr class="featurette-divider" />
-        <div class="system-concept-introduction">
-            <div class="container">
-                <div class="row justify-content-center">
-                    <h1>A free practice platform for Military Academy Students.</h1>
-                    <h4 class="text-muted text-center" style="font-weight: 400">
-                        ALCPT is short for American Language Course Placement Test.<br />
-                        ALCPT distinguishes multiple user permissions, and students can
-                        focus on their own permissions to practice.<br />
-                        This system will also generate some simple statistical graphs to
-                        make it easier for users to understand their practice status.
-                    </h4>
+    </header>
+    <!-- Header Section End -->
+
+
+    <!-- Services Section Start -->
+    <section id="services" class="section">
+        <div class="container">
+
+            <div class="row">
+                <!-- Start Col -->
+                <div class="col-lg-4 col-md-6 col-xs-12">
+                    <div class="services-item text-center">
+                        <div class="icon">
+                            <i class="fas fa-user-shield"></i>
+                        </div>
+                        <h4>Commander</h4>
+                        <p>Commanders can check every students record to assure the effectiveness of learning of all the students.</p>
+
+                    </div>
                 </div>
+                <!-- End Col -->
+                <!-- Start Col -->
+                <div class="col-lg-4 col-md-6 col-xs-12">
+                    <div class="services-item text-center">
+                        <div class="icon">
+                            <i class="fas fa-user-graduate"></i>
+                        </div>
+                        <h4>Student</h4>
+                        <p>Students can practice any kind of question as they wish.</p>
+                        <br>
+                        <br>
+                        <br>
+                    </div>
+                </div>
+                <!-- End Col -->
+                <!-- Start Col -->
+                <div class="col-lg-4 col-md-6 col-xs-12">
+                    <div class="services-item text-center">
+                        <div class="icon">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <h4>Favorite Question</h4>
+                        <p>All the question you have ever practiced or tested can be added to Favorite Question. You can review them anytime, anywhere you want!</p>
+                    </div>
+                </div>
+                <!-- End Col -->
+
             </div>
         </div>
-        <hr class="featurette-divider" />
-        <div class="system-concept-introduction">
-            <div class="container">
-                <h2 style="color: red">＃Top 5</h2>
-                <div class="row justify-content-center">
-                    <div class="col-md-6">
-                        <div class="leaderboard">
-                            <div class="card">
-                                <div class="card-header">Board - Most Practice</div>
-                                <div class="card-body">
-                                    <table width="100%">
-                                        <tbody>
-                                            {% for user, answersheet_num in sorted_Data %}
-                                            <tr>
-                                                <td class="text-center">{{ loop.index }}</td>
-                                                <td class="text-left">{{ user }}</td>
-                                                <td class="text-center">{{ answersheet_num }}</td>
-                                            </tr>
-                                            {% endfor %}
-                                        </tbody>
-                                    </table>
-                                </div>
+    </section>
+    <!-- Services Section End -->
+
+
+
+    <!-- Business Plan Section Start -->
+    <section id="business-plan">
+        <div class="container">
+
+            <div class="row">
+                <!-- Start Col -->
+                <div class="col-lg-6 col-md-12 pl-0 pt-70 pr-5">
+                    <div class="business-item-img">
+                        <img src="{{ static('images/about/business-img.png') }}" class="img-fluid" alt="">
+                    </div>
+                </div>
+                <!-- End Col -->
+                <!-- Start Col -->
+                <div class="col-lg-6 col-md-12 pl-4">
+                    <div class="business-item-info">
+                        <h3>A free practice platform for Military Academy Students</h3>
+                        <p>ALCPT is short for American Language Course Placement Test.<br />
+                            ALCPT distinguishes multiple user permissions, and students can
+                            focus on their own permissions to practice.<br />
+                            This system will also generate some simple statistical graphs to
+                            make it easier for users to understand their practice status.
+                            <a class="btn btn-common float-right" href="{{ url('Homepage') }}">Start</a>
+                    </div>
+                </div>
+                <!-- End Col -->
+
+            </div>
+        </div>
+    </section>
+    <!-- Business Plan Section End -->
+
+
+
+    <!-- Cool Fetatures Section Start -->
+    <section id="features" class="section">
+        <div class="container">
+            <!-- Start Row -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="features-text section-header text-center">
+                        <div>
+                            <h2 class="section-title">User Permission</h2>
+                            <div class="desc-text">
+                                <p></p>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="leaderboard">
-                            <div class="card">
-                                <div class="card-header">Board - High Score</div>
-                                <div class="card-body">
-                                    <table width="100%">
-                                        <tbody>
-                                            {% for user, answersheet_num in average_score_sortedData %}
-                                            <tr>
-                                                <td class="text-center">{{ loop.index }}</td>
-                                                <td class="text-left">{{ user }}</td>
-                                                <td class="text-center">{{ answersheet_num }}</td>
-                                            </tr>
-                                            {% endfor %}
-                                        </tbody>
-                                    </table>
-                                </div>
+                </div>
+
+            </div>
+            <!-- End Row -->
+            <!-- Start Row -->
+            <div class="row featured-bg">
+                <!-- Start Col -->
+                <div class="col-lg-6 col-md-6 col-xs-12 p-0">
+                    <!-- Start Fetatures -->
+                    <div class="feature-item featured-border1">
+                        <div class="feature-icon float-left">
+                            <a href="{{ url('OM_SystemManager') }}"><img class="img-responsive" src="{{ static('/images/system.svg') }}" width="60%" style="padding-top: 20px; padding-left: 4px; opacity: 0.5;" alt=" Responsive image" /></a>
+
+                        </div>
+                        <div class="feature-info float-left">
+                            <h4>System Manager</h4>
+                            <p>User manage and </p>
+                        </div>
+                    </div>
+                    <!-- End Fetatures -->
+                </div>
+                <!-- End Col -->
+
+                <!-- Start Col -->
+                <div class="col-lg-6 col-md-6 col-xs-12 p-0">
+                    <!-- Start Fetatures -->
+                    <div class="feature-item featured-border2">
+                        <div class="feature-icon float-right">
+                            <a href="{{ url('OM_TestManager') }}"><img class="img-responsive" src="{{ static('/images/checklist.svg') }}" width="60%" style="padding-top: 20px; padding-left: 6px; opacity: 0.5; " alt="Responsive image" /></a>
+                        </div>
+                        <div class="feature-info float-left">
+                            <h4>Test Manager</h4>
+                            <p>Create, edit test papers and create <br>groups of testees </p>
+                        </div>
+                    </div>
+                    <!-- End Fetatures -->
+                </div>
+                <!-- End Col -->
+
+                <!-- Start Col -->
+                <div class="col-lg-6 col-md-6 col-xs-12 p-0">
+                    <!-- Start Fetatures -->
+                    <div class="feature-item featured-border1">
+                        <div class="feature-icon float-left">
+                            <a href="{{ url('OM_TBManager') }}"><img class="img-responsive" src="{{ static('/images/file-check.svg') }}" width="60%" style="padding-top: 20px; padding-left: 6px; opacity: 0.5; " alt=" Responsive image" /></a>
+
+                        </div>
+                        <div class="feature-info float-left">
+                            <h4>TB Manager</h4>
+                            <p> Review the questions submitted by <br>
+                                the question operator and to maintain <br>
+                                these questions.</p>
+                        </div>
+                    </div>
+                    <!-- End Fetatures -->
+                </div>
+                <!-- End Col -->
+
+                <!-- Start Col -->
+                <div class="col-lg-6 col-md-6 col-xs-12 p-0">
+                    <!-- Start Fetatures -->
+                    <div class="feature-item featured-border2">
+                        <div class="feature-icon float-right">
+                            <a href="{{ url('OM_TBOperator') }}"><img class="img-responsive" src="{{ static('/images/file.svg') }}" width="60%" style="padding-top: 20px; padding-left: 6px; opacity: 0.5; " alt=" Responsive image" /></a>
+                        </div>
+                        <div class="feature-info float-left">
+                            <h4>TB Operator</h4>
+                            <p>add new questions and submit them to <br>
+                                the bank manager for review.</p>
+                        </div>
+                    </div>
+                    <!-- End Fetatures -->
+                </div>
+                <!-- End Col -->
+
+                <!-- Start Col -->
+                <div class="col-lg-6 col-md-6 col-xs-12 p-0">
+                    <!-- Start Fetatures -->
+                    <div class="feature-item featured-border3">
+                        <div class="feature-icon float-left">
+                            <a href="{{ url('OM_Viewer') }}"><img class="img-responsive" src="{{ static('/images/data-scientist.svg') }}" width="60%" style="padding-top: 20px; padding-left: 6px; opacity: 0.5; " alt=" Responsive image" /></a>
+                        </div>
+                        <div class="feature-info float-left">
+                            <h4>Viewer</h4>
+                            <p>Commander and Techer can check <br>
+                                student's score.</p>
+                        </div>
+                    </div>
+                    <!-- End Fetatures -->
+                </div>
+                <!-- End Col -->
+
+                <!-- Start Col -->
+                <div class="col-lg-6 col-md-6 col-xs-12 p-0">
+                    <!-- Start Fetatures -->
+                    <div class="feature-item">
+                        <div class="feature-icon float-right">
+                            <a href="{{ url('OM_Testee') }}"><img class="img-responsive" src="{{ static('/images/data-scientist.svg') }}" width="60%" style="padding-top: 20px; padding-left: 6px; opacity: 0.5; " alt=" Responsive image" /></a>
+                        </div>
+                        <div class="feature-info float-left">
+                            <h4>Testee</h4>
+                            <p>Users can practice listening <br>
+                                and reading exercises in English <br>
+                                through this system.</p>
+                        </div>
+                    </div>
+                    <!-- End Fetatures -->
+                </div>
+                <!-- End Col -->
+
+
+            </div>
+            <!-- End Row -->
+        </div>
+    </section>
+    <!-- Cool Fetatures Section End -->
+
+
+    <!-- Recent Showcase Section Start -->
+    <section id="showcase">
+        <div class="container-fluid right-position">
+            <!-- Start Row -->
+            <div class="row gradient-bg">
+                <div class="col-lg-12">
+                    <div class="showcase-text section-header text-center">
+                        <div>
+                            <h2 class="section-title">Showcase</h2>
+                            <div class="desc-text">
+                                <p></p>
+                            </div>
+                        </div>
+                        <video width="900" controls autoplay loop muted>
+                            <source src="{{ static('/demo/demo20201010.mp4') }}" type="video/mp4">
+
+                            </source>
+                        </video>
+                    </div>
+
+                </div>
+
+            </div>
+            <!-- End Row -->
+
+            <!-- Start Row -->
+            <!-- End Row -->
+        </div>
+    </section>
+    <!-- Recent Showcase Section End -->
+
+
+    <!-- Client Testimoninals Section Start -->
+
+    <!-- Client Testimoninals Section End -->
+
+
+    <!-- Team section Start -->
+    <section id="team" class="section">
+        <div class="container">
+            <!-- Start Row -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="team-text section-header text-center">
+                        <div>
+                            <h2 class="section-title">Team Members</h2>
+                            <div class="desc-text">
+                                <p>National Defense University of Management College</p>
                             </div>
                         </div>
                     </div>
                 </div>
+
             </div>
+            <!-- End Row -->
+            <!-- Start Row -->
+            <div class="row">
+                <!-- Start Col -->
+                <div class="col-lg-3 col-md-6 col-xs-12">
+                    <div class="single-team">
+                        <div class="team-thumb">
+                            <img src="{{ static('/images/劉昀昕.jpg') }}" class="img-fluid" style="opacity:0.8" alt="">
+                        </div>
+
+                        <div class="team-details">
+                            <div class="team-social-icons">
+                                <ul class="social-list">
+                                    <li><a href="#"><i class="lni-facebook-filled"></i></a></li>
+                                    <li><a href="#"><i class="lni-twitter-filled"></i></a></li>
+                                    <li><a href="#"><i class="lni-google-plus"></i></a></li>
+                                </ul>
+                            </div>
+                            <div class="team-inner text-center">
+                                <h5 class="team-title">Patric Green</h5>
+                                <p>Project Manager</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Start Col -->
+
+                <!-- Start Col -->
+                <div class="col-lg-3 col-md-6 col-xs-12">
+                    <div class="single-team">
+                        <div class="team-thumb">
+                            <img src="{{ static('/images/黃柏豪.jpg') }}" class="img-fluid" style="opacity:0.8" alt="">
+                        </div>
+
+                        <div class="team-details">
+                            <div class="team-social-icons">
+                                <ul class="social-list">
+                                    <li><a href="#"><i class="lni-facebook-filled"></i></a></li>
+                                    <li><a href="#"><i class="lni-twitter-filled"></i></a></li>
+                                    <li><a href="#"><i class="lni-google-plus"></i></a></li>
+                                </ul>
+                            </div>
+                            <div class="team-inner text-center">
+                                <h5 class="team-title">黃柏豪</h5>
+                                <p>Back-end Developer</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Start Col -->
+
+                <!-- Start Col -->
+                <div class="col-lg-3 col-md-6 col-xs-12">
+                    <div class="single-team">
+                        <div class="team-thumb">
+                            <img src="{{ static('/images/黃子祐.jpg') }}" class="img-fluid" style="opacity:0.8" alt="">
+                        </div>
+
+                        <div class="team-details">
+                            <div class="team-social-icons">
+                                <ul class="social-list">
+                                    <li><a href="#"><i class="lni-facebook-filled"></i></a></li>
+                                    <li><a href="#"><i class="lni-twitter-filled"></i></a></li>
+                                    <li><a href="#"><i class="lni-google-plus"></i></a></li>
+                                </ul>
+                            </div>
+                            <div class="team-inner text-center">
+                                <h5 class="team-title">黃子祐</h5>
+                                <p>Web developer</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Start Col -->
+
+                <!-- Start Col -->
+                <div class="col-lg-3 col-md-6 col-xs-12">
+                    <div class="single-team">
+                        <div class="team-thumb">
+                            <img src="{{ static('/images/賴昱婷.jpg') }}" class="img-fluid" style="opacity:0.8" alt="">
+                        </div>
+
+                        <div class="team-details">
+                            <div class="team-social-icons">
+                                <ul class="social-list">
+                                    <li><a href="#"><i class="lni-facebook-filled"></i></a></li>
+                                    <li><a href="#"><i class="lni-twitter-filled"></i></a></li>
+                                    <li><a href="#"><i class="lni-google-plus"></i></a></li>
+                                </ul>
+                            </div>
+                            <div class="team-inner text-center">
+                                <h5 class="team-title">賴昱婷</h5>
+                                <p>Web developer</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Start Col -->
+
+
+            </div>
+            <!-- End Row -->
         </div>
-        <hr class="featurette-divider" />
-        <!--Introduce System Manager.-->
-        <div class="privilege-intro">
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-md-5">
-                        <h2 class="featurette-heading">
-                            System Manager
-                            <span class="text-muted">Controlling about system.</span>
-                        </h2>
-                        <p class="lead">
-                            The main task of the system manager is to control some personal
-                            information of users on the system. Like personal information,
-                            student information, etc.
-                        </p>
+    </section>
+    <!-- Team section End -->
+
+
+    <!-- Blog Section -->
+    <!-- <section id="blog" class="section"> -->
+    <!-- Container Starts -->
+    <!-- <div class="container"> -->
+    <!-- Start Row -->
+    <!-- <div class="row">
+                <div class="col-lg-12">
+                    <div class="blog-text section-header text-center">
                         <div>
-                            <button type="button" class="btn btn-primary" onclick="window.location.href='{{ url('OM_SystemManager') }}'">
-                                More
-                            </button>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <img class="img-responsive" src="{{ static('/images/system.svg') }}" width="90%" height="90%" alt="Responsive image" />
-                    </div>
-                </div>
-                <hr class="featurette-divider" />
-            </div>
-        </div>
-        <!--Introduce Test Manager.-->
-        <div class="privilege-intro">
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-md-3">
-                        <img class="img-responsive" src="{{ static('/images/checklist.svg') }}" width="90%" height="90%" alt="Responsive image" />
-                    </div>
-                    <div class="col-md-5">
-                        <h2 class="featurette-heading">
-                            Test Manager
-                            <span class="text-muted">Controlling about exam.</span>
-                        </h2>
-                        <p class="lead">
-                            The main task of the test manager is to create and edit test
-                            papers, and to create groups of testees. Use these test papers
-                            to create mock tests to test specific groups of subjects.
-                        </p>
-                        <div class="text-right">
-                            <button type="button" class="btn btn-primary" onclick="window.location.href='{{ url('OM_TestManager') }}'">
-                                More
-                            </button>
+                            <h2 class="section-title">Latest Blog Posts</h2>
+                            <div class="desc-text">
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do</p>
+                                <p>eiusmod tempor incididunt ut labore et dolore.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <hr class="featurette-divider" />
-            </div>
-        </div>
-        <!--Introduce TB Manager.-->
-        <div class="privilege-intro">
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-md-5">
-                        <h2 class="featurette-heading">
-                            TB Manager
-                            <span class="text-muted">Maintain and review questions</span>
-                        </h2>
-                        <p class="lead">
-                            The main task of the TB manager is to review the questions
-                            submitted by the question operator and to maintain these
-                            questions.
-                        </p>
+
+            </div> -->
+    <!-- End Row -->
+    <!-- Start Row -->
+    <!-- <div class="row"> -->
+    <!-- Start Col -->
+    <!-- <div class="col-lg-4 col-md-6 col-xs-12 blog-item"> -->
+    <!-- Blog Item Starts -->
+    <!-- <div class="blog-item-wrapper">
+                        <div class="blog-item-img">
+                            <a href="single-post.html">
+                                <img src="img/blog/01.jpg" class="img-fluid" alt="">
+                            </a>
+                        </div>
+                        <div class="blog-item-text">
+                            <h3><a href="single-post.html">How Slick Will Transform <br>Your Business</a></h3>
+                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry.</p>
+                            <a href="" class="read-more">5 Min read</a>
+                        </div>
+                        <div class="author">
+                            <span class="name"><i class="lni-user"></i><a href="#">Posted by Admin</a></span>
+                            <span class="date float-right"><i class="lni-calendar"></i><a href="#">10 April, 2020</a></span>
+                        </div>
+                    </div> -->
+    <!-- Blog Item Wrapper Ends-->
+    <!-- </div> -->
+    <!-- End Col -->
+    <!-- Start Col -->
+    <!-- <div class="col-lg-4 col-md-6 col-xs-12 blog-item"> -->
+    <!-- Blog Item Starts -->
+    <!-- <div class="blog-item-wrapper">
+                        <div class="blog-item-img">
+                            <a href="single-post.html">
+                                <img src="img/blog/02.jpg" class="img-fluid" alt="">
+                            </a>
+                        </div>
+                        <div class="blog-item-text">
+                            <h3><a href="single-post.html">Growth Techniques for <br>New Startups</a></h3>
+                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry.</p>
+                            <a href="" class="read-more">5 Min read</a>
+                        </div>
+                        <div class="author">
+                            <span class="name"><i class="lni-user"></i><a href="#">Posted by Admin</a></span>
+                            <span class="date float-right"><i class="lni-calendar"></i><a href="#">10 April, 2020</a></span>
+                        </div>
+                    </div> -->
+    <!-- Blog Item Wrapper Ends-->
+    <!-- </div> -->
+    <!-- End Col -->
+    <!-- Start Col -->
+    <!-- <div class="col-lg-4 col-md-6 col-xs-12 blog-item"> -->
+    <!-- Blog Item Starts -->
+    <!-- <div class="blog-item-wrapper">
+                        <div class="blog-item-img">
+                            <a href="single-post.html">
+                                <img src="img/blog/03.jpg" class="img-fluid" alt="">
+                            </a>
+                        </div>
+                        <div class="blog-item-text">
+                            <h3><a href="single-post.html">Writing Professional <br>Emails to Customers</a></h3>
+                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry.</p>
+                            <a href="" class="read-more">5 Min read</a>
+                        </div>
+                        <div class="author">
+                            <span class="name"><i class="lni-user"></i><a href="#">Posted by Admin</a></span>
+                            <span class="date float-right"><i class="lni-calendar"></i><a href="#">10 April, 2020</a></span>
+                        </div>
+                    </div> -->
+    <!-- Blog Item Wrapper Ends-->
+    <!-- </div> -->
+    <!-- End Col -->
+
+    <!-- </div> -->
+    <!-- End Row -->
+    <!-- </div> -->
+    <!-- </section> -->
+    <!-- blog Section End -->
+
+    <!-- Contact Us Section -->
+    <section id="contact" class="section">
+        <!-- Container Starts -->
+        <div class="container">
+            <!-- Start Row -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="contact-text section-header text-center">
                         <div>
-                            <button type="button" class="btn btn-primary" onclick="window.location.href='{{ url('OM_TBManager') }}'">
-                                More
-                            </button>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <img class="img-responsive" src="{{ static('/images/file-check.svg') }}" width="90%" height="90%" alt="Responsive image" />
-                    </div>
-                </div>
-                <hr class="featurette-divider" />
-            </div>
-        </div>
-        <!--Introduce TB Operator.-->
-        <div class="privilege-intro">
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-md-3">
-                        <img class="img-responsive" src="{{ static('/images/file.svg') }}" width="90%" height="90%" alt="Responsive image" />
-                    </div>
-                    <div class="col-md-5">
-                        <h2 class="featurette-heading">
-                            TB Operator
-                            <span class="text-muted">Create new questions.</span>
-                        </h2>
-                        <p class="lead">
-                            The main job of the problem operator is to add new questions and
-                            submit them to the bank manager for review.
-                        </p>
-                        <div class="text-right">
-                            <button type="button" class="btn btn-primary" onclick="window.location.href='{{ url('OM_TBOperator') }}'">
-                                More
-                            </button>
+                            <h2 class="section-title">Get In Touch</h2>
+                            <div class="desc-text">
+                                <p>If you have any question, please contact us.</p>
+
+                            </div>
                         </div>
                     </div>
                 </div>
-                <hr class="featurette-divider" />
+
             </div>
-        </div>
-        <!--Introduce Viewer.-->
-        <div class="privilege-intro">
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-md-5">
-                        <h2 class="featurette-heading">
-                            Viewer
-                            <span class="text-muted">Watch the test status of users via this system</span>
-                        </h2>
-                        <p class="lead">
-                            This permission is mainly designed for the chief or teacher to
-                            watch the testee's practice status through this system and
-                            evaluate whether there is a tendency to improve their English
-                            ability.
-                        </p>
-                        <div>
-                            <button type="button" class="btn btn-primary" onclick="window.location.href='{{ url('OM_Viewer') }}'">
-                                More
-                            </button>
+            <!-- End Row -->
+            <!-- Start Row -->
+            <div class="row">
+                <!-- Start Col -->
+                <div class="col-lg-6 col-md-12">
+                    <form id="contactForm">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="name" name="name" placeholder="Name" required data-error="Please enter your name">
+                                    <div class="help-block with-errors"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <input type="text" placeholder="Subject" id="msg_subject" class="form-control" name="msg_subject" required data-error="Please enter your subject">
+                                    <div class="help-block with-errors"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="email" name="email" placeholder="Email" required data-error="Please enter your Email">
+                                    <div class="help-block with-errors"></div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <textarea class="form-control" id="message" name="message" placeholder="Write Message" rows="4" data-error="Write your message" required></textarea>
+                                    <div class="help-block with-errors"></div>
+                                </div>
+                                <div class="submit-button">
+                                    <button class="btn btn-common" id="submit" type="submit">Submit</button>
+                                    <div id="msgSubmit" class="h3 hidden"></div>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-3">
-                        <img class="img-responsive" src="{{ static('/images/data-scientist.svg') }}" width="90%" height="90%" alt="Responsive image" />
+                    </form>
+                </div>
+                <!-- End Col -->
+                <!-- Start Col -->
+                <div class="col-lg-1">
+
+                </div>
+                <!-- End Col -->
+                <!-- Start Col -->
+                <div class="col-lg-4 col-md-12">
+                    <div class="contact-img">
+                        <img src="{{ static('nav-logo.png') }}" class="img-fluid" alt="">
                     </div>
                 </div>
-                <hr class="featurette-divider" />
-            </div>
-        </div>
-        <!--Introduce Testee.-->
-        <div class="privilege-intro">
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-md-3">
-                        <img class="img-responsive" src="{{ static('/images/examinee.svg') }}" width="90%" height="90%" alt="Responsive image" />
-                    </div>
-                    <div class="col-md-5">
-                        <h2 class="featurette-heading">
-                            Testee
-                            <span class="text-muted">Main users of this system</span>
-                        </h2>
-                        <p class="lead">
-                            Users can practice listening and reading exercises in English
-                            through this system. There are also mock tests designed to be
-                            performed by administrators. Allows users to use these tests to
-                            improve their understanding of English test questions.
-                        </p>
-                        <div class="text-right">
-                            <button type="button" class="btn btn-primary" onclick="window.location.href='{{ url('OM_Testee') }}'">
-                                More
-                            </button>
-                        </div>
-                    </div>
+                <!-- End Col -->
+                <!-- Start Col -->
+                <div class="col-lg-1">
                 </div>
-                <hr class="featurette-divider" />
+                <!-- End Col -->
+
             </div>
+            <!-- End Row -->
         </div>
-        <div class="contact-us">
-            <div class="container">
-                <div class="row">
-                    <h3 class="text-muted">Contact Us.</h3>
-                </div>
-                <hr class="featurette-divider" />
-            </div>
-        </div>
-    </main>
-    {% include "footer.html" %}
+    </section>
+    <!-- Contact Us Section End -->
+
+    <!-- Footer Section Start -->
+    {% include 'footer.html' %}
+    <!-- Footer Section End -->
+
+
+    <!-- Go To Top Link -->
+    <a href="#" class="back-to-top">
+        <i class="lni-chevron-up"></i>
+    </a>
+
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="loader" id="loader-1"></div>
+    </div>
+    <!-- End Preloader -->
+
+
+    <!-- jQuery first, then Tether, then Bootstrap JS. -->
+    {% include 'about_head.html' %}
+
+
 </body>
+
 
 </html>
