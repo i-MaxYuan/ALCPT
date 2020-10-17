@@ -6,9 +6,9 @@
 <main class="login-form">
     <div class="cotainer">
         <div class="row justify-content-center">
-            <div class="col-md-8">
+            <div class="col-md-6">
                 <div class="card">
-                    <div class="card-header">Login.</div>
+                    <div class="card-header" style="text-align: center; font-size: 20px">Login</div>
                     <div class="card-body">
                         <form action="{{ url('login') }}" method="post">
                             <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
