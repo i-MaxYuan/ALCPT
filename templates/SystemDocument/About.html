@@ -15,7 +15,7 @@
         </div>
         <nav class="navbar navbar-expand-md bg-inverse fixed-top scrolling-navbar">
             <div class="container">
-                <a href="{{ url('Homepage') }}" class="navbar-brand"><img src="{{ static('nav-logo.png') }}" style="width:150px" alt=""></a>
+                <a href="{{ url('Homepage') }}" class="navbar-brand"><img src="{{ static('nav-logo.png') }}" style="width:120px" alt=""></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                     <i class="lni-menu"></i>
                 </button>
@@ -311,8 +311,8 @@
                                 <p></p>
                             </div>
                         </div>
-                        <video width="900" controls autoplay loop muted>
-                            <source src="{{ static('/demo/demo20201010.mp4') }}" type="video/mp4">
+                        <video class="col-md-8" controls autoplay loop muted>
+                            <source class="col-md-6" src="{{ static('/demo/demo20201010.mp4') }}" type="video/mp4">
 
                             </source>
                         </video>
@@ -655,7 +655,7 @@
 
 
     <!-- jQuery first, then Tether, then Bootstrap JS. -->
-    {% include 'about_head.html' %}
+    {% include 'about_foot.html' %}
 
 
 </body>
