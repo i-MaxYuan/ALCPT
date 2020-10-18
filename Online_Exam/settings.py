@@ -24,7 +24,7 @@ SECRET_KEY = 'yftv^g7w17v-vd96!=ad37dv@m$_gh^nn_&d*4@qzsoce5*pd3'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+
 
 # Application definition
 
@@ -50,8 +50,10 @@ MIDDLEWARE = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    # 'alcpt.middleware.EnglishExamSystemMiddleware',
+    
+
 )
+
 
 ROOT_URLCONF = 'Online_Exam.urls'
 
@@ -134,11 +136,6 @@ USE_I18N = True
 USE_L10N = True
 
 #USE_TZ = True
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.8/howto/static-files/
-
-
 
 
 LANGUAGES = {
