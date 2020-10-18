@@ -402,7 +402,7 @@ button:focus {
 .back-to-top {
     display: none;
     position: fixed;
-    bottom: 18px;
+    bottom: 50px;
     right: 15px;
     width: 45px;
     height: 45px;
@@ -1381,7 +1381,6 @@ button:focus {
    Blog section
    ========================================================================== */
 .blog-hero-area {
-    background: url(../img/hero-area.jpg) no-repeat;
     background-size: auto;
     background-size: cover;
     color: #fff;
