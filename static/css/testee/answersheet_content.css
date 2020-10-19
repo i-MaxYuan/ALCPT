@@ -1,4 +1,4 @@
-.testee-score-list table>thead>tr>th,
+/* .testee-score-list table>thead>tr>th,
 .testee-score-list table>tbody>tr>td {
     text-align: center;
     vertical-align: middle;
@@ -6,9 +6,8 @@
 
 .testee-score-list .modal-body {
     font-size: 20px;
-}
-
-.testee-score-list .col-md-6 h3 {
+} */
+/* .testee-score-list .col-md-6 h3 {
     padding: 30px 20px;
 }
 
@@ -25,7 +24,7 @@
 .testee-score-list table>tbody>tr>td .fa-check {
     color: green;
     font-size: 25px;
-    padding-right: 23px
+    padding-right: 23px;
 }
 
 .testee-score-list table>tbody>tr>td .fa-exclamation-circle,
@@ -33,11 +32,11 @@
 .fa-times {
     color: red;
     font-size: 25px;
-    padding-right: 23px
+    padding-right: 23px;
 }
 
 .testee-score-list table>tbody>tr>td>a .fa-heart {
     color: red;
     font-size: 25px;
     padding-right: 20px;
-}
+} */
