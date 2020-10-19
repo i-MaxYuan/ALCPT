@@ -97,13 +97,15 @@
                     </li>
                     {% endif %} {% if user.is_authenticated %}
                     <!-- Button trigger modal for personal notification center -->
-                    <button type="button" class="btn" data-toggle="modal" data-target="#NotificationCenter">
-                        <i class="fa fa-bell"></i>
-                        {% if request.user.proclamation_set.all()|unread_count != 0 %}
-                        <label class="notification-custom"><sup>{{ request.user.proclamation_set.all()|unread_count }}</sup></label>
-                        {% endif %}
-                    </button>
+                    <li class="nav-item dropdown">
+                        <button type="button" class="btn" data-toggle="modal" data-target="#NotificationCenter">
+                            <i class="fa fa-bell"></i>
 
+                            {% if request.user.proclamation_set.all()|unread_count != 0 %}
+                            <label class=" notification-custom"><sup>{{ request.user.proclamation_set.all()|unread_count }}</sup></label>
+                            {% endif %}
+                        </button>
+                    </li>
                     <!-- Modal for notification center -->
                     <form id="notificationForm" name="notificationForm" method="post">
                         <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
@@ -167,14 +169,28 @@
                     </form>
                     <!-- Button trigger modal for user functions menu -->
                     <button type="button" class="btn" data-toggle="modal" data-target="#ModalCenter">
-                        <i class="fa fa-user"></i>
+
+                        <img src="{{ user.photo.url }}" width="35px" style="border-radius: 50%; padding-right: 5px; padding-bottom: 2px" alt="">
+
+                        <!-- {% if request.user.name != None %}
+                        {{ request.user.name }}
+                        {% else %}
+                        {{ request.user.reg_id }}
+                        {% endif %} -->
+
                     </button>
 
                     <!-- Modal for functions menu -->
                     <div class="modal fade" id="ModalCenter" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered" role="document">
                             <div class="modal-content">
+
                                 <div class="modal-header text-center">
+                                    {% if user.photo %}
+                                    <img src="{{ user.photo.url }}" width="70px" style="border-radius: 50%; padding-bottom: 10px;" alt="{{ user.name }}">
+                                    {% else %}
+                                    <img class="card-img-top" src="" alt="{{ user.name }}" />
+                                    {% endif %}
                                     <h5 class="modal-title" id="ModalLongTitle">
                                         {% if request.user.name != None %}
                                         {{ request.user.name }}
@@ -216,11 +232,13 @@
                                     <button onclick="window.location.href='{{ url('about') }}'">
                                         <i class="fas fa-question"></i>{{ trans("About") }}
                                     </button>
+                                    <div class="dropdown-divider custom"></div>
+
                                 </div>
 
                                 <div class="modal-footer">
-                                    <a class="btn btn-light" href="{{ url('logout') }}" onclick="return confirm('Sure to logout?')">{{trans("Logout")}}</a>
-                                    <a class="btn btn-secondary" data-dismiss="modal">{{trans("Cancel")}}</a>
+
+                                    <a class="btn btn-outline-dark btn-block" href="{{ url('logout') }}" onclick="return confirm('Sure to logout?')"><i class="fas fa-sign-out-alt"></i>{{trans("Logout")}}</a>
                                 </div>
                             </div>
                         </div>

@@ -1,13 +1,30 @@
-{% extends 'new_base.html' %}
-{% block scripts %}
-<script src="{{ static('/javascript/exam/manual_pick.js') }}"></script>
-{% endblock %}
-{% block path %}
+{% extends 'new_base.html' %} {% block scripts %}
+<script>
+    function question_detail(index) {
+        var detailIndex = "question_detail" + index;
+        var question_detail = document.getElementById(detailIndex);
+        var summaryIndex = "summary" + index;
+        var summary_q_content = document.getElementById(summaryIndex);
+        var fullIndex = "full" + index;
+        var full_q_content = document.getElementById(fullIndex);
+
+        if (question_detail.style.display === "none") {
+            question_detail.style.display = "table-row";
+            summary_q_content.style.display = "none";
+            full_q_content.style.display = "table-row";
+        } else {
+            question_detail.style.display = "none";
+            summary_q_content.style.display = "table-row";
+            full_q_content.style.display = "none";
+        }
+    }
+</script>
+{% endblock %} {% block path %}
 <li class="breadcrumb-item" aria-current="page">
     <a href="{{ url('testpaper_list') }}">TestPaper List</a>
 </li>
 <li class="breadcrumb-item" aria-current="page">
-    <a href="{{ url('testpaper_edit', args=[testpaper.id]) }}">TestPaper Edit</a>
+    <a href="{( url('testpaper_edit', args=[testpaper.id]) }}">TestPaper Edit</a>
 </li>
 <li class="breadcrumb-item active" aria-current="page">Manual Pick</li>
 {% endblock %} {% block content %}
@@ -35,9 +52,16 @@
 
                             <tbody>
                                 {% for question in all_questions %}
-                                <tr style="cursor: pointer" class="data-row" onclick="selectRow(this)">
+                                <tr>
                                     <td>
-                                        <input type="checkbox" class="passed-questions" name="question" value="{{ question.id }}" {% if question in selected_questions %}checked{% endif %} />
+                                        <input type="checkbox" class="passed-questions" name="question" value="{{ question.id }}" {%
+                      if
+                      question
+                      in
+                      selected_questions
+                      %}checked{%
+                      endif
+                      %} />
                                     </td>
 
                                     <td>{{ question.id }}</td>
@@ -71,7 +95,8 @@
 
                                     <td colspan="3">
                                         <ol type="A">
-                                            {% for option in question.choice_set.all() %} {% if option.is_answer %}
+                                            {% for option in question.choice_set.all() %} {% if
+                      option.is_answer %}
                                             <li style="color: red">{{ option }}</li>
                                             {% else %}
                                             <li>{{ option }}</li>
