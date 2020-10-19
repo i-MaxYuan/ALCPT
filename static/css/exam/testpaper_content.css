@@ -1,23 +1,23 @@
-#sidebar .container .row {
+#sidebarContent .container .row {
     height: 76vh;
 }
 
-#sidebar nav>ul {
+#sidebarContent nav>ul {
     display: inline;
-    font-size: 20px;
+    font-size: 17px;
     padding: 2px;
 }
 
-#sidebar nav>ul>li {
+#sidebarContent nav>ul>li {
     padding: 10px;
 }
 
-#sidebar nav>ul>li>a {
+#sidebarContent nav>ul>li>a {
     text-decoration: none;
     color: white;
 }
 
-#sidebar nav>ul>li>a:hover {
+#sidebarContentContent nav>ul>li>a:hover {
     background-color: rgb(108, 117, 125);
     opacity: 0.1;
 }
@@ -31,7 +31,7 @@
     text-align: center;
 }
 
-#data-content {
+#testpaperContent {
     height: 76vh;
     overflow-x: scroll;
 }

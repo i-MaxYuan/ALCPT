@@ -5,8 +5,11 @@
 <head>
     {% include 'head.html' %}
 
+
     {% block stylesheets %} {% endblock %} {% block scripts %} {% endblock %}
+
 </head>
+
 
 <body>
     <div class="wrapper">
@@ -16,7 +19,7 @@
             <div id="path">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item active" aria-current="page">
+                        <li class="breadcrumb-item " aria-current="page">
                             <a href="{{ url('Homepage') }}">{{trans("Home")}}</a>
                         </li>
                         {% block path %} {% endblock %}
@@ -40,24 +43,16 @@
 </body>
 
 </html>
-<!--路徑-->
+
+
+{% include "footer.html" %}
+
+</html>
 
 
 
-<style>
-    #path a {
-        text-decoration: none;
 
-    }
-</style>
-
-<!--主要資料區-->
-
-
-
-<div class="space"></div>
-</div>
-<style>
+<!-- <style>
     #main-block {
             {
             #height: 65vh;
@@ -98,17 +93,4 @@
     .fas {
         padding-right: 5px;
     }
-</style>
-
-<!--分頁-->
-
-<style>
-
-</style>
-
-
-
-
-{% include "footer.html" %}
-
-</html>
+</style> -->

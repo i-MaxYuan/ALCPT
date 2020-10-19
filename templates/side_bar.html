@@ -1,11 +1,14 @@
 <nav id="sidebar">
+    <div id="dismiss">
+        <i class="fas fa-arrow-left"></i>
+    </div>
+
     <div class="sidebar-header">
         <a href="{{ url('about') }}" class="navbar-brand"><img src="{{ static('/logo/nav-logo-white.png') }}" style="width:130px" alt=""></a>
     </div>
-
     {% if user.is_authenticated %}
-    <ul class="list-unstyled components">
 
+    <ul class="list-unstyled components">
         <img src="{{ user.photo.url }}" width="70px" style="border-radius: 50%; padding-right: 5px; margin-bottom:20px;  margin-left:10px" alt="">
 
         {% if request.user.name != None %}
@@ -16,9 +19,8 @@
         <script>
             say_hello();
         </script>
-
         <li class="active">
-            <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fas fa-user"></i>{{ trans("Profile") }}</a>
+            <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false"><i class="fas fa-user"></i>{{ trans("Profile") }}</a>
             <ul class="collapse list-unstyled" id="homeSubmenu">
                 <li>
                     <a href="{{ url('profile') }}"><i class="fas fa-user"></i>{{ trans("Profile") }}</a>
@@ -29,14 +31,11 @@
                 <li>
                     <a href="{{ url('email') }}"><i class="fas fa-envelope"></i>Email</a>
                 </li>
-
                 <li>
                     <a href="{{ url('password_change') }}"><i class="fas fa-key"></i>{{ trans("Password Change") }}</a>
                 </li>
             </ul>
         </li>
-
-
 
         <li>
             <a href="{{ url('report') }}"><i class="fas fa-exclamation-triangle"></i>{{ trans("Report") }}</a>
@@ -52,11 +51,11 @@
         </li>
     </ul>
     {% else %}
+
     <ul class="list-unstyled CTAs">
         <li>
             <a href="{{ url('login') }}" class="download">{{trans("Login")}}</a>
         </li>
     </ul>
     {% endif %}
-
 </nav>
