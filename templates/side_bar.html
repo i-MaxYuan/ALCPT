@@ -1,0 +1,62 @@
+<nav id="sidebar">
+    <div class="sidebar-header">
+        <a href="{{ url('about') }}" class="navbar-brand"><img src="{{ static('/logo/nav-logo-white.png') }}" style="width:130px" alt=""></a>
+    </div>
+
+    {% if user.is_authenticated %}
+    <ul class="list-unstyled components">
+
+        <img src="{{ user.photo.url }}" width="70px" style="border-radius: 50%; padding-right: 5px; margin-bottom:20px;  margin-left:10px" alt="">
+
+        {% if request.user.name != None %}
+        {{ request.user.name }}
+        {% else %}
+        {{ request.user.reg_id }}
+        {% endif %}
+        <script>
+            say_hello();
+        </script>
+
+        <li class="active">
+            <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fas fa-user"></i>{{ trans("Profile") }}</a>
+            <ul class="collapse list-unstyled" id="homeSubmenu">
+                <li>
+                    <a href="{{ url('profile') }}"><i class="fas fa-user"></i>{{ trans("Profile") }}</a>
+                </li>
+                <li>
+                    <a href="{{ url('profile_edit') }}"><i class="fas fa-user-edit"></i>{{ trans("Edit Profile") }}</a>
+                </li>
+                <li>
+                    <a href="{{ url('email') }}"><i class="fas fa-envelope"></i>Email</a>
+                </li>
+
+                <li>
+                    <a href="{{ url('password_change') }}"><i class="fas fa-key"></i>{{ trans("Password Change") }}</a>
+                </li>
+            </ul>
+        </li>
+
+
+
+        <li>
+            <a href="{{ url('report') }}"><i class="fas fa-exclamation-triangle"></i>{{ trans("Report") }}</a>
+        </li>
+        <li>
+            <a href="{{ url('about') }}"><i class="fas fa-question"></i>{{ trans("About") }}</a>
+        </li>
+    </ul>
+
+    <ul class="list-unstyled CTAs">
+        <li>
+            <a href="{{ url('logout') }}" class="download" onclick="return confirm('Sure to logout?')"><i class="fas fa-sign-out-alt"></i>Logout</a>
+        </li>
+    </ul>
+    {% else %}
+    <ul class="list-unstyled CTAs">
+        <li>
+            <a href="{{ url('login') }}" class="download">{{trans("Login")}}</a>
+        </li>
+    </ul>
+    {% endif %}
+
+</nav>

@@ -1,7 +1,7 @@
 {% extends 'new_base.html' %}
 
 {% block stylesheets %}
-<link rel="stylesheet" type="text/css" href="{{ static('/css/testee/favorite_question_list.css') }}" />
+<!-- <link rel="stylesheet" type="text/css" href="{{ static('/css/testee/favorite_question_list.css') }}" /> -->
 {% endblock %}
 
 {% block scripts %}
@@ -114,7 +114,7 @@
                                 </td>
                                 <td class="text-right">
 
-                                    <a href="{{ url('favorite_question_delete', args=[favorite_question.id]) }}"><i class="fas fa-heart"></i></a>
+                                    <a href="{{ url('favorite_question_delete', args=[favorite_question.id]) }}"><i class="fas fa-heart" style="color: red; font-size: 25px"></i></a>
                                 </td>
                             </tr>
 

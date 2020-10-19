@@ -1,7 +1,7 @@
 {% extends 'new_base.html' %}
 
 {% block stylesheets %}
-<link rel="stylesheet" type="text/css" href="{{ static('/css/testee/answersheet_content.css') }}" />
+<!-- <link rel="stylesheet" type="text/css" href="{{ static('/css/testee/answersheet_content.css') }}" /> -->
 {% endblock %}
 
 {% block scripts %}
@@ -131,15 +131,15 @@
                                     <i class="fa fa-question"></i>
                                     {% else %}
                                     {% if question_correction %}
-                                    <i class="fa fa-check"></i>
+                                    <i class="fa fa-check" style="color: green; font-size: 25px; padding-right: 5px"></i>
                                     {% else %}
-                                    <i class="fa fa-times"></i>
+                                    <i class="fa fa-times" style="color: red; font-size: 25px; padding-right: 10px"></i>
                                     {% endif %}
                                     {% endif %}
                                     {% if favorite %}
-                                    <a href="{{ url('favorite_question', args=[answer.question.id, answersheet.id]) }}"><i class="fas fa-heart"></i></a>
+                                    <a href="{{ url('favorite_question', args=[answer.question.id, answersheet.id]) }}"><i class="fas fa-heart" style="color: red; font-size: 25px; padding-right: 5px"></i></a>
                                     {% else %}
-                                    <a href="{{ url('favorite_question', args=[answer.question.id, answersheet.id]) }}"><i class="far fa-heart"></i></a>
+                                    <a href="{{ url('favorite_question', args=[answer.question.id, answersheet.id]) }}"><i class="far fa-heart" style="color: red; font-size: 25px; padding-right: 5px"></i></a>
                                     {% endif %}
                                 </td>
                             </tr>
