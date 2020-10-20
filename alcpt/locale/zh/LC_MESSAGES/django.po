@@ -645,6 +645,13 @@ msgstr "聽力"
 msgid  "Reading"
 msgstr "閱讀"
 
+
+msgid  "Listening "
+msgstr "聽力"
+
+msgid  "Reading "
+msgstr "閱讀"
+
 msgid  "Listening Type"
 msgstr "聽力題型"
 
@@ -712,6 +719,10 @@ msgid  "Difficulty"
 msgstr "難易度"
 
 msgid  "Create"
+msgstr "創建"
+
+
+msgid  "Create "
 msgstr "創建"
 
 msgid  "Option"
@@ -1127,6 +1138,15 @@ msgstr "科系"
 
 msgid  "Green color means the correct answer."
 msgstr "綠色代表是正確的答案"
+
+msgid  "Paragraph"
+msgstr "段落"
+
+msgid  "Edit"
+msgstr "編輯"
+
+msgid  "Reject Reason"
+msgstr "否決的理由"
 
 msgid  ""
 msgstr ""

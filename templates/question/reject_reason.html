@@ -2,9 +2,9 @@
 
 {% block path %}
 <li class="breadcrumb-item" aria-current="page">
-    <a href="{{ url('question_review') }}">{{trans("")}}Review</a>
+    <a href="{{ url('question_review') }}">{{trans("Review")}}</a>
 </li>
-<li class="breadcrumb-item active" aria-current="page">{{trans("")}}Reject Reason</li>
+<li class="breadcrumb-item active" aria-current="page">{{trans("Reject Reason")}}</li>
 {% endblock %}
 
 {% block content %}
@@ -26,7 +26,7 @@
 
                             <div class="text-center">
                                 <button type="submit" class="btn btn-danger" onclick="return confirm('{{trans("Sure to reject")}}?')">
-                                    {{trans(Reject"")}}
+                                    {{trans("Reject")}}
                                 </button>
                                 <button type="button" class="btn btn-secondary" onclick="self.location=document.referrer;">
                                     {{trans("Cancel")}}
