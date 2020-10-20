@@ -645,6 +645,13 @@ msgstr "聽力"
 msgid  "Reading"
 msgstr "閱讀"
 
+
+msgid  "Listening "
+msgstr "聽力"
+
+msgid  "Reading "
+msgstr "閱讀"
+
 msgid  "Listening Type"
 msgstr "聽力題型"
 
@@ -712,6 +719,10 @@ msgid  "Difficulty"
 msgstr "難易度"
 
 msgid  "Create"
+msgstr "創建"
+
+
+msgid  "Create "
 msgstr "創建"
 
 msgid  "Option"
@@ -903,11 +914,8 @@ msgstr "測試經理的主要任務是創建和編輯測試卷，以及創建受
 msgid  "Maintain and review questions"
 msgstr "維護和審查問題"
 
-msgid  "Review the questions submitted by the question" by the question operator and to maintain these questions."
+msgid  "The main task of the TB manager is to review the questions submitted by the question operator and to maintain these questions."
 msgstr "題庫管理員的主要任務是審查問題操作員提交的問題並維護這些問題。"
-
-msgid "and to maintain these questions."
-msgstr ""
 
 msgid  "The main job of the problem operator is to add new questions and submit them to the bank manager for review."
 msgstr "問題操作員的主要工作是添加新問題並將其提交給題庫管理員以供審核。"
@@ -1130,6 +1138,15 @@ msgstr "科系"
 
 msgid  "Green color means the correct answer."
 msgstr "綠色代表是正確的答案"
+
+msgid  "Paragraph"
+msgstr "段落"
+
+msgid  "Edit"
+msgstr "編輯"
+
+msgid  "Reject Reason"
+msgstr "否決的理由"
 
 msgid  ""
 msgstr ""

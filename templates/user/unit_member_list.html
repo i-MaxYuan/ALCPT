@@ -11,17 +11,17 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <h5 class="card-header">{{ viewed_unit.name }} Member List.</h5>
+                    <h5 class="card-header">{{ viewed_unit.name }} {{trans("Member List")}}</h5>
 
                     <div class="card-body">
                         <div class="table-responsive">
                             <table class="table table-hover">
                                 <thead class="thead-light">
                                     <tr>
-                                        <th>Account.</th>
-                                        <th>Student ID.</th>
-                                        <th>Name.</th>
-                                        <th>Year Grade.</th>
+                                        <th>{{trans("Account")}}</th>
+                                        <th>{{trans("Student ID")}}</th>
+                                        <th>{{trans("Name")}}</th>
+                                        <th>{{trans("Year Grade")}}</th>
                                     </tr>
                                 </thead>
 
@@ -35,7 +35,7 @@
                                     </tr>
                                     {% endfor %} {% else %}
                                     <tr>
-                                        <td colspan="4" class="text-center">No Data.</td>
+                                        <td colspan="4" class="text-center">{{trans("No Data")}}</td>
                                     </tr>
                                     {% endif %}
                                 </tbody>
@@ -47,7 +47,7 @@
                         <footer class="blockquote-footer">
                             {{ unit_members.count() }} in {{ viewed_unit }}
                             <button type="button" class="btn btn-primary float-right" onclick="history.back()">
-                                OK
+                                {{trans("OK")}}
                             </button>
                         </footer>
                     </div>

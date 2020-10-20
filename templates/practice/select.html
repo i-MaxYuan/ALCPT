@@ -43,7 +43,7 @@
                             <h5 class="card-subtitle mb-2 text-muted">{{trans("Question Number")}}</h5>
                             <p class="card-text">
                                 <select class="custom-select custom-select-sm" name="question_num" id="question_num" onchange="ChangeButton()" required>
-                                    <option value=" "disabled selected hidden>
+                                    <option value=" " disabled selected hidden>
                                         {{trans("Choose the number of your test paper")}}
                                     </option>
                                     <option value="10">10</option>
@@ -53,7 +53,7 @@
                             </p>
 
                             <div class="text-center">
-                                <button type="submit" id="submit" class="btn btn-primary" onclick="return confirm('{{trans("You can start practice!")}}')" disabled>
+                                <button type="submit" id="submit" class="btn btn-primary" onclick="return confirm('{{trans("You can start practice")}}'!)" disabled>
                                     {{trans("Submit")}}
                                 </button>
                                 <button type="reset" class="btn btn-light">{{trans("Reset")}}</button>

@@ -6,8 +6,7 @@
 
 {% block path %}
 <li class="breadcrumb-item active" aria-current="page">
-    Create {% if kind == 'listening' %}{{trans("Listening")}} {% else %}{{trans("Reading")}}{% endif %}
-    {{trans("Question")}}
+    {{trans("Create ")}}{% if kind == 'listening' %}{{trans("Listening ")}}{% else %}{{trans("Reading ")}}{% endif %}{{trans("Question")}}
 </li>
 {% endblock %}
 {% block content %}
@@ -20,7 +19,7 @@
 
                     <div class="card">
                         <div class="card-header">
-                            {{trans("Create")}} {% if kind == 'listening' %}{{trans("Listening")}}{% else %}{{trans("Reading")}}{% endif %} {{trans("Question")}}
+                            {{trans("Create ")}}{% if kind == 'listening' %}{{trans("Listening ")}}{% else %}{{trans("Reading ")}}{% endif %}{{trans("Question")}}
                         </div>
 
                         <div class="card-body">
@@ -29,7 +28,7 @@
                             <div class="input-group">
                                 <div class="custom-file">
                                     <input type="file" class="custom-file-input" id="question_file" name="question_file" accept="audio/mpeg" onchange="OpenButton('listening')" />
-                                    <label class="custom-file-label" for="question_file">{{trans("Select mpeg file")}}</label>
+                                    <label class="custom-file-label" for="question_file">{{trans("Select MPEG file")}}</label>
                                 </div>
                             </div>
                             <script>
