@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block path %}
-<li class="breadcrumb-item active" aria-current="page">Question List</li>
+<li class="breadcrumb-item active" aria-current="page">{{trans("Question List")}}</li>
 {% endblock %} {% block content%}
 <main class="question-list">
     <div class="container-fluid">
@@ -13,29 +13,29 @@
             <div class="col-lg-12">
                 <!-- 搜尋 -->
                 <form class="form-inline md-form form-group-sm mt-0" method="get">
-                    <input class="form-control" type="text" name="question_content" {% if keywords.question_content %}value="{{ keywords.question_content }}" {% else %}value="" {% endif %} placeholder="Search" aria-label="Search" />
+                    <input class="form-control" type="text" name="question_content" {% if keywords.question_content %}value="{{ keywords.question_content }}" {% else %}value="" {% endif %} placeholder="{{trans("Search")}}" aria-label="Search" />
 
-                    <label class="mr-sm-2" for="inlineFormCustomSelect">Type.</label>
+                    <label class="mr-sm-2" for="inlineFormCustomSelect">{{trans("Type")}}</label>
                     <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" name="question_type">
-                        <option value="" selected>Select All.</option>
+                        <option value="" selected>{{trans("Select All")}}</option>
                         {% for q_type in question_types %}
                         <option value="{{ q_type.value.0 }}" {% if q_type.value.0 == keywords.question_type %} selected {% endif %}>{{ q_type.value.1 }}</option>
                         {% endfor %}
                     </select>
 
                     {% if request.user|has_perm('TBManager') %}
-                    <label class="mr-sm-2" for="inlineFormCustomSelect">Difficulty.</label>
+                    <label class="mr-sm-2" for="inlineFormCustomSelect">{{trans("Difficulty")}}</label>
                     <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" name="difficulty">
-                        <option value="" selected>Select All</option>
+                        <option value="" selected>{{trans("Select All")}}</option>
                         {% for difficulty in difficulty_choices %}
                         <option value="{{ difficulty.0 }}" {% if difficulty.0 == keywords.difficulty %} selected {% endif %}>{{ difficulty.1 }}</option>
                         {% endfor %}
                     </select>
                     {% endif %}
 
-                    <label class="mr-sm-2" for="inlineFormCustomSelect">State.</label>
+                    <label class="mr-sm-2" for="inlineFormCustomSelect">{{trans("State")}}</label>
                     <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" name="state">
-                        <option value="" selected>Select All.</option>
+                        <option value="" selected>{{trans("Select All")}}</option>
                         {% for state in state_choices %}
                         <option value="{{ state.0 }}" {% if state.0 == keywords.state %} selected {% endif %}>{{ state.1 }}</option>
                         {% endfor %}
@@ -51,16 +51,16 @@
         <div class="row justify-content-center">
             <div class="col-lg-12">
                 <div class="table-responsive-md">
-                    <h2>Question List.（Total: {{ questions.count() }}）</h2>
+                    <h2>{{trans("Question List")}}（{{trans("Total")}}: {{ questions.count() }}）</h2>
                     <table class="table table-hover table-striped table-bordered table-mc-light-blue">
                         <thead class="thead-light">
                             <tr>
                                 <th scope="col"></th>
-                                <th scope="col">Serial.</th>
-                                <th scope="col">Content.</th>
-                                <th scope="col">Type.</th>
-                                <th scope="col">State.</th>
-                                <th scope="col">Other.</th>
+                                <th scope="col">{{trans("Serial")}}</th>
+                                <th scope="col">{{trans("Content")}}</th>
+                                <th scope="col">{{trans("Type")}}</th>
+                                <th scope="col">{{trans("State")}}</th>
+                                <th scope="col">{{trans("Other")}}</th>
                             </tr>
                         </thead>
 
@@ -78,7 +78,7 @@
                                     {% if question.q_file %}
                                     <audio controls preload="none">
                                         <source src="{{ question.q_file.url }}" type="audio/mpeg" />
-                                        Your browser does not support the audio tag.
+                                        {{trans("Your browser does not support the audio tag")}}
                                     </audio>
                                     {% else %}
                                     <div id="summary_Q_content{{ loop.index }}">
@@ -117,7 +117,7 @@
                                         Submit
                                     </button> -->
                                     <button class="btn btn-warning" id="edit" type="button" onclick="window.location.href='{{ url('question_edit', args=[question.id]) }}'">
-                                        Edit
+                                        {{trans("Edit")}}
                                     </button>
                                     <!-- <button class="btn btn-danger" id="delete" type="button" onclick="window.location.href='{{ url('question_delete', args=[question.id]) }}'">
                                         Delete
@@ -127,10 +127,10 @@
 
                                     {% else %}
                                     <button class="btn btn-warning" id="edit" type="button" onclick="window.location.href='{{ url('question_edit', args=[question.id]) }}'">
-                                        Edit
+                                        {{trans("Edit")}}
                                     </button>
                                     <button class="btn btn-danger" id="delete" type="button" onclick="window.location.href='{{ url('question_delete', args=[question.id]) }}'">
-                                        Delete
+                                        {{trans("Delete")}}
                                     </button>
 
                                     {% endif %}
@@ -138,21 +138,20 @@
                                     <!-- Reject -->
                                     {% if question.state == 2 %}
                                     <button class="btn btn-success" id="submit">
-                                        Submit
+                                        {{trans("Submit")}}
                                     </button>
                                     <button class="btn btn-warning" id="edit" type="button" onclick="window.location.href='{{ url('operator_edit', args=[question.id]) }}'">
-                                        Edit
+                                        {{trans("Edit")}}
                                     </button>
-                                    <a href="{{ url('question_delete', args=[question.id]) }}" class="btn btn-danger" id="delete" onclick="return confirm('Sure to delete?')">Delete</a>
+                                    <a href="{{ url('question_delete', args=[question.id]) }}" class="btn btn-danger" id="delete" onclick="return confirm('{{trans("Sure to delete")}}?')">{{trans("Delete")}}</a>
                                     {% elif question.state == 4 %}
 
                                     {% else %}
-                                    <a href='{{ url('question_submit', args=[question.id]) }}' class="btn btn-success" id="submit" onclick="return confirm('Sure to submit?')">Submit</a>
+                                    <a href='{{ url('question_submit', args=[question.id]) }}' class="btn btn-success" id="submit" onclick="return confirm('{{trans("Sure to submit")}}?')">{{trans("Submit")}}</a>
                                     <button class="btn btn-warning" id="edit" type="button" onclick="window.location.href='{{ url('operator_edit', args=[question.id]) }}'">
-
-                                        Edit
+                                        {{trans("Edit")}}
                                     </button>
-                                    <a href="{{ url('question_delete', args=[question.id]) }}" class="btn btn-danger" id="delete" onclick="return confirm('Sure to delete?')">Delete</a>
+                                    <a href="{{ url('question_delete', args=[question.id]) }}" class="btn btn-danger" id="delete" onclick="return confirm('{{trans("Sure to delete")}}?')">{{trans("Delete")}}</a>
                                     {% endif %}
                                     {% endif %}
                                 </td>
@@ -176,14 +175,14 @@
                                 <td colspan="2" style="text-align: left; font-size: 14px">
                                     <ul style="font-size: 14px; list-style: none">
                                         <li>
-                                            Update:{{ question.update_time.strftime('%Y/%m/%d %H:%M') }}
+                                            {{trans("Update")}}:{{ question.update_time.strftime('%Y/%m/%d %H:%M') }}
                                         </li>
-                                        <li>Issued:{{ question.issued_freq }}</li>
+                                        <li>{{trans("Issued")}}:{{ question.issued_freq }}</li>
                                         <li>
-                                            Difficulty:{{ question.difficulty|readable_question_difficulty }}
+                                            {{trans("Difficulty")}}:{{ question.difficulty|readable_question_difficulty }}
                                         </li>
-                                        <li>Creator:{{ question.created_by.name }}</li>
-                                        <li>Last Update:{{ question.last_updated_by.name }}</li>
+                                        <li>{{trans("Creator")}}:{{ question.created_by.name }}</li>
+                                        <li>{{trans("Last Update")}}:{{ question.last_updated_by.name }}</li>
                                     </ul>
                                 </td>
                             </tr>

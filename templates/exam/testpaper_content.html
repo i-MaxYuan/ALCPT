@@ -10,9 +10,9 @@
 
 {% block path %}
 <li class="breadcrumb-item" aria-current="page">
-    <a href="{{ url('testpaper_list') }}">TestPaper List</a>
+    <a href="{{ url('testpaper_list') }}">{{trans(TestPaper List"")}}</a>
 </li>
-<li class="breadcrumb-item active" aria-current="page">TestPaper Content</li>
+<li class="breadcrumb-item active" aria-current="page">{{trans("TestPaper Content")}}</li>
 {% endblock %}
 {% block content %}
 <main class="testpaper-content">
@@ -23,22 +23,22 @@
                     <nav>
                         <ul class="nav nav-stacked">
                             <li>
-                                <a id="all" href="#" onclick="toggle_visibility('all')">All</a>
+                                <a id="all" href="#" onclick="toggle_visibility('all')">{{trans("All")}}</a>
                             </li>
                             <li>
-                                <a id="QA" href="#QA" onclick="toggle_visibility('QA')">Listening/QA</a>
+                                <a id="QA" href="#QA" onclick="toggle_visibility('QA')">{{trans("Listening")}}/{{trans("QA")}}</a>
                             </li>
                             <li>
-                                <a id="ShortConversation" href="#ShortConversation" onclick="toggle_visibility('ShortConversation')">Listening/ShortConversation</a>
+                                <a id="ShortConversation" href="#ShortConversation" onclick="toggle_visibility('ShortConversation')">{{trans("Listening")}}/{{trans("ShortConversation")}}</a>
                             </li>
                             <li>
-                                <a id="Grammar" href="#Grammar" onclick="toggle_visibility('Grammar')">Reading/Grammar</a>
+                                <a id="Grammar" href="#Grammar" onclick="toggle_visibility('Grammar')">{{trans("Reading")}}/{{trans("Grammar")}}</a>
                             </li>
                             <li>
-                                <a id="Phrase" href="#Phrase" onclick="toggle_visibility('Phrase')">Reading/Phrase</a>
+                                <a id="Phrase" href="#Phrase" onclick="toggle_visibility('Phrase')">{{trans("Reading")}}/{{trans("Phrase")}}</a>
                             </li>
                             <li>
-                                <a id="ParagraphUnderstanding" href="#ParagraphUnderstanding" onclick="toggle_visibility('ParagraphUnderstanding')">Reading/paragraph</a>
+                                <a id="ParagraphUnderstanding" href="#ParagraphUnderstanding" onclick="toggle_visibility('{{trans("ParagraphUnderstanding")}}')">{{trans("Reading")}}/{{trans("paragraph")}}</a>
                             </li>
                         </ul>
                     </nav>
@@ -50,9 +50,9 @@
                             <thead class="thead-light">
                                 <tr>
                                     <th>#</th>
-                                    <th>Serial.</th>
-                                    <th>Content.</th>
-                                    <th>Type.</th>
+                                    <th>{{trans("Serial")}}</th>
+                                    <th>{{trans("Content")}}</th>
+                                    <th>{{trans("Type")}}</th>
                                 </tr>
                             </thead>
 
@@ -70,7 +70,7 @@
                                     <td style="text-align: left">
                                         <audio controls preload="none">
                                             <source src="{{ question.q_file.url }}" type="audio/mpeg" />
-                                            Your browser does not support the audio tag.
+                                            {{trans("Your browser does not support the audio tag")}}
                                         </audio>
                                     </td>
 
@@ -105,14 +105,14 @@
                                 </tr>
                                 {% else %}
                                 <tr>
-                                    <td colspan="4">No Data.</td>
+                                    <td colspan="4">{{trans("No Data")}}</td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
                         </table>
 
                         <button type="button" class="btn btn-primary float-right" onclick="back()">
-                            OK
+                            {{trans("OK")}}
                         </button>
                     </div>
                 </div>

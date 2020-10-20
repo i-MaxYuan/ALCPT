@@ -2,9 +2,9 @@
 
 {% block path %}
 <li class="breadcrumb-item" aria-current="page">
-    <a href="{{ url('tboperator_question_list') }}" onclick="return confirm('Sure to leave edition?')">Question List</a>
+    <a href="{{ url('tboperator_question_list') }}" onclick="return confirm('{{trans("Sure to leave edition")}}?')">{{trans("Question List")}}</a>
 </li>
-<li class="breadcrumb-item active" aria-current="page">Question Edit</li>
+<li class="breadcrumb-item active" aria-current="page">{{trans("Question Edit")}}</li>
 {% endblock %}
 
 {% block content %}
@@ -16,15 +16,15 @@
                     <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
 
                     <div class="card">
-                        <div class="card-header">Question Edit.</div>
+                        <div class="card-header">{{trans("Question Edit")}}</div>
 
                         <div class="card-body">
-                            <h5 class="card-subtitle mb-2 text-muted">Question Content.</h5>
+                            <h5 class="card-subtitle mb-2 text-muted">{{trans("Question Content")}}</h5>
                             <p class="card-text">
                                 {% if question.q_file %}
                                 <audio controls preload="none">
                                     <source src="{{ question.q_file.url }}" type="audio/mpeg" />
-                                    Your browser does not support the audio tag.
+                                    {{trans("Your browser does not support the audio tag")}}
                                 </audio>
                                 {% else %}
                                 <textarea class="form-control" name="q_content" cols="55" rows="10" onkeyup="ChangeJudgementButton('{{ question_q_content }}', this)">
@@ -32,24 +32,24 @@
                                 {% endif %}
                             </p>
 
-                            <h5 class="card-subtitle mb-2 text-muted">Type.</h5>
+                            <h5 class="card-subtitle mb-2 text-muted">{{trans("Type")}}</h5>
                             <p class="card-text">
                                 <select class="custom-select" name="question_type" id="question_type" onchange="ChangeJudgementButton('{{ question_type }}', this)" required>
                                     <option value="" disabled selected>
-                                        Choose the question type
+                                        {{trans("Choose the question type")}}
                                     </option>
                                     {% if question.q_content %}
-                                    <option value="3" {% if question.q_type == 3 %}selected{% endif %}>Grammar</option>
-                                    <option value="4" {% if question.q_type == 4 %}selected{% endif %}>Phrase</option>
-                                    <option value="5" {% if question.q_type == 5 %}selected{% endif %}>ParagraphUnderstanding</option>
+                                    <option value="3" {% if question.q_type == 3 %}selected{% endif %}>{{trans("Grammar")}}</option>
+                                    <option value="4" {% if question.q_type == 4 %}selected{% endif %}>{{trans("Phrase")}}</option>
+                                    <option value="5" {% if question.q_type == 5 %}selected{% endif %}>{{trans("ParagraphUnderstanding")}}</option>
                                     {% elif question.q_file %}
-                                    <option value="1" {% if question.q_type == 1 %}selected{% endif %}>QA</option>
-                                    <option value="2" {% if question.q_type == 2 %}selected{% endif %}>ShortConversation</option>
+                                    <option value="1" {% if question.q_type == 1 %}selected{% endif %}>{{trans("QA")}}</option>
+                                    <option value="2" {% if question.q_type == 2 %}selected{% endif %}>{{trans("ShortConversation")}}</option>
                                     {%endif %}
                                 </select>
                             </p>
 
-                            <h5 class="card-subtitle mb-2 text-muted">Set Answer.</h5>
+                            <h5 class="card-subtitle mb-2 text-muted">{{trans("Set Answer")}}</h5>
                             <ol type="A">
                                 <p class="card-text">
                                     {% for choice in question.choice_set.all() %}
@@ -61,11 +61,11 @@
                             </ol>
 
                             <div class="text-center">
-                                <button type="submit" id="submit" class="btn btn-primary" onclick="return confirm('Sure to update and saved it?')">
-                                    Update
+                                <button type="submit" id="submit" class="btn btn-primary" onclick="return confirm('{{trans("Sure to update and saved it")}}?')">
+                                    {{trans("Update")}}
                                 </button>
                                 <button type="button" class="btn btn-secondary" onclick="self.location=document.referrer;">
-                                    Cancel
+                                    {{trans("Cancel")}}
                                 </button>
                             </div>
                         </div>

@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block path %}
-<li class="breadcrumb-item active" aria-current="page">Exam Record</li>
+<li class="breadcrumb-item active" aria-current="page">{{trans("Exam Record")}}</li>
 {% endblock %}
 
 {% block content %}
@@ -13,10 +13,10 @@
     <div class="container">
         <ul class="nav nav-tabs" id="newTab" role="tablist">
             <li class="nav-item">
-                <a class="nav-link active" id="practice-tab" data-toggle="tab" href="#practice" role="tab" aria-controls="practice" aria-selected="true">Practice</a>
+                <a class="nav-link active" id="practice-tab" data-toggle="tab" href="#practice" role="tab" aria-controls="practice" aria-selected="true">{{trans("Practice")}}</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" id="exam-tab" data-toggle="tab" href="#exam" role="tab" aria-controls="exam" aria-selected="false">Exam</a>
+                <a class="nav-link" id="exam-tab" data-toggle="tab" href="#exam" role="tab" aria-controls="exam" aria-selected="false">{{trans("Exam")}}</a>
             </li>
         </ul>
 
@@ -25,15 +25,15 @@
                 <div class="container">
                     <div class="row justify-content-center">
                         <div class="col-md-12">
-                            <h2>Practice Record List</h2>
+                            <h2>{{trans("Practice Record List")}}</h2>
 
                             <div class="table-responsive-md">
                                 <table class="table table-hover table-bordered table-striped table-mc-light-blue">
                                     <thead class="thead-light">
                                         <tr>
-                                            <th class="text-center">Name</th>
-                                            <th class="text-center">Type</th>
-                                            <th class="text-center">Other</th>
+                                            <th class="text-center">{{trans("Name")}}</th>
+                                            <th class="text-center">{{trans("Type")}}</th>
+                                            <th class="text-center">{{trans("Other")}}</th>
                                         </tr>
                                     </thead>
 
@@ -47,21 +47,21 @@
                                             <td class="text-center" data-title="Other">
                                                 {% if not exam|is_finished(request.user) %}
                                                 <button type="button" class="btn btn-primary" onclick="window.location.href='{{ url('testee_start_practice', args=[exam.id]) }}'">
-                                                    Start.
+                                                    {{trans("Start")}}
                                                 </button>
                                                 <button type="button" class="btn btn-danger" onclick="window.location.href='{{ url('testee_settle_exam', args=[exam.id]) }}'">
-                                                    Settle.
+                                                    {{trans("Settle")}}
                                                 </button>
                                                 {% else %}
                                                 <button type="button" class="btn btn-success" disabled>
-                                                    Finished.
+                                                    {{trans("Finished")}}
                                                 </button>
                                                 {% endif %}
                                             </td>
                                         </tr>
                                         {% else %}
                                         <tr>
-                                            <td class="text-center" colspan="3">No Data</td>
+                                            <td class="text-center" colspan="3">{{trans("No Data")}}</td>
                                         </tr>
                                         {% endfor %}
                                     </tbody>
@@ -76,17 +76,17 @@
                 <div class="container">
                     <div class="row justify-content-center">
                         <div class="col-md-12">
-                            <h2>Exam Record List.</h2>
+                            <h2>{{trans("Exam Record List")}}</h2>
 
                             <div class="table-responsive-md">
                                 <table class="table table-hover table-striped table-bordered table-mc-light-blue">
                                     <thead class="thead-light">
                                         <tr>
-                                            <th class="text-center">Name.</th>
-                                            <th class="text-center">Type.</th>
-                                            <th class="text-center">Start Time.</th>
-                                            <th class="text-center">Duration.</th>
-                                            <th class="text-center">Other.</th>
+                                            <th class="text-center">{{trans("Name")}}</th>
+                                            <th class="text-center">{{trans("Name")}}</th>
+                                            <th class="text-center">{{trans("Start Time")}}</th>
+                                            <th class="text-center">{{trans("Duration")}}</th>
+                                            <th class="text-center">{{trans("Other")}}</th>
                                         </tr>
                                     </thead>
 
@@ -104,18 +104,18 @@
                                             <td class="text-center">
                                                 {% if not exam|is_finished(request.user) %}
                                                 <button type="button" class="btn btn-primary" onclick="window.location.href='{{ url('testee_start_exam', args=[exam.id]) }}'">
-                                                    Start.
+                                                    {{trans("Start")}}
                                                 </button>
                                                 {% else %}
                                                 <button type="button" class="btn btn-success" disabled>
-                                                    Finished.
+                                                    {{trans("Finished")}}
                                                 </button>
                                                 {% endif %}
                                             </td>
                                         </tr>
                                         {% else %}
                                         <tr>
-                                            <td class="text-center" colspan="5">No Data.</td>
+                                            <td class="text-center" colspan="5">{{trans("No Data")}}</td>
                                         </tr>
                                         {% endfor %}
                                     </tbody>

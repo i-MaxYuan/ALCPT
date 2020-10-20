@@ -9,24 +9,24 @@
 {% endblock %}
 
 {% block path %}
-<li class="breadcrumb-item active" aria-current="page">Question Review</li>
+<li class="breadcrumb-item active" aria-current="page">{{trans("Question Review")}}</li>
 {% endblock %} {% block content%}
 <main class="review-table">
     <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col-md-12">
                 <div class="table-responsive-md">
-                    <h2>Review.（Total: {{ reviewed_questions.count() }}）</h2>
+                    <h2>{{trans("Review")}}（{{trans("Total")}}: {{ reviewed_questions.count() }}）</h2>
 
                     <table class="table table-hover table-bordered table-striped table-mc-light-blue">
                         <thead class="thead-light">
                             <tr>
                                 <th scope="col"></th>
-                                <th scope="col">Serial.</th>
-                                <th scope="col">Content.</th>
-                                <th scope="col">Type.</th>
-                                <th scope="col">State.</th>
-                                <th scope="col">Other.</th>
+                                <th scope="col">{{trans("Serial")}}</th>
+                                <th scope="col">{{trans("Content")}}</th>
+                                <th scope="col">{{trans("Type")}}</th>
+                                <th scope="col">{{trans("State.")}}</th>
+                                <th scope="col">{{trans("Other")}}</th>
                             </tr>
                         </thead>
 
@@ -44,7 +44,7 @@
                                     {% if question.q_file %}
                                     <audio controls preload="none">
                                         <source src="{{ question.q_file.url }}" type="audio/mpeg" />
-                                        Your browser does not support the audio tag.
+                                        {{trans("Your browser does not support the audio tag")}}
                                     </audio>
                                     {% else %}
                                     <div id="summary_Q_content{{ loop.index }}" class="text-left">
@@ -68,12 +68,12 @@
                                 </td>
 
                                 <td>
-                                    <a href="{{ url('question_pass', args=[question.id]) }}" class="btn btn-success" onclick="return confirm('Sure to pass?')">Pass</a>
+                                    <a href="{{ url('question_pass', args=[question.id]) }}" class="btn btn-success" onclick="return confirm('{{trans("")}}Sure to pass?')">{{trans("Pass")}}</a>
                                     <button type="button" class="btn btn-warning" onclick="window.location.href='{{ url('question_edit', args=[question.id]) }}'">
-                                        Edit
+                                        {{trans("Edit")}}
                                     </button>
                                     <button type="button" class="btn btn-danger" onclick="window.location.href='{{ url('question_reject', args=[question.id]) }}'">
-                                        Reject
+                                        {{trans("Reject")}}
                                     </button>
                                 </td>
                             </tr>
@@ -96,17 +96,17 @@
                                 <td style="text-align: left; font-size: 14px">
                                     <ul style="font-size: 14px; list-style: none">
                                         <li>
-                                            Last update:{{ question.update_time.strftime('%H:%M, %Y/%m/%d') }}
+                                            {{trans("Last update")}}:{{ question.update_time.strftime('%H:%M, %Y/%m/%d') }}
                                         </li>
-                                        <li>Issued:{{ question.issued_freq }}</li>
-                                        <li>Difficulty:{{ question.difficulty }}</li>
-                                        <li>Creator:{{ question.created_by.name }}</li>
+                                        <li>{{trans("Issued")}}:{{ question.issued_freq }}</li>
+                                        <li>{{trans("Difficulty")}}:{{ question.difficulty }}</li>
+                                        <li>{{trans("Creator")}}:{{ question.created_by.name }}</li>
                                     </ul>
                                 </td>
                             </tr>
                             {% endfor %} {% else %}
                             <tr>
-                                <td colspan="6">No Data.</td>
+                                <td colspan="6">{{trans("No Data")}}</td>
                             </tr>
                             {% endif %}
                         </tbody>

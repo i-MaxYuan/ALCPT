@@ -11,9 +11,9 @@
 
 {% block path %}
 <li class="breadcrumb-item" aria-current="page">
-    <a href="{{ url('profile') }}">Profile</a>
+    <a href="{{ url('profile') }}">{{trans("Profile")}}</a>
 </li>
-<li class="breadcrumb-item active" aria-current="page">Update Profile</li>
+<li class="breadcrumb-item active" aria-current="page">{{trans("Update Profile")}}</li>
 {% endblock %} {% block content %}
 <main class="edit-user-form">
     <form enctype="multipart/form-data" action="{{ url('profile_edit') }}" method="post">
@@ -24,7 +24,7 @@
             <div class="row">
                 <div class="col-lg-4">
                     <div class="card mb-3">
-                        <div class="card-header">User Photo.</div>
+                        <div class="card-header">{{trans("User Photo")}}</div>
 
                         {% if user.photo %}
                         <img class="card-img-top" src="{{ user.photo.url }}" alt="{{ user.name }}" />
@@ -34,7 +34,7 @@
                         <div class="input-group">
                             <div class="custom-file">
                                 <input type="file" class="custom-file-input" id="photo_file" name="photo_file" accept="image/*" />
-                                <label class="custom-file-label" for="photo_file">Select image file</label>
+                                <label class="custom-file-label" for="photo_file">{{trans("Select image file")}}</label>
                             </div>
                         </div>
                         <script>
@@ -50,7 +50,7 @@
 
                         <div class="card-body">
                             <p class="card-text">
-                                <textarea class="form-control" rows="4" name="introduction" placeholder="Introduce yourself..."> {% if user.introduction %}{{ user.introduction }}{% endif %}</textarea>
+                                <textarea class="form-control" rows="4" name="introduction" placeholder="{{trans("Introduce yourself")}}..."> {% if user.introduction %}{{ user.introduction }}{% endif %}</textarea>
                             </p>
                         </div>
                     </div>
@@ -58,54 +58,51 @@
 
                 <div class="col-lg-5">
                     <div class="card mb-3">
-                        <div class="card-header">User Profile.</div>
+                        <div class="card-header">{{trans("User Profile")}}</div>
 
                         <div class="card-body text-left">
-                            <h5 class="card-subtitle mb-2 text-muted">Register ID.</h5>
+                            <h5 class="card-subtitle mb-2 text-muted">{{trans("Register ID")}}</h5>
                             <h4 class="card-text">{{ user.reg_id }}</h4>
 
                             <h5 class="card-subtitle mb-2 text-muted">
-                                Name.<label id="name_invalid" class="name_invalid"></label>
+                                {{trans("Name")}}<label id="name_invalid" class="name_invalid"></label>
                             </h5>
                             <p class="card-text">
-                                <input class="form-control" type="text" name="name" {%
-                  if
-                  user.name
-                  %}value="{{ user.name }}" {%
-                  endif
-                  %} onkeyup="name_valid('{{ user.name }}', this)" placeholder="Name..." required />
+                                <input class="form-control" type="text" name="name" {%if user.name %}value="{{ user.name }}" {% endif %} onkeyup="name_valid('{{ user.name }}', this)" placeholder="Name..." required />
                             </p>
 
+                 
                             <h5 class="card-subtitle mb-2 text-muted">
-                                Email.{% if user.email_is_verified %}<i class="fa fa-check-circle"></i>{% endif %}
+                  
+                  {{trans("Email")}}{% if user.email_is_verified %}<i class="fa fa-check-circle"></i>{% endif %}
                             </h5>
                             <p class="card-text">
-                                {% if user.email %} {{ user.email }} {% else %} Unset {% endif
+                                {% if user.email %} {{ user.email }} {% else %} {{trans("Unset")}} {% endif
                 %}
                             </p>
 
                             <h5 class="card-subtitle mb-2 text-muted">
-                                Gender.<label id="gender_invalid" class="gender_invalid"></label>
+                                {{trans("Gender")}}<label id="gender_invalid" class="gender_invalid"></label>
                             </h5>
                             <p class="card-text">
                                 <select class="custom-select custom-select-sm" name="gender" id="gender" onchange="gender_valid('{{ user.gender }}', document.getElementById('gender'))" required>
-                                    <option value="" disabled selected>Choose your gender</option>
-                                    <option value="1" {% if user.gender == 1 %}selected{% endif %}>Male</option>
-                                    <option value="2" {% if user.gender == 2 %}selected{% endif %}>Female</option>
-                                    <option value="3" {% if user.gender == 3 %}selected{% endif %}>Privacy</option>
+                                    <option value="" disabled selected>{{trans("Choose your gender")}}</option>
+                                    <option value="1" {% if user.gender == 1 %}selected{% endif %}>{{trans("Male")}}</option>
+                                    <option value="2" {% if user.gender == 2 %}selected{% endif %}>{{trans("Female")}}</option>
+                                    <option value="3" {% if user.gender == 3 %}selected{% endif %}>{{trans("Privacy")}}</option>
                                 </select>
                             </p>
 
                             <h5 class="card-subtitle mb-2 text-muted">
-                                Identity.<label id="identity_invalid" class="identity_invalid"></label>
+                                {{trans("Identity")}}<label id="identity_invalid" class="identity_invalid"></label>
                             </h5>
                             <p class="card-text">
                                 {% if user.identity %} {{ user.identity|readableIdentity }} {%
-                else %} Unset {% endif %}
+                else %} {{trans("Unset")}} {% endif %}
                             </p>
 
                             <h5 class="card-subtitle mb-2 text-muted">
-                                Privilege.<label id="privilege_invalid" class="privilege_invalid"></label>
+                                {{trans("Privilege")}}<label id="privilege_invalid" class="privilege_invalid"></label>
                             </h5>
                             <p class="card-text">
                                 {% if user|has_perms(privileges.SystemManager) %}
@@ -125,11 +122,11 @@
                         </div>
 
                         <div class="card-footer text-muted">
-                            <span>Last login - {{ user.last_login }}<br /></span>
-                            <span>Create time - {{ user.created_time }}<br /></span>
+                            <span>{{trans("Last login")}} - {{ user.last_login }}<br /></span>
+                            <span>{{trans("Create time")}} - {{ user.created_time }}<br /></span>
                             <span>
-                                Status - {% if user.is_active %} active {% elif user.is_staff %}
-                                staff {% elif user.is_superuser %} superuser {% endif %}
+                                {{trans("Status")}} - {% if user.is_active %} {{trans("active")}} {% elif user.is_staff %}
+                                {{trans("staff")}} {% elif user.is_superuser %} {{trans("superuser")}} {% endif %}
                             </span>
                         </div>
                     </div>
@@ -137,19 +134,19 @@
 
                 <div class="col-lg-3">
                     <div class="card mb-3">
-                        <div class="card-header">Student Profile</div>
+                        <div class="card-header">{{trans("Student Profile")}}</div>
 
                         <div class="card-body text-left">
-                            <h5 class="card-subtitle mb-2 text-muted">Student ID</h5>
+                            <h5 class="card-subtitle mb-2 text-muted">{{trans("Student ID")}}</h5>
                             <h4 class="card-text">{{ user.student.stu_id }}</h4>
 
                             <h5 class="card-subtitle mb-2 text-muted">
-                                Department<label id="department_invalid" class="department_invalid"></label>
+                                {{trans("Department")}}<label id="department_invalid" class="department_invalid"></label>
                             </h5>
                             <p class="card-text">
                                 <select class="custom-select custom-select-sm" name="department" id="department" onchange="department_valid('{{ user.student.department.id }}', document.getElementById('department'))" required>
                                     <option value="" disabled selected>
-                                        Choose your department
+                                        {{trans("Choose your department")}}
                                     </option>
                                     {% for department in departments %}
                                     <option value="{{ department.id }}" {% if department == user.student.department %}selected{% endif %}>{{ department }}</option>
@@ -158,12 +155,12 @@
                             </p>
 
                             <h5 class="card-subtitle mb-2 text-muted">
-                                Squadron<label id="squadron_invalid" class="squadron_invalid"></label>
+                                {{trans("Squadron")}}<label id="squadron_invalid" class="squadron_invalid"></label>
                             </h5>
                             <p class="card-text">
                                 <select class="custom-select custom-select-sm" name="squadron" id="squadron" onchange="squadron_valid('{{ user.student.squadron.id }}', document.getElementById('squadron'))" required>
                                     <option value="" disabled selected>
-                                        Choose your squadron
+                                        {{trans("Choose your squadron")}}
                                     </option>
                                     {% for squadron in squadrons %}
                                     <option value="{{ squadron.id }}" {% if squadron == user.student.squadron %}selected{% endif %}>{{ squadron }}</option>
@@ -172,7 +169,7 @@
                             </p>
 
                             <h5 class="card-subtitle mb-2 text-muted">
-                                Grade<label id="grade_invalid" class="grade_invalid"></label>
+                                {{trans("Grade")}}<label id="grade_invalid" class="grade_invalid"></label>
                             </h5>
                             <p class="card-text ">
                                 <input class="form-control" type="text" name="grade" value="{{ user.student.grade }}" onkeyup="grade_valid('{{ user.student.grade }}', this)" required />
@@ -181,10 +178,10 @@
 
                         <div class="card-footer">
                             <button type="submit" class="btn btn-primary" id="submit">
-                                Update
+                                {{trans("Update")}}
                             </button>
                             <button type="button" class="btn btn-secondary" onclick="self.location=document.referrer;">
-                                Cancel
+                                {{trans("Cancel")}}
                             </button>
                         </div>
                     </div>
@@ -194,7 +191,7 @@
             <div class="row">
                 <div class="col-lg-4">
                     <div class="card mb-3">
-                        <div class="card-header">User Photo.</div>
+                        <div class="card-header">{{trans("User Photo")}}</div>
 
                         {% if user.photo %}
                         <img class="card-img-top" src="{{ user.photo.url }}" alt="{{ user.name }}" />
@@ -205,7 +202,7 @@
 
                         <div class="card-body">
                             <p class="card-text">
-                                <textarea class="form-control" rows="4" name="introduction" placeholder="Introduce yourself...">
+                                <textarea class="form-control" rows="4" name="introduction" placeholder="{{trans("Introduce yourself")}}...">
 {% if user.introduction %}{{ user.introduction }}{% endif %}</textarea>
                             </p>
                         </div>
@@ -214,14 +211,14 @@
 
                 <div class="col-lg-8">
                     <div class="card mb-3">
-                        <div class="card-header">User Profile.</div>
+                        <div class="card-header">{{trans("User Profile")}}</div>
 
                         <div class="card-body text-left">
-                            <h5 class="card-subtitle mb-2 text-muted">Register ID.</h5>
+                            <h5 class="card-subtitle mb-2 text-muted">{{trans("Register ID")}}</h5>
                             <h4 class="card-text">{{ user.reg_id }}</h4>
 
                             <h5 class="card-subtitle mb-2 text-muted">
-                                Name.<label id="name_invalid" class="name_invalid"></label>
+                                {{trans("Name")}}<label id="name_invalid" class="name_invalid"></label>
                             </h5>
                             <p class="card-text">
                                 <input class="form-control" type="text" name="name" {%
@@ -229,14 +226,14 @@
                   user.name
                   %}value="{{ user.name }}" {%
                   endif
-                  %} onkeyup="name_valid('{{ user.name }}', this)" placeholder="Name..." required />
+                  %} onkeyup="name_valid('{{ user.name }}', this)" placeholder="{{trans("Name")}}..." required />
                             </p>
 
                             <h5 class="card-subtitle mb-2 text-muted">
-                                Email.{% if user.email_is_verified %}<i class="fa fa-check-circle"></i>{% endif %}
+                                {{trans("Email")}}{% if user.email_is_verified %}<i class="fa fa-check-circle"></i>{% endif %}
                             </h5>
                             <p class="card-text">
-                                {% if user.email %} {{ user.email }} {% else %} Unset {% endif
+                                {% if user.email %} {{ user.email }} {% else %} {{trans("Unset")}} {% endif
                 %}
                             </p>
 
@@ -245,22 +242,22 @@
                             </h5>
                             <p class="card-text">
                                 <select class="custom-select custom-select-sm" name="gender" id="gender" onchange="gender_valid('{{ user.gender }}', document.getElementById('gender'))" required>
-                                    <option value="" disabled selected>Choose your gender</option>
-                                    <option value="1" {% if user.gender == 0 %}selected{% endif %}>Male</option>
-                                    <option value="2" {% if user.gender == 1 %}selected{% endif %}>Female</option>
-                                    <option value="3" {% if user.gender == 2 %}selected{% endif %}>Privacy</option>
+                                    <option value="" disabled selected>{{trans("Choose your gender")}}</option>
+                                    <option value="1" {% if user.gender == 0 %}selected{% endif %}>{{trans("Male")}}</option>
+                                    <option value="2" {% if user.gender == 1 %}selected{% endif %}>{{trans("Female")}}</option>
+                                    <option value="3" {% if user.gender == 2 %}selected{% endif %}>{{trans("Privacy")}}</option>
                                 </select>
                             </p>
 
                             <h5 class="card-subtitle mb-2 text-muted">
-                                Identity.<label id="identity_invalid" class="identity_invalid"></label>
+                                {{trans("Identity")}}<label id="identity_invalid" class="identity_invalid"></label>
                             </h5>
                             <p class="card-text">
                                 {% if user.identity %} {{ user.identity|readableIdentity }} {%
                 else %} Unset {% endif %}
                             </p>
 
-                            <h5 class="card-subtitle mb-2 text-muted">Privilege.</h5>
+                            <h5 class="card-subtitle mb-2 text-muted">{{trans("Privilege")}}</h5>
                             <p class="card-text">
                                 {% if user|has_perms(privileges.SystemManager) %}
                                 <span class="badge alert-danger">{{ privileges.SystemManager.value.1 }}</span>
@@ -279,19 +276,19 @@
                         </div>
 
                         <div class="card-footer text-muted">
-                            <span>Last login - {{ user.last_login }}<br /></span>
-                            <span>Create time - {{ user.created_time }}<br /></span>
+                            <span>{{trans("Last login")}} - {{ user.last_login }}<br /></span>
+                            <span>{{trans("Create time")}} - {{ user.created_time }}<br /></span>
                             <span>
-                                Status - {% if user.is_active %} active {% elif user.is_staff %}
-                                staff {% elif user.is_superuser %} superuser {% endif %}
+                                {{trans("Status")}} - {% if user.is_active %} {{trans("active")}} {% elif user.is_staff %}
+                                {{trans("staff")}} {% elif user.is_superuser %} {{trans("superuser")}} {% endif %}
                             </span>
 
                             <div class="text-right">
                                 <button type="submit" id="submit" class="btn btn-primary">
-                                    Update
+                                    {{trans("Update")}}
                                 </button>
                                 <button type="button" class="btn btn-secondary" onclick="self.location=document.referrer;">
-                                    Cancel
+                                    {{trans("Cancel")}}
                                 </button>
                             </div>
                         </div>

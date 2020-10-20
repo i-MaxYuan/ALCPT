@@ -10,7 +10,7 @@
 
 {% block path %}
 <li class="breadcrumb-item active" aria-current="page">
-    Create {% if kind == 'listening' %}Listening {% else %}Reading {% endif %}（Multiple）
+    {{trans("Create")}} {% if kind == 'listening' %}{{trans("Listening")}} {% else %}{{trans("Reading")}} {% endif %}（{{trans("Multiple")}}）
 </li>
 {% endblock %} {% block content %}
 <main class="multiple-question-create-form">
@@ -21,7 +21,7 @@
                     <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
 
                     <div class="card">
-                        <div class="card-header">Create Question.(Multiple)</div>
+                        <div class="card-header">{{trans("Create Question")}}({{trans("Multiple")}})</div>
 
                         <script>
                             // to change the label, the selected file name will display
@@ -34,11 +34,11 @@
                             });
                         </script>
                         <div class="card-body">
-                            <h5 class="card-subtitle mb-2 text-muted">File.</h5>
+                            <h5 class="card-subtitle mb-2 text-muted">{{trans("File")}}</h5>
                             <div class="input-group">
                                 <div class="custom-file">
                                     <input type="file" class="custom-file-input" id="questions_file" name="questions_file" accept=".xls, .xlsx" onchange="file_not_empty()" />
-                                    <label class="custom-file-label" for="questions_file">Select .xls and .xlsx file</label>
+                                    <label class="custom-file-label" for="questions_file">{{trans("Select .xls and .xlsx file")}}</label>
                                 </div>
                                 <div class="input-group-append">
                                     <button type="submit" id="submit" class="btn btn-outline-secondary" disabled>
@@ -49,34 +49,34 @@
 
                             <p class="card-text"></p>
 
-                            <h5 class="card-subtitle mb-2 text-muted">File Criteria.</h5>
-                            <p style="color: red">*Only accept「.xls」or「.xlsx」file.</p>
+                            <h5 class="card-subtitle mb-2 text-muted">{{trans("File Criteria")}}</h5>
+                            <p style="color: red">*{{trans("Only accept「.xls」or「.xlsx」file")}}</p>
                             <p style="color: red">
-                                &ast;Field
-                                Order：Content／Option1／Option2／Option3／Option4／Answer／Type／Difficulty
+                                &ast;{{trans("Field")}}
+                                {{trans("Order")}}：{{trans("Content")}}／{{trans("Option")}}1／{{trans("Option")}}2／{{trans("Option")}}3／{{trans("Option")}}4／{{trans("Answer")}}／{{trans("Type")}}／{{trans("Difficulty")}}
                             </p>
                             <p class="card-text"></p>
 
-                            <h5 class="card-subtitle mb-2 text-muted">Tips.</h5>
+                            <h5 class="card-subtitle mb-2 text-muted">{{trans("Tips")}}</h5>
                             <p class="card-text mark">
-                                <strong>Type.</strong><br />
-                                1 -> Grammar<br />
-                                2 -> Phrase<br />
-                                3 -> Paragraph Understanding<br />
+                                <strong>{{trans("Type")}}</strong><br />
+                                1 -> {{trans("Grammar")}}<br />
+                                2 -> {{trans("Phrase")}}<br />
+                                3 -> {{trans("Paragraph Understanding<")}}<br />
                             </p>
                             <hr />
                             <p class="card-text mark">
-                                <strong>Difficulty.</strong><br />
-                                1 -> Easy<br />
-                                2 -> Medium<br />
-                                3 -> Hard<br />
+                                <strong>{{trans("Difficulty")}}</strong><br />
+                                1 -> {{trans("Easy")}}<br />
+                                2 -> {{trans("Medium")}}<br />
+                                3 -> {{trans("Hard<")}}br />
                             </p>
                         </div>
 
                         <footer class="card-footer">
                             <div class="text-center">
                                 <button type="button" class="btn btn-secondary" onclick="history.go(-1);">
-                                    Cancel
+                                    {{trans("Cancel")}}
                                 </button>
                             </div>
                         </footer>
