@@ -33,7 +33,7 @@
 
                                 <div class="card-footer text-center">
                                     <div class="p-2">
-                                        <a class="btn btn-primary" href="{{ url('manual_pick', args=[testpaper.id, question_type.value.0]) }}" class="card-link">&nbsp;&nbsp; Manual&nbsp;&nbsp;
+                                        <a class="btn btn-primary" href="{{ url('manual_pick', args=[testpaper.id, question_type.value.0]) }}" class="card-link">{{trans("Manual")}}
                                         </a>
                                     </div>
                                     <div>
@@ -44,7 +44,8 @@
                                         {% endif %}
                                     </div>
                                     <div class="p-2">
-                                        <a class="btn btn-secondary" href="{{ url('reset_pick', args=[testpaper.id, question_type.value.0]) }}" class="card-link" onclick="alert('{{trans("Questions have been reset")}}')">&nbsp;&nbsp; Reset&nbsp;&nbsp;
+                                        <a class="btn btn-secondary" href="{{ url('reset_pick', args=[testpaper.id, question_type.value.0]) }}" class="card-link"
+                                            onclick="alert('{{trans("Questions have been reset")}}')">&nbsp;&nbsp;{{trans("Reset")}}&nbsp;&nbsp;
                                         </a>
                                     </div>
                                 </div>

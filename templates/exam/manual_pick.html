@@ -24,7 +24,7 @@
     <a href="{{ url('testpaper_list') }}">{{trans("TestPaper List")}}</a>
 </li>
 <li class="breadcrumb-item" aria-current="page">
-    <a href="{( url('testpaper_edit', args=[testpaper.id]) }}">{{trans("TestPaper Edit")}}</a>
+    <a href="{{ url('testpaper_edit', args=[testpaper.id]) }}">{{trans("TestPaper Edit")}}</a>
 </li>
 <li class="breadcrumb-item active" aria-current="page">{{trans("Manual Pick")}}</li>
 {% endblock %} {% block content %}

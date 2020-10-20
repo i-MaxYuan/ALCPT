@@ -25,7 +25,7 @@
                                 <th scope="col">{{trans("Serial")}}</th>
                                 <th scope="col">{{trans("Content")}}</th>
                                 <th scope="col">{{trans("Type")}}</th>
-                                <th scope="col">{{trans("State.")}}</th>
+                                <th scope="col">{{trans("State")}}</th>
                                 <th scope="col">{{trans("Other")}}</th>
                             </tr>
                         </thead>
@@ -68,7 +68,7 @@
                                 </td>
 
                                 <td>
-                                    <a href="{{ url('question_pass', args=[question.id]) }}" class="btn btn-success" onclick="return confirm('{{trans("")}}Sure to pass?')">{{trans("Pass")}}</a>
+                                    <a href="{{ url('question_pass', args=[question.id]) }}" class="btn btn-success" onclick="return confirm('{{trans("Sure to pass")}}?')">{{trans("Pass")}}</a>
                                     <button type="button" class="btn btn-warning" onclick="window.location.href='{{ url('question_edit', args=[question.id]) }}'">
                                         {{trans("Edit")}}
                                     </button>
@@ -96,7 +96,7 @@
                                 <td style="text-align: left; font-size: 14px">
                                     <ul style="font-size: 14px; list-style: none">
                                         <li>
-                                            {{trans("Last update")}}:{{ question.update_time.strftime('%H:%M, %Y/%m/%d') }}
+                                            {{trans("Last Update")}}:{{ question.update_time.strftime('%H:%M, %Y/%m/%d') }}
                                         </li>
                                         <li>{{trans("Issued")}}:{{ question.issued_freq }}</li>
                                         <li>{{trans("Difficulty")}}:{{ question.difficulty }}</li>
