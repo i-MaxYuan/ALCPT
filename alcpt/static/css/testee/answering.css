@@ -25,24 +25,34 @@
     background-color: lightblue;
 }
 
-.answering-page .col-lg-9.col-md-12.table-responsive table {
+.answering-page .col-lg-8.col-md-12.table-responsive table {
     font-size: 24px;
 }
 
-.answering-page .col-lg-9.col-md-12.table-responsive table>tr>td {
+.answering-page .col-lg-8.col-md-12.table-responsive table>tr>td {
     text-align: left;
     vertical-align: middle;
 }
 
-.answering-page .col-lg-9.col-md-12.table-responsive .btn.btn-primary.btn-lg,
-.answering-page .col-lg-9.col-md-12.table-responsive .btn.btn-outline-primary.btn-lg {
+.answering-page .col-lg-8.col-md-12.table-responsive .btn.btn-primary.btn-lg,
+.answering-page .col-lg-8.col-md-12.table-responsive .btn.btn-outline-primary.btn-lg {
     text-align: left;
     border-radius: 30px;
+    margin: 10px;
 }
 
-.answering-page .col-lg-9.col-md-12.table-responsive .col-md-6 button {
-    cursor: pointer;
-    float: right;
-    margin: 10px;
-    border-radius: 5px;
+.answering-page .col-lg-8.col-md-12.table-responsive form>table>tr>td>span {
+    width: inherit;
+    height: inherit;
+    background-color: white;
+    opacity: 0;
+    position: absolute;
+}
+
+.btn.btn-outline-success.float-right {
+    margin: 0px 25px 0px;
+}
+
+.btn.btn-secondary.float-right {
+    margin: 0px 10px 0px;
 }
