@@ -14,6 +14,16 @@ Domain Path:      /languages/
 /* ==========================================================================
    GENERAL
    ========================================================================== */
+/* block the function of long press copying */
+* {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
 body {
     font-family: 'Rubik', sans-serif;
     color: #a0a6ad;

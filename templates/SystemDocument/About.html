@@ -5,7 +5,9 @@
     {% include 'about_head.html' %}
 </head>
 
-<body>
+<!-- JS that disable right mouse click -->
+
+<body oncontextmenu=self.event.returnValue=false onselectstart="return false">
 
     <!-- Header Section Start -->
     <header id="home" class="hero-area">
