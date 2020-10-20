@@ -6,8 +6,8 @@
 
 {% block path %}
 <li class="breadcrumb-item active" aria-current="page">
-    Create {% if kind == 'listening' %}Listening {% else %}Reading{% endif %}
-    Question
+    Create {% if kind == 'listening' %}{{trans("Listening")}} {% else %}{{trans("Reading")}}{% endif %}
+    {{trans("Question")}}
 </li>
 {% endblock %}
 {% block content %}
@@ -20,16 +20,16 @@
 
                     <div class="card">
                         <div class="card-header">
-                            Create {% if kind == 'listening' %}Listening{% else %}Reading{% endif %} Question.
+                            {{trans("Create")}} {% if kind == 'listening' %}{{trans("Listening")}}{% else %}{{trans("Reading")}}{% endif %} {{trans("Question")}}
                         </div>
 
                         <div class="card-body">
                             {% if kind == 'listening' %}
-                            <h5 class="card-subtitle mb-2 text-muted">File.</h5>
+                            <h5 class="card-subtitle mb-2 text-muted">{{trans("File")}}</h5>
                             <div class="input-group">
                                 <div class="custom-file">
                                     <input type="file" class="custom-file-input" id="question_file" name="question_file" accept="audio/mpeg" onchange="OpenButton('listening')" />
-                                    <label class="custom-file-label" for="question_file">Select mpeg file</label>
+                                    <label class="custom-file-label" for="question_file">{{trans("Select mpeg file")}}</label>
                                 </div>
                             </div>
                             <script>
@@ -44,72 +44,72 @@
                             </script>
                             <p class="card-text"></p>
 
-                            <h5 class="card-subtitle mb-2 text-muted">Type.</h5>
+                            <h5 class="card-subtitle mb-2 text-muted">{{trans("Type")}}</h5>
                             <p class="card-text">
                                 <select class="custom-select custom-select-sm" name="question_type" id="question_type_listening" onkeyup="OpenButton('listening')" required>
                                     <option value="" disabled selected>
-                                        Choose the question type
+                                        {{trans("Choose the question type")}}
                                     </option>
-                                    <option value="1">QA</option>
-                                    <option value="2">ShortConversation</option>
+                                    <option value="1">{{trans("QA")}}</option>
+                                    <option value="2">{{trans("ShortConversation")}}</option>
                                 </select>
                             </p>
 
                             {% elif kind == 'reading' %}
-                            <h5 class="card-subtitle mb-2 text-muted">Question Content.</h5>
+                            <h5 class="card-subtitle mb-2 text-muted">{{trans("Question Content")}}</h5>
                             <p class="card-text">
-                                <textarea class="form-control" cols="100" rows="5" name="question_content" id="question_content" onkeyup="OpenButton('reading')" placeholder="Enter the question content..." required></textarea>
+                                <textarea class="form-control" cols="100" rows="5" name="question_content" id="question_content" onkeyup="OpenButton('reading')" placeholder="{{trans("Enter the question content")}}..." required></textarea>
                             </p>
 
-                            <h5 class="card-subtitle mb-2 text-muted">Type.</h5>
+                            <h5 class="card-subtitle mb-2 text-muted">{{trans("Type")}}</h5>
                             <p class="card-text">
                                 <select class="custom-select custom-select-sm" name="question_type" id="question_type_listening" onkeyup="OpenButton('listening')" required>
                                     <option value="" disabled selected>
-                                        Choose the question type
+                                        {{trans("Choose the question type")}}
                                     </option>
-                                    <option value="3">Grammar</option>
-                                    <option value="4">Phrase</option>
-                                    <option value="5">ParagraphUnderstanding</option>
+                                    <option value="3">{{trans("Grammar")}}</option>
+                                    <option value="4">{{trans("Phrase")}}</option>
+                                    <option value="5">{{trans("ParagraphUnderstanding")}}</option>
                                 </select>
                             </p>
                             {% endif %}
 
-                            <h5 class="card-subtitle mb-2 text-muted">Difficulty.</h5>
+                            <h5 class="card-subtitle mb-2 text-muted">{{trans("Difficulty")}}</h5>
                             <p class="card-text">
                                 <select class="custom-select custom-select-sm" name="question_difficulty">
-                                    <option value="1" selected>Easy</option>
-                                    <option value="2">Medium</option>
-                                    <option value="3">Hard</option>
+                                    <option value="1" selected>{{trans("Easy")}}</option>
+                                    <option value="2">{{trans("Medium")}}</option>
+                                    <option value="3">{{trans("Hard")}}</option>
                                 </select>
                             </p>
 
-                            <h5 class="card-subtitle mb-2 text-muted">Question Option.</h5>
+                            <h5 class="card-subtitle mb-2 text-muted">{{trans("Question Option")}}</h5>
                             <p>
-                                Ａ.<input class="form-control" type="text" name="choice1" id="choice1" onkeyup="OpenButton('{{ kind }}')" placeholder="Enter Choice content..." required />
+                                Ａ.<input class="form-control" type="text" name="choice1" id="choice1" onkeyup="OpenButton('{{ kind }}')" placeholder="{{trans("Enter Choice content")}}..." required />
                             </p>
                             <p>
-                                Ｂ.<input class="form-control" type="text" name="choice2" id="choice2" onkeyup="OpenButton('{{ kind }}')" placeholder="Enter Choice content..." required />
+                                Ｂ.<input class="form-control" type="text" name="choice2" id="choice2" onkeyup="OpenButton('{{ kind }}')" placeholder="{{trans("Enter Choice content")}}..." required />
                             </p>
                             <p>
-                                Ｃ.<input class="form-control" type="text" name="choice3" id="choice3" onkeyup="OpenButton('{{ kind }}')" placeholder="Enter Choice content..." required />
+                                Ｃ.<input class="form-control" type="text" name="choice3" id="choice3" onkeyup="OpenButton('{{ kind }}')" placeholder="{{trans("Enter Choice content")}}..." required />
                             </p>
                             <p>
-                                Ｄ.<input class="form-control" type="text" name="choice4" id="choice4" onkeyup="OpenButton('{{ kind }}')" placeholder="Enter Choice content..." required />
+                                Ｄ.<input class="form-control" type="text" name="choice4" id="choice4" onkeyup="OpenButton('{{ kind }}')" placeholder="{{trans("Enter Choice content")}}..." required />
                             </p>
 
                             {% if kind == 'reading' %}
                             <div class="text-right">
-                                <a href="{{ url('question_multiCreate') }}">Multiple Creation?</a>
+                                <a href="{{ url('question_multiCreate') }}">{{trans("Multiple Creation")}}?</a>
                             </div>
                             {% endif %}
                         </div>
 
                         <footer class="card-footer text-right">
                             <div class="text-center">
-                                <button type="submit" class="btn btn-primary">Submit</button>
-                                <button type="reset" class="btn btn-light">Reset</button>
+                                <button type="submit" class="btn btn-primary">{{trans("Submit")}}</button>
+                                <button type="reset" class="btn btn-light">{{trans("Reset")}}</button>
                                 <button type="button" class="btn btn-secondary" onclick="history.go(-1);">
-                                    Cancel
+                                    {{trans("Cancel")}}
                                 </button>
                             </div>
                         </footer>

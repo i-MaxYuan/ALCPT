@@ -1,6 +1,6 @@
 {% extends 'new_base.html' %}
 {% block path %}
-<li class="breadcrumb-item active" aria-current="page">Report Question</li>
+<li class="breadcrumb-item active" aria-current="page">{{trans("Report Question")}}</li>
 {% endblock %}
 {% block content%}
 <main class="report-form">
@@ -8,14 +8,14 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">Report</div>
+                    <div class="card-header">{{trans("Report")}}</div>
 
                     <div class="card-body">
                         <form action="{{ url('report_question', args=[reported_question.id]) }}" method="post">
                             <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
 
                             <div class="form-group row">
-                                <label for="p_title" class="col-md-4 col-form-label text-md-right">Report Category.</label>
+                                <label for="p_title" class="col-md-4 col-form-label text-md-right">{{trans("Report Category")}}</label>
                                 <div class="col-md-6">
                                     <select class="custom-select custom-select-sm" name="category" type="hidden">
                                         {% for category in categories %}
@@ -26,18 +26,18 @@
                             </div>
 
                             <div class="form-group row">
-                                <label for="p_text" class="col-md-4 col-form-label text-md-right">Supplement Note.</label>
+                                <label for="p_text" class="col-md-4 col-form-label text-md-right">{{trans("Supplement Note")}}</label>
                                 <div class="col-md-6">
-                                    <textarea class="form-control" name="supplement_note" cols="100" rows="8" placeholder="Describe your situation what happened..." required></textarea>
+                                    <textarea class="form-control" name="supplement_note" cols="100" rows="8" placeholder="{{trans("Describe your situation what happened")}}..." required></textarea>
                                 </div>
                             </div>
 
                             <div class="form-group row">
-                                <label for="p_text" class="col-md-4 col-form-label text-md-right">Question Content.</label>
+                                <label for="p_text" class="col-md-4 col-form-label text-md-right">{{trans("Question Content")}}</label>
                                 {% if reported_question.q_file %}
                                 <audio controls preload="none">
                                     <source src="{{ reported_question.q_file.url }}" type="audio/mpeg" />
-                                    Your browser does not support the audio tag.
+                                    {{trans("Your browser does not support the audio tag")}}
                                 </audio>
                                 {% else %}
                                 <div class="col-md-8">{{ reported_question.q_content }}</div>
@@ -45,7 +45,7 @@
                             </div>
 
                             <div class="form-group row">
-                                <label for="p_text" class="col-md-4 col-form-label text-md-right">Question Choice.</label>
+                                <label for="p_text" class="col-md-4 col-form-label text-md-right">{{trans("Question Choice")}}</label>
                                 <div class="col-md-8">
                                     <ol type="A">
                                         {% for choice in reported_question.choice_set.all() %}
@@ -59,11 +59,11 @@
 
                             <div class="text-center">
                                 <button type="submit" class="btn btn-primary" onclick="return confirm('Sure to report?')">
-                                    Submit
+                                    {{trans("Submit")}}
                                 </button>
-                                <button type="reset" class="btn btn-light">Reset</button>
+                                <button type="reset" class="btn btn-light">{{trans("Reset")}}</button>
                                 <button type="button" class="btn btn-secondary" onclick="history.go(-1)">
-                                    Cancel
+                                    {{trans("Cancel")}}
                                 </button>
                             </div>
                         </form>

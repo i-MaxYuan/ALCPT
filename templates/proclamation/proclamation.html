@@ -23,10 +23,10 @@
                             {% endif %}
                         </th>
                         {% else %}
-                        <th class="text-center">Title</th>
-                        <th class="text-center">Content</th>
-                        <th class="text-center">Announcer</th>
-                        <th class="text-center">Release Time</th>
+                        <th class="text-center">{{trans("Title")}}</th>
+                        <th class="text-center">{{trans("Content")}}</th>
+                        <th class="text-center">{{trans("Announcer")}}</th>
+                        <th class="text-center">{{trans("Release Time")}}</th>
                         {% endif %}
                     </tr>
                 </thead>
@@ -71,7 +71,8 @@
                         {% if request.user|has_perm('SystemManager') %}
                         <td class="text-center">
                             <a href="{{ url('proclamation_edit', args=[pro.id]) }}"><i class="fa fa-pencil-square-o"></i></a>
-                            <a href="{{ url('proclamation_delete', args=[pro.id]) }}" onclick="return confirm('Sure to delete?')"><i class="fa fa-trash-o"></i></a>
+                        <th class="text-center">{{trans("Release Time")}}</th>
+                            <a href="{{ url('proclamation_delete', args=[pro.id]) }}" onclick="return confirm('{{trans("Sure to delete")}}?')"><i class="fa fa-trash-o"></i></a>
                         </td>
                         {% endif %}
 

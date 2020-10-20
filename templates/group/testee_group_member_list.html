@@ -10,10 +10,10 @@
 
 {% block path %}
 <li class="breadcrumb-item" aria-current="page">
-    <a href="{{ url('testee_group_list') }}">Testee Group List</a>
+    <a href="{{ url('testee_group_list') }}">{{trans("Testee Group List")}}</a>
 </li>
 <li class="breadcrumb-item active" aria-current="page">
-    Testee Group Member List
+    {{trans("Testee Group Member List")}}
 </li>
 {% endblock %}
 {% block content %}
@@ -21,21 +21,21 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-12">
-                <h2>Testee Group Member List.</h2>
+                <h2>{{trans("Testee Group Member List")}}</h2>
 
                 <div class="search_bar">
-                    <input class="form-control" type="text" id="search" onkeyup="searchFunction()" placeholder="Search by ID or Name..." />
+                    <input class="form-control" type="text" id="search" onkeyup="searchFunction()" placeholder="{{trans("Search by ID or Name")}}..." />
                 </div>
 
                 <div class="table-responsive">
                     <table class="table table-hover" id="table">
                         <thead class="thead-light">
                             <tr>
-                                <th>Account./StudentID.</th>
-                                <th>Name.</th>
-                                <th>Department.</th>
-                                <th>Squadron.</th>
-                                <th>Grade.</th>
+                                <th>{{trans("Account")}}/{{trans("StudentID")}}</th>
+                                <th>{{trans("Name")}}</th>
+                                <th>{{trans("Department")}}</th>
+                                <th>{{trans("Squadron")}}</th>
+                                <th>{{trans("Grade")}}</th>
                             </tr>
                         </thead>
 
@@ -51,12 +51,12 @@
                                 {% else %}
                                 <td>{{ member.reg_id }}</td>
                                 <td>{{ member.name }}</td>
-                                <td colspan="3">None</td>
+                                <td colspan="3">{{trans("None")}}</td>
                                 {% endif %}
                             </tr>
                             {% endfor %} {% else %}
                             <tr>
-                                <td colspan="5" class="text-center">No Data.</td>
+                                <td colspan="5" class="text-center">{{trans("No Data")}}</td>
                             </tr>
                             {% endif %}
                         </tbody>
@@ -65,7 +65,7 @@
 
                 <div class="text-center">
                     <button type="button" class="btn btn-primary" onclick="self.location=document.referrer;">
-                        OK
+                        {{trans("OK")}}
                     </button>
                 </div>
             </div>

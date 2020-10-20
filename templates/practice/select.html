@@ -6,7 +6,7 @@
 
 {% block path %}
 <li class="breadcrumb-item active" aria-current="page">
-    {% if kind == 'listening' %}Listening{% else %}Reading{% endif %} Select
+    {% if kind == 'listening' %}{{trans("Listening")}}{% else %}{{trans("Reading")}}{% endif %} {{trans("Select")}}
 </li>
 {% endblock %}
 {% block content %}
@@ -18,33 +18,33 @@
                     <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
 
                     <div class="card">
-                        <div class="card-header">Practice Select.</div>
+                        <div class="card-header">{{trans("Practice Select")}}</div>
 
                         <div class="card-body">
                             {% if kind == 'listening' %}
                             <h5 class="card-subtitle mb-2 text-muted">
-                                Listening Type.(Multiple Select)
+                                {{trans("Listening Type")}}({{trans("Multiple Select")}})
                             </h5>
                             <p class="card-text">
-                                <input type="checkbox" name="question_type" onclick="ChangeButton()" value="1" />QA
-                                <input type="checkbox" name="question_type" onclick="ChangeButton()" value="2" />ShortConversation
+                                <input type="checkbox" name="question_type" onclick="ChangeButton()" value="1" />{{trans("QA")}}
+                                <input type="checkbox" name="question_type" onclick="ChangeButton()" value="2" />{{trans("ShortConversation")}}
                             </p>
                             {% else %}
                             <h5 class="card-subtitle mb-2 text-muted">
-                                Reading Type.(Multiple Select)
+                                {{trans("Reading Type")}}({{trans("Multiple Select")}})
                             </h5>
                             <p class="card-text">
-                                <input type="checkbox" name="question_type" onclick="ChangeButton()" value="3" />Grammar
-                                <input type="checkbox" name="question_type" onclick="ChangeButton()" value="4" />Phrase
-                                <input type="checkbox" name="question_type" onclick="ChangeButton()" value="5" />ParagraphUnderstanding
+                                <input type="checkbox" name="question_type" onclick="ChangeButton()" value="3" />{{trans("Grammar")}}
+                                <input type="checkbox" name="question_type" onclick="ChangeButton()" value="4" />{{trans("Phrase")}}
+                                <input type="checkbox" name="question_type" onclick="ChangeButton()" value="5" />{{trans("ParagraphUnderstanding")}}
                             </p>
                             {% endif %}
 
-                            <h5 class="card-subtitle mb-2 text-muted">Question Number.</h5>
+                            <h5 class="card-subtitle mb-2 text-muted">{{trans("Question Number")}}</h5>
                             <p class="card-text">
                                 <select class="custom-select custom-select-sm" name="question_num" id="question_num" onchange="ChangeButton()" required>
-                                    <option value="" disabled selected hidden>
-                                        Choose the number of your test paper
+                                    <option value=" "disabled selected hidden>
+                                        {{trans("Choose the number of your test paper")}}
                                     </option>
                                     <option value="10">10</option>
                                     <option value="20">20</option>
@@ -53,12 +53,12 @@
                             </p>
 
                             <div class="text-center">
-                                <button type="submit" id="submit" class="btn btn-primary" onclick="return confirm('You can start practice!')" disabled>
-                                    Submit
+                                <button type="submit" id="submit" class="btn btn-primary" onclick="return confirm('{{trans("You can start practice!")}}')" disabled>
+                                    {{trans("Submit")}}
                                 </button>
-                                <button type="reset" class="btn btn-light">Reset</button>
+                                <button type="reset" class="btn btn-light">{{trans("Reset")}}</button>
                                 <button type="button" class="btn btn-secondary" onclick="self.location=document.referrer;">
-                                    Cancel
+                                    {{trans("Cancel")}}
                                 </button>
                             </div>
                         </div>

@@ -10,7 +10,7 @@
 
 
 {% block path %}
-<li class="breadcrumb-item active" aria-current="page">Answering...</li>
+<li class="breadcrumb-item active" aria-current="page">{{trans("Answering")}}...</li>
 {% endblock %}
 
 {% block content %}
@@ -19,7 +19,7 @@
     <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col-lg-4 col-md-12">
-                <h4>Question Number</h4>
+                <h4>{{trans("Question Number")}}</h4>
                 <table>
                     <tr>
                         {% for answer in answers %}
@@ -54,7 +54,7 @@
             </div>
 
             <div class="col-lg-8 col-md-12 table-responsive">
-                <h2>Answering</h2>
+                <h2>{{trans("Answering")}}</h2>
                 <form action="{{ url('testee_answering', args=[exam.id, answer.id]) }}" method="post">
                     <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
 
@@ -65,15 +65,23 @@
                             <td>
                                 <audio controls preload="none">
                                     <source src="{{ answer.question.q_file.url }}" type="audio/mpeg" />
-                                    Your browser does not support the audio tag.
+                                    {{trans("Your browser does not support the audio tag")}}
                                 </audio>
                             </td>
 
                             {% elif answer.question.q_type|question_kind == 'reading' %}
 
-                            <td>
-                                <span>{{ answer.question }}</span>
+                            <!-- <td>
+                                <span style="width: inherit;
+                                height: inherit;
+                                background-color: white;
+                                opacity: 0;
+                                position: absolute;">{{ answer.question }}</span>
                                 {{ answer.question }}
+
+                            </td> -->
+                            <td>
+                                <button type="button" class="btn btn-lg text-left">{{ answer.question }}</button>
                             </td>
                             {% else %}
                             <td>
@@ -106,10 +114,10 @@
                     </table>
                 </form>
                 {% if answer_count == 0 %}
-                <button type="submit" class="btn btn-outline-success float-right" onclick="window.location.href='{{ url('submit_answersheet', args=[exam.id]) }}'">Submit</button>
+                <button type="submit" class="btn btn-outline-success float-right" onclick="window.location.href='{{ url('submit_answersheet', args=[exam.id]) }}'">{{trans("Submit")}}</button>
                 {% endif %}
                 <button type="button" class="btn btn-secondary float-right" onclick="window.location.href='{{ url('testee_exam_list') }}'">
-                    Leave
+                    {{trans("Leave")}}
                 </button>
             </div>
         </div>
