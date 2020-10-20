@@ -15,7 +15,7 @@
 
 {% block content %}
 
-<main class="answering-page">
+<main class="answering-page" oncontextmenu=self.event.returnValue=false onselectstart="return false">
     <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col-lg-4 col-md-12">
@@ -71,18 +71,12 @@
 
                             {% elif answer.question.q_type|question_kind == 'reading' %}
 
-                            <!-- <td>
-                                <span style="width: inherit;
-                                height: inherit;
-                                background-color: white;
-                                opacity: 0;
-                                position: absolute;">{{ answer.question }}</span>
+                            <td>
+
                                 {{ answer.question }}
 
-                            </td> -->
-                            <td>
-                                <button type="button" class="btn btn-lg text-left">{{ answer.question }}</button>
                             </td>
+
                             {% else %}
                             <td>
                                 Unknown

@@ -5,7 +5,15 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="{{ static('/javascript/question/multi_create.js') }}"></script>
+<script>
+    function file_not_empty() {
+        if (document.getElementById('questions_file')) {
+            document.getElementById('submit').disabled = false;
+        } else {
+            document.getElementById('submit').disabled = true;
+        }
+    }
+</script>
 {% endblock %}
 
 {% block path %}
@@ -23,16 +31,7 @@
                     <div class="card">
                         <div class="card-header">{{trans("Create Question")}}({{trans("Multiple")}})</div>
 
-                        <script>
-                            // to change the label, the selected file name will display
-                            $(".custom-file-input").on("change", function() {
-                                var fileName = $(this).val().split("\\").pop();
-                                $(this)
-                                    .siblings(".custom-file-label")
-                                    .addClass("selected")
-                                    .html(fileName);
-                            });
-                        </script>
+
                         <div class="card-body">
                             <h5 class="card-subtitle mb-2 text-muted">{{trans("File")}}</h5>
                             <div class="input-group">
@@ -46,6 +45,16 @@
                                     </button>
                                 </div>
                             </div>
+                            <script>
+                                // to change the label, the selected file name will display
+                                $(".custom-file-input").on("change", function() {
+                                    var fileName = $(this).val().split("\\").pop();
+                                    $(this)
+                                        .siblings(".custom-file-label")
+                                        .addClass("selected")
+                                        .html(fileName);
+                                });
+                            </script>
 
                             <p class="card-text"></p>
 
