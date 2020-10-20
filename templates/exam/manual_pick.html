@@ -4,12 +4,12 @@
 {% endblock %}
 {% block path %}
 <li class="breadcrumb-item" aria-current="page">
-    <a href="{{ url('testpaper_list') }}">TestPaper List</a>
+    <a href="{{ url('testpaper_list') }}">{{trans("TestPaper List")}}</a>
 </li>
 <li class="breadcrumb-item" aria-current="page">
-    <a href="{{ url('testpaper_edit', args=[testpaper.id]) }}">TestPaper Edit</a>
+    <a href="{{ url('testpaper_edit', args=[testpaper.id]) }}">{{trans("TestPaper Edit")}}</a>
 </li>
-<li class="breadcrumb-item active" aria-current="page">Manual Pick</li>
+<li class="breadcrumb-item active" aria-current="page">{{trans("Manual Pick")}}</li>
 {% endblock %} {% block content %}
 <main class="manual-pick">
     <div class="container">
@@ -18,7 +18,7 @@
                 <form action="{{ url('manual_pick', args=[testpaper.id, question_type.value.0]) }}" method="post">
                     <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
                     <h2>
-                        Manual Pick - {{ question_type.value.1 }}（<span id="selected_number">{{ selected_questions.count() }}</span>／{{ limit_number }}）
+                        {{trans("Manual Pick")}} - {{ question_type.value.1 }}（<span id="selected_number">{{ selected_questions.count() }}</span>／{{ limit_number }}）
                     </h2>
 
                     <div class="table-responsive">
@@ -27,8 +27,8 @@
                                 <tr>
                                     <th></th>
                                     <th>#</th>
-                                    <th>Content.</th>
-                                    <th>difficulty.</th>
+                                    <th>{{trans("Content")}}</th>
+                                    <th>{{trans("difficulty")}}</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -46,7 +46,7 @@
                                         {% if question.q_file %}
                                         <audio controls preload="none">
                                             <source src="{{ question.q_file.url }}" type="audio/mpeg" />
-                                            Your browser does not support the audio tag.
+                                            {{trans("Your browser does not support the audio tag")}}
                                         </audio>
                                         {% else %}
                                         <span id="summary{{ question.id }}">
@@ -110,9 +110,9 @@
                     </div>
 
                     <div class="text-center">
-                        <button type="submit" class="btn btn-primary">OK</button>
+                        <button type="submit" class="btn btn-primary">{{trans("OK")}}</button>
                         <button type="button" class="btn btn-secondary" onclick="self.location=document.referrer;">
-                            Cancel
+                            {{trans("Cancel")}}
                         </button>
                     </div>
                 </form>

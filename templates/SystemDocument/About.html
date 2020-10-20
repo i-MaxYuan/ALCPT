@@ -22,32 +22,32 @@
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <ul class="navbar-nav mr-auto w-100 justify-content-end">
                         <li class="nav-item">
-                            <a class="nav-link page-scroll" href="#home">Home</a>
+                            <a class="nav-link page-scroll" href="#home">{{trans("Home")}}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link page-scroll" href="#services">About</a>
+                            <a class="nav-link page-scroll" href="#services">{{trans("About")}}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link page-scroll" href="#features">User</a>
+                            <a class="nav-link page-scroll" href="#features">{{trans("User")}}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link page-scroll" href="#showcase">Showcase</a>
+                            <a class="nav-link page-scroll" href="#showcase">{{trans("Showcase")}}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link page-scroll" href="#testimonial">Review</a>
+                            <a class="nav-link page-scroll" href="#testimonial">{{trans("Review")}}</a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link page-scroll" href="#team">Team</a>
+                            <a class="nav-link page-scroll" href="#team">{{trans("Team")}}</a>
                         </li>
                         <!-- <li class="nav-item">
                             <a class="nav-link page-scroll" href="#blog">Blog</a>
                         </li> -->
                         <li class="nav-item">
-                            <a class="nav-link page-scroll" href="#contact">Contact</a>
+                            <a class="nav-link page-scroll" href="#contact">{{trans("Contact")}}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="btn btn-singin" href="{{ url('Homepage') }}">Start</a>
+                            <a class="btn btn-singin" href="{{ url('Homepage') }}">{{trans("Start")}}</a>
                         </li>
                     </ul>
                 </div>
@@ -58,12 +58,12 @@
                 <div class="col-lg-6 col-md-12 col-xs-12">
                     <div class="contents">
                         <h2 class="head-title">{{ trans("Welcome to ALCPT Online Platform") }}</h2>
-                        <p>ALCPT is a website helps you improve your English Proficiency and evalute learning effectiveness.</p>
+                        <p>{{trans("ALCPT is a website helps you improve your English Proficiency and evalute learning effectiveness.")}}</p>
 
 
                         <div class="header-button">
-                            <a href="{{ url('download_system_pdf') }}" rel="nofollow" target="_blank" class="btn btn-border-filled">About System</a>
-                            <a href="{{ url('download_OM_pdf') }}" rel="nofollow" target="_blank" class="btn btn-border-filled">Operation Manual</a>
+                            <a href="{{ url('download_system_pdf') }}" rel="nofollow" target="_blank" class="btn btn-border-filled">{{trans("About System")}}</a>
+                            <a href="{{ url('download_OM_pdf') }}" rel="nofollow" target="_blank" class="btn btn-border-filled">{{trans("Operation Manual")}}</a>
 
                             <!-- <a href="{{ url('download_OM_pdf') }}" rel="nofollow" target="_blank" class="btn btn-border page-scroll">Operation Manual</a> -->
 
@@ -92,8 +92,8 @@
                         <div class="icon">
                             <i class="fas fa-user-shield"></i>
                         </div>
-                        <h4>Commander</h4>
-                        <p>Commanders can check every students record to assure the effectiveness of learning of all the students.</p>
+                        <h4>{{trans("Commander")}}</h4>
+                        <p>{{trans("Commanders can check every students record to assure the effectiveness of learning of all the students.")}}</p>
 
                     </div>
                 </div>
@@ -104,8 +104,8 @@
                         <div class="icon">
                             <i class="fas fa-user-graduate"></i>
                         </div>
-                        <h4>Student</h4>
-                        <p>Students can practice any kind of question as they wish.</p>
+                        <h4>{{trans("Student")}}</h4>
+                        <p>{{trans("Students can practice any kind of question as they wish.")}}</p>
                         <br>
                         <br>
                         <br>
@@ -118,8 +118,8 @@
                         <div class="icon">
                             <i class="fas fa-heart"></i>
                         </div>
-                        <h4>Favorite Question</h4>
-                        <p>All the question you have ever practiced or tested can be added to Favorite Question. You can review them anytime, anywhere you want!</p>
+                        <h4>{{trans("Favorite Question")}}</h4>
+                        <p>{{trans("All the question you have ever practiced or tested can be added to Favorite Question. You can review them anytime, anywhere you want!")}}</p>
                     </div>
                 </div>
                 <!-- End Col -->
@@ -146,13 +146,11 @@
                 <!-- Start Col -->
                 <div class="col-lg-6 col-md-12 pl-4">
                     <div class="business-item-info">
-                        <h3>A free practice platform for Military Academy Students</h3>
-                        <p>ALCPT is short for American Language Course Placement Test.<br />
-                            ALCPT distinguishes multiple user permissions, and students can
-                            focus on their own permissions to practice.<br />
-                            This system will also generate some simple statistical graphs to
-                            make it easier for users to understand their practice status.
-                            <a class="btn btn-common float-right" href="{{ url('Homepage') }}">Start</a>
+                        <h3>{{trans("A free practice platform for Military Academy Students.")}}</h3>
+                        <p>{{trans("ALCPT is short for American Language Course Placement Test.")}}<br />
+                        {{trans("ALCPT distinguishes multiple user permissions, and students can focus on their own permissions to practice.")}}<br />
+                        {{trans("This system will also generate some simple statistical graphs to make it easier for users to understand their practice status.")}}
+                            <a class="btn btn-common float-right" href="{{ url('Homepage') }}">{{trans("Start")}}</a>
                     </div>
                 </div>
                 <!-- End Col -->
@@ -172,7 +170,7 @@
                 <div class="col-lg-12">
                     <div class="features-text section-header text-center">
                         <div>
-                            <h2 class="section-title">User Permission</h2>
+                            <h2 class="section-title">{{trans("User Permission")}}</h2>
                             <div class="desc-text">
                                 <p></p>
                             </div>
@@ -193,8 +191,8 @@
 
                         </div>
                         <div class="feature-info float-left">
-                            <h4>System Manager</h4>
-                            <p>User manage and </p>
+                            <h4>{{trans("System Manager")}}</h4>
+                            <p>{{trans("User manage and ")}}</p>
                         </div>
                     </div>
                     <!-- End Fetatures -->
@@ -209,8 +207,8 @@
                             <a href="{{ url('OM_TestManager') }}"><img class="img-responsive" src="{{ static('/images/checklist.svg') }}" width="60%" style="padding-top: 20px; padding-left: 6px; opacity: 0.5; " alt="Responsive image" /></a>
                         </div>
                         <div class="feature-info float-left">
-                            <h4>Test Manager</h4>
-                            <p>Create, edit test papers and create <br>groups of testees </p>
+                            <h4>{{trans("Test Manager")}}</h4>
+                            <p>{{trans("Create, edit test papers and create ")}}<br>{{trans("groups of testees ")}}</p>
                         </div>
                     </div>
                     <!-- End Fetatures -->
@@ -226,10 +224,8 @@
 
                         </div>
                         <div class="feature-info float-left">
-                            <h4>TB Manager</h4>
-                            <p> Review the questions submitted by <br>
-                                the question operator and to maintain <br>
-                                these questions.</p>
+                            <h4>{{trans("TB Manager")}}</h4>
+                            <p> {{trans("Review the questions submitted by the question operator and to maintain these questions.")}}</p>
                         </div>
                     </div>
                     <!-- End Fetatures -->
@@ -244,9 +240,9 @@
                             <a href="{{ url('OM_TBOperator') }}"><img class="img-responsive" src="{{ static('/images/file.svg') }}" width="60%" style="padding-top: 20px; padding-left: 6px; opacity: 0.5; " alt=" Responsive image" /></a>
                         </div>
                         <div class="feature-info float-left">
-                            <h4>TB Operator</h4>
-                            <p>add new questions and submit them to <br>
-                                the bank manager for review.</p>
+                            <h4>{{trans("TB Operator")}}</h4>
+                            <p>{{trans("add new questions and submit them to ")}}<br>
+                            {{trans("the TB manager for review.")}}</p>
                         </div>
                     </div>
                     <!-- End Fetatures -->
@@ -261,9 +257,9 @@
                             <a href="{{ url('OM_Viewer') }}"><img class="img-responsive" src="{{ static('/images/data-scientist.svg') }}" width="60%" style="padding-top: 20px; padding-left: 6px; opacity: 0.5; " alt=" Responsive image" /></a>
                         </div>
                         <div class="feature-info float-left">
-                            <h4>Viewer</h4>
-                            <p>Commander and Techer can check <br>
-                                student's score.</p>
+                            <h4>{{trans("Viewer")}}</h4>
+                            <p>{{trans("Commander and Techer can check ")}}<br>
+                            {{trans("student's score.")}} </p>
                         </div>
                     </div>
                     <!-- End Fetatures -->
@@ -278,10 +274,10 @@
                             <a href="{{ url('OM_Testee') }}"><img class="img-responsive" src="{{ static('/images/data-scientist.svg') }}" width="60%" style="padding-top: 20px; padding-left: 6px; opacity: 0.5; " alt=" Responsive image" /></a>
                         </div>
                         <div class="feature-info float-left">
-                            <h4>Testee</h4>
-                            <p>Users can practice listening <br>
-                                and reading exercises in English <br>
-                                through this system.</p>
+                            <h4>{{trans("Testee")}}</h4>
+                            <p>{{trans("Users can practice listening ")}}<br>
+                                {{trans("and reading exercises in English ")}}<br>
+                                {{trans("through this system.")}}</p>
                         </div>
                     </div>
                     <!-- End Fetatures -->
@@ -303,7 +299,7 @@
                 <div class="col-lg-12">
                     <div class="showcase-text section-header text-center">
                         <div>
-                            <h2 class="section-title">Showcase</h2>
+                            <h2 class="section-title">{{trans("Showcase")}}</h2>
                             <div class="desc-text">
                                 <p></p>
                             </div>
@@ -336,7 +332,7 @@
 
             <!-- Start Row -->
             <div class="row justify-content-center testimonial-area">
-                <h2 class="section-title">User Review</h2>
+                <h2 class="section-title">{{trans("User Review")}}</h2>
                 <div class="col-lg-10 col-md-12 col-sm-12 col-xs-12 pr-20 " style="overflow: hidden;padding-bottom: 60px">
 
                     <div id="client-testimonial" class="text-center owl-carousel">
@@ -355,7 +351,7 @@
                                 <div class="content-inner">
                                     <p class="description">想放假zzz</p>
                                     <div class="author-info">
-                                        <h5>劉昀昕 | <span> Project Manager</span></h5>
+                                        <h5>劉昀昕 | <span> {{trans("Project Manager")}}</span></h5>
                                     </div>
                                 </div>
                                 <div class="client-thumb">
@@ -368,7 +364,7 @@
                                 <div class="content-inner">
                                     <p class="description">Peko peko peko?</p>
                                     <div class="author-info">
-                                        <h5>黃柏豪 | <span>Back-end Developer</span></h5>
+                                        <h5>黃柏豪 | <span>{{trans("Back-end Developer")}}</span></h5>
                                     </div>
                                 </div>
                                 <div class="client-thumb">
@@ -381,7 +377,7 @@
                                 <div class="content-inner">
                                     <p class="description">好厭世zzzZZ</p>
                                     <div class="author-info">
-                                        <h5>黃子祐 | <span>Front-end Developer; Tester</span></h5>
+                                        <h5>黃子祐 | <span>{{trans("Front-endDeveloper")}}; {trans("Tester")}}</span></h5>
                                     </div>
                                 </div>
                                 <div class="client-thumb">
@@ -394,7 +390,7 @@
                                 <div class="content-inner">
                                     <p class="description">想睡覺了zzz</p>
                                     <div class="author-info">
-                                        <h5>賴昱婷 | <span> Front-end Developer; Translator</span></h5>
+                                        <h5>賴昱婷 | <span> {{trans("Front-endDeveloper")}}; {{trans("Translator")}}</span></h5>
                                     </div>
                                 </div>
                                 <div class="client-thumb">
@@ -420,9 +416,9 @@
                 <div class="col-lg-12">
                     <div class="team-text section-header text-center">
                         <div>
-                            <h2 class="section-title">Team Members</h2>
+                            <h2 class="section-title">{trans("Team Members")}}</h2>
                             <div class="desc-text">
-                                <p>National Defense University of Management College</p>
+                                <p>{{trans("National Defense University of Management College")}}</p>
                             </div>
                         </div>
                     </div>
@@ -449,7 +445,7 @@
                             </div>
                             <div class="team-inner text-center">
                                 <h5 class="team-title">劉昀昕</h5>
-                                <p>Project Manager</p>
+                                <p>{{trans("Project Manager")}}</p>
                             </div>
                         </div>
                     </div>
@@ -473,7 +469,7 @@
                             </div>
                             <div class="team-inner text-center">
                                 <h5 class="team-title">黃柏豪</h5>
-                                <p>Back-end Developer</p>
+                                <p>{{trans("Back-end Developer")}}</p>
                             </div>
                         </div>
                     </div>
@@ -497,7 +493,7 @@
                             </div>
                             <div class="team-inner text-center">
                                 <h5 class="team-title">黃子祐</h5>
-                                <p>Web developer</p>
+                                <p>{{trans("Web developer")}}</p>
                             </div>
                         </div>
                     </div>
@@ -521,7 +517,7 @@
                             </div>
                             <div class="team-inner text-center">
                                 <h5 class="team-title">賴昱婷</h5>
-                                <p>Web developer</p>
+                                <p>{{trans("Web developer")}}</p>
                             </div>
                         </div>
                     </div>
@@ -642,9 +638,9 @@
                 <div class="col-lg-12">
                     <div class="contact-text section-header text-center">
                         <div>
-                            <h2 class="section-title">Get In Touch</h2>
+                            <h2 class="section-title">{{trans("Get In Touch")}}</h2>
                             <div class="desc-text">
-                                <p>If you have any question, please contact us.</p>
+                                <p>{{trans("If you have any question, please contact us.")}}</p>
 
                             </div>
                         </div>
@@ -668,30 +664,30 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <input type="text" class="form-control" id="name" name="name" placeholder="Name" required data-error="Please enter your name">
+                                    <input type="text" class="form-control" id="name" name="name" placeholder="{{trans("Name")}}" required data-error="{{trans("Please enter your name")}}">
                                     <div class="help-block with-errors"></div>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <input type="text" placeholder="Subject" id="msg_subject" class="form-control" name="msg_subject" required data-error="Please enter your subject">
+                                    <input type="text" placeholder="{{trans("Subject")}}" id="msg_subject" class="form-control" name="msg_subject" required data-error="{{trans("Please enter your subject")}}">
                                     <div class="help-block with-errors"></div>
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <input type="text" class="form-control" id="email" name="email" placeholder="Email" required data-error="Please enter your Email">
+                                    <input type="text" class="form-control" id="email" name="email" placeholder="{{trans("Email")}}" required data-error="{{trans("Please enter your Email")}}">
                                     <div class="help-block with-errors"></div>
                                 </div>
                             </div>
 
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <textarea class="form-control" id="message" name="message" placeholder="Write Message" rows="4" data-error="Write your message" required></textarea>
+                                    <textarea class="form-control" id="message" name="message" placeholder="{{trans("Write Message")}}" rows="4" data-error="{{trans("Write your message")}}" required></textarea>
                                     <div class="help-block with-errors"></div>
                                 </div>
                                 <div class="submit-button">
-                                    <button class="btn btn-common float-right" id="submit" type="submit">Submit</button>
+                                    <button class="btn btn-common float-right" id="submit" type="submit">{{trans("Submit")}}</button>
                                     <div id="msgSubmit" class="h3 hidden"></div>
                                     <div class="clearfix"></div>
                                 </div>

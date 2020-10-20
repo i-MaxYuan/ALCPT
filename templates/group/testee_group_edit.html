@@ -6,9 +6,9 @@
 
 {% block path %}
 <li class="breadcrumb-item" aria-current="page">
-    <a href="{{ url('testee_group_list') }}" onclick="return confirm('Sure to leave and abandon editing？')">Testee Group List</a>
+    <a href="{{ url('testee_group_list') }}" onclick="return confirm('{{trans("Sure to leave and abandon editing")}}？')">{{trans("Testee Group List")}}</a>
 </li>
-<li class="breadcrumb-item active">Testee Group Edit - {{ group.name }}</li>
+<li class="breadcrumb-item active">{{trans("Testee Group Edit")}} - {{ group.name }}</li>
 {% endblock %}
 
 {% block content %}
@@ -16,7 +16,7 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-11 table-responsive">
-                <h2>All Testees List.</h2>
+                <h2>{{trans("All Testees List")}}</h2>
                 <div class="text-right">
                     <button class="btn fa fa-check-square-o" type="button" title="Select All" onclick="selectAll();" style="font-size: 24px"></button>
                     <button class="btn fa fa-exchange" type="button" title="Reverse" onclick="reverseSelect();" style="font-size: 24px"></button>
@@ -28,10 +28,10 @@
                     <table class="table table-hover">
                         <thead class="thead-light">
                             <th class="text-center"></th>
-                            <th class="text-center">Name.</th>
-                            <th class="text-center">Department.</th>
-                            <th class="text-center">Squadron.</th>
-                            <th class="text-center">Year Grade.</th>
+                            <th class="text-center">{{trans("Name")}}</th>
+                            <th class="text-center">{{trans("Department")}}</th>
+                            <th class="text-center">{{trans("Squadron")}}</th>
+                            <th class="text-center">{{trans("Year Grade")}}</th>
                         </thead>
 
                         <tbody>
@@ -50,9 +50,9 @@
                     </table>
 
                     <div class="text-center">
-                        <button type="submit" class="btn btn-primary">Update</button>
+                        <button type="submit" class="btn btn-primary">{{trans("Update")}}</button>
                         <button type="button" class="btn btn-secondary" onclick="self.location=document.referrer;">
-                            Cancel
+                            {{trans("Cancel")}}
                         </button>
                     </div>
                 </form>

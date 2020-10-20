@@ -4,9 +4,9 @@
 {% endblock %}
 {% block path %}
 <li class="breadcrumb-item" aria-current="page">
-    <a href="{{ url('exam_list') }}">Exam List</a>
+    <a href="{{ url('exam_list') }}">{{trans("Exam List")}}</a>
 </li>
-<li class="breadcrumb-item active" aria-current="page">Exam Edit</li>
+<li class="breadcrumb-item active" aria-current="page">{{trans("Exam Edit")}}</li>
 {% endblock %} {% block content %}
 <main class="exam-create-form">
     <div class="container">
@@ -15,11 +15,11 @@
                 <form method="post">
                     <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
                     <div class="card">
-                        <div class="card-header">Exam Edit.</div>
+                        <div class="card-header">{{trans("Exam Edit")}}</div>
 
                         <div class="card-body">
                             <h5 class="card-subtitle mb-2 text-muted">
-                                Exam Name.<span id="name_invalid" class="name_invalid"></span>
+                                {{trans("Exam Name")}}<span id="name_invalid" class="name_invalid"></span>
                             </h5>
                             <p class="card-text">
                                 <input class="form-control" type="text" onkeyup="unique_name({{ exam_names }}, this)" name="exam_name" value="{{ exam.name }}" required />
@@ -28,14 +28,14 @@
                             <div class="dropdown-divider"></div>
 
                             <h5 class="card-subtitle mb-2 text-muted">
-                                Test Paper.<span id="name_invalid" class="name_invalid"></span>
+                                {{trans("Test Paper")}}<span id="name_invalid" class="name_invalid"></span>
                             </h5>
                             {#
               <select class="custom-select custom-select-sm" name="selected_testpaper" id="selected_testpaper" onchange="is_selected(document.getElementById('selected_testpaper'), 'testpaper')" required>#}
                             <select class="custom-select custom-select-sm" name="selected_testpaper" id="selected_testpaper" required>
                                 <p class="card-text">
                                     <option value="" disabled selected>
-                                        Choose Test Paper
+                                        {{trans("Choose Test Paper")}}
                                     </option>
                                     {% for testpaper in testpapers %}
                                     <option value="{{ testpaper.id }}" {% if exam.testpaper.name == testpaper.name %}selected{% endif %}>{{ testpaper.name }}</option>
@@ -46,7 +46,7 @@
                             <div class="dropdown-divider"></div>
 
                             <h5 class="card-subtitle mb-2 text-muted">
-                                Group.<span id="group_invalid" class="group_invalid"></span>
+                                {{trans("Group")}}<span id="group_invalid" class="group_invalid"></span>
                             </h5>
                             {#
                 <select class="custom-select custom-select-sm" name="selected_group" id="selected_group" onchange="is_selected(document.getElementById('selected_group'), 'group')" required >
@@ -54,7 +54,7 @@
                             <select class="custom-select custom-select-sm" name="selected_group" id="selected_group">
                                 <p class="card-text">
                                     <option value="" disabled selected>
-                                        Choose Testee Group
+                                        {{trans("Choose Testee Group")}}
                                     </option>
                                     {% for group in groups %}
                                     <option value="{{ group.id }}">{{ group.name }}</option>
@@ -64,7 +64,7 @@
 
                             <div class="dropdown-divider"></div>
 
-                            <h5 class="card-subtitle mb-2 text-muted">Start Time.</h5>
+                            <h5 class="card-subtitle mb-2 text-muted">{{trans("Start Time")}}</h5>
                             <p class="card-text">
                                 Date:
                                 <select name="start_time_date" required>
@@ -86,7 +86,7 @@
                             </p>
 
                             <h5 class="card-subtitle mb-2 text-muted">
-                                Duration.(min)<span id="duration_invalid" class="duration_invalid"></span>
+                                {{trans("Duration")}}({{trans("min")}})<span id="duration_invalid" class="duration_invalid"></span>
                             </h5>
                             <p class="card-text">
                                 <input class="form-control" type="text" name="duration" value="{{ exam.duration }}" required />
@@ -94,7 +94,7 @@
 
                             <div class="float-right">
                                 <button type="submit" class="btn btn-primary" id="submit">
-                                    Update
+                                    {{trans("Update")}}
                                 </button>
                                 <!-- <button type="button" class="btn btn-secondary" onclick="self.location=document.referrer;">
                                     Cancel

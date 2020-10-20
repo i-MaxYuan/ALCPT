@@ -10,10 +10,10 @@
 
 {% block path %}
 <li class="breadcrumb-item" aria-current="page">
-    <a href="{{ url('testee_score_list') }}">Score List</a>
+    <a href="{{ url('testee_score_list') }}">{{trans("Score List")}}</a>
 </li>
 <li class="breadcrumb-item active" aria-current="page">
-    View Test paper Content
+    {{trans("View Test paper Content")}}
 </li>
 {% endblock %} {% block content %}
 <main class="testee-score-list">
@@ -25,8 +25,8 @@
                         <thead class="thead-light">
                             <tr>
                                 <th></th>
-                                <th scope="col">Serial.</th>
-                                <th scope="col">Content.</th>
+                                <th scope="col">{{trans("Serial")}}</th>
+                                <th scope="col">{{trans("Content")}}</th>
                                 <th scope="col" class="text-right">
                                     <button type="button" class="btn" data-toggle="modal" data-target="#promptContent">
                                         <i class="fa fa-question-circle"></i>
@@ -35,55 +35,42 @@
                                         <div class="modal-dialog modal-dialog-centered" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header text-center">
-                                                    <h5 class="modal-title" id="ModalLongTitle">Tips</h5>
+                                                    <h5 class="modal-title" id="ModalLongTitle">{{trans("Tips")}}</h5>
                                                 </div>
 
                                                 <div class="modal-body">
                                                     <ul>
                                                         <li>
                                                             <p>
-                                                                If your <u>answer is correct</u>, then it will
-                                                                display only one color in all choices and there
-                                                                will display
+                                                                {{trans("If your")}} <u>{{trans("answer is correct")}}</u>{{trans(", then it will display only one color in all choices and there will display")}}
                                                                 <i class="fa fa-check"></i>
-                                                                behind the question.
-                                                            </p>
-                                                        </li>
+                                                                {{trans("behind the question.")}} </p></li>
                                                         <li>
                                                             <p>
-                                                                If you <u>didn't answer the question</u>, then
-                                                                it will display only one color in all choices
-                                                                and also display
+                                                                {{trans("If your")}}<u>{{trans("didn't answer the question")}}</u>{{trans(", then it will display only one color in all choices and there will display")}}
                                                                 <i class="fa fa-question"></i>
-                                                                behind the question.
+                                                                {{trans("behind the question.")}}
                                                             </p>
                                                         </li>
                                                         <li>
                                                             <p>
-                                                                The question has been reported as an error, but
-                                                                after processing by the TBManager, then it will
-                                                                display
+                                                                {{trans("The question has been reported as an error, but after processing by the TBManager, then it will display")}}
                                                                 <i class="fa fa-exclamation-circle"></i>
-                                                                behind the question.
+                                                                {{trans("behind the question.")}}
                                                             </p>
                                                         </li>
                                                         <li>
                                                             <p style="color: red">
-                                                                Red color means you selected the wrong answer
-                                                                on the exam.
-                                                            </p>
+                                                                {{trans("Red color means your selected the wrong answer on the exam.")}} </p>
                                                         </li>
                                                         <li>
                                                             <p style="color: green">
-                                                                Green color means the correct answer.
+                                                                {{trans(" Green color means the correct answer.")}}                                                          
                                                             </p>
                                                         </li>
                                                         <li>
                                                             <p>
-                                                                If you think there is a problem with the
-                                                                question, you can click
-                                                                <i class="fa fa-exclamation-triangle"></i> to
-                                                                report it.
+                                                                {{trans("If you think there is a problem with the question, you can click")}}                                                  <i class="fa fa-exclamation-triangle"></i> {{trans("to report it.")}}
                                                             </p>
                                                         </li>
                                                     </ul>
@@ -91,7 +78,7 @@
 
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-primary" data-dismiss="modal">
-                                                        OK
+                                                        {{trans("OK")}}
                                                     </button>
                                                 </div>
                                             </div>
@@ -112,7 +99,7 @@
                                     {% if answer.question.q_file %}
                                     <audio controls preload="none">
                                         <source src="{{ answer.question.q_file.url }}" type="audio/mpeg">
-                                        Your browser does not support the audio tag.
+                                            {{trans("Your browser does not support the audio tag.")}}
                                     </audio>
                                     {% else %}
                                     <div id="summary_Q_content{{ loop.index }}">
@@ -219,7 +206,7 @@
                 {% endautoescape %}
             </div>
             <div class="text-center">
-                <button type="button" class="btn btn-primary" onclick="window.location.href='{{ url('testee_score_list') }}'">OK</button>
+                <button type="button" class="btn btn-primary" onclick="window.location.href='{{ url('testee_score_list') }}'">{{trans("OK")}}</button>
             </div>
         </div>
     </div>

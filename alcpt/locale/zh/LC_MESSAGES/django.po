@@ -24,6 +24,9 @@ msgstr "歡迎來到ALCPT線上測驗平台"
 msgid  "SystemManager"
 msgstr "系統管理員"
 
+msgid  "System Manager"
+msgstr "系統管理員"
+
 msgid "User List"
 msgstr "使用者列表"
 
@@ -34,6 +37,15 @@ msgid  "TBManager"
 msgstr "題庫管理員"
 
 msgid  "TBOperator"
+msgstr "題庫操作員"
+
+msgid "Test Manager"
+msgstr "考試管理員"
+
+msgid  "TB Manager"
+msgstr "題庫管理員"
+
+msgid  "TB Operator"
 msgstr "題庫操作員"
 
 msgid  "Viewer"
@@ -92,12 +104,6 @@ msgstr "閱讀練習"
 
 msgid  "User"
 msgstr "使用者"
-
-msgid  "Profile"
-msgstr "檢視個人資料"
-
-msgid  "Edit Profile"
-msgstr "更新個人資料"
 
 msgid  "Email"
 msgstr "電子郵件"
@@ -268,7 +274,7 @@ msgid  "Choose Gender"
 msgstr "選擇性別"
 
 msgid  "Grade"
-msgstr "年級"
+msgstr "年班"
 
 msgid  "grade"
 msgstr "年級"
@@ -298,7 +304,7 @@ msgid  "Account"
 msgstr "帳號"
 
 msgid  "Multiple"
-msgstr "多人"
+msgstr "多重"
 
 msgid  "Multiple Create User"
 msgstr "創建多個使用者"
@@ -308,6 +314,9 @@ msgstr "上傳檔案"
 
 msgid  "Select .xls and .xlsx file"
 msgstr "選擇 .xls 或 .xlsx 的檔案"
+
+msgid  "Only accept「.xls」or「.xlsx」file"
+msgstr "只接受 .xls 或 .xlsx 的檔案"
 
 msgid  "File Criteria"
 msgstr "檔案準則"
@@ -492,8 +501,640 @@ msgstr "測驗名稱"
 msgid "Last Login"
 msgstr "最後登入時間"
 
+msgid "Exam Content"
+msgstr "考試資訊"
 
+msgid "Test paper"
+msgstr "測驗卷"
+
+msgid  "Created"
+msgstr "創建時間"
+
+msgid  "Testee List"
+msgstr "測驗者名單"
+
+msgid  "Personnel"
+msgstr "人員"
+
+msgid  "Exam Create"
+msgstr "建立考試"
+
+msgid  "Choose Test Paper"
+msgstr "選擇測驗卷"
+
+msgid  "Group"
+msgstr "群組"
+
+msgid  "Choose Testee Group"
+msgstr "選擇測驗群組"
+
+msgid  "Date"
+msgstr "日期"
+
+msgid  "Exam Edit"
+msgstr "編輯測驗"
+
+msgid  "Test Paper"
+msgstr "測驗卷"
+
+msgid  "Creator"
+msgstr "創建人"
+
+msgid  "TestPaper Edit"
+msgstr "編輯試卷"
+
+msgid  "Manual Pick"
+msgstr "手動選題"
+
+msgid  "difficulty"
+msgstr "難易度"
+
+msgid  "TestPaper Content"
+msgstr "試卷內容"
+
+msgid  "Listening/QA"
+msgstr "聽力/問答"
+
+msgid  "Listening/ShortConversation"
+msgstr "聽力/會話"
+
+msgid  "Reading/Grammar"
+msgstr "閱讀/文法"
+
+msgid  "Reading/Phrase"
+msgstr "閱讀/片語"
+
+msgid  "Reading/paragraph"
+msgstr "閱讀/段落文章"
+
+msgid  "Type"
+msgstr "種類"
+
+msgid  "TestPaper Create"
+msgstr "創建試卷"
+
+msgid  "TestPaper Name"
+msgstr "試卷名稱"
+
+msgid  "Back"
+msgstr "返回"
+
+msgid  "Selected"
+msgstr "已選擇"
+
+msgid  "Automatic"
+msgstr "自動選題"
+
+msgid  "Questions have been reset"
+msgstr "題目已重置"
+
+msgid  "Manual"
+msgstr "手動選題"
+
+msgid  "Valid"
+msgstr "有效與否"
+
+msgid  "Used"
+msgstr "使用與否"
+
+msgid  "Last Update"
+msgstr "最近更新"
+
+msgid  "Testpaper Name"
+msgstr "試卷名稱"
+
+msgid  "Sure to delete"
+msgstr "確定要刪除嗎"
+
+msgid  "Testee Group Create"
+msgstr "創建受測者群組"
+
+msgid  "Enter the group name"
+msgstr "輸入群組名稱"
+
+msgid  "Testee Group Edit"
+msgstr "編輯受測者群組"
+
+msgid  "All Testees List"
+msgstr "受測者列表"
+
+msgid  "Year Grade"
+msgstr "年班"
+
+msgid  "Testee Group Member List"
+msgstr "受測者群組人員列表"
+
+msgid  "Search by ID or Name"
+msgstr "輸入學生ID或姓名"
+
+msgid  "None"
+msgstr "無"
+
+msgid  "Created Time"
+msgstr "創建時間"
+
+msgid  "Select"
+msgstr "選擇"
+
+msgid  "Practice Select"
+msgstr "測驗練習選擇"
+
+msgid  "Listening"
+msgstr "聽力"
+
+msgid  "Reading"
+msgstr "閱讀"
+
+msgid  "Listening Type"
+msgstr "聽力題型"
+
+msgid  "Multiple Select"
+msgstr "多重選擇"
+
+msgid  "QA"
+msgstr "問答"
+
+msgid  "ShortConversation"
+msgstr "簡短會話"
+
+msgid  "Reading Type"
+msgstr "閱讀題型"
+
+msgid  "Grammar"
+msgstr "文法"
+
+msgid  "Phrase"
+msgstr "片語"
+
+msgid  "ParagraphUnderstanding"
+msgstr "段落理解"
+
+msgid  "Choose the number of your test paper"
+msgstr "選擇測驗卷號碼"
+
+msgid  "Question Number"
+msgstr "測驗卷題數"
+
+msgid  "You can start practice"
+msgstr "你可以開始測驗囉"
+
+msgid  "Proclamation Detail"
+msgstr "公告資料"
+
+msgid  "Enter Choice content"
+msgstr "輸入選項內容"
+
+msgid  "Question"
+msgstr "題目"
+
+msgid  "File"
+msgstr "檔案"
+
+msgid  "Select MPEG file"
+msgstr "選擇MPEG格式的檔案"
+
+msgid  "Choose the question type"
+msgstr "選擇試題題型"
+
+msgid  "Medium"
+msgstr "適中"
+
+msgid  "Easy"
+msgstr "簡單"
+
+msgid  "Hard"
+msgstr "困難"
+
+msgid  "Question Option"
+msgstr "試題選項"
+
+msgid  "Difficulty"
+msgstr "難易度"
+
+msgid  "Create"
+msgstr "創建"
+
+msgid  "Option"
+msgstr "選項"
+
+msgid  "Create Question"
+msgstr "創建試題"
+
+msgid  "Paragraph Understanding"
+msgstr "段落理解"
+
+msgid  "Answer"
+msgstr "解答"
+
+msgid  "Enter the question content"
+msgstr "輸入試題內容"
+
+msgid  "Question Edit"
+msgstr "編輯試題"
+
+msgid  "Set Answer"
+msgstr "設立答案"
+
+msgid  "Sure to update and saved it"
+msgstr "確定更新並儲存嗎"
+
+msgid  "Sure to leave edition"
+msgstr "確定離開編輯嗎"
+
+msgid  "Review"
+msgstr "審核"
+
+msgid  "Question File"
+msgstr "試題檔案"
+
+msgid  "Sure to update this question and pass it"
+msgstr "確定更新此試題並通過審核嗎"
+
+msgid  "Sure to pass"
+msgstr "確定通過審核嗎"
+
+msgid  "Pass"
+msgstr "通過"
+
+msgid  "Sure to change the answer of this question and modified its state into handled"
+msgstr "確定改變此題答案並將狀態改為處理中嗎"
+
+msgid  "Select All"
+msgstr "選擇全部"
+
+msgid  "Other"
+msgstr "其他"
+
+msgid  "Issued"
+msgstr "發佈"
+
+msgid  "Sure to submit"
+msgstr "確定提交嗎"
+
+msgid  "Update Profile"
+msgstr "更新個人資料"
+
+msgid  "Select image file"
+msgstr "選擇照片檔案"
+
+msgid  "Introduce yourself"
+msgstr "自我介紹"
+
+msgid  "User Profile"
+msgstr "使用者個人資料"
+
+msgid  "Choose your gender"
+msgstr "選擇性別"
+
+msgid  "Choose your department"
+msgstr "選擇科系"
+
+msgid  "Choose your squadron"
+msgstr "選擇中隊"
+
+msgid  "Verify"
+msgstr "驗證"
+
+msgid  "Email Verification"
+msgstr "驗證郵件信箱"
+
+msgid  "Password"
+msgstr "密碼"
+
+msgid  "Enter your Password"
+msgstr "輸入密碼"
+ 
+msgid  "Verification"
+msgstr "驗證碼"
+
+msgid  "Forgot Your Password"
+msgstr "忘記密碼"
+
+msgid  "Ignore upper or lowercase"
+msgstr "忽略大小寫"
+
+msgid  "Old Password"
+msgstr "舊密碼"
+
+msgid  "New Password"
+msgstr "新密碼"
+
+msgid  "Verification Password"
+msgstr "驗證密碼"
+
+msgid  "Change"
+msgstr "更改"
+
+msgid  "Password Reset."
+msgstr "密碼重置"
+
+msgid  "Report Number"
+msgstr "回報號碼"
+
+msgid  "Sure to create"
+msgstr "確定創建嗎"
+
+msgid  "Choose one privilege at least"
+msgstr "至少選擇一個權限"
+
+msgid  "Learn more"
+msgstr "了解更多"
+
+msgid  "This is a place where we try to build some interesting stuff about a web system for ALCPT. Hope you can improve your ability of English via this system"
+msgstr "在這裡，我們嘗試為ALCPT構建有關Web系統的一些有趣的東西，希望您也可以通過該系統提高英語水平"
+
+msgid  "If you have any suggestions, please leave us a message. Thank you for your using"
+msgstr "如果您有任何建議，請留言給我們，謝謝您的使用"
+
+msgid  "Start"
+msgstr "開始"
+
+msgid  "About System"
+msgstr "關於系統"
+
+msgid  "Operation Manual"
+msgstr "使用手冊"
+
+msgid  "System"
+msgstr "系統"
+
+msgid  "Download Operation Manual"
+msgstr "下載使用手冊"
+
+msgid  "A free practice platform for Military Academy Students."
+msgstr "一個軍事學院學生可以免費練習的練習平台。"
+
+msgid  "ALCPT is short for American Language Course Placement Test."
+msgstr "ALCPT是美國語言課程入學考試的簡稱。"
+
+msgid  "ALCPT distinguishes multiple user permissions, and students can focus on their own permissions to practice."
+msgstr "ALCPT區分多個使用者權限，學生可以專注於自己的權限進行練習。"
+
+msgid  "This system will also generate some simple statistical graphs to make it easier for users to understand their practice status."
+msgstr "該系統會生成一些簡單的統計圖表，以讓使用者更容易了解其練習的狀態。"
+
+msgid  "Top 5"
+msgstr "前五名"
+
+msgid  "Board"
+msgstr "佈告欄"
+
+msgid  "Most Practice"
+msgstr "練習次數排行"
+
+msgid  "High Score"
+msgstr "分數排行"
+
+msgid  "Controlling about system."
+msgstr "控制本系統中屬於類別類的相關資料"
+
+msgid  "The main task of the system manager is to control some personal information of users on the system. Like personal information,student information, etc."
+msgstr "系統管理員的主要任務是控制系統上用戶的一些個人信息。如個人信息，學生信息等。"
+
+msgid  "More"
+msgstr "更多資訊"
+
+msgid  "Controlling about exam."
+msgstr "主要負責對於考試的相關控制"
+
+msgid  "The main task of the test manager is to create and edit test papers, and to create groups of testees. Use these test papers to create mock tests to test specific groups of subjects."
+msgstr "測試經理的主要任務是創建和編輯測試卷，以及創建受測者群組。使用這些測驗卷來創建模擬測驗，以測驗特定的科系群組。"
+
+msgid  "Maintain and review questions"
+msgstr "維護和審查問題"
+
+msgid  "The main task of the TB manager is to review the questions submitted by the question operator and to maintain these questions."
+msgstr "題庫管理員的主要任務是審查問題操作員提交的問題並維護這些問題。"
+
+msgid  "The main job of the problem operator is to add new questions and submit them to the bank manager for review."
+msgstr "問題操作員的主要工作是添加新問題並將其提交給題庫管理員以供審核。"
+
+msgid  "Create new questions."
+msgstr "創建新題目"
+
+msgid  "Watch the test status of users via this system"
+msgstr "通過該系統觀察使用者的測試狀態"
+
+msgid  "This permission is mainly designed for the chief or teacher to watch the testee's practice status through this system and evaluate whether there is a tendency to improve their English ability."
+msgstr "該權限主要是為了讓校長或老師通過該系統觀察受測者的練習狀況，並評估是否有提高其英語水平的趨勢。"
+
+msgid  "Users can practice listening and reading exercises in English through this system. There are also mock tests designed to be performed by administrators. Allows users to use these tests to improve their understanding of English test questions."
+msgstr "使用者可以通過該系統進行英語練習聽力和閱讀練習。還有一些是由管理員執行的模擬測試。允許使用者使用這些測驗來提高他們對英語測試問題的理解。"
+
+msgid  "Contact Us"
+msgstr "聯絡我們"
+
+msgid  "Main users of this system"
+msgstr "該系統的主要用戶"
+
+msgid  "Answering"
+msgstr "作答中"
+
+msgid  "Unknown"
+msgstr "未知"
+
+msgid  "Leave"
+msgstr "離開"
+
+msgid  "If your "
+msgstr "如果你"
+
+msgid  "answer is correct"
+msgstr "答案是正確的,"
+
+msgid  ", then it will display only one color in all choices and there will display"
+msgstr "那麼它將在所有選擇中僅顯示一種顏色，並且將顯示"
+
+msgid  "behind the question."
+msgstr "在問題後面"
+
+msgid  "Score List"
+msgstr "成績列表"
+
+msgid  "View Test paper Content"
+msgstr "查看測驗卷內容"
+
+msgid  "didn't answer the question"
+msgstr "沒有回答問題"
+
+msgid  "The question has been reported as an error, but after processing by the TBManager, then it will display"
+msgstr "該問題已被反應有錯誤，但經由題庫管理員處理後，他將會顯示"
+
+msgid  "Red color means your selected the wrong answer on the exam."
+msgstr "紅色表示你在測驗中所選的答案為錯誤答案"
+
+msgid  "Green color means the sentence is correct but you miss it."
+msgstr "綠色表示句子正確，但您錯過了。"
+
+msgid  "If you think there is a problem with the question, you can click"
+msgstr "如果您認為該問題有問題，可以點擊"
+
+msgid  "If you have any problem with the question, you can click"
+msgstr "如果您有任何問題有問題，可以點擊"
+
+msgid  " to report it."
+msgstr "進行回報"
+
+msgid  "Practice"
+msgstr "練習"
+
+msgid  "Exam"
+msgstr "測驗"
+
+msgid  "Practice Record List"
+msgstr "練習成績列表"
+
+msgid  "Settle"
+msgstr "結束"
+
+msgid  "Finished"
+msgstr "已完成"
+
+msgid  "Exam Record List"
+msgstr "測驗成績列表"
+
+msgid  "You have no favorite question now"
+msgstr "您目前沒有試題在問題收藏本中"
+
+msgid  "Sure to report"
+msgstr "確定要回報嗎"
+
+msgid  "Start your first reading practice!"
+msgstr "開始您的第一個閱讀練習！"
+
+msgid  "Start your first listening practice!"
+msgstr "開始您的第一個聽力練習!"
+
+msgid  "Member List"
+msgstr "人員列表"
+
+msgid  "Sure to leave and abandon editing"
+msgstr "確定離開且放棄這個編輯嗎"
+
+msgid  "Enter the reject reason"
+msgstr "輸入拒絕的原因"
+
+msgid  "Sure to reject"
+msgstr "確定否決嗎"
+
+msgid  "Reject"
+msgstr "否決"
+
+msgid  "Showcase"
+msgstr "櫥窗"
+
+msgid  "Team"
+msgstr "團隊"
+
+msgid  "Contact"
+msgstr "聯絡"
+
+msgid  "ALCPT is a website helps you improve your English Proficiency and evalute learning effectiveness."
+msgstr "ALCPT是一個可幫助您提高英語水平和評估學習效果的網站。"
+
+msgid  "Commander"
+msgstr "指揮官"
+
+msgid  "Commanders can check every students record to assure the effectiveness of learning of all the students."
+msgstr "指揮官可以檢查每位學生的記錄，以確保所有學生學習的有效性"
+
+msgid  "Students can practice any kind of question as they wish."
+msgstr "學生可以根據需要練習任何類型的試題"
+
+msgid  "All the question you have ever practiced or tested can be added to Favorite Question. You can review them anytime, anywhere you want!"
+msgstr "您曾經練習或測驗過的所有問題都可以添加到“最愛收藏本”中。您可以隨時隨地查看它們！"
+
+msgid  "User Permission"
+msgstr "使用者權限"
+
+msgid  "Review the questions submitted by the question operator and to maintain these questions."
+msgstr "查看問題操作者提交的問題並維護這些問題。"
+
+msgid  "Create, edit test papers and create "
+msgstr "創建，編輯試卷並創建"
+
+msgid  "groups of testees "
+msgstr "一組受測者"
+
+msgid  "add new questions and submit them to "
+msgstr "添加新問題並將其提交給"
+
+msgid  "the TB manager for review."
+msgstr "題庫經理進行審查。"
+
+msgid  "Commander and Techer can check "
+msgstr "指揮官和老師可以檢查"
+
+msgid  "student's score."
+msgstr "學生的成績。"
+
+msgid  "Users can practice listening "
+msgstr "使用者可以練習聽力"
+
+msgid  "and reading exercises in English "
+msgstr "和英語閱讀練習"
+
+msgid  "through this system."
+msgstr "透過這個系統。"
+
+msgid  "Please enter your Email"
+msgstr "請輸入你的電子信箱"
+
+msgid  "Write Message"
+msgstr "寫下建議"
+
+msgid  "Write your message"
+msgstr "寫下您的建議"
+
+msgid  "Please enter your name"
+msgstr "請輸入你的名字"
+
+msgid  "Get In Touch"
+msgstr "保持聯繫"
+
+msgid  "If you have any question, please contact us."
+msgstr "如有任何疑問，請與我們聯繫。"
+
+msgid  "Web developer"
+msgstr "網頁開發人員"
+
+msgid  "Back-end Developer"
+msgstr "後端開發人員"
+
+msgid  "Project Manager"
+msgstr "專案經理"
+
+msgid  "Team Members"
+msgstr "團隊成員"
+
+msgid  "National Defense University of Management College"
+msgstr "國防管理大學學院"
+
+msgid  "Front-end Developer"
+msgstr "前端開發人員"
+
+msgid  "Translator"
+msgstr "翻譯員"
+
+msgid  "Tester"
+msgstr "測試員"
+
+msgid  "User Review"
+msgstr "使用者審查"
+
+msgid  "Subject"
+msgstr "科系"
+
+msgid  "Green color means the correct answer."
+msgstr "綠色代表是正確的答案"
+
+msgid  ""
+msgstr ""
+
+msgid  ""
+msgstr ""
 ##msgid  ""
 ##msgstr ""
 ##{{trans("Identity")}}
 ##{{trans("")}}
+

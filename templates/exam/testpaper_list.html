@@ -1,20 +1,20 @@
 {% extends 'new_base.html' %} {% block path %}
-<li class="breadcrumb-item active" aria-current="page">TestPaper List</li>
+<li class="breadcrumb-item active" aria-current="page">{{trans("TestPaper List")}}</li>
 {% endblock %} {% block content %}
 <main class="testpaper-list">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-12 table-responsive-md">
-                <h2>TestPaper List.</h2>
+                <h2>{{trans("TestPaper List")}}</h2>
 
                 <table class="table table-hover table-bordered table-striped table-mc-light-blue">
                     <thead class="thead-light">
                         <tr>
-                            <th class="text-center">Testpaper Name.</th>
-                            <th class="text-center">Valid.</th>
-                            <th class="text-center">Used.</th>
-                            <th class="text-center">Last Update.</th>
-                            <th class="text-center">Creator.</th>
+                            <th class="text-center">{{trans("Testpaper Name")}}</th>
+                            <th class="text-center">{{trans("Valid")}}</th>
+                            <th class="text-center">{{trans("Used")}}</th>
+                            <th class="text-center">{{trans("Last Update")}}</th>
+                            <th class="text-center">{{trans("Creator")}}</th>
                             <th class="text-center">
                                 <div class="add">
                                     <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ url('testpaper_create') }}'">
@@ -53,13 +53,13 @@
                                 <a href="{{ url('testpaper_valid', args=[testpaper.id]) }}"><i class="fa fa-check-circle"></i></a>
                                 <a href="{{ url('testpaper_unvalid', args=[testpaper.id]) }}"><i class="fa fa-times"></i></a>
                                 <a href="{{ url('testpaper_edit', args=[testpaper.id]) }}"><i class="fa fa-pencil-square-o fa-fw mb-2"></i></a>
-                                <a href="{{ url('testpaper_delete', args=[testpaper.id]) }}" onclick="return confirm('Sure to delete？');"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                                <a href="{{ url('testpaper_delete', args=[testpaper.id]) }}" onclick="return confirm('{{trans("Sure to delete")}}？');"><i class="fa fa-trash" aria-hidden="true"></i></a>
                                 {% endif %}
                             </td>
                         </tr>
                         {% endfor %} {% else %}
                         <tr>
-                            <td class="text-center" colspan="6">No Data.</td>
+                            <td class="text-center" colspan="6">{{trans("No Data")}}</td>
                         </tr>
                         {% endif %}
                     </tbody>
