@@ -47,7 +47,7 @@
                             <div class="dropdown-divider"></div>
 
                             <h5 class="card-subtitle mb-2 text-muted">
-                                Group.<a href="{{ url('testee_group_create') }}"><i class="fa fa-plus-circle"></i></a><span id="group_invalid" class="group_invalid"></span>
+                                {{trans("Group")}}<a href="{{ url('testee_group_create') }}"><i class="fa fa-plus-circle"></i></a><span id="group_invalid" class="group_invalid"></span>
                             </h5>
 
 
@@ -68,13 +68,13 @@
                                 {{trans("Start Time")}}<span id="time_invalid" class="time_invalid" style="color: red; font-size: 14px">{{trans("Required")}}</span>
                             </h5>
                             <p class="card-text">
-                                Date:
+                                {{trans("Date")}}:
                                 <select name="start_time_date" required>
                                     {% for date in dateList %}
                                     <option value="{{ date }}">{{ date }}</option>
                                     {% endfor %}
                                 </select>
-                                Time:
+                                {{trans("Time")}}:
                                 <select name="start_time_hour" required>
                                     {% for hour in hourList %}
                                     <option value="{{ hour }}">{{ hour }}</option>
