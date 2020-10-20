@@ -18,8 +18,8 @@
 <main class="answering-page">
     <div class="container-fluid">
         <div class="row justify-content-center">
-            <div class="col-lg-3 col-md-12">
-                <h4>Question Number.</h4>
+            <div class="col-lg-4 col-md-12">
+                <h4>Question Number</h4>
                 <table>
                     <tr>
                         {% for answer in answers %}
@@ -49,13 +49,17 @@
                     </tr>
                 </table>
             </div>
+            <div class="space">
 
-            <div class="col-lg-9 col-md-12 table-responsive">
-                <h2>Answering.</h2>
+            </div>
+
+            <div class="col-lg-8 col-md-12 table-responsive">
+                <h2>Answering</h2>
                 <form action="{{ url('testee_answering', args=[exam.id, answer.id]) }}" method="post">
                     <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
 
                     <table>
+
                         <tr>
                             {% if answer.question.q_type|question_kind == 'listening' %}
                             <td>
@@ -64,8 +68,11 @@
                                     Your browser does not support the audio tag.
                                 </audio>
                             </td>
+
                             {% elif answer.question.q_type|question_kind == 'reading' %}
+
                             <td>
+                                <span>{{ answer.question }}</span>
                                 {{ answer.question }}
                             </td>
                             {% else %}
@@ -75,33 +82,35 @@
                             {% endif %}
                         </tr>
 
+
                         <tr>
                             <td>
 
                                 {% for option in answer.question.choice_set.all() %}
 
                                 {% if loop.index == answer.selected %}
-                                <button type="submit" class="btn btn-primary btn-lg btn-block" name="answer_{{ answer.id }}" value="{{ loop.index }}">{{ loop.index }}. {{ option }} </button>
+                                <button type=" submit" class="btn btn-primary btn-lg " name="answer_{{ answer.id }}" value="{{ loop.index }}">{{ loop.index }}. {{ option }} </button>
+                                <br />
                                 {% else %}
-                                <button type="submit" class="btn btn-outline-primary btn-lg btn-block" name="answer_{{ answer.id }}" value="{{ loop.index }}">{{ loop.index }}. {{ option }} </button>
+
+                                <button type="submit" class="btn btn-outline-primary btn-lg " name="answer_{{ answer.id }}" value="{{ loop.index }}">{{ loop.index }}. {{ option }}
+                                </button>
+                                <br />
                                 {% endif %}
 
                                 {% endfor %}
 
                             </td>
+
                         </tr>
-
-
                     </table>
                 </form>
-                <div class="col-md-6">
-                    {% if answer_count == 0 %}
-                    <button type="submit" class="btn btn-outline-success" onclick="window.location.href='{{ url('submit_answersheet', args=[exam.id]) }}'">Submit</button>
-                    {% endif %}
-                    <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ url('testee_exam_list') }}'">
-                        Leave
-                    </button>
-                </div>
+                {% if answer_count == 0 %}
+                <button type="submit" class="btn btn-outline-success float-right" onclick="window.location.href='{{ url('submit_answersheet', args=[exam.id]) }}'">Submit</button>
+                {% endif %}
+                <button type="button" class="btn btn-secondary float-right" onclick="window.location.href='{{ url('testee_exam_list') }}'">
+                    Leave
+                </button>
             </div>
         </div>
     </div>
