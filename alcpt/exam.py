@@ -49,8 +49,15 @@ def exam_create(request):
         testpaper = TestPaper.objects.get(id=int(request.POST.get('selected_testpaper')))
         selected_group = Group.objects.get(id=int(request.POST.get('selected_group')))
 
-        exam_name = request.POST.get('exam_name')
         try:
+            exam_name = request.POST.get('exam_name')
+            Exam.objects.get(name = exam_name)
+            messages.error(request, "Failed created, exam name had been used - {}".format(exam_name))
+            return redirect('exam_create')
+        #Exam 找不到同樣exam_name才建立
+        except:
+
+            exam_name = request.POST.get('exam_name')
             exam = Exam.objects.create(name=exam_name,
                                        exam_type=ExamType.Exam.value[0],
                                        start_time=start_time,
@@ -101,9 +108,7 @@ def exam_create(request):
                    users=list(User.objects.filter(exam__testeeList__exam=exam).distinct()))
 
             messages.success(request, "Successfully created a new exam - {}.".format(exam.name))
-        except ObjectDoesNotExist as f:
-            messages.error(request, "Failed created, exam name had been used - {}"+f.format(exam_name))
-
+            return redirect('exam_list')
         return redirect('exam_list')
     else:
         exam_names = [_.name for _ in Exam.objects.all()]
