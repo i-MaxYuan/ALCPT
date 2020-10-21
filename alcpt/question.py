@@ -349,12 +349,13 @@ def question_create(request, kind):
 @permission_check(UserType.TBOperator)
 def question_multiCreate(request):
     if request.method == "POST":
-        if request.FILES.get('users_file', ):
+        if request.FILES.get('questions_file', ):
             wb = xlrd.open_workbook(filename=None, file_contents=request.FILES['questions_file'].read())
             table = wb.sheets()[0]
             all_questions = []
+            numbers = [n for n in range(1,5)]
 
-            for i in range(table.nrows):
+            for i in range(1, table.nrows):
                 question = []
                 for j in range(table.ncols):
                     item = table.cell_value(i, j)
@@ -369,26 +370,23 @@ def question_multiCreate(request):
                 choice2 = question[2]
                 choice3 = question[3]
                 choice4 = question[4]
-                q_type = question[5] + 2
-                q_difficulty = question[6]
+                q_type = question[6]
+                q_difficulty = question[7]
 
                 reading_question = tboperator.create_reading_question(q_content=q_content,
                                                                       q_type=q_type,
                                                                       created_by=request.user,
                                                                       difficulty=q_difficulty)
 
-                option1 = Choice.objects.create(c_content=choice1, question=reading_question)
-                option2 = Choice.objects.create(c_content=choice2, question=reading_question)
-                option3 = Choice.objects.create(c_content=choice3, question=reading_question)
-                option4 = Choice.objects.create(c_content=choice4, question=reading_question)
-                option1.save()
-                option2.save()
-                option3.save()
-                option4.save()
 
-                choice = Choice.objects.get(id=question[5])
-                choice.is_answer = 1
-                choice.save()
+                choices = [choice1, choice2, choice3, choice4]
+                for number, choice in zip(numbers, choices):
+                    if question[5] == number:
+                        option = Choice.objects.create(c_content=choice, question=reading_question, is_answer=1)
+
+                    else:
+                        option = Choice.objects.create(c_content=choice, question=reading_question)
+                        option.save()
 
             return redirect('tboperator_question_list')
         else:

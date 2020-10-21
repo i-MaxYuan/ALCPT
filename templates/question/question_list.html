@@ -7,12 +7,13 @@
 {% block path %}
 <li class="breadcrumb-item active" aria-current="page">{{trans("Question List")}}</li>
 {% endblock %} {% block content%}
+
 <main class="question-list">
     <div class="container-fluid">
-        <div class="row">
-            <div class="col-lg-12">
+        <div class="row justify-content-center">
+            <div class="col-lg-11">
                 <!-- 搜尋 -->
-                <form class="form-inline md-form form-group-sm mt-0" method="get">
+                <form class="form-inline md-form form-group-sm mt-0" method="get" style="margin-bottom: 10px;">
                     <input class="form-control" type="text" name="question_content" {% if keywords.question_content %}value="{{ keywords.question_content }}" {% else %}value="" {% endif %} placeholder="{{trans("Search")}}" aria-label="Search" />
 
                     <label class="mr-sm-2" for="inlineFormCustomSelect">{{trans("Type")}}</label>
@@ -45,11 +46,8 @@
                         <i class="fa fa-search"></i>
                     </button>
                 </form>
-            </div>
-        </div>
 
-        <div class="row justify-content-center">
-            <div class="col-lg-12">
+
                 <div class="table-responsive-md">
                     <h2>{{trans("Question List")}}（{{trans("Total")}}: {{ questions.count() }}）</h2>
                     <table class="table table-hover table-striped table-bordered table-mc-light-blue">
@@ -74,7 +72,7 @@
 
                                 <td class="text-center">{{ question.id }}</td>
 
-                                <td style="text-align: left">
+                                <td class="text-left">
                                     {% if question.q_file %}
                                     <audio controls preload="none">
                                         <source src="{{ question.q_file.url }}" type="audio/mpeg" />
@@ -90,7 +88,7 @@
                                     {% endif %}
                                 </td>
 
-                                <td style="text-align: left">
+                                <td class="text-center">
                                     {{ question.q_type|readable_question_type }}
                                 </td>
 
@@ -161,18 +159,19 @@
                                 <td colspan="2"></td>
                                 <td style="text-align: left">
                                     <ol type="A">
-                                        {% for option in question.choice_set.all() %} {% if option.is_answer %}
-                                        <li style="color: red">{{ option }}</li>
+                                        {% for option in question.choice_set.all() %}
+                                        {% if option.is_answer %}
+                                        <li style="color: green">{{ option }}</li>
                                         {% else %}
                                         <li>{{ option }}</li>
                                         {% endif %} {% endfor %}
                                     </ol>
                                 </td>
-                                <td style="font-size: 14px; text-align: left">
+                                <td colspan="2" style="font-size: 14px; text-align: left">
                                     {% if question.faulted_reason %} {{ question.faulted_reason }}
                                     {% endif %}
                                 </td>
-                                <td colspan="2" style="text-align: left; font-size: 14px">
+                                <td style="text-align: left; font-size: 14px">
                                     <ul style="font-size: 14px; list-style: none">
                                         <li>
                                             {{trans("Update")}}:{{ question.update_time.strftime('%Y/%m/%d %H:%M') }}
@@ -182,7 +181,6 @@
                                             {{trans("Difficulty")}}:{{ question.difficulty|readable_question_difficulty }}
                                         </li>
                                         <li>{{trans("Creator")}}:{{ question.created_by.name }}</li>
-                                        <li>{{trans("Last Update")}}:{{ question.last_updated_by.name }}</li>
                                     </ul>
                                 </td>
                             </tr>
