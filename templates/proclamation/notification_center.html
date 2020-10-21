@@ -1,0 +1,167 @@
+{% extends 'new_base.html' %}
+
+{% block stylesheets %}
+<style>
+    label {
+        padding-top: 1px;
+        width: 15px;
+        height: 15px;
+        background-color: red;
+        border-radius: 24px;
+        color: white;
+        text-align: center;
+    }
+</style>
+
+{% endblock %}
+
+{% block path %}
+<li class="breadcrumb-item active" aria-current="page">{{trans("Notification Center")}}</li>
+{% endblock %}
+
+{% block content %}
+<main class="exam-record">
+    <div class="container">
+        <ul class="nav nav-tabs" id="newTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="practice-tab" data-toggle="tab" href="#practice" role="tab" aria-controls="practice" aria-selected="true">
+                    All
+                    {% if request.user.proclamation_set.all()|unread_count != 0 %}
+                    <label class="notification-custom"><sup>{{ request.user.proclamation_set.all()|unread_count }}</sup></label>
+                    {% endif %}
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="exam-tab" data-toggle="tab" href="#exam" role="tab" aria-controls="exam" aria-selected="false">Report</a>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="tabContent">
+            <div class="tab-pane fade show active" id="practice" role="tabpanel" aria-labelledby="practice-tab">
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-md-12">
+                            <h2>{{trans("Notification Center")}}</h2><span>Total: {{ request.user.proclamation_set.count() }}</span>
+
+                            <div class="table-responsive-md">
+                                <table class="table table-hover table-bordered table-striped table-mc-light-blue">
+                                    <thead class="thead-light">
+
+                                        <tr>
+                                            <th></th>
+                                            <th></th>
+                                            <th class="text-center">{{trans("Title")}}</th>
+                                            <th class="text-center">{{trans("Content")}}</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        {% for notification in notifications %}
+                                        {% if notification.is_read %}
+                                        <tr>
+                                            <td class="align-middle">
+                                                <input type="checkbox" name="proclamation" value="{{ notification.id }}" />
+                                            </td>
+                                            <td></td>
+                                            <td class="text-left" data-title="Title：" style="cursor: pointer">
+                                                <a href="{{ url('proclamation_detail', args=[notification.id]) }}">{{ notification.title }}</a>
+                                            </td>
+                                            <td class="text-left" data-title="Content：" style="cursor: pointer">
+                                                <a href="{{ url('proclamation_detail', args=[notification.id]) }}">{{ notification.text }}</a>
+                                            </td>
+                                            <td>
+                                                <a href="{{ url('notification_delete', args=[notification.id]) }}"><i class="fa fa-trash-o"></i></a>
+                                            </td>
+                                        </tr>
+                                        {% else %}
+                                        <tr style="font-weight: bold;">
+                                            <td class="align-middle">
+                                                <input type="checkbox" name="proclamation" value="{{ notification.id }}" />
+                                            </td>
+                                            <td>
+                                                <i class="fas fa-circle" style="color: red; font-size: 10px;"></i>
+                                            </td>
+                                            <td class="text-left" data-title="Title：" style="cursor: pointer">
+                                                <a href="{{ url('proclamation_detail', args=[notification.id]) }}">{{ notification.title }}</a>
+                                            </td>
+                                            <td class="text-left" data-title="Content：" style="cursor: pointer">
+                                                <a href="{{ url('proclamation_detail', args=[notification.id]) }}">{{ notification.text }}</a>
+                                            </td>
+                                            <td>
+                                                <a href="{{ url('notification_delete', args=[notification.id]) }}"><i class="fa fa-trash-o"></i></a>
+                                            </td>
+                                        </tr>
+                                        {% endif %}
+                                        {% else %}
+                                        <tr>
+                                            <td class="text-center" colspan="5">{{trans("No Notification")}}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- <div class="tab-pane fade" id="exam" role="tabpanel" aria-labelledby="exam-tab">
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-md-12">
+                            <h2>{{trans("Exam Record List")}}</h2>
+
+                            <div class="table-responsive-md">
+                                <table class="table table-hover table-striped table-bordered table-mc-light-blue">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th class="text-center">{{trans("Name")}}</th>
+                                            <th class="text-center">{{trans("Name")}}</th>
+                                            <th class="text-center">{{trans("Start Time")}}</th>
+                                            <th class="text-center">{{trans("Duration")}}</th>
+                                            <th class="text-center">{{trans("Other")}}</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        {% for exam in examList %}
+                                        <tr>
+                                            <td class="text-center">{{ exam }}</td>
+                                            <td class="text-center">
+                                                {{ exam.exam_type|readable_exam_type }}
+                                            </td>
+                                            <td class="text-center">
+                                                {{ exam.start_time.strftime('%Y/%m/%d %H:%M') }}
+                                            </td>
+                                            <td class="text-center">{{ exam.duration }} min.</td>
+                                            <td class="text-center">
+                                                {% if not exam|is_finished(request.user) %}
+                                                <button type="button" class="btn btn-primary" onclick="window.location.href='{{ url('testee_start_exam', args=[exam.id]) }}'">
+                                                    {{trans("Start")}}
+                                                </button>
+                                                {% else %}
+                                                <button type="button" class="btn btn-success" disabled>
+                                                    {{trans("Finished")}}
+                                                </button>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                        {% else %}
+                                        <tr>
+                                            <td class="text-center" colspan="5">{{trans("No Data")}}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+        </div>
+    </div>
+</main>
+
+
+{% endblock %}

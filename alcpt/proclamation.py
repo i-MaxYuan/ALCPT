@@ -69,12 +69,10 @@ def delete(request, proclamation_id):
             messages.success(request, "Successfully deleted.")
         else:
             messages.warning(request, "Failed deleted.")
-
     except ObjectDoesNotExist:
         messages.error(request, "Proclamation doesn't exist, proclamation id: {}".format(proclamation_id))
-
-    return redirect(request.META.get('HTTP_REFERER'))
-
+        return redirect('Homepage')
+    return redirect('Homepage')
 
 @login_required
 def toggle(request, action):
@@ -106,3 +104,22 @@ def detail(request, proclamation_id):
         return render(request, 'proclamation/proclamation_detail.html', locals())
     except ObjectDoesNotExist:
         return redirect('Homepage')
+
+
+@login_required
+def notification_center(request):
+    notifications = request.user.proclamation_set.all()
+    return render(request,'proclamation/notification_center.html',locals())
+
+@login_required
+def notification_delete(request, proclamation_id):
+    try:
+        proclamation = Proclamation.objects.get(id=proclamation_id)
+        proclamation.delete()
+        messages.success(request, "Successfully deleted.")
+
+    except ObjectDoesNotExist:
+        messages.error(request, "Proclamation doesn't exist, proclamation id: {}".format(proclamation_id))
+
+        return redirect(request.META.get('HTTP_REFERER'))
+    return redirect(request.META.get('HTTP_REFERER'))
