@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 from alcpt.decorators import permission_check, login_required
 from alcpt.models import User, Proclamation
@@ -109,6 +110,7 @@ def detail(request, proclamation_id):
 @login_required
 def notification_center(request):
     notifications = request.user.proclamation_set.all()
+
     return render(request,'proclamation/notification_center.html',locals())
 
 @login_required

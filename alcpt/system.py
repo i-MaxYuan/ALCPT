@@ -5,7 +5,7 @@ import json
 import datetime
 
 from string import punctuation
-
+from django.contrib import auth
 from django.core import serializers
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_http_methods
@@ -519,6 +519,7 @@ def report(request):
 # 負責單位對回報的回應
 @login_required
 def report_reply(request, report_id):
+
     if request.user.has_perm(UserType.SystemManager):
         permission = 'SystemManager'
         pass
@@ -553,8 +554,11 @@ def report_reply(request, report_id):
         reply = request.POST.get('reply')
         new_reply = Reply.objects.create(source=replying_report, content=reply, created_by=request.user)
 
-        proclamation_content = "The administrator has responded the problem you encountered.\n" \
-                               "Please refer to the notification center for more details."
+        proclamation_content =  "問題類別："+str(replying_report.category.name) +"\n"+\
+                                "問題："+replying_report.supplement_note+"\n"+\
+                                "回覆："+reply+"\n"+\
+                                "reply by:"+request.user.name
+
         notify(title='Reply',
                text=proclamation_content,
                is_read=False,
