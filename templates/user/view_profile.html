@@ -1,4 +1,10 @@
-{% extends 'new_base.html' %} {% block path %}
+{% extends 'new_base.html' %}
+
+{% block stylesheets %}
+<link rel="stylesheet" type="text/css" href="{{ static('/css/user/view_profile.css') }}" />
+{% endblock %}
+
+{% block path %}
 <li class="breadcrumb-item" aria-current="page">
     <a href="{{ url('user_list') }}">{{trans("User List")}}</a>
 </li>
@@ -8,7 +14,7 @@
     <div class="container">
         {% if viewed_user.student %}
         <div class="row">
-            <div class="col-lg-3">
+            <div class="col-lg-4">
                 <div class="card mb-3">
                     <div class="card-header">{{trans("User Photo")}}</div>
 
@@ -24,7 +30,7 @@
                 </div>
             </div>
 
-            <div class="col-lg-6">
+            <div class="col-lg-5">
                 <div class="card mb-3">
                     <div class="card-header">{{trans("User Profile")}}</div>
 
@@ -73,21 +79,12 @@
                     </div>
 
                     <div class="card-footer text-muted">
-                        <p style="font-size: 12px">
-                            {{trans("Last login")}} - {{ viewed_user.last_login }}
-                        </p>
-                        <p style="font-size: 12px">
-                            {{trans("Create time")}} - {{ viewed_user.created_time }}
-                        </p>
-                        <p style="font-size: 12px">
-                            {{trans("Status")}} - {% if viewed_user.is_active %}
-                            <span>{{trans("active")}}</span>
-                            {% elif viewed_user.is_staff %}
-                            <span>{{trans("staff")}}</span>
-                            {% elif viewed_user.is_superuser %}
-                            <span>{{trans("superuser")}}</span>
-                            {% endif %}
-                        </p>
+                        <span>{{trans("Last login")}} - {{ user.last_login }}<br /></span>
+                        <span>{{trans("Create time")}} - {{ user.created_time }}<br /></span>
+                        <span>
+                            {{trans("Status")}} - {% if user.is_active %} {{trans("active")}} {% elif user.is_staff %}
+                            {{trans("staff")}} {% elif user.is_superuser %} {{trans("superuser")}} {% endif %}
+                        </span>
                     </div>
                 </div>
             </div>
@@ -111,7 +108,7 @@
                     </div>
 
                     <div class="card-footer text-right">
-                        <button onclick="history.back()" class="btn btn-primary">{{trans("OK")}}</button>
+                        <button onclick="history.back()" class="btn btn-primary btn-block">{{trans("OK")}}</button>
                     </div>
                 </div>
             </div>
@@ -183,25 +180,15 @@
                     </div>
 
                     <div class="card-footer text-muted">
-                        <p style="font-size: 12px">
-                            {{trans("Last login")}} - {{ viewed_user.last_login }}
-                        </p>
-                        <p style="font-size: 12px">
-                            {{trans("Create time")}} - {{ viewed_user.created_time }}
-                        </p>
-                        <p style="font-size: 12px">
-                            {{trans("Status")}} - {% if viewed_user.is_active %}
-                            <span>{{trans("active")}}</span>
-                            {% elif viewed_user.is_staff %}
-                            <span>{{trans("staff")}}</span>
-                            {% elif viewed_user.is_superuser %}
-                            <span>{{trans("superuser")}}</span>
-                            {% endif %}
-                        </p>
-
+                        <span>{{trans("Last login")}} - {{ user.last_login }}<br /></span>
+                        <span>{{trans("Create time")}} - {{ user.created_time }}<br /></span>
+                        <span>
+                            {{trans("Status")}} - {% if user.is_active %} {{trans("active")}} {% elif user.is_staff %}
+                            {{trans("staff")}} {% elif user.is_superuser %} {{trans("superuser")}} {% endif %}
+                        </span>
                         <div class="text-right">
                             <button onclick="history.back()" class="btn btn-primary">
-                                {trans("OK")}}
+                                {{trans("OK")}}
                             </button>
                         </div>
                     </div>

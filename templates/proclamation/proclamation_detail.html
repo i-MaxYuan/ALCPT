@@ -1,5 +1,5 @@
 {% extends 'new_base.html' %} {% block path %}
-<li class="breadcrumb-item active" aria-current="page">Proclamation Detail</li>
+<li class="breadcrumb-item active" aria-current="page">Detail</li>
 {% endblock %} {% block content %}
 <main class="proclamation-detail">
     <div class="container">
@@ -18,7 +18,7 @@
                             <cite title="Source Title">{{ proclamation.created_time }}</cite>
                         </footer>
 
-                        <button type="button" class="btn btn-primary float-right" onclick="self.location=document.referrer;">
+                        <button type="button" class="btn btn-primary float-right" onclick="window.location.href='{{ url('notification_center') }}'">
                             {{ trans("OK") }}
                         </button>
                     </div>

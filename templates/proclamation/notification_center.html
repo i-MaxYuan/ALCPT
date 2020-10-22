@@ -1,5 +1,8 @@
 {% extends 'new_base.html' %}
 
+{% block scripts %}
+<script src="{{ static('/javascript/proclamation/notification_center.js') }}"></script>
+{% endblock %}
 {% block stylesheets %}
 <style>
     label {
@@ -42,7 +45,11 @@
                     <div class="row justify-content-center">
                         <div class="col-md-12">
                             <h2>{{trans("Notification Center")}}</h2><span>Total: {{ request.user.proclamation_set.count() }}</span>
-
+                            <div class="text-right">
+                                <button class="btn fa fa-check-square-o" type="button" title="Select All" onclick="selectAll();" style="font-size: 24px"></button>
+                                <button class="btn fa fa-exchange" type="button" title="Reverse" onclick="reverseSelect();" style="font-size: 24px"></button>
+                                <button class="btn fa fa-close" type="button" title="Cancel All" onclick="cancelAll();" style="font-size: 24px"></button>
+                            </div>
                             <div class="table-responsive-md">
                                 <table class="table table-hover table-bordered table-striped table-mc-light-blue">
                                     <thead class="thead-light">
@@ -65,10 +72,10 @@
                                             </td>
                                             <td></td>
                                             <td class="text-left" data-title="Title：" style="cursor: pointer">
-                                                <a href="{{ url('proclamation_detail', args=[notification.id]) }}">{{ notification.title }}</a>
+                                                <a href="{{ url('proclamation_detail', args=[notification.id]) }}">{{ notification.title|truncate(20, True) }}</a>
                                             </td>
                                             <td class="text-left" data-title="Content：" style="cursor: pointer">
-                                                <a href="{{ url('proclamation_detail', args=[notification.id]) }}">{{ notification.text }}</a>
+                                                <a href="{{ url('proclamation_detail', args=[notification.id]) }}">{{ notification.text|truncate(60, True) }}</a>
                                             </td>
                                             <td>
                                                 <a href="{{ url('notification_delete', args=[notification.id]) }}"><i class="fa fa-trash-o"></i></a>
@@ -83,10 +90,10 @@
                                                 <i class="fas fa-circle" style="color: red; font-size: 10px;"></i>
                                             </td>
                                             <td class="text-left" data-title="Title：" style="cursor: pointer">
-                                                <a href="{{ url('proclamation_detail', args=[notification.id]) }}">{{ notification.title }}</a>
+                                                <a href="{{ url('proclamation_detail', args=[notification.id]) }}">{{ notification.title|truncate(20, True) }}</a>
                                             </td>
                                             <td class="text-left" data-title="Content：" style="cursor: pointer">
-                                                <a href="{{ url('proclamation_detail', args=[notification.id]) }}">{{ notification.text }}</a>
+                                                <a href="{{ url('proclamation_detail', args=[notification.id]) }}">{{ notification.text|truncate(60, True) }}</a>
                                             </td>
                                             <td>
                                                 <a href="{{ url('notification_delete', args=[notification.id]) }}"><i class="fa fa-trash-o"></i></a>
@@ -105,6 +112,17 @@
                     </div>
                 </div>
             </div>
+            <!-- <script>
+                function set_action(action) {
+                    var form = document.getElementById("notificationForm");
+                    if (action === "read") {
+                        form.action = "/proclamation/read/toggle";
+                    } else {
+                        form.action = "/proclamation/delete/toggle";
+                    }
+                    form.submit();
+                }
+            </script> -->
 
             <!-- <div class="tab-pane fade" id="exam" role="tabpanel" aria-labelledby="exam-tab">
                 <div class="container">
