@@ -130,11 +130,12 @@
                         {% endif %}
                         {% else %}
                         <a class="dropdown-item" href="#" style="background: #efefef; ">
-                            No notification
+                            {{trans("No notification")}}
                         </a>
 
                         {% endfor %}
-                        <a style="color: #70a8e0; margin-left: 20px; text-decoration: underline" href="{{ url('notification_center') }}">show all</a>
+                        <a style="color: #70a8e0; margin-left: 20px; text-decoration: underline" href="{{ url('notification_center') }}">{{trans("show all")}}</a>
+                        
 
                     </div>
 
