@@ -1148,11 +1148,115 @@ msgstr "編輯"
 msgid  "Reject Reason"
 msgstr "否決的理由"
 
-msgid  ""
-msgstr ""
+msgid  "Sure to logout"
+msgstr "確定登出"
 
-msgid  ""
-msgstr ""
+msgid  "No notification"
+msgstr "沒有通知"
+
+msgid  "show all"
+msgstr "顯示全部"
+
+msgid  "Verification email has been sent, please check out."
+msgstr "郵箱驗證信件已寄出，請去確認"
+
+msgid  "Reset password successfully, please login with new password."
+msgstr "重置密碼成功，請用新密碼重新登入"
+
+msgid  "Wrong Password or User unexist."
+msgstr "錯誤密碼或使用者不存在"
+
+msgid  "Fist login, please edit your data"
+msgstr "第一次登入，請編輯您的個人資料"
+
+msgid  "Login Success."
+msgstr "登入成功"
+
+msgid  "Verification code error"
+msgstr "驗證碼錯誤"
+
+msgid  "Saved profile successfully."
+msgstr "成功儲存個人資料"
+
+msgid  "Old password does not match."
+msgstr "舊的密碼錯誤"
+
+msgid  "New password and old password are the same."
+msgstr "新密碼與舊密碼一樣"
+
+msgid  "Verification error."
+msgstr "驗證錯誤"
+
+msgid  "Password change successfully. Please login again with new password."
+msgstr "密碼更新成功，請重新登入新密碼"
+
+msgid  "New password and verificaiton password doesn't match."
+msgstr "新密碼和驗證密碼不相容"
+
+msgid  "Verfication Success"
+msgstr "驗證成功"
+
+msgid  "Reset link has been sent, please check your email."
+msgstr "重置連結已寄出，請至您的郵箱查收"
+
+msgid  "User does not exist. Try again."
+msgstr "使用者不存在，請重新測試一次"
+
+msgid  "You have no permission"
+msgstr "您沒有權限"
+
+msgid  "This report had been resolved."
+msgstr "此問題回報已解決"
+
+msgid  "Successfully Created - User, Student"
+msgstr "成功創建[學生]使用者"
+
+msgid  "Please input the student ID."
+msgstr "請輸入學生ID"
+
+msgid  "Successfully Created - User"
+msgstr "成功創建-使用者"
+
+msgid  "You are not student."
+msgstr "您不是學生"
+
+msgid  "Successfully updated user."
+msgstr "成功更新使用者"
+
+msgid  "This ID had been used."
+msgstr "這個ID已經被使用"
+
+msgid  "Please update Student information."
+msgstr "請更新學生的資訊"
+
+msgid  "This register ID had been used."
+msgstr "這個註冊ID已被使用"
+
+msgid  "Choose the unit which you want to create."
+msgstr "選擇您要創建的單位"
+
+msgid  "This name had been used."
+msgstr "這個名字已被使用"
+
+msgid  "Update successfully."
+msgstr "更新成功"
+
+msgid  "Unknown unit name."
+msgstr "未知的單位名稱"
+
+msgid  "Thanks for your advise, we will help you to solve your problem as soon as possible."
+msgstr "謝謝您的建議，我們會儘快協助您解決您的問題"
+
+msgid  "Permission Denied."
+msgstr "沒有權限"
+
+msgid  "This report not belongs to your permission."
+msgstr "這個問題回報不是屬於您的權限"
+
+msgid  "Mainly responsible for the control system category data"
+msgstr "主要負責控制系統類別類的資料"
+
+
 ##msgid  ""
 ##msgstr ""
 ##{{trans("Identity")}}

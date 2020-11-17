@@ -29,7 +29,7 @@
                     <a href="{{ url('profile_edit') }}"><i class="fas fa-user-edit"></i>{{ trans("Edit Profile") }}</a>
                 </li>
                 <li>
-                    <a href="{{ url('email') }}"><i class="fas fa-envelope"></i>Email</a>
+                    <a href="{{ url('email') }}"><i class="fas fa-envelope"></i>{{trans("Email")}}</a>
                 </li>
                 <li>
                     <a href="{{ url('password_change') }}"><i class="fas fa-key"></i>{{ trans("Password Change") }}</a>
@@ -37,7 +37,7 @@
             </ul>
         </li>
         <li>
-            <a href="{{ url('notification_center') }}"><i class="fas fa-bell"></i>Notification Center</a>
+            <a href="{{ url('notification_center') }}"><i class="fas fa-bell"></i>{{trans("Notification Center")}}</a>
         </li>
 
         <li>
@@ -50,7 +50,7 @@
 
     <ul class="list-unstyled CTAs">
         <li>
-            <a href="{{ url('logout') }}" class="download" onclick="return confirm('Sure to logout?')"><i class="fas fa-sign-out-alt"></i>Logout</a>
+            <a href="{{ url('logout') }}" class="download" onclick="return confirm('{{trans("Sure to logout")}}?')"><i class="fas fa-sign-out-alt"></i>{{trans("Logout")}}</a>
         </li>
     </ul>
     {% else %}
