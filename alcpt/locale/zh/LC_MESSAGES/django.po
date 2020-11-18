@@ -1148,12 +1148,5 @@ msgstr "編輯"
 msgid  "Reject Reason"
 msgstr "否決的理由"
 
-msgid  ""
-msgstr ""
-
-msgid  ""
-msgstr ""
-##msgid  ""
-##msgstr ""
-##{{trans("Identity")}}
-##{{trans("")}}
+msgid "Pending"
+msgstr "暫存"
