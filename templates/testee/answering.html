@@ -25,19 +25,19 @@
                         {% for answer in answers %}
                         <td>
                             {% if answer.selected != -1 and answer.id == selected_answer.id%}
-                            <div class="bit one">
+                            <div class="bit one" style="color: #007BFF">
                                 <a href=" {{ url('testee_answering', args=[exam.id, answer.id]) }}">{{ loop.index }}</a>
                             </div>
                             {% elif answer.selected != -1 %}
-                            <div class="bit two">
+                            <div class="bit two" style="color: #007BFF">
                                 <a href=" {{ url('testee_answering', args=[exam.id, answer.id]) }}">{{ loop.index }}</a>
                             </div>
                             {% elif answer.id == selected_answer.id %}
-                            <div class="bit three">
+                            <div class="bit three" style="color: #007BFF">
                                 <a href=" {{ url('testee_answering', args=[exam.id, answer.id]) }}">{{ loop.index }}</a>
                             </div>
                             {% else %}
-                            <div class="bit">
+                            <div class="bit" style="color: #007BFF">
                                 <a href="{{ url('testee_answering', args=[exam.id, answer.id]) }}">{{ loop.index }}</a>
                             </div>
                             {% endif %}
@@ -111,7 +111,7 @@
                 <button type="submit" class="btn btn-outline-success float-right" onclick="window.location.href='{{ url('submit_answersheet', args=[exam.id]) }}'">{{trans("Submit")}}</button>
                 {% endif %}
                 <button type="button" class="btn btn-secondary float-right" onclick="window.location.href='{{ url('testee_exam_list') }}'">
-                    {{trans("Leave")}}
+                    {{trans("Pending")}}
                 </button>
             </div>
         </div>

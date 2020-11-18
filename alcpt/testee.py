@@ -53,9 +53,9 @@ def score_list(request):
     READING_QUALIFICATION = {'qualified': 0,'unqualified': 0}
     LISTENING_QUALIFICATION = {'qualified': 0,'unqualified': 0}
 
-    EXAM_SCORE_RANGE = {'one': 0,'two': 0,'three': 0,'four': 0,'five': 0,'six': 0,'seven': 0,'eight': 0,'nine': 0,'ten': 0}
-    READING_SCORE_RANGE = {'one': 0,'two': 0,'three': 0,'four': 0,'five': 0,'six': 0,'seven': 0,'eight': 0,'nine': 0,'ten': 0}
-    LISTENING_SCORE_RANGE = {'one': 0,'two': 0,'three': 0,'four': 0,'five': 0,'six': 0,'seven': 0,'eight': 0,'nine': 0,'ten': 0}
+    EXAM_SCORE_RANGE = {'zero':0, 'one': 0,'two': 0,'three': 0,'four': 0,'five': 0,'six': 0,'seven': 0,'eight': 0,'nine': 0}
+    READING_SCORE_RANGE = {'zero':0, 'one': 0,'two': 0,'three': 0,'four': 0,'five': 0,'six': 0,'seven': 0,'eight': 0,'nine': 0}
+    LISTENING_SCORE_RANGE = {'zero':0, 'one': 0,'two': 0,'three': 0,'four': 0,'five': 0,'six': 0,'seven': 0,'eight': 0,'nine': 0}
 
     #EXAM
     #計算是否及格
@@ -73,12 +73,12 @@ def score_list(request):
         if answer_sheet.score is None:
             pass
         else:
-            if count <= answer_sheet.score <= count + 10:
-                EXAM_SCORE_RANGE['one'] += 1
+            if count <= answer_sheet.score < count + 10:
+                EXAM_SCORE_RANGE['zero'] += 1
             else:
                 count += 10
                 for name in list(EXAM_SCORE_RANGE.keys())[1:]:
-                    if count < answer_sheet.score <= count + 10:
+                    if count <= answer_sheet.score < count + 10:
                         EXAM_SCORE_RANGE[name] += 1
                         break
                     else:
@@ -100,12 +100,12 @@ def score_list(request):
         if answer_sheet.score is None:
             pass
         else:
-            if count <= answer_sheet.score <= count + 10:
-                READING_SCORE_RANGE['one'] += 1
+            if count <= answer_sheet.score < count + 10:
+                READING_SCORE_RANGE['zero'] += 1
             else:
                 count += 10
                 for name in list(READING_SCORE_RANGE.keys())[1:]:
-                    if count < answer_sheet.score <= count + 10:
+                    if count <= answer_sheet.score < count + 10:
                         READING_SCORE_RANGE[name] += 1
                         break
                     else:
@@ -126,12 +126,12 @@ def score_list(request):
         if answer_sheet.score is None:
             pass
         else:
-            if count <= answer_sheet.score <= count + 10:
-                LISTENING_SCORE_RANGE['one'] += 1
+            if count <= answer_sheet.score < count + 10:
+                LISTENING_SCORE_RANGE['zero'] += 1
             else:
                 count += 10
                 for name in list(LISTENING_SCORE_RANGE.keys())[1:]:
-                    if count < answer_sheet.score <= count + 10:
+                    if count <= answer_sheet.score < count + 10:
                         LISTENING_SCORE_RANGE[name] += 1
                         break
                     else:
@@ -139,7 +139,7 @@ def score_list(request):
     # xaxis : Score
     # yaxis : Times
     # Bar chart
-    x_data = [ str(num) for num in range(10, 101, 10)]
+    x_data = [ str(num) for num in range(0, 101, 10)]
     y_exam_data = list(EXAM_SCORE_RANGE.values())
     y_reading_data = list(READING_SCORE_RANGE.values())
     y_listening_data = list(LISTENING_SCORE_RANGE.values())

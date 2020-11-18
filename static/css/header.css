@@ -84,7 +84,7 @@
     text-align: center;
 }
 
-i.fas {
+i.fas, i.fa {
     padding-right: 5px;
 }
 
@@ -103,14 +103,6 @@ i.fas {
 
 .fa-file-signature {
     color: darksalmon;
-}
-
-.fa-file-alt,
-.fa-list,
-.a-list-ol,
-.fa-headphones-alt,
-.fa-tasks {
-    padding-right: 5px;
 }
 
 .fa-layer-group {
