@@ -21,7 +21,7 @@ from alcpt.proclamation import notify
 from alcpt.definitions import UserType, Identity
 from alcpt.decorators import permission_check, login_required
 from alcpt.exceptions import IllegalArgumentError
-
+from django.utils.translation import ugettext as _
 
 # 使用者列表
 @permission_check(UserType.SystemManager)
@@ -98,11 +98,11 @@ def user_create(request):
 
                     new_user.save()
                     new_user_stu.save()
-                    messages.success(request, 'Successfully Created - User, Student')
+                    messages.success(request, _('Successfully Created - User, Student'))
                     return redirect('user_list')
 
                 else:
-                    messages.warning(request, 'Please input the student ID.')
+                    messages.warning(request, _('Please input the student ID.'))
                     privileges = UserType.__members__
                     identities = Identity.__members__.values()
                     departments = Department.objects.all()
@@ -113,10 +113,10 @@ def user_create(request):
                 new_user = User.objects.create_user(reg_id=reg_id, privilege=privilege_value, password=reg_id)
                 new_user.identity = identity
                 new_user.save()
-                messages.success(request, 'Successfully Created - User')
+                messages.success(request, _('Successfully Created - User'))
 
                 if request.POST.get('stu_id'):
-                    messages.warning(request, 'You are not student.')
+                    messages.warning(request, _('You are not student.'))
 
                 return redirect('user_list')
 
@@ -229,18 +229,18 @@ def user_edit(request, reg_id):
                         edited_user.save()
                         edited_student.save()
 
-                        messages.success(request, "Successfully updated user.")
+                        messages.success(request, _("Successfully updated user."))
                         return redirect('user_list')
 
                     except IntegrityError:
-                        messages.warning(request, "This ID had been used.")
+                        messages.warning(request, _("This ID had been used."))
                         departments = Department.objects.all()
                         squadrons = Squadron.objects.all()
                         return render(request, 'user/edit_user.html', locals())
 
                 except ObjectDoesNotExist:
                     Student.objects.create(stu_id=edited_user.reg_id, user=edited_user).save()
-                    messages.warning(request, "Please update Student information.")
+                    messages.warning(request, _("Please update Student information."))
                     return redirect('user_list')
 
             else:
@@ -256,7 +256,7 @@ def user_edit(request, reg_id):
                     return redirect('user_list')
 
                 except IntegrityError:
-                    messages.warning(request, "This register ID had been used.")
+                    messages.warning(request, _("This register ID had been used."))
                     try:
                         edited_user.student
                         departments = Department.objects.all()
@@ -312,10 +312,10 @@ def create_unit(request):
                 Squadron.objects.create(name=name)
 
             else:
-                messages.error(request, 'Choose the unit which you want to create.')
+                messages.error(request, _('Choose the unit which you want to create.'))
                 return redirect('unit_create')
         except IntegrityError:
-            messages.error(request, "This name had been used.")
+            messages.error(request, _("This name had been used."))
             return redirect('unit_create')
 
         messages.success(request, 'Success insert new unit: {}.'.format(name))
@@ -339,7 +339,7 @@ def unit_edit(request, unit_kind, unit_name):
             edited_unit.name = request.POST.get('name')
             edited_unit.save()
 
-        messages.success(request, "Update successfully.")
+        messages.success(request, _("Update successfully."))
         return redirect('unit_list')
 
     else:
@@ -350,7 +350,7 @@ def unit_edit(request, unit_kind, unit_name):
             edited_unit = Department.objects.get(name=unit_name)
 
         else:
-            messages.warning(request, "Unknown unit name.")
+            messages.warning(request, _("Unknown unit name."))
             return redirect('unit_list')
 
         return render(request, 'user/unit_edit.html', locals())
@@ -508,7 +508,7 @@ def report(request):
 
         user_report.save()
 
-        messages.success(request, 'Thanks for your advise, we will help you to solve your problem as soon as possible.')
+        messages.success(request, _('Thanks for your advise, we will help you to solve your problem as soon as possible.'))
 
         return redirect('report_list')
     else:
@@ -530,14 +530,14 @@ def report_reply(request, report_id):
         permission = 'TBManager'
         pass
     else:
-        messages.warning(request, 'Permission Denied.')
+        messages.warning(request, _('Permission Denied.'))
         return redirect('Homepage')
 
     try:
         replying_report = Report.objects.get(id=report_id)
 
         if replying_report.category.responsibility & request.user.privilege == 0:
-            messages.warning(request, 'This report not belongs to your permission.')
+            messages.warning(request, _('This report not belongs to your permission.'))
             return redirect('responsible_report_list', responsibility=permission)
         elif replying_report.state == 1:
             replying_report.state = 2
@@ -548,7 +548,7 @@ def report_reply(request, report_id):
 
     if request.method == 'POST':
         if replying_report.state == 3:
-            messages.warning(request, 'This report had been resolved.')
+            messages.warning(request, _('This report had been resolved.'))
             return redirect('responsible_report_list', responsibility=permission)
 
         reply = request.POST.get('reply')
@@ -585,7 +585,7 @@ def view_report_detail(request, report_id):
         elif request.user.has_perm(UserType.SystemManager):
             pass
         else:
-            messages.warning(request, 'You have no permission')
+            messages.warning(request, _('You have no permission'))
             return redirect('Homepage')
     except ObjectDoesNotExist:
         messages.error(request, "Report doesn't exist, report id: {}".format(report_id))
@@ -607,18 +607,18 @@ def report_done(request, report_id):
         permission = 'TBManager'
         pass
     else:
-        messages.warning(request, 'Permission Denied.')
+        messages.warning(request, _('Permission Denied.'))
         return redirect('Homepage')
 
     try:
         replying_report = Report.objects.get(id=report_id)
 
         if replying_report.category.responsibility & request.user.privilege == 0:
-            messages.warning(request, 'This report not belongs to your permission.')
+            messages.warning(request, _('This report not belongs to your permission.'))
             return redirect('responsible_report_list', responsibility=permission)
 
         elif replying_report.state == 3:
-            messages.warning(request, 'This report had been resolved.')
+            messages.warning(request, _('This report had been resolved.'))
             return redirect('responsible_report_list', responsibility=permission)
 
         elif replying_report.state == 2:
@@ -627,7 +627,7 @@ def report_done(request, report_id):
             replying_report.user_notification = True
             replying_report.staff_notification = False
             replying_report.save()
-            messages.success(request, 'This report has resolved.')
+            messages.success(request, _('This report has resolved.'))
     except ObjectDoesNotExist:
         messages.error(request, "Report doesn't exist, report id: {}".format(report_id))
 

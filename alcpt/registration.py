@@ -15,7 +15,7 @@ from alcpt.forms import CaptchaForm
 from alcpt.models import User, Department, Squadron, Report, Reply
 from alcpt.email import email_verified, reset_password_mail
 from alcpt.managerfuncs import systemmanager
-
+from django.utils.translation import ugettext as _
 # Create your views here.
 
 
@@ -32,7 +32,7 @@ def login(request):
                 user = auth.authenticate(reg_id=reg_id, password=password)
 
                 if user is None or not user.is_active:
-                    messages.error(request, 'Wrong Password or User unexist.')
+                    messages.error(request, _('Wrong Password or User unexist.'))
                     return render(request, 'registration/login.html', locals())
 
                 auth.login(request, user)
@@ -40,18 +40,18 @@ def login(request):
                 if user.last_login is None:
                     departments = Department.objects.all()
                     squadrons = Squadron.objects.all()
-                    messages.warning(request, 'Fist login, please edit your data')
+                    messages.warning(request, _('Fist login, please edit your data'))
                     privileges = UserType.__members__
                     identities = Identity.__members__.values()
                     return render(request, 'registration/edit_profile.html', locals())
-                messages.success(request, 'Login Success.')
+                messages.success(request, _('Login Success.'))
 
             except ObjectDoesNotExist:
                 return redirect('login')
 
             return redirect(next_page)
         else:
-            messages.error(request, 'Verification code error')
+            messages.error(request, _('Verification code error'))
             return redirect('login')
 
     else:
@@ -67,7 +67,7 @@ def login(request):
 @login_required
 def logout(request):
     auth.logout(request)
-    messages.success(request, 'Logout Success.')
+    messages.success(request, _('Logout Success.'))
 
     return redirect(LOGOUT_REDIRECT_URL)
 
@@ -102,7 +102,7 @@ def edit_profile(request):
         except ObjectDoesNotExist:
             pass
 
-        messages.success(request, 'Saved profile successfully.')
+        messages.success(request, _('Saved profile successfully.'))
         return redirect('profile')
 
     else:
@@ -123,24 +123,24 @@ def change_password(request):
         if user.check_password(old_password):
             pass
         else:
-            messages.error(request, 'Old password does not match.')
+            messages.error(request, _('Old password does not match.'))
             return redirect('password_change')
 
         new_password = request.POST.get('new_password',)
         verification_password = request.POST.get('verification_password',)
 
         if new_password == old_password:
-            messages.error(request, 'New password and old password are the same.')
+            messages.error(request, _('New password and old password are the same.'))
             return redirect('password_change')
         elif new_password != verification_password:
-            messages.error(request, 'Verification error.')
+            messages.error(request, _('Verification error.'))
             return redirect('password_change')
         else:
             user.set_password(new_password)
             user.update_time = timezone.now()
             user.save()
 
-            messages.success(request, 'Password change successfully. Please login again with new password.')
+            messages.success(request, _('Password change successfully. Please login again with new password.'))
             return redirect('profile')
     else:
         return render(request, 'registration/password_change.html', locals())
@@ -152,7 +152,7 @@ def reset_password(request, encode_reg_id):
         verification_password = request.POST.get('verification_password')
 
         if new_password != verification_password:
-            messages.warning(request, "New password and verificaiton password doesn't match.")
+            messages.warning(request, _("New password and verificaiton password doesn't match."))
             return render(request, 'registration/password_reset.html', locals())
         else:
             decode_reg_id = base64.b64decode(encode_reg_id.encode('ascii')).decode('ascii')
@@ -160,7 +160,7 @@ def reset_password(request, encode_reg_id):
 
             user.set_password(new_password)
             user.save()
-            messages.success(request, "Reset password successfully, please login with new password.")
+            messages.success(request, _("Reset password successfully, please login with new password."))
             return redirect('login')
     else:
         return render(request, 'registration/password_reset.html', locals())
@@ -173,7 +173,7 @@ def verification(request):
     user.email_is_verified = False
     user.save()
     email_verified(user, request.POST.get('verified_email'), request.user)
-    messages.success(request, "Verification email has been sent, please check out.")
+    messages.success(request, _("Verification email has been sent, please check out."))
     return redirect('email')
 
 
@@ -187,7 +187,7 @@ def verify_done(request, encode_email):
     user.email = decode_email
     user.email_is_verified = True
     user.save()
-    messages.success(request, "Verfication Success")
+    messages.success(request, _("Verfication Success"))
     return redirect('profile')
 
 
@@ -198,10 +198,10 @@ def forget_password(request):
 
         if User.objects.filter(reg_id=reg_id, email=email):
             reset_password_mail(reg_id, email)
-            messages.success(request, "Reset link has been sent, please check your email.")
+            messages.success(request, _("Reset link has been sent, please check your email."))
             return redirect('login')
         else:
-            messages.error(request, "User does not exist. Try again.")
+            messages.error(request, _("User does not exist. Try again."))
             return render(request, 'email_to_reset_password.html', locals())
     else:
         return render(request, 'email_to_reset_password.html')
@@ -223,7 +223,7 @@ def report_detail(request, report_id):
         elif request.user.has_perm(UserType.SystemManager):
             pass
         else:
-            messages.warning(request, 'You have no permission')
+            messages.warning(request, _('You have no permission'))
             return redirect('Homepage')
     except ObjectDoesNotExist:
         messages.error(request, "Report doesn't exist, report id: {}".format(report_id))
@@ -231,7 +231,7 @@ def report_detail(request, report_id):
 
     if request.method == 'POST':
         if viewed_report.state == 3 or viewed_report.resolved_by:
-            messages.warning(request, 'This report had been resolved.')
+            messages.warning(request, _('This report had been resolved.'))
             return redirect('report_list')
         reply = request.POST.get('reply')
         new_reply = Reply.objects.create(source=viewed_report, content=reply, created_by=request.user)
