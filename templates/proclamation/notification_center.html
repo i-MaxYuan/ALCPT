@@ -28,14 +28,14 @@
         <ul class="nav nav-tabs" id="newTab" role="tablist">
             <li class="nav-item">
                 <a class="nav-link active" id="practice-tab" data-toggle="tab" href="#practice" role="tab" aria-controls="practice" aria-selected="true">
-                    All
+                    {{trans("All")}}
                     {% if request.user.proclamation_set.all()|unread_count != 0 %}
                     <label class="notification-custom"><sup>{{ request.user.proclamation_set.all()|unread_count }}</sup></label>
                     {% endif %}
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" id="exam-tab" data-toggle="tab" href="#exam" role="tab" aria-controls="exam" aria-selected="false">Report</a>
+                <a class="nav-link" id="exam-tab" data-toggle="tab" href="#exam" role="tab" aria-controls="exam" aria-selected="false">{{trans("Report")}}</a>
             </li>
         </ul>
 
