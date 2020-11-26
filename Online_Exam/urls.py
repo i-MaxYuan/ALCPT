@@ -22,7 +22,7 @@ from django.urls import path, re_path
 
 from django.conf.urls.i18n import i18n_patterns # traslation
 
-from alcpt import registration, system, views, exam, question, viewer, testee, group, proclamation
+from alcpt import registration, system, views, exam, question, viewer, testee, group, proclamation, achievement
 
 urlpatterns = [
     re_path(r'^favicon.ico$', RedirectView.as_view(url=r'static/favicon.ico')),
@@ -390,6 +390,15 @@ urlpatterns = [
                             name='testee_practice_create'),
                 ]))
         ])),
+    re_path(r'^achievement$', achievement.achievement_list,
+            name='achievement_list'),
+    re_path(
+        r'^achievement/',
+        include([
+            re_path(r'^create$',
+                    achievement.achievement_create,
+                    name='achievement_create'),
+        ])),
 ]
 
 urlpatterns += i18n_patterns(
@@ -751,6 +760,8 @@ re_path(
                         name='testee_practice_create'),
             ]))
     ])),
+    re_path(r'^achievement$', achievement.achievement_list,
+            name='achievement_list'),
 )
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

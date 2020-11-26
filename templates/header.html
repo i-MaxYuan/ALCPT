@@ -23,6 +23,7 @@
                         <a class="dropdown-item" href="{{ url('user_list') }}"><i class="fas fa-users"></i>{{ trans("User List") }}</a>
                         <a class="dropdown-item" href="{{ url('unit_list') }}"><i class="fas fa-school"></i>{{ trans("Unit List") }}</a>
                         <a class="dropdown-item" href="{{ url('report_category_list') }}"><i class="fas fa-question"></i>{{ trans("ReportCategory List") }}</a>
+                        <a class="dropdown-item" href="{{ url('achievement_list') }}"><i class="fas fa-medal"></i>{{ trans("Achievement List") }}</a>
                         {% if request.user|get_SystemManager_report_notification == 0 %}
                         <a class="dropdown-item" href="{{ url('responsible_report_list', args=['SystemManager']) }}"><i class="fas fa-comment-dots"></i>{{ trans("User Response Handling") }}</a>
                         {% else %}

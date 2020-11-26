@@ -60,6 +60,10 @@ class User(AbstractBaseUser):
     )
     identity = models.PositiveSmallIntegerField(null=True, default=0)
     introduction = models.TextField(null=True)
+    level = models.PositiveSmallIntegerField(default=1)
+    experience = models.IntegerField(default=0)
+    achievement = models.ManyToManyField('Achievement')
+
 
     objects = UserManager()
 
@@ -79,6 +83,36 @@ class User(AbstractBaseUser):
         #     return (self.privilege & require_privilege.value[0]) > 0
         return (self.privilege & require_privilege.value[0]) > 0
 
+#成就
+# name: 成就名稱
+# badge: 徽章圖樣
+# point: 點數
+# level: 幾等可以做這個成就
+# task: 任務
+# definition: 成就描述
+# created_time: 成就建立時間
+# created_by: 成就建立人
+# finisher: 參與成就的人
+class Achievement(models.Model):
+    name = models.CharField(max_length=50)
+    badge = models.ImageField(upload_to='photos', null=True, default="photos/default_badge.png")
+    point = models.PositiveSmallIntegerField(default=0)
+    level = models.PositiveSmallIntegerField(default=0)
+    task = models.ManyToManyField('Task')
+    definition = models.TextField()
+    created_time = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey("User", on_delete=models.PROTECT, related_name="achievement_created_by")
+    finisher = models.ForeignKey("User", on_delete=models.CASCADE, related_name="achievement_finisher")
+
+#任務
+# name: 任務名稱
+# completion: 完成值
+# progress: 已完成值
+
+class Task(models.Model):
+    name = models.CharField(max_length=100)
+    completion = models.SmallIntegerField(default=0)
+    progress = models.SmallIntegerField(default=0)
 
 # 學系
 # department is ordered by id
