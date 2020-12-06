@@ -135,17 +135,17 @@ def calculate_score(exam_id: int, answer_sheet: AnswerSheet):
             #correct_freq正確率 = 答對次數/總答本題次數
             answer.question.correct_freq = (answer.question.q_correct_time / answer.question.q_time)*100
             #正確率 轉 難易度
-            if answer.question.correct_freq <= 20:
-                answer.question.difficulty = 3
-
-            elif 21 <= answer.question.correct_freq <= 70:
-                answer.question.difficulty = 2
-
-            elif 71 <= answer.question.correct_freq <= 100:
-                answer.question.difficulty = 1
-
-            else:
-                answer.question.difficulty = 1
+            # if answer.question.correct_freq <= 20:
+            #     answer.question.difficulty = 3
+            #
+            # elif 21 <= answer.question.correct_freq <= 70:
+            #     answer.question.difficulty = 2
+            #
+            # elif 71 <= answer.question.correct_freq <= 100:
+            #     answer.question.difficulty = 1
+            #
+            # else:
+            #     answer.question.difficulty = 1
             answer.question.save()
 
     # calculate average score of practice
