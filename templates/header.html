@@ -125,7 +125,7 @@
                         <a class="dropdown-item" href="{{ url('proclamation_detail', args=[proclamation.id]) }}" style="background: #efefef; ">
                             <i class="fas fa-circle" style="color: red; font-size: 10px;"></i>
                             {{ proclamation.title }}<br>
-                            {{ proclamation.text|truncate(20, True) }}
+                            {{ proclamation.text|truncate(30, True) }}
                         </a>
                         {% endif %}
                         {% else %}
@@ -134,7 +134,7 @@
                         </a>
 
                         {% endfor %}
-                        <a style="color: #70a8e0; margin-left: 130px; text-decoration: underline" href="{{ url('notification_center') }}">show all</a>
+                        <a style="color: #70a8e0; margin-left: 40%; margin-right: 33%; text-decoration: underline" href="{{ url('notification_center') }}">show all</a>
 
                     </div>
 
