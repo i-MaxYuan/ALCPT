@@ -24,8 +24,6 @@ SECRET_KEY = 'yftv^g7w17v-vd96!=ad37dv@m$_gh^nn_&d*4@qzsoce5*pd3'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-
-
 # Application definition
 
 INSTALLED_APPS = (
@@ -50,10 +48,7 @@ MIDDLEWARE = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-
-
 )
-
 
 ROOT_URLCONF = 'Online_Exam.urls'
 
@@ -127,8 +122,6 @@ CAPTCHA_BACKGROUND_COLOR = 'white'  # 驗證碼顏色
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
 
-
-
 TIME_ZONE = 'Asia/Taipei'
 
 USE_I18N = True
@@ -137,16 +130,14 @@ USE_L10N = True
 
 #USE_TZ = True
 
-
 LANGUAGES = {
     ('en-us', 'English'),
     ('zh', '中文繁體'),
 }
-LANGUAGE_CODE = 'zh'#'en-us'
+LANGUAGE_CODE = 'zh'  # 'en-us'
 LOCALE_PATHS = [
-os.path.join(BASE_DIR, 'locale'),
+    os.path.join(BASE_DIR, 'locale'),
 ]
-
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
@@ -160,3 +151,5 @@ LOGIN_REDIRECT_URL = '/proclamation'
 LOGOUT_REDIRECT_URL = '/'
 
 AUTH_USER_MODEL = 'alcpt.User'
+
+ALLOWED_HOSTS = ['*']
