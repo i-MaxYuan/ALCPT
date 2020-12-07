@@ -285,7 +285,13 @@ def score_list(request):
     except EmptyPage:
         answersheetList = paginator.page(paginator.num_pages)
 
-    return render(request, 'testee/score_list.html', locals())
+    context = {'answer_sheets_exam':answer_sheets_exam, 'answer_sheets_reading':answer_sheets_reading, 'answer_sheets_listening': answer_sheets_listening,
+                'exam_bar_chart':exam_bar_chart, 'exam_pie_chart':exam_pie_chart,
+                'reading_bar_chart':reading_bar_chart, 'reading_pie_chart':reading_pie_chart,
+                'listening_bar_chart':listening_bar_chart, 'listening_pie_chart':listening_pie_chart,
+                'answersheetList':answersheetList, 'paginator':paginator}
+
+    return render(request, 'testee/score_list.html', context)
 
 
 @permission_check(UserType.Testee)
