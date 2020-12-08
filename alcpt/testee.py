@@ -289,7 +289,7 @@ def score_list(request):
                 'exam_bar_chart':exam_bar_chart, 'exam_pie_chart':exam_pie_chart,
                 'reading_bar_chart':reading_bar_chart, 'reading_pie_chart':reading_pie_chart,
                 'listening_bar_chart':listening_bar_chart, 'listening_pie_chart':listening_pie_chart,
-                'answersheetList':answersheetList, 'paginator':paginator}
+                }
 
     return render(request, 'testee/score_list.html', context)
 
