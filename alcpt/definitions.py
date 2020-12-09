@@ -1,14 +1,14 @@
 from enum import Enum
-
+from django.utils.translation import gettext as _
 
 # type and authority od alcpt users
 class UserType(Enum):
-    SystemManager = (0b100000, 'SystemManager')
-    TestManager = (0b10000, 'TestManager')
-    TBManager = (0b1000, 'TBManager')
-    TBOperator = (0b100, 'TBOperator')
-    Viewer = (0b10, 'Viewer')
-    Testee = (0b1, 'Testee')
+    SystemManager = (0b100000, _('SystemManager'))
+    TestManager = (0b10000, _('TestManager'))
+    TBManager = (0b1000, _('TBManager'))
+    TBOperator = (0b100, _('TBOperator'))
+    Viewer = (0b10, _('Viewer'))
+    Testee = (0b1, _('Testee'))
 
     # @staticmethod
     # def type_value(privilege: str):
@@ -22,11 +22,11 @@ class QuestionType(Enum):
     # Grammar = (3, '閱讀／文法')
     # Phrase = (4, '閱讀／名詞片語')
     # ParagraphUnderstanding = (5, '閱讀／段落理解')
-    QA = (1, 'Listening／QA')
-    ShortConversation = (2, 'Listening／Conversation')
-    Grammar = (3, 'Reading／Grammar')
-    Phrase = (4, 'Reading／Phrase')
-    ParagraphUnderstanding = (5, 'Reading／Paragraph')
+    QA = (1, _('Listening/QA'))
+    ShortConversation = (2, _('Listening/Conversation'))
+    Grammar = (3, _('Reading/Grammar'))
+    Phrase = (4, _('Reading/Phrase'))
+    ParagraphUnderstanding = (5, _('Reading/paragraph'))
 
 
 # The amount of various questions in the moke exam
@@ -48,6 +48,6 @@ class ExamType(Enum):
 
 
 class Identity(Enum):
-    Visitor = (1, 'Visitor')
-    Student = (2, 'Student')
-    Teacher = (3, 'Teacher')
+    Visitor = (1, _('Visitor'))
+    Student = (2, _('Student'))
+    Teacher = (3, _('Teacher'))
