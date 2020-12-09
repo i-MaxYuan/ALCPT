@@ -1023,13 +1023,13 @@ msgid  "Sure to leave and abandon editing"
 msgstr "確定離開且放棄這個編輯嗎"
 
 msgid  "Enter the reject reason"
-msgstr "輸入拒絕的原因"
+msgstr "輸入未通過的原因"
 
 msgid  "Sure to reject"
-msgstr "確定否決嗎"
+msgstr "確定未通過嗎"
 
 msgid  "Reject"
-msgstr "否決"
+msgstr "未通過"
 
 msgid  "Showcase"
 msgstr "櫥窗"
@@ -1146,7 +1146,7 @@ msgid  "Edit"
 msgstr "編輯"
 
 msgid  "Reject Reason"
-msgstr "否決的理由"
+msgstr "未通過的理由"
 
 msgid  "Sure to logout"
 msgstr "確定登出"
@@ -1256,7 +1256,59 @@ msgstr "這個問題回報不是屬於您的權限"
 msgid  "Mainly responsible for the control system category data"
 msgstr "主要負責控制系統類別類的資料"
 
+msgid  "Create Successfully"
+msgstr "創建成功"
 
+msgid  "Successfully deleted"
+msgstr "成功刪除"
+
+msgid  "Update Successfully. proclamation title - "
+msgstr "更新成功，公告標題 - "
+
+msgid  "Failed deleted"
+msgstr "無法刪除"
+
+msgid  "Proclamation doesn't exist, proclamation id: "
+msgstr "公告不存在，公告id: "
+
+msgid  "Failed executed"
+msgstr "執行錯誤"
+
+msgid  "Listening/Conversation"
+msgstr "聽力/會話"
+
+msgid  "Pending"
+msgstr "待定"
+
+msgid  "pending"
+msgstr "待定"
+
+msgid  "Reported"
+msgstr "回報中"
+
+msgid  "processing"
+msgstr "處理中"
+
+msgid  "saved"
+msgstr "已儲存"
+
+msgid  "Faulty"
+msgstr "有問題"
+
+msgid  "Handle"
+msgstr "處理中"
+
+msgid  "Saved"
+msgstr "已儲存"
+
+msgid  "reject"
+msgstr "未通過"
+
+msgid  "Please check out your email to complete the email verification, thank you for your cooperation."
+msgstr "請確認您的郵件信箱以完成驗證，謝謝您的合作"
+
+msgid  "solved"
+msgstr "已解決"
 ##msgid  ""
 ##msgstr ""
 ##{{trans("Identity")}}

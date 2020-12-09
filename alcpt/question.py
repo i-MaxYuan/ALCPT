@@ -7,7 +7,7 @@ from django.contrib import messages
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.views.decorators.http import require_http_methods
-
+from django.utils.translation import gettext as _
 from .models import Question, Choice
 from .exceptions import *
 from .decorators import permission_check
@@ -19,16 +19,16 @@ from .managerfuncs import tbmanager, tboperator
 def manager_index(request):
     question_types = [_ for _ in QuestionType]
 
-    state_choices = [(1, 'Pass'),
-                     (4, 'Faulty'),
-                     (5, 'Handle')]
+    state_choices = [(1, _('Pass')),
+                     (4, _('Faulty')),
+                     (5, _('Handle'))]
     states = []
     for x in state_choices:
         states.append(x[0])
 
-    difficulty_choices = [(1, 'Easy'),
-                          (2, 'Medium'),
-                          (3, 'Hard')]
+    difficulty_choices = [(1, _('Easy')),
+                          (2, _('Medium')),
+                          (3, _('Hard'))]
 
     keywords = {
         'question_content': request.GET.get('question_content'),
@@ -214,9 +214,9 @@ def operator_index(request):
         question_types.append(q)
 
     state_choices = [
-        (6, 'Saved'),
-        (2, 'Reject'),
-        (4, 'Faulty')]
+        (6, _('Saved')),
+        (2, _('Reject')),
+        (4, _('Faulty'))]
 
     difficulty_choices = [(1, '1'),
                           (2, '2'),

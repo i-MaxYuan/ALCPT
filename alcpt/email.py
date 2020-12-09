@@ -5,7 +5,7 @@ from email.mime.text import MIMEText
 from smtplib import SMTP, SMTPAuthenticationError, SMTPException
 from alcpt.models import User
 from alcpt.proclamation import *
-
+from django.utils.translation import gettext as _ #translation
 
 def email_verified(verified_user, verified_email, request_user):
     # strSmtp = "smtp.gmail.com:587"
@@ -26,9 +26,8 @@ def email_verified(verified_user, verified_email, request_user):
               "This is an automatic notification mail from the system. Please did not reply directly.\n" + \
               "Thank you for your cooperation."
 
-    proclamation_content = "Please check out your email to complete the email verification.\n\n" + \
-                           "Thank you for your cooperation."
-    Proclamation.objects.create(title="Email Verification",
+    proclamation_content = _("Please check out your email to complete the email verification, thank you for your cooperation.")
+    Proclamation.objects.create(title=_("Email Verification"),
                                 text=proclamation_content,
                                 is_read=False,
                                 is_public=False,
