@@ -1,0 +1,109 @@
+{% extends 'new_base.html'%}
+
+{% block scripts %}
+<script src="{{ static('/javascript/question/create.js') }}"></script>
+{% endblock %}
+
+{% block path %}
+<li class="breadcrumb-item active" aria-current="page">
+    {{trans("Create Achievement ")}}
+</li>
+{% endblock %}
+{% block content %}
+<main class="question-create-form">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <form enctype="multipart/form-data" method="post">
+                    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
+
+                    <div class="card">
+                        <div class="card-header">
+                            {{trans("Create Achievement")}}
+                        </div>
+
+                        <div class="card-body">
+                            <!-- <h5 class="card-subtitle mb-2 text-muted">{{trans("Badge")}}</h5>
+                            <div class="input-group">
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="badge" name="badge" onchange="OpenButton('listening')" />
+                                    <label class="custom-file-label" for="badge">{{trans("Select badge photo")}}</label>
+                                </div>
+                            </div> -->
+                            <script>
+                                // to change the label, the selected file name will display
+                                $(".custom-file-input").on("change", function() {
+                                    var fileName = $(this).val().split("\\").pop();
+                                    $(this)
+                                        .siblings(".custom-file-label")
+                                        .addClass("selected")
+                                        .html(fileName);
+                                });
+                            </script>
+                            <p class="card-text"></p>
+
+                            <h5 class="card-subtitle mb-2 text-muted">{{trans("Name")}}</h5>
+                            <div class="input-group">
+                                <input class="form-control" type="text" name="name" id="name" onkeyup="OpenButton('{{ kind }}')" placeholder="{{trans("Achievement name")}}..." required />
+                            </div>
+
+                            <p class="card-text"></p>
+
+                            <h5 class="card-subtitle mb-2 text-muted">{{trans("Key")}}</h5>
+                            <div class="input-group">
+                                <input class="form-control" type="text" name="key" id="key" onkeyup="OpenButton('{{ kind }}')" placeholder="{{trans("提示")}}..." required />
+                            </div>
+
+                            <p class="card-text"></p>
+
+                            <h5 class="card-subtitle mb-2 text-muted">{{trans("description")}}</h5>
+                            <p class="card-text">
+                                <textarea class="form-control" cols="100" rows="5" name="description" id="description" onkeyup="OpenButton('reading')" placeholder="{{trans("描述")}}..." required></textarea>
+                            </p>
+
+                            <p class="card-text"></p>
+
+                            <h5 class="card-subtitle mb-2 text-muted">{{trans("category")}}</h5>
+                            <p class="card-text">
+                                <textarea class="form-control" cols="100" rows="5" name="category" id="category" onkeyup="OpenButton('reading')" placeholder="{{trans("閱讀")}}..." required></textarea>
+                            </p>
+
+                            <p class="card-text"></p>
+
+                            <h5 class="card-subtitle mb-2 text-muted">{{trans("Point")}}</h5>
+                            <div class="input-group">
+                                <input class="form-control" type="text" name="point" id="point" onkeyup="OpenButton('{{ kind }}')" placeholder="{{trans("10, etc")}}..." required />
+                            </div>
+
+                            <p class="card-text"></p>
+
+                            <h5 class="card-subtitle mb-2 text-muted">{{trans("Level")}}</h5>
+                            <div class="input-group">
+                                <input class="form-control" type="text" name="level" id="level" onkeyup="OpenButton('{{ kind }}')" placeholder="{{trans("10, etc")}}..." required />
+                            </div>
+
+                            <p class="card-text"></p>
+
+                            <h5 class="card-subtitle mb-2 text-muted">{{trans("Completion")}}</h5>
+                            <div class="input-group">
+                                <input class="form-control" type="text" name="completion" id="completion" onkeyup="OpenButton('{{ kind }}')" placeholder="{{trans("10, etc")}}..." required />
+                            </div>
+
+                        </div>
+
+                        <footer class="card-footer text-right">
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary">{{trans("Submit")}}</button>
+                                <button type="reset" class="btn btn-light">{{trans("Reset")}}</button>
+                                <button type="button" class="btn btn-secondary" onclick="history.go(-1);">
+                                    {{trans("Cancel")}}
+                                </button>
+                            </div>
+                        </footer>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

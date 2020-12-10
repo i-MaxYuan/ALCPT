@@ -60,6 +60,8 @@ class User(AbstractBaseUser):
     )
     identity = models.PositiveSmallIntegerField(null=True, default=0)
     introduction = models.TextField(null=True)
+    level = models.PositiveSmallIntegerField(default=1)
+    experience = models.IntegerField(default=0)
 
     objects = UserManager()
 
@@ -79,6 +81,27 @@ class User(AbstractBaseUser):
         #     return (self.privilege & require_privilege.value[0]) > 0
         return (self.privilege & require_privilege.value[0]) > 0
 
+
+class Achievement(models.Model):
+    """ These objects are what people are earning when contributing """
+    name = models.CharField(max_length=75)
+    key = models.CharField(max_length=75, unique=True)
+    description = models.TextField(null=True, blank=True)
+    category = models.CharField(default="", max_length=75)
+    point = models.IntegerField(default=0)
+    level = models.IntegerField(default=0)
+    completion = models.IntegerField(default=0) #每個任務都有完成值
+
+    def __unicode__(self):
+        return "Achievement(%s, %s)" % (self.name, self.bonus)
+
+
+class UserAchievement(models.Model):
+    user = models.ForeignKey('User', on_delete=models.PROTECT)
+    achievement = models.ForeignKey('Achievement', on_delete=models.PROTECT, related_name="userachievements")
+    progress = models.IntegerField(default=0)#使用者的進度值
+    unlock = models.BooleanField(default=False)
+    registered_at = models.DateTimeField(auto_now_add=True)
 
 # 學系
 # department is ordered by id
