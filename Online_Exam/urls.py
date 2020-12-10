@@ -206,6 +206,15 @@ urlpatterns = [
             re_path(r'^view_profile/(?P<reg_id>[a-zA-Z0-9]+)$',
                     system.view_profile,
                     name='view_profile'),
+            re_path(r'^achievement$', system.achievement_list,
+                    name='achievement_list'),
+            re_path(
+                r'^achievement/',
+                include([
+                    re_path(r'^create$',
+                            system.achievement_create,
+                            name='achievement_create'),
+                ])),
         ])),
 
     # 考試管理員

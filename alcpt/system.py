@@ -16,13 +16,47 @@ from django.db import IntegrityError
 from django.contrib import messages
 
 from alcpt.managerfuncs import systemmanager
-from alcpt.models import User, Student, Department, Squadron, ReportCategory, Report, Reply
+from alcpt.models import User, Student, Department, Squadron, ReportCategory, Report, Reply, UserAchievement, Achievement
 from alcpt.proclamation import notify
 from alcpt.definitions import UserType, Identity
 from alcpt.decorators import permission_check, login_required
 from alcpt.exceptions import IllegalArgumentError
 from django.utils.translation import ugettext as _
 
+@permission_check(UserType.SystemManager)
+def achievement_list(request):
+    achievements = Achievement.objects.all()
+    return render(request, 'achievement/achievement_list.html', locals())
+
+@permission_check(UserType.SystemManager)
+def achievement_create(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        key = request.POST.get('key')
+        description = request.POST.get('description')
+        category = request.POST.get('category')
+        point = request.POST.get('point')
+        level = request.POST.get('level')
+        completion = request.POST.get('completion')
+
+        try:
+            Achievement.objects.get(name=name)
+            messages.error(request, "Failed created, Achievement name had been used - {}".format(name))
+            return redirect('achievement_create')
+
+        except:
+            achievement = Achievement.objects.create(name=name,
+                                                         key=key,
+                                                         description=description,
+                                                         category=category,
+                                                         point=point,
+                                                         level=level,
+                                                         completion=completion)
+            achievement.save()
+            messages.success(request, 'Successfully created.')
+            return redirect('achievement_list')
+    else:
+        return render(request, 'achievement/achievement_create.html', locals())
 # 使用者列表
 @permission_check(UserType.SystemManager)
 def user_list(request):

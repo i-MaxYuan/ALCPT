@@ -45,4 +45,3 @@ def create_practice(*, user: User, practice_type: ExamType, question_types: list
                                         duration=0, created_by=user)
 
     return practice_exam
-

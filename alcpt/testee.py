@@ -11,7 +11,7 @@ from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
-from .models import Question, AnswerSheet, Student, User, Exam, TestPaper, Answer, ReportCategory, Report
+from .models import Question, AnswerSheet, Student, User, Exam, TestPaper, Answer, ReportCategory, Report, Achievement, UserAchievement
 from .exceptions import *
 from .decorators import permission_check
 from .definitions import UserType, QuestionType, ExamType
@@ -20,6 +20,26 @@ from .managerfuncs import practicemanager, testmanager, testee
 import plotly.offline as pyo
 import plotly.graph_objs as go
 import pandas as pd
+
+from django.core.signals import request_finished
+from django.dispatch import receiver, Signal
+from .achievement.achievement import TestAchievement
+
+request_achievement_signal = Signal(providing_args=['user', 'exam_type'])
+
+@permission_check(UserType.Testee)
+@receiver(request_achievement_signal)
+def post_achievement_receiver(sender, **kwargs):
+    user = 0
+    for key, value in kwargs.items():
+        if key == 'user':
+            user = value
+        if key == 'exam_type': # 過濾是哪種考試類別
+            #傳入考試別到函數
+            achievement_cal = TestAchievement(user, value) #建立物件
+            achievement_cal.test_achievement()
+
+
 
 
 @permission_check(UserType.Testee)
@@ -781,6 +801,7 @@ def submit_answersheet(request, exam_id):
     answer_sheet = AnswerSheet.objects.get(exam=exam, user=request.user)
     score = testmanager.calculate_score(exam.id, answer_sheet)
     messages.success(request, 'You had finished the exam.')
+    request_achievement_signal.send(sender='AnswerSheet', user = request.user.id, exam_type = exam.exam_type)
     return redirect('testee_score_list')
 
 # Settle exam score directly.
