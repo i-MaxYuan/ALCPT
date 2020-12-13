@@ -6,85 +6,51 @@
         <h1>題庫管理員說明</h1>
         <ul>
           <li>主要負責管理及審核試題</li>
-          <img src="{{ static('/images/om/tbm/om-tbm01.png') }}" width="50%" />
-          <ul>
-            <p>
-              <li>Question List：試題列表</li>
-              <li>Review：審核試題</li>
-              <li>Report List：問題列表</li>
-            </p>
-          </ul>
+          <img src="{{ static('/images/om/tbm/nom-tbm01.png') }}" width="50%" />
         </ul>
-
         <hr />
-
-        <h3>Question List：試題列表</h3>
-        <img src="{{ static('/images/om/tbm/om-tbm02.png') }}" width="90%" />
+        <h3>試題列表</h3>
+        <img src="{{ static('/images/om/tbm/nom-tbm05.png') }}" width="70%" />
         <ul>
           <li>
-            表格內主要顯示試題的「Serial.」、「Content.」、「Type.」、「State.」、「Other.」
+            表格內主要顯示試題的「序列」、「內容」、「種類」、「狀態」、「其他」
             <ul>
-              <li>「Serial.」：代表該試題的流水號。</li>
-              <li>「Content.」：代表該試題的內容。</li>
-              <li>「Type.」：代表該試題的試題類型。</li>
-              <li>「State.」：代表該試題的狀態。</li>
-              <li>「Other.」：代表該試題的功能鍵。</li>
+              <li>「序列」 : 代表該試題的流水號。</li>
+              <li>「內容」 : 代表該試題的內容。</li>
+              <li>「種類」 : 代表該試題的試題類型。</li>
+              <li>「狀態」 : 代表該試題的狀態。</li>
+              <li>「其他」 : 代表該試題的功能鍵。</li>
             </ul>
           </li>
           <li>
-            點擊該試題的欄位可顯示該「試題的選項」、「正確答案」、「Update.」（最新更新時間）、「Issued.」（使用次數）、<br />
-            「Difficulty.」（難度）、「Creator.」（建立者）、「Last
-            Update.」（最新更新者）
+            點擊該試題的欄位可顯示該「試題的選項」、「正確答案」、「最新更新時間」、「使用次數」、「難易度」、「創建人」。
           </li>
           <li>
-            試題類型<code>Type</code>區分為：
-            <ul>
-              <li>Listening／QA：問答</li>
-              <li>Listening／Conversation：簡短對話</li>
-              <li>Reading／Grammar：文法</li>
-              <li>Reading／Phrase：名詞片語</li>
-              <li>
-                Reading／Paragraph：段落理解。閱讀完一篇簡短的文章後，會有與文章相關試題令受測者作答。
-              </li>
-            </ul>
+            試題類型區分為 : 問答、簡短對話、文法、名詞片語、段落理解。
           </li>
+        </ul>
           <li>
-            試題狀態<code>State</code>區分為：
+            試題狀態區分為 : 
             <ul>
-              <li>
-                Saved：暫存。該試題在<a href="{{ url('OM_TBOperator') }}"
-                  >題庫操作員</a
-                >輸入後，會暫時存放在題庫操作員的題目列表中，待題庫操作員確認無誤後即可送出交由題庫管理員進行審核。
-              </li>
-              <li>
-                Pass：審核通過。該試題在通過審核之後即可成為題庫中的試題，將可供<a
-                  href="{{ url('OM_TestManager') }}"
-                  >考試管理員</a
-                >進行選用。
-              </li>
-              <li>
-                Reject：審核未通過。該試題內容或選項可能有誤，待題庫操作員更改後即可重新提交審核。
-              </li>
-              <li>Pending：等待審核。該試題尚未被題庫管理員進行審核。</li>
-              <li>
-                Reported：被回報錯誤。該試題在被使用後，被受測者回報有問題，包含題目有誤或是選項無法選取等等。
-              </li>
-              <li>
-                Handled：被回報錯誤已處理。該試題在被回報錯誤後，經由題庫管理員進行處理，而該試題將不被繼續進行使用。
-              </li>
+              <li>暫存 : 該試題在<code><a href="{{ url('OM_TBOperator') }}">題庫操作員</a></code>輸入後，會暫時存放在題庫操作員的題目列表中，待題庫操作員確認無誤後即可送出交由題庫管理員進行審核。</li>
+              <li>通過 : 該試題在通過審核之後即可成為題庫中的試題，將可供<code><a href="{{ url('OM_TestManager') }}">考試管理員</a
+                ></code>進行選用。</li>
+              <li>未通過 : 該試題內容或選項可能有誤，待題庫操作員更改後即可重新提交審核。</li>
+              <li>等待審核 : 該試題尚未被題庫管理員進行審核。</li>
+              <li>有問題 : 該試題在被使用後，被受測者回報有問題，包含題目有誤或是選項無法選取等等。</li>
+              <li>已處理 : 該試題在被回報錯誤後，經由題庫管理員進行處理，而該試題將不被繼續進行使用。</li>
               <li style="color: red">
-                以上「Reported」及「Handled」的<a href="{{ url('OM_Report') }}"
-                  >問題回報</a
-                >機制持續開發中。
+                以上「有問題」及「已處理」的<code><a href="{{ url('OM_Report') }}"
+                  >問題回報</a></code>機制持續開發中。
               </li>
             </ul>
           </li>
           <li>
-            「搜尋」功能列：可進行「Search」、「Type.」、「Difficulty.」及「State.」。
+            「搜尋」功能列 : 可進行「搜尋」、「種類」、「難易度」及「狀態」。
             <ul>
-              <li>「Search」：可透過試題的內容或是試題選項進行試題的搜尋。</li>
+              <li>「搜尋」 : 可透過試題的內容或是試題選項進行試題的搜尋。</li>
               <li>
-                「State」：題庫管理員僅能透過<code>Pass</code>、<code>Reported</code>、<code>Handle</code>進行搜尋。
+                「狀態」 : 題庫管理員僅能透過<code>通過</code>、<code>有問題</code>、<code>已處理</code>進行搜尋。
               </li>
             </ul>
           </li>
@@ -92,23 +58,25 @@
 
         <hr />
 
-        <h3>Review：審核試題</h3>
-        <img src="{{ static('/images/om/tbm/om-tbm03.png') }}" width="70%" />
+        <h3>審核試題</h3>
+        <img src="{{ static('/images/om/tbm/nom-tbm06.png') }}" width="70%" />
+        <img src="{{ static('/images/om/tbm/nom-tbm07.png') }}" width="50%" />
+        <img src="{{ static('/images/om/tbm/nom-tbm08.png') }}" width="43%" />
         <ul>
           <li>
-            <button class="btn btn-success">Pass</button
-            >：題庫管理員使該試題通過審核。
+            <button class="btn btn-success">通過</button
+            > : 題庫管理員使該試題通過審核。
           </li>
           <li>
-            <button class="btn btn-warning">Edit</button
-            >：題庫管理員編輯該試題並使其通過審核。
+            <button class="btn btn-warning">編輯</button
+            > : 題庫管理員編輯該試題並使其通過審核。
             <ul>
               <li style="color: red">題庫管理員編輯功能，僅提供更改答案。</li>
             </ul>
           </li>
           <li>
-            <button class="btn btn-danger">Reject</button
-            >：題庫管理員退回該試題。
+            <button class="btn btn-danger">未通過</button
+            > : 題庫管理員退回該試題。
             <ul>
               <li style="color: red">
                 題庫管理員在退回時需填寫相關的訊息來說明為何退回？
@@ -119,10 +87,10 @@
 
         <hr />
 
-        <h3>Report List：問題列表</h3>
+        <h3>問題列表</h3>
         <ul>
           <p>
-            <li>請參閱<a href="{{ url('OM_Report') }}">問題回報</a>。</li>
+            <li>請參閱<code><a href="{{ url('OM_Report') }}">問題回報</a></code>。</li>
           </p>
         </ul>
 

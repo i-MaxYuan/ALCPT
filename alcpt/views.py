@@ -117,6 +117,9 @@ def OM_Report(request):
 def OM_User(request):
     return render(request, 'SystemDocument/OperationManual/OM_User.html')
 
+def OM_Sidebar(request):
+    return render(request, 'SystemDocument/OperationManual/OM_Sidebar.html')
+
 
 def OM_SystemManager(request):
     return render(request, 'SystemDocument/OperationManual/OM_SystemManager.html')
