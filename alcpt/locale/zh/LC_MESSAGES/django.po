@@ -768,7 +768,7 @@ msgid  "Pass"
 msgstr "通過"
 
 msgid  "Sure to change the answer of this question and modified its state into handled"
-msgstr "確定改變此題答案並將狀態改為處理中嗎"
+msgstr "確定改變此題答案並將狀態改為已處理嗎"
 
 msgid  "Select All"
 msgstr "選擇全部"
@@ -777,7 +777,7 @@ msgid  "Other"
 msgstr "其他"
 
 msgid  "Issued"
-msgstr "發佈"
+msgstr "使用次數"
 
 msgid  "Sure to submit"
 msgstr "確定提交嗎"
@@ -1278,13 +1278,13 @@ msgid  "Listening/Conversation"
 msgstr "聽力/會話"
 
 msgid  "Pending"
-msgstr "待定"
+msgstr "等待審核"
 
 msgid  "pending"
-msgstr "待定"
+msgstr "等待審核"
 
 msgid  "Reported"
-msgstr "回報中"
+msgstr "被回報錯誤"
 
 msgid  "processing"
 msgstr "處理中"
@@ -1299,7 +1299,7 @@ msgid  "Handle"
 msgstr "處理中"
 
 msgid  "Saved"
-msgstr "已儲存"
+msgstr "暫存"
 
 msgid  "reject"
 msgstr "未通過"
@@ -1309,6 +1309,9 @@ msgstr "請確認您的郵件信箱以完成驗證，謝謝您的合作"
 
 msgid  "solved"
 msgstr "已解決"
+
+msgid  "Sidebar"
+msgstr "側邊欄"
 ##msgid  ""
 ##msgstr ""
 ##{{trans("Identity")}}
