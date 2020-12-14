@@ -75,10 +75,14 @@
         </div>
     </footer>
     <script type="text/javascript">
-        var timer = window.setInterval(disappear, 4000); // display 3 seconds , then disappear
+        // var timer = window.setInterval(disappear, 4000); // display 3 seconds , then disappear
         function disappear() {
             document.getElementById("prompt").style.height = "0";
             document.getElementById("prompt").style.transition = "0.1s";
+        }
+
+        if (document.getElementById("prompt")) {
+            setTimeout('disappear()', 4000);
         }
 
         // trigger collapse side bar
