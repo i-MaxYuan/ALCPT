@@ -18,7 +18,7 @@ from django.contrib import messages
 from alcpt.managerfuncs import systemmanager
 from alcpt.models import User, Student, Department, Squadron, ReportCategory, Report, Reply, UserAchievement, Achievement
 from alcpt.proclamation import notify
-from alcpt.definitions import UserType, Identity
+from alcpt.definitions import UserType, Identity, AchievementType
 from alcpt.decorators import permission_check, login_required
 from alcpt.exceptions import IllegalArgumentError
 from django.utils.translation import ugettext as _
@@ -56,6 +56,7 @@ def achievement_create(request):
             messages.success(request, 'Successfully created.')
             return redirect('achievement_list')
     else:
+        achievement_categories = AchievementType.__members__.values()
         return render(request, 'achievement/achievement_create.html', locals())
 # 使用者列表
 @permission_check(UserType.SystemManager)

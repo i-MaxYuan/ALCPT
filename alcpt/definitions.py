@@ -55,7 +55,7 @@ class Identity(Enum):
 
 # Types of achivement
 class AchievementType(Enum):
-    special_mission = (0, '特殊任務')
+    Special_mission = (0, '特殊任務')
     Exam = (1, '模擬鑑測')
     Practice = (2, '綜合練習')
     Listening = (3, '聽力練習')

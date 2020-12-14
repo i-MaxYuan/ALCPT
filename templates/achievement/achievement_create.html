@@ -64,30 +64,51 @@
                             <p class="card-text"></p>
 
                             <h5 class="card-subtitle mb-2 text-muted">{{trans("category")}}</h5>
-                            <p class="card-text">
-                                <textarea class="form-control" cols="100" rows="5" name="category" id="category" onkeyup="OpenButton('reading')" placeholder="{{trans("閱讀")}}..." required></textarea>
-                            </p>
+                            <select class="custom-select custom-select-sm" id="category" name="category" required>
+                                <option value="" disabled selected>{{trans("成就類別")}}</option>
+                                {% for category in achievement_categories %}
+                                <option value="{{ category.value.0 }}">
+                                    {{ category.value.1 }}
+                                </option>
+                                {% endfor %}
+                            </select>
 
                             <p class="card-text"></p>
 
                             <h5 class="card-subtitle mb-2 text-muted">{{trans("Point")}}</h5>
-                            <div class="input-group">
-                                <input class="form-control" type="text" name="point" id="point" onkeyup="OpenButton('{{ kind }}')" placeholder="{{trans("10, etc")}}..." required />
-                            </div>
+                            <select class="custom-select custom-select-sm" id="point" name="point" required>
+                                <option value="" disabled selected>{{trans("達成成就經驗值")}}</option>
+                                {% for point in range(0,5001,50) %}
+                                <option value="{{ point }}">
+                                    {{ point }}
+                                </option>
+                                {% endfor %}
+                            </select>
 
                             <p class="card-text"></p>
 
                             <h5 class="card-subtitle mb-2 text-muted">{{trans("Level")}}</h5>
-                            <div class="input-group">
-                                <input class="form-control" type="text" name="level" id="level" onkeyup="OpenButton('{{ kind }}')" placeholder="{{trans("10, etc")}}..." required />
-                            </div>
+                            <select class="custom-select custom-select-sm" id="level" name="level" required>
+                                <option value="" disabled selected>{{trans("可接取任務之等級")}}</option>
+                                {% for level in range(1,50) %}
+                                <option value="{{ level }}">
+                                    {{ level }}
+                                </option>
+                                {% endfor %}
+                            </select>
 
                             <p class="card-text"></p>
 
                             <h5 class="card-subtitle mb-2 text-muted">{{trans("Completion")}}</h5>
-                            <div class="input-group">
-                                <input class="form-control" type="text" name="completion" id="completion" onkeyup="OpenButton('{{ kind }}')" placeholder="{{trans("10, etc")}}..." required />
-                            </div>
+
+                            <select class="custom-select custom-select-sm" id="completion" name="completion" required>
+                                <option value="" disabled selected>{{trans("完成值/次數")}}</option>
+                                {% for completion in range(1,101) %}
+                                <option value="{{ completion }}">
+                                    {{ completion }}
+                                </option>
+                                {% endfor %}
+                            </select>
 
                         </div>
 

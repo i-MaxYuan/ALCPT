@@ -98,12 +98,13 @@ def exam_create(request):
             # create proclamation to notice all testees the exam start time.
             proclamation_content = "Start Time: " + start_time + "\n" + \
                                    "Duration: " + duration + " minutes.\n"
-                                   
+
             notify(title=exam.name,
                    text=proclamation_content,
                    is_read=False,
                    is_public=False,
                    announcer=request.user,
+                   exam_id=exam.id,
                    users=list(User.objects.filter(exam__testeeList__exam=exam).distinct()))
 
             messages.success(request, "Successfully created a new exam - {}.".format(exam.name))

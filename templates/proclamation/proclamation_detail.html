@@ -17,6 +17,13 @@
                             {{ proclamation.created_by }} in
                             <cite title="Source Title">{{ proclamation.created_time }}</cite>
                         </footer>
+                        {% if proclamation.exam_id != 0 %}
+                        <button type="button" class="btn btn-outline-warning" onclick="window.location.href='{{ url('testee_start_exam', args=[proclamation.exam_id]) }}'">
+                            {{trans("Start")}}
+                        </button>
+                        {% else %}
+
+                        {% endif %}
 
                         <button type="button" class="btn btn-primary float-right" onclick="window.location.href='{{ url('notification_center') }}'">
                             {{ trans("OK") }}
