@@ -96,6 +96,7 @@
                         {{ trans("Testee") }}
                     </a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{{ url('testee_achievement_list') }}"><i class="fas fa-medal"></i>{{ trans("Achievement") }}</a>
                         <a class="dropdown-item" href="{{ url('favorite_question_list') }}"> <i class="fas fa-heart"></i>{{ trans("Favorite Question") }}</a>
                         <a class="dropdown-item" href="{{ url('testee_exam_list') }}"><i class="fas fa-list"></i>{{ trans("Exam Record") }}</a>
                         <a class="dropdown-item" href="{{ url('testee_score_list') }}"><i class="fas fa-tasks"></i>{{ trans("Score Record") }}</a>

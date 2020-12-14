@@ -10,7 +10,6 @@
 
     <ul class="list-unstyled components">
         <img src="{{ user.photo.url }}" width="70px" style="border-radius: 50%; padding-right: 5px; margin-bottom:20px;  margin-left:10px" alt="">
-
         {% if request.user.name != None %}
         {{ request.user.name }}
         {% else %}
@@ -19,6 +18,11 @@
         <script>
             say_hello();
         </script>
+
+        <li>
+            <a href="#">LV.{{ request.user.level }} ( Exp.{{ request.user.experience }} )</a>
+
+        </li>
         <li class="active">
             <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false"><i class="fas fa-user"></i>{{ trans("Profile") }}</a>
             <ul class="collapse list-unstyled" id="homeSubmenu">
@@ -35,7 +39,8 @@
                     <a href="{{ url('password_change') }}"><i class="fas fa-key"></i>{{ trans("Password Change") }}</a>
                 </li>
             </ul>
-        </li>
+
+
         <li>
             <a href="{{ url('notification_center') }}"><i class="fas fa-bell"></i>{{ trans("Notification Center") }}</a>
         </li>
