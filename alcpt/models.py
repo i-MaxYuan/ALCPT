@@ -85,15 +85,15 @@ class User(AbstractBaseUser):
 class Achievement(models.Model):
     """ These objects are what people are earning when contributing """
     name = models.CharField(max_length=75)
-    key = models.CharField(max_length=75, unique=True)
+    key = models.CharField(max_length=75)
     description = models.TextField(null=True, blank=True)
-    category = models.CharField(default="", max_length=75)
+    category = models.PositiveSmallIntegerField(default=0)
     point = models.IntegerField(default=0)
     level = models.IntegerField(default=0)
     completion = models.IntegerField(default=0) #每個任務都有完成值
 
-    def __unicode__(self):
-        return "Achievement(%s, %s)" % (self.name, self.bonus)
+    def __str__(self):
+        return self.name
 
 
 class UserAchievement(models.Model):

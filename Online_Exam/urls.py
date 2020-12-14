@@ -391,6 +391,13 @@ urlpatterns = [
             re_path(r'^answer_sheet/content/(?P<answersheet_id>[0-9]+)$',
                     testee.view_answersheet_content,
                     name='view_answersheet_content'),
+            re_path(r'^achievement_list$',
+                    testee.achievement_list,
+                    name='testee_achievement_list'),
+
+            re_path(r'^achievement/create/(?P<achievement_id>[0-9]+)/(?P<achievement_category>[0-9]+)$',
+                    testee.accept_achievement,
+                    name='accept_achievement'),
             re_path(
                 r'^practice/',
                 include([

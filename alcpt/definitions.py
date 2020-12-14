@@ -51,3 +51,12 @@ class Identity(Enum):
     Visitor = (1, 'Visitor')
     Student = (2, 'Student')
     Teacher = (3, 'Teacher')
+
+
+# Types of achivement
+class AchievementType(Enum):
+    special_mission = (0, '特殊任務')
+    Exam = (1, '模擬鑑測')
+    Practice = (2, '綜合練習')
+    Listening = (3, '聽力練習')
+    Reading = (4, '閱讀練習')

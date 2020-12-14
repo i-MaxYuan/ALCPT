@@ -14,7 +14,7 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from .models import Question, AnswerSheet, Student, User, Exam, TestPaper, Answer, ReportCategory, Report, Achievement, UserAchievement
 from .exceptions import *
 from .decorators import permission_check
-from .definitions import UserType, QuestionType, ExamType
+from .definitions import UserType, QuestionType, ExamType, AchievementType
 from .managerfuncs import practicemanager, testmanager, testee
 
 import plotly.offline as pyo
@@ -38,6 +38,44 @@ def post_achievement_receiver(sender, **kwargs):
             #傳入考試別到函數
             achievement_cal = TestAchievement(user, value) #建立物件
             achievement_cal.test_achievement()
+
+#再寫個Signal
+@require_http_methods(["GET", "POST"])
+@permission_check(UserType.Testee)
+def accept_achievement(request, achievement_id, achievement_category):
+    achievement = Achievement.objects.get(id=achievement_id)
+    try:
+        achievement.filter(userachievements__user=request.user)
+        messages.warning(request, "Not a valid achievement")
+        return redirect("testee_achievement_list")
+
+    except:
+        accept_achievement = UserAchievement.objects.create(user=request.user,
+                                                            achievement=achievement)
+        accept_achievement.save()
+
+        print(achievement_category)
+
+        achievement_cal = TestAchievement(request.user.id, int(achievement_category)) #建立物件
+        achievement_cal.test_achievement()
+
+        messages.success(request, "Accept achievement successfully! ")
+        return redirect("testee_achievement_list")
+
+
+
+@permission_check(UserType.Testee)
+def achievement_list(request):
+    #還沒接的成就
+    unreceived_achievements = Achievement.objects.all().exclude(userachievements__user=request.user)
+
+    #已經接的成就
+    received_achievements = Achievement.objects.all().filter(userachievements__user=request.user).filter(userachievements__unlock=False)
+
+    #已完成成就
+    completed_achievements = Achievement.objects.all().filter(userachievements__user=request.user).filter(userachievements__unlock=True)
+
+    return render(request, 'testee/achievement.html', locals())
 
 
 
