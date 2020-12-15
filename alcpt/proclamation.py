@@ -45,7 +45,7 @@ def edit(request, proclamation_id):
         return render(request, 'proclamation/proclamation_edit.html', locals())
 
 
-def notify(title: str, text: str, is_read: bool, is_public: bool, exam_id: int, announcer: User, users):
+def notify(title: str, text: str, is_read: bool, is_public: bool, exam_id: int, report_id: int, announcer: User, users):
     if is_public:
         Proclamation.objects.bulk_create(title=title,
                                          text=text,
@@ -58,7 +58,8 @@ def notify(title: str, text: str, is_read: bool, is_public: bool, exam_id: int, 
                                                        is_read=is_read,
                                                        is_public=is_public,
                                                        recipient=user,
-                                                       exam_id=int(exam_id),
+                                                       exam_id=exam_id,
+                                                       report_id=report_id,
                                                        created_by=announcer) for user in users])
 
 

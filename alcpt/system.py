@@ -599,6 +599,8 @@ def report_reply(request, report_id):
                is_read=False,
                is_public=False,
                announcer=request.user,
+               exam_id=0,
+               report_id=report_id,
                users=[replying_report.created_by])
 
         replying_report.user_notification = True
