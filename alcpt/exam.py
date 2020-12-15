@@ -105,6 +105,7 @@ def exam_create(request):
                    is_public=False,
                    announcer=request.user,
                    exam_id=exam.id,
+                   report_id=0,
                    users=list(User.objects.filter(exam__testeeList__exam=exam).distinct()))
 
             messages.success(request, "Successfully created a new exam - {}.".format(exam.name))

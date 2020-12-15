@@ -19,9 +19,12 @@
                         </footer>
                         {% if proclamation.exam_id != 0 %}
                         <button type="button" class="btn btn-outline-warning" onclick="window.location.href='{{ url('testee_start_exam', args=[proclamation.exam_id]) }}'">
-                            {{trans("Start")}}
+                            {{trans("Start Exam")}}
                         </button>
-                        {% else %}
+                        {% elif proclamation.report_id != 0 %}
+                        <button type="button" class="btn btn-outline-warning" onclick="window.location.href='{{ url('view_report_detail', args=[proclamation.report_id]) }}'">
+                            {{trans("Check the Reply")}}
+                        </button>
 
                         {% endif %}
 
