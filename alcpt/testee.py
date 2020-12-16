@@ -57,15 +57,20 @@ def accept_achievement(request, achievement_id, achievement_category):
         print(achievement_category)
 
         achievement_cal = TestAchievement(request.user.id, int(achievement_category)) #建立物件
-        achievement_cal.test_achievement()
+        result = achievement_cal.test_achievement()
 
-        messages.success(request, "Accept achievement successfully! ")
-        return redirect("testee_achievement_list")
+        if result != None:
+            messages.success(request,"You get the achievement {}".format(result))
+            return redirect("testee_achievement_list")
+        else:
+            messages.success(request, "Accept achievement successfully! ")
+            return redirect("testee_achievement_list")
 
 
 
 @permission_check(UserType.Testee)
 def achievement_list(request):
+    all_achievements = Achievement.objects.all()
     #還沒接的成就
     unreceived_achievements = Achievement.objects.all().exclude(userachievements__user=request.user)
 

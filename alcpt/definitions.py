@@ -60,3 +60,16 @@ class AchievementType(Enum):
     Practice = (2, '綜合練習')
     Listening = (3, '聽力練習')
     Reading = (4, '閱讀練習')
+
+
+class Level(Enum):
+    one = (1, 0)
+    two = (2, 200)
+    three = (3, 500)
+    four = (4, 1000)
+    five = (5, 2000)
+    six = (6, 4000)
+    seven = (7, 6000)
+    eight = (8, 8000)
+    nine = (9, 10000)
+    ten = (10, 12000)

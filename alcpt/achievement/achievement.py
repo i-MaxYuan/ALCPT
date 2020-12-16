@@ -1,4 +1,19 @@
 from alcpt.models import UserAchievement, Achievement, AnswerSheet, Exam, User
+from alcpt.definitions import Level
+
+
+def levelup(user_id):
+    user = User.objects.get(id=user_id)
+    for level in Level:
+        if user.level == level.value[0]-1:
+            if user.experience >= level.value[1]:
+                user.level = user.level + 1
+                user.save()
+                print("level up")
+
+        else:
+            continue
+
 
 class TestAchievement:
     #user: user的id 5
@@ -24,6 +39,8 @@ class TestAchievement:
                     user.experience +=  exam_achievement.achievement.point
                     exam_achievement.save()
                     user.save()
+                    levelup(self.user)
+                    return exam_achievement.achievement.name
                 else:
                     continue
         except:
@@ -48,6 +65,8 @@ class TestAchievement:
                     user.experience +=  reading_achievement.achievement.point
                     reading_achievement.save()
                     user.save()
+                    levelup(self.user)
+                    return reading_achievement.achievement.name
 
                 else:
                     continue
@@ -71,6 +90,8 @@ class TestAchievement:
                     user.experience +=  listening_achievement.achievement.point
                     listening_achievement.save()
                     user.save()
+                    levelup(self.user)
+                    return listening_achievement.achievement.name
 
                 else:
                     continue
@@ -86,4 +107,5 @@ class TestAchievement:
     }
 
     def test_achievement(self):
-        self.myDict[self.achievement_category](self)
+        result = self.myDict[self.achievement_category](self)
+        return result
