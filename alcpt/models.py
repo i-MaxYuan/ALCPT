@@ -3,7 +3,10 @@ import time, datetime, json
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
-from alcpt.definitions import UserType
+from alcpt.definitions import UserType, Level
+
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 
 class UserManager(BaseUserManager):
@@ -82,6 +85,8 @@ class User(AbstractBaseUser):
         return (self.privilege & require_privilege.value[0]) > 0
 
 
+
+
 class Achievement(models.Model):
     """ These objects are what people are earning when contributing """
     name = models.CharField(max_length=75)
@@ -96,12 +101,19 @@ class Achievement(models.Model):
         return self.name
 
 
+
 class UserAchievement(models.Model):
     user = models.ForeignKey('User', on_delete=models.PROTECT)
     achievement = models.ForeignKey('Achievement', on_delete=models.PROTECT, related_name="userachievements")
     progress = models.IntegerField(default=0)#使用者的進度值
     unlock = models.BooleanField(default=False)
     registered_at = models.DateTimeField(auto_now_add=True)
+
+# @receiver(post_save, sender=UserAchievement)
+# def update_userachievement(sender, instance, created, **kwargs):
+#     if created == False:
+#         if instance.unlock == True:
+#             print("achievement unlock!")
 
 # 學系
 # department is ordered by id
