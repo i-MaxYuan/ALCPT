@@ -89,6 +89,7 @@ class User(AbstractBaseUser):
 
 class Achievement(models.Model):
     """ These objects are what people are earning when contributing """
+    trophy = models.ImageField(upload_to='photos', default="default_trophy/default_trophy.png")
     name = models.CharField(max_length=75)
     key = models.CharField(max_length=75)
     description = models.TextField(null=True, blank=True)

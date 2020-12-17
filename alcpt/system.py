@@ -31,6 +31,7 @@ def achievement_list(request):
 @permission_check(UserType.SystemManager)
 def achievement_create(request):
     if request.method == 'POST':
+        trophy = request.FILES.get('trophy')
         name = request.POST.get('name')
         key = request.POST.get('key')
         description = request.POST.get('description')
@@ -45,13 +46,14 @@ def achievement_create(request):
             return redirect('achievement_create')
 
         except:
-            achievement = Achievement.objects.create(name=name,
-                                                         key=key,
-                                                         description=description,
-                                                         category=category,
-                                                         point=point,
-                                                         level=level,
-                                                         completion=completion)
+            achievement = Achievement.objects.create(trophy=trophy,
+                                                     name=name,
+                                                     key=key,
+                                                     description=description,
+                                                     category=category,
+                                                     point=point,
+                                                     level=level,
+                                                     completion=completion)
             achievement.save()
             messages.success(request, 'Successfully created.')
             return redirect('achievement_list')
