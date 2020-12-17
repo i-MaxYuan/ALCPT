@@ -16,20 +16,21 @@
                             {% for achievement in completed_achievements %}
 
                             <div class="col">
-                                <div class="card shadow-sm">
-                                    <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
-                                        <title>{{ achievement.name }}</title>
-                                        <rect width="100%" height="100%" fill="green" /><text x="50%" y="50%" fill="#eceeef" dy=".3em">{{ achievement.name }}</text>
-                                    </svg>
+                                <div class="card shadow-sm" style="border-radius: 20%; max-width: 100%; display: flex; align-items: center; justify-content: center; margin-bottom:20px; padding-top: 20px;">
+
+                                    {% if achievement.trophy.url %}
+                                    <img width="200px" height="200px" src=" {{ achievement.trophy.url }}" alt="{{ achievement.name }}" />
+                                    {% else %}
+                                    <rect width="100%" height="100%" fill="green" /><text x="50%" y="50%" fill="#eceeef" dy=".3em">{{ achievement.name }}</text>
+                                    {% endif %}
 
                                     <div class="card-body">
                                         <p class="card-text">{{ achievement.key }}</p>
                                         <div class="d-flex justify-content-between align-items-center">
-                                            <div class="btn-group">
 
-                                                <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                                            </div>
-                                            <small class="text-muted">9 mins</small>
+                                            <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+
+
                                         </div>
                                     </div>
                                 </div>
@@ -40,11 +41,13 @@
                             {% for achievement in received_achievements %}
 
                             <div class="col">
-                                <div class="card shadow-sm">
-                                    <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
-                                        <title>{{ achievement.name }}</title>
-                                        <rect width="100%" height="100%" fill="grey" /><text x="50%" y="50%" fill="#eceeef" dy=".3em">{{ achievement.name }}</text>
-                                    </svg>
+                                <div class="card shadow-sm" style="border-radius: 20%; max-width: 100%; display: flex; align-items: center; justify-content: center; margin-bottom:20px; padding-top: 20px;">
+
+                                    {% if achievement.trophy.url %}
+                                    <img width="200px" height="200px" style="opacity: 50%" src=" {{ achievement.trophy.url }}" alt="{{ achievement.name }}" />
+                                    {% else %}
+                                    <rect width="100%" height="100%" fill="green" /><text x="50%" y="50%" fill="#eceeef" dy=".3em">{{ achievement.name }}</text>
+                                    {% endif %}
 
                                     <div class="card-body">
                                         <p class="card-text">{{ achievement.key }}</p>
@@ -53,7 +56,7 @@
                                                 <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
                                                 <button type="button" class="btn btn-sm btn-outline-secondary">Reject</button>
                                             </div>
-                                            <small class="text-muted">9 mins</small>
+
                                         </div>
                                     </div>
                                 </div>
@@ -64,11 +67,13 @@
                             {% for achievement in unreceived_achievements %}
 
                             <div class="col">
-                                <div class="card shadow-sm">
-                                    <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
-                                        <title>{{ achievement.name }}</title>
-                                        <rect width="100%" height="100%" fill="light grey" /><text x="50%" y="50%" fill="#eceeef" dy=".3em">{{ achievement.name }}</text>
-                                    </svg>
+                                <div class="card shadow-sm" style="border-radius: 20%; max-width: 100%; display: flex; align-items: center; justify-content: center; margin-bottom:20px; padding-top: 20px;">
+
+                                    {% if achievement.trophy.url %}
+                                    <img width="200px" height="200px" style=" -webkit-filter:blur(2px)grayscale(1); opacity: 50%" src=" {{ achievement.trophy.url }}" alt="{{ achievement.name }}" />
+                                    {% else %}
+                                    <rect width="100%" height="100%" fill="green" /><text x="50%" y="50%" fill="#eceeef" dy=".3em">{{ achievement.name }}</text>
+                                    {% endif %}
 
                                     <div class="card-body">
                                         <p class="card-text">{{ achievement.key }}</p>
@@ -77,7 +82,7 @@
                                                 <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
                                                 <button type="button" class="btn btn-sm btn-outline-primary" onclick="window.location.href='{{ url('accept_achievement', args=[achievement.id, achievement.category]) }}'">Accept</button>
                                             </div>
-                                            <small class="text-muted">9 mins</small>
+
                                         </div>
                                     </div>
                                 </div>
