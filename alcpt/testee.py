@@ -1,6 +1,6 @@
 import json
 import random
-from datetime import datetime
+import datetime
 from string import punctuation
 
 from django.shortcuts import render, redirect
@@ -21,11 +21,34 @@ import plotly.offline as pyo
 import plotly.graph_objs as go
 import pandas as pd
 
+from django.db.models.signals import post_save
 from django.core.signals import request_finished
 from django.dispatch import receiver, Signal
-from .achievement.achievement import TestAchievement
+from .achievement.achievement import TestAchievement, special_achievement_exam_settle, special_achievement_create, new_user_special_achievement_create, old_user_special_achievement_update
 
 request_achievement_signal = Signal(providing_args=['user', 'exam_type'])
+
+@receiver(post_save, sender=Achievement)
+def special_achievement_create_receiver(sender, instance, **kwargs):
+    if instance.category == '0': #當新增的任務是特殊成就時
+        special_achievement_create(instance)
+
+@receiver(post_save, sender=User)
+def new_user_special_achievement_create_receiver(sender, instance, created, **kwargs):
+    if created == False:
+        old_user_special_achievement_update(instance)
+    else:
+        new_user_special_achievement_create(instance)
+
+
+
+@receiver(request_finished)
+def special_exam_achievement_receiver(sender, **kwargs):
+    exam = Exam.objects.all().filter(exam_type=1)[0]
+    now = datetime.datetime.now()
+    if (now > exam.finish_time) & (now < (exam.finish_time+datetime.timedelta(hours=1))):
+        special_achievement_exam_settle(exam.id)
+
 
 @permission_check(UserType.Testee)
 @receiver(request_achievement_signal)
@@ -72,7 +95,7 @@ def accept_achievement(request, achievement_id, achievement_category):
 def achievement_list(request):
     all_achievements = Achievement.objects.all()
     #還沒接的成就
-    unreceived_achievements = Achievement.objects.all().exclude(userachievements__user=request.user)
+    unreceived_achievements = Achievement.objects.all().exclude(userachievements__user=request.user).filter(level__lte=request.user.level)
 
     #已經接的成就
     received_achievements = Achievement.objects.all().filter(userachievements__user=request.user).filter(userachievements__unlock=False)
@@ -393,7 +416,7 @@ def practice_create(request, kind):
 
 @permission_check(UserType.Testee)
 def view_answersheet_content(request, answersheet_id):
-    now_time = datetime.now()
+    now_time = datetime.datetime.now()
     try:
         answersheet = AnswerSheet.objects.get(id=answersheet_id)
 
@@ -402,7 +425,7 @@ def view_answersheet_content(request, answersheet_id):
             if answersheet.is_finished == False:
                 messages.warning(request, 'This exam does not finish. Keep working on! ')
                 return redirect('testee_exam_list')
-            elif datetime.now() < answersheet.exam.finish_time:
+            elif datetime.datetime.now() < answersheet.exam.finish_time:
                 messages.warning(request, 'This exam does not finish.')
                 return redirect('testee_score_list')
             elif answersheet.is_tested == False:
@@ -626,7 +649,7 @@ def start_exam(request, exam_id):
         exam = Exam.objects.get(id=exam_id)
         answer_sheet = AnswerSheet.objects.get(exam=exam, user=request.user)
 
-        now_time = datetime.now()
+        now_time = datetime.datetime.now()
         if not exam.is_public:
             pass
         elif exam.start_time < now_time < exam.finish_time:
@@ -669,7 +692,7 @@ def start_practice(request, exam_id):
     try:
         exam = Exam.objects.get(id=exam_id)
 
-        now_time = datetime.now()
+        now_time = datetime.datetime.now()
         if not exam.is_public:
             pass
         elif exam.start_time < now_time < exam.finish_time:
