@@ -18,15 +18,15 @@
                             <div class="col">
                                 <div class="card shadow-sm" style="border-radius: 20%; max-width: 100%; display: flex; align-items: center; justify-content: center; margin-bottom:20px; padding-top: 20px;">
 
-                                    {% if achievement.trophy.url %}
-                                    <img width="200px" height="200px" src=" {{ achievement.trophy.url }}" alt="{{ achievement.name }}" />
+                                    {% if achievement.achievement.trophy.url %}
+                                    <img width="200px" height="200px" src=" {{ achievement.achievement.trophy.url }}" alt="{{ achievement.achievement.name }}" />
                                     {% else %}
-                                    <rect width="100%" height="100%" fill="green" /><text x="50%" y="50%" fill="#eceeef" dy=".3em">{{ achievement.name }}</text>
+                                    <rect width="100%" height="100%" fill="green" /><text x="50%" y="50%" fill="#eceeef" dy=".3em">{{ achievement.achievement.name }}</text>
                                     {% endif %}
 
                                     <div class="card-body">
-                                        <p class="card-text">《 {{ achievement.name }} 》</p>
-                                        <p class="card-text">{{ achievement.key }}</p>
+                                        <p class="card-text">《 {{ achievement.achievement.name }} 》</p>
+                                        <p class="card-text">{{ achievement.achievement.key }}</p>
                                         <div class="d-flex justify-content-between align-items-center">
 
                                             <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
@@ -44,19 +44,18 @@
                             <div class="col">
                                 <div class="card shadow-sm" style="border-radius: 20%; max-width: 100%; display: flex; align-items: center; justify-content: center; margin-bottom:20px; padding-top: 20px;">
 
-                                    {% if achievement.trophy.url %}
-                                    <img width="200px" height="200px" style="opacity: 50%" src=" {{ achievement.trophy.url }}" alt="{{ achievement.name }}" />
+                                    {% if achievement.achievement.trophy.url %}
+                                    <img width="200px" height="200px" style="opacity: 50%" src=" {{ achievement.achievement.trophy.url }}" alt="{{ achievement.achievement.name }}" />
                                     {% else %}
-                                    <rect width="100%" height="100%" fill="green" /><text x="50%" y="50%" fill="#eceeef" dy=".3em">{{ achievement.name }}</text>
+                                    <rect width="100%" height="100%" fill="green" /><text x="50%" y="50%" fill="#eceeef" dy=".3em">{{ achievement.achievement.name }}</text>
                                     {% endif %}
 
                                     <div class="card-body">
-                                        <p class="card-text">《 {{ achievement.name }} 》</p>
-                                        <p class="card-text">{{ achievement.key }}</p>
+                                        <p class="card-text">《 {{ achievement.achievement.name }} 》</p>
+                                        <p class="card-text">{{ achievement.achievement.key }}</p>
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div class="btn-group">
                                                 <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                                                <button type="button" class="btn btn-sm btn-outline-secondary">Reject</button>
                                             </div>
 
                                         </div>

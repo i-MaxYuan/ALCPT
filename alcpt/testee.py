@@ -14,7 +14,7 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from .models import Question, AnswerSheet, Student, User, Exam, TestPaper, Answer, ReportCategory, Report, Achievement, UserAchievement
 from .exceptions import *
 from .decorators import permission_check
-from .definitions import UserType, QuestionType, ExamType, AchievementType
+from .definitions import UserType, QuestionType, ExamType, AchievementCategory
 from .managerfuncs import practicemanager, testmanager, testee
 
 import plotly.offline as pyo
@@ -24,43 +24,55 @@ import pandas as pd
 from django.db.models.signals import post_save
 from django.core.signals import request_finished
 from django.dispatch import receiver, Signal
-from .achievement.achievement import TestAchievement, special_achievement_exam_settle, special_achievement_create, new_user_special_achievement_create, old_user_special_achievement_update
+from .achievement.achievement import TestAchievement, achievement_create, new_user_achievement_create, old_user_achievement_update
 
-request_achievement_signal = Signal(providing_args=['user', 'exam_type'])
+request_achievement_signal = Signal(providing_args=['user', 'score', 'exam_type'])
 
 @receiver(post_save, sender=Achievement)
-def special_achievement_create_receiver(sender, instance, **kwargs):
-    if instance.category == '0': #當新增的任務是特殊成就時
-        special_achievement_create(instance)
+def achievement_create_receiver(sender, instance, **kwargs):
+    achievement_create(instance)
 
 @receiver(post_save, sender=User)
-def new_user_special_achievement_create_receiver(sender, instance, created, **kwargs):
+def new_user_achievement_create_receiver(sender, instance, created, **kwargs):
     if created == False:
-        old_user_special_achievement_update(instance)
+        old_user_achievement_update(instance)
+        pass
     else:
-        new_user_special_achievement_create(instance)
+        new_user_achievement_create(instance)
 
 
 
-@receiver(request_finished)
-def special_exam_achievement_receiver(sender, **kwargs):
-    exam = Exam.objects.all().filter(exam_type=1)[0]
-    now = datetime.datetime.now()
-    if (now > exam.finish_time) & (now < (exam.finish_time+datetime.timedelta(hours=1))):
-        special_achievement_exam_settle(exam.id)
+# @receiver(request_finished)
+# def special_exam_achievement_receiver(sender, **kwargs):
+#     exam = Exam.objects.all().filter(exam_type=1)[0]
+#     now = datetime.datetime.now()
+#     if (now > exam.finish_time) & (now < (exam.finish_time+datetime.timedelta(hours=1))):
+#         special_achievement_exam_settle(exam.id)
 
 
 @permission_check(UserType.Testee)
 @receiver(request_achievement_signal)
 def post_achievement_receiver(sender, **kwargs):
     user = 0
+    score = 0
     for key, value in kwargs.items():
         if key == 'user':
             user = value
+        if key == 'score':
+            score = value
         if key == 'exam_type': # 過濾是哪種考試類別
             #傳入考試別到函數
-            achievement_cal = TestAchievement(user, value) #建立物件
-            achievement_cal.test_achievement()
+            if value == 1:
+                achievement_cal = TestAchievement(user, score, value, 5) #建立物件 Exam
+                achievement_cal.test_achievement()
+            elif value == 3:
+                achievement_cal = TestAchievement(user, score, value, 6) #建立物件 listening
+                achievement_cal.test_achievement()
+            elif value == 4:
+                achievement_cal = TestAchievement(user, score, value, 7) #建立物件 reading
+                achievement_cal.test_achievement()
+
+
 
 #再寫個Signal
 @require_http_methods(["GET", "POST"])
@@ -98,10 +110,11 @@ def achievement_list(request):
     unreceived_achievements = Achievement.objects.all().exclude(userachievements__user=request.user).filter(level__lte=request.user.level)
 
     #已經接的成就
-    received_achievements = Achievement.objects.all().filter(userachievements__user=request.user).filter(userachievements__unlock=False)
+    received_achievements = UserAchievement.objects.all().filter(user=request.user).filter(unlock=False)
+
 
     #已完成成就
-    completed_achievements = Achievement.objects.all().filter(userachievements__user=request.user).filter(userachievements__unlock=True)
+    completed_achievements = UserAchievement.objects.all().filter(user=request.user).filter(unlock=True)
 
     return render(request, 'testee/achievement.html', locals())
 
@@ -867,7 +880,7 @@ def submit_answersheet(request, exam_id):
     answer_sheet = AnswerSheet.objects.get(exam=exam, user=request.user)
     score = testmanager.calculate_score(exam.id, answer_sheet)
     messages.success(request, 'You had finished the exam.')
-    request_achievement_signal.send(sender='AnswerSheet', user = request.user.id, exam_type = exam.exam_type)
+    request_achievement_signal.send(sender='AnswerSheet', user = request.user.id, score = score, exam_type = exam.exam_type)
     return redirect('testee_score_list')
 
 # Settle exam score directly.
@@ -879,6 +892,7 @@ def settle(request, exam_id):
             answer_sheet = AnswerSheet.objects.get(exam=exam,
                                                    user=request.user)
             score = testmanager.calculate_score(exam.id, answer_sheet)
+            request_achievement_signal.send(sender='AnswerSheet', user = request.user.id, score = score, exam_type = exam.exam_type)
             messages.success(
                 request,
                 "You have settled this exam score directly. You got {} point in this exam."
