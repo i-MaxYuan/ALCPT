@@ -54,12 +54,13 @@ class Identity(Enum):
 
 
 # Types of achivement
-class AchievementType(Enum):
-    Special_mission = (0, '特殊任務')
+class AchievementCategory(Enum):
     Exam = (1, '模擬鑑測')
-    Practice = (2, '綜合練習')
     Listening = (3, '聽力練習')
     Reading = (4, '閱讀練習')
+    red_mark_exam = (5, '模擬考30分以下')
+    red_mark_listening = (6, '聽力練習30分以下')
+    red_mark_reading = (7, '閱讀練習30分以下')
 
 
 class Level(Enum):
@@ -75,14 +76,14 @@ class Level(Enum):
     ten = (10, 12000)
     eleven = (11, 14000)
     twelve = (12, 18000)
-    thirteen = (13, 22000)
-    fourteen = (14, 24000)
-    fifteen = (15, 26000)
-    sixteen = (16, 28000)
-    seventeen = (17, 30000)
-    eighteen = (18, 32000)
-    nineteen = (19, 34000)
-    twenty = (20, 36000)
-    twenty_one = (21, 38000)
-    twenty_two = (22, 40000)
-    twenty_three = (23, 42000)
+    thirteen = (13, 20000)
+    fourteen = (14, 22000)
+    fifteen = (15, 24000)
+    sixteen = (16, 26000)
+    seventeen = (17, 28000)
+    eighteen = (18, 30000)
+    nineteen = (19, 32000)
+    twenty = (20, 34000)
+    twenty_one = (21, 36000)
+    twenty_two = (22, 38000)
+    twenty_three = (23, 40000)

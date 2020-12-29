@@ -18,7 +18,7 @@ from django.contrib import messages
 from alcpt.managerfuncs import systemmanager
 from alcpt.models import User, Student, Department, Squadron, ReportCategory, Report, Reply, UserAchievement, Achievement
 from alcpt.proclamation import notify
-from alcpt.definitions import UserType, Identity, AchievementType
+from alcpt.definitions import UserType, Identity, AchievementCategory
 from alcpt.decorators import permission_check, login_required
 from alcpt.exceptions import IllegalArgumentError
 from django.utils.translation import ugettext as _
@@ -58,7 +58,7 @@ def achievement_create(request):
             messages.success(request, 'Successfully created.')
             return redirect('achievement_list')
     else:
-        achievement_categories = AchievementType.__members__.values()
+        achievement_categories = AchievementCategory.__members__.values()
         return render(request, 'achievement/achievement_create.html', locals())
 # 使用者列表
 @permission_check(UserType.SystemManager)
@@ -163,7 +163,7 @@ def user_create(request):
             identities = Identity.__members__.values()
             departments = Department.objects.all()
             squadrons = Squadron.objects.all()
-            return render(request, 'user/create_user.html', locals())
+            return redirect('user_create')
 
     else:
         privileges = UserType.__members__.values()
@@ -320,7 +320,7 @@ def user_edit(request, reg_id):
             stu_ids = [_.stu_id for _ in Student.objects.all().exclude(stu_id=edited_user.reg_id)]
             return render(request, 'user/edit_user.html', locals())
 
-        except ObjectDoesNotExist:
+        except:
             messages.error(request, "User doesn't exist, user register id - {}".format(reg_id))
             return redirect('user_list')
 
