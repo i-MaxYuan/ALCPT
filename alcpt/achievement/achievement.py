@@ -113,6 +113,7 @@ class TestAchievement:
                     red_mark_exam_achievement.save()
                     if red_mark_exam_achievement.progress >= red_mark_exam_achievement.achievement.completion:
                         red_mark_exam_achievement.unlock = True
+                        user.experience += red_mark_exam_achievement.achievement.point
                         red_mark_exam_achievement.save()
                         user.save()
                         levelup(self.user)
@@ -167,6 +168,7 @@ class TestAchievement:
                     red_mark_listening_achievement.save()
                     if red_mark_listening_achievement.progress >= red_mark_listening_achievement.achievement.completion:
                         red_mark_listening_achievement.unlock = True
+                        user.experience += red_mark_listening_achievement.achievement.point
                         red_mark_listening_achievement.save()
                         user.save()
                         levelup(self.user)
@@ -216,6 +218,7 @@ class TestAchievement:
                     red_mark_reading_achievement.save()
                     if red_mark_reading_achievement.progress >= red_mark_reading_achievement.achievement.completion:
                         red_mark_reading_achievement.unlock = True
+                        user.experience += red_mark_reading_achievement.achievement.point
                         red_mark_reading_achievement.save()
                         user.save()
                         levelup(self.user)
