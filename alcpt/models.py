@@ -3,7 +3,10 @@ import time, datetime, json
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
-from alcpt.definitions import UserType
+from alcpt.definitions import UserType, Level
+
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 
 class UserManager(BaseUserManager):
@@ -60,6 +63,8 @@ class User(AbstractBaseUser):
     )
     identity = models.PositiveSmallIntegerField(null=True, default=0)
     introduction = models.TextField(null=True)
+    level = models.PositiveSmallIntegerField(default=1)
+    experience = models.IntegerField(default=0)
 
     objects = UserManager()
 
@@ -79,6 +84,37 @@ class User(AbstractBaseUser):
         #     return (self.privilege & require_privilege.value[0]) > 0
         return (self.privilege & require_privilege.value[0]) > 0
 
+
+
+
+class Achievement(models.Model):
+    """ These objects are what people are earning when contributing """
+    trophy = models.ImageField(upload_to='photos', default="default_trophy/default_trophy.png")
+    name = models.CharField(max_length=75)
+    key = models.CharField(max_length=75)
+    description = models.TextField(null=True, blank=True)
+    category = models.PositiveSmallIntegerField(default=0)
+    point = models.IntegerField(default=0)
+    level = models.IntegerField(default=0)
+    completion = models.IntegerField(default=0) #每個任務都有完成值
+
+    def __str__(self):
+        return self.name
+
+
+
+class UserAchievement(models.Model):
+    user = models.ForeignKey('User', on_delete=models.PROTECT)
+    achievement = models.ForeignKey('Achievement', on_delete=models.PROTECT, related_name="userachievements")
+    progress = models.IntegerField(default=0)#使用者的進度值
+    unlock = models.BooleanField(default=False)
+    registered_at = models.DateTimeField(auto_now_add=True)
+
+# @receiver(post_save, sender=UserAchievement)
+# def update_userachievement(sender, instance, created, **kwargs):
+#     if created == False:
+#         if instance.unlock == True:
+#             print("achievement unlock!")
 
 # 學系
 # department is ordered by id
@@ -300,6 +336,8 @@ class Proclamation(models.Model):
     is_read = models.BooleanField(default=True)
     is_public = models.BooleanField(default=False)
     recipient = models.ForeignKey('User', on_delete=models.CASCADE, null=True)
+    exam_id = models.PositiveIntegerField(default=0)
+    report_id = models.PositiveIntegerField(default=0)
     created_time = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey('User', on_delete=models.SET_NULL, null=True, related_name='announcer')
 
