@@ -648,6 +648,7 @@ def start_practice(request, exam_id):
 def answering(request, exam_id, answer_id):
     exam = Exam.objects.get(id=exam_id)
     if exam.exam_type == 1:
+        deadline = exam.finish_time.strftime("%Y-%m-%dT%H:%M:%S")
         hour = exam.finish_time.hour
         minute = exam.finish_time.minute
     try:
