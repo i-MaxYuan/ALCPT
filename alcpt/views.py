@@ -1,11 +1,13 @@
 from django.shortcuts import render
 from django.http import FileResponse
 from django.utils.translation import gettext as _ #translation
+import datetime
+
 
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 from .definitions import UserType
-from .models import Proclamation, User
+from .models import Proclamation, User, Exam, AnswerSheet
 
 # Create your views here.
 
@@ -13,6 +15,19 @@ from .models import Proclamation, User
 def index(request):
     privileges = UserType.__members__,
     proclamations = Proclamation.objects.filter(is_public=True)
+
+    now_time = datetime.datetime.now()
+
+    exam = Exam.objects.all().filter(exam_type=1).order_by('-id')
+
+    if exam:
+        latest_exam = exam[0]
+        leaderboard = AnswerSheet.objects.all().filter(exam_id=latest_exam.id).order_by("-score")
+
+
+
+
+
     page = request.GET.get('page', 1)
     paginator = Paginator(proclamations, 10)  # the second parameter is used to display how many items. Now is display 5
 

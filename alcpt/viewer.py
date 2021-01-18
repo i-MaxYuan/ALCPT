@@ -2,6 +2,7 @@ import re
 
 from string import punctuation
 from datetime import datetime
+import bisect
 
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_http_methods
@@ -44,6 +45,7 @@ def exam_score_detail(request, exam_id):
         testee_not_tested = 0
         testee_scores = []
         answer_sheets = []
+        testee_grade = []
         SCORE_RANGE = {'one': 0,'two': 0,'three': 0,'four': 0,'five': 0,'six': 0,'seven': 0,'eight': 0,'nine': 0,'ten': 0}
 
         for testee in testees:
@@ -64,14 +66,22 @@ def exam_score_detail(request, exam_id):
                 not_tested += 1
                 answer_sheets.append(None)
 
+
+    #級距
+        def grade(score, breakpoints=[60,70,80,90], grades='FDCBA'):
+            i = bisect.bisect(breakpoints, score)
+            return grades[i]
+
         #計算成績分布
         for testee in testees:
             count = 0
             try:
                 answer_sheet = AnswerSheet.objects.get(exam=exam, user_id=testee.id)
                 if answer_sheet.is_tested is False:
+                    testee_grade.append(grade(0))
                     pass
                 else:
+                    testee_grade.append(grade(answer_sheet.score))
                     if count <= answer_sheet.score <= count + 10:
                         SCORE_RANGE['one'] += 1
                     else:
@@ -85,14 +95,11 @@ def exam_score_detail(request, exam_id):
             except ObjectDoesNotExist:
                 pass
 
+        testeeData = list(zip(testees, answer_sheets, testee_grade))
 
-        #平均分數
-        # if testee_scores:
-        #     testee_score_means = np.mean(testee_scores)
-        # else:
-        #     testee_score_means = '無考試成績'
 
-        testeeData = list(zip(testees, answer_sheets))
+
+
 
         #Bar Chart
         #xaxis: score

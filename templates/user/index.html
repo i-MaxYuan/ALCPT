@@ -61,8 +61,14 @@
                             <th class="text-center">{{trans("Account")}}</th>
                             <th class="text-center">{{trans("Name")}}</th>
                             <th class="text-center">{{trans("Identity")}}</th>
-                            <th class="text-center">{{trans("Privilege")}}</th>
+                            <th class="text-center">{{trans("SYS")}}</th>
+                            <th class="text-center">{{trans("TM")}}</th>
+                            <th class="text-center">{{trans("TBM")}}</th>
+                            <th class="text-center">{{trans("TBO")}}</th>
+                            <th class="text-center">{{trans("Viewer")}}</th>
+                            <th class="text-center">{{trans("Testee")}}</th>
                             <th class="text-center">{{trans("Last login")}}</th>
+
                             <th>
                                 <div class="add">
                                     <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ url('user_create') }}'">
@@ -91,25 +97,44 @@
                                 {% if user.identity %} {{ user.identity|readableIdentity }} {% else %} 尚未設定 {% endif %}
                             </td>
 
-                            <td class="text-center" data-title="Privilege：">
+
+                            <td class="text-center" data-title="SYS">
                                 {% if user|has_perms(privileges.SystemManager) %}
-                                <span class="badge alert-danger">{{ privileges.SystemManager.value.1 }}</span>
-                                {% endif %} {% if user|has_perms(privileges.TestManager) %}
-                                <span class="badge alert-warning">{{ privileges.TestManager.value.1 }}</span>
-                                {% endif %} {% if user|has_perms(privileges.TBManager) %}
-                                <span class="badge badge-primary">{{ privileges.TBManager.value.1 }}</span>
-                                {% endif %} {% if user|has_perms(privileges.TBOperator) %}
-                                <span class="badge alert-success">{{ privileges.TBOperator.value.1 }}</span>
-                                {% endif %} {% if user|has_perms(privileges.Viewer) %}
-                                <span class="badge alert-info">{{ privileges.Viewer.value.1 }}</span>
-                                {% endif %} {% if user|has_perms(privileges.Testee) %}
-                                <span class="badge alert-dark">{{ privileges.Testee.value.1 }}</span>
+                                <i class="fas fa-check" style="color: red;"></i>
                                 {% endif %}
                             </td>
 
+                            <td class="text-center" data-title="TM">
+                                {% if user|has_perms(privileges.TestManager) %}
+                                <i class="fas fa-check" style="color: orange;"></i>
+                                {% endif %}
+                            </td>
+                            <td class="text-center" data-title="TBM">
+                                {% if user|has_perms(privileges.TBManager) %}
+                                <i class="fas fa-check" style="color: blue;"></i>
+                                {% endif %}
+                            </td>
+                            <td class="text-center" data-title="TBO">
+                                {% if user|has_perms(privileges.TBOperator) %}
+                                <i class="fas fa-check" style="color: green;"></i>
+                                {% endif %}
+                            </td>
+                            <td class="text-center" data-title="Viewer">
+
+                                {% if user|has_perms(privileges.Viewer) %}
+                                <i class="fas fa-check" style="color: darkblue;"></i>
+                                {% endif %}
+
+                            </td>
+                            <td class="text-center" data-title="Testee">
+                                {% if user|has_perms(privileges.Testee) %}
+                                <i class="fas fa-check" style="color: gray;"></i>
+                                {% endif %}
+                            </td>
                             <td class="text-center" data-title="Last Login：">
                                 {% if user.last_login %} {{ user.last_login.strftime('%Y/%m/%d %H:%M') }} {% else %}{{trans(" Not logged in ")}}{% endif %}
                             </td>
+
 
                             <td class="text-center">
                                 <a href="{{ url('user_edit', args=[user.reg_id]) }}"><i class="fa fa-pencil-square-o"></i></a>

@@ -21,11 +21,12 @@
                             <th class="text-center">{{trans("Account ID")}}</th>
                             <th class="text-center">{{trans("Name")}}</th>
                             <th class="text-center">{{trans("Score")}}</th>
+                            <th class="text-center">{{trans("Grade")}}</th>
                             <th class="text-right"></th>
                         </thead>
 
                         <tbody>
-                            {% for testee, answer_sheet in testeeData %}
+                            {% for testee, answer_sheet, grade in testeeData %}
                             <tr>
                                 <td class="text-center">
                                     {% if testee.student %}
@@ -38,11 +39,16 @@
 
                                 {% if answer_sheet.is_tested == False %}
                                 <td class="text-center" data-title="Type" style="color: #c12e2a">未進行測驗</td>
+                                <td class="text-center" data-title="Type" style="color: #00A600"></td>
                                 {% elif answer_sheet.score  < 60 %}
                                 <td class="text-center" data-title="Type" style="color: #c12e2a">{{ answer_sheet.score }}</td>
+                                <td class="text-center" data-title="Type" style="color: #c12e2a">{{ grade }}</td>
                                 {% else %}
                                 <td class="text-center" data-title="Type" style="color: #00A600">{{ answer_sheet.score }}</td>
+                                <td class="text-center" data-title="Type" style="color: #00A600">{{ grade }}</td>
                                 {% endif %}
+
+
 
                                 <td class="text-right">
                                     {% if testee.student %}

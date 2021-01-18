@@ -44,7 +44,9 @@
                                                             <p>
                                                                 {{trans("If your")}} <u>{{trans("answer is correct")}}</u>{{trans(", then it will display only one color in all choices and there will display")}}
                                                                 <i class="fa fa-check"></i>
-                                                                {{trans("behind the question.")}} </p></li>
+                                                                {{trans("behind the question.")}}
+                                                            </p>
+                                                        </li>
                                                         <li>
                                                             <p>
                                                                 {{trans("If your")}}<u>{{trans("didn't answer the question")}}</u>{{trans(", then it will display only one color in all choices and there will display")}}
@@ -61,16 +63,17 @@
                                                         </li>
                                                         <li>
                                                             <p style="color: red">
-                                                                {{trans("Red color means your selected the wrong answer on the exam.")}} </p>
+                                                                {{trans("Red color means your selected the wrong answer on the exam.")}}
+                                                            </p>
                                                         </li>
                                                         <li>
                                                             <p style="color: green">
-                                                                {{trans(" Green color means the correct answer.")}}                                                          
+                                                                {{trans(" Green color means the correct answer.")}}
                                                             </p>
                                                         </li>
                                                         <li>
                                                             <p>
-                                                                {{trans("If you think there is a problem with the question, you can click")}}                                                  <i class="fa fa-exclamation-triangle"></i> {{trans("to report it.")}}
+                                                                {{trans("If you think there is a problem with the question, you can click")}} <i class="fa fa-exclamation-triangle"></i> {{trans("to report it.")}}
                                                             </p>
                                                         </li>
                                                     </ul>
@@ -99,7 +102,7 @@
                                     {% if answer.question.q_file %}
                                     <audio controls preload="none">
                                         <source src="{{ answer.question.q_file.url }}" type="audio/mpeg">
-                                            {{trans("Your browser does not support the audio tag.")}}
+                                        {{trans("Your browser does not support the audio tag.")}}
                                     </audio>
                                     {% else %}
                                     <div id="summary_Q_content{{ loop.index }}">
@@ -201,9 +204,12 @@
                 </table>
             </div>
             <div class="col-md-6">
+                {% if correction_bar_chart %}
                 {% autoescape off %}
                 {{ correction_bar_chart }}
                 {% endautoescape %}
+                {% else %}
+                {% endif %}
             </div>
             <div class="text-center">
                 <button type="button" class="btn btn-primary" onclick="window.location.href='{{ url('testee_score_list') }}'">{{trans("OK")}}</button>

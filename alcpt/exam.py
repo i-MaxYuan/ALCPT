@@ -12,8 +12,9 @@ from django.db import IntegrityError
 from alcpt.managerfuncs import testmanager
 from alcpt.decorators import permission_check
 from alcpt.proclamation import notify
+from alcpt.achievement.achievement import exam_special_achievement
 from alcpt.definitions import UserType, QuestionType, QuestionTypeCounts, ExamType
-from alcpt.models import User, Exam, TestPaper, Group, Question, Proclamation, AnswerSheet, Answer
+from alcpt.models import User, Exam, TestPaper, Group, Question, Proclamation, AnswerSheet, Answer, Achievement
 from alcpt.email import notification_mail
 from alcpt.exceptions import *
 
@@ -48,6 +49,9 @@ def exam_create(request):
 
         testpaper = TestPaper.objects.get(id=int(request.POST.get('selected_testpaper')))
         selected_group = Group.objects.get(id=int(request.POST.get('selected_group')))
+
+        # achievement = Achievement.objects.get(id=int(request.POST.get('achievement')))
+
 
         try:
             exam_name = request.POST.get('exam_name')
@@ -98,18 +102,23 @@ def exam_create(request):
             # create proclamation to notice all testees the exam start time.
             proclamation_content = "Start Time: " + start_time + "\n" + \
                                    "Duration: " + duration + " minutes.\n"
-                                   
+
             notify(title=exam.name,
                    text=proclamation_content,
                    is_read=False,
                    is_public=False,
                    announcer=request.user,
+                   exam_id=exam.id,
+                   report_id=0,
                    users=list(User.objects.filter(exam__testeeList__exam=exam).distinct()))
+
+            # exam_special_achievement(achievement=achievement, users=list(User.objects.filter(exam__testeeList__exam=exam).distinct()))
 
             messages.success(request, "Successfully created a new exam - {}.".format(exam.name))
             return redirect('exam_list')
         return redirect('exam_list')
     else:
+        special_exam_achievements = Achievement.objects.all().filter(category=0)
         exam_names = [_.name for _ in Exam.objects.all()]
         testpapers = TestPaper.objects.filter(is_testpaper=True, valid=True)
         groups = Group.objects.all()

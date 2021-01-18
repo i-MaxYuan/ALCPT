@@ -51,3 +51,39 @@ class Identity(Enum):
     Visitor = (1, 'Visitor')
     Student = (2, 'Student')
     Teacher = (3, 'Teacher')
+
+
+# Types of achivement
+class AchievementCategory(Enum):
+    Exam = (1, '模擬鑑測')
+    Listening = (3, '聽力練習')
+    Reading = (4, '閱讀練習')
+    red_mark_exam = (5, '模擬考30分以下')
+    red_mark_listening = (6, '聽力練習30分以下')
+    red_mark_reading = (7, '閱讀練習30分以下')
+
+
+class Level(Enum):
+    one = (1, 0)
+    two = (2, 200)
+    three = (3, 500)
+    four = (4, 1000)
+    five = (5, 2000)
+    six = (6, 4000)
+    seven = (7, 6000)
+    eight = (8, 8000)
+    nine = (9, 10000)
+    ten = (10, 12000)
+    eleven = (11, 14000)
+    twelve = (12, 18000)
+    thirteen = (13, 20000)
+    fourteen = (14, 22000)
+    fifteen = (15, 24000)
+    sixteen = (16, 26000)
+    seventeen = (17, 28000)
+    eighteen = (18, 30000)
+    nineteen = (19, 32000)
+    twenty = (20, 34000)
+    twenty_one = (21, 36000)
+    twenty_two = (22, 38000)
+    twenty_three = (23, 40000)
