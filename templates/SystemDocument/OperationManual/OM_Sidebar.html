@@ -1,0 +1,122 @@
+{% extends 'OperationManual_base.html' %} {% block content %}
+<main id="om-content">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-12 text-left">
+            <h1>側邊欄說明</h1>
+              <ul>
+                <p>
+                  <li>主要負責使用者的相關資料</li>
+                    <img src="{{ static('/images/om/sidebar/nom-sidebar01.png') }}" width="75%" />
+                    <img src="{{ static('/images/om/sidebar/nom-sidebar02.png') }}" width="75%" />
+                </p>
+              </ul>
+            <hr />
+
+            <h3>個人資料</h3>
+            <ul>
+                <p>
+                  <li> 包含「檢視個人資料」、「編輯個人資料」、「電子郵件」、「更改密碼」。</li>
+                </p>
+            </ul>
+            <img src="{{ static('/images/om/sidebar/nom-sidebar03.png') }}" width="35%" />  
+              
+            <h4>檢視個人資料</h4>
+            <img src="{{ static('/images/om/sm/nom-sm09.png') }}" width="45%" />
+            <img src="{{ static('/images/om/sm/nom-sm08.png') }}" width="50%" />
+            <ul>
+              <p>
+                <li>若該使用者為「學生」，才會顯示右邊學生基本資料。</li>
+              </p>
+            </ul>
+            
+            <h4>編輯個人資料</h4>
+            <img src="{{ static('/images/om/sidebar/nom-sidebar04.png') }}" width="60%" />
+            <ul>
+              <p>
+                <li>此圖以身份為「學生」的使用者為例，若身份為非「學生」之使用者，則不會有右邊學生基本資料可進行編輯。</li>
+                <li>使用者可以進行個人資料的更改，可更改項目有 : 「使用者照片」、「自我介紹」、「名字」、「性別」。</li>
+                <li>若該使用者為「學生」，則會多顯示學生基本資料，可更改項目有 : 「科系」、「中隊」、「年班」。</li>
+                <li>完成更改後，點擊「更新」即可完成更新。</li>
+              </p>
+            </ul>
+
+            <h4>電子郵件</h4>
+            <img src="{{ static('/images/om/sidebar/nom-sidebar05.png') }}" width="60%" />
+            <ul>
+              <p>
+                <li>使用者可更改電子郵件。</li>
+                <li>郵件寄出時，會發通知給使用者，告知使用者驗證郵件已寄出。</li>
+                <li>尚未進行郵件的更改，該輸入欄位會顯示「無」</li>
+                <li>已完成驗證的電子郵件在個人資料的電子郵件欄位會看見旁邊有
+                    <i class="fa fa-check-circle"
+                    style="color: green; font-size: 24px"></i>
+                </li>
+                <li>亦可進行已完成驗證的信箱進行更改，但須至電子郵件信箱進行相關驗證程序進行驗證。</li>
+              </p>
+            </ul>
+
+            <h4>更改密碼</h4>
+            <img src="{{ static('/images/om/sidebar/nom-sidebar06.png') }}" width="50%" />
+            <ul>
+              <p>
+                <li>更改成功會顯示 : 密碼更新成功，請重新登入新密碼。</li>
+                <li>若使用者完成密碼更改後，系統會自動登出，使用者需使用新密碼重新進行登入。使用者可更改電子郵件。</li>
+              </p>
+            </ul>
+            <hr />
+
+            <h3>通知中心</h3>
+            <ul>
+                <p>
+                  <li> 亦可點擊右上角鈴鐺查看。</li>
+                  <li> 包含「主題」、「內容」。</li>
+                  <li> 可點擊垃圾桶刪除該則通知。</li>
+                </p>
+            </ul>
+            <img src="{{ static('/images/om/sidebar/nom-sidebar08.png') }}" width="50%" /><p></p>
+            <img src="{{ static('/images/om/sidebar/nom-sidebar12.png') }}" width="15%" />
+            <img src="{{ static('/images/om/sidebar/nom-sidebar07.png') }}" width="75%" />
+            <p></p>
+
+            <h4>公告資料</h4>
+            <img src="{{ static('/images/om/sidebar/nom-sidebar09.png') }}" width="50%" />
+            <ul>
+              <p>
+                <li>提供公告詳細資訊，顯示為哪位「註冊ID」於「何時」產生此則通知。</li>
+                <li>若檢視完畢，可點擊「關閉」，回至通知中心。</li>
+              </p>
+            </ul>
+            <hr />
+
+            <h3>問題回報</h3>
+            <img src="{{ static('/images/om/sidebar/nom-sidebar13.png') }}" width="15%" />
+            <img src="{{ static('/images/om/sidebar/nom-sidebar10.png') }}" width="60%" />
+
+            <ul>
+              <p>
+                <li>選擇「問題回報類別」及填寫「反映事項」後即可提交。</li>
+                <li>回報成功後，會顯示 : 謝謝您的建議，我們會儘快協助您解決您的問題。並進入問題回報列表。</li>
+                </p>
+            </ul>
+            <hr />
+
+            <h3>關於系統</h3>
+            <ul>
+                <p>
+                  <li>回至系統首頁。</li>
+                </p>
+            </ul>
+            <img src="{{ static('/images/om/sidebar/nom-sidebar14.png') }}" width="15%" />
+            <img src="{{ static('/images/om/sidebar/nom-sidebar11.png') }}" width="60%" />
+
+            <hr />
+
+
+
+          <hr class="featurette-divider" />
+        </div>
+      </div>
+    </div>
+</main>
+{% endblock %}

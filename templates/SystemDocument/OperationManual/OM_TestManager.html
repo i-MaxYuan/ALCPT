@@ -7,128 +7,109 @@
         <ul>
           <p>
             <li>
-              主要負責對於考試的相關控制，包含：「測驗的維護」、「測驗試卷的維護」以及「受測人員的管理」。
+              主要負責對於考試的相關控制，包含 : 「測驗列表」、「試卷列表」、「受測者群組列表」及「使用者處理進度」。
             </li>
             <li>
-              創建測驗給相對的受測者進行測驗，受測者可以在他們的「<a
+              創建測驗給相對的受測者進行測驗，受測者可以在他們的「<code><a
                 href="{{ url('OM_Testee') }}"
-                >Exam Record.</a
-              >」看見這些公開的測驗。
+                >測驗紀錄</a
+              ></code>」看見這些公開的測驗。
             </li>
-            <img src="{{ static('/images/om/tm/om-tm01.png') }}" width="50%" />
+            <img src="{{ static('/images/om/tm/nom-tm01.png') }}" width="70%" />
           </p>
-          <ul>
-            <p>
-              <li>Exam List：測驗列表</li>
-              <li>TestPaper List：試卷列表</li>
-              <li>Testee Group List：受測者群組列表</li>
-              <li>Report List：問題列表</li>
-            </p>
-          </ul>
         </ul>
-
         <hr />
 
-        <h3>Exam List：測驗列表</h3>
-        <img src="{{ static('/images/om/tm/om-tm02.png') }}" width="60%" />
+        <h3>測驗列表</h3>
+        <img src="{{ static('/images/om/tm/nom-tm02.png') }}" width="20%" />
+        <img src="{{ static('/images/om/tm/nom-tm06.png') }}" width="75%" />
         <p></p>
         <ul>
           <li>
-            表格內主要顯示測驗的「Exam
-            Name.」、「Start.」、「Finish.」、「Duration.(min)」、「Creator.」。
+            表格內主要顯示測驗的「測驗名稱」、「開始時間」、「結束時間」、「考試時間(分鐘)」、「創建人」。
           </li>
+          <li>
+            測驗尚未開始時，可編輯及刪除測驗卷。
+          </li>
+          <p></p>
 
           <h4>檢閱測驗內容</h4>
-          <img src="{{ static('/images/om/tm/om-tm12.png') }}" width="50%" />
+          <img src="{{ static('/images/om/tm/nom-tm07.png') }}" width="50%" />
+          <img src="{{ static('/images/om/tm/nom-tm08.png') }}" width="45%" />
           <ul>
             <p>
               <li>查看測驗的相關資訊</li>
-            </p>
-          </ul>
-          <img src="{{ static('/images/om/tm/om-tm13.png') }}" width="40%" />
-          <ul>
-            <p>
-              <li>檢閱受測者名單</li>
+              <li>可點擊<code>測驗成績</code>查看測驗人員名單</li>
+              <li>可點擊「關閉」回至測驗列表</li>
             </p>
           </ul>
 
-          <h4>新增測驗</h4>
-          <img src="{{ static('/images/om/tm/om-tm03.png') }}" width="40%" />
+          <h4>建立及編輯測驗卷</h4>
+          <img src="{{ static('/images/om/tm/nom-tm09.png') }}" width="47%" />
+          <img src="{{ static('/images/om/tm/nom-tm10.png') }}" width="47%" />
+          
           <ul>
             <li>
-              新增測驗需填寫「Exam Name.」（測驗名稱）、選擇「Test
-              Paper.」（測驗試卷）、選擇「Group.」（受測者群組）、
-              <br />設置「Start.」（測驗開始時間）以及「Duration.(min)」（測驗時間（單位：分鐘））。
+              新增測驗卷需填寫「測驗名稱」、選擇「測驗卷」、選擇「受測者群組」、設置「測驗開始時間」以及「測驗時間（單位 : 分鐘）」。
             </li>
             <li>
-              「Start.」，測驗開始時間的設置需選擇「Date.」（日期）及「Time.」（時間）。
+              編輯測驗卷可更改「測驗名稱」、「測驗卷」、「群組」、「開始時間」、「測驗時間（單位 : 分鐘)」
+              <ul>
+                <p>
+                  <li>更改「受測者群組」會將該群組內的受測者加入該測驗的受測者名單；若無選擇則不更改受測者名單。</li>
+                  <li style="color: red">
+                    若該測驗的「開始時間」已超過當下時間，則無法進行編輯。
+                  </li>
+                </p>
+              </ul>
+            </li>
+            <li>
+              「測驗開始時間」需選擇「日期」及「時間」。
               <ul>
                 <p>
                   <li>日期以今日為基準往後推20天可供選擇。</li>
                   <li>時間欄位，左邊選單為「時」、右邊為「分」。</li>
-                  <li>「時」的範圍介於0～23。「分」則以每５分鐘為間隔。</li>
+                  <li>「時」的範圍介於0～23。「分」則以每5分鐘為間隔。</li>
                 </p>
               </ul>
             </li>
-            <li>「Duration.(min)」，為測驗時間的設置，以分鐘為單位。</li>
-          </ul>
-
-          <h4>編輯測驗</h4>
-          <img src="{{ static('/images/om/tm/om-tm14.png') }}" width="50%" />
-          <ul>
-            <p>
-              <li>
-                可更改「Exam Name.」、「Test
-                Paper.」、「Group.」、「Start.」、「Duration.(min)」
-              </li>
-              <li>
-                更改「Group.」（受測者群組）會將該群組內的受測者加入該測驗的受測者名單；若無選擇則不更改受測者名單。
-              </li>
-              <li style="color: red">
-                若該測驗的「Start Time.」已超過當下時間，則無法進行編輯。
-              </li>
-            </p>
           </ul>
         </ul>
-
         <hr />
 
-        <h3>Test Paper List：試卷列表</h3>
-        <img src="{{ static('/images/om/tm/om-tm04.png') }}" width="60%" />
+        <h3>試卷列表</h3>
+        <img src="{{ static('/images/om/tm/nom-tm03.png') }}" width="20%" />
+        <img src="{{ static('/images/om/tm/nom-tm11.png') }}" width="75%" />
         <p></p>
         <ul>
           <li>
-            表格內主要顯示使用者的「Testpaper
-            Name.」、「Valid.」、「Used.」、「Last Update.」、「Creator.」。
+            表格內主要顯示使用者的「試卷名稱」、「有效與否」、「使用與否」、「最近更新」、「創建人」。
             <ul>
               <li>
-                Valid.：代表該考卷的合法性，若該考卷的<a
-                  href="{{ url('OM_TBManager') }}"
-                  >試題類型</a
-                >皆達到該類型的上限量，會顯示True，否則顯示False。
+                有效與否 : 代表該考卷的合法性，若該考卷的「<code><a href="{{ url('OM_TBManager')}}">試題類型</a></code>」皆達到該類型的上限量，會顯示True，否則顯示False。
               </li>
               <li style="color: red">
-                若該試卷「Valid.」已為True，則無法點擊「編輯試卷」進行編輯。
+                若該試卷「有效與否」已為True，則無法點擊「編輯試卷」進行編輯。
               </li>
               <li>
-                Used.：代表該考卷是否已被測驗使用，若已使用會顯示True，否則顯示False。
+                使用與否 : 代表該考卷是否已被測驗使用，若已使用會顯示True，否則顯示False。
               </li>
-              <li>Last Update.：顯示該考卷的最後更新時間。</li>
+              <li>最近更新 : 顯示該考卷的最後更新時間。</li>
             </ul>
 
             <h4>檢閱試卷內容</h4>
-            <img src="{{ static('/images/om/tm/om-tm05.png') }}" width="60%" />
+            <img src="{{ static('/images/om/tm/nom-tm12.png') }}" width="60%" />
             <ul>
               <li>
                 左邊區塊為「類型標籤」，右邊區塊為「試題內容」。
                 <ul>
                   <p>
                     <li>
-                      類型標籤：可依類型顯示右邊區塊的試題內容。可使使用者可不必一次檢閱一整張考卷的所有內容。
+                      類型標籤 : 可依類型顯示右邊區塊的試題內容。可使使用者可不必一次檢閱一整張考卷的所有內容。
                     </li>
-                    <li>類型標籤分為「All」及５種類型之標籤。</li>
+                    <li>類型標籤分為「全部」及5種類型之標籤。</li>
                     <li>
-                      試題內容：主要顯示「Serial.」（該試題在考卷之編號）、「Content.」（試題大概內容）、「Type.」（該試題類型）。
+                      試題內容 : 主要顯示「序列」（該試題在考卷之編號）、「內容」（試題大概內容）、「種類」（該試題類型）。
                     </li>
                     <li>
                       點選該欄位可顯示該試題完整內容，包含「完整試題題目」及「該試題之選項」。選項若被標記為紅色，表示該選項為該試題的正確答案。
@@ -138,66 +119,56 @@
               </li>
             </ul>
 
-            <h4>新增試卷</h4>
-            <img src="{{ static('/images/om/tm/om-tm06.png') }}" width="40%" />
+            <h4>創建及編輯試卷</h4>
+            <img src="{{ static('/images/om/tm/nom-tm13.png') }}" width="50%" />
+            <img src="{{ static('/images/om/tm/nom-tm14.png') }}" width="75%" />
             <ul>
               <p>
                 <li>
-                  新增試卷：僅命名該次所要建立的試卷名稱，而後才進行該試卷的編輯。
+                  創建試卷僅命名該次所要建立的試卷名稱，而後才進行該試卷的編輯。
+                </li>
+                <li>
+                  編輯試卷可編輯「試卷名稱」及「試卷內容」。
+                  <ul>
+                    <li>試卷內容包含５種試題類型。</li>
+                    <li>各類型可編輯方式分為「人工選題」、「自動選題」。</li>
+                    <li>人工選題 : 考試管理員進入該試題類型題庫進行試題選擇。</li>
+                    <li>
+                      自動選題 : 可由系統隨機選取試題，會選取尚未達該試題類型上限量的差量。
+                      <ul>
+                        <p>
+                          <li>
+                            若尚未達該該試題類型上限量，自動選題按鈕會顯示<button class="btn btn-warning"
+                            >自動選題</button
+                            >；否則會顯示<button class="btn btn-danger" disabled>自動選題</button
+                            >。
+                          </li>
+                        </p>
+                      </ul>
+                    </li>
+                  </ul>
                 </li>
               </p>
             </ul>
-
-            <h4>編輯試卷</h4>
-            <img src="{{ static('/images/om/tm/om-tm07.png') }}" width="60%" />
-            <ul>
-              <li>
-                編輯試卷可編輯「TestPaper Name.」（試卷名稱）及「試卷內容」。
-                <ul>
-                  <li>試卷內容包含５種試題類型。</li>
-                  <li>
-                    各類型可編輯方式分為「Manual」（人工選題）、「Automatic」（自動選題）。
-                  </li>
-                </ul>
-              </li>
-              <li>人工選題：考試管理員進入該試題類型題庫進行試題選擇。</li>
-              <li>
-                自動選題：可由系統隨機選取試題；會選取尚未達該試題類型上限量的差量。
-                <ul>
-                  <p>
-                    <li>
-                      若尚未達該該試題類型上限量，自動選題按鈕會顯示<button
-                        class="btn btn-warning"
-                      >
-                        Automatic</button
-                      >；否則會顯示<button class="btn btn-danger" disabled>
-                        Automatic</button
-                      >。
-                    </li>
-                  </p>
-                </ul>
-              </li>
-            </ul>
-
+            
             <h4>刪除試卷</h4>
             <ul>
               <p>
                 <li>
-                  點擊 <i class="fa fa-trash"></i> 則會有彈出視窗詢問「Sure to
-                  delete？」，若確定要刪除可點擊「好」，否則點擊「取消」關閉該視窗。
+                  點擊 <i class="fa fa-trash"></i> 則會有彈出視窗詢問「確定刪除？」，若確定要刪除可點擊「好」，否則點擊「取消」關閉該視窗。
                 </li>
                 <li style="color: red">
-                  若該試卷「Valid.」已為True，則無法刪除該試卷。
+                  若該試卷「有效與否」已為True，則無法刪除該試卷。
                 </li>
               </p>
             </ul>
           </li>
         </ul>
-
         <hr />
 
-        <h3>Testee Group List：受測者群組列表</h3>
-        <img src="{{ static('/images/om/tm/om-tm08.png') }}" width="70%" />
+        <h3>受測者群組列表</h3>
+        <img src="{{ static('/images/om/tm/nom-tm04.png') }}" width="20%" />
+        <img src="{{ static('/images/om/tm/nom-tm15.png') }}" width="75%" />
         <ul>
           <p>
             <li>
@@ -208,18 +179,18 @@
             </li>
           </p>
           <h4>檢閱受測者群組</h4>
-          <img src="{{ static('/images/om/tm/om-tm09.png') }}" width="60%" />
+          <img src="{{ static('/images/om/tm/nom-tm18.png') }}" width="60%" />
           <ul>
             <p>
               <li>顯示所有在該群組內之人員。</li>
               <li>
-                「搜尋列」提供簡易的搜尋方式，以「Account./StudentID.」或「Name.」做為搜索的條件。
+                「搜尋列」提供簡易的搜尋方式，以「帳號/學生ID」或「名字」做為搜索的條件。
               </li>
             </p>
           </ul>
 
           <h4>新增受測者群組</h4>
-          <img src="{{ static('/images/om/tm/om-tm10.png') }}" width="40%" />
+          <img src="{{ static('/images/om/tm/nom-tm16.png') }}" width="40%" />
           <ul>
             <p>
               <li>
@@ -229,12 +200,48 @@
           </ul>
 
           <h4>編輯受測者群組</h4>
-          <img src="{{ static('/images/om/tm/om-tm11.png') }}" width="60%" />
+          <img src="{{ static('/images/om/tm/nom-tm17.png') }}" width="60%" />
         </ul>
-
         <hr />
 
-        <h3>Report List：問題列表</h3>
+        <h3>使用者問題處理進度</h3>
+        <img src="{{ static('/images/om/tm/nom-tm05.png') }}" width="20%" />
+        <img src="{{ static('/images/om/sm/nom-sm21.png') }}" width="60%" />
+        <ul>
+          <p>
+            <li>若有使用者進行問題回報，而回報種類為考試管理員管轄的權限，則該使用者處理進度欄會有<code>1</code>的標示，用來提醒管理員尚有多少問題需讀取。</li>
+            <li>點擊該欄位則可檢視及回覆使用者所提出的問題。</li>
+          </p>
+        </ul>
+          <p></p>
+          <img src="{{ static('/images/om/sm/nom-sm22.png') }}" width="75%" />
+        <ul>
+          <p>
+            <li>左邊區塊是顯示使用者問題回報的相關資訊</li>
+            <li>
+              右邊區塊是管理員與使用者的對話框，在下方輸入框輸入所要回覆的內容，點擊「回覆」按鈕即可回覆使用者。
+            </li>
+            <li>
+              若本次問題回報被管理員「關閉」的話，代表本次回報已處理完成，使用者也無法繼續回覆，本次回報也會更改狀態為<code>已解決</code>。
+            </li>
+            <img
+              src="{{ static('/images/om/sm/nom-sm23.png') }}"
+              width="10%"
+            />
+            <li>
+              若管理員已回覆使用者的問題回報，則在使用者的頁面會看到「鈴鐺」有
+              <label class="notification-badge">1</label>的標示。
+            </li>
+            <img
+              src="{{ static('/images/om/sm/nom-sm24.png') }}"
+              width="60%"
+            />
+          </p>
+        </ul>
+
+
+        <h3>問題列表</h3>
+
         <ul>
           <p>
             <li>請參閱<a href="{{ url('OM_Report') }}">問題回報</a>。</li>

@@ -66,6 +66,7 @@ urlpatterns = [
             re_path(r'^System$', views.OM_System, name='OM_System'),
             re_path(r'^Report$', views.OM_Report, name='OM_Report'),
             re_path(r'^User$', views.OM_User, name='OM_User'),
+            re_path(r'^Sidebar$', views.OM_Sidebar, name='OM_Sidebar'),
             re_path(r'^SystemManager$',
                     views.OM_SystemManager,
                     name='OM_SystemManager'),
