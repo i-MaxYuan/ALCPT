@@ -34,71 +34,74 @@
                                 <div class="modal-content">
                                     <div class="modal-header text-center">
                                         <h5 class="modal-title" id="ModalLongTitle">
-                                            Operation Manual
+                                            {{trans("Operation Manual")}}
                                         </h5>
                                     </div>
                                     <div id="modal-menu">
                                         <button onclick="window.location.href='{{ url ('OM_System') }}'">
-                                            System
+                                            {{trans("System")}}
                                         </button>
 
                                         <div class="dropdown-divider custom"></div>
-
-                                        <button onclick="window.location.href='{{ url ('OM_User') }}'">
-                                            User
+                                        <button onclick="window.location.href='{{url('OM_User')}}'">
+                                            {{trans("User")}}
+                                        </button>
+                                        
+                                        <div class="dropdown-divider custom"></div>
+                                        <button onclick="window.location.href='{{ url ('OM_Sidebar') }}'">
+                                            {{trans("Sidebar")}}
                                         </button>
 
                                         <div class="dropdown-divider custom"></div>
-
                                         <button onclick="window.location.href='{{ url ('OM_Report') }}'">
-                                            Report
+                                            {{trans("Report")}}
                                         </button>
 
                                         <div class="dropdown-divider custom"></div>
 
                                         <button onclick="window.location.href='{{ url ('OM_SystemManager') }}'">
-                                            System Manager
+                                            {{trans("System Manager")}}
                                         </button>
 
                                         <div class="dropdown-divider custom"></div>
 
                                         <button onclick="window.location.href='{{ url ('OM_TestManager') }}'">
-                                            Test Manager
+                                            {{trans("Test Manager")}}
                                         </button>
 
                                         <div class="dropdown-divider custom"></div>
 
                                         <button onclick="window.location.href='{{ url ('OM_TBManager') }}'">
-                                            TB Manager
+                                            {{trans("TB Manager")}}
                                         </button>
 
                                         <div class="dropdown-divider custom"></div>
 
                                         <button onclick="window.location.href='{{ url ('OM_TBOperator') }}'">
-                                            TB Operator
+                                            {{trans("TB Operator")}}
                                         </button>
 
                                         <div class="dropdown-divider custom"></div>
 
                                         <button onclick="window.location.href='{{ url ('OM_Viewer') }}'">
-                                            Viewer
+                                            {{trans("Viewer")}}
                                         </button>
 
                                         <div class="dropdown-divider custom"></div>
 
                                         <button onclick="window.location.href='{{ url ('OM_Testee') }}'">
-                                            Testee
+                                            {{trans("Testee")}}
                                         </button>
 
                                         <div class="dropdown-divider custom"></div>
 
                                         <button onclick="window.location.href='{{ url ('download_OM_pdf') }}'">
-                                            Download Operation Manual
+                                            {{trans("Download Operation Manual")}}
                                         </button>
                                     </div>
 
                                     <div class="modal-footer">
-                                        <a class="btn btn-secondary" style="color: white" data-dismiss="modal">Cancel</a>
+                                        <a class="btn btn-secondary" style="color: white" data-dismiss="modal">{{trans("Cancel")}}</a>
                                     </div>
                                 </div>
                             </div>

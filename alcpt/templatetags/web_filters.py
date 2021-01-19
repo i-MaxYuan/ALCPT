@@ -7,7 +7,9 @@ from alcpt.models import User, Student, Question, ReportCategory, Exam, Report
 from alcpt.utility import set_query_parameter
 from alcpt.exceptions import IllegalArgumentError, ObjectNotFoundError
 from alcpt.definitions import UserType, QuestionType, ExamType
+from django.utils.translation import gettext as _
 
+ #translation
 from jinja2 import evalcontextfilter, Markup, escape
 
 # jinja2 custom filters
@@ -68,9 +70,9 @@ def readable_question_type(question_type: int):
 def readable_question_difficulty(difficulty: int):
     DIFFICULTY = (
         (0, ''),
-        (1, 'Easy'),
-        (2, 'Medium'),
-        (3, 'Hard'),
+        (1, _('Easy')),
+        (2, _('Medium')),
+        (3, _('Hard')),
     )
 
     return DIFFICULTY[difficulty][1]
@@ -141,9 +143,9 @@ def is_student(user: User):
 def readableIdentity(identity: int):
     IDENTITY = (
         (0, ''),
-        (1, 'Visitor'),
-        (2, 'Student'),
-        (3, 'Teacher'),
+        (1, _('Visitor')),
+        (2, _('Student')),
+        (3, _('Teacher')),
     )
     return IDENTITY[identity][1]
 
@@ -169,12 +171,12 @@ def check_correct(option: str, question: Question):
 def readable_state(state: int):
     STATE = (
         (0, ''),
-        (1, 'pass'),
-        (2, 'reject'),
-        (3, 'pending'),
-        (4, 'faulty'),
-        (5, 'handle'),
-        (6, 'saved'),
+        (1, _('pass')),
+        (2, _('reject')),
+        (3, _('pending')),
+        (4, _('faulty')),
+        (5, _('processing')),
+        (6, _('saved')),
     )
     return STATE[state][1]
 
@@ -182,10 +184,10 @@ def readable_state(state: int):
 @register.filter(name='readable_report_state')
 def readable_report_state(state: int):
     STATE = (
-        (0, 'saved'),
-        (1, 'pending'),
-        (2, 'processing'),
-        (3, 'solved'),
+        (0, _('saved')),
+        (1, _('pending')),
+        (2, _('processing')),
+        (3, _('solved')),
     )
     return STATE[state][1]
 
@@ -203,15 +205,15 @@ def responsible_unit(category: ReportCategory, required_privilege: UserType):
 @register.filter(name='question_kind')
 def question_kind(question_type: int):
     if question_type == QuestionType.QA.value[0]:
-        return 'listening'
+        return _('Listening')
     if question_type == QuestionType.ShortConversation.value[0]:
-        return 'listening'
+        return _('Listening')
     if question_type == QuestionType.Grammar.value[0]:
-        return 'reading'
+        return _('Reading')
     if question_type == QuestionType.Phrase.value[0]:
-        return 'reading'
+        return _('Reading')
     if question_type == QuestionType.ParagraphUnderstanding.value[0]:
-        return 'reading'
+        return _('Reading')
 
     return 'unknown'
 
@@ -248,12 +250,12 @@ def readable_question_query_content(question_query_content: str):
         if 'state' in item:
             STATE = (
                 (0, ''),
-                (1, 'Pass'),
-                (2, 'Reject'),
-                (3, 'Pending'),
-                (4, 'Reported'),
-                (5, 'Handle'),
-                (6, 'saved'),
+                (1, _('Pass')),
+                (2, _('Reject')),
+                (3, _('Pending')),
+                (4, _('Reported')),
+                (5, _('Processing')),
+                (6, _('saved')),
             )
             readable_query_content += '"state="' + STATE[int(item[1])][1] + '"'
 
@@ -264,9 +266,9 @@ def readable_question_query_content(question_query_content: str):
             readable_query_content += '+"question_content="' + item[1] + '"'
 
         elif 'question_type' in item:
-            TYPE = ((0, ''), (1, 'Listening/QA'),
-                    (2, 'Listening/Conversation'), (3, 'Reading/Grammar'),
-                    (4, 'Reading/Phrase'), (5, 'Reading/Paragraph'))
+            TYPE = ((0, ''), (1, _('Listening/QA')),
+                    (2, _('Listening/Conversation')), (3, _('Reading/Grammar')),
+                    (4, _('Reading/Phrase')), (5, _('Reading/Paragraph')))
             readable_query_content += '+"type="' + TYPE[int(item[1])][1] + '"'
 
     return readable_query_content

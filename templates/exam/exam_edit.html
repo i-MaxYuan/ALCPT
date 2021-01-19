@@ -66,13 +66,13 @@
 
                             <h5 class="card-subtitle mb-2 text-muted">{{trans("Start Time")}}</h5>
                             <p class="card-text">
-                                Date:
+                                {{trans("Date")}}:
                                 <select name="start_time_date" required>
                                     {% for date in dateList %}
                                     <option value="{{ date }}" {% if date == original_date %}selected{% endif %}>{{ date }}</option>
                                     {% endfor %}
                                 </select>
-                                Time:
+                                {{trans("Time")}}:
                                 <select name="start_time_hour" required>
                                     {% for hour in hourList %}
                                     <option value="{{ hour }}" {% if hour == original_hour %}selected{% endif %}>{{ hour }}</option>

@@ -6,6 +6,7 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from alcpt.decorators import permission_check, login_required
 from alcpt.models import User, Proclamation
 from alcpt.definitions import UserType
+from django.utils.translation import gettext as _ #translation
 
 
 @login_required
@@ -21,7 +22,7 @@ def create(request):
         text = request.POST.get('p_text')
         Proclamation.objects.create(title=title, text=text, is_public=True, created_by=request.user)
 
-        messages.success(request, "Create Successfully.")
+        messages.success(request, _("Create Successfully"))
         return redirect('Homepage')
     else:
         return render(request, 'proclamation/proclamation_create.html', locals())
@@ -32,14 +33,14 @@ def edit(request, proclamation_id):
     try:
         proclamation = Proclamation.objects.get(id=proclamation_id)
     except ObjectDoesNotExist:
-        messages.error(request, "Proclamation does not exist, proclamation id - {}".format(proclamation_id))
+        messages.error(request, _("Proclamation doesn't exist, proclamation id: ")+(proclamation_id))
         return redirect(request.META.get('HTTP_REFERER'))
 
     if request.method == 'POST':
         proclamation.title = request.POST.get('p_title')
         proclamation.text = request.POST.get('p_text')
         proclamation.save()
-        messages.success(request, 'Update Successfully. proclamation title - {}'.format(proclamation.title))
+        messages.success(request, _('Update Successfully. proclamation title - ') + proclamation.title)
         return redirect(request.META.get('HTTP_REFERER'))
     else:
         return render(request, 'proclamation/proclamation_edit.html', locals())
@@ -69,11 +70,11 @@ def delete(request, proclamation_id):
         proclamation = Proclamation.objects.get(id=proclamation_id)
         if proclamation.is_public:
             proclamation.delete()
-            messages.success(request, "Successfully deleted.")
+            messages.success(request, _("Successfully deleted"))
         else:
-            messages.warning(request, "Failed deleted.")
+            messages.warning(request, _("Failed deleted"))
     except ObjectDoesNotExist:
-        messages.error(request, "Proclamation doesn't exist, proclamation id: {}".format(proclamation_id))
+        messages.error(request, _("Proclamation doesn't exist, proclamation id: ")+proclamation_id)
         return redirect('Homepage')
     return redirect('Homepage')
 
@@ -91,7 +92,7 @@ def toggle(request, action):
             for selected_proclamation in selected_proclamations:
                 Proclamation.objects.get(id=selected_proclamation).delete()
         else:
-            messages.error(request, "Failed executed.")
+            messages.error(request, _("Failed executed"))
 
         return redirect(request.META.get('HTTP_REFERER'))
     else:
@@ -120,10 +121,10 @@ def notification_delete(request, proclamation_id):
     try:
         proclamation = Proclamation.objects.get(id=proclamation_id)
         proclamation.delete()
-        messages.success(request, "Successfully deleted.")
+        messages.success(request, _("Successfully deleted"))
 
     except ObjectDoesNotExist:
-        messages.error(request, "Proclamation doesn't exist, proclamation id: {}".format(proclamation_id))
+        messages.error(request, _("Proclamation doesn't exist, proclamation id: ")+(proclamation_id))
 
         return redirect(request.META.get('HTTP_REFERER'))
     return redirect(request.META.get('HTTP_REFERER'))

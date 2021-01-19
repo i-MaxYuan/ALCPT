@@ -15,18 +15,17 @@
 
         <h3>使用者問題回報</h3>
         <img
-          src="{{ static('/images/om/report/om-report01.png') }}"
-          width="30%"
+          src="{{ static('/images/om/report/nom-report01.png') }}"
+          width="40%"
         />
         <img
-          src="{{ static('/images/om/report/om-report02.png') }}"
-          width="40%"
+          src="{{ static('/images/om/report/nom-report02.png') }}"
+          width="20%"
         />
         <ul>
           <p>
             <li>
-              可由<a href="{{ url('OM_User')}}">一般使用者</a
-              >功能表或是進入個人資料頁面，左方導覽列的「Report」頁面中的「新增回報」按鈕來進行問題回報。
+              可於側邊欄開啟<code><a href="{{ url('OM_User')}}">一般使用者</a></code>功能表或是進入個人資料頁面，左方導覽列的「Report」頁面中的「新增回報」按鈕來進行問題回報。
             </li>
           </p>
         </ul>
@@ -74,9 +73,7 @@
         <ul>
           <p>
             <li>
-              若有使用者進行問題回報，而該回報類別屬於某一個權限的管理員，則會有
-              <label class="notification-badge">1</label> 的標示，
-              用來提醒該管理員有多少個問題回報尚未讀取。
+              若有使用者進行問題回報，而該回報類別屬於某一個權限的管理員，則會有<code>1</code>的標示，用來提醒管理員有多少個問題回報尚未讀取。
             </li>
           </p>
         </ul>
@@ -110,7 +107,7 @@
               的標示；而已回覆的問題回報也會與其他欄位有不同的顏色區隔。
             </li>
             <li>
-              若管理員認為本次的問題回報是簡已處理完成，即可點擊「關閉」按鈕來結束本次的問題回報。本次回報也會更改狀態為<code>Solved</code>。
+              若管理員認為本次的問題回報是簡已處理完成，即可點擊「關閉」按鈕來結束本次的問題回報。本次回報也會更改狀態為<code>已解決</code>。
             </li>
             <img
               src="{{ static('/images/om/report/om-report08.png') }}"
