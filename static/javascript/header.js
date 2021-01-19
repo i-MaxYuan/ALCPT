@@ -25,7 +25,7 @@ function say_hello() {
 	} else if (hour < 22) {
 		document.write("晚安！")
 	} else {
-		document.write("夜里好！")
+		document.write("該睡摟！")
 	}
 
 }
