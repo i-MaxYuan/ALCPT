@@ -49,11 +49,11 @@
                                 <button class="btn fa fa-check-square-o" type="button" title="Select All" onclick="selectAll();" style="font-size: 24px"></button>
                                 <button class="btn fa fa-exchange" type="button" title="Reverse" onclick="reverseSelect();" style="font-size: 24px"></button>
                                 <button class="btn fa fa-close" type="button" title="Cancel All" onclick="cancelAll();" style="font-size: 24px"></button>
+                                <button class="btn fa fa-trash" type="button" title="Delete Selected" onclick="deleteSelected();" style="font-size: 24px"></button>
                             </div>
                             <div class="table-responsive-md">
                                 <table class="table table-hover table-bordered table-striped table-mc-light-blue">
                                     <thead class="thead-light">
-
                                         <tr>
                                             <th></th>
                                             <th></th>
@@ -62,50 +62,52 @@
                                             <th></th>
                                         </tr>
                                     </thead>
-
-                                    <tbody>
-                                        {% for notification in notifications %}
-                                        {% if notification.is_read %}
-                                        <tr>
-                                            <td class="align-middle">
-                                                <input type="checkbox" name="proclamation" value="{{ notification.id }}" />
-                                            </td>
-                                            <td></td>
-                                            <td class="text-left" data-title="Title：" style="cursor: pointer">
-                                                <a href="{{ url('proclamation_detail', args=[notification.id]) }}">{{ notification.title|truncate(20, True) }}</a>
-                                            </td>
-                                            <td class="text-left" data-title="Content：" style="cursor: pointer">
-                                                <a href="{{ url('proclamation_detail', args=[notification.id]) }}">{{ notification.text|truncate(60, True) }}</a>
-                                            </td>
-                                            <td>
-                                                <a href="{{ url('notification_delete', args=[notification.id]) }}"><i class="fa fa-trash-o"></i></a>
-                                            </td>
-                                        </tr>
-                                        {% else %}
-                                        <tr style="font-weight: bold;">
-                                            <td class="align-middle">
-                                                <input type="checkbox" name="proclamation" value="{{ notification.id }}" />
-                                            </td>
-                                            <td>
-                                                <i class="fas fa-circle" style="color: red; font-size: 10px;"></i>
-                                            </td>
-                                            <td class="text-left" data-title="Title：" style="cursor: pointer">
-                                                <a href="{{ url('proclamation_detail', args=[notification.id]) }}">{{ notification.title|truncate(20, True) }}</a>
-                                            </td>
-                                            <td class="text-left" data-title="Content：" style="cursor: pointer">
-                                                <a href="{{ url('proclamation_detail', args=[notification.id]) }}">{{ notification.text|truncate(60, True) }}</a>
-                                            </td>
-                                            <td>
-                                                <a href="{{ url('notification_delete', args=[notification.id]) }}"><i class="fa fa-trash-o"></i></a>
-                                            </td>
-                                        </tr>
-                                        {% endif %}
-                                        {% else %}
-                                        <tr>
-                                            <td class="text-center" colspan="5">{{trans("No Notification")}}</td>
-                                        </tr>
-                                        {% endfor %}
-                                    </tbody>
+                                    <form method="post" id="selectedCheckbox">
+                                        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
+                                        <tbody>
+                                            {% for notification in notifications %}
+                                            {% if notification.is_read %}
+                                            <tr>
+                                                <td class="align-middle">
+                                                    <input type="checkbox" name="proclamation" value="{{ notification.id }}" />
+                                                </td>
+                                                <td></td>
+                                                <td class="text-left" data-title="Title：" style="cursor: pointer">
+                                                    <a href="{{ url('proclamation_detail', args=[notification.id]) }}">{{ notification.title|truncate(20, True) }}</a>
+                                                </td>
+                                                <td class="text-left" data-title="Content：" style="cursor: pointer">
+                                                    <a href="{{ url('proclamation_detail', args=[notification.id]) }}">{{ notification.text|truncate(60, True) }}</a>
+                                                </td>
+                                                <td>
+                                                    <a href="{{ url('notification_delete', args=[notification.id]) }}"><i class="fa fa-trash-o"></i></a>
+                                                </td>
+                                            </tr>
+                                            {% else %}
+                                            <tr style="font-weight: bold;">
+                                                <td class="align-middle">
+                                                    <input type="checkbox" name="proclamation" value="{{ notification.id }}" />
+                                                </td>
+                                                <td>
+                                                    <i class="fas fa-circle" style="color: red; font-size: 10px;"></i>
+                                                </td>
+                                                <td class="text-left" data-title="Title：" style="cursor: pointer">
+                                                    <a href="{{ url('proclamation_detail', args=[notification.id]) }}">{{ notification.title|truncate(20, True) }}</a>
+                                                </td>
+                                                <td class="text-left" data-title="Content：" style="cursor: pointer">
+                                                    <a href="{{ url('proclamation_detail', args=[notification.id]) }}">{{ notification.text|truncate(60, True) }}</a>
+                                                </td>
+                                                <td>
+                                                    <a href="{{ url('notification_delete', args=[notification.id]) }}"><i class="fa fa-trash-o"></i></a>
+                                                </td>
+                                            </tr>
+                                            {% endif %}
+                                            {% else %}
+                                            <tr>
+                                                <td class="text-center" colspan="5">{{trans("No Notification")}}</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </form>
                                 </table>
                             </div>
                         </div>
@@ -181,5 +183,9 @@
     </div>
 </main>
 
-
+<script>
+    function deleteSelected(){
+        document.getElementById("selectedCheckbox").submit()
+    }
+</script>
 {% endblock %}
