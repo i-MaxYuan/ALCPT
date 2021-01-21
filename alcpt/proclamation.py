@@ -114,6 +114,15 @@ def detail(request, proclamation_id):
 def notification_center(request):
     notifications = request.user.proclamation_set.all()
 
+    # 這樣寫總覺得不太對，期待後進學弟妹完善
+    if request.method == 'POST':
+        proclamations = request.POST.getlist('proclamation')
+        
+        for proclamation_id in proclamations:
+            proclamation = Proclamation.objects.get(id=proclamation_id)
+            proclamation.delete()
+    
+        messages.success(request, _("Successfully deleted"))
     return render(request,'proclamation/notification_center.html',locals())
 
 @login_required
