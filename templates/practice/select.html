@@ -14,7 +14,7 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-10">
-                <form method="post">
+                <form method="post" onsubmit="return checkDuration()">
                     <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
 
                     <div class="card">
@@ -43,7 +43,7 @@
                             <h5 class="card-subtitle mb-2 text-muted">{{trans("Question Number")}}</h5>
                             <p class="card-text">
                                 <select class="custom-select custom-select-sm" name="question_num" id="question_num" onchange="ChangeButton()" required>
-                                    <option value=" " disabled selected hidden>
+                                    <option value="" disabled selected hidden>
                                         {{trans("Choose the number of your test paper")}}
                                     </option>
                                     <option value="10">10</option>
@@ -52,9 +52,10 @@
                                 </select>
                             </p>
                             
-                            <h5 class="card-subtitle mb-2 text-muted">測驗時間(不限時免填)</h5>
+                            <h5 class="card-subtitle mb-2 text-muted">測驗時間(分鐘)-不限時免填</h5>
                             <p class="card-text">
                                 <input type="text" id="duration" name="duration">
+                                <div id="hint" style="color:red;"></div>
                             </p>
                             
                             <div class="text-center">
@@ -74,4 +75,16 @@
     </div>
 </main>
 
+<script>
+    function checkDuration(){
+        duration = document.getElementById("duration").value
+        
+        if (/^([1-9][0-9]*)$/.test(duration) | duration == "") {
+            return true;
+        }else{
+            document.getElementById("hint").innerHTML = "請輸入正確的時間格式";
+            return false;
+        }
+    }
+</script>
 {% endblock %}

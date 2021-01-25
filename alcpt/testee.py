@@ -119,7 +119,7 @@ def achievement_list(request):
     return render(request, 'testee/achievement.html', locals())
 
 def leaderboard(request):
-    now_time = datetime.datetime.now()
+    now_time = datetime.now()
 
     # 等級排名
     user_level = User.objects.all().order_by('-level')
