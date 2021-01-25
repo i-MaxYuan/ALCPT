@@ -60,11 +60,13 @@
                     </tr>
                 </table>
                 <br>
+                {% if deadline is not none %}
                 <h4>剩餘作答時間</h4>
                 <div id="clock">
                     <!--Days: <span class="days"></span><br>--> 
                     <span class="hours"></span>:<span class="minutes"></span>:<span class="seconds"></span>
                 </div>
+                {% endif %}
             </div>
             <div class="space">
 
@@ -136,7 +138,7 @@
 </main>
 
 <script>
-    const deadline = "{{deadline}}";
+    const deadline = "{{ deadline }}";
     
     function getTimeRemaining(endtime) {
       const total = Date.parse(endtime) - Date.parse(new Date());
@@ -180,7 +182,9 @@
       updateClock(); // run function once at first to avoid delay 
       var timeinterval = setInterval(updateClock,1000);  
     }
-
-    initializeClock('clock', deadline); 
+    
+    if (deadline != null) {
+        initializeClock('clock', deadline); 
+    }
 </script>
 {% endblock %}
