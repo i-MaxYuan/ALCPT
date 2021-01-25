@@ -392,6 +392,9 @@ urlpatterns = [
             re_path(r'^answer_sheet/content/(?P<answersheet_id>[0-9]+)$',
                     testee.view_answersheet_content,
                     name='view_answersheet_content'),
+            re_path(r'^leaderboard$',
+                    testee.leaderboard,
+                    name='leaderboard'),
             re_path(r'^achievement_list$',
                     testee.achievement_list,
                     name='testee_achievement_list'),
@@ -410,7 +413,10 @@ urlpatterns = [
 ]
 
 urlpatterns += i18n_patterns(
+re_path(r'^favicon.ico$', RedirectView.as_view(url=r'static/favicon.ico')),
+re_path(r'^admin/', admin.site.urls),
 re_path(r'^$', views.about, name='about'),
+re_path(r'^1$', views.about1, name='about1'),
 re_path(
     r'^/',
     include([
@@ -448,6 +454,7 @@ re_path(
         re_path(r'^System$', views.OM_System, name='OM_System'),
         re_path(r'^Report$', views.OM_Report, name='OM_Report'),
         re_path(r'^User$', views.OM_User, name='OM_User'),
+        re_path(r'^Sidebar$', views.OM_Sidebar, name='OM_Sidebar'),
         re_path(r'^SystemManager$',
                 views.OM_SystemManager,
                 name='OM_SystemManager'),
@@ -510,8 +517,8 @@ re_path(
         re_path(r'^(?P<proclamation_id>[0-9]+)/notification_delete$',
                 proclamation.notification_delete,
                 name='notification_delete'),
-
     ])),
+
 re_path(r'^email_verification$',
         registration.verification,
         name='email_verification'),
@@ -588,6 +595,15 @@ re_path(
         re_path(r'^view_profile/(?P<reg_id>[a-zA-Z0-9]+)$',
                 system.view_profile,
                 name='view_profile'),
+        re_path(r'^achievement$', system.achievement_list,
+                name='achievement_list'),
+        re_path(
+            r'^achievement/',
+            include([
+                re_path(r'^create$',
+                        system.achievement_create,
+                        name='achievement_create'),
+            ])),
     ])),
 
 # 考試管理員
@@ -637,6 +653,10 @@ re_path(
                     r'^(?P<testpaper_id>[0-9]+)/(?P<question_type>[0-9]+)/manual_pick',
                     exam.manual_pick,
                     name='manual_pick'),
+                re_path(
+                    r'^(?P<testpaper_id>[0-9]+)/(?P<question_type>[0-9]+)/reset_pick',
+                    exam.reset_pick,
+                    name='reset_pick'),
             ])),
         re_path(r'^testee_group$',
                 group.group_list,
@@ -760,6 +780,16 @@ re_path(
         re_path(r'^answer_sheet/content/(?P<answersheet_id>[0-9]+)$',
                 testee.view_answersheet_content,
                 name='view_answersheet_content'),
+        re_path(r'^leaderboard$',
+                testee.leaderboard,
+                name='leaderboard'),
+        re_path(r'^achievement_list$',
+                testee.achievement_list,
+                name='testee_achievement_list'),
+
+        re_path(r'^achievement/create/(?P<achievement_id>[0-9]+)/(?P<achievement_category>[0-9]+)$',
+                testee.accept_achievement,
+                name='accept_achievement'),
         re_path(
             r'^practice/',
             include([

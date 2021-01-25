@@ -118,6 +118,21 @@ def achievement_list(request):
 
     return render(request, 'testee/achievement.html', locals())
 
+def leaderboard(request):
+    now_time = datetime.datetime.now()
+
+    # 等級排名
+    user_level = User.objects.all().order_by('-level')
+
+    # 模擬考排名
+    exam = Exam.objects.all().filter(exam_type=1).order_by('-id')
+
+    if exam:
+        latest_exam = exam[0]
+        leaderboard = AnswerSheet.objects.all().filter(exam_id=latest_exam.id).order_by("-score")
+
+    return render(request, 'testee/leaderboard.html', locals())
+
 
 
 
