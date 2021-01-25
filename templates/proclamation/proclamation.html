@@ -5,7 +5,7 @@
 <main class="proclamation">
     <div class="container">
         <div class="row">
-            <div class="col-8">
+            <div class="col-12">
                 <div class="table-responsive-md">
                     <table class="table table-bordered table-striped table-hover table-mc-light-blue">
                         <thead class="thead-light">
@@ -112,38 +112,6 @@
                             {% endfor %}
                         </tbody>
                     </table>
-                </div>
-            </div>
-
-
-
-            <div class="col-4">
-                <h2 class="text-center">Leaderboard</h2>
-                <div class="table-responsive-md" style="border: 2px solid black; padding: 10px; border-radius: 10%;">
-                    <table class="table table-hover table-striped">
-                        <h4 class="text-center">{{ latest_exam }}</h4>
-                        <tbody>
-                            {% for answersheet in leaderboard %}
-                            {% if loop.index < 11 %}
-
-                            <!-- if score is None do nothing -->
-                            {% if answersheet.score == None %}
-                            <!-- do nothing -->
-                            {% else %}
-                            <tr>
-                                <td class="text-center" data-title="Name">{{ loop.index }}</td>
-                                <td class="text-center" data-title="Name">{{ answersheet.user.name }}</td>
-                                <td class="text-center" data-title="Score">{{ answersheet.score }}</td>
-                            </tr>
-                            {% endif %}
-
-                            {% endif %}
-                            {% endfor %}
-
-                        </tbody>
-                    </table>
-
-
                 </div>
             </div>
         </div>

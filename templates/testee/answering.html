@@ -15,22 +15,22 @@
 
 {% block content %}
 
-<style type="text/css"> 
-#clock{ 
-    font-family: sans-serif; 
-    color: rgb(95, 205, 120); 
-    display: inline-block; 
-    font-weight: 600; 
-    text-align: center; 
-    font-size: 36px;
-}
-</style> 
+<style type="text/css">
+    #clock {
+        font-family: sans-serif;
+        color: rgb(95, 205, 120);
+        display: inline-block;
+        font-weight: 600;
+        text-align: center;
+        font-size: 36px;
+    }
+</style>
 
 <main class="answering-page" oncontextmenu=self.event.returnValue=false onselectstart="return false">
     <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col-lg-4 col-md-12">
-                <h3>{{trans("Question Number")}}</h3>                
+                <h3>{{trans("Question Number")}}</h3>
                 <table>
                     <tr>
                         {% for answer in answers %}
@@ -62,7 +62,7 @@
                 <br>
                 <h4>剩餘作答時間</h4>
                 <div id="clock">
-                    <!--Days: <span class="days"></span><br>--> 
+                    <!--Days: <span class="days"></span><br>-->
                     <span class="hours"></span>:<span class="minutes"></span>:<span class="seconds"></span>
                 </div>
             </div>
@@ -76,7 +76,6 @@
                     <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
 
                     <table>
-
                         <tr>
                             {% if answer.question.q_type|question_kind == 'listening' %}
                             <td>
@@ -137,50 +136,51 @@
 
 <script>
     const deadline = "{{deadline}}";
-    
+
     function getTimeRemaining(endtime) {
-      const total = Date.parse(endtime) - Date.parse(new Date());
-      const seconds = Math.floor( (total/1000) % 60 ); 
-      const minutes = Math.floor( (total/1000/60) % 60 ); 
-      const hours = Math.floor( (total/(1000*60*60)) % 24 );        
-        
-        return { 
-          total, 
-          //days, 
-          hours, 
-          minutes,            
-          seconds 
-        }; 
+        const total = Date.parse(endtime) - Date.parse(new Date());
+        const seconds = Math.floor((total / 1000) % 60);
+        const minutes = Math.floor((total / 1000 / 60) % 60);
+        const hours = Math.floor((total / (1000 * 60 * 60)) % 24);
+
+        return {
+            total,
+            //days,
+            hours,
+            minutes,
+            seconds
+        };
     }
 
-    function initializeClock(id, endtime) { 
-      const clock = document.getElementById(id); 
-      const hoursSpan = clock.querySelector('.hours'); 
-      const minutesSpan = clock.querySelector('.minutes'); 
-      const secondsSpan = clock.querySelector('.seconds'); 
-      function updateClock(){ 
-        const t = getTimeRemaining(endtime); 
-        hoursSpan.innerHTML = String(t.hours).padStart(2, '0'); 
-        minutesSpan.innerHTML = String(t.minutes).padStart(2, '0');        
-        secondsSpan.innerHTML = String(t.seconds).padStart(2, '0');
-        
-        if (t.total <= 0) { 
-          clearInterval(timeinterval);
-          alert('time\'s up');
-          window.location.href = "{{ url('submit_answersheet', args=[exam.id]) }}";
-        } else if (t.total <= 300000) {
-            clock.style.color = 'rgb(212, 30, 30)';
-        } else if (t.total <= 600000) {
-            clock.style.color = 'rgb(255, 205, 40)';
-        } else {
-            //pass
+    function initializeClock(id, endtime) {
+        const clock = document.getElementById(id);
+        const hoursSpan = clock.querySelector('.hours');
+        const minutesSpan = clock.querySelector('.minutes');
+        const secondsSpan = clock.querySelector('.seconds');
+
+        function updateClock() {
+            const t = getTimeRemaining(endtime);
+            hoursSpan.innerHTML = String(t.hours).padStart(2, '0');
+            minutesSpan.innerHTML = String(t.minutes).padStart(2, '0');
+            secondsSpan.innerHTML = String(t.seconds).padStart(2, '0');
+
+            if (t.total <= 0) {
+                clearInterval(timeinterval);
+                alert('time\'s up');
+                window.location.href = "{{ url('submit_answersheet', args=[exam.id]) }}";
+            } else if (t.total <= 300000) {
+                clock.style.color = 'rgb(212, 30, 30)';
+            } else if (t.total <= 600000) {
+                clock.style.color = 'rgb(255, 205, 40)';
+            } else {
+                //pass
+            }
         }
-      } 
- 
-      updateClock(); // run function once at first to avoid delay 
-      var timeinterval = setInterval(updateClock,1000);  
+
+        updateClock(); // run function once at first to avoid delay
+        var timeinterval = setInterval(updateClock, 1000);
     }
 
-    initializeClock('clock', deadline); 
+    initializeClock('clock', deadline);
 </script>
 {% endblock %}

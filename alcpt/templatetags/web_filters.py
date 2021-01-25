@@ -205,15 +205,15 @@ def responsible_unit(category: ReportCategory, required_privilege: UserType):
 @register.filter(name='question_kind')
 def question_kind(question_type: int):
     if question_type == QuestionType.QA.value[0]:
-        return _('Listening')
+        return 'listening'
     if question_type == QuestionType.ShortConversation.value[0]:
-        return _('Listening')
+        return 'listening'
     if question_type == QuestionType.Grammar.value[0]:
-        return _('Reading')
+        return 'reading'
     if question_type == QuestionType.Phrase.value[0]:
-        return _('Reading')
+        return 'reading'
     if question_type == QuestionType.ParagraphUnderstanding.value[0]:
-        return _('Reading')
+        return 'reading'
 
     return 'unknown'
 
