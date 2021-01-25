@@ -414,7 +414,7 @@ urlpatterns = [
 
 urlpatterns += i18n_patterns(
 re_path(r'^favicon.ico$', RedirectView.as_view(url=r'static/favicon.ico')),
-re_path(r'^admin/', admin.site.urls),
+# re_path(r'^admin/', admin.site.urls),
 re_path(r'^$', views.about, name='about'),
 re_path(r'^1$', views.about1, name='about1'),
 re_path(
