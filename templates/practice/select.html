@@ -51,7 +51,12 @@
                                     <option value="30">30</option>
                                 </select>
                             </p>
-
+                            
+                            <h5 class="card-subtitle mb-2 text-muted">測驗時間(不限時免填)</h5>
+                            <p class="card-text">
+                                <input type="text" id="duration" name="duration">
+                            </p>
+                            
                             <div class="text-center">
                                 <button type="submit" id="submit" class="btn btn-primary" onclick="return confirm('{{trans("You can start practice")}}'!)" disabled>
                                     {{trans("Submit")}}

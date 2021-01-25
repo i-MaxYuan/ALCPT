@@ -1,6 +1,6 @@
 import json
 import random
-import datetime
+from datetime import datetime, timedelta
 from string import punctuation
 
 from django.shortcuts import render, redirect
@@ -45,7 +45,7 @@ def new_user_achievement_create_receiver(sender, instance, created, **kwargs):
 # @receiver(request_finished)
 # def special_exam_achievement_receiver(sender, **kwargs):
 #     exam = Exam.objects.all().filter(exam_type=1)[0]
-#     now = datetime.datetime.now()
+#     now = datetime.now()
 #     if (now > exam.finish_time) & (now < (exam.finish_time+datetime.timedelta(hours=1))):
 #         special_achievement_exam_settle(exam.id)
 
@@ -398,6 +398,12 @@ def score_list(request):
 def practice_create(request, kind):
     if request.method == 'POST':
         user = User.objects.get(id=request.user.id)
+        
+        duration = request.POST.get('duration')
+        if duration == "":
+            finish_time = None
+        else:
+            finish_time = datetime.strptime(datetime.now().strftime('%Y-%m-%d %H:%M:%S'), '%Y-%m-%d %H:%M:%S') + timedelta(minutes=int(duration))
 
         question_num = int(request.POST.get('question_num', ))
 
@@ -418,7 +424,8 @@ def practice_create(request, kind):
             user=user,
             practice_type=practice_type,
             question_types=selected_types,
-            question_num=question_num)
+            question_num=question_num,
+            finish_time=finish_time)
 
         messages.success(request,
                          'Create successfully, {}'.format(practice_exam))
@@ -429,7 +436,7 @@ def practice_create(request, kind):
 
 @permission_check(UserType.Testee)
 def view_answersheet_content(request, answersheet_id):
-    now_time = datetime.datetime.now()
+    now_time = datetime.now()
     try:
         answersheet = AnswerSheet.objects.get(id=answersheet_id)
 
@@ -438,7 +445,7 @@ def view_answersheet_content(request, answersheet_id):
             if answersheet.is_finished == False:
                 messages.warning(request, 'This exam does not finish. Keep working on! ')
                 return redirect('testee_exam_list')
-            elif datetime.datetime.now() < answersheet.exam.finish_time:
+            elif datetime.now() < answersheet.exam.finish_time:
                 messages.warning(request, 'This exam does not finish.')
                 return redirect('testee_score_list')
             elif answersheet.is_tested == False:
@@ -662,7 +669,7 @@ def start_exam(request, exam_id):
         exam = Exam.objects.get(id=exam_id)
         answer_sheet = AnswerSheet.objects.get(exam=exam, user=request.user)
 
-        now_time = datetime.datetime.now()
+        now_time = datetime.now()
         if not exam.is_public:
             pass
         elif exam.start_time < now_time < exam.finish_time:
@@ -705,7 +712,7 @@ def start_practice(request, exam_id):
     try:
         exam = Exam.objects.get(id=exam_id)
 
-        now_time = datetime.datetime.now()
+        now_time = datetime.now()
         if not exam.is_public:
             pass
         elif exam.start_time < now_time < exam.finish_time:
@@ -746,8 +753,12 @@ def start_practice(request, exam_id):
 @require_http_methods(["GET", "POST"])
 def answering(request, exam_id, answer_id):
     exam = Exam.objects.get(id=exam_id)
-    if exam.exam_type == 1:
+    if exam.finish_time is None:
+        deadline = None
+    else:
         deadline = exam.finish_time.strftime("%Y-%m-%dT%H:%M:%S")
+
+    if exam.exam_type == 1:
         hour = exam.finish_time.hour
         minute = exam.finish_time.minute
     try:
