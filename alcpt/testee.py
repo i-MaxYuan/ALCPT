@@ -167,9 +167,9 @@ def score_list(request):
     READING_QUALIFICATION = {'qualified': 0,'unqualified': 0}
     LISTENING_QUALIFICATION = {'qualified': 0,'unqualified': 0}
 
-    EXAM_SCORE_RANGE = {'zero':0, 'one': 0,'two': 0,'three': 0,'four': 0,'five': 0,'six': 0,'seven': 0,'eight': 0,'nine': 0}
-    READING_SCORE_RANGE = {'zero':0, 'one': 0,'two': 0,'three': 0,'four': 0,'five': 0,'six': 0,'seven': 0,'eight': 0,'nine': 0}
-    LISTENING_SCORE_RANGE = {'zero':0, 'one': 0,'two': 0,'three': 0,'four': 0,'five': 0,'six': 0,'seven': 0,'eight': 0,'nine': 0}
+    EXAM_SCORE_RANGE = {'zero':0, 'one': 0,'two': 0,'three': 0,'four': 0,'five': 0,'six': 0,'seven': 0,'eight': 0,'nine': 0, 'ten': 0}
+    READING_SCORE_RANGE = {'zero':0, 'one': 0,'two': 0,'three': 0,'four': 0,'five': 0,'six': 0,'seven': 0,'eight': 0,'nine': 0, 'ten': 0}
+    LISTENING_SCORE_RANGE = {'zero':0, 'one': 0,'two': 0,'three': 0,'four': 0,'five': 0,'six': 0,'seven': 0,'eight': 0,'nine': 0, 'ten': 0}
 
     #EXAM
     #計算是否及格
@@ -195,6 +195,8 @@ def score_list(request):
                     if count <= answer_sheet.score < count + 10:
                         EXAM_SCORE_RANGE[name] += 1
                         break
+                    elif count < answer_sheet.score == 100:
+                        EXAM_SCORE_RANGE['ten'] += 1
                     else:
                         count += 10
 
@@ -222,6 +224,8 @@ def score_list(request):
                     if count <= answer_sheet.score < count + 10:
                         READING_SCORE_RANGE[name] += 1
                         break
+                    elif count < answer_sheet.score == 100:
+                        EXAM_SCORE_RANGE['ten'] += 1
                     else:
                         count += 10
     #LISTENING
@@ -248,6 +252,8 @@ def score_list(request):
                     if count <= answer_sheet.score < count + 10:
                         LISTENING_SCORE_RANGE[name] += 1
                         break
+                    elif count < answer_sheet.score == 100:
+                        EXAM_SCORE_RANGE['ten'] += 1
                     else:
                         count += 10
     # xaxis : Score
@@ -257,7 +263,7 @@ def score_list(request):
     y_exam_data = list(EXAM_SCORE_RANGE.values())
     y_reading_data = list(READING_SCORE_RANGE.values())
     y_listening_data = list(LISTENING_SCORE_RANGE.values())
-    color = ['#FF0000','#FF5B00','#FF7900','#FFB600','#FFE700','#E1FF00','#B6FF00','#86FF00','#55FF00','#18FF00']
+    color = ['#FF0000','#FF5B00','#FF7900','#FFB600','#FFE700','#E1FF00','#B6FF00','#86FF00','#55FF00','#18FF00', '#18FF00']
 
     #Exam
     df = pd.DataFrame(list(zip(x_data,y_exam_data)))
@@ -413,7 +419,7 @@ def score_list(request):
 def practice_create(request, kind):
     if request.method == 'POST':
         user = User.objects.get(id=request.user.id)
-        
+
         duration = request.POST.get('duration')
         if duration == "":
             finish_time = None
