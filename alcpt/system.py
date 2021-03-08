@@ -122,21 +122,30 @@ def user_create(request):
             identity = int(request.POST.get('identity'))
             if identity == 2:
                 if request.POST.get('stu_id'):
-                    new_user = User.objects.create_user(reg_id=reg_id, privilege=privilege_value, password=reg_id)
-                    new_user.identity = identity
+                    #判斷stu_id是否存在
+                    if Student.objects.all().filter(stu_id=request.POST.get('stu_id')):
+                        privileges = UserType.__members__.values()
+                        identities = Identity.__members__.values()
+                        departments = Department.objects.all()
+                        squadrons = Squadron.objects.all()
+                        messages.error(request, _('exist student ID.'))
+                        return render(request, 'user/create_user.html', locals())
+                    else:
+                        new_user = User.objects.create_user(reg_id=reg_id, privilege=privilege_value, password=reg_id)
+                        new_user.identity = identity
 
-                    new_user_stu = Student.objects.create(stu_id=request.POST.get('stu_id'), user=new_user)
-                    if request.POST.get('department'):
-                        new_user_stu.department = Department.objects.get(id=int(request.POST.get('department')))
-                    if request.POST.get('squadron'):
-                        new_user_stu.squadron = Squadron.objects.get(id=int(request.POST.get('squadron')))
-                    if request.POST.get('grade'):
-                        new_user_stu.grade = request.POST.get('grade')
+                        new_user_stu = Student.objects.create(stu_id=request.POST.get('stu_id'), user=new_user)
+                        if request.POST.get('department'):
+                            new_user_stu.department = Department.objects.get(id=int(request.POST.get('department')))
+                        if request.POST.get('squadron'):
+                            new_user_stu.squadron = Squadron.objects.get(id=int(request.POST.get('squadron')))
+                        if request.POST.get('grade'):
+                            new_user_stu.grade = request.POST.get('grade')
 
-                    new_user.save()
-                    new_user_stu.save()
-                    messages.success(request, _('Successfully Created - User, Student'))
-                    return redirect('user_list')
+                        new_user.save()
+                        new_user_stu.save()
+                        messages.success(request, _('Successfully Created - User, Student'))
+                        return redirect('user_list')
 
                 else:
                     messages.warning(request, _('Please input the student ID.'))
