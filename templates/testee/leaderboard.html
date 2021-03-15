@@ -5,64 +5,96 @@
 {% endblock %}
 
 {% block content %}
-<div class="col-4">
-    <h2 class="text-center">模擬考排名</h2>
-    <div class="table-responsive-md" style="border: 2px solid black; padding: 10px; border-radius: 10%;">
-        <table class="table table-hover table-striped">
-            <h4 class="text-center">{{ latest_exam }}</h4>
-            <tbody>
-                {% for answersheet in leaderboard %}
-                {% if loop.index < 11 %}
-
-                <!-- if score is None do nothing -->
-                {% if answersheet.score == None %}
-                <!-- do nothing -->
-                {% else %}
-                <tr>
-                    <td class="text-center" data-title="Name">{{ loop.index }}</td>
-                    <td class="text-center" data-title="Name">{{ answersheet.user.name }}</td>
-                    <td class="text-center" data-title="Score">{{ answersheet.score }}</td>
-                </tr>
-                {% endif %}
-
-                {% endif %}
-                {% endfor %}
-
-            </tbody>
-        </table>
+<div class="container">
+    <div class="row">
 
 
+        <div class="col-6">
+
+            <div class="card text-center">
+                <div class="card-header">
+                    模擬考排名
+                </div>
+
+                <div class="card-body">
+                    <table class="table table-hover table-striped">
+
+                        {% if latest_exam %}
+                        <h4 class="text-center">{{ latest_exam }}</h4>
+                        <tbody>
+                            <th>Rank</th>
+                            <th>Name</th>
+                            <th>Level</th>
+                            {% for answersheet in leaderboard %}
+                            {% if loop.index < 11 %}
+
+                            {% if answersheet.score == None %}
+                            <!-- do nothing -->
+                            {% else %}
+
+                            <tr>
+                                <td class="text-center" data-title="Rank">{{ loop.index }}</td>
+                                <td class="text-center" data-title="Name">{{ answersheet.user.name  }}</td>
+                                <td class="text-center" data-title="Score">{{ answersheet.score }}</td>
+
+                            </tr>
+                            {% endif %}
+                            {% endif %}
 
 
+                            {% endfor %}
+                        </tbody>
+
+                        {% else %}
+
+                        no data
+                        {% endif %}
+
+
+
+
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-6">
+
+            <div class="card text-center">
+                <div class="card-header">
+                    等級排名
+                </div>
+
+                <div class="card-body">
+                    <table class="table table-hover table-striped">
+                        <tbody>
+                            <th>Rank</th>
+                            <th>Name</th>
+                            <th>Level</th>
+                            {% for user in user_level %}
+                            {% if loop.index < 11 %}
+
+                            <tr>
+                                <td class="text-center" data-title="Rank">{{ loop.index }}</td>
+                                <td class="text-center" data-title="Name">{{ user.name }}</td>
+                                <td class="text-center" data-title="Level">{{ user.level }}</td>
+
+                            </tr>
+                            {% endif %}
+
+
+                            {% endfor %}
+
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-<div class="col-4">
-    <h2 class="text-center">等級排名</h2>
-    <div class="table-responsive-md" style="border: 2px solid black; padding: 10px; border-radius: 10%;">
-        <table class="table table-hover table-striped">
-            <h4 class="text-center">{{ latest_exam }}</h4>
-            <tbody>
-                {% for user in user_level %}
-                {% if loop.index < 11 %}
-
-                <tr>
-                    <td class="text-center" data-title="Name">{{ loop.index }}</td>
-                    <td class="text-center" data-title="Name">{{ user.name }}</td>
-                    <td class="text-center" data-title="Name">{{ user.level }}</td>
-
-                </tr>
-                {% endif %}
 
 
-                {% endfor %}
-
-            </tbody>
-        </table>
-
-
-
-
-    </div>
-</div>
 
 {% endblock %}
