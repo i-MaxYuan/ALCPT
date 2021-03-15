@@ -357,6 +357,9 @@ urlpatterns = [
             re_path(
                 r'^exam/',
                 include([
+                    re_path(r'^pending/(?P<exam_id>[0-9]+)$',
+                            testee.pending,
+                            name='pending'),
                     re_path(r'^list$',
                             testee.exam_list,
                             name='testee_exam_list'),

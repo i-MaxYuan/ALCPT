@@ -128,7 +128,7 @@
                 {% if answer_count == 0 %}
                 <button type="submit" class="btn btn-outline-success float-right" onclick="window.location.href='{{ url('submit_answersheet', args=[exam.id]) }}'">{{trans("Submit")}}</button>
                 {% endif %}
-                <button type="button" class="btn btn-secondary float-right" onclick="window.location.href='{{ url('testee_exam_list') }}'">
+                <button type="button" class="btn btn-secondary float-right" onclick="window.location.href='{{ url('pending', args=[exam.id]) }}'">
                     {{trans("Pending")}}
                 </button>
             </div>

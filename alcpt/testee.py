@@ -151,6 +151,15 @@ def exam_list(request):
 
     return render(request, 'testee/exam_list.html', locals())
 
+@permission_check(UserType.Testee)
+def pending(request, exam_id):
+    exam = Exam.objects.get(id=exam_id)
+    now_time = datetime.now()
+    
+    exam.remaining_time = exam.remaining_time - timedelta.total_seconds(now_time - exam.modified_time)
+    exam.save()
+
+    return redirect('testee_exam_list')
 
 @permission_check(UserType.Testee)
 @require_http_methods(["GET"])
@@ -421,10 +430,13 @@ def practice_create(request, kind):
         user = User.objects.get(id=request.user.id)
 
         duration = request.POST.get('duration')
+        finish_time = None
+        
         if duration == "":
-            finish_time = None
+            remaining_time = None
         else:
-            finish_time = datetime.strptime(datetime.now().strftime('%Y-%m-%d %H:%M:%S'), '%Y-%m-%d %H:%M:%S') + timedelta(minutes=int(duration))
+            remaining_time = int(duration) * 60 # turn to seconds
+            #finish_time = datetime.strptime(datetime.now().strftime('%Y-%m-%d %H:%M:%S'), '%Y-%m-%d %H:%M:%S') + timedelta(minutes=int(duration))
 
         question_num = int(request.POST.get('question_num', ))
 
@@ -446,7 +458,8 @@ def practice_create(request, kind):
             practice_type=practice_type,
             question_types=selected_types,
             question_num=question_num,
-            finish_time=finish_time)
+            finish_time=finish_time,
+            remaining_time=remaining_time)
 
         messages.success(request,
                          'Create successfully, {}'.format(practice_exam))
@@ -734,6 +747,7 @@ def start_practice(request, exam_id):
         exam = Exam.objects.get(id=exam_id)
 
         now_time = datetime.now()
+        
         if not exam.is_public:
             pass
         elif exam.start_time < now_time < exam.finish_time:
@@ -744,7 +758,10 @@ def start_practice(request, exam_id):
         elif now_time > exam.finish_time:
             messages.warning(request, 'Exam had finished.')
             return redirect('testee_exam_list')
-
+        
+        exam.modified_time = now_time
+        exam.finish_time = exam.modified_time + timedelta(seconds=exam.remaining_time)
+        exam.save()
     except ObjectDoesNotExist:
         messages.error(request, 'Exam does not exist, Exam id: {}'.format(exam_id))
         return redirect('testee_exam_list')

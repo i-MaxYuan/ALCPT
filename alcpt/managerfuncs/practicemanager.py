@@ -10,7 +10,7 @@ from alcpt.exceptions import IllegalArgumentError
 
 
 # practicemanager create a practice
-def create_practice(*, user: User, practice_type: ExamType, question_types: list, question_num: int, integration: bool = False, finish_time):
+def create_practice(*, user: User, practice_type: ExamType, question_types: list, question_num: int, integration: bool = False, finish_time=None, remaining_time=None):
     now = datetime.now()
 
     practice_name = "{}-{}".format(practice_type.value[1], now.strftime('%Y/%m/%d %H:%M:%S'))
@@ -42,6 +42,6 @@ def create_practice(*, user: User, practice_type: ExamType, question_types: list
         practice_testpaper.question_list.add(question)
 
     practice_exam = Exam.objects.create(name=practice_name, exam_type=practice_type.value[0], testpaper=practice_testpaper,
-                                        duration=0, created_by=user, finish_time=finish_time)
+                                        duration=0, created_by=user, finish_time=finish_time,remaining_time=remaining_time)
 
     return practice_exam
