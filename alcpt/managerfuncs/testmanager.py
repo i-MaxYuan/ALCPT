@@ -70,8 +70,12 @@ def quantity_confirmation(testpaper: TestPaper):
         return True
 
 
-def auto_pick(testpaper: TestPaper, question_type: int):
-    Q_type_all_passed_questions = set(Question.objects.filter(state=1).filter(q_type=question_type))
+def auto_pick(testpaper: TestPaper, question_type: int, difficulty: int):
+    if difficulty != 0:
+        Q_type_all_passed_questions = set(Question.objects.filter(state=1).filter(q_type=question_type).filter(difficulty=difficulty))
+    else:
+        Q_type_all_passed_questions = set(Question.objects.filter(state=1).filter(q_type=question_type))
+
     Q_type_selected_questions = set(testpaper.question_list.all().filter(q_type=question_type))
     Q_type_not_used_questions = list(Q_type_all_passed_questions.difference(Q_type_selected_questions))
 

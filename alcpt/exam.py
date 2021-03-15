@@ -437,15 +437,14 @@ def manual_pick(request, testpaper_id, question_type):
 
 
 @permission_check(UserType.TestManager)
-def auto_pick(request, testpaper_id, question_type):
+def auto_pick(request, testpaper_id, question_type, difficulty):
     try:
         testpaper = TestPaper.objects.get(id=testpaper_id)
 
         if testmanager.quantity_confirmation(testpaper=testpaper):
             messages.warning(request, 'This type had reached limit amount.')
             return redirect('/exam/testpaper/{}/edit'.format(testpaper_id))
-
-        selected_num = testmanager.auto_pick(testpaper=testpaper, question_type=int(question_type))
+        selected_num = testmanager.auto_pick(testpaper=testpaper, question_type=int(question_type), difficulty=int(difficulty))
 
         messages.success(request, selected_num)
     except ObjectDoesNotExist:
