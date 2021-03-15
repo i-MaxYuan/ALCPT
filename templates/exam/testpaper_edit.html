@@ -30,26 +30,29 @@
                                         {{trans("Total")}}: {{ question_type_count }}，{{trans("Selected")}}: {{ selected_question_type_num }}
                                     </p>
                                 </div>
+                                <div class="card-footer text-left">Manual :
+                                    <a class="btn btn-primary" href="{{ url('manual_pick', args=[testpaper.id, question_type.value.0]) }}" class="card-link">{{trans("Manual")}}</a>
+                                </div>
+                                <div class="card-footer text-left">Automatic :
+                                    <a class="btn btn-warning" href="{{ url('auto_pick', args=[testpaper.id, question_type.value.0, 0]) }}" class="card-link">{{trans("Automatic")}}</a>
+                                </div>
+
+                                <div class="card-footer text-left">Difficulty :
+
+                                    <a class="btn btn-success" href="{{ url('auto_pick', args=[testpaper.id, question_type.value.0, 1]) }}" class="card-link">{{trans("Easy")}}</a>
+
+                                    <a class="btn btn-warning" href="{{ url('auto_pick', args=[testpaper.id, question_type.value.0, 2]) }}" class="card-link">{{trans("Medium")}}</a>
+
+                                    <a class="btn btn-danger" href="{{ url('auto_pick', args=[testpaper.id, question_type.value.0, 3]) }}" class="card-link">{{trans("Hard")}}</a>
+
+                                </div>
 
                                 <div class="card-footer text-center">
-                                    <div class="p-2">
-                                        <a class="btn btn-primary" href="{{ url('manual_pick', args=[testpaper.id, question_type.value.0]) }}" class="card-link">{{trans("Manual")}}
-                                        </a>
-                                    </div>
-                                    <div>
-                                        {% if selected_question_type_num == 0 %}
-                                        <a class="btn btn-warning" href="{{ url('auto_pick', args=[testpaper.id, question_type.value.0]) }}" class="card-link">{{trans("Automatic")}}</a>
-                                        {% else %}
-                                        <a class="btn btn-warning" href="{{ url('auto_pick', args=[testpaper.id, question_type.value.0]) }}" class="card-link">{{trans("Automatic")}}</a>
-                                        {% endif %}
-                                    </div>
-                                    <div class="p-2">
-                                        <a class="btn btn-secondary" href="{{ url('reset_pick', args=[testpaper.id, question_type.value.0]) }}" class="card-link">&nbsp;&nbsp;{{trans("Reset")}}&nbsp;&nbsp;
-                                        </a>
-                                    </div>
+                                    <a class="btn btn-secondary" href="{{ url('reset_pick', args=[testpaper.id, question_type.value.0]) }}" class="card-link">&nbsp;&nbsp;{{trans("Reset")}}&nbsp;&nbsp;</a>
                                 </div>
                             </div>
                             {% endfor %}
+
                         </div>
                     </div>
 
@@ -60,6 +63,7 @@
                         </button>
                     </div>
                 </form>
+
             </div>
         </div>
     </div>
