@@ -258,7 +258,7 @@ urlpatterns = [
                             exam.testpaper_delete,
                             name='testpaper_delete'),
                     re_path(
-                        r'^(?P<testpaper_id>[0-9]+)/(?P<question_type>[0-9]+)/auto_pick',
+                        r'^(?P<testpaper_id>[0-9]+)/(?P<question_type>[0-9]+)/(?P<difficulty>[0-9]+)/auto_pick',
                         exam.auto_pick,
                         name='auto_pick'),
                     re_path(
