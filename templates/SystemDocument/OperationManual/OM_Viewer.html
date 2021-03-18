@@ -9,54 +9,59 @@
             <li>
               主要使用者是老師或隊職官長官，藉此觀看學生對於此練習平台的使用、練習狀況。
             </li>
-            <li style="color: red">Data Analysis（持續開發中...）</li>
             <img
-              src="{{ static('/images/om/viewer/om-viewer01.png') }}"
-              width="50%"
+              src="{{ static('/images/om/viewer/nom-viewer01.png') }}"
+              width="30%"
             />
           </p>
-          <ul>
-            <li>Exam Score List：測驗成績列表</li>
-          </ul>
         </ul>
-
         <hr />
-
-        <h3>Exam Score List：測驗成績列表</h3>
-        <img
-          src="{{ static('/images/om/viewer/om-viewer02.png') }}"
-          width="80%"
-        />
+        <h3>測驗成績列表</h3>
+        <img src="{{ static('/images/om/viewer/nom-viewer02.png') }}" width="80%"/>
         <ul>
-          <li>
-            <i class="fa fa-users" style="font-size: 24px"></i>：代表該次測驗<a
-              href="{{ url('OM_Testee') }}"
-              >受測者</a
-            >人數。
-          </li>
+          <li>表格內顯示考試卷的「測驗名稱」、「測驗平均」、「人數」、「開始時間」、「結束時間」、「考試時間(分鐘)」。</li>
+          <li><i class="fa fa-users" style="font-size: 20px"></i> : 代表該次測驗<code><a href="{{ url('OM_Testee') }}">受測者</a></code>人數。</li>
+          <li>點擊測驗名稱可檢視該測驗卷的測驗狀況。</li>
+          <p></p>
 
           <h4>點擊檢閱測驗資訊</h4>
-          <img
-            src="{{ static('/images/om/viewer/om-viewer03.png') }}"
-            width="70%"
-          />
+          <img src="{{ static('/images/om/viewer/nom-viewer03.png') }}" width="95%"/>
+          <img src="{{ static('/images/om/viewer/nom-viewer04.png') }}" width="45%"/>
+          <img src="{{ static('/images/om/viewer/nom-viewer05.png') }}" width="45%"/>
           <ul>
             <p>
-              <li>
-                「Score.」欄位顯示<code>未進行測驗</code>可能情況如下：
-                <ol type="1">
-                  <li>該次測驗尚未開始。</li>
-                  <li>該受測者在測驗結束之前都未進行測驗。</li>
-                </ol>
-              </li>
-              <li>
-                「Pie
-                Chart.」主要顯示該測驗的「Qualified」（及格人數）、「Unqualified」（不及格人數）及「Not
-                tested」（未進行測驗人數）所組成的圓餅圖來表示該次測驗的及格率。
-              </li>
+              <li>左上方表格為該測驗卷的所有受測者，會顯示受測者的「學號」、「名字」、「成績」、「等級」。將滑鼠游標移至想查看的受測者欄位，會出現<i class="fa fa-long-arrow-right" style="font-size: 20px"></i>，點選<i class="fa fa-long-arrow-right" style="font-size: 20px"></i>即可查看該受測者的所有練習及考試狀況分析。</li>
+              <ul>
+                  <li>「成績」欄位顯示<code>未進行測驗</code>可能情況如下 : 
+                    <ol type="1">
+                      <li>該次測驗尚未開始。</li>
+                      <li>該受測者在測驗結束之前都未進行測驗。</li>
+                    </ol></li>
+                    <li>「等級」分為A、B、C、D及F，90~100分為A，80~89分為B，70~79分為C，60~69分為D，60分以下皆為F。</li>
+              </ul>
+              <li>右上方表格為成績考核狀況，顯示該測驗卷的「受測者平均分數」、「考生人數」、「未考試人數」、「及格人數」、「不及格人數」。</li>
+              <li>左下方的為「及格人數」、「不及格人數」、「未進行測驗人數」所組成的圓餅圖來表示該次測驗的及格率。</li>
+              <li>右下方則為考生成績分佈長條圖，可以從圖中了解考生成績分布情況。</li>
             </p>
           </ul>
+          <h4>點擊受測者欄位檢閱受測者受測資料</h4>
+          <img src="{{ static('/images/om/viewer/nom-viewer06.png') }}" width="95%"/>
+          <ul>
+              <li>該頁面顯示受測者的「基本資料」、「最後登入時間」、「測驗紀錄」。</li>
+              <li>成績檢閱者可以透過此頁面了解該受測者的學習狀況，及最後學習時間，進而對該系統做近一步的改進。</li>
+            
+          </ul>
         </ul>
+        <hr />
+        <h3>問題列表</h3>
+        <ul>
+          <p>
+            <li>請參閱<code><a href="{{ url('OM_Report') }}">問題回報</a></code>。</li>
+          </p>
+        </ul>
+
+          
+          
 
         <hr class="featurette-divider" />
       </div>
