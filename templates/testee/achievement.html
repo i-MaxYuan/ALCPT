@@ -1,5 +1,5 @@
 {% extends 'new_base.html' %} {% block path %}
-<li class="breadcrumb-item active" aria-current="page">{{trans("Acheivement List")}}</li>
+<li class="breadcrumb-item active" aria-current="page">{{trans("Achievement List")}}</li>
 {% endblock %} {% block content %}
 <main class="achievement-list">
     <div class="container">
@@ -8,7 +8,7 @@
 
 
                 <div class="album py-5 bg-light">
-                    <h4>Achievement List</h4>
+                    <h4>{{trans("Achievement List")}}</h4>
                     <div class="container">
 
 
@@ -29,7 +29,7 @@
                                         <p class="card-text">{{ achievement.achievement.key }}</p>
                                         <div class="d-flex justify-content-between align-items-center">
 
-                                            <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                                            <button type="button" class="btn btn-sm btn-outline-secondary">{{trans("view")}}</button>
 
 
                                         </div>
@@ -55,7 +55,7 @@
                                         <p class="card-text">{{ achievement.achievement.key }}</p>
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div class="btn-group">
-                                                <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                                                <button type="button" class="btn btn-sm btn-outline-secondary">{{trans("view")}}</button>
                                             </div>
 
                                         </div>
@@ -81,8 +81,8 @@
                                         <p class="card-text"> {{ achievement.key }}</p>
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div class="btn-group">
-                                                <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                                                <button type="button" class="btn btn-sm btn-outline-primary" onclick="window.location.href='{{ url('accept_achievement', args=[achievement.id, achievement.category]) }}'">Accept</button>
+                                                <button type="button" class="btn btn-sm btn-outline-secondary">{{trans("view")}}</button>
+                                                <button type="button" class="btn btn-sm btn-outline-primary" onclick="window.location.href='{{ url('accept_achievement', args=[achievement.id, achievement.category]) }}'">{{trans("Accept")}}</button>
                                             </div>
 
                                         </div>

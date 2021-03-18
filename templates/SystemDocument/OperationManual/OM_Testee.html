@@ -6,176 +6,143 @@
         <h1>受測者說明</h1>
         <ul>
           <li>本系統主要的使用者。</li>
-          <img
-            src="{{ static('/images/om/testee/om-testee01.png') }}"
-            width="50%"
-          />
+          <li>包含「成就」、「問題收藏本」、「測驗紀錄」、「成績紀錄」、「聽力練習」、「閱讀練習」。</li>
+          <img src="{{ static('/images/om/testee/nom-testee02.png') }}" width="50%" />
+        </ul>
+        <hr />
+
+        <h3>成就</h3>
+        <img src="{{ static('/images/om/testee/nom-testee03.png') }}" width="70%" />
+        <ul>
+          <li>為增添受測者做練習及測驗的趣味性，以達成各式里程碑為動力，藉此讓受測者能更有意願學習。</li>
+          <li>各個里程碑都可點選「查看」了解詳細內容。</li>
+          <li>已達成的里程碑顏色會較鮮艷，為達成的則顏色較淺。</li>
+        </ul>
+        <p></p>
+        <hr />
+
+        <h3>問題收藏本</h3>
+        <img src="{{ static('/images/om/testee/nom-testee04.png') }}" width="90%" />
+        <ul>
+          <li>受測者可以將自己想反覆複習的題目放入收藏本中，方便複習。</li>
+          <li>點擊該題題目，會有下拉式試題內容可供閱讀複習。</li>
+          <li>點選<i class="fa fa-question-circle" style="font-size: 18px"></i>可以查看提示。</li>
+          <li>點擊愛心，將<i class="fa fa fa-heart" style="font-size: 18px"></i>更改為<i class="fa fa-heart-o" style="font-size: 18px"></i>則該題將會從問題收藏本中消失。</li>
+          <li>如對該題有問題，可點選<i class="fa fa-exclamation-triangle" style="font-size: 18px"></i>對該題進行問題回報。</li>
+
+          <h4>查看提示</h4>
+          <img src="{{ static('/images/om/testee/nom-testee05.png') }}" width="50%" />
           <ul>
             <p>
-              <li>Exam Record：測驗紀錄</li>
-              <li>Score Record：成績紀錄</li>
-              <li>Listening Practice：聽力練習</li>
-              <li>Reading Practice：閱讀練習</li>
+              <li>了解該頁面的運作模式。</li>
+            </p>
+          </ul>
+
+          <h4>問題回報</h4>
+          <img src="{{ static('/images/om/testee/nom-testee06.png') }}" width="60%" />
+          <ul>
+            <p>
+              <li>包含「問題回報類別」、「反映事項」、「試題」、「問題選項」。</li>
+              <li>受測者可以根據對試題問題的類別，選擇回報類別，其中包含有「帳號問題」、「成績問題」、「試題問題」、「其他」。</li>
             </p>
           </ul>
         </ul>
-
+        <p></p>
         <hr />
 
-        <h3>Exam Record：測驗紀錄</h3>
-        <img
-          src="{{ static('/images/om/testee/om-testee02.png') }}"
-          width="60%"
-        />
+
+        <h3>測驗紀錄</h3>
+        <img src="{{ static('/images/om/testee/nom-testee07.png') }}" width="90%"/>
+        <img src="{{ static('/images/om/testee/nom-testee08.png') }}" width="90%"/>
         <ul>
+          <li>可在此檢閱所有測驗，包括「個人的練習」還有「公開的測驗」，可使用「分頁標籤」切換頁面。</li>
           <li>
-            可在此檢閱所有測驗，包括「Practice.」（個人的練習）還有「Exam.」（公開的測驗），可使用「分頁標籤」切換頁面。
-          </li>
-          <li>
-            若在「Practice.」或「Exam.」的「Other.」欄位顯示<button
-              class="btn btn-primary"
-            >
-              Start.</button
-            >，表示該測驗尚未完成；若顯示<button
-              class="btn btn-success"
-              disabled
-            >
-              Finished.</button
-            >，則表示該測驗已完成作答。
+            若在「練習」或「測驗」的「其他」欄位顯示
+            <button class="btn btn-primary btn-sm">開始</button>及
+            <button class="btn btn-danger btn-sm" disabled>結束</button>
+            ，表示該測驗尚未完成，受測者可以選擇點選<button class="btn btn-primary btn-sm">開始</button>繼續作答
+            ，也可選擇點選<button class="btn btn-danger btn-sm" disabled>結束</button>放棄測驗
+            ；若顯示<button class="btn btn-success btn-sm" disabled>已完成</button>，則表示該測驗已完成作答。
           </li>
           <li style="color: red">
-            在「Exam.」會多顯示「Start
-            Time.」（開始時間）及「Duration.」（測驗時間）。若使用者在開始時間前點擊「Start.」則會顯示一提示訊息「Exam
-            does not start.」。
+            在「測驗成績列表」會多顯示「開始時間」及「測驗時間」。若使用者在開始時間前點擊「開始」則會顯示一提示訊息「測驗尚未開始」。
           </li>
-          <img
-            src="{{ static('/images/om/testee/om-testee03.png') }}"
-            width="100%"
-          />
+          <p></p>
+          <h4>作答頁面</h4>
+          <img src="{{ static('/images/om/testee/nom-testee09.png') }}" width="100%"/>
           <ul>
             <p>
-              <li>此為測驗作答的頁面。</li>
               <li>
                 受測者可依題序進行作答；亦可透過「題號板」跳題進行作答。但無論何種方式，都需完成作答系統才會進行成績計算，否則再次作答時會從尚未作答的試題再繼續開始。
               </li>
             </p>
           </ul>
-        </ul>
 
+
+        </ul>
         <hr />
 
-        <h3>Score Record：成績紀錄</h3>
-        <img
-          src="{{ static('/images/om/testee/om-testee04.png') }}"
-          width="70%"
-        />
+        <h3>成績紀錄</h3>
+        <img src="{{ static('/images/om/testee/nom-testee10.png') }}" width="80%"/>
+        <img src="{{ static('/images/om/testee/nom-testee13.png') }}" width="40%"/>
         <ul>
-          <li>
-            此為受測者所有相關測驗的紀錄頁面。包含：「個人的練習」及「公開的測驗」。
-          </li>
-
+          <li>以條列式陳列所有測驗的成績紀錄，顯示該測驗的「測驗卷名稱」、「成績」及「結束時間」。</li>
+          <li>包含「模擬考成績」、「閱讀練習成績」、「聽力練習成績」，可使用「分頁標籤」切換頁面。</li>
+          <li>可點擊測驗卷查看測驗時的作答狀況。</li>
+          <li>若該次測驗的「成績」顯示<code>尚未答題結束</code>則表示該次測驗尚未完成；若點擊尚未完成的測驗，系統會將頁面移轉至測驗紀錄列表，供測驗者繼續進行測驗。</li>
+          <li>於右上角，以長條圖顯示受測者所有測驗（閱讀練習、聽力練習、模擬測驗）的成績分布。</li>
+          <li>於右下角，以圓餅圖顯示受測者所有測驗的合格率。</li>
+          <p></p>
           <h4>點擊檢閱測驗卷</h4>
-          <img
-            src="{{ static('/images/om/testee/om-testee05.png') }}"
-            width="50%"
-          />
+          <img src="{{ static('/images/om/testee/nom-testee12.png') }}" width="90%"/>
+          <img src="{{ static('/images/om/testee/nom-testee11.png') }}" width="90%"/>
           <ul>
             <li>
-              可檢視在測驗時的作答狀況，若該題是作答正確的，後方則會有個<i
-                class="fa fa-check"
-                style="color: green; font-size: 24px"
-              ></i
-              >；否則點擊該題後可看到紅色及綠色的選項。
+              可檢視在測驗時的作答狀況，若該題是作答正確的，後方則會有個
+              <i class="fa fa-check" style="color: green; font-size: 24px" ></i>
+              ；否則則會有個
+              <i class="fa fa-times" style="color: red; font-size: 24px" ></i>。
+            </li>
+            <li>點擊該題後可看到紅色及綠色的選項。
               <ul>
                 <li style="color: red">紅色代表受測者在作答時選擇的選項。</li>
                 <li style="color: green">綠色表示該題的正確答案。</li>
               </ul>
             </li>
-          </ul>
-
-          <h4>條列式</h4>
-          <ul>
-            <p>
-              <li>
-                受測者在進入「Score
-                Record」時的預設頁面即是條列式顯示各練習的成績結果。
-              </li>
-              <li>
-                以條列式陳列所有測驗的成績紀錄，顯示該測驗的「Name.」、「Score.」及「Finish
-                Time.」。
-              </li>
-              <li>
-                若該次測驗的「Score.」顯示<code>None</code>則表示該次測驗尚未完成；若點擊尚未完成的測驗，系統會顯示一提示訊息「Does
-                not finish this practice. Reject your request.」
-              </li>
-            </p>
-          </ul>
-
-          <h4>長條圖</h4>
-          <img
-            src="{{ static('/images/om/testee/om-testee06.png') }}"
-            width="50%"
-          />
-          <ul>
-            <p>
-              <li>
-                受測者可透過表格上方的
-                <i
-                  class="fa fa-bar-chart"
-                  style="color: #007bff; font-size: 24px"
-                ></i>
-                來作切換。
-              </li>
-              <li>
-                長條圖主要顯示受測者所有測驗（個人練習、公開測驗）的成績分布。
-              </li>
-            </p>
-          </ul>
-
-          <h4>圓餅圖</h4>
-          <img
-            src="{{ static('/images/om/testee/om-testee07.png') }}"
-            width="50%"
-          />
-          <ul>
-            <p>
-              <li>
-                受測者可透過表格上方的
-                <i
-                  class="fa fa-pie-chart"
-                  style="color: #007bff; font-size: 24px"
-                ></i>
-                來作切換。
-              </li>
-              <li>圓餅圖主要顯示受測者所有測驗的合格率。</li>
-            </p>
+            <li>每個試題後方都會有 <i class="fa fa-heart-o" style="color: red; font-size: 18px"></i>，如對該題有複習意願，可點選該題的愛心，將其變為實心 <i class="fa fa fa-heart" style="font-size: 18px"></i> 即列入最愛收藏本中。</li>
+            <li>點選 <i class="fa fa-question-circle" style="font-size: 18px"></i> 可以查看提示。</li>
+            <li>如對該題有問題，可點選 <i class="fa fa-exclamation-triangle" style="font-size: 18px"></i> 對該題進行問題回報。</li>
+            <li>左下方的表格為該次測驗的「受測者成績」、「總平均」、「所有受測者人數」、「受測者名次」、「受測者該次測驗成績的PR值」，受測者可藉由此表格了解該次測驗的成績分析。</li>
+            <li>右下方的圖表為該次測驗的答題正確率，分為閱讀及聽力的答題率，因該範例只有測試閱讀，故只看到一條答題率狀況。</li>
+            <li>瀏覽完畢，可以點選 <button class="btn btn-primary btn-sm">關閉</button> 回至<code>成績紀錄</code>列表。</li>
+            <p></p>
           </ul>
         </ul>
-
+        <p></p>
         <hr />
+        <p></p>
 
-        <h3>Listening Practice：聽力練習／Reading Practice：閱讀練習</h3>
-        <img
-          src="{{ static('/images/om/testee/om-testee08.png') }}"
-          width="30%"
-        />
-        <img
-          src="{{ static('/images/om/testee/om-testee09.png') }}"
-          width="30%"
-        />
+        <h3>聽力練習／閱讀練習</h3>
+        <img src="{{ static('/images/om/testee/nom-testee14.png') }}" width="48%"/>
+        <img src="{{ static('/images/om/testee/nom-testee15.png') }}" width="48%"]/>
         <ul>
           <p>
             <li>
-              聽力及閱讀練習的建立頁面僅有<a href="{{ url('OM_TBManager') }}"
-                >試題類型</a
-              >的選擇上有差異，
+              聽力及閱讀練習的建立頁面僅有<code><a href="{{ url('OM_TBManager') }}">試題類型</a
+              ></code>的選擇上有差異，
             </li>
             <li>
-              受測者可在「Listening/Reading
-              Type.」多選所要練習的類型，下方「Question
-              Number.」再選擇所要練習的題數。題數則分為10, 20,
+              受測者可在「聽力/閱讀題型」多選所要練習的類型，下方「測驗卷題數」再選擇所要練習的題數。題數則分為10, 20,
               30題。可以個人喜好做選擇。
             </li>
+          </p>
+        </ul>
+        <hr />
+
+        <h3>問題列表</h3>
+        <ul>
+          <p>
+            <li>請參閱<code><a href="{{ url('OM_Report') }}">問題回報</a></code>。</li>
           </p>
         </ul>
 

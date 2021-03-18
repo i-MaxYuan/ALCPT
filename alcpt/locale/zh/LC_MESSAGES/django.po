@@ -274,7 +274,7 @@ msgid  "Choose Gender"
 msgstr "選擇性別"
 
 msgid  "Grade"
-msgstr "年班"
+msgstr "等級"
 
 msgid  "grade"
 msgstr "年級"
@@ -349,7 +349,7 @@ msgid "Department List"
 msgstr "科系列表"
 
 msgid "Serial"
-msgstr "序列"
+msgstr "題號"
 
 msgid "No Data"
 msgstr "沒有資料"
@@ -1278,7 +1278,7 @@ msgid  "Listening/Conversation"
 msgstr "聽力/會話"
 
 msgid  "Pending"
-msgstr "等待審核"
+msgstr "待定"
 
 msgid  "pending"
 msgstr "等待審核"
@@ -1312,6 +1312,21 @@ msgstr "已解決"
 
 msgid  "Sidebar"
 msgstr "側邊欄"
+
+msgid  "Achievement"
+msgstr "成就"
+
+msgid  "Achievement List"
+msgstr "成就榜"
+
+msgid "view"
+msgstr "查看"
+
+msgid  "Accept"
+msgstr "同意"
+
+msgid  "Question Choice"
+msgstr "問題選項"
 ##msgid  ""
 ##msgstr ""
 ##{{trans("Identity")}}
