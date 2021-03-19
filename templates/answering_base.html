@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% include 'head.html' %}
+
+    {% block stylesheets %} {% endblock %} 
+
+    {% block scripts %} {% endblock %}
+</head>
+
+
+
+<body>
+    <div class="wrapper">
+        <div id="content" valign="center">
+            <div id="path">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item " aria-current="page">
+                            <a>{{trans("Home")}}</a>
+                        </li>
+                        {% block path %} {% endblock %}
+                    </ol>
+                </nav>
+            </div>
+            {% block content %} {% endblock %}
+        </div>
+    </div>
+</body>
+</html>

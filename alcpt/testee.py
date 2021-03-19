@@ -154,10 +154,11 @@ def exam_list(request):
 @permission_check(UserType.Testee)
 def pending(request, exam_id):
     exam = Exam.objects.get(id=exam_id)
-    now_time = datetime.now()
     
-    exam.remaining_time = exam.remaining_time - timedelta.total_seconds(now_time - exam.modified_time)
-    exam.save()
+    if exam.remaining_time is not None: 
+        now_time = datetime.now()
+        exam.remaining_time = exam.remaining_time - timedelta.total_seconds(now_time - exam.modified_time)
+        exam.save()
 
     return redirect('testee_exam_list')
 
@@ -759,9 +760,11 @@ def start_practice(request, exam_id):
             messages.warning(request, 'Exam had finished.')
             return redirect('testee_exam_list')
         
-        exam.modified_time = now_time
-        exam.finish_time = exam.modified_time + timedelta(seconds=exam.remaining_time)
-        exam.save()
+        if exam.remaining_time is not None:
+            exam.modified_time = now_time
+            exam.finish_time = exam.modified_time + timedelta(seconds=exam.remaining_time)
+            exam.save()
+
     except ObjectDoesNotExist:
         messages.error(request, 'Exam does not exist, Exam id: {}'.format(exam_id))
         return redirect('testee_exam_list')
