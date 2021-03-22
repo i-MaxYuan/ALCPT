@@ -591,6 +591,9 @@ msgstr "題目已重置"
 msgid  "Manual"
 msgstr "手動選題"
 
+msgid  "Manuallist"
+msgstr "操作手冊"
+
 msgid  "Valid"
 msgstr "有效與否"
 
@@ -1056,10 +1059,16 @@ msgid  "All the question you have ever practiced or tested can be added to Favor
 msgstr "您曾經練習或測驗過的所有問題都可以添加到“最愛收藏本”中。您可以隨時隨地查看它們！"
 
 msgid  "User Permission"
-msgstr "使用者權限"
+msgstr "使用者操作手冊"
 
 msgid  "Review the questions submitted by the question operator and to maintain these questions."
 msgstr "查看問題操作者提交的問題並維護這些問題。"
+
+msgid "Review the questions submitted by the"
+msgstr "查看問題操作者提交的問題"
+
+msgid " question operator and to maintain these questions."
+msgstr "並維護這些問題。"
 
 msgid  "Create, edit test papers and create "
 msgstr "創建，編輯試卷並創建"
@@ -1071,7 +1080,7 @@ msgid  "add new questions and submit them to "
 msgstr "添加新問題並將其提交給"
 
 msgid  "the TB manager for review."
-msgstr "題庫經理進行審查。"
+msgstr "題庫管理員進行審查。"
 
 msgid  "Commander and Techer can check "
 msgstr "指揮官和老師可以檢查"
@@ -1254,7 +1263,13 @@ msgid  "This report not belongs to your permission."
 msgstr "這個問題回報不是屬於您的權限"
 
 msgid  "Mainly responsible for the control system category data"
-msgstr "主要負責控制系統類別類的資料"
+msgstr "主要負責控制系統各群組的資料"
+
+msgid "Mainly responsible for the"
+msgstr "主要負責控制"
+
+msgid " control system category data"
+msgstr "系統各群組的資料"
 
 msgid  "Create Successfully"
 msgstr "創建成功"

@@ -11,86 +11,73 @@
               >題庫管理員</a
             >審核。
           </li>
-          <img src="{{ static('/images/om/tbo/om-tbo01.png') }}" width="50%" />
+          <img src="{{ static('/images/om/tbo/nom-tbo01.png') }}" width="50%" />
           <ul>
-            <li>Question List：試題列表</li>
-            <li>Create Listening：建立聽力試題</li>
-            <li>Create Reading：建立閱讀試題</li>
+            <li>包含「試題列表」、「建立聽力試題」、「建立閱讀試題」</li>
           </ul>
         </ul>
 
         <hr />
 
-        <h3>Question List：試題列表</h3>
-        <img src="{{ static('/images/om/tbo/om-tbo02.png') }}" width="70%" />
+        <h3>試題列表</h3>
+        <img src="{{ static('/images/om/tbo/nom-tbo06.png') }}" width="70%" />
         <ul>
           <li>
-            <button class="btn btn-success">Submit</button
-            >：題庫操作員提交該試題等待審核。
-          </li>
-          <li>
-            <button class="btn btn-warning">Edit</button
-            >：題庫操作員編輯該試題，並使該試題進入<code>Saved</code>。
+            功能表功能：
             <ul>
-              <p>
-                <li>
-                  編輯試題僅能更改該試題的「<a href="{{ url('OM_TBManager') }}"
-                    >試題類型</a
-                  >」及「正確答案」。
-                </li>
-                <li style="color: red">更改選項內容持續開發中。</li>
-              </p>
-            </ul>
+              <li><button class="btn btn-success">提交</button>：題庫操作員提交該試題等待題庫管理員審核。</li>
+              <li><button class="btn btn-warning">編輯</button>：題庫操作員編輯該試題，並使該試題進入<code>已儲存</code>。
+                <ul>
+                    <li>編輯試題僅能更改該試題的「試題類型」及「正確答案」。</li>
+                </ul>
+              </li>
+              <li><button class="btn btn-danger">刪除</button>：題庫操作員刪除該試題。</li>
+            </ul>  
           </li>
-          <li>
-            <button class="btn btn-danger">Delete</button
-            >：題庫操作員刪除該試題。
+          <li>點擊該題後可看到綠色的選項及反映問題。
+            <ul>
+              <li style="color: green">綠色表示該題的正確答案。</li>
+            </ul>
           </li>
         </ul>
 
         <hr />
 
-        <h3>Create Listening：建立聽力試題</h3>
-        <img src="{{ static('/images/om/tbo/om-tbo03.png') }}" width="50%" />
+        <h3>建立聽力試題</h3>
+        <img src="{{ static('/images/om/tbo/nom-tbo02.png') }}" width="50%" />
         <ul>
-          <li>「File.」：選擇該試題音檔。</li>
+          <li>「檔案」：選擇該試題音檔。</li>
           <li>
-            「Type.」：選擇該試題<a href="{{ url('OM_TBManager') }}">試題類型</a
-            >。
+            「種類」：選擇該試題<a href="{{ url('OM_TBManager') }}">試題類型</a>。
           </li>
           <li>
-            「Difficulty.」：設置該試題難度。difficulty區分為：
+            「難易度」：設置該試題難度。區分為：
             <ul>
-              <p>
-                <li>Easy</li>
-                <li>Medium</li>
-                <li>Hard</li>
-              </p>
+                <li>簡單</li>
+                <li>適中</li>
+                <li>困難</li>
             </ul>
           </li>
-          <li>「Question Option.」：該試題的４個選項。</li>
+          <li>「問題選項」：該試題的四個選項。</li>
         </ul>
-
         <hr />
 
-        <h3>Create Reading：建立閱讀試題</h3>
-        <img src="{{ static('/images/om/tbo/om-tbo04.png') }}" width="60%" />
+        <h3>建立閱讀試題</h3>
+        <img src="{{ static('/images/om/tbo/nom-tbo03.png') }}" width="60%" />
         <ul>
           <p>
-            <li>「Question Content.」：閱讀試題的題目內容。</li>
+            <li>「試題內容」：閱讀試題的題目內容。</li>
             <li>其餘欄位請參考建立聽力試題。</li>
           </p>
         </ul>
-
         <hr />
 
         <h3>多重建立試題</h3>
-        <img src="{{ static('/images/om/tbo/om-tbo05.png') }}" width="40%" />
+        <img src="{{ static('/images/om/tbo/nom-tbo04.png') }}" width="40%" />
         <ul>
           <li>以匯入Excel檔（xls, xlsx）來建立試題。</li>
           <li>
-            「File
-            Format.」：規範該檔案需如何輸入資料，題庫操作員需遵守以下資料順序：
+            「檔案格式」：規範該檔案需如何輸入資料，題庫操作員需遵守以下資料順序：
             <ul>
               <p>
                 <li style="color: red">
