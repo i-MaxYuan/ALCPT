@@ -1,14 +1,13 @@
 from enum import Enum
-from django.utils.translation import gettext as _
 
 # type and authority od alcpt users
 class UserType(Enum):
-    SystemManager = (0b100000, _('SystemManager'))
-    TestManager = (0b10000, _('TestManager'))
-    TBManager = (0b1000, _('TBManager'))
-    TBOperator = (0b100, _('TBOperator'))
-    Viewer = (0b10, _('Viewer'))
-    Testee = (0b1, _('Testee'))
+    SystemManager = (0b100000, 'SystemManager')
+    TestManager = (0b10000, 'TestManager')
+    TBManager = (0b1000, 'TBManager')
+    TBOperator = (0b100, 'TBOperator')
+    Viewer = (0b10, 'Viewer')
+    Testee = (0b1, 'Testee')
 
     # @staticmethod
     # def type_value(privilege: str):
