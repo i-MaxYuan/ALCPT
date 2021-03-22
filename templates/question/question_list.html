@@ -149,6 +149,7 @@
                                     <button class="btn btn-warning" id="edit" type="button" onclick="window.location.href='{{ url('operator_edit', args=[question.id]) }}'">
                                         {{trans("Edit")}}
                                     </button>
+
                                     <a href="{{ url('question_delete', args=[question.id]) }}" class="btn btn-danger" id="delete" onclick="return confirm('{{trans("Sure to delete")}}?')">{{trans("Delete")}}</a>
                                     {% endif %}
                                     {% endif %}
