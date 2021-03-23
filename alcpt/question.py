@@ -70,7 +70,7 @@ def manager_index(request):
 @permission_check(UserType.TBManager)
 @require_http_methods(["GET"])
 def review(request):
-    # 過濾掉狀態為"暫存"、"審核通過"、"被回報錯誤，已處理"
+    # 過濾掉狀態為"暫存6"、"審核通過1"、"被回報錯誤4，已處理5"
     reviewed_questions = Question.objects.filter(state=3).order_by('id')
     page = request.GET.get('page', 1)
     paginator = Paginator(reviewed_questions, 10)  # the second parameter is used to display how many items. Now is 10
@@ -122,12 +122,12 @@ def question_reject(request, question_id):
 def question_edit(request, question_id):
     try:
         question = Question.objects.get(id=question_id)
-        if question.state == 1 or question.state == 5:
+        if question.state == 1 or question.state == 5:  #pass handle
             messages.warning(request, 'Failed edited, the question had been passed or handled.')
             return redirect(request.META.get('HTTP_REFERER',))
 
         if request.method == 'POST':
-            if question.state == 4:
+            if question.state == 4: #faulty
                 if question.q_file:
                     new_question = Question.objects.create(q_type=question.q_type,
                                                            q_file=question.q_file,
@@ -175,7 +175,7 @@ def question_edit(request, question_id):
 
                 messages.success(request, "Successfully processed the question")
                 return redirect('tbmanager_question_list')
-            else:
+            else:  #2reject 3pending
                 question.q_content = request.POST.get('q_content')
 
                 for choice in question.choice_set.all():
