@@ -63,7 +63,7 @@
                                 <td>
                                     <button type="button" {% if question.state == 1 %} class="btn btn-success" {% elif question.state == 2 or question.state == 4 %} class="btn btn-danger" {% elif question.state == 3 %} class="btn btn-light"
                                         {% elif question.state == 5 %} class="btn btn-dark" {% elif question.state == 6 %} class="btn btn-secondary" {% endif %} disabled>
-                                        {{ question.state|readable_state }}
+                                        {{ question.state }}
                                     </button>
                                 </td>
 
