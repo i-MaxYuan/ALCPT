@@ -275,3 +275,11 @@
     </li>
 </ul>
 {% endblock %}
+
+{% block navbarFocused %}
+<script>
+    const responsibilitys = {"TBOperator":0, "TBManager":1};
+    const focus = ["TBOperator_navbar", "TBManager_navbar"];
+    navbarFocused(focus[responsibilitys["{{ responsibility }}"]]);
+</script>
+{% endblock %}

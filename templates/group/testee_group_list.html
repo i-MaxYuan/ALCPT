@@ -1,6 +1,10 @@
-{% extends 'new_base.html' %} {% block path %}
+{% extends 'new_base.html' %} 
+
+{% block path %}
 <li class="breadcrumb-item active" aria-current="page">{{trans("Testee Group List")}}</li>
-{% endblock %} {% block content %}
+{% endblock %} 
+
+{% block content %}
 <main class="testee-group-list">
     <div class="container">
         <div class="row justify-content-center">
@@ -94,4 +98,10 @@
         <a class="page-link" href="?page={{ groupList.paginator.num_pages }}"><i class="fa fa-angle-double-right"></i></a>
     </li>
 </ul>
+{% endblock %}
+
+{% block navbarFocused %}
+<script>
+    navbarFocused("TestManager_navbar");
+</script>
 {% endblock %}
