@@ -37,22 +37,27 @@
                             <td class="text-center" data-title="Name">{{ category.name }}</td>
                             <td class="text-center" data-title="Respo" class="text-center">
                                 {% if category|responsible_unit(privileges.SystemManager) %}
-                                <span class="badge alert-danger">{{ privileges.SystemManager.value.1 }}</span>
-                                {% endif %} {% if
-                category|responsible_unit(privileges.TestManager) %}
-                                <span class="badge alert-warning">{{ privileges.TestManager.value.1 }}</span>
-                                {% endif %} {% if
-                category|responsible_unit(privileges.TBManager) %}
-                                <span class="badge badge-primary">{{ privileges.TBManager.value.1 }}</span>
-                                {% endif %} {% if
-                category|responsible_unit(privileges.TBOperator) %}
-                                <span class="badge alert-success">{{ privileges.TBOperator.value.1 }}</span>
-                                {% endif %} {% if category|responsible_unit(privileges.Viewer)
-                %}
-                                <span class="badge alert-info" style>{{ privileges.Viewer.value.1 }}</span>
-                                {% endif %} {% if category|responsible_unit(privileges.Testee)
-                %}
-                                <span class="badge alert-dark">{{ privileges.Testee.value.1 }}</span>
+                                    <span class="badge alert-danger">{{ privileges.SystemManager.value.1 }}</span>
+                                {% endif %} 
+                                
+                                {% if category|responsible_unit(privileges.TestManager) %}
+                                    <span class="badge alert-warning">{{ privileges.TestManager.value.1 }}</span>
+                                {% endif %} 
+
+                                {% if category|responsible_unit(privileges.TBManager) %}
+                                    <span class="badge badge-primary">{{ privileges.TBManager.value.1 }}</span>
+                                {% endif %} 
+                                
+                                {% if category|responsible_unit(privileges.TBOperator) %}
+                                    <span class="badge alert-success">{{ privileges.TBOperator.value.1 }}</span>
+                                {% endif %} 
+                                
+                                {% if category|responsible_unit(privileges.Viewer) %}
+                                    <span class="badge alert-info" style>{{ privileges.Viewer.value.1 }}</span>
+                                {% endif %} 
+                                
+                                {% if category|responsible_unit(privileges.Testee) %}
+                                    <span class="badge alert-dark">{{ privileges.Testee.value.1 }}</span>
                                 {% endif %}
                             </td>
                             <td class="text-center" data-title="Number">
@@ -73,4 +78,10 @@
         </div>
     </div>
 </main>
+{% endblock %}
+
+{% block navbarFocused %}
+<script>
+    navbarFocused("SystemManager_navbar");
+</script>
 {% endblock %}

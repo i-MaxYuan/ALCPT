@@ -5,10 +5,9 @@
 <head>
     {% include 'head.html' %}
 
-    {% block stylesheets %}
+    {% block stylesheets %}{% endblock %} 
 
-    {% endblock %} {% block scripts %} {% endblock %}
-
+    {% block scripts %}{% endblock %}
 </head>
 
 
@@ -46,6 +45,7 @@
 
 </html>
 
+{% block navbarFocused %} {% endblock %}
 
 {% include "footer.html" %}
 

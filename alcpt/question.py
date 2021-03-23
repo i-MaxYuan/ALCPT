@@ -17,6 +17,7 @@ from .managerfuncs import tbmanager, tboperator
 
 @permission_check(UserType.TBManager)
 def manager_index(request):
+    responsibility = "TBManager"
     question_types = [_ for _ in QuestionType]
 
     state_choices = [(1, _('Pass')),
@@ -209,6 +210,7 @@ def question_edit(request, question_id):
 @permission_check(UserType.TBOperator)
 @require_http_methods(["GET"])
 def operator_index(request):
+    responsibility = "TBOperator"
     question_types = []
     for q in list(QuestionType):
         question_types.append(q)
