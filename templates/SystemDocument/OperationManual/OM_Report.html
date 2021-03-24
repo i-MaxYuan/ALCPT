@@ -14,112 +14,102 @@
         </ul>
 
         <h3>使用者問題回報</h3>
-        <img
-          src="{{ static('/images/om/report/nom-report01.png') }}"
-          width="40%"
-        />
-        <img
-          src="{{ static('/images/om/report/nom-report02.png') }}"
-          width="20%"
-        />
+        <img src="{{ static('/images/om/report/nom-report03.png') }}"
+          width="70%"/>
         <ul>
           <p>
             <li>
-              可於側邊欄開啟<code><a href="{{ url('OM_User')}}">一般使用者</a></code>功能表或是進入個人資料頁面，左方導覽列的「Report」頁面中的「新增回報」按鈕來進行問題回報。
+              可於側邊欄開啟<code><a href="{{ url('OM_User')}}">一般使用者</a></code>功能表頁面中的「問題回報」按鈕來進行問題回報。
             </li>
           </p>
         </ul>
 
         <h3>問題回報</h3>
-        <img
-          src="{{ static('/images/om/report/om-report03.png') }}"
-          width="40%"
-        />
+        <img src="{{ static('/images/om/report/nom-report02.png') }}"
+          width="80%" />
+        <img src="{{ static('/images/om/sidebar/nom-sidebar10.png') }}" width="45%" />
+        <img src="{{ static('/images/om/user/nom-user06.png') }}" width="49%"/>
         <ul>
           <p>
-            <li>
-              選擇「Report Category.」及填寫「Supplement Note.」後即可送出。
-            </li>
-            <li>
-              完成回報後，使用者可在左方導覽列的「Report」去查看自己所做的所有問題回報。
-            </li>
+            <li>點選「問題回報」會顯示問題回報列表，點選該欄位即會顯示該問題回報的詳細資訊(如右下圖示)。</li>
+            <li>點選「＋」即可新增問題回報(如左下圖示)。</li>
+              <ul>
+                <li>選擇「問題回報類別」及填寫「反映事項」後即可提交。</li>
+                <li>回報成功後，會顯示 : 謝謝您的建議，我們會儘快協助您解決您的問題。並進入問題回報列表。</li>
+                <li>完成回報後，使用者可回到「問題回報列表」查看自己所做的所有問題回報及回覆。</li>
+              </ul>
+          </p>
+          <p class="mark">
+            <strong>提示</strong><br />
+            １.問題回報種類
+            只做了大致上的歸類，若當中沒有符合您所遇到的狀況類別，請選擇「其他」。<br />
+            ２.反應事項
+            為補充說明，請多加敘述您在操作本系統時所遇到的問題，讓管理員能更有效地為您解決問題。<br />
           </p>
         </ul>
-        <p class="mark">
-          <strong>Tip.</strong><br />
-          １.Report Category.
-          只做了大致上的歸類，若當中沒有符合您所遇到的狀況類別，請選擇「其他」。<br />
-          ２.Supplement Note.
-          為補充說明，請多加敘述您在操作本系統時所遇到的問題，讓管理員能更有效地為您解決問題。<br />
-        </p>
-
         <hr />
 
         <h1>問題回報處理</h1>
         <ul>
           <p>
+            <li>經由使用者對於所遇到問題所做的問題回報，應有相關負責的權限來進行處理，故有設計問題類別的責任歸屬。
+              請參閱<code><a href="{( url('OM_SystemManager') }}">系統管理員</a></code>的「問題類別列表」、「使用者問題處理進度」，其中有對於問題類別進一步的相關說明。</li>
+            <img src="{{ static('/images/om/report/nom-report04.png') }}" width="80%"/>
+            <img src="{{ static('/images/om/report/nom-report05.png') }}" width="75%"/>
+            <img src="{{ static('/images/om/report/nom-report07.png') }}" width="20%"/>
             <li>
-              經由使用者對於所遇到問題所做的問題回報，應有相關負責的權限來進行處理，故有設計問題類別的責任歸屬。
-              請參閱<a href="{( url('OM_SystemManager') }}">系統管理員</a
-              >的<code>ReportCategory List</code
-              >，其中有對於問題類別進一步的相關說明。
+              若有使用者進行問題回報，而該回報類別屬於某一個權限的管理員，則會有<label class="notification-badge style="font-size: 10px">1</label>的標示，用來提醒管理員有多少個問題回報尚未讀取。
             </li>
-          </p>
-        </ul>
-        <img
-          src="{{ static('/images/om/report/om-report04.png') }}"
-          width="20%"
-        />
-        <ul>
-          <p>
-            <li>
-              若有使用者進行問題回報，而該回報類別屬於某一個權限的管理員，則會有<code>1</code>的標示，用來提醒管理員有多少個問題回報尚未讀取。
-            </li>
-          </p>
-        </ul>
-        <img
-          src="{{ static('/images/om/report/om-report05.png') }}"
-          width="60%"
-        />
-        <ul>
-          <p>
             <li>若尚未讀取該問題回報，該欄位會顏色相對較深，若已讀則較淡。</li>
             <li>點擊該欄位則可檢視及回覆使用者所提出的問題。</li>
           </p>
         </ul>
-        <img
-          src="{{ static('/images/om/report/om-report06.png') }}"
-          width="60%"
-        />
+        <h3>管理者檢視問題</h3>
         <ul>
           <p>
+            <img src="{{ static('/images/om/report/nom-report12.png') }}" width="48%" />
+            <img src="{{ static('/images/om/report/nom-report13.png') }}" width="48%" />
             <li>左邊區塊是顯示使用者問題回報的相關資訊</li>
-            <li>
-              右邊區塊是管理員與使用者的對話框，在下方輸入框輸入所要回覆的內容，點擊「回覆」按鈕即可回覆使用者。
-            </li>
-            <img
-              src="{{ static('/images/om/report/om-report07.png') }}"
-              width="60%"
-            />
-            <li>
-              若管理員已回覆使用者的問題回報，則在使用者的頁面會看到「Report」的旁邊有
-              <label class="notification-badge">1</label>
-              的標示；而已回覆的問題回報也會與其他欄位有不同的顏色區隔。
-            </li>
-            <li>
+            <li>右邊區塊是管理員與使用者的對話框，在下方輸入框輸入所要回覆的內容，點擊「評論」按鈕即可回覆使用者。</li>
+            
               若管理員認為本次的問題回報是簡已處理完成，即可點擊「關閉」按鈕來結束本次的問題回報。本次回報也會更改狀態為<code>已解決</code>。
             </li>
-            <img
-              src="{{ static('/images/om/report/om-report08.png') }}"
-              width="60%"
-            />
-            <li>
-              若本次問題回報被管理員「Close」的話，代表本次回報已處理完成，使用者也無法繼續回覆。
-            </li>
+            <li>若本次問題回報被管理員「關閉」的話，代表本次回報已處理完成，使用者也無法繼續回覆。</li>
           </p>
         </ul>
 
+        <h3>使用者查看回覆</h3>
+        <ul>
+          <p>
+            <img src="{{ static('/images/om/report/nom-report08.png') }}" width="35%" />
+            <img src="{{ static('/images/om/report/nom-report09.png') }}" width="63%" />
+            <li>
+              若管理員已回覆使用者的問題回報，則在使用者的右上角鈴鐺旁邊有
+              <label class="notification-badge">1</label>
+              的標示；而已回覆的問題回報也會與其他欄位有不同的顏色區隔。
+            </li>
+            <li>若尚未讀取該通知，該欄位前會有小紅點且顏色較深，若已讀則沒有且顏色較淡</li>
+              <ul>
+                <li>若想查看詳細資訊可以點選「顯示全部」，頁面會跳轉到通知中心(如右上圖)。</li>
+                <li>點選欄位即可查看完整公告資料。</li>
+              </ul>
+            
+            <p></p>
+            <h4>公告資料</h4>
+            <img src="{{ static('/images/om/report/nom-report10.png') }}" width="55%" />
+            <img src="{{ static('/images/om/report/nom-report11.png') }}" width="48%" />
+            <img src="{{ static('/images/om/report/nom-report14.png') }}" width="48%" />
+            <ul>
+              <p>
+                <li>包含「主旨」、「問題類別」、「問題」、「回覆」及回覆人。</li>
+                <li>如想查看該回報問題的完整資訊，可以點選「查看回覆」。</li>
+              </p>
+            </ul>
+          </p>
+        </ul>
+        <hr />
         <hr class="featurette-divider" />
+        <p></p>
       </div>
     </div>
   </div>

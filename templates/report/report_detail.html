@@ -10,7 +10,7 @@
 </li>
 <li class="breadcrumb-item active" aria-current="page">{{trans("View Report Detail")}}</li>
 {% endblock %} {% block content %}
-<main class="reply">
+<main class="reply
     <div class="original-report-card">
         <div class="container">
             <div class="row">
@@ -50,7 +50,7 @@
                             <footer class="blockquote-footer">
                                 <cite title="Source Title">{{ viewed_report.created_by }} in {{ viewed_report.created_time }}<br /></cite>
                                 {% if viewed_report.state == 2 %}
-                                <label class="btn btn-danger float-right">Processing</label>
+                                <label class="btn btn-danger float-right">{{trans("Processing")}}</label>
                                 {% elif viewed_report.state == 3 %}
                                 <cite title="Source Title">Resolved by {{ viewed_report.resolved_by }} in {{ viewed_report.resolved_time }}</cite>
                                 <label class="btn btn-success float-right">{{trans("Solved")}}</label>

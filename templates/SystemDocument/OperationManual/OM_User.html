@@ -12,19 +12,15 @@
             </li>
             <li>
               權限區分為：
-                  <a href="{{ url('OM_SystemManager') }}">系統管理員</a>
-                  <a href="{{ url('OM_TestManager') }}">考試管理員</a>
-                  <a href="{{ url('OM_TBManager') }}">題庫管理員</a>
-                  <a href="{{ url('OM_TBOperator') }}">題庫操作員</a>
-                  <a href="{{ url('OM_Viewer') }}">成績檢閱者</a>
-                  <a href="{{ url('OM_Testee') }}">受測者</a>
+                  <code><a href="{{ url('OM_SystemManager') }}">系統管理員</a></code>、
+                  <code><a href="{{ url('OM_TestManager') }}">考試管理員</a></code>、
+                  <code><a href="{{ url('OM_TBManager') }}">題庫管理員</a></code>、
+                  <code><a href="{{ url('OM_TBOperator') }}">題庫操作員</a></code>、
+                  <code><a href="{{ url('OM_Viewer') }}">成績檢閱者</a></code>、
+                  <code><a href="{{ url('OM_Testee') }}">受測者</a></code>
               
             </li>
-            <img
-              src="{{ static('/images/om/user/nom-user02.png') }}"
-              width="80%"
-              height="80%"
-            />
+            <img src="{{ static('/images/om/user/nom-user02.png') }}" width="80%"/>
 
             <li>點擊左上角的圖示，即可查看一般使用者功能表。</li>
             <img src="{{ static('/images/om/user/nom-user03.png') }}"width="80%"/>
@@ -117,12 +113,17 @@
             <hr />
 
             <h3>問題回報</h3>
-            <img src="{{ static('/images/om/sidebar/nom-sidebar10.png') }}" width="80%" />
-
+            <img src="{{ static('/images/om/user/nom-user05.png') }}" width="90%"/>
+            <img src="{{ static('/images/om/sidebar/nom-sidebar10.png') }}" width="45%" />
+            <img src="{{ static('/images/om/user/nom-user06.png') }}" width="45%"/>
             <ul>
               <p>
-                <li>選擇「問題回報類別」及填寫「反映事項」後即可提交。</li>
-                <li>回報成功後，會顯示 : 謝謝您的建議，我們會儘快協助您解決您的問題。並進入問題回報列表。</li>
+                <li>點選「問題回報」會顯示問題回報列表，點選該欄位即會顯示該問題回報的詳細資訊(如右下圖示)。</li>
+                <li>點選「＋」即可新增問題回報(如左下圖示)。</li>
+                  <ul>
+                    <li>選擇「問題回報類別」及填寫「反映事項」後即可提交。</li>
+                    <li>回報成功後，會顯示 : 謝謝您的建議，我們會儘快協助您解決您的問題。並進入問題回報列表。</li>
+                  </ul>
                 </p>
             </ul>
             <hr />
@@ -133,6 +134,7 @@
                   <li>回至系統首頁。</li>
                 </p>
             </ul>
+
             <img src="{{ static('/images/om/sidebar/nom-sidebar11.png') }}" width="80%" />
 
             <hr />
