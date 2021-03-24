@@ -42,7 +42,6 @@ def index(request):
 
 
 def about(request):
-
     return render(request, 'SystemDocument/About.html', locals())
 
 
