@@ -55,7 +55,7 @@ def achievement_create(request):
                                                      level=level,
                                                      completion=completion)
             achievement.save()
-            messages.success(request, 'Successfully created.')
+            messages.success(request, _('Successfully created.'))
             return redirect('achievement_list')
     else:
         achievement_categories = AchievementCategory.__members__.values()
@@ -298,7 +298,7 @@ def user_edit(request, reg_id):
                     if edited_user.student:
                         Student.objects.get(user=edited_user).delete()
 
-                    messages.success(request, "Successfully updated user.")
+                    messages.success(request, _("Successfully updated user."))
                     return redirect('user_list')
 
                 except IntegrityError:
@@ -600,12 +600,12 @@ def report_reply(request, report_id):
         reply = request.POST.get('reply')
         new_reply = Reply.objects.create(source=replying_report, content=reply, created_by=request.user)
 
-        proclamation_content =  "問題類別："+str(replying_report.category.name) +"\n"+\
-                                "問題："+replying_report.supplement_note+"\n"+\
-                                "回覆："+reply+"\n"+\
-                                "reply by:"+request.user.name
+        proclamation_content =  "問題類別 : "+str(replying_report.category.name) +"\n"+\
+                                "問題 : "+replying_report.supplement_note+"\n"+\
+                                "回覆 : "+reply+"\n"+\
+                                "回覆人 : "+request.user.name
 
-        notify(title='Reply',
+        notify(title=_('Reply'),
                text=proclamation_content,
                is_read=False,
                is_public=False,

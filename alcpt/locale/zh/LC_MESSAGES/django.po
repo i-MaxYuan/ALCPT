@@ -785,6 +785,9 @@ msgstr "使用次數"
 msgid  "Sure to submit"
 msgstr "確定提交嗎"
 
+msgid  "Leaderboard"
+msgstr "榮譽榜"
+
 msgid  "Update Profile"
 msgstr "更新個人資料"
 
@@ -1226,6 +1229,9 @@ msgstr "請輸入學生ID"
 msgid  "Successfully Created - User"
 msgstr "成功創建-使用者"
 
+msgid "Successfully created."
+msgstr "成功創建"
+
 msgid  "You are not student."
 msgstr "您不是學生"
 
@@ -1342,7 +1348,66 @@ msgstr "同意"
 
 msgid  "Question Choice"
 msgstr "問題選項"
-##msgid  ""
-##msgstr ""
+
+msgid "Check the Reply"
+msgstr "查看回覆"
+
+msgid "reply by"
+msgstr "回覆人"
+
+msgid "Show all"
+msgstr "顯示全部"
+
+msgid "Badge"
+msgstr "徽章"
+
+msgid "Rank"
+msgstr "排名"
+
+msgid "Level"
+msgstr "等級"
+
+msgid  "Achievement Name"
+msgstr "里程碑名稱"
+
+
+msgid  "Achievement name"
+msgstr "里程碑名稱"
+
+msgid  "Key"
+msgstr "達成條件"
+
+msgid  "Description"
+msgstr "詳細描述"
+
+msgid  "description"
+msgstr "詳細描述"
+
+msgid  "Point"
+msgstr "經驗值"
+
+msgid "completion"
+msgstr "完成次數"
+
+
+msgid "Completion"
+msgstr "完成次數"
+
+msgid "category"
+msgstr "成就類別"
+
+msgid "Trophy"
+msgstr "獎盃"
+
+
+msgid "Select Trophy photo"
+msgstr "選擇獎盃圖片"
+
+msgid "Create Achievement"
+msgstr "創建里程碑"
+
+msgid "Acheivement List"
+msgstr "里程碑列表"
+
 ##{{trans("Identity")}}
 ##{{trans("")}}
