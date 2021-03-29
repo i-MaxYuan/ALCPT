@@ -22,9 +22,9 @@
                         {% if latest_exam %}
                         <h4 class="text-center">{{ latest_exam }}</h4>
                         <tbody>
-                            <th>Rank</th>
-                            <th>Name</th>
-                            <th>Level</th>
+                            <th>{{trans("Rank")}}</th>
+                            <th>{{trans("Name")}}</th>
+                            <th>{{trans("Score")}}</th>
                             {% for answersheet in leaderboard %}
                             {% if loop.index < 11 %}
 
@@ -69,9 +69,9 @@
                 <div class="card-body">
                     <table class="table table-hover table-striped">
                         <tbody>
-                            <th>Rank</th>
-                            <th>Name</th>
-                            <th>Level</th>
+                            <th>{{trans("Rank")}}</th>
+                            <th>{{trans("Name")}}</th>
+                            <th>{{trans("Level")}}</th>
                             {% for user in user_level %}
                             {% if loop.index < 11 %}
 
