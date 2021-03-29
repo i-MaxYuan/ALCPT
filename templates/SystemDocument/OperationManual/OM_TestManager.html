@@ -205,37 +205,37 @@
         <hr />
 
         <h3>使用者問題處理進度</h3>
-        <img src="{{ static('/images/om/tm/nom-tm05.png') }}" width="20%" />
-        <img src="{{ static('/images/om/sm/nom-sm21.png') }}" width="60%" />
+        <img src="{{ static('/images/om/report/nom-report07.png') }}" width="20%"/>
+        <img src="{{ static('/images/om/report/nom-report05.png') }}" width="75%"/>
         <ul>
           <p>
-            <li>若有使用者進行問題回報，而回報種類為考試管理員管轄的權限，則該使用者處理進度欄會有<code>1</code>的標示，用來提醒管理員尚有多少問題需讀取。</li>
+            <li>
+              若有使用者進行問題回報，而該回報類別屬於某一個權限的管理員，則會有<label class="notification-badge style="font-size: 10px">1</label>的標示，用來提醒管理員有多少個問題回報尚未讀取。
+            </li>
             <li>點擊該欄位則可檢視及回覆使用者所提出的問題。</li>
           </p>
         </ul>
           <p></p>
-          <img src="{{ static('/images/om/sm/nom-sm22.png') }}" width="75%" />
+          <img src="{{ static('/images/om/report/nom-report12.png') }}" width="48%" />
+          <img src="{{ static('/images/om/report/nom-report13.png') }}" width="48%" />
         <ul>
           <p>
             <li>左邊區塊是顯示使用者問題回報的相關資訊</li>
-            <li>
-              右邊區塊是管理員與使用者的對話框，在下方輸入框輸入所要回覆的內容，點擊「回覆」按鈕即可回覆使用者。
+            <li>右邊區塊是管理員與使用者的對話框，在下方輸入框輸入所要回覆的內容，點擊「評論」按鈕即可回覆使用者。</li>
+            
+              若管理員認為本次的問題回報是簡已處理完成，即可點擊「關閉」按鈕來結束本次的問題回報。本次回報也會更改狀態為<code>已解決</code>。
             </li>
-            <li>
-              若本次問題回報被管理員「關閉」的話，代表本次回報已處理完成，使用者也無法繼續回覆，本次回報也會更改狀態為<code>已解決</code>。
-            </li>
-            <img
-              src="{{ static('/images/om/sm/nom-sm23.png') }}"
-              width="10%"
-            />
+            <li>若本次問題回報被管理員「關閉」的話，代表本次回報已處理完成，使用者也無法繼續回覆。</li>
+            <img src="{{ static('/images/om/report/nom-report08.png') }}" width="35%" />
+            <img src="{{ static('/images/om/report/nom-report09.png') }}" width="63%" />
             <li>
               若管理員已回覆使用者的問題回報，則在使用者的頁面會看到「鈴鐺」有
               <label class="notification-badge">1</label>的標示。
             </li>
-            <img
-              src="{{ static('/images/om/sm/nom-sm24.png') }}"
-              width="60%"
-            />
+            <li>若想查看詳細資訊可以點選「顯示全部」，頁面會跳轉到通知中心(如右上圖)。</li>
+            <li>點選欄位即可查看完整公告資料。</li>
+            <img src="{{ static('/images/om/sm/nom-sm24.png') }}" width="60%" />
+            
           </p>
         </ul>
 

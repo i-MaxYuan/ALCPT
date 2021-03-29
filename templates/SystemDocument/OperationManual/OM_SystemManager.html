@@ -7,13 +7,12 @@
         <ul>
           <p>
             <li>主要負責控制本系統中屬於類別類的相關資料</li>
-            <img src="{{ static('/images/om/sm/nom-sm01.png') }}" width="70%" />
+            <img src="{{ static('/images/om/sm/nom-sm25.png') }}" width="70%" />
           </p>
         </ul>
         <hr />
 
         <h3>使用者列表</h3>
-        <img src="{{ static('/images/om/sm/nom-sm17.png') }}" width="15%" />
         <img src="{{ static('/images/om/sm/nom-sm02.png') }}" width="70%" />
         <p></p>
         <ul>
@@ -106,7 +105,6 @@
         <hr />
 
         <h3>單位列表</h3>
-        <img src="{{ static('/images/om/sm/nom-sm18.png') }}" width="15%" />
         <img src="{{ static('/images/om/sm/nom-sm05.png') }}" width="60%" />
         <ul>
           <li>「標籤」: 可進行「科系列表」與「中隊列表」的切換。</li>
@@ -143,7 +141,6 @@
         <hr />
 
         <h3>問題類別列表</h3>
-        <img src="{{ static('/images/om/sm/nom-sm19.png') }}" width="15%" />
         <img src="{{ static('/images/om/sm/nom-sm12.png') }}" width="60%" />
         <p></p>
         <ul>
@@ -216,37 +213,29 @@
         <hr />
 
         <h3>使用者問題處理進度</h3>
-        <img src="{{ static('/images/om/sm/nom-sm20.png') }}" width="15%" />
         <img src="{{ static('/images/om/sm/nom-sm21.png') }}" width="60%" />
         <ul>
           <p>
-            <li>若有使用者進行問題回報，而回報種類為系統管理員管轄的權限，則該使用者處理進度欄會有<code>1</code>的標示，用來提醒管理員尚有多少問題需讀取。</li>
-            <li>點擊該欄位則可檢視及回覆使用者所提出的問題。</li>
-          </p>
+            <li>若有使用者進行問題回報，而回報種類為該管轄的權限，則該使用者處理進度欄會有<code>1</code>的標示，用來提醒管理員尚有多少問題需讀取。</li>
+            <li>點擊欄位可檢視及回覆使用者所提出的問題。</li>
+            <img src="{{ static('/images/om/report/nom-report12.png') }}" width="48%" />
+            <img src="{{ static('/images/om/report/nom-report13.png') }}" width="48%" />
+            <li>左邊區塊是顯示使用者問題回報的相關資訊</li>
+            <li>右邊區塊是管理員與使用者的對話框，在下方輸入框輸入所要回覆的內容，點擊「回覆」按鈕即可回覆使用者。</li>
+            <li>若管理員認為本次的問題回報是簡已處理完成，即可點擊「關閉」按鈕來結束本次的問題回報。本次回報也會更改狀態為<code>已解決</code>，使用者也無法繼續回覆。</li>
         </ul>
-          <p></p>
-          <img src="{{ static('/images/om/sm/nom-sm22.png') }}" width="75%" />
         <ul>
           <p>
-            <li>左邊區塊是顯示使用者問題回報的相關資訊</li>
-            <li>
-              右邊區塊是管理員與使用者的對話框，在下方輸入框輸入所要回覆的內容，點擊「回覆」按鈕即可回覆使用者。
-            </li>
-            <li>
-              若本次問題回報被管理員「關閉」的話，代表本次回報已處理完成，使用者也無法繼續回覆，本次回報也會更改狀態為<code>已解決</code>。
-            </li>
-            <img
-              src="{{ static('/images/om/sm/nom-sm23.png') }}"
-              width="10%"
-            />
-            <li>
-              若管理員已回覆使用者的問題回報，則在使用者的頁面會看到「鈴鐺」有
-              <label class="notification-badge">1</label>的標示。
-            </li>
-            <img
-              src="{{ static('/images/om/sm/nom-sm24.png') }}"
-              width="60%"
-            />
+            
+              </p>
+           
+            <img src="{{ static('/images/om/report/nom-report08.png') }}" width="35%" />
+            <img src="{{ static('/images/om/sm/nom-sm24.png') }}" width="60%" />
+
+            <li>若管理員已回覆使用者的問題回報，則在使用者的頁面會看到「鈴鐺」有
+              <label class="notification-badge">1</label>的標示。</li>
+            <li>若想查看詳細資訊可以點選「顯示全部」，頁面會跳轉到通知中心(如右上圖)。</li>
+            <li>點選欄位即可查看完整公告資料。</li>
             
           </p>
         </ul>
