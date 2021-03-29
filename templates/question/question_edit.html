@@ -57,7 +57,7 @@
                                 {% else %}
                                 <a href="{{ url('question_pass', args=[question.id]) }}" class="btn btn-success" onclick="return confirm('{{trans("Sure to pass")}}?')">{{trans("Pass")}}</a>
                                 <button type="submit" id="submit" class="btn btn-primary" onclick="return confirm('{{trans("Sure to change the answer of this question and modified its state into handled")}}?')">
-                                    {{trans("Update")}}
+                                    {{trans("Handle")}}
                                 </button>
                                 {% endif %}
                                 <button type="button" class="btn btn-secondary" onclick="history.go(-1);">
