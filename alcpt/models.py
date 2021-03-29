@@ -65,6 +65,7 @@ class User(AbstractBaseUser):
     introduction = models.TextField(null=True)
     level = models.PositiveSmallIntegerField(default=1)
     experience = models.IntegerField(default=0)
+    browser = models.TextField(null=True)
 
     objects = UserManager()
 
