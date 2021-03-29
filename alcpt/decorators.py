@@ -1,6 +1,8 @@
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect
 from django.http import HttpResponseRedirect
 from .exceptions import PermissionWrongError
+from . import registration
 
 
 # Function's permission authorize user to use that function
@@ -13,6 +15,11 @@ def permission_check(required_privilege):
 
             if not request.user.has_perm(required_privilege):
                 raise PermissionWrongError()
+            
+            if request.COOKIES['sessionid'] != request.user.browser:
+                relogin = True
+                registration.logout(request, relogin)
+                return redirect('login')
 
             return view(request, *args, **kwargs)
         return check

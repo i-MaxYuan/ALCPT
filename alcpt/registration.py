@@ -36,7 +36,9 @@ def login(request):
                     return render(request, 'registration/login.html', locals())
 
                 auth.login(request, user)
+                user.browser = request.session.session_key
                 user.save()
+
                 if user.last_login is None:
                     departments = Department.objects.all()
                     squadrons = Squadron.objects.all()
@@ -65,9 +67,18 @@ def login(request):
 
 # 登出
 @login_required
-def logout(request):
+def logout(request, relogin=False):
+    if request.user.browser == request.COOKIES['sessionid']:
+        request.user.browser = None
+        request.user.save()
+
     auth.logout(request)
-    messages.success(request, _('Logout Success.'))
+
+    if relogin:
+        messages.error(request, 'You logged in elsewhere so you were forced to log out.')
+        return
+    else:
+        messages.success(request, _('Logout Success.'))
 
     return redirect(LOGOUT_REDIRECT_URL)
 
