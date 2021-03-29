@@ -55,3 +55,11 @@
     </div>
 </main>
 {% endblock %}
+
+{% block navbarFocused %}
+<script>
+    const responsibilitys = {"SystemManager":0, "TestManager":1, "TBManager":2};
+    const focus = ["SystemManager_navbar", "TestManager_navbar", "TBManager_navbar"];
+    navbarFocused(focus[responsibilitys["{{ responsibility }}"]]);
+</script>
+{% endblock %}

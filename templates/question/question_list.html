@@ -94,36 +94,47 @@
 
                                 <td>
                                     <button type="button" {% if question.state == 1 %} class="btn btn-success" {% elif question.state == 2 or question.state == 4 %} class="btn btn-danger" {% elif question.state == 3 %} class="btn btn-light"
-                                        {% elif question.state == 5 %} class="btn btn-dark" {% elif question.state == 6 %} class="btn btn-secondary" {% endif %}>{{ question.state|readable_state }}</button>
+                                        {% elif question.state == 5 %} class="btn btn-dark" {% elif question.state == 6 %} class="btn btn-secondary" {% endif %}>{{ question.state| readable_state }}</button>
                                 </td>
 
                                 <td class="functions-btn">
+
+                                    {% if request.user|has_perm('TBManager') and request.user|has_perm('TBOperator') %}
                                     <!-- pass -->
-                                    {% if request.user|has_perm('TBManager') %} {% if question.state == 1 %}
-                                    <!-- <button class="btn btn-primary" id="submit" type="button" onclick="window.location.href='{{ url('question_submit', args=[question.id]) }}'">
+                                    {% if question.state == 1 %}
+
+                                    <!-- reject -->
+                                    {% elif question.state == 2 %}
+                                    <button class="btn btn-primary" id="submit" type="button" onclick="window.location.href='{{ url('question_submit', args=[question.id]) }}'">
                                         Submit
-                                    </button> -->
-                                    <!-- <button class="btn btn-warning" id="edit" type="button" onclick="window.location.href='{{ url('question_edit', args=[question.id]) }}'">
+                                    </button>
+
+                                    <button class="btn btn-warning" id="edit" type="button" onclick="window.location.href='{{ url('operator_edit', args=[question.id]) }}'">
                                         Edit
-                                    </button> -->
-                                    <!-- <button class="btn btn-danger" id="delete" type="button" onclick="window.location.href='{{ url('question_delete', args=[question.id]) }}'">
+                                    </button>
+
+                                    <button class="btn btn-danger" id="delete" type="button" onclick="window.location.href='{{ url('question_delete', args=[question.id]) }}'">
                                         Delete
-                                    </button> -->
+                                    </button>
+
+                                    <!-- pending -->
+                                    {% elif question.state == 3 %}
+
                                     <!-- Faulty -->
                                     {% elif question.state == 4 %}
-                                    <!-- <button class="btn btn-primary" id="submit" type="button" onclick="window.location.href='{{ url('question_submit', args=[question.id]) }}'">
-                                        Submit
-                                    </button> -->
                                     <button class="btn btn-warning" id="edit" type="button" onclick="window.location.href='{{ url('question_edit', args=[question.id]) }}'">
                                         {{trans("Edit")}}
                                     </button>
-                                    <!-- <button class="btn btn-danger" id="delete" type="button" onclick="window.location.href='{{ url('question_delete', args=[question.id]) }}'">
-                                        Delete
-                                    </button> -->
+
                                     <!-- handle -->
                                     {% elif question.state == 5 %}
 
-                                    {% else %}
+
+                                    <!-- saved -->
+                                    {% elif question.state == 6 %}
+                                    <button class="btn btn-primary" id="submit" type="button" onclick="window.location.href='{{ url('question_submit', args=[question.id]) }}'">
+                                        Submit
+                                    </button>
                                     <button class="btn btn-warning" id="edit" type="button" onclick="window.location.href='{{ url('question_edit', args=[question.id]) }}'">
                                         {{trans("Edit")}}
                                     </button>
@@ -132,6 +143,18 @@
                                     </button>
 
                                     {% endif %}
+
+                                    {% elif request.user|has_perm('TBManager') %}
+
+                                    <!-- Faulty -->
+                                    {% if question.state == 4 %}
+                                    <button class="btn btn-warning" id="edit" type="button" onclick="window.location.href='{{ url('question_edit', args=[question.id]) }}'">
+                                        {{trans("Edit")}}
+                                    </button>
+                                    {% endif %}
+
+
+
                                     {% elif request.user|has_perm('TBOperator') %}
                                     <!-- Reject -->
                                     {% if question.state == 2 %}
@@ -142,13 +165,17 @@
                                         {{trans("Edit")}}
                                     </button>
                                     <a href="{{ url('question_delete', args=[question.id]) }}" class="btn btn-danger" id="delete" onclick="return confirm('{{trans("Sure to delete")}}?')">{{trans("Delete")}}</a>
+                                    <!-- Faulty -->
                                     {% elif question.state == 4 %}
 
                                     {% else %}
-                                    <a href='{{ url('question_submit', args=[question.id]) }}' class="btn btn-success" id="submit" onclick="return confirm('{{trans("Sure to submit")}}?')">{{trans("Submit")}}</a>
+                                    <button class="btn btn-primary" id="submit" type="button" onclick="window.location.href='{{ url('question_submit', args=[question.id]) }}'">
+                                        Submit
+                                    </button>
                                     <button class="btn btn-warning" id="edit" type="button" onclick="window.location.href='{{ url('operator_edit', args=[question.id]) }}'">
                                         {{trans("Edit")}}
                                     </button>
+
                                     <a href="{{ url('question_delete', args=[question.id]) }}" class="btn btn-danger" id="delete" onclick="return confirm('{{trans("Sure to delete")}}?')">{{trans("Delete")}}</a>
                                     {% endif %}
                                     {% endif %}
@@ -247,4 +274,12 @@
         <a class="page-link" href="?page={{ questionList.paginator.num_pages }}{{ query_content }}"><i class="fa fa-angle-double-right"></i></a>
     </li>
 </ul>
+{% endblock %}
+
+{% block navbarFocused %}
+<script>
+    const responsibilitys = {"TBOperator":0, "TBManager":1};
+    const focus = ["TBOperator_navbar", "TBManager_navbar"];
+    navbarFocused(focus[responsibilitys["{{ responsibility }}"]]);
+</script>
 {% endblock %}

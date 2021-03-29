@@ -175,7 +175,7 @@ def readable_state(state: int):
         (2, _('reject')),
         (3, _('pending')),
         (4, _('faulty')),
-        (5, _('processing')),
+        (5, _('handled')),
         (6, _('saved')),
     )
     return STATE[state][1]
