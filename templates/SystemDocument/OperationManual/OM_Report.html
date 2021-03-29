@@ -52,6 +52,8 @@
         <h1>問題回報處理</h1>
         <ul>
           <p>
+            <h2>管理者檢視問題</h2>
+            <li>只有<code><a href="{( url('OM_SystemManager') }}">系統管理員</a></code>、<code><a href="{{ url('OM_TestManager') }}">考試管理員</a></code>、<code><a href="{{ url('OM_TBManager') }}">題庫管理員</a></code>欄下有「使用者問題處理進度」</li>
             <li>經由使用者對於所遇到問題所做的問題回報，應有相關負責的權限來進行處理，故有設計問題類別的責任歸屬。
               請參閱<code><a href="{( url('OM_SystemManager') }}">系統管理員</a></code>的「問題類別列表」、「使用者問題處理進度」，其中有對於問題類別進一步的相關說明。</li>
             <img src="{{ static('/images/om/report/nom-report04.png') }}" width="80%"/>
@@ -64,7 +66,7 @@
             <li>點擊該欄位則可檢視及回覆使用者所提出的問題。</li>
           </p>
         </ul>
-        <h3>管理者檢視問題</h3>
+        
         <ul>
           <p>
             <img src="{{ static('/images/om/report/nom-report12.png') }}" width="48%" />
@@ -78,7 +80,7 @@
           </p>
         </ul>
 
-        <h3>使用者查看回覆</h3>
+        <h2>使用者查看回覆</h2>
         <ul>
           <p>
             <img src="{{ static('/images/om/report/nom-report08.png') }}" width="35%" />
@@ -95,7 +97,7 @@
               </ul>
             
             <p></p>
-            <h4>公告資料</h4>
+            <h3>公告資料</h3>
             <img src="{{ static('/images/om/report/nom-report10.png') }}" width="55%" />
             <img src="{{ static('/images/om/report/nom-report11.png') }}" width="48%" />
             <img src="{{ static('/images/om/report/nom-report14.png') }}" width="48%" />
