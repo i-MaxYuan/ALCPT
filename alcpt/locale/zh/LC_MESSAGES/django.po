@@ -692,7 +692,7 @@ msgid  "ParagraphUnderstanding"
 msgstr "段落理解"
 
 msgid  "Choose the number of your test paper"
-msgstr "選擇測驗卷號碼"
+msgstr "選擇測驗題數"
 
 msgid  "Question Number"
 msgstr "測驗卷題數"
