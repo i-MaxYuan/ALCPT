@@ -481,7 +481,7 @@ msgid "No News"
 msgstr "沒有公告"
 
 msgid "View"
-msgstr "測驗成績"
+msgstr "查看"
 
 msgid "Score"
 msgstr "成績"
@@ -785,6 +785,9 @@ msgstr "通過"
 msgid  "Sure to change the answer of this question and modified its state into handled"
 msgstr "確定改變此題答案並將狀態改為已處理嗎"
 
+msgid "handled"
+msgstr "處理中"
+
 msgid  "Select All"
 msgstr "選擇全部"
 
@@ -900,7 +903,7 @@ msgid  "ALCPT distinguishes multiple user permissions, and students can focus on
 msgstr "ALCPT區分多個使用者權限，學生可以專注於自己的權限進行練習。"
 
 msgid  "This system will also generate some simple statistical graphs to make it easier for users to understand their practice status."
-msgstr "該系統會生成一些簡單的統計圖表，以讓使用者更容易了解其練習的狀態。"
+msgstr "本系統在測驗完成後，會生成一些統計圖表，供使用者檢閱查看，讓使用者更輕鬆更明瞭的了解其練習的成效。"
 
 msgid  "Top 5"
 msgstr "前五名"
@@ -1328,6 +1331,9 @@ msgstr "已儲存"
 msgid  "Faulty"
 msgstr "有問題"
 
+msgid  "faulty"
+msgstr "有問題"
+
 msgid  "Handle"
 msgstr "處理中"
 
@@ -1401,7 +1407,6 @@ msgstr "經驗值"
 msgid "completion"
 msgstr "完成次數"
 
-
 msgid "Completion"
 msgstr "完成次數"
 
@@ -1411,7 +1416,6 @@ msgstr "成就類別"
 msgid "Trophy"
 msgstr "獎盃"
 
-
 msgid "Select Trophy photo"
 msgstr "選擇獎盃圖片"
 
@@ -1420,6 +1424,12 @@ msgstr "創建里程碑"
 
 msgid "Acheivement List"
 msgstr "里程碑列表"
+
+msgid "pass"
+msgstr "通過"
+
+msgid "correct frequency"
+msgstr "正確率"
 
 ##{{trans("Identity")}}
 ##{{trans("")}}
