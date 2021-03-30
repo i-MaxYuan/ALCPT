@@ -30,14 +30,13 @@
                                         {{trans("Total")}}: {{ question_type_count }}，{{trans("Selected")}}: {{ selected_question_type_num }}
                                     </p>
                                 </div>
-                                <div class="card-footer text-left">Manual :
+                                <div class="card-footer text-center">選題 :
                                     <a class="btn btn-primary" href="{{ url('manual_pick', args=[testpaper.id, question_type.value.0]) }}" class="card-link">{{trans("Manual")}}</a>
-                                </div>
-                                <div class="card-footer text-left">Automatic :
                                     <a class="btn btn-warning" href="{{ url('auto_pick', args=[testpaper.id, question_type.value.0, 0]) }}" class="card-link">{{trans("Automatic")}}</a>
                                 </div>
+                               
 
-                                <div class="card-footer text-left">Difficulty :
+                                <div class="card-footer text-center">難易度 : 
 
                                     <a class="btn btn-success" href="{{ url('auto_pick', args=[testpaper.id, question_type.value.0, 1]) }}" class="card-link">{{trans("Easy")}}</a>
 
