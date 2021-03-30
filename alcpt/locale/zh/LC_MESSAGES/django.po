@@ -736,6 +736,8 @@ msgstr "難易度"
 msgid  "Create"
 msgstr "創建"
 
+msgid "Filter By difficulty"
+msgstr "難易度選擇"
 
 msgid  "Create "
 msgstr "創建"
@@ -968,14 +970,12 @@ msgstr "未知"
 msgid  "Leave"
 msgstr "離開"
 
-msgid  "If your "
-msgstr "如果你"
+msgid  "If your answer is correct, then it will display only one color in all choices and there will display"
+msgstr "如果你答案是正確的,那麼它將在所有選擇中僅顯示一種顏色，並且將顯示"
 
-msgid  "answer is correct"
-msgstr "答案是正確的,"
 
-msgid  ", then it will display only one color in all choices and there will display"
-msgstr "那麼它將在所有選擇中僅顯示一種顏色，並且將顯示"
+msgid  "If your answer is wrong, then it will display"
+msgstr "如果你答案是錯誤的,那麼它將顯示"
 
 msgid  "behind the question."
 msgstr "在問題後面"
@@ -989,8 +989,11 @@ msgstr "查看測驗卷內容"
 msgid  "didn't answer the question"
 msgstr "沒有回答問題"
 
-msgid  "The question has been reported as an error, but after processing by the TBManager, then it will display"
-msgstr "該問題已被反應有錯誤，但經由題庫管理員處理後，他將會顯示"
+msgid  "If you want to report a problem, you can click on "
+msgstr "如果想反映問題可以點選"
+
+msgid "to report."
+msgstr "進行回報。"
 
 msgid  "Red color means your selected the wrong answer on the exam."
 msgstr "紅色表示你在測驗中所選的答案為錯誤答案"
@@ -1430,6 +1433,9 @@ msgstr "通過"
 
 msgid "correct frequency"
 msgstr "正確率"
+
+msgid "Report Question"
+msgstr "問題回報"
 
 ##{{trans("Identity")}}
 ##{{trans("")}}

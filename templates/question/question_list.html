@@ -201,14 +201,14 @@
                                 <td style="text-align: left; font-size: 14px">
                                     <ul style="font-size: 14px; list-style: none">
                                         <li>
-                                            {{trans("Update")}}:{{ question.update_time.strftime('%Y/%m/%d %H:%M') }}
+                                            {{trans("Update")}} : {{ question.update_time.strftime('%Y/%m/%d %H:%M') }}
                                         </li>
-                                        <li>{{trans("Issued")}}:{{ question.issued_freq }}</li>
+                                        <li>{{trans("Issued")}} : {{ question.issued_freq }}</li>
                                         <li>
-                                            {{trans("Difficulty")}}:{{ question.difficulty|readable_question_difficulty }}
+                                            {{trans("Difficulty")}} : {{ question.difficulty|readable_question_difficulty }}
                                         </li>
-                                        <li>{{trans("correct frequency")}}:{{ question.correct_freq }}%</li>
-                                        <li>{{trans("Creator")}}:{{ question.created_by.name }}</li>
+                                        <li>{{trans("correct frequency")}} : {{ question.correct_freq }}%</li>
+                                        <li>{{trans("Creator")}} : {{ question.created_by.name }}</li>
                                     </ul>
                                 </td>
                             </tr>
