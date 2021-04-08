@@ -58,7 +58,7 @@
                                                         {% for privilege in privileges %}
                                                         <li>
                                                             <input type="checkbox" id="{{ privilege.value.1 }}" name="{{ privilege }}" onclick="privilege_not_empty()" {% if privilege == privilege.Testee %} checked
-                                                                {% endif %}>&nbsp;{{ privilege.value.1 }}
+                                                                {% endif %}>&nbsp;{{ privilege.value.2 }}
                                                         </li>
                                                         {% endfor %}
                                                     </ul>

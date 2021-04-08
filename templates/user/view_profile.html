@@ -63,17 +63,17 @@
                         <h5 class="card-subtitle mb-2 text-muted">{{trans("Privilege")}}</h5>
                         <p class="card-text">
                             {% if viewed_user|has_perms(privileges.SystemManager) %}
-                            <span class="badge alert-danger">{{ privileges.SystemManager.value.1 }}</span>
+                            <span class="badge alert-danger">{{ privileges.SystemManager.value.2 }}</span>
                             {% endif %} {% if viewed_user|has_perms(privileges.TestManager) %}
-                            <span class="badge alert-warning">{{ privileges.TestManager.value.1 }}</span>
+                            <span class="badge alert-warning">{{ privileges.TestManager.value.2 }}</span>
                             {% endif %} {% if viewed_user|has_perms(privileges.TBManager) %}
-                            <span class="badge badge-primary">{{ privileges.TBManager.value.1 }}</span>
+                            <span class="badge badge-primary">{{ privileges.TBManager.value.2 }}</span>
                             {% endif %} {% if viewed_user|has_perms(privileges.TBOperator) %}
-                            <span class="badge alert-success">{{ privileges.TBOperator.value.1 }}</span>
+                            <span class="badge alert-success">{{ privileges.TBOperator.value.2 }}</span>
                             {% endif %} {% if viewed_user|has_perms(privileges.Viewer) %}
-                            <span class="badge alert-info">{{ privileges.Viewer.value.1 }}</span>
+                            <span class="badge alert-info">{{ privileges.Viewer.value.2 }}</span>
                             {% endif %} {% if viewed_user|has_perms(privileges.Testee) %}
-                            <span class="badge alert-dark">{{ privileges.Testee.value.1 }}</span>
+                            <span class="badge alert-dark">{{ privileges.Testee.value.2 }}</span>
                             {% endif %}
                         </p>
                     </div>
@@ -164,17 +164,17 @@
                         <h5 class="card-subtitle mb-2 text-muted">{{trans("Privilege")}}</h5>
                         <p class="card-text">
                             {% if viewed_user|has_perms(privileges.SystemManager) %}
-                            <span class="badge alert-danger">{{ privileges.SystemManager.value.1 }}</span>
+                            <span class="badge alert-danger">{{ privileges.SystemManager.value.2 }}</span>
                             {% endif %} {% if viewed_user|has_perms(privileges.TestManager) %}
-                            <span class="badge alert-warning">{{ privileges.TestManager.value.1 }}</span>
+                            <span class="badge alert-warning">{{ privileges.TestManager.value.2 }}</span>
                             {% endif %} {% if viewed_user|has_perms(privileges.TBManager) %}
-                            <span class="badge badge-primary">{{ privileges.TBManager.value.1 }}</span>
+                            <span class="badge badge-primary">{{ privileges.TBManager.value.2 }}</span>
                             {% endif %} {% if viewed_user|has_perms(privileges.TBOperator) %}
-                            <span class="badge alert-success">{{ privileges.TBOperator.value.1 }}</span>
+                            <span class="badge alert-success">{{ privileges.TBOperator.value.2 }}</span>
                             {% endif %} {% if viewed_user|has_perms(privileges.Viewer) %}
-                            <span class="badge alert-info">{{ privileges.Viewer.value.1 }}</span>
+                            <span class="badge alert-info">{{ privileges.Viewer.value.2 }}</span>
                             {% endif %} {% if viewed_user|has_perms(privileges.Testee) %}
-                            <span class="badge alert-dark">{{ privileges.Testee.value.1 }}</span>
+                            <span class="badge alert-dark">{{ privileges.Testee.value.2 }}</span>
                             {% endif %}
                         </p>
                     </div>
