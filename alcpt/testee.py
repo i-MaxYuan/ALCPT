@@ -724,6 +724,9 @@ def start_exam(request, exam_id):
             messages.warning(request, 'You had not complete this exam. Your score is {}'.format(score))
             return redirect('testee_score_list')
 
+        exam.is_started = True
+        exam.save()
+
     except ObjectDoesNotExist:
         messages.error(request,
                        'Exam does not exist, Exam id: {}'.format(exam_id))
@@ -760,10 +763,13 @@ def start_practice(request, exam_id):
             messages.warning(request, 'Exam had finished.')
             return redirect('testee_exam_list')
         
+        exam.is_started = True
+        
         if exam.remaining_time is not None:
             exam.modified_time = now_time
             exam.finish_time = exam.modified_time + timedelta(seconds=exam.remaining_time)
-            exam.save()
+        
+        exam.save()
 
     except ObjectDoesNotExist:
         messages.error(request, 'Exam does not exist, Exam id: {}'.format(exam_id))

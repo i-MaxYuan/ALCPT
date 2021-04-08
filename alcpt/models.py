@@ -199,6 +199,7 @@ class Exam(models.Model):
     is_public = models.BooleanField(default=False)
     testeeList = models.ManyToManyField('User')
     remaining_time = models.BigIntegerField(default=None, null=True)
+    is_started = models.BooleanField(default=False)
     
     class Meta:
         ordering = ('-created_time',)
