@@ -56,7 +56,7 @@
                             <footer class="blockquote-footer">
                                 <cite title="Source Title">{{ viewed_report.created_by }} in {{ viewed_report.created_time }}<br /></cite>
                                 {% if viewed_report.state == 2 %}
-                                <label class="btn btn-danger float-right">Processing</label>
+                                <label class="btn btn-danger float-right">{{trans("Processing")}}</label>
                                 {% elif viewed_report.state == 3 %}
                                 <cite title="Source Title">Resolved by {{ viewed_report.resolved_by }} in {{ viewed_report.resolved_time }}</cite>
                                 <label class="btn btn-success float-right">{{trans("Solved")}}</label>
