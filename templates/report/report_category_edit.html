@@ -54,11 +54,11 @@
                                 category|belongs_to(privilege)
                                 %} checked {%
                                 endif
-                                %} />&nbsp;&nbsp;{{ privilege.value.1 }}
+                                %} />&nbsp;&nbsp;{{ privilege.value.2 }}
                                     </li>
                                     {% else %}
                                     <li>
-                                        <strike><input type="checkbox" id="{{ privilege.value.1 }}" name="{{ privilege }}" onclick="this.checked=!this.checked;" />&nbsp;&nbsp;{{ privilege.value.1 }}</strike>
+                                        <strike><input type="checkbox" id="{{ privilege.value.1 }}" name="{{ privilege }}" onclick="this.checked=!this.checked;" />&nbsp;&nbsp;{{ privilege.value.2 }}</strike>
                                     </li>
                                     {% endif %} {% endfor %}
                                 </ul>
