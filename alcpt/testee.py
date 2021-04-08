@@ -16,6 +16,7 @@ from .exceptions import *
 from .decorators import permission_check
 from .definitions import UserType, QuestionType, ExamType, AchievementCategory
 from .managerfuncs import practicemanager, testmanager, testee
+from django.utils.translation import gettext as _
 
 import plotly.offline as pyo
 import plotly.graph_objs as go
@@ -648,9 +649,9 @@ def favorite_question_list(request):
     question_types = [_ for _ in QuestionType]
 
     difficulty_choices =[
-        (1, 'Easy'),
-        (2, 'Medium'),
-        (3, 'Hard')
+        (1, _('Easy')),
+        (2, _('Medium')),
+        (3, _('Hard'))
     ]
 
     keywords = {
