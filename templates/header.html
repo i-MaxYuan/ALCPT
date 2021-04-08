@@ -49,7 +49,7 @@
                         <a class="dropdown-item" href="{{ url('responsible_report_list', args=['TestManager']) }}"><i class="fas fa-comment-dots"></i>{{ trans("User Response Handling") }}</a>
                         {% else %}
                         <a class="dropdown-item" href="{{ url('responsible_report_list', args=['TestManager']) }}"><i class="fas fa-comment-dots"></i>{{ trans("User Response Handling") }}&ensp;
-                            <span class="badge badge-pill badge-danger">{{ request.user|get_SystemManager_report_notification }}</span></a>
+                            <span class="badge badge-pill badge-danger">{{ request.user|get_TestManager_report_notification }}</span></a>
                         {% endif %}
                     </div>
                 </li>
@@ -65,7 +65,7 @@
                         <a class="dropdown-item" href="{{ url('responsible_report_list', args=['TBManager']) }}"><i class="fas fa-comment-dots"></i>{{ trans("User Response Handling") }}</a>
                         {% else %}
                         <a class="dropdown-item" href="{{ url('responsible_report_list', args=['TBManager']) }}"><i class="fas fa-comment-dots"></i> {{ trans("User Response Handling") }}&ensp;
-                            <span class="badge badge-pill badge-danger">{{ request.user|get_SystemManager_report_notification }}</span></a>
+                            <span class="badge badge-pill badge-danger">{{ request.user|get_TBManager_report_notification }}</span></a>
                         {% endif %}
                     </div>
                 </li>
