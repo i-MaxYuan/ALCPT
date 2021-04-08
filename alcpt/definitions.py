@@ -3,12 +3,12 @@ from django.utils.translation import gettext as _
 
 # type and authority od alcpt users
 class UserType(Enum):
-    SystemManager = (0b100000, _('SystemManager'))
-    TestManager = (0b10000, _('TestManager'))
-    TBManager = (0b1000, _('TBManager'))
-    TBOperator = (0b100, _('TBOperator'))
-    Viewer = (0b10, _('Viewer'))
-    Testee = (0b1, _('Testee'))
+    SystemManager = (0b100000,'SystemManager', _('SystemManager'))
+    TestManager = (0b10000, 'TestManager', _('TestManager'))
+    TBManager = (0b1000, 'TBManager', _('TBManager'))
+    TBOperator = (0b100, 'TBOperator', _('TBOperator'))
+    Viewer = (0b10, 'Viewer', _('Viewer'))
+    Testee = (0b1, 'Testee', _('Testee'))
 
     # @staticmethod
     # def type_value(privilege: str):

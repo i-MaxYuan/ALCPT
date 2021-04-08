@@ -102,7 +102,7 @@
                                                     {% for privilege in privileges %}
                                                     <li data-value="{{ privilege.value.0 }}">
                                                         <input type="checkbox" id="{{ privilege.value.1 }}" name="{{ privilege }}" onclick="privilege_valid()" {% if edited_user|has_permission(privilege) %} checked
-                                                            {% endif %} />&nbsp;{{ privilege.value.1 }}
+                                                            {% endif %} />&nbsp;{{ privilege.value.2 }}
                                                     </li>
                                                     {% endfor %}
                                                 </p>
@@ -271,7 +271,7 @@
                                                     {% for privilege in privileges %}
                                                     <li data-value="{{ privilege.value.0 }}">
                                                         <input type="checkbox" id="{{ privilege.value.1 }}" name="{{ privilege }}" onclick="privilege_valid()" {% if edited_user|has_permission(privilege) %} checked
-                                                            {% endif %} />&nbsp;{{ privilege.value.1 }}
+                                                            {% endif %} />&nbsp;{{ privilege.value.2 }}
                                                     </li>
                                                     {% endfor %}
                                                 </p>
