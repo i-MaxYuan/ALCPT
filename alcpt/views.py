@@ -44,6 +44,9 @@ def index(request):
 def about(request):
     return render(request, 'SystemDocument/About.html', locals())
 
+def project_history(request):
+    return render(request, 'SystemDocument/about/project_history.html', locals())
+
 
 
 def about1(request):

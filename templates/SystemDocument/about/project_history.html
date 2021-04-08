@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% include 'about_head.html' %}
+</head>
+
+<!-- JS that disable right mouse click -->
+
+<!-- <body oncontextmenu=self.event.returnValue=false onselectstart="return false"> -->
+
+<!-- Header Section Start -->
+<header id="home" class="hero-area">
+    <div class="overlay">
+        <span></span>
+        <span></span>
+    </div>
+    <nav class="navbar navbar-expand-md bg-inverse fixed-top scrolling-navbar">
+        <div class="container">
+            <a href="{{ url('about') }}" class="navbar-brand"><img src="{{ static('/logo/nav-logo-white.png') }}" style="width:130px" alt="" /></a>
+
+        </div>
+    </nav>
+    <div class="container">
+        <div class="row space-100" style="padding-top: 100px; font-size: 15px">
+            <div class="container py-3">
+                <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
+                    <h1 class="display-4 fw-normal" style="color: white">Project History</h1>
+                    <p class="fs-5" style="font-size: 25px; color: white; padding-top: 15px">From 2019 till now, we has devoted to this Project "ALCPT" for more than three years.</p>
+                </div>
+
+                <main>
+                    <div class="row row-cols-1 row-cols-md-3 mb-6 text-center" style="padding-top: 50px">
+                        <div class="col">
+                            <div class="card mb-4 rounded-3 shadow-sm">
+                                <div class="card-header py-3">
+                                    <h4 class="my-0 fw-normal">2019</h4>
+                                </div>
+                                <div class="card-body">
+                                    <h1 class="card-title pricing-card-title">108期</h1>
+                                    <ul class="list-unstyled mt-3 mb-4">
+                                        <li>Project startup</li>
+                                        <li>Demand interview</li>
+                                        <li>basic quiz function</li>
+                                        <li>upload question</li>
+                                    </ul>
+                                    <button type="button" class="w-100 btn btn-lg btn-secondary">No Doc</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card mb-4 rounded-3 shadow-sm">
+                                <div class="card-header py-3">
+                                    <h4 class="my-0 fw-normal">2020</h4>
+                                </div>
+                                <div class="card-body">
+                                    <h1 class="card-title pricing-card-title">109期</h1>
+                                    <ul class="list-unstyled mt-3 mb-4">
+                                        <li>Rebuild system framwork</li>
+                                        <li>Beautify the layout</li>
+                                        <li>Fundamental demand</li>
+                                        <li>Exam process structure</li>
+                                    </ul>
+                                    <button type="button" class="w-100 btn btn-lg btn-info" onclick="window.location.href='{{ url('Download_system_pdf') }}'">Download</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <div class="card mb-4 rounded-3 shadow-sm border-primary">
+                                <div class="card-header py-3 text-white bg-primary border-primary">
+                                    <h4 class="my-0 fw-normal">2021</h4>
+                                </div>
+                                <div class="card-body">
+                                    <h1 class="card-title pricing-card-title">110期</h1>
+                                    <ul class="list-unstyled mt-3 mb-4">
+                                        <li>Hosting on server</li>
+                                        <li>Layout beautifulize</li>
+                                        <li>Achievement system</li>
+                                        <li>Bilingual website</li>
+                                    </ul>
+                                    <button type="button" class="w-100 btn btn-lg btn-primary">Download</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                </main>
+
+
+            </div>
+
+        </div>
+    </div>
+</header>
+<!-- Header Section End -->
+
+
+
+
+
+
+
+
+
+<!-- Footer Section Start -->
+{% include 'footer.html' %}
+<!-- Footer Section End -->
+
+<!-- Go To Top Link -->
+<a href="#" class="back-to-top">
+    <i class="lni-chevron-up"></i>
+</a>
+
+<!-- Preloader -->
+<div id="preloader">
+    <div class="loader" id="loader-1"></div>
+</div>
+<!-- End Preloader -->
+
+<!-- jQuery first, then Tether, then Bootstrap JS. -->
+{% include 'about_foot.html' %}
+
+
+</html>
