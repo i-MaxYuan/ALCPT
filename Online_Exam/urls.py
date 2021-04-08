@@ -42,6 +42,9 @@ urlpatterns = [
     re_path(
         r'^about/',
         include([
+            re_path(r'^project_history',
+                views.project_history,
+                name='project_history'),
             re_path(r'^SystemManager',
                     views.about_SystemManager,
                     name='about_SystemManager'),
