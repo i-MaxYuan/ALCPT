@@ -761,7 +761,7 @@ msgid  "Question Edit"
 msgstr "編輯試題"
 
 msgid  "Set Answer"
-msgstr "設立答案"
+msgstr "設定答案"
 
 msgid  "Sure to update and saved it"
 msgstr "確定更新並儲存嗎"
@@ -902,10 +902,10 @@ msgid  "ALCPT is short for American Language Course Placement Test."
 msgstr "ALCPT是美國語言課程入學考試的簡稱。"
 
 msgid  "ALCPT distinguishes multiple user permissions, and students can focus on their own permissions to practice."
-msgstr "ALCPT區分多個使用者權限，學生可以專注於自己的權限進行練習。"
+msgstr "本系統區分為6個使用者權限，分別為「系統管理員」、「考試管理員」、「題庫管理員」、「題庫操作員」、「成績檢閱者」及「受測者」，各使用者可以使用自己的權限進行操作。"
 
 msgid  "This system will also generate some simple statistical graphs to make it easier for users to understand their practice status."
-msgstr "本系統在測驗完成後，會生成一些統計圖表，供使用者檢閱查看，讓使用者更輕鬆更明瞭的了解其練習的成效。"
+msgstr " "
 
 msgid  "Top 5"
 msgstr "前五名"
@@ -1068,16 +1068,16 @@ msgid  "ALCPT is a website helps you improve your English Proficiency and evalut
 msgstr "ALCPT是一個可幫助您提高英語水平和評估學習效果的網站。"
 
 msgid  "Commander"
-msgstr "指揮官"
+msgstr "教師及隊職官"
 
 msgid  "Commanders can check every students record to assure the effectiveness of learning of all the students."
-msgstr "指揮官可以檢查每位學生的記錄，以確保所有學生學習的有效性"
+msgstr "檢閱受測者的成績紀錄，了解所有受測者學習的有效性"
 
 msgid  "Students can practice any kind of question as they wish."
-msgstr "學生可以根據需要練習任何類型的試題"
+msgstr "練習或測驗各式類型的試題及模擬考"
 
 msgid  "All the question you have ever practiced or tested can be added to Favorite Question. You can review them anytime, anywhere you want!"
-msgstr "您曾經練習或測驗過的所有問題都可以添加到“最愛收藏本”中。您可以隨時隨地查看它們！"
+msgstr "練習或測驗過的所有試題，都可以添加到“問題收藏本”中，供受測者隨時點選複習"
 
 msgid  "User Permission"
 msgstr "使用者操作手冊"
@@ -1104,10 +1104,10 @@ msgid  "the TB manager for review."
 msgstr "題庫管理員進行審查。"
 
 msgid  "Commander and Techer can check "
-msgstr "指揮官和老師可以檢查"
+msgstr "成績檢閱者可以檢閱"
 
 msgid  "student's score."
-msgstr "學生的成績。"
+msgstr "受測者的成績。"
 
 msgid  "Users can practice listening "
 msgstr "使用者可以練習聽力"
@@ -1439,6 +1439,9 @@ msgstr "問題回報"
 
 msgid "No Notification"
 msgstr "沒有通知"
+
+msgid "Back Home"
+msgstr "回至首頁"
 
 ##{{trans("Identity")}}
 ##{{trans("")}}
