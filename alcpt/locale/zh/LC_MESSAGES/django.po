@@ -1086,37 +1086,37 @@ msgid  "Review the questions submitted by the question operator and to maintain 
 msgstr "查看問題操作者提交的問題並維護這些問題。"
 
 msgid "Review the questions submitted by the"
-msgstr "查看問題操作者提交的問題"
+msgstr "查看題庫操作員提交的試題"
 
 msgid " question operator and to maintain these questions."
-msgstr "並維護這些問題。"
+msgstr "並對這些試題進行維護"
 
 msgid  "Create, edit test papers and create "
-msgstr "創建，編輯試卷並創建"
+msgstr "創建、編輯試卷"
 
 msgid  "groups of testees "
-msgstr "一組受測者"
+msgstr "及編輯受測者群組"
 
 msgid  "add new questions and submit them to "
-msgstr "添加新問題並將其提交給"
+msgstr "添加新試題並提交給"
 
 msgid  "the TB manager for review."
-msgstr "題庫管理員進行審查。"
+msgstr "題庫管理員進行審核"
 
 msgid  "Commander and Techer can check "
-msgstr "成績檢閱者可以檢閱"
+msgstr "檢閱各個模擬測驗的"
 
 msgid  "student's score."
-msgstr "受測者的成績。"
+msgstr "受測者成績分佈及分析。"
 
 msgid  "Users can practice listening "
-msgstr "使用者可以練習聽力"
+msgstr "可查看成就榜"
 
 msgid  "and reading exercises in English "
-msgstr "和英語閱讀練習"
+msgstr "進行聽力、閱讀練習"
 
 msgid  "through this system."
-msgstr "透過這個系統。"
+msgstr "利用問題收藏本進行複習"
 
 msgid  "Please enter your Email"
 msgstr "請輸入你的電子信箱"
