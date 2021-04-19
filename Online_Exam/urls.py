@@ -420,7 +420,6 @@ urlpatterns = [
 
 urlpatterns += i18n_patterns(
 re_path(r'^favicon.ico$', RedirectView.as_view(url=r'static/favicon.ico')),
-# re_path(r'^admin/', admin.site.urls),
 re_path(r'^$', views.about, name='about'),
 re_path(r'^1$', views.about1, name='about1'),
 re_path(
@@ -428,14 +427,17 @@ re_path(
     include([
         re_path(r'^download_system_pdf$',
                 views.downloadSystemPDF,
-                name='download_system_pdf'),
+                name='Download_system_pdf'),
         re_path(r'^download_OM_pdf$',
                 views.downloadOperationManual,
-                name='download_OM_pdf'),
+                name='Download_OM_pdf'),
     ])),
 re_path(
     r'^about/',
     include([
+        re_path(r'^project_history',
+            views.project_history,
+            name='project_history'),
         re_path(r'^SystemManager',
                 views.about_SystemManager,
                 name='about_SystemManager'),
@@ -652,7 +654,7 @@ re_path(
                         exam.testpaper_delete,
                         name='testpaper_delete'),
                 re_path(
-                    r'^(?P<testpaper_id>[0-9]+)/(?P<question_type>[0-9]+)/auto_pick',
+                    r'^(?P<testpaper_id>[0-9]+)/(?P<question_type>[0-9]+)/(?P<difficulty>[0-9]+)/auto_pick',
                     exam.auto_pick,
                     name='auto_pick'),
                 re_path(
@@ -751,6 +753,9 @@ re_path(
         re_path(
             r'^exam/',
             include([
+                re_path(r'^pending/(?P<exam_id>[0-9]+)$',
+                        testee.pending,
+                        name='pending'),
                 re_path(r'^list$',
                         testee.exam_list,
                         name='testee_exam_list'),

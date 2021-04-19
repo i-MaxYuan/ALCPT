@@ -52,6 +52,7 @@ def exam_score_detail(request, exam_id):
         for testee in testees:
             try:
                 answer_sheet = AnswerSheet.objects.get(exam=exam, user_id=testee.id)
+
                 if answer_sheet.is_tested is False:
                     not_tested += 1
                     testee_not_tested += 1
@@ -66,7 +67,9 @@ def exam_score_detail(request, exam_id):
             except ObjectDoesNotExist:
                 not_tested += 1
                 answer_sheets.append(None)
-
+            except TypeError:
+                messages.warning(request, 'The test is finished, but not all testee had submitted test paper.')
+                return redirect('exam_score_list')                
 
     #級距
         def grade(score, breakpoints=[60,70,80,90], grades='FDCBA'):
