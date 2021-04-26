@@ -19,7 +19,7 @@ msgstr ""
 
 
 msgid "Welcome to ALCPT Online Platform"
-msgstr "歡迎來到ALCPT線上測驗平台"
+msgstr "歡迎來到ALCPT線上練習平台"
 
 msgid  "SystemManager"
 msgstr "系統管理員"
@@ -604,7 +604,7 @@ msgid  "Manual"
 msgstr "手動選題"
 
 msgid  "Manuallist"
-msgstr "操作手冊"
+msgstr "權限說明"
 
 msgid  "Valid"
 msgstr "有效與否"
@@ -896,13 +896,13 @@ msgid  "Download Operation Manual"
 msgstr "下載使用手冊"
 
 msgid  "A free practice platform for Military Academy Students."
-msgstr "一個軍事學院學生可以免費練習的練習平台。"
+msgstr "一個軍事院校學生可以免費練習的ALCPT練習平台"
 
 msgid  "ALCPT is short for American Language Course Placement Test."
-msgstr "ALCPT是美國語言課程入學考試的簡稱。"
+msgstr " "
 
 msgid  "ALCPT distinguishes multiple user permissions, and students can focus on their own permissions to practice."
-msgstr "本系統區分為6個使用者權限，分別為「系統管理員」、「考試管理員」、「題庫管理員」、「題庫操作員」、「成績檢閱者」及「受測者」，各使用者可以使用自己的權限進行操作。"
+msgstr "本系統區分為6個使用者權限，分別為「系統管理員」、「考試管理員」、「題庫管理員」、「題庫操作員」、「成績檢閱者」及「受測者」，使用者可以擁有多個使用者權限進行操作。"
 
 msgid  "This system will also generate some simple statistical graphs to make it easier for users to understand their practice status."
 msgstr " "
@@ -1065,7 +1065,7 @@ msgid  "Contact"
 msgstr "聯絡"
 
 msgid  "ALCPT is a website helps you improve your English Proficiency and evalute learning effectiveness."
-msgstr "ALCPT是一個可幫助您提高英語水平和評估學習效果的網站。"
+msgstr "本平台是一個可幫助您提高英語水平和評估學習效果的網站"
 
 msgid  "Commander"
 msgstr "教師及隊職官"
@@ -1080,7 +1080,7 @@ msgid  "All the question you have ever practiced or tested can be added to Favor
 msgstr "練習或測驗過的所有試題，都可以添加到“問題收藏本”中，供受測者隨時點選複習"
 
 msgid  "User Permission"
-msgstr "使用者操作手冊"
+msgstr "使用者權限說明"
 
 msgid  "Review the questions submitted by the question operator and to maintain these questions."
 msgstr "查看問題操作者提交的問題並維護這些問題。"
@@ -1104,10 +1104,10 @@ msgid  "the TB manager for review."
 msgstr "題庫管理員進行審核"
 
 msgid  "Commander and Techer can check "
-msgstr "檢閱各個模擬測驗的"
+msgstr "檢閱各個模擬測驗及練習的"
 
 msgid  "student's score."
-msgstr "受測者成績分佈及分析。"
+msgstr "受測者成績分佈及分析"
 
 msgid  "Users can practice listening "
 msgstr "可查看成就榜"
