@@ -148,9 +148,10 @@
                         </tr>
                         {% endfor %} {% else %}
                         <tr>
-                            <td class="text-center" colspan="8">
-                                {% if query_content and not users %} Cannot query these
-                                conditions「{{ query_content|readable_user_query_contents }}」users。 {% endif %}
+                            <td class="text-center" colspan="15">
+                                {% if query_content and not users %} 
+                                    查無符合條件之使用者。 
+                                {% endif %}
                             </td>
                         </tr>
                         {% endif %}

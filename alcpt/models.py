@@ -149,7 +149,7 @@ class Squadron(models.Model):
 # squadron: user's squadron
 class Student(models.Model):
     stu_id = models.CharField(max_length=50, unique=True)
-    user = models.OneToOneField("User", on_delete=models.CASCADE)
+    user = models.OneToOneField("User", on_delete=models.CASCADE, related_name="student")
     department = models.ForeignKey("Department", on_delete=models.PROTECT, blank=True, null=True)
     grade = models.PositiveSmallIntegerField(default=time.localtime().tm_year - 1911)
     squadron = models.ForeignKey("Squadron", on_delete=models.PROTECT, blank=True, null=True)
