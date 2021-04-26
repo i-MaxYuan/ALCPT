@@ -95,7 +95,7 @@ WSGI_APPLICATION = 'Online_Exam.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'ALCPT',
+        'NAME': 'alcpt',
         'USER': 'root',
         'PASSWORD': 'alcptalcpt',
         'HOST': '127.0.0.1',
