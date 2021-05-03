@@ -1446,7 +1446,7 @@ msgstr "問題回報"
 msgid "No Notification"
 msgstr "沒有通知"
 
-msgid "Back Home"
+msgid "home"
 msgstr "回至首頁"
 
 msgid "You can start practice!"
@@ -1454,6 +1454,9 @@ msgstr "您可以開始練習！"
 
 msgid "You had finished the exam."
 msgstr "您已結束本測驗"
+
+msgid "Continue"
+msgstr "繼續"
 
 
 ##{{trans("Identity")}}
