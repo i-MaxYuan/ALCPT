@@ -639,7 +639,7 @@ def favorite_question(request, question_id, answersheet_id):
     except ObjectDoesNotExist:
         user = User.objects.get(id=request.user.id)
         question.favorite.add(user)
-        messages.success(request, 'Question has added to your favorite!')
+        messages.success(request, _('Question has added to your favorite!'))
     return redirect('view_answersheet_content', answersheet_id)
 
 
