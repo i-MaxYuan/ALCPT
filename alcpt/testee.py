@@ -851,7 +851,6 @@ def answering(request, exam_id, answer_id):
                             answer_id=the_next_question.id)
 
         else:
-            messages.warning(request, _('You have finished your Test, please submit your answesheet'))
             return redirect('testee_answering',
                             exam_id=exam_id,
                             answer_id=answer_id)
