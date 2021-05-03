@@ -1295,6 +1295,9 @@ msgstr "主要負責控制"
 msgid " control system category data"
 msgstr "系統各群組的資料"
 
+msgid  "Create successfully"
+msgstr "創建成功"
+
 msgid  "Create Successfully"
 msgstr "創建成功"
 
@@ -1317,7 +1320,7 @@ msgid  "Listening/Conversation"
 msgstr "聽力/會話"
 
 msgid  "Pending"
-msgstr "待定"
+msgstr "暫離"
 
 msgid  "pending"
 msgstr "等待審核"
@@ -1330,6 +1333,9 @@ msgstr "處理中"
 
 msgid  "saved"
 msgstr "已儲存"
+
+msgid  "save"
+msgstr "暫存"
 
 msgid  "Faulty"
 msgstr "有問題"
@@ -1442,6 +1448,13 @@ msgstr "沒有通知"
 
 msgid "Back Home"
 msgstr "回至首頁"
+
+msgid "You can start practice!"
+msgstr "您可以開始練習！"
+
+msgid "You had finished the exam."
+msgstr "您已結束本測驗"
+
 
 ##{{trans("Identity")}}
 ##{{trans("")}}
