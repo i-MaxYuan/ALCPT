@@ -464,7 +464,7 @@ def practice_create(request, kind):
             remaining_time=remaining_time)
 
         messages.success(request,
-                         'Create successfully, {}'.format(practice_exam))
+                         '創建成功, {}'.format(practice_exam))
         return redirect('testee_exam_list')
     else:
         return render(request, 'practice/select.html', locals())
@@ -851,7 +851,7 @@ def answering(request, exam_id, answer_id):
                             answer_id=the_next_question.id)
 
         else:
-            messages.warning(request, 'You have finished your Test, please submit your answesheet')
+            messages.warning(request, _('You have finished your Test, please submit your answesheet'))
             return redirect('testee_answering',
                             exam_id=exam_id,
                             answer_id=answer_id)
@@ -899,7 +899,7 @@ def answering(request, exam_id, answer_id):
 #                                     answer_id=the_next_question.id)
 #
 #     except:
-#         messages.success(request, 'You had finished the exam.')
+#         messages.success(request, _('You had finished the exam.'))
 #         score = testmanager.calculate_score(exam.id, answer_sheet)
 #         return redirect('testee_exam_list')
 #
@@ -914,7 +914,7 @@ def answering(request, exam_id, answer_id):
 #         if len(
 #                         Answer.objects.filter(answer_sheet=answer_sheet).filter(
 #                             selected=-1)) == 0:
-#             messages.success(request, 'You had finished the exam.')
+#             messages.success(request, _('You had finished the exam.'))
 #             score = testmanager.calculate_score(exam.id, answer_sheet)
 #             return redirect('testee_score_list')
 #         else:
@@ -939,7 +939,7 @@ def submit_answersheet(request, exam_id):
     exam = Exam.objects.get(id=exam_id)
     answer_sheet = AnswerSheet.objects.get(exam=exam, user=request.user)
     score = testmanager.calculate_score(exam.id, answer_sheet)
-    messages.success(request, 'You had finished the exam.')
+    messages.success(request, _('You had finished the exam.'))
     request_achievement_signal.send(sender='AnswerSheet', user = request.user.id, score = score, exam_type = exam.exam_type)
     return redirect('testee_score_list')
 
