@@ -1458,6 +1458,67 @@ msgstr "您已結束本測驗"
 msgid "Continue"
 msgstr "繼續"
 
+msgid "Project History"
+msgstr "專案歷史沿革"
 
+msgid "From 2019 till now, we has devoted to this Project ALCPT for more than three years."
+msgstr "從2019年至今，我們致力於開發ALCPT線上練習系統平台已經超過三年"
+
+msgid "Project startup"
+msgstr "系統源起"
+
+msgid "Demand interview"
+msgstr "需求訪談"
+
+msgid "Basic quiz function"
+msgstr "基本線上測驗功能開發"
+
+msgid "Upload question"
+msgstr "上傳測驗練習題庫"
+
+msgid "No Doc"
+msgstr "沒有檔案"
+
+msgid "Rebuild system framwork"
+msgstr "重建系統架構"
+
+msgid "Beautify the layout"
+msgstr "美化佈局"
+
+msgid "Fundamental demand"
+msgstr "基本需求開發"
+
+msgid "Download"
+msgstr "下載檔案"
+
+msgid "Hosting on server"
+msgstr "將專案部署到機房"
+
+msgid "Layout beautifulize"
+msgstr "模板美化"
+
+msgid "Achievement system"
+msgstr "新增成就系統"
+
+msgid "Bilingual website"
+msgstr "建置雙語網站"
+
+msgid "Exam process structure"
+msgstr "設立測驗流程架構"
+
+msgid "Question has added to your favorite!"
+msgstr "該題已加入至您的最愛收藏本！"
+
+msgid "This report has resolved."
+msgstr "該問題回報已被解決"
+
+msgid "You hadn't finish your test, please keep answering the exam"
+msgstr "您尚未完成您的測驗，請回至作答頁面完成作答"
+
+msgid "You hadn't take this exam!"
+msgstr "您未參加該次測驗！"
+
+msgid "Thanks for your report, we will review this question as soon as possible."
+msgstr "感謝您的回報，我們將會儘速回覆您的問題！"
 ##{{trans("Identity")}}
 ##{{trans("")}}
