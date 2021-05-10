@@ -479,13 +479,13 @@ def view_answersheet_content(request, answersheet_id):
 
         if answersheet.exam.is_public:
             if answersheet.is_finished == False:
-                messages.warning(request, 'This exam does not finish. Keep working on! ')
+                messages.warning(request, _("You hadn't finish your test, please keep answering the exam"))
                 return redirect('testee_exam_list')
             elif datetime.now() < answersheet.exam.finish_time:
                 messages.warning(request, 'This exam does not finish.')
                 return redirect('testee_score_list')
             elif answersheet.is_tested == False:
-                messages.warning(request, "You hadn't take this exam! ")
+                messages.warning(request, _("You hadn't take this exam!"))
                 return redirect('testee_score_list')
 
 
@@ -620,7 +620,7 @@ def view_answersheet_content(request, answersheet_id):
 
             return render(request, 'testee/answersheet_content.html', locals())
     elif answersheet.is_finished  == False and now_time > answersheet.finish_time:
-        messages.success(request, "You hadn't finish your test, please keep answering the exam")
+        messages.success(request, {{trans("You hadn't finish your test, please keep answering the exam")}})
         return redirect('testee_exam_list')
     else:
         messages.warning(request, 'Does not finished this practice. Reject your request.')
@@ -717,7 +717,7 @@ def start_exam(request, exam_id):
         elif now_time > exam.finish_time and answer_sheet.is_tested == False:
             answer_sheet.is_finished = True
             answer_sheet.save()
-            messages.warning(request, "You hadn't take this exam!")
+            messages.warning(request, _("You hadn't take this exam!"))
             return redirect('testee_score_list')
 
         elif now_time > exam.finish_time and answer_sheet.is_tested == True:

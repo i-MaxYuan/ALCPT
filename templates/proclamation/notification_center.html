@@ -46,7 +46,7 @@
                 <div class="container">
                     <div class="row justify-content-center">
                         <div class="col-md-12">
-                            <h2>{{trans("Notification Center")}}</h2><span>Total: {{ request.user.proclamation_set.count() }}</span>
+                            <h2>{{trans("Notification Center")}}</h2><span>{{trans('Total')}} : {{ request.user.proclamation_set.count() }}</span>
                             <div class="text-right">
                                 <button class="btn fa fa-check-square-o" type="button" title="Select All" onclick="selectAll();" style="font-size: 24px"></button>
                                 <button class="btn fa fa-exchange" type="button" title="Reverse" onclick="reverseSelect();" style="font-size: 24px"></button>
