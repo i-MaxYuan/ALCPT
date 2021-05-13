@@ -816,7 +816,7 @@ def answering(request, exam_id, answer_id):
         answer_sheet = AnswerSheet.objects.get(exam=exam, user=request.user)
         answers = answer_sheet.answer_set.all()
         if answer_sheet.is_finished:
-            messages.warning(request, "You had completed this exam.")
+            messages.warning(request, _("You had completed this exam"))
             return redirect('testee_score_list')
         if answer not in answer_sheet.answer_set.all():
             messages.warning(request, 'Not your answer: {}'.format(answer_id))
