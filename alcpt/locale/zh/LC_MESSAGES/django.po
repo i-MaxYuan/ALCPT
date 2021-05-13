@@ -343,7 +343,7 @@ msgid  "Tips"
 msgstr "提示"
 
 msgid  "Field Order"
-msgstr "領域順序"
+msgstr "排列順序"
 
 msgid  "Account do not accept these specific characters"
 msgstr "帳號不接受這些特定字元"

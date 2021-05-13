@@ -47,12 +47,12 @@
                         <h5 class="card-subtitle mb-2 text-muted">{{trans("Email")}}</h5>
                         <p class="card-text">
                             {% if viewed_user.email %} {{ viewed_user.email }} {% else %}
-                            Unset {% endif %}
+                            {{trans("Unset")}} {% endif %}
                         </p>
 
                         <h5 class="card-subtitle mb-2 text-muted">{{trans("Gender")}}</h5>
                         <p class="card-text">
-                            {% if viewed_user.gender == 1 %}{{trans("Male")}} {% elif viewed_user.gender == 2 %}{{trans("Female ")}} {% elif viewed_user.gender == 3 %}{{trans("Privacy")}} {% else %}{{trans("Unset")}}{% endif %}
+                            {% if viewed_user.gender == 1 %}{{trans("Male")}} {% elif viewed_user.gender == 2 %}{{trans("Female")}} {% elif viewed_user.gender == 3 %}{{trans("Privacy")}} {% else %}{{trans("Unset")}}{% endif %}
                         </p>
 
                         <h5 class="card-subtitle mb-2 text-muted">{{trans("Identity")}}</h5>
@@ -103,7 +103,7 @@
                         <h5 class="card-subtitle mb-2 text-muted">{{trans("Squadron")}}</h5>
                         <p class="card-text">{{ viewed_user.student.squadron }}</p>
 
-                        <h5 class="card-subtitle mb-2 text-muted">{{trans("Grade")}}</h5>
+                        <h5 class="card-subtitle mb-2 text-muted">{{trans("Year Grade")}}</h5>
                         <p class="card-text">{{ viewed_user.student.grade }}</p>
                     </div>
 
