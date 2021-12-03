@@ -35,6 +35,28 @@
                         <li class="nav-item">
                             <a class="btn btn-singin" href="{{ url('Homepage') }}">{{trans("Start")}}</a>
                         </li>
+                        <div class="dropdown">
+                            <button class="btn btn-singin dropdown-toggle" type="button" data-toggle="dropdown">
+                                {{trans("Language")}}
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="javascript:en_lang()">English</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:zh_lang()">繁體中文</a>
+                                </li>
+                            </ul>
+                            <script>
+                                function en_lang(){
+                                    window.location.assign(window.location.href.replace("zh","en-us"));
+                                }
+
+                                function zh_lang(){
+                                    window.location.assign(window.location.href.replace("en-us","zh"));
+                                }
+                            </script>
+                        </div>
                     </ul>
                 </div>
             </div>

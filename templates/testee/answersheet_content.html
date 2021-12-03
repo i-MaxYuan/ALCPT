@@ -43,26 +43,21 @@
                                                         <li>
                                                             <p>
                                                                 {{trans("If your answer is correct, then it will display only one color in all choices and there will display")}}
-                                                                <i class="fa fa-check"></i>
+                                                                <i class="fa fa-check" style="color: green"></i>
                                                                 {{trans("behind the question.")}}
                                                             </p>
                                                         </li>
                                                         <li>
                                                             <p>
                                                                 {{trans("If your answer is wrong, then it will display")}}
-                                                                <i class="fa fa-times"></i>
+                                                                <i class="fa fa-times" style="color: red"></i>
                                                                 {{trans("behind the question.")}}
                                                             </p>
                                                         </li>
                                                         
                                                         <li>
-                                                            <p style="color: red">
-                                                                {{trans("Red color means your selected the wrong answer on the exam.")}}
-                                                            </p>
-                                                        </li>
-                                                        <li>
-                                                            <p style="color: green">
-                                                                {{trans("Green color means the correct answer.")}}
+                                                            <p>
+                                                                {{trans("If you want to discuss the question with other testees, you can click")}} <i class="fa fa-comments-o" style="color: dodgerblue"></i>{{trans(" to see the discussion forum.")}}
                                                             </p>
                                                         </li>
                                                         <li>
@@ -120,11 +115,15 @@
                                     <i class="fa fa-times" style="color: red; font-size: 25px; padding-right: 10px"></i>
                                     {% endif %}
                                     {% endif %}
+                                    <!--discussion area-->
+                                    <i class="fa fa-comments-o" style="color: dodgerblue; font-size: 25px; padding-right: 5px"></i>
+
                                     {% if favorite %}
                                     <a href="{{ url('favorite_question', args=[answer.question.id, answersheet.id]) }}"><i class="fas fa-heart" style="color: red; font-size: 25px; padding-right: 5px"></i></a>
                                     {% else %}
                                     <a href="{{ url('favorite_question', args=[answer.question.id, answersheet.id]) }}"><i class="far fa-heart" style="color: red; font-size: 25px; padding-right: 5px"></i></a>
                                     {% endif %}
+
                                 </td>
                             </tr>
 

@@ -24,7 +24,7 @@
 
         </li>
         <li class="active">
-            <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false"><i class="fas fa-user"></i>{{ trans("Profile") }}</a>
+            <a href="#homeSubmenu" data-toggle="collapse"><!-- aria-expanded="false"--><i class="fas fa-user"></i>{{ trans("Profile") }}</a>
             <ul class="collapse list-unstyled" id="homeSubmenu">
                 <li>
                     <a href="{{ url('profile') }}"><i class="fas fa-user"></i>{{ trans("Profile") }}</a>
@@ -39,8 +39,6 @@
                     <a href="{{ url('password_change') }}"><i class="fas fa-key"></i>{{ trans("Password Change") }}</a>
                 </li>
             </ul>
-
-
         <li>
             <a href="{{ url('notification_center') }}"><i class="fas fa-bell"></i>{{ trans("Notification Center") }}</a>
         </li>
@@ -54,6 +52,27 @@
         <li>
             <a href="{{ url('about') }}"><i class="fas fa-question"></i>{{ trans("home") }}</a>
         </li>
+
+        <li class="active">
+            <a href="#language" data-toggle="collapse"><!--aria-expanded="false"--><i class="fas fa-language"></i>{{ trans("Language") }}</a>
+            <ul class="collapse list-unstyled" id="language">
+                <li>
+                    <a href="javascript:en_lang()">English</a>
+                </li>
+                <li>
+                    <a href="javascript:zh_lang()">繁體中文</a>
+                </li>
+            </ul>
+            <script>
+                function en_lang(){
+                    window.location.assign(window.location.href.replace("zh","en-us"));
+                }
+
+                function zh_lang(){
+                    window.location.assign(window.location.href.replace("en-us","zh"));
+                }
+            </script>
+        <li>
     </ul>
 
     <ul class="list-unstyled CTAs">

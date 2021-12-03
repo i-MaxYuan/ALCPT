@@ -65,6 +65,30 @@ a:focus {
     left: 0;
 }
 
+/*.sidebar-dropdown {
+    color: 7386D5;
+    font-size: 110%;
+    position: relative;
+    display: inline-block;
+    left: 20px;
+}
+
+.sidebar-dropdown-content {
+    color: 7386D5;
+    background-color: #553a8c;
+    font-size: 80%;
+    display: none;
+    position: absolute;
+    /*left: 20px;*/
+    /*z-index: 1;
+    width: 130px;
+}
+
+.sidebar-dropdown:hover .sidebar-dropdown-content {
+    display: block;
+    border-width: 3px;
+}*/
+
 #dismiss {
     width: 35px;
     height: 35px;
