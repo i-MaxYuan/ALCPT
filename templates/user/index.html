@@ -140,8 +140,6 @@
                             <td class="text-center" data-title="Last Login：">
                                 {% if user.last_login %} {{ user.last_login.strftime('%Y/%m/%d %H:%M') }} {% else %}{{trans(" Not logged in ")}}{% endif %}
                             </td>
-
-
                             <td class="text-center">
                                 <a href="{{ url('user_edit', args=[user.reg_id]) }}"><i class="fa fa-pencil-square-o"></i></a>
                             </td>

@@ -93,6 +93,9 @@ a:not([href]):not([tabindex]):focus, a:not([href]):not([tabindex]):hover {
     background: #3c9cfd !important;
 }
 
+.dropdown-menu {
+    background-color: 3c96ff;
+}
 /* ==========================================================================
    Section Title
    ========================================================================== */

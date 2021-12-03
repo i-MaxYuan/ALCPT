@@ -44,6 +44,7 @@ def index(request):
 def about(request):
     return render(request, 'SystemDocument/About.html', locals())
 
+
 def project_history(request):
     return render(request, 'SystemDocument/about/project_history.html', locals())
 
@@ -160,3 +161,4 @@ def OM_Viewer(request):
 
 def OM_Testee(request):
     return render(request, 'SystemDocument/OperationManual/OM_Testee.html')
+

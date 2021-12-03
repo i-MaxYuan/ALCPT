@@ -24,21 +24,29 @@ from django.conf.urls.i18n import i18n_patterns # traslation
 
 from alcpt import registration, system, views, exam, question, viewer, testee, group, proclamation
 
+# ^ means beginning of the line, $ means end of the line
 urlpatterns = [
-    re_path(r'^favicon.ico$', RedirectView.as_view(url=r'static/favicon.ico')),
+    re_path(r'^favicon.ico$', RedirectView.as_view(url=r'static/favicon.ico')), 
     re_path(r'^admin/', admin.site.urls),
-    re_path(r'^$', views.about, name='about'),
+    re_path(r'^$', views.about, name='about'), #首頁
     re_path(r'^1$', views.about1, name='about1'),
-    re_path(
-        r'^/',
-        include([
-            re_path(r'^download_system_pdf$',
-                    views.downloadSystemPDF,
-                    name='Download_system_pdf'),
-            re_path(r'^download_OM_pdf$',
-                    views.downloadOperationManual,
-                    name='Download_OM_pdf'),
-        ])),
+    # re_path(
+    #     r'^/',
+    #     include([
+    #         re_path(r'^download_system_pdf$',
+    #                 views.downloadSystemPDF,
+    #                 name='Download_system_pdf'),
+    #         re_path(r'^download_OM_pdf$',
+    #                 views.downloadOperationManual,
+    #                 name='Download_OM_pdf'),
+    #     ])),
+    re_path(r'^download_system_pdf$',
+            views.downloadSystemPDF,
+            name='Download_system_pdf'),
+    re_path(r'^download_OM_pdf$',
+            views.downloadOperationManual,
+            name='Download_OM_pdf'),
+
     re_path(
         r'^about/',
         include([
@@ -63,8 +71,10 @@ urlpatterns = [
                     views.about_developer,
                     name='about_developer'),
         ])),
+    
+    # 系統使用手冊
     re_path(
-        r'operation_manual/',
+        r'operation_manual/', 
         include([
             re_path(r'^System$', views.OM_System, name='OM_System'),
             re_path(r'^Report$', views.OM_Report, name='OM_Report'),
@@ -82,7 +92,9 @@ urlpatterns = [
             re_path(r'^Viewer$', views.OM_Viewer, name='OM_Viewer'),
             re_path(r'^Testee$', views.OM_Testee, name='OM_Testee'),
         ])),
-    re_path(r'^report$', system.report, name='report'),
+    
+    # 問題回報
+    re_path(r'^report$', system.report, name='report'), 
     re_path(
         r'^report/',
         include([
@@ -107,6 +119,8 @@ urlpatterns = [
                     system.report_done,
                     name='report_done'),
         ])),
+
+    # 公告設定
     re_path(r'^proclamation$', views.index, name='Homepage'),
     re_path(
         r'^proclamation/',
@@ -142,8 +156,10 @@ urlpatterns = [
         registration.verify_done,
         name='verify_done'),
     re_path(r'^captcha/', include('captcha.urls')),
+
+    # 使用者帳號設定
     re_path(
-        r'^accounts/',
+        r'^accounts/', 
         include([
             re_path(r'^login/', registration.login, name='login'),
             re_path(r'^logout/', registration.logout, name='logout'),
@@ -414,7 +430,7 @@ urlpatterns = [
                     re_path(r'^(?P<kind>(listening|reading))$',
                             testee.practice_create,
                             name='testee_practice_create'),
-                ]))
+                ])),
         ])),
 ]
 
@@ -422,16 +438,16 @@ urlpatterns += i18n_patterns(
 re_path(r'^favicon.ico$', RedirectView.as_view(url=r'static/favicon.ico')),
 re_path(r'^$', views.about, name='about'),
 re_path(r'^1$', views.about1, name='about1'),
-re_path(
-    r'^/',
-    include([
-        re_path(r'^download_system_pdf$',
-                views.downloadSystemPDF,
-                name='Download_system_pdf'),
-        re_path(r'^download_OM_pdf$',
-                views.downloadOperationManual,
-                name='Download_OM_pdf'),
-    ])),
+# re_path(
+#     r'^/',
+#     include([
+#         re_path(r'^download_system_pdf$',
+#                 views.downloadSystemPDF,
+#                 name='Download_system_pdf'),
+#         re_path(r'^download_OM_pdf$',
+#                 views.downloadOperationManual,
+#                 name='Download_OM_pdf'),
+#     ])),
 re_path(
     r'^about/',
     include([
@@ -456,8 +472,11 @@ re_path(
                 views.about_developer,
                 name='about_developer'),
     ])),
+
+# re_path(r'^en-us', views.set_language, name='set_language')
+
 re_path(
-    r'operation_manual/',
+    r'^operation_manual/',
     include([
         re_path(r'^System$', views.OM_System, name='OM_System'),
         re_path(r'^Report$', views.OM_Report, name='OM_Report'),

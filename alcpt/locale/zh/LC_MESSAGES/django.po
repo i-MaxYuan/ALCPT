@@ -1520,5 +1520,20 @@ msgstr "您未參加該次測驗！"
 
 msgid "Thanks for your report, we will review this question as soon as possible."
 msgstr "感謝您的回報，我們將會儘速回覆您的問題！"
+
+msgid "Language"
+msgstr "語言"
 ##{{trans("Identity")}}
 ##{{trans("")}}
+
+msgid "Reading Practice Score"
+msgstr "閱讀練習成績"
+
+msgid "Listening Practice Score"
+msgstr "聽力練習成績"
+
+msgid "Exam Score"
+msgstr "模擬考成績"
+
+msgid "Remaining Time"
+msgstr "剩餘作答時間"

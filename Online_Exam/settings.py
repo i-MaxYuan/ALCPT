@@ -124,6 +124,7 @@ CAPTCHA_BACKGROUND_COLOR = 'white'  # 驗證碼顏色
 
 TIME_ZONE = 'Asia/Taipei'
 
+# 國際化
 USE_I18N = True
 
 USE_L10N = True
