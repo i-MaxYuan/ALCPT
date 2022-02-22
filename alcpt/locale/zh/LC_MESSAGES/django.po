@@ -718,6 +718,10 @@ msgstr "選擇MPEG格式的檔案"
 msgid  "Choose the question type"
 msgstr "選擇試題題型"
 
+msgid ""
+"Choose the difficulty of your test paper"
+msgstr "選擇測驗難度"
+
 msgid  "Medium"
 msgstr "適中"
 
