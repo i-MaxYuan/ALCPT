@@ -51,7 +51,19 @@
                                     <option value="30">30</option>
                                 </select>
                             </p>
-                            
+
+                            <h5 class="card-subtitle mb-2 text-muted">{{trans("Difficulty")}}</h5>
+                            <p class="card-text">
+                                <select class="custom-select custom-select-sm" name="question_level" id="question_level" onchange="ChangeButton()" required>
+                                    <option value="" disabled selected hidden>
+                                        {{trans("Choose the difficulty of your test paper")}}
+                                    </option>
+                                    <option value="10">{{trans("Easy")}}</option>
+                                    <option value="20">{{trans("Medium")}}</option>
+                                    <option value="30">{{trans("Hard")}}</option>
+                                </select>
+                            </p>
+
                             <h5 class="card-subtitle mb-2 text-muted">測驗時間(分鐘)-不限時免填 最長999分鐘</h5>
                             <p class="card-text">
                                 <input type="text" id="duration" name="duration">
