@@ -473,7 +473,6 @@ re_path(
                 name='about_developer'),
     ])),
 
-# re_path(r'^en-us', views.set_language, name='set_language')
 
 re_path(
     r'^operation_manual/',
@@ -826,7 +825,22 @@ re_path(
                 re_path(r'^(?P<kind>(listening|reading))$',
                         testee.practice_create,
                         name='testee_practice_create'),
-            ]))
+            ])),
+        re_path(r'^forum$',
+                testee.forum,
+                name="forum"),
+        re_path(r'^forum_question/(?P<question_id>[0-9]+)/(?P<answersheet_id>[0-9]+)$',
+                testee.forum_question,
+                name="forum_question"),
+        re_path(r'^forum_question_add/(?P<question_id>[0-9]+)/(?P<answersheet_id>[0-9]+)$',
+                testee.forum_question_add,
+                name='forum_question_add'),
+        re_path(r'^forum_comment_add/(?P<question_id>[0-9]+)$',
+                testee.forum_comment_add,
+                name='forum_comment_add'),
+        re_path(r'^forum_comment_delete/(?P<forum_comment_id>[0-9]+)$',
+                testee.forum_comment_delete,
+                name='forum_comment_delete')
     ])),
 )
 

@@ -1,0 +1,150 @@
+{% extends 'new_base.html' %}
+
+
+{% block scripts %}
+<script src="{{ static('/javascript/toggle.js') }}"></script>
+{% endblock %}
+
+{% block path %}
+<li class="breadcrumb-item active" aria-current="page">{{trans("Forum")}}</li>
+{% endblock %}
+
+{% block content %}
+<main class="testee-score-list">
+	<div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                <h2>{{trans("Forum")}}</h2>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped table-hover table-mc-light-blue">
+                        <thead class="thead-light">
+                            <tr>
+                                <th></th>
+                                <th scope="col">{{trans("Serial")}}</th>
+                                <th scope="col">{{trans("Content")}}</th>
+                                <th scope="col" class="text-right">
+                                    <button type="button" class="btn" data-toggle="modal" data-target="#promptContent">
+                                        <i class="fa fa-question-circle"></i>
+                                    </button>
+                                    <div class="modal fade text-left" id="promptContent" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header text-center">
+                                                    <h5 class="modal-title" id="ModalLongTitle">{{trans("Tips")}}</h5>
+                                                </div>
+
+                                                <div class="modal-body">
+                                                    <ul>
+                                                        <li>
+                                                            <p style="color: green">
+                                                                {{trans("Green color means the correct answer.")}}
+                                                            </p>
+                                                        </li>
+                                                        <li>
+                                                            <p>
+                                                                {{trans("If you have any problem with the question, you can click")}}<i class="fa fa-exclamation-triangle"></i>{{trans(" to report it.")}}
+                                                            </p>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-primary" data-dismiss="modal">{{trans("OK")}}</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for forum_question in forum_questions_search %}
+                                <tr id="mainData{{ loop.index }}">
+                                    <td id="angle_right_btn_{{ loop.index }}" onclick="toggle('{{ loop.index }}')" style="cursor: pointer;"><i class="fa fa-angle-right"></i></td>
+                                    <td>{{ loop.index }}</td>
+                                    <td class="text-left">
+                                        {% if forum_question.q_file %}
+                                        <audio controls preload="none">
+                                            <source src="{{ forum_question.q_file.url }}" type="audio/mpeg">
+                                                {{trans("Your browser does not support the audio tag.")}}
+                                        </audio>
+                                        {% else %}
+                                        <div id="summary_Q_content{{ loop.index }}">
+                                            {{ forum_question.q_content|summary(110) }}
+                                        </div>
+                                        <div id="full_Q_content{{ loop.index }}" style="display: none">
+                                            {{ forum_question.q_content|linebreaksbr }}
+                                        </div>
+                                        {% endif %}
+                                    </td>
+                            
+                                    <td>
+                                    </td>
+                                </tr>
+
+                                <tr id="detailData{{ loop.index }}" style="display: none;">
+                                    <td></td>
+                                    <td colspan="2" style="text-align: left">
+                                        <ol type="A">
+                                            {% for option in forum_question.choice_set.all() %}
+                                            {% if option.is_answer %}
+                                            <li style="color: green">{{ option }}</li>
+                                            {% else %}
+                                            <li>{{ option }}</li>
+                                            {% endif %}
+                                            {% endfor %}
+                                        </ol>
+                                    </td>
+                                    <td class="text-right">
+                                        {% if forum_question.state == 5 %}
+                                        <i class="fa fa-exclamation-triangle" onclick="alert('This question had been modified.')"></i>
+                                        {% else %}
+                                        <i class="fa fa-exclamation-triangle" onclick="window.location.href='{{ url('report_question', args=[forum_question.id]) }}'"></i>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+
+                                <div id="forum_comment{{ loop.index }}" style="display: none">
+                                    {% for forum_comment in forum_comment_search %}
+                                        {% if forum_comment.f_question.id == forum_question.id %}
+                                            <tr>
+                                                <td>{{forum_comment.f_creator.name}}</td>
+                                                <td>{{forum_comment.data_time}}</td>
+                                                <td>{{forum_comment.f_content}}</td>
+                                                <td>
+                                                    {% if forum_comment.f_creator.id == request.user.id %}
+                                                        <a href="{{ url('forum_comment_delete', args=[forum_comment.id]) }}"><i class="fa-solid fa-trash-can" style="color: darkgray; font-size: 25px; padding-right: 5px"></i></a>
+                                                    {% endif %}
+                                                 </td>
+                                            </tr>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                                
+                                <tr id="forum_table{{ loop.index }}" style="display: none">
+                                    <td></td>
+                                    <td colspan="2" style="text-align: left">
+                                        <form action="forum_comment_add/{{forum_question.id}}" method="POST"> 
+                                            <label for="forum_comment">Ask questions:</label>
+                                            <textarea id="forum_comment" name="forum_comment" rows="5" cols="40"></textarea>
+                                            <input type="submit" value="Submit">
+                                        </form>
+                                    </td>
+                                </tr>    
+
+                            {% else %}
+                                <tr>
+                                    <td class="text-center" colspan="5">{{trans("There is no question in forum now")}}...</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody> 
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+{% endblock %}
+
