@@ -81,13 +81,12 @@
                         </thead>
 
                         <tbody>
-
-
-                            {% for answer, question_correction, favorite in answers_correction_favorites %}
+                            {% for answer, question_correction, favorite, all_questions in answers_correction_favorites %}
                             <tr id="mainData{{ loop.index }}">
                                 <td id="angle_right_btn_{{ loop.index }}" onclick="toggle('{{ loop.index }}')" style="cursor: pointer;"><i class="fa fa-angle-right"></i></td>
                                 <td>{{ loop.index }}</td>
-                                <td class="text-left">
+                                <!-- <td class="text-left"> -->
+                                <td class="col-11">
                                     {% if answer.question.q_file %}
                                     <audio controls preload="none">
                                         <source src="{{ answer.question.q_file.url }}" type="audio/mpeg">
@@ -102,21 +101,21 @@
                                     </div>
                                     {% endif %}
                                 </td>
-                                <td class="text-right">
+                                <!-- <td class="text-right"> -->
+                                <td class="col-1" style="text-align: right">
                                     <!-- <p>{{ answer.question.difficulty | readable_question_difficulty }}</p> -->
                                     {% if answer.question.state == 5 %}
                                     <i class="fa fa-exclamation-circle"></i>
                                     {% elif answer.selected == -1 %}
                                     <i class="fa fa-question"></i>
                                     {% else %}
-                                    {% if question_correction %}
-                                    <i class="fa fa-check" style="color: green; font-size: 25px; padding-right: 5px"></i>
-                                    {% else %}
-                                    <i class="fa fa-times" style="color: red; font-size: 25px; padding-right: 10px"></i>
+                                        {% if question_correction %}
+                                        <i class="fa fa-check" style="color: green; font-size: 25px; padding-right: 5px"></i>
+                                        {% else %}
+                                        <i class="fa fa-times" style="color: red; font-size: 25px; padding-right: 5px"></i>
+                                        {% endif %}
                                     {% endif %}
-                                    {% endif %}
-                                    <!--discussion area-->
-                                    <i class="fa fa-comments-o" style="color: dodgerblue; font-size: 25px; padding-right: 5px"></i>
+
 
                                     {% if favorite %}
                                     <a href="{{ url('favorite_question', args=[answer.question.id, answersheet.id]) }}"><i class="fas fa-heart" style="color: red; font-size: 25px; padding-right: 5px"></i></a>
@@ -124,6 +123,12 @@
                                     <a href="{{ url('favorite_question', args=[answer.question.id, answersheet.id]) }}"><i class="far fa-heart" style="color: red; font-size: 25px; padding-right: 5px"></i></a>
                                     {% endif %}
 
+                                    <!--forum-->
+                                    {% if answer.question.in_forum %}
+                                        <a href="{{ url('forum_question', args=[answer.question.id, answersheet.id]) }}"><i class="fa-solid fa-comment" style="color: dodgerblue; font-size: 25px; padding-right: 5px"></i></a>
+                                    {% else %}
+                                        <a href="#"><i class="fa-regular fa-comment" style="color: dodgerblue; font-size: 25px; padding-right: 5px"></i></a>
+                                    {% endif %}
                                 </td>
                             </tr>
 
@@ -149,6 +154,7 @@
                                         {% endif %} {% endfor %}
                                     </ol>
                                 </td>
+                                
                                 <td class="text-right">
                                     {% if answer.question.state == 5 %}
                                     <i class="btn btn-outline-success" style="cursor: pointer" onclick="alert('This question had been modified.')"></i>
@@ -157,7 +163,19 @@
                                     {% endif %}
                                 </td>
                             </tr>
+
+                            <tr id="forum_table{{ loop.index }}" style="display: none">
+                                <td></td>
+                                <td colspan="2" style="text-align: left">
+                                    <form action="../../forum_question_add/{{answer.question.id}}/{{answersheet.id}}" method="POST"> 
+                                        <label for="forum_comment">Ask questions:</label>
+                                        <textarea id="forum_comment" name="forum_comment" rows="5" cols="40"></textarea>
+                                        <input type="submit" value="Submit">
+                                    </form>
+                                </td>
+                            </tr>    
                             {% endfor %}
+                            
                         </tbody>
                     </table>
 

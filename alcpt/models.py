@@ -242,6 +242,7 @@ class Question(models.Model):
                                         related_name='last_updated')
     is_valid = models.BooleanField(default=False)       # 似乎沒用到
     favorite = models.ManyToManyField('User')
+    in_forum = models.BooleanField(default=False)
     faulted_reason = models.CharField(max_length=255, blank=True, null=True, default="")
     STATES_CHOICES = (
         (1, '審核通過'),
@@ -252,6 +253,7 @@ class Question(models.Model):
         (6, '暫存'),
     )
     state = models.SmallIntegerField(choices=STATES_CHOICES, default=6)
+    #forum = models.BooleanField(default = False)
 
     class Meta:
         ordering = ('-q_content',)
@@ -275,6 +277,25 @@ class Choice(models.Model):
 
     def __str__(self):
         return self.c_content
+
+
+#討論區
+#f_question: the question needed to be discuss
+#f_content: discussing content about the question
+#f_creator: forum who makes
+#data_time: time of creating forum about the question 
+class Forum(models.Model):
+    f_question = models.ForeignKey('Question', on_delete=models.CASCADE)
+    f_content = models.TextField(blank=False, null=False)
+    f_creator = models.ForeignKey('User', on_delete=models.CASCADE)
+    data_time = models.DateTimeField(blank=True, null=True, default=datetime.datetime.now)
+
+#討論區留言
+#f_c_question:
+# class ForumComment(models.Model):
+#     f_c_question = models.ForeignKey('Forum')
+#     f_comment = models.TextField(blank=False, null=False)
+#     f_commenter = models.OneToOneField('User')
 
 
 # 答案卷

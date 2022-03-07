@@ -11,7 +11,7 @@ from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
-from .models import Question, AnswerSheet, Student, User, Exam, TestPaper, Answer, ReportCategory, Report, Achievement, UserAchievement
+from .models import Question, AnswerSheet, Student, User, Exam, TestPaper, Answer, ReportCategory, Report, Achievement, UserAchievement, Forum
 from .exceptions import *
 from .decorators import permission_check
 from .definitions import UserType, QuestionType, ExamType, AchievementCategory
@@ -516,10 +516,12 @@ def view_answersheet_content(request, answersheet_id):
             rank = testee_count - testee_surpassed
 
 
-        answers = answersheet.answer_set.all()
+        all_questions = Question.objects.all()#.filter(forum=False)
+        answers = answersheet.answer_set.all() #QuerySet
         questions = Question.objects.all().filter(favorite=request.user)
         question_correction_list, q_type_list= testee.question_correction(answersheet)
         is_favorite = []
+        #forum_question = Forum.objects.all()
         #return 那題題目 is True or False 的 list
         for answer in answers:
             try:
@@ -528,7 +530,8 @@ def view_answersheet_content(request, answersheet_id):
 
             except ObjectDoesNotExist:
                 is_favorite.append(0)
-                answers_correction_favorites = zip(answers, question_correction_list, is_favorite)
+                # answers_correction_favorites = zip(answers, question_correction_list, is_favorite)
+                answers_correction_favorites = zip(answers, question_correction_list, is_favorite, all_questions)
 
         y_data = []
         x_data1 = []
@@ -642,6 +645,62 @@ def favorite_question(request, question_id, answersheet_id):
         messages.success(request, _('Question has added to your favorite!'))
     return redirect('view_answersheet_content', answersheet_id)
 
+@permission_check(UserType.Testee)
+def forum_question(request, question_id, answersheet_id):
+    # question = Question.objects.all().filter(id=question_id)
+    question = Question.objects.get(id=question_id)
+    if question.in_forum:
+        return redirect('forum')
+    else:
+        messages.success(request, ('Add the question to the forum'))
+        return redirect('view_answersheet_content', answersheet_id)
+
+@permission_check(UserType.Testee)
+@require_http_methods(["POST"])
+def forum_question_add(request, question_id, answersheet_id):
+    if 'forum_comment' in request.POST and request.POST['forum_comment'] != "":
+        forum_comment = Forum.objects.create(
+            f_question = Question.objects.all().get(id = question_id),
+            f_content = request.POST['forum_comment'],
+            f_creator = request.user)
+        if forum_comment.f_question.in_forum == 0:
+            Question.objects.all().filter(id=question_id).update(in_forum=1)
+        messages.success(request, ('Successfully add the question to the forum.'))
+    else:
+        messages.warning(request, ('Failure! This space cannot be left blank!'))
+    return redirect('view_answersheet_content', answersheet_id)
+
+@permission_check(UserType.Testee)
+@require_http_methods(["POST"])
+def forum_comment_add(request, question_id):
+    if 'forum_comment' in request.POST and request.POST['forum_comment'] != "":
+        forum_comment = Forum.objects.create(
+            f_question = Question.objects.all().get(id = question_id),
+            f_content = request.POST['forum_comment'],
+            f_creator = request.user)
+        messages.success(request, ('Successfully add the comment to the question.'))
+    else:
+        messages.warning(request, ('Failure! This space cannot be left blank!'))
+    return redirect('forum')
+
+@permission_check(UserType.Testee)
+def forum_comment_delete(request, forum_comment_id):
+    forum_comment = Forum.objects.get(id=forum_comment_id)
+    forum_comment.delete()
+    messages.warning(request, 'The comment has removed from the forum...')
+    try:   
+        Forum.objects.get(f_question=forum_comment.f_question.id)       
+    except ObjectDoesNotExist:
+        forum_question = Question.objects.filter(id=forum_comment.f_question.id).update(in_forum=0)
+    return redirect('forum')
+
+@permission_check(UserType.Testee)
+def forum(request):
+    # forum_questions_search = Forum.objects.all()
+    forum_questions_search = Question.objects.all().filter(in_forum=1)
+    forum_comment_search = Forum.objects.all()
+    return render(request, 'testee/forum.html', locals())
+
 
 @permission_check(UserType.Testee)
 def favorite_question_list(request):
@@ -697,6 +756,7 @@ def favorite_question_delete(request, question_id):
         return redirect('favorite_question_list')
     except ObjectDoesNotExist:
         return redirect('favorite_question_list')
+
 
 @permission_check(UserType.Testee)
 @require_http_methods(["GET"])
