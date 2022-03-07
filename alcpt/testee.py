@@ -521,7 +521,6 @@ def view_answersheet_content(request, answersheet_id):
         questions = Question.objects.all().filter(favorite=request.user)
         question_correction_list, q_type_list= testee.question_correction(answersheet)
         is_favorite = []
-        #forum_question = Forum.objects.all()
         #return 那題題目 is True or False 的 list
         for answer in answers:
             try:
@@ -662,7 +661,8 @@ def forum_question_add(request, question_id, answersheet_id):
         forum_comment = Forum.objects.create(
             f_question = Question.objects.all().get(id = question_id),
             f_content = request.POST['forum_comment'],
-            f_creator = request.user)
+            f_creator = request.user,
+            data_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
         if forum_comment.f_question.in_forum == 0:
             Question.objects.all().filter(id=question_id).update(in_forum=1)
         messages.success(request, ('Successfully add the question to the forum.'))
@@ -677,7 +677,8 @@ def forum_comment_add(request, question_id):
         forum_comment = Forum.objects.create(
             f_question = Question.objects.all().get(id = question_id),
             f_content = request.POST['forum_comment'],
-            f_creator = request.user)
+            f_creator = request.user,
+            data_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
         messages.success(request, ('Successfully add the comment to the question.'))
     else:
         messages.warning(request, ('Failure! This space cannot be left blank!'))
@@ -688,9 +689,7 @@ def forum_comment_delete(request, forum_comment_id):
     forum_comment = Forum.objects.get(id=forum_comment_id)
     forum_comment.delete()
     messages.warning(request, 'The comment has removed from the forum...')
-    try:   
-        Forum.objects.get(f_question=forum_comment.f_question.id)       
-    except ObjectDoesNotExist:
+    if Forum.objects.filter(f_question=forum_comment.f_question.id).count()==0:
         forum_question = Question.objects.filter(id=forum_comment.f_question.id).update(in_forum=0)
     return redirect('forum')
 
