@@ -19,10 +19,10 @@
                     <table class="table table-bordered table-striped table-hover table-mc-light-blue">
                         <thead class="thead-light">
                             <tr>
-                                <th></th>
-                                <th scope="col">{{trans("Serial")}}</th>
+                                <th width="10%"></th>
+                                <th scope="col" width="10%">{{trans("Serial")}}</th>
                                 <th scope="col">{{trans("Content")}}</th>
-                                <th scope="col" class="text-right">
+                                <th scope="col" class="text-right" width="5%>
                                     <button type="button" class="btn" data-toggle="modal" data-target="#promptContent">
                                         <i class="fa fa-question-circle"></i>
                                     </button>
@@ -106,6 +106,11 @@
                                 </tr>
 
                                 <div id="forum_comment{{ loop.index }}" style="display: none">
+                                    <tr>
+                                        <th>User</th>
+                                        <th>Date</th>
+                                        <th>Comment</th>
+                                        <th></th>
                                     {% for forum_comment in forum_comment_search %}
                                         {% if forum_comment.f_question.id == forum_question.id %}
                                             <tr>
@@ -123,10 +128,10 @@
                                 </div>
                                 
                                 <tr id="forum_table{{ loop.index }}" style="display: none">
-                                    <td></td>
-                                    <td colspan="2" style="text-align: left">
+                                    <!-- <td></td> -->
+                                    <td colspan="3" style="text-align: left">
                                         <form action="forum_comment_add/{{forum_question.id}}" method="POST"> 
-                                            <label for="forum_comment">Ask questions:</label>
+                                            <label for="forum_comment">Write down your  comment:</label>
                                             <textarea id="forum_comment" name="forum_comment" rows="5" cols="40"></textarea>
                                             <input type="submit" value="Submit">
                                         </form>
