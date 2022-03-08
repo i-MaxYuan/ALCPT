@@ -1541,3 +1541,18 @@ msgstr "模擬考成績"
 
 msgid "Remaining Time"
 msgstr "剩餘作答時間"
+
+msgid "Forum"
+msgstr "討論區"
+
+msgid "Write down your questions"
+msgstr "請寫下你的疑問"
+
+msgid " means that the question has been discuessed, you can click it to see the forum."
+msgstr "代表此題已被討論，點擊即可查看討論區"
+
+msgid " means that the question doesn't have any comments."
+msgstr "代表此題尚未被任何人討論"
+
+msgid "If you want to delete your comments, please click "
+msgstr "如果你想刪除你的留言，請點擊"

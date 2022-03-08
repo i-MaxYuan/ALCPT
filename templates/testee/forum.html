@@ -19,8 +19,8 @@
                     <table class="table table-bordered table-striped table-hover table-mc-light-blue">
                         <thead class="thead-light">
                             <tr>
-                                <th width="10%"></th>
-                                <th scope="col" width="10%">{{trans("Serial")}}</th>
+                                <th width="7%"></th>
+                                <th scope="col" width="7%">{{trans("Serial")}}</th>
                                 <th scope="col">{{trans("Content")}}</th>
                                 <th scope="col" class="text-right" width="5%>
                                     <button type="button" class="btn" data-toggle="modal" data-target="#promptContent">
@@ -38,6 +38,11 @@
                                                         <li>
                                                             <p style="color: green">
                                                                 {{trans("Green color means the correct answer.")}}
+                                                            </p>
+                                                        </li>
+                                                        <li>
+                                                            <p>
+                                                                {{trans("If you want to delete your comments, please click ")}}<i class="fa-solid fa-trash-can" style="color: darkgray;"></i>
                                                             </p>
                                                         </li>
                                                         <li>
@@ -61,8 +66,8 @@
                         <tbody>
                             {% for forum_question in forum_questions_search %}
                                 <tr id="mainData{{ loop.index }}">
-                                    <td id="angle_right_btn_{{ loop.index }}" onclick="toggle('{{ loop.index }}')" style="cursor: pointer;"><i class="fa fa-angle-right"></i></td>
-                                    <td>{{ loop.index }}</td>
+                                    <td id="angle_right_btn_{{ loop.index }}" onclick="toggle('{{ loop.index }}')" style="cursor: pointer;text-align: center;"><i class="fa fa-angle-right"></i></td>
+                                    <td >{{ loop.index }}</td>
                                     <td class="text-left">
                                         {% if forum_question.q_file %}
                                         <audio controls preload="none">
@@ -105,12 +110,13 @@
                                     </td>
                                 </tr>
 
-                                <div id="forum_comment{{ loop.index }}" style="display: none">
+                                <tbody id="forum_comment{{ loop.index }}" style="display: none">
                                     <tr>
-                                        <th>User</th>
-                                        <th>Date</th>
-                                        <th>Comment</th>
+                                        <th>{{trans("User")}}</th>
+                                        <th style="text-align: center">{{trans("Date")}}</th>
+                                        <th>{{trans("Comment")}}</th>
                                         <th></th>
+                                    </tr>
                                     {% for forum_comment in forum_comment_search %}
                                         {% if forum_comment.f_question.id == forum_question.id %}
                                             <tr>
@@ -125,17 +131,17 @@
                                             </tr>
                                         {% endif %}
                                     {% endfor %}
-                                </div>
+                                </tbody>
                                 
                                 <tr id="forum_table{{ loop.index }}" style="display: none">
-                                    <!-- <td></td> -->
                                     <td colspan="3" style="text-align: left">
                                         <form action="forum_comment_add/{{forum_question.id}}" method="POST"> 
-                                            <label for="forum_comment">Write down your  comment:</label>
-                                            <textarea id="forum_comment" name="forum_comment" rows="5" cols="40"></textarea>
-                                            <input type="submit" value="Submit">
+                                            <label for="forum_comment">{{trans("Write down your questions")}}:</label>
+                                            <textarea id="forum_comment" name="forum_comment" rows="5" cols="60"></textarea>
+                                            <input type="submit" value={{trans("Submit")}}>
                                         </form>
                                     </td>
+                                    <td></td>
                                 </tr>    
 
                             {% else %}
