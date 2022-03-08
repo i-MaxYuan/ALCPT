@@ -521,6 +521,7 @@ def view_answersheet_content(request, answersheet_id):
         questions = Question.objects.all().filter(favorite=request.user)
         question_correction_list, q_type_list= testee.question_correction(answersheet)
         is_favorite = []
+        forum_comment_search = Forum.objects.all()
         #return 那題題目 is True or False 的 list
         for answer in answers:
             try:
@@ -692,6 +693,15 @@ def forum_comment_delete(request, forum_comment_id):
     if Forum.objects.filter(f_question=forum_comment.f_question.id).count()==0:
         forum_question = Question.objects.filter(id=forum_comment.f_question.id).update(in_forum=0)
     return redirect('forum')
+
+@permission_check(UserType.Testee)
+def answersheet_comment_delete(request, forum_comment_id, answersheet_id):
+    forum_comment = Forum.objects.get(id=forum_comment_id)
+    forum_comment.delete()
+    messages.warning(request, 'The comment has removed from the forum...')
+    if Forum.objects.filter(f_question=forum_comment.f_question.id).count()==0:
+        forum_question = Question.objects.filter(id=forum_comment.f_question.id).update(in_forum=0)
+    return redirect('view_answersheet_content', answersheet_id)
 
 @permission_check(UserType.Testee)
 def forum(request):

@@ -25,7 +25,7 @@ function toggle(index) {
 		summary_Q_content.style.display = "none";
 		full_Q_content.style.display = "block";
 		forum_Table.style.display = "table-row";
-		forum_Comment.style.display = "table-row";
+		forum_Comment.style.display = "table-row-group";
 	} else {
 		angle_right_btn.innerHTML = '<i class="fa fa-angle-right"></i>';
 		data.style.display = "none";

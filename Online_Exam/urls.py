@@ -840,7 +840,10 @@ re_path(
                 name='forum_comment_add'),
         re_path(r'^forum_comment_delete/(?P<forum_comment_id>[0-9]+)$',
                 testee.forum_comment_delete,
-                name='forum_comment_delete')
+                name='forum_comment_delete'),
+        re_path(r'^answersheet_comment_delete/(?P<forum_comment_id>[0-9]+)/(?P<answersheet_id>[0-9]+)$',
+                testee.answersheet_comment_delete,
+                name='answersheet_comment_delete'),
     ])),
 )
 
