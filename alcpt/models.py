@@ -105,7 +105,7 @@ class Achievement(models.Model):
 
 
 class UserAchievement(models.Model):
-    user = models.ForeignKey('User', on_delete=models.PROTECT)
+    user = models.ForeignKey('User', on_delete=models.CASCADE)
     achievement = models.ForeignKey('Achievement', on_delete=models.PROTECT, related_name="userachievements")
     progress = models.IntegerField(default=0)#使用者的進度值
     unlock = models.BooleanField(default=False)
@@ -165,7 +165,7 @@ class TestPaper(models.Model):
     name = models.CharField(max_length=100, unique=True)
     question_list = models.ManyToManyField('Question')
     created_time = models.DateTimeField(auto_now_add=True)
-    created_by = models.ForeignKey("User", on_delete=models.PROTECT, related_name='testee_created')
+    created_by = models.ForeignKey("User", on_delete=models.SET_NULL, null=True, related_name='testee_created')
     is_testpaper = models.BooleanField(default=False)
     is_used = models.BooleanField(default=False)
     update_time = models.DateTimeField(auto_now=True)
@@ -194,7 +194,7 @@ class Exam(models.Model):
     start_time = models.DateTimeField(blank=True, null=True)
     created_time = models.DateTimeField(auto_now_add=True)
     duration = models.PositiveSmallIntegerField(default=0)
-    created_by = models.ForeignKey('User', on_delete=models.PROTECT, related_name='exam_created')
+    created_by = models.ForeignKey('User', on_delete=models.SET_NULL, null=True, related_name='exam_created')
     finish_time = models.DateTimeField(blank=True, null=True)
     is_public = models.BooleanField(default=False)
     testeeList = models.ManyToManyField('User')
@@ -236,7 +236,7 @@ class Question(models.Model):
     q_time = models.IntegerField(default=0)
     q_correct_time = models.IntegerField(default=0)
     created_time = models.DateTimeField(auto_now_add=True)
-    created_by = models.ForeignKey('User', on_delete=models.PROTECT, related_name='question_created')
+    created_by = models.ForeignKey('User', on_delete=models.CASCADE, related_name='question_created')
     update_time = models.DateTimeField(auto_now=True)
     last_updated_by = models.ForeignKey('User', on_delete=models.SET_NULL, blank=True, null=True,
                                         related_name='last_updated')
@@ -307,7 +307,7 @@ class Forum(models.Model):
 # score: score of the answer sheet
 class AnswerSheet(models.Model):
     exam = models.ForeignKey('Exam', on_delete=models.CASCADE, blank=True)
-    user = models.ForeignKey('User', on_delete=models.CASCADE)      # Student -> User
+    user = models.ForeignKey('User', on_delete=models.SET_NULL, null=True)      # Student -> User
     finish_time = models.DateTimeField(auto_now_add=True)
     is_tested = models.BooleanField(default=False)
     is_finished = models.BooleanField(default=False)
@@ -338,7 +338,7 @@ class Answer(models.Model):
 class Group(models.Model):
     name = models.CharField(max_length=255, unique=True)
     member = models.ManyToManyField('User', blank=True)     # Student -> User
-    created_by = models.ForeignKey("User", on_delete=models.PROTECT, related_name='group_created')
+    created_by = models.ForeignKey("User", on_delete=models.CASCADE, related_name='group_created')
     update_time = models.DateTimeField(auto_now=True)
     created_time = models.DateTimeField(auto_now_add=True)
 
@@ -404,9 +404,9 @@ class Report(models.Model):
         (4, '暫存')
     )
     state = models.SmallIntegerField(choices=STATES_CHOICES, default=0)
-    created_by = models.ForeignKey('User', on_delete=models.PROTECT)
+    created_by = models.ForeignKey('User', on_delete=models.CASCADE)
     created_time = models.DateTimeField(auto_now_add=True, blank=True, null=True)
-    resolved_by = models.ForeignKey('User', on_delete=models.PROTECT, related_name='resolve_by', blank=True, null=True)
+    resolved_by = models.ForeignKey('User', on_delete=models.CASCADE, related_name='resolve_by', blank=True, null=True)
     resolved_time = models.DateTimeField(auto_now=True, blank=True, null=True)
 
     def __str__(self):

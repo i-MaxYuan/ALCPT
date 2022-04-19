@@ -20,7 +20,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'yftv^g7w17v-vd96!=ad37dv@m$_gh^nn_&d*4@qzsoce5*pd3'
-
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -135,7 +135,7 @@ LANGUAGES = {
     ('en-us', 'English'),
     ('zh', '中文繁體'),
 }
-LANGUAGE_CODE = 'zh'  # 'en-us'
+LANGUAGE_CODE = 'zh-Hant'  # 'en-us'
 LOCALE_PATHS = [
     os.path.join(BASE_DIR, 'locale'),
 ]

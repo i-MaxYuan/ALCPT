@@ -333,6 +333,17 @@ def user_edit(request, reg_id):
             messages.error(request, "User doesn't exist, user register id - {}".format(reg_id))
             return redirect('user_list')
 
+# 刪除使用者
+def user_del(request,reg_id):
+    try:
+        user = User.objects.get(reg_id=reg_id)
+        user.delete()
+        messages.success(request, _("Successfully deleted user."))
+        return redirect('user_list')
+    except ObjectDoesNotExist:
+        messages.error(request,_("ERROR!"))
+        return redirect('user_list')
+    return redirect('user_list')
 
 # 單位列表
 @permission_check(UserType.SystemManager)
