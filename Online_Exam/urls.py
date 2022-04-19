@@ -585,6 +585,9 @@ re_path(
         re_path(r'^edit/(?P<reg_id>[a-zA-Z0-9]+)$',
                 system.user_edit,
                 name='user_edit'),
+        re_path(r'^delete/(?P<reg_id>[a-zA-Z0-9]+)$',
+                system.user_del,
+                name='user_del'),
         re_path(r'^unit_list/$', system.unit, name='unit_list'),
         re_path(
             r'^unit_list/',

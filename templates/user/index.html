@@ -75,13 +75,19 @@
                             <th class="text-center">{{trans("Testee")}}</th>
                             <th class="text-center">{{trans("Last login")}}</th>
 
-                            <th>
+                            <th class="text-center">
                                 <div class="add">
                                     <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ url('user_create') }}'">
-                                        <i class="fa fa-plus"></i>
+                                        <i class="fa fa-user-plus"></i>
                                     </button>
                                 </div>
                             </th>
+                             <th class="text-center">
+                                <button type="button" class="btn btn-link" disabled>
+                                    <i class="fa fa-user-minus"></i>
+                                </button>
+                            </th>
+
                         </tr>
                     </thead>
 
@@ -142,6 +148,10 @@
                             </td>
                             <td class="text-center">
                                 <a href="{{ url('user_edit', args=[user.reg_id]) }}"><i class="fa fa-pencil-square-o"></i></a>
+                            </td>
+                            <td class="text-center">
+                                    <a href="{{ url('user_del', args=[user.reg_id]) }}" onclick="return confirm('{{trans("Sure to delete this user")}}?')">
+                                    <i class="fa fa-trash" style="color:red"></i></a>
                             </td>
                         </tr>
                         {% endfor %} {% else %}
