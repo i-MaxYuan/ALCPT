@@ -236,7 +236,7 @@ class Question(models.Model):
     q_time = models.IntegerField(default=0)
     q_correct_time = models.IntegerField(default=0)
     created_time = models.DateTimeField(auto_now_add=True)
-    created_by = models.ForeignKey('User', on_delete=models.CASCADE, related_name='question_created')
+    created_by = models.ForeignKey('User', on_delete=models.SET_NULL, blank=True, null=True, related_name='question_created')
     update_time = models.DateTimeField(auto_now=True)
     last_updated_by = models.ForeignKey('User', on_delete=models.SET_NULL, blank=True, null=True,
                                         related_name='last_updated')
