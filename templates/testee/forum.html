@@ -66,7 +66,7 @@
                         <tbody>
                             {% for forum_question in forum_questions_search %}
                                 <tr id="mainData{{ loop.index }}">
-                                    <td id="angle_right_btn_{{ loop.index }}" onclick="toggle('{{ loop.index }}')" style="cursor: pointer;text-align: center;"><i class="fa fa-angle-right"></i></td>
+                                    <td id="angle_right_btn_{{ loop.index }}" onclick="toggle('{{ loop.index }}'); change();" style="cursor: pointer;text-align: center;"><i class="fa fa-angle-right"></i></td>
                                     <td >{{ loop.index }}</td>
                                     <td class="text-left">
                                         {% if forum_question.q_file %}
@@ -127,7 +127,7 @@
                                                     {% if forum_comment.f_creator.id == request.user.id %}
                                                         <a href="{{ url('forum_comment_delete', args=[forum_comment.id]) }}"><i class="fa-solid fa-trash-can" style="color: darkgray; font-size: 25px; padding-right: 5px"></i></a>
                                                     {% endif %}
-                                                 </td>
+                                                </td>
                                             </tr>
                                         {% endif %}
                                     {% endfor %}
@@ -143,7 +143,6 @@
                                     </td>
                                     <td></td>
                                 </tr>    
-
                             {% else %}
                                 <tr>
                                     <td class="text-center" colspan="5">{{trans("There is no question in forum now")}}...</td>

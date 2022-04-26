@@ -1562,3 +1562,12 @@ msgstr "模擬考排行"
 
 msgid "Level Ranking"
 msgstr "等級排行"
+
+msgid "There is no question in forum now"
+msgstr "目前沒有任何題目被討論"
+
+msgid "IM, Management College, NDU. Version"
+msgstr "國防大學—管理學院—資訊管理學系， 版本"
+
+msgid "No comments"
+msgstr "此題尚無任何討論"
