@@ -24,7 +24,7 @@
                             <div class="form-group row">
                                 <label for="reg_id" class="col-md-4 col-form-label text-md-right">{{trans("Reg ID")}}</label>
                                 <div class="col-md-6">
-                                    <input class="form-control" type="text" id="reg_id" name="reg_id" placeholder="{{trans("Register ID")}}..." onkeyup="valid_ID(this)" required />
+                                    <input class="form-control" type="text" id="reg_id" name="reg_id" pattern='[[a-zA-Z0-9]*' placeholder="{{trans("Register ID")}}..." onkeyup="valid_ID(this)" required />
                                     <label class="unique_id" id="invalid_id" style="display: none"></label>
                                 </div>
                             </div>
