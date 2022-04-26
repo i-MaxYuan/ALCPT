@@ -15,6 +15,7 @@ function toggle(index) {
 	var forum_Table = document.getElementById(forumTable);
 	var forumComment = "forum_comment"+index;
 	var forum_Comment = document.getElementById(forumComment);
+	
 
 
 	if (data.style.display === "none") {
@@ -26,7 +27,8 @@ function toggle(index) {
 		full_Q_content.style.display = "block";
 		forum_Table.style.display = "table-row";
 		forum_Comment.style.display = "table-row-group";
-	} else {
+	} 
+	else {
 		angle_right_btn.innerHTML = '<i class="fa fa-angle-right"></i>';
 		data.style.display = "none";
 		// iconRight.style.display = "block";

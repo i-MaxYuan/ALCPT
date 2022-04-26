@@ -677,6 +677,7 @@ def forum_comment_add(request, question_id):
     if 'forum_comment' in request.POST and request.POST['forum_comment'] != "":
         forum_comment = Forum.objects.create(
             f_question = Question.objects.all().get(id = question_id),
+            # f_content = tinymce.get("mytextarea").getContent()
             f_content = request.POST['forum_comment'],
             f_creator = request.user,
             data_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
@@ -709,6 +710,14 @@ def forum(request):
     forum_questions_search = Question.objects.all().filter(in_forum=1)
     forum_comment_search = Forum.objects.all()
     return render(request, 'testee/forum.html', locals())
+
+# @permission_check(UserType.TBManager)
+# def add_best_reply(request. question_id, q_reply):
+#     question = Question.objects.all().get(id=question_id)
+#     question.best_reply = q_reply
+#     question.replier = request.user
+#     return render(request, )
+
 
 
 @permission_check(UserType.Testee)

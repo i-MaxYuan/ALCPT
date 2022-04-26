@@ -253,7 +253,8 @@ class Question(models.Model):
         (6, '暫存'),
     )
     state = models.SmallIntegerField(choices=STATES_CHOICES, default=6)
-    #forum = models.BooleanField(default = False)
+    best_reply = models.TextField(blank = True, null = True)
+    replier = models.OneToOneField('User', on_delete=models.CASCADE, related_name = "replier", null = True, blank = True)
 
     class Meta:
         ordering = ('-q_content',)
@@ -289,13 +290,6 @@ class Forum(models.Model):
     f_content = models.TextField(blank=False, null=False)
     f_creator = models.ForeignKey('User', on_delete=models.CASCADE)
     data_time = models.DateTimeField(blank=True, null=True, default=datetime.datetime.now)
-
-#討論區留言
-#f_c_question:
-# class ForumComment(models.Model):
-#     f_c_question = models.ForeignKey('Forum')
-#     f_comment = models.TextField(blank=False, null=False)
-#     f_commenter = models.OneToOneField('User')
 
 
 # 答案卷
