@@ -23,7 +23,7 @@ from alcpt.exceptions import *
 def exam_list(request):
     exams = Exam.objects.filter(is_public=True)
 
-    page = request.GET.get('page', 0)
+    page = request.GET.get('page', 1)
     paginator = Paginator(exams, 10)  # the second parameter is used to display how many items. Now is display 10
 
     try:
@@ -270,7 +270,7 @@ def testpaper_list(request):
     else:
         testpapers = TestPaper.objects.filter(is_testpaper=True).order_by("-created_time")
 
-    page = request.GET.get('page', 0)
+    page = request.GET.get('page', 1)
     paginator = Paginator(testpapers, 10)  # the second parameter is used to display how many items. Now is display 10
 
     try:
