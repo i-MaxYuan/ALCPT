@@ -24,7 +24,7 @@ def group_list(request):
     else:
         groups = Group.objects.all()
 
-    page = request.GET.get('page', 0)
+    page = request.GET.get('page', 1)
     paginator = Paginator(groups, 10)
 
     try:
