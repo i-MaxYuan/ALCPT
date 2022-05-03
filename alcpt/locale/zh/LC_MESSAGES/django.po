@@ -34,7 +34,7 @@ msgid "User List"
 msgstr "使用者列表"
 
 msgid "TestManager"
-msgstr "考試管理員"
+msgstr "鑑測管理員"
 
 msgid  "TBManager"
 msgstr "題庫管理員"
@@ -46,10 +46,10 @@ msgid  "TBO"
 msgstr "題庫操作員"
 
 msgid "Test Manager"
-msgstr "考試管理員"
+msgstr "鑑測管理員"
 
 msgid "TM"
-msgstr "考試管理員"
+msgstr "鑑測管理員"
 
 msgid  "TB Manager"
 msgstr "題庫管理員"
@@ -906,7 +906,7 @@ msgid  "ALCPT is short for American Language Course Placement Test."
 msgstr " "
 
 msgid  "ALCPT distinguishes multiple user permissions, and students can focus on their own permissions to practice."
-msgstr "本系統區分為6個使用者權限，分別為「系統管理員」、「考試管理員」、「題庫管理員」、「題庫操作員」、「成績檢閱者」及「受測者」，使用者可以擁有多個使用者權限進行操作。"
+msgstr "本系統區分為6個使用者權限，分別為「系統管理員」、「鑑測管理員」、「題庫管理員」、「題庫操作員」、「成績檢閱者」及「受測者」，使用者可以擁有多個使用者權限進行操作。"
 
 msgid  "This system will also generate some simple statistical graphs to make it easier for users to understand their practice status."
 msgstr " "
