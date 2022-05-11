@@ -1032,7 +1032,7 @@ msgstr "已完成"
 msgid  "Exam Record List"
 msgstr "測驗成績列表"
 
-msgid  "You have no favorite question now"
+msgid  "You have no favorite questions now"
 msgstr "您目前沒有試題在問題收藏本中"
 
 msgid  "Sure to report?"
@@ -1068,7 +1068,7 @@ msgstr "團隊"
 msgid  "Contact"
 msgstr "聯絡"
 
-msgid  "ALCPT is a website helps you improve your English Proficiency and evalute learning effectiveness."
+msgid  "ALCPT is a website that helps you improve your English Proficiency and evaluate learning effectiveness."
 msgstr "本平台是一個可幫助您提高英語水平和評估學習效果的網站"
 
 msgid  "Commander"
