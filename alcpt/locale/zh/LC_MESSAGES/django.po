@@ -1571,3 +1571,12 @@ msgstr "國防大學—管理學院—資訊管理學系， 版本"
 
 msgid "No comments"
 msgstr "此題尚無任何討論"
+
+msgid "Start Exam"
+msgstr "開始模擬考"
+
+msgid "minutes"
+msgstr "分鐘"
+
+msgid "in"
+msgstr "建立於"
