@@ -11,10 +11,12 @@
                     <div class="card-body">
                         <h5 class="card-title">{{ proclamation.title }}</h5>
 
-                        <p class="card-text">{{ proclamation.text|linebreaksbr }}</p>
+                        <!-- <p class="card-text">{{ proclamation.text|linebreaksbr }}</p> -->
+                        <p class="card-text">{{ trans("Start Time") }} : {{ time }}</p>
+                        <p class="card-text">{{ trans("Duration")}} : {{ duration }} {{ trans("minutes") }}</p>
 
                         <footer class="blockquote-footer">
-                            {{ proclamation.created_by }} in
+                            {{ proclamation.created_by }} {{ trans("in") }}
                             <cite title="Source Title">{{ proclamation.created_time }}</cite>
                         </footer>
                         {% if proclamation.exam_id != 0 %}
