@@ -288,9 +288,9 @@ def score_list(request):
                 marker_color=df['color'])
     data=[trace]
     layout = go.Layout(
-        title='Exam考試總成績分佈',
+        title='模擬鑑測總成績分佈',
         xaxis = dict(title = '成績'),
-        yaxis = dict(title = '考試成績範圍次數')
+        yaxis = dict(title = '鑑測成績範圍次數')
     )
     fig = go.Figure(data=data, layout=layout)
     exam_bar_chart = pyo.plot(fig, output_type='div')
@@ -307,9 +307,9 @@ def score_list(request):
                 marker_color=df['color'])
     data=[trace]
     layout = go.Layout(
-        title='Reading練習總成績分佈',
+        title='閱讀練習總成績分佈',
         xaxis = dict(title = '成績'),
-        yaxis = dict(title = '考試成績範圍次數')
+        yaxis = dict(title = '練習成績範圍次數')
     )
     fig = go.Figure(data=data, layout=layout)
     reading_bar_chart = pyo.plot(fig, output_type='div')
@@ -326,9 +326,9 @@ def score_list(request):
                 marker_color=df['color'])
     data=[trace]
     layout = go.Layout(
-        title='Listening練習總成績分佈',
+        title='聽力練習總成績分佈',
         xaxis = dict(title = '成績'),
-        yaxis = dict(title = '考試成績範圍次數')
+        yaxis = dict(title = '練習成績範圍次數')
     )
     fig = go.Figure(data=data, layout=layout)
     listening_bar_chart = pyo.plot(fig, output_type='div')
@@ -344,7 +344,7 @@ def score_list(request):
 
     data = [trace]
     layout = go.Layout({
-        'title': 'Exam考試合格率分析',
+        'title': '模擬鑑測合格率分析',
         'annotations': [
             {
                 'font': {
@@ -366,7 +366,7 @@ def score_list(request):
 
     data = [trace]
     layout = go.Layout({
-        'title': 'Reading練習合格率分析',
+        'title': '閱讀練習合格率分析',
         'annotations': [
              {
                 'font': {
@@ -390,7 +390,7 @@ def score_list(request):
 
     data = [trace]
     layout = go.Layout({
-        'title': 'Listening練習合格率分析',
+        'title': '聽力練習合格率分析',
         'annotations': [
              {
                 'font': {

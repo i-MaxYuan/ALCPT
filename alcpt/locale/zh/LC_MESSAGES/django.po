@@ -76,7 +76,7 @@ msgid  "User Response Handling"
 msgstr "使用者問題處理進度"
 
 msgid  "Exam List"
-msgstr "測驗列表"
+msgstr "模擬鑑測列表"
 
 msgid  "TestPaper List"
 msgstr "試卷列表"
@@ -97,16 +97,19 @@ msgid  "Create Reading Question"
 msgstr "建立閱讀試題"
 
 msgid  "View Testee Score"
-msgstr "測驗成績列表"
+msgstr "檢閱模擬鑑測成績"
 
 msgid  "Favorite Question"
 msgstr "問題收藏本"
 
 msgid  "Exam Record"
-msgstr "測驗紀錄"
+msgstr "模擬鑑測紀錄"
 
 msgid  "Score Record"
 msgstr "成績紀錄"
+
+msgid  "Test Record"
+msgstr "測驗紀錄"
 
 msgid  "Listening Practice"
 msgstr "聽力練習"
@@ -487,7 +490,7 @@ msgid "Score"
 msgstr "成績"
 
 msgid "Exam Score List"
-msgstr "考試成績列表"
+msgstr "模擬鑑測成績列表"
 
 msgid "Start Time"
 msgstr "開始時間"
@@ -499,7 +502,7 @@ msgid "Finish Time"
 msgstr "結束時間"
 
 msgid "Duration"
-msgstr "考試時間"
+msgstr "鑑測時間"
 
 msgid "min"
 msgstr "分鐘"
@@ -508,6 +511,9 @@ msgid "View Testee Info"
 msgstr "查看測驗者資料"
 
 msgid "Exam Name"
+msgstr "模擬鑑測名稱"
+
+msgid "Test Name"
 msgstr "測驗名稱"
 
 msgid "Last Login"
@@ -517,37 +523,37 @@ msgid "Exam Content"
 msgstr "考試資訊"
 
 msgid "Test paper"
-msgstr "測驗卷"
+msgstr "試卷"
 
 msgid  "Created"
 msgstr "創建時間"
 
 msgid  "Testee List"
-msgstr "測驗者名單"
+msgstr "鑑測者名單"
 
 msgid  "Personnel"
 msgstr "人員"
 
 msgid  "Exam Create"
-msgstr "建立考試"
+msgstr "建立模擬鑑測"
 
 msgid  "Choose Test Paper"
-msgstr "選擇測驗卷"
+msgstr "選擇試卷"
 
 msgid  "Group"
 msgstr "群組"
 
 msgid  "Choose Testee Group"
-msgstr "選擇測驗群組"
+msgstr "選擇受測者群組"
 
 msgid  "Date"
 msgstr "日期"
 
 msgid  "Exam Edit"
-msgstr "編輯測驗"
+msgstr "編輯鑑測"
 
 msgid  "Test Paper"
-msgstr "測驗卷"
+msgstr "試卷"
 
 msgid  "Creator"
 msgstr "創建人"
@@ -652,7 +658,7 @@ msgid  "Select"
 msgstr "選擇"
 
 msgid  "Practice Select"
-msgstr "測驗練習選擇"
+msgstr "練習卷設定"
 
 msgid  "Listening"
 msgstr "聽力"
@@ -692,10 +698,10 @@ msgid  "ParagraphUnderstanding"
 msgstr "段落理解"
 
 msgid  "Choose the number of your test paper"
-msgstr "選擇測驗題數"
+msgstr "選擇練習題數"
 
 msgid  "Question Number"
-msgstr "測驗卷題數"
+msgstr "題數"
 
 msgid  "You can start practice"
 msgstr "你可以開始測驗囉"
@@ -720,7 +726,7 @@ msgstr "選擇試題題型"
 
 msgid ""
 "Choose the difficulty of your test paper"
-msgstr "選擇測驗難度"
+msgstr "選擇練習難度"
 
 msgid  "Medium"
 msgstr "適中"
@@ -1030,7 +1036,7 @@ msgid  "Finished"
 msgstr "已完成"
 
 msgid  "Exam Record List"
-msgstr "測驗成績列表"
+msgstr "模擬鑑測成績列表"
 
 msgid  "You have no favorite questions now"
 msgstr "您目前沒有試題在問題收藏本中"
@@ -1537,7 +1543,7 @@ msgid "Listening Practice Score"
 msgstr "聽力練習成績"
 
 msgid "Exam Score"
-msgstr "模擬考成績"
+msgstr "模擬鑑測成績"
 
 msgid "Remaining Time"
 msgstr "剩餘作答時間"
@@ -1573,7 +1579,7 @@ msgid "No comments"
 msgstr "此題尚無任何討論"
 
 msgid "Start Exam"
-msgstr "開始模擬考"
+msgstr "開始鑑測"
 
 msgid "minutes"
 msgstr "分鐘"
