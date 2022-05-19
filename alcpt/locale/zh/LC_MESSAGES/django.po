@@ -1024,7 +1024,7 @@ msgid  "Practice"
 msgstr "練習"
 
 msgid  "Exam"
-msgstr "測驗"
+msgstr "鑑測"
 
 msgid  "Practice Record List"
 msgstr "練習成績列表"
@@ -1114,7 +1114,7 @@ msgid  "the TB manager for review."
 msgstr "題庫管理員進行審核"
 
 msgid  "Commander and Techer can check "
-msgstr "檢閱各個模擬測驗及練習的"
+msgstr "檢閱各個模擬鑑測及練習的"
 
 msgid  "student's score."
 msgstr "受測者成績分佈及分析"
@@ -1463,7 +1463,7 @@ msgid "You can start practice!"
 msgstr "您可以開始練習！"
 
 msgid "You had finished the exam."
-msgstr "您已結束本測驗"
+msgstr "您已結束本鑑測"
 
 msgid "Continue"
 msgstr "繼續"
@@ -1526,7 +1526,7 @@ msgid "You hadn't finish your test, please keep answering the exam"
 msgstr "您尚未完成您的測驗，請回至作答頁面完成作答"
 
 msgid "You hadn't take this exam!"
-msgstr "您未參加該次測驗！"
+msgstr "您未參加該次鑑測！"
 
 msgid "Thanks for your report, we will review this question as soon as possible."
 msgstr "感謝您的回報，我們將會儘速回覆您的問題！"
