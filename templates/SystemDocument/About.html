@@ -6,7 +6,6 @@
 </head>
 
 <!-- JS that disable right mouse click -->
-
 <body oncontextmenu=self.event.returnValue=false onselectstart="return false">
 
     <!-- Header Section Start -->
@@ -32,13 +31,14 @@
                         <li class="nav-item">
                             <a class="nav-link page-scroll" href="#features">{{trans("Manuallist")}}</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="btn btn-singin" href="{{ url('Homepage') }}">{{trans("Start")}}</a>
-                        </li>
+
+                        
                         <div class="dropdown">
+                            
                             <button class="btn btn-singin dropdown-toggle" type="button" data-toggle="dropdown">
                                 {{trans("Language")}}
                             </button>
+                            
                             <ul class="dropdown-menu">
                                 <li>
                                 	<a href="/en-us/">English</a>
@@ -48,10 +48,27 @@
                                 </li>
                             </ul>
                         </div>
-                    </ul>
                 </div>
+                <a href="/en-us/accounts/profile">
+                {% if user.is_authenticated %}
+                <ul class="list-unstyled components">
+                    <img src="{{ user.photo.url }}" width="70px" style="border-radius: 50%; padding-right: 5px; margin-bottom:20px;  margin-left:10px" alt="">
+                    {% if request.user.name != None %}
+                    {{ request.user.name }}
+                    {% else %}
+                    {{ request.user.reg_id }}
+                    {% endif %}
+                    <script>
+                        say_hello();
+                    </script></a>
+    
+                    {% else %}
+                    <a class="btn btn-singin" href="/en-us/accounts/login">Login</a>
+                    {% endif %}
+                    </ul>
             </div>
         </nav>
+
         <div class="container">
             <div class="row space-100">
                 <div class="col-lg-6 col-md-12 col-xs-12">

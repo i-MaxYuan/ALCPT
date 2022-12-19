@@ -9,10 +9,10 @@
                 <form method="post">
                     <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
                     <div class="card">
-                        <div class="card-header">{{trans("TestPaper Create")}}</div>
+                        <div class="card-header" style=" color:blue; font-size:30px;">{{trans("TestPaper Create")}}</div>
 
                         <div class="card-body">
-                            <h5 class="card-subtitle mb-2 text-muted">
+                            <h5 class="card-subtitle mb-2 text-muted" style="font-size:25px;">
                                 {{trans("TestPaper Name")}}<span class="invalid" id="invalid"></span>
                             </h5>
                             <p class="card-text">

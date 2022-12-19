@@ -18,32 +18,33 @@
                     <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
 
                     <div class="card">
-                        <div class="card-header">{{trans("Practice Select")}}</div>
+                        <div class="card-header" style=" color:blue; font-size:30px;">{{trans("Practice Select")}}</div>
 
                         <div class="card-body">
                             {% if kind == 'listening' %}
-                            <h5 class="card-subtitle mb-2 text-muted">
+                            <h5 class="card-subtitle mb-2 text-muted" style="font-size:25px;"><b> 
                                 {{trans("Listening Type")}}({{trans("Multiple Select")}})
-                            </h5>
-                            <p class="card-text">
-                                <input type="checkbox" name="question_type" onclick="ChangeButton()" value="1" />{{trans("QA")}}
-                                <input type="checkbox" name="question_type" onclick="ChangeButton()" value="2" />{{trans("ShortConversation")}}
+                            </b></h5>
+                            <p class="card-text" style="font-size:20px;">
+                                <input type="checkbox" name="question_type" onclick="ChangeButton()" value="1" style="height: 24px;width: 24px;" />{{trans("QA")}} <br>
+                                <input type="checkbox" name="question_type" onclick="ChangeButton()" value="2" style="height: 24px;width: 24px;" />{{trans("ShortConversation")}}
                             </p>
                             {% else %}
-                            <h5 class="card-subtitle mb-2 text-muted">
+                            <h5 class="card-subtitle mb-2 text-muted" style="font-size:25px;"><b>
                                 {{trans("Reading Type")}}({{trans("Multiple Select")}})
-                            </h5>
-                            <p class="card-text">
-                                <input type="checkbox" name="question_type" onclick="ChangeButton()" value="3" />{{trans("Grammar")}}
-                                <input type="checkbox" name="question_type" onclick="ChangeButton()" value="4" />{{trans("Phrase")}}
-                                <input type="checkbox" name="question_type" onclick="ChangeButton()" value="5" />{{trans("ParagraphUnderstanding")}}
+                            </b></h5>
+                            
+                            <p class="card-text" style="font-size:20px;">
+                                <input type="checkbox" name="question_type" onclick="ChangeButton()" value="3"  style="height: 24px;width: 24px;"/>{{trans("Grammar")}} <br>
+                                <input type="checkbox" name="question_type" onclick="ChangeButton()" value="4" style="height: 24px;width: 24px;"/>{{trans("Phrase")}} <br>
+                                <input type="checkbox" name="question_type" onclick="ChangeButton()" value="5" style="height: 24px;width: 24px;"/>{{trans("ParagraphUnderstanding")}}
                             </p>
                             {% endif %}
-
-                            <h5 class="card-subtitle mb-2 text-muted">{{trans("Question Number")}}</h5>
+                            <br>
+                            <h5 class="card-subtitle mb-2 text-muted" style="font-size:25px;"><b> {{trans("Question Number")}}</b></h5>
                             <p class="card-text">
-                                <select class="custom-select custom-select-sm" name="question_num" id="question_num" onchange="ChangeButton()" required>
-                                    <option value="" disabled selected hidden>
+                                <select class="custom-select custom-select-sm" name="question_num" id="question_num"  style="font-size:18px;" onchange="ChangeButton()" required>
+                                    <option value="" disabled selected hidden >
                                         {{trans("Choose the number of your test paper")}}
                                     </option>
                                     <option value="10">10</option>
@@ -51,10 +52,10 @@
                                     <option value="30">30</option>
                                 </select>
                             </p>
-
-                            <h5 class="card-subtitle mb-2 text-muted">{{trans("Difficulty")}}</h5>
+                            <br>
+                            <h5 class="card-subtitle mb-2 text-muted" style="font-size:25px;"><b> {{trans("Difficulty")}}</b></h5>
                             <p class="card-text">
-                                <select class="custom-select custom-select-sm" name="question_level" id="question_level" onchange="ChangeButton()" required>
+                                <select class="custom-select custom-select-sm" name="question_level" id="question_level"  style="font-size:18px;"  onchange="ChangeButton()" required>
                                     <option value="" disabled selected hidden>
                                         {{trans("Choose the difficulty of your test paper")}}
                                     </option>
@@ -63,8 +64,8 @@
                                     <option value="30">{{trans("Hard")}}</option>
                                 </select>
                             </p>
-
-                            <h5 class="card-subtitle mb-2 text-muted">練習時間(分鐘)-不限時免填 最長999分鐘</h5>
+                            <br>
+                            <h5 class="card-subtitle mb-2 text-muted" style="font-size:25px;"><b>練習時間(分鐘)-不限時免填 最長999分鐘</b></h5>
                             <p class="card-text">
                                 <input type="text" id="duration" name="duration">
                                 <div id="hint" style="color:red;"></div>

@@ -18,13 +18,13 @@
                     <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
 
                     <div class="card">
-                        <div class="card-header">
+                        <div class="card-header" style=" color:blue; font-size:30px;">
                             {{trans("Create ")}}{% if kind == 'listening' %}{{trans("Listening ")}}{% else %}{{trans("Reading ")}}{% endif %}{{trans("Question")}}
                         </div>
 
                         <div class="card-body">
                             {% if kind == 'listening' %}
-                            <h5 class="card-subtitle mb-2 text-muted">{{trans("File")}}</h5>
+                            <h5 class="card-subtitle mb-2 text-muted" style="font-size:25px;">{{trans("File")}}</h5>
                             <div class="input-group">
                                 <div class="custom-file">
                                     <input type="file" class="custom-file-input" id="question_file" name="question_file" accept="audio/mpeg" onchange="OpenButton('listening')" />
@@ -42,8 +42,8 @@
                                 });
                             </script>
                             <p class="card-text"></p>
-
-                            <h5 class="card-subtitle mb-2 text-muted">{{trans("Type")}}</h5>
+                            <br>
+                            <h5 class="card-subtitle mb-2 text-muted" style="font-size:25px;">{{trans("Type")}}</h5>
                             <p class="card-text">
                                 <select class="custom-select custom-select-sm" name="question_type" id="question_type_listening" onkeyup="OpenButton('listening')" required>
                                     <option value="" disabled selected>
@@ -55,12 +55,13 @@
                             </p>
 
                             {% elif kind == 'reading' %}
-                            <h5 class="card-subtitle mb-2 text-muted">{{trans("Question Content")}}</h5>
+                            
+                            <h5 class="card-subtitle mb-2 text-muted" style="font-size:25px;">{{trans("Question Content")}}</h5>
                             <p class="card-text">
                                 <textarea class="form-control" cols="100" rows="5" name="question_content" id="question_content" onkeyup="OpenButton('reading')" placeholder="{{trans("Enter the question content")}}..." required></textarea>
                             </p>
-
-                            <h5 class="card-subtitle mb-2 text-muted">{{trans("Type")}}</h5>
+                            <br>
+                            <h5 class="card-subtitle mb-2 text-muted" style="font-size:25px;">{{trans("Type")}}</h5>
                             <p class="card-text">
                                 <select class="custom-select custom-select-sm" name="question_type" id="question_type_listening" onkeyup="OpenButton('listening')" required>
                                     <option value="" disabled selected>
@@ -72,8 +73,8 @@
                                 </select>
                             </p>
                             {% endif %}
-
-                            <h5 class="card-subtitle mb-2 text-muted">{{trans("Difficulty")}}</h5>
+                            <br>
+                            <h5 class="card-subtitle mb-2 text-muted" style="font-size:25px;">{{trans("Difficulty")}}</h5>
                             <p class="card-text">
                                 <select class="custom-select custom-select-sm" name="question_difficulty">
                                     <option value="1" selected>{{trans("Easy")}}</option>
@@ -81,8 +82,8 @@
                                     <option value="3">{{trans("Hard")}}</option>
                                 </select>
                             </p>
-
-                            <h5 class="card-subtitle mb-2 text-muted">{{trans("Question Option")}}</h5>
+                            <br>
+                            <h5 class="card-subtitle mb-2 text-muted" style="font-size:25px;">{{trans("Question Option")}}</h5>
                             <p>
                                 Ａ.<input class="form-control" type="text" name="choice1" id="choice1" onkeyup="OpenButton('{{ kind }}')" placeholder="{{trans("Enter Choice content")}}..." required />
                             </p>

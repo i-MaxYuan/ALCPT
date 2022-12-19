@@ -6,21 +6,21 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">{{ trans("Proclamation Create") }}</div>
+                    <div class="card-header" style=" color:blue; font-size:30px;">{{ trans("Proclamation Create") }}</div>
 
                     <div class="card-body">
                         <form method="post">
                             <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
 
                             <div class="form-group row">
-                                <label for="p_title" class="col-md-4 col-form-label text-md-right">{{ trans("Title") }}</label>
+                                <label for="p_title" class="col-md-4 col-form-label text-md-right" style="font-size:25px;">{{ trans("Title") }}</label>
                                 <div class="col-md-6">
                                     <input type="text" id="p_title" class="form-control" name="p_title" placeholder="{{trans("Proclamation Title")}}..." required autofocus />
                                 </div>
                             </div>
 
                             <div class="form-group row">
-                                <label for="p_text" class="col-md-4 col-form-label text-md-right">{{ trans("Content") }}</label>
+                                <label for="p_text" class="col-md-4 col-form-label text-md-right" style="font-size:25px;">{{ trans("Content") }}</label>
                                 <div class="col-md-6">
                                     <textarea class="form-control" name="p_text" cols="100" rows="8" placeholder="{{trans("Proclamation Content")}}..." required></textarea>
                                 </div>
