@@ -36,7 +36,17 @@ INSTALLED_APPS = (
     'alcpt',
     'captcha',
     'django_plotly_dash.apps.DjangoPlotlyDashConfig',
+    'django_crontab',
+    'dbbackup',
 )
+
+#dbbackup options
+DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
+DBBACKUP_STORAGE_OPTIONS = {'location': '/home/max/Desktop/ALCPT/backup'}
+
+CRONJOBS = [
+    ('*/10 * * * *', 'alcpt.cron.backup','>>/home/max/Desktop/crontab.log')  
+]
 
 MIDDLEWARE = (
     'django.contrib.sessions.middleware.SessionMiddleware',
