@@ -3,7 +3,7 @@ import time
 from datetime import datetime
 from django.core import management
 from django.conf import settings
-from django_cron import CronJobBase, Schedule
+#from django_cron import CronJobBase, Schedule
 
 #from Online_Exam import urls
 #
@@ -22,11 +22,12 @@ def backup():
 def restore():
     management.call_command("dbrestore")
 
-
-def cron_time():
+'''
+def cron_time(): #unused
     min = "/10"
     hour = ""
     day_of_month = ""
     month = ""
     day_of_week = ""
     return(f"*{min} *{hour} *{day_of_month} *{month} *{day_of_week}")
+'''

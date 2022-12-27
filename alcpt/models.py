@@ -418,3 +418,7 @@ class Reply(models.Model):
 
     def get_content(self):
         return json.loads(self.content)
+
+class Word_exam(models.Model):
+    word11 = models.CharField(max_length=50)
+    definiton11 = models.TextField()
