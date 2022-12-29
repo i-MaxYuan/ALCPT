@@ -11,7 +11,7 @@ from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
-from .models import Question, AnswerSheet, Student, User, Exam, TestPaper, Answer, ReportCategory, Report, Achievement, UserAchievement, Forum
+from .models import Question, AnswerSheet, Student, User, Exam, TestPaper, Answer, ReportCategory, Report, Achievement, UserAchievement, Forum, Word_library
 from .exceptions import *
 from .decorators import permission_check
 from .definitions import UserType, QuestionType, ExamType, AchievementCategory
@@ -1086,3 +1086,7 @@ def report_question(request, question_id):
                              "This question had been reported, thank you.")
             return redirect(request.META.get('HTTP_REFERER'))
         return render(request, 'testee/report_question.html', locals())
+
+def word_library(request):
+        word_list = Word_library.objects.all()
+        return render(request,'testee/word_library.html',{'word_list':word_list})
