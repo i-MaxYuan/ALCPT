@@ -1090,3 +1090,6 @@ def report_question(request, question_id):
 def word_library(request):
         word_list = Word_library.objects.all()
         return render(request,'testee/word_library.html',{'word_list':word_list})
+
+def word_library_create(request):
+        return render(request,'testee/word_library_create.html')

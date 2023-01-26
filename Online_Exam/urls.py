@@ -849,7 +849,10 @@ re_path(
                 name='answersheet_comment_delete'),
         re_path(r'^word_library$',
                 testee.word_library,
-                name='word_library')
+                name='word_library'),
+        re_path(r'^word_library_create$',
+                testee.word_library_create,
+                name='word_library_create'),
     ])),
 )
 
