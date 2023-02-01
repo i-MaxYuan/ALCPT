@@ -1096,7 +1096,7 @@ def word_library_create(request):
         word_chinese = request.POST.get('word_chinese')
         try:
             word_english = request.POST.get('word_english')
-            Word_library.objects.get(words = word_chinese)
+            Word_library.objects.get(words = word_english)
             messages.error(request, "Failed created, word had been used - {}".format(word_english))
             return redirect('word_library_create')
         #Words 找不到同樣word_english才建立
@@ -1105,4 +1105,4 @@ def word_library_create(request):
             word_english = request.POST.get('word_english')
             words = Word_library.objects.create(words = word_english,
                                        translation = word_chinese)
-        return render(request,'testee/word_library_create.html')
+        return render(request,'testee/word_library_create.html',locals())

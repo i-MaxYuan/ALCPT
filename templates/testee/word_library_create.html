@@ -20,14 +20,14 @@
                                 {{trans("English")}}<span id="english_invalid" class="english_invalid"></span>
                             </h5>
                             <p class="card-text">
-                                <input class="form-control" type="text" onkeyup="unique_english({{ exam_names }}, this)" name="word_english" required />
+                                <input class="form-control" type="text" onkeyup="unique_english({{ word.words }}, this)" name="word_english" required />
                             </p>
 
                             <h5 class="card-subtitle mb-2 text-muted">
                                 {{trans("Chinese")}}<span id="chinese_invalid" class="chinese_invalid"></span>
                             </h5>
                             <p class="card-text">
-                                <input class="form-control" type="text" onkeyup="unique_chinese({{ exam_names }}, this)" name="word_chinese" required />
+                                <input class="form-control" type="text" onkeyup="unique_chinese({{ word.translations }}, this)" name="word_chinese" required />
                             </p>
 
                             <div class="float-right">
