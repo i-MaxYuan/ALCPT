@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 import random
-
+import tkinter as tk
+from tkinter import messagebox
 from django.shortcuts import render, redirect
 
 from django.views.decorators.http import require_http_methods
@@ -63,14 +64,14 @@ def exam_create(request):
 
             exam_name = request.POST.get('exam_name')
             exam = Exam.objects.create(name=exam_name,
-                                       exam_type=ExamType.Exam.value[0],
-                                       start_time=start_time,
-                                       created_time=datetime.now(),
-                                       duration=duration,
-                                       finish_time=finish_time,
-                                       testpaper=testpaper,
-                                       is_public=True,
-                                       created_by=request.user)
+                exam_type=ExamType.Exam.value[0],
+                start_time=start_time,
+                created_time=datetime.now(),
+                duration=duration,
+                finish_time=finish_time,
+                testpaper=testpaper,
+                is_public=True,
+                created_by=request.user)
             testpaper.is_used = True
             testpaper.save()
 
@@ -232,7 +233,24 @@ def exam_edit(request, exam_id):
         messages.error(request, "Exam does not exist, exam id - {}".format(exam_id))
         return redirect('exam_list')
 
-
+"""
+    centers a tkinter window
+    :param win: the main window or Toplevel window to center
+    """        
+def center(win):
+    
+    win.update_idletasks()
+    width = win.winfo_width()
+    frm_width = win.winfo_rootx() - win.winfo_x()
+    win_width = width + 2 * frm_width
+    height = win.winfo_height()
+    titlebar_height = win.winfo_rooty() - win.winfo_y()
+    win_height = height + titlebar_height + frm_width
+    x = win.winfo_screenwidth() // 2 - win_width // 2
+    y = win.winfo_screenheight() // 2 - win_height // 2
+    win.geometry('{}x{}+{}+{}'.format(width, height, x, y))
+    win.deiconify()
+    
 @permission_check(UserType.TestManager)
 def exam_delete(request, exam_id):
     try:
@@ -240,21 +258,27 @@ def exam_delete(request, exam_id):
         if datetime.now() > exam.start_time:
             messages.error(request, "Failed deleted, this Exam had started.")
             return redirect('exam_list')
-
+        root = tk.Tk()
+        root.title('Warning')
+        center(root)
+        msgbox = messagebox.askquestion('Delete Exam',u'Wheater to delete \n Exam_Name: \n Exam_Id:{0}  '.format(exam_id))
         proclamation_title = "Cancel " + exam.name + "."
         proclamation_content = exam.name + " had been canceled. Thank you for your cooperation."
         notify(title=proclamation_title,
-               text=proclamation_content,
-               is_read=False,
-               is_public=False,
-               announcer=request.user,
-               users=list(User.objects.filter(exam__testeeList__exam=exam).distinct()))
-
-        exam.testeeList.clear()
-        exam.delete()
-        messages.success(request, "Successfully deleted, exam id - {}".format(exam_id))
-        return redirect('exam_list')
-
+            text=proclamation_content,
+            is_read=False,
+            is_public=False,
+            announcer=request.user,
+            users=list(User.objects.filter(exam__testeeList__exam=exam).distinct()))
+        if msgbox == "yes":
+            exam.testeeList.clear()
+            exam.delete()
+            messages.success(request, "Successfully deleted, exam id - {}".format(exam_id))
+            root.destroy()
+            return redirect('exam_list')
+        else:
+            root.destroy()
+            return redirect('exam_list')
     except ObjectDoesNotExist:
         messages.error(request, "Exam does not exist, exam id - {}".format(exam_id))
         return redirect('exam_list')

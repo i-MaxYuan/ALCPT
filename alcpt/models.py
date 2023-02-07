@@ -418,3 +418,7 @@ class Reply(models.Model):
 
     def get_content(self):
         return json.loads(self.content)
+
+class word(models.Model):
+    word = models.CharField(max_length=50, unique=True)
+    answord = models.CharField(max_length=50, unique=True)

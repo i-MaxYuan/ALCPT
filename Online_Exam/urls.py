@@ -22,7 +22,9 @@ from django.urls import path, re_path
 
 from django.conf.urls.i18n import i18n_patterns # traslation
 
-from alcpt import registration, system, views, exam, question, viewer, testee, group, proclamation
+from alcpt import registration, system, views, exam, question, viewer, testee, group, proclamation,tag
+
+
 
 # ^ means beginning of the line, $ means end of the line
 urlpatterns = [
@@ -40,6 +42,12 @@ urlpatterns = [
     #                 views.downloadOperationManual,
     #                 name='Download_OM_pdf'),
     #     ])),
+    
+    
+    re_path(r'^tag$',tag.home,name='tag'),
+    
+    
+    
     re_path(r'^download_system_pdf$',
             views.downloadSystemPDF,
             name='Download_system_pdf'),
@@ -102,6 +110,7 @@ urlpatterns = [
                     testee.report_question,
                     name='report_question'),
             re_path(r'^list$', registration.report_list, name='report_list'),
+            
             re_path(r'^(?P<report_id>[0-9]+)/detail$',
                     registration.report_detail,
                     name='report_detail'),

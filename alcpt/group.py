@@ -116,3 +116,8 @@ def group_content(request, group_id):
     except ObjectDoesNotExist:
         messages.error(request, 'Group does not exist, group id: {}'.format(group_id))
         return redirect('testee_group_list')
+
+
+
+
+#

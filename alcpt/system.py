@@ -3,6 +3,8 @@ import xlrd
 import os
 import json
 import datetime
+import tkinter as tk
+from tkinter import messagebox
 
 from string import punctuation
 from django.contrib import auth
@@ -47,13 +49,13 @@ def achievement_create(request):
 
         except:
             achievement = Achievement.objects.create(trophy=trophy,
-                                                     name=name,
-                                                     key=key,
-                                                     description=description,
-                                                     category=category,
-                                                     point=point,
-                                                     level=level,
-                                                     completion=completion)
+            name=name,
+            key=key,
+            description=description,
+            category=category,
+            point=point,
+            level=level,
+            completion=completion)
             achievement.save()
             messages.success(request, _('Successfully created.'))
             return redirect('achievement_list')
@@ -332,14 +334,40 @@ def user_edit(request, reg_id):
         except:
             messages.error(request, "User doesn't exist, user register id - {}".format(reg_id))
             return redirect('user_list')
-
+"""
+    centers a tkinter window
+    :param win: the main window or Toplevel window to center
+    """        
+def center(win):
+    
+    win.update_idletasks()
+    width = win.winfo_width()
+    frm_width = win.winfo_rootx() - win.winfo_x()
+    win_width = width + 2 * frm_width
+    height = win.winfo_height()
+    titlebar_height = win.winfo_rooty() - win.winfo_y()
+    win_height = height + titlebar_height + frm_width
+    x = win.winfo_screenwidth() // 2 - win_width // 2
+    y = win.winfo_screenheight() // 2 - win_height // 2
+    win.geometry('{}x{}+{}+{}'.format(width, height, x, y))
+    win.deiconify()
 # 刪除使用者
 def user_del(request,reg_id):
     try:
         user = User.objects.get(reg_id=reg_id)
-        user.delete()
-        messages.success(request, _("Successfully deleted user."))
-        return redirect('user_list')
+        name = user.name
+        root = tk.Tk()
+        root.title('Warning')
+        center(root)
+        msgbox = messagebox.askquestion('Delete User',u'Wheater to delete \n Name:{0} \n Id:{1}  '.format(name,reg_id))
+        if msgbox=='yes':
+            user.delete()
+            messages.success(request, _("Successfully deleted user."))
+            root.destroy()
+            return redirect('user_list')
+        else:
+            root.destroy()
+            return redirect('user_list')
     except ObjectDoesNotExist:
         messages.error(request,_("ERROR!"))
         return redirect('user_list')
@@ -567,7 +595,7 @@ def report(request):
 
         messages.success(request, _('Thanks for your advise, we will help you to solve your problem as soon as possible.'))
 
-        return redirect('report_list')
+        return redirect('report')
     else:
         categories = ReportCategory.objects.all()
         return render(request, 'report/report.html', locals())

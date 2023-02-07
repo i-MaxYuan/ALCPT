@@ -150,7 +150,7 @@
                                 <a href="{{ url('user_edit', args=[user.reg_id]) }}"><i class="fa fa-pencil-square-o"></i></a>
                             </td>
                             <td class="text-center">
-                                    <a href="{{ url('user_del', args=[user.reg_id]) }}" onclick="return confirm('{{trans("Sure to delete this user")}}?')">
+                                    <a href="{{ url('user_del', args=[user.reg_id])}}" onclick="return confirm('{{trans("Sure to delete this user")}}?')">
                                     <i class="fa fa-trash" style="color:red"></i></a>
                             </td>
                         </tr>
@@ -183,7 +183,7 @@
         <a class="page-link" href="javascript:void(0);"><i class="fa fa-angle-left"></i></a>
         {% endif %}
     </li>
-
+    
     {% for page in paginator.page_range %} {% if page == userList.number %}
     <li class="page-item active">
         <a class="page-link" href="?page={{ page }}{{ query_content }}">{{ page }}</a>

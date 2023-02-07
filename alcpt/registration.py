@@ -1,7 +1,8 @@
 import base64
+from http.client import HTTPResponse
+from urllib import response
 
 from django.shortcuts import render, redirect
-
 from django.utils import timezone
 from django.contrib import auth
 from django.contrib import messages
@@ -21,6 +22,7 @@ from django.utils.translation import ugettext as _
 
 # 登入
 def login(request):
+    #auto_login(request)
     if request.method == 'POST':
         captcha = CaptchaForm(request.POST)
         if captcha.is_valid():  # 驗證通過
@@ -30,11 +32,11 @@ def login(request):
 
             try:
                 user = auth.authenticate(reg_id=reg_id, password=password)
-
                 if user is None or not user.is_active:
                     messages.error(request, _('Wrong Password or User unexist.'))
                     return render(request, 'registration/login.html', locals())
-
+                
+                
                 auth.login(request, user)
                 user.browser = request.session.session_key
                 user.save()
@@ -65,6 +67,17 @@ def login(request):
             return render(request, 'registration/login.html', locals())
 
 
+#auto login
+'''
+def auto_login(request):
+    if 'yo' in request.COOKIES:
+        password = request.COOKIES['yo']
+        user = auth.authenticate(reg_id =password,password = password)
+        auth.login(request, user)
+        user.browser = request.session.session_key
+        user.save()
+    else: 
+        return''' 
 # 登出
 @login_required
 def logout(request, relogin=False):
@@ -249,7 +262,7 @@ def report_detail(request, report_id):
         viewed_report.user_notification = False
         viewed_report.staff_notification = True
         viewed_report.save()
-        return redirect('report_list')
+        return redirect('Homepage')
     else:
         Report.objects.filter(id=report_id).update(user_notification=False)
 
