@@ -1,3 +1,4 @@
+<title>ALCPT - Homepage</title>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -17,12 +18,15 @@
         </div>
         <nav class="navbar navbar-expand-md bg-inverse fixed-top scrolling-navbar">
             <div class="container">
-                <a href="{{ url('Homepage') }}" class="navbar-brand"><img src="{{ static('/logo/nav-logo-white.png') }}" style="width:130px" alt="" /></a>
+                <a href="{{ url('Homepage') }}" class="navbar-brand"><img src="{{ static('/logo/nav-logo-white.png') }}" style="width:200px" alt="" /></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                     <i class="lni-menu"></i>
                 </button>
+                
                 <div class="collapse navbar-collapse" id="navbarCollapse">
-                    <ul class="navbar-nav mr-auto w-100 justify-content-end">
+                    
+                    <ul class="navbar-nav mr-auto w-100 justify-content-end">  
+                       
                         <li class="nav-item">
                             <a class="nav-link page-scroll" href="#home">{{trans("Home")}}</a>
                         </li>
@@ -32,24 +36,48 @@
                         <li class="nav-item">
                             <a class="nav-link page-scroll" href="#features">{{trans("Manuallist")}}</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="btn btn-singin" href="{{ url('Homepage') }}">{{trans("Start")}}</a>
+                        <li>
+                            {% if user.is_authenticated %}
+                       
+                            <a class="nav-link page-scroll" href="{{ url('profile') }}">
+                            <img src="{{ user.photo.url }}" width="30px" style="border-radius: 10%; padding-right: 5px; margin-bottom:1px;  margin-left:1px" alt="">
+                            {% if request.user.name != None %}
+                            {{ request.user.name }}
+                            {% else %}
+                            {{ request.user.reg_id }}
+                            {% endif %}
+                            <script>
+                                say_hello();
+                            </script>
+        
+                            {% else %}
                         </li>
-                        <div class="dropdown">
-                            <button class="btn btn-singin dropdown-toggle" type="button" data-toggle="dropdown">
-                                {{trans("Language")}}
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li>
-                                	<a href="/en-us/">English</a>
-                                </li>
-                                <li>
-                                	<a href="/zh/">繁體中文</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </ul>
+                        <li class="nav-item">
+                            <a class="nav-link page-scroll"  href="{{ url('login') }}">{{trans("Login")}}</a>
+                        </li>
+        
+                        {% endif %}
+                        
+                        </ul>
+                    </div>
+                    
                 </div>
+                <div class="dropdown">
+                    <button class="btn btn-singin dropdown-toggle"
+                     type="button" data-toggle="dropdown">
+                        {{trans("Language")}}
+                    </button> 
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="/en-us/">English</a>
+                        </li>
+                        <li>
+                            <a href="/zh/">繁體中文</a>
+                        </li>
+                    </ul>
+                    
+                </div>
+                
             </div>
         </nav>
         <div class="container">

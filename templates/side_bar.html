@@ -8,16 +8,16 @@
     </div>
     {% if user.is_authenticated %}
 
-    <ul class="list-unstyled components">
-        <img src="{{ user.photo.url }}" width="70px" style="border-radius: 50%; padding-right: 5px; margin-bottom:20px;  margin-left:10px" alt="">
-        {% if request.user.name != None %}
-        {{ request.user.name }}
-        {% else %}
-        {{ request.user.reg_id }}
-        {% endif %}
-        <script>
-            say_hello();
-        </script>
+                <ul class="list-unstyled components">
+                <img src="{{ user.photo.url }}" width="70px" style="border-radius: 50%; padding-right: 5px; margin-bottom:20px;  margin-left:10px" alt="">
+                {% if request.user.name != None %}
+                {{ request.user.name }}
+                {% else %}
+                {{ request.user.reg_id }}
+                {% endif %}
+                <script>
+                    say_hello();
+                </script>
 
         <li>
             <a href="#">LV.{{ request.user.level }} ( Exp.{{ request.user.experience }} )</a>
