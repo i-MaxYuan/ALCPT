@@ -25,10 +25,10 @@
                     <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
 
                     <div class="card">
-                        <div class="card-header">{{trans("Email Verification")}}</div>
+                        <div class="card-header" style=" color:blue; font-size: 30px">{{trans("Email Verification")}}</div>
 
                         <div class="card-body">
-                            <h5 class="card-subtitle mb-2 text-muted">{{trans("Email")}}</h5>
+                            <h5 class="card-subtitle mb-2 text-muted" style=" font-size: 25px">{{trans("Email")}}</h5>
                             <p class="card-text">
                                 <input type="text" class="form-control" name="verified_email" value="{{ user.email }}" onchange="check_email('{{ user.email }}', this.value)" />
                             </p>

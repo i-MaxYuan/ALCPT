@@ -28,28 +28,28 @@
                             <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
 
                             <div class="form-group row">
-                                <label for="p_title" class="col-md-4 col-form-label text-md-right" style="font-size:20px;">{{trans("ReportCategory Name")}}</label>
+                                <label for="p_title" class="col-md-4 col-form-label text-md-right" style="font-size:25px;">{{trans("ReportCategory Name")}}</label>
                                 <div class="col-md-6">
-                                    <input class="form-control" type="text" name="category_name" onkeyup="unique_name(this)" placeholder="{{trans("ReportCategory Name")}}..." required />
+                                    <input class="form-control" type="text" name="category_name" onkeyup="unique_name(this)"  style="height: 50px;width: 350px;"placeholder="{{trans("ReportCategory Name")}}..." required />
                                     <label id="name_invalid" class="name_invalid"></label>
                                 </div>
                             </div>
 
                             <div class="form-group row">
-                                <label for="p_title" class="col-md-4 col-form-label text-md-right" style="font-size:20px;">{{trans("Privilege")}}</label>
+                                <label for="p_title" class="col-md-4 col-form-label text-md-right" style="font-size:25px;">{{trans("Privilege")}}</label>
                                 <div class="col-md-6">
                                     <div class="container">
                                         <div class="row">
                                             <div class="col-lg-12">
                                                 <div class="button-group">
-                                                    <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" style=" color:blue; font-size:20px;">
+                                                    <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" style=" color:blue; font-size:25px;">
                                                         <i class="fa fa-gears align-middle"></i>
                                                     </button>
                                                     <ul class="dropdown-menu">
                                                         <li class="dropdown-header">{{trans("Privilege Setting")}}</li>
                                                         {% for privilege in privileges %} {% if loop.index <= 3 %}
                                                         <li>
-                                                            <input type="checkbox" id="{{ privilege.value.1 }}" name="{{ privilege }}" onclick="privilege_not_empty()" {% if privilege == privilege.SystemManager %} checked
+                                                            <input type="checkbox" id="{{ privilege.value.1 }}" name="{{ privilege }}" onclick="privilege_not_empty()"  style="height: 24px;width: 24px;" {% if privilege == privilege.SystemManager %} checked
                                                                 {% endif %}>&nbsp;&nbsp;{{ privilege.value.1 }}
                                                         </li>
                                                         {% else %}
