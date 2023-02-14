@@ -1095,7 +1095,7 @@ def word_library_create(request):
     if request.method == 'POST':
             word_english = request.POST.get('word_english')
             word_chinese = request.POST.get('word_chinese')
-            Word = Word_library.objects.create(words = word_chinese,translations = word_english)
+            Word = Word_library.objects.create(words = word_english,translations = word_chinese)
             Word.save()
             return redirect('word_library')
     else:    
