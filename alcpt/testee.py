@@ -1092,17 +1092,11 @@ def word_library(request):
         return render(request,'testee/word_library.html',{'word_list':word_list})
 
 def word_library_create(request):
-     if request.method == 'POST':
-        word_chinese = request.POST.get('word_chinese')
-        try:
+    if request.method == 'POST':
             word_english = request.POST.get('word_english')
-            Word_library.objects.get(words = word_english)
-            messages.error(request, "Failed created, word had been used - {}".format(word_english))
-            return redirect('word_library_create')
-        #Words 找不到同樣word_english才建立
-        except:
-
-            word_english = request.POST.get('word_english')
-            words = Word_library.objects.create(words = word_english,
-                                       translation = word_chinese)
+            word_chinese = request.POST.get('word_chinese')
+            Word = Word_library.objects.create(words = word_chinese,translations = word_english)
+            Word.save()
+            return redirect('word_library')
+    else:    
         return render(request,'testee/word_library_create.html',locals())

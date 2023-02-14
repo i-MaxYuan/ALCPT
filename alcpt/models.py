@@ -421,4 +421,4 @@ class Reply(models.Model):
 
 class Word_library(models.Model):
     words = models.CharField(max_length=50)
-    translations = models.TextField()
+    translations = models.CharField(max_length=50)
