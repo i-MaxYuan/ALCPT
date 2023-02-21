@@ -40,12 +40,12 @@ INSTALLED_APPS = (
 )
 
 CRONJOBS = [
-    ('*/1 * * * *', 'alcpt.cron.backup','>>/home/max/Desktop/crontab.log')  
+    ('*/1 * * * *', 'alcpt.cron.backup','>>/home/ray/Desktop/crontab.log')  
 ]
 
 #備份路徑,記得設定為自己的路徑
 DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
-DBBACKUP_STORAGE_OPTIONS = {'location': '/home/max/Desktop/ALCPT/backup_files'}
+DBBACKUP_STORAGE_OPTIONS = {'location': '/home/ray/Desktop/ALCPT/backup_files'}
 #備份主設定
 
 
