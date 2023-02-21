@@ -11,7 +11,7 @@ from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
-from .models import Question, AnswerSheet, Student, User, Exam, TestPaper, Answer, ReportCategory, Report, Achievement, UserAchievement, Forum
+from .models import Question, AnswerSheet, Student, User, Exam, TestPaper, Answer, ReportCategory, Report, Achievement, UserAchievement, Forum, Word_library
 from .exceptions import *
 from .decorators import permission_check
 from .definitions import UserType, QuestionType, ExamType, AchievementCategory
@@ -623,7 +623,7 @@ def view_answersheet_content(request, answersheet_id):
 
             return render(request, 'testee/answersheet_content.html', locals())
     elif answersheet.is_finished  == False and now_time > answersheet.finish_time:
-        messages.success(request, {{trans("You hadn't finish your test, please keep answering the exam")}})
+        messages.success(request, {{trans("You hadn't finish your test, please keep answering the exam")}})   
         return redirect('testee_exam_list')
     else:
         messages.warning(request, 'Does not finished this practice. Reject your request.')
@@ -1086,3 +1086,17 @@ def report_question(request, question_id):
                              "This question had been reported, thank you.")
             return redirect(request.META.get('HTTP_REFERER'))
         return render(request, 'testee/report_question.html', locals())
+
+def word_library(request):
+        word_list = Word_library.objects.all()
+        return render(request,'testee/word_library.html',{'word_list':word_list})
+
+def word_library_create(request):
+    if request.method == 'POST':
+            word_english = request.POST.get('word_english')
+            word_chinese = request.POST.get('word_chinese')
+            Word = Word_library.objects.create(words = word_english,translations = word_chinese)
+            Word.save()
+            return redirect('word_library')
+    else:    
+        return render(request,'testee/word_library_create.html',locals())
