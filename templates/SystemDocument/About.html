@@ -54,9 +54,9 @@
                 <a href="/en-us/accounts/profile">
                 {% if user.is_authenticated %}
                 <ul class="list-unstyled components">
-                    <img src="{{ user.photo.url }}" width="70px" style="border-radius: 50%; padding-right: 5px; margin-bottom:20px;  margin-left:10px" alt="">
+                    <img src="{{ user.photo.url }}" width="70px" style="border-radius: 50%; padding-right: 5px; margin-bottom:2px;  margin-left:20px" alt="">
                     {% if request.user.name != None %}
-                    {{ request.user.name }}
+                    <a class="list name" style="font-size:20px;"> {{ request.user.name }}</a>
                     {% else %}
                     {{ request.user.reg_id }}
                     {% endif %}

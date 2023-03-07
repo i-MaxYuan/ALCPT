@@ -9,7 +9,6 @@
 <li class="breadcrumb-item active" aria-current="page">{{trans("Profile")}}</li>
 {% endblock %} {% block content %}
 
-
 <div class="container">
     {% if user.student %}
     <div class="row">
@@ -17,6 +16,8 @@
             <div class="card mb-3">
                 <div class=" card-header">{{trans("User Photo")}}</div>
 
+            <div class="container">
+                    <div class="row justify-content-flex" style="padding-top:100px; padding-right:10px; padding-left:10px">
                 {% if user.photo %}
                 <img class="card-img-top" src="{{ user.photo.url }}" alt="{{ user.name }}" />
                 {% else %}
@@ -25,13 +26,14 @@
 
                 <div class="card-body">
                     <p class="card-text">
-                        {% if user.introduction %} {{ user.introduction|linebreaksbr }} {%
-            else %} {{trans("Unset")}} {% endif %}
+                        {% if user.introduction %} {{ user.introduction|linebreaksbr }}
+                         {%else %} {{trans("Unset")}} {% endif %}
                     </p>
+                </div>
                 </div>
             </div>
         </div>
-
+    </div>
         <div class="col-lg-5">
             <div class="card mb-3">
                 <div class=" card-header">{{trans("User Profile")}}</div>
