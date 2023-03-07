@@ -26,18 +26,23 @@
                 <div class="col-lg-4">
                     <div class="card mb-3">
                         <div class="card-header">{{trans("User Photo")}}</div>
-
-                        {% if user.photo %}
-                        <img class="card-img-top" src="{{ user.photo.url }}" alt="{{ user.name }}" />
-                        {% else %}
-                        <img class="card-img-top" src="..." alt="{{ user.name }}" />
-                        {% endif %}
-                        <div class="input-group">
-                            <div class="custom-file">
-                                <input type="file" class="custom-file-input" id="photo_file" name="photo_file" accept="image/*" />
-                                <label class="custom-file-label" for="photo_file">{{trans("Select image file")}}</label>
-                            </div>
+                            <div class="container">
+                                <div class="row justify-content-center" style="padding-top:10px; padding-right: 10px; padding-left:10px">
+                            {% if user.photo %}
+                            <img class="card-img-top" src="{{ user.photo.url }}" alt="{{ user.name }}" />
+                            {% else %}
+                            <img class="card-img-top" src="..." alt="{{ user.name }}" />
+                            {% endif %}
                         </div>
+                    </div>
+                    <div class="container">
+                        <div class="row justify-content-center" style="padding-top:10px; padding-right: 10px; padding-left:10px">
+                            <div class="input-group">
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="photo_file" name="photo_file" accept="image/*" />
+                                    <label class="custom-file-label" for="photo_file">{{trans("Select image file")}}</label>
+                                </div>
+                            </div>
                         <script>
                             // to change the label, the selected file name will display
                             $(".custom-file-input").on("change", function() {
@@ -49,13 +54,15 @@
                             });
                         </script>
 
-                        <div class="card-body">
+                            <div class="card-body">
                             <p class="card-text">
                                 <textarea class="form-control" rows="4" name="introduction" placeholder="{{trans("Introduce yourself")}}..."> {% if user.introduction %}{{ user.introduction }}{% endif %}</textarea>
                             </p>
+                            </div>
                         </div>
                     </div>
                 </div>
+            </div>
 
                 <div class="col-lg-5">
                     <div class="card mb-3">
