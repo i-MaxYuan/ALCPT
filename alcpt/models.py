@@ -420,5 +420,5 @@ class Reply(models.Model):
         return json.loads(self.content)
 
 class Word_library(models.Model):
-    words = models.CharField(max_length=50)
-    translations = models.CharField(max_length=50)
+    words = models.CharField(max_length=30,unique=True)
+    translations = models.CharField(max_length=30)

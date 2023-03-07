@@ -28,21 +28,22 @@
                         {% for word in word_list %}
                         <tr style="cursor: pointer" >
                             <td class="text-center" data-title="English">
-                                {{ word.words}}
+                                {{word.words}}
                             </td>
                             <td class="text-center" data-title="Chineses">
-                                {{ word.translations }}
-                            </td>
+                                {{word.translations}}
                             <td class="text-center">
                                 <a href="{{ url('word_library_edit')}}"><i class="fa fa-pencil-square-o"></i></a>
-                                <a href="{{ url('word_library')}}" onclick="return confirm('Sure to delete？');"><i class="fa fa-trash"></i></a>
+                                <a href="{{ url('word_library_del',args=[word.words])}}" onclick="return confirm('{{trans("Sure to delete this user?")}}')">
+                                    <i class="fa fa-trash" style="color:red"></i></a>
                             </td>
                         </tr>
                         {% endfor %}
+                        </tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 </main>
-{% endblock %}
+#{% endblock %}

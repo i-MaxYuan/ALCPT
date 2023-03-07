@@ -1093,13 +1093,27 @@ def word_library(request):
 
 def word_library_create(request):
     if request.method == 'POST':
+        if Word_library.objects.all().filter(words=request.POST.get('word_english')):
+            messages.error(request,'exist word')
+            return redirect('word_library')
+        else:
             word_english = request.POST.get('word_english')
             word_chinese = request.POST.get('word_chinese')
             Word = Word_library.objects.create(words = word_english,translations = word_chinese)
             Word.save()
+            messages.success(request,'Word Add successful.')
             return redirect('word_library')
     else:    
         return render(request,'testee/word_library_create.html',locals())
-
 def word_library_edit(request):
     return render(request,'testee/word_library_edit.html')
+
+def word_library_del(request,words):
+    try:
+        wo = Word_library.objects.get(words=words)       
+        wo.delete()
+        messages.success(request, ("Successfully deleted word"))
+        return redirect('word_library')
+    except ObjectDoesNotExist:
+        messages.error(request,'error')
+        return redirect('word_library')
