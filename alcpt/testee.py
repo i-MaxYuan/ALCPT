@@ -1116,3 +1116,5 @@ def word_library_del(request,words):
         messages.error(request,'error')
         return redirect('word_library')
     
+
+    
