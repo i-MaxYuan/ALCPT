@@ -1110,10 +1110,11 @@ def word_library_edit(request):
 
 def word_library_del(request,words):
     try:
-        wo = Word_library.objects.get(words=words)       
-        wo.delete()
+        word = Word_library.objects.get(words=words)       
+        word.delete()
         messages.success(request, ("Successfully deleted word"))
         return redirect('word_library')
     except ObjectDoesNotExist:
         messages.error(request,'error')
         return redirect('word_library')
+    
