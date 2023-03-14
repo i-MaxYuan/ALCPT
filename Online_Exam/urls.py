@@ -857,7 +857,7 @@ re_path(
                 testee.word_library_del,
                 name='word_library_del'),
 
-        path('word_library_edit/<str:words><str:translations>',
+        path('word_library_edit/',
                 testee.word_library_edit,
                 name='word_library_edit'),
                 
