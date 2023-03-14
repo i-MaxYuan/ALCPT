@@ -1,0 +1,50 @@
+{% extends 'new_base.html' %}
+{% block scripts %}
+<!-- <script src="{{ static('/javascript/exam/exam_edit.js') }}"></script> -->
+{% endblock %}
+{% block path %}
+<li class="breadcrumb-item" aria-current="page">
+    <a href="{{ url('word_library') }}">{{trans("Word Library")}}</a>
+</li>
+<li class="breadcrumb-item active" aria-current="page">{{trans("Word Library Edit")}}</li>
+{% endblock %} {% block content %}
+<main class="exam-create-form">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <form method="post">
+                    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
+                    <div class="card">
+                        <div class="card-header">{{trans("Word Library Edit")}}</div>
+
+                        <div class="card-body">
+                            <h5 class="card-subtitle mb-2 text-muted">
+                                {{trans("English")}}<span id="name_invalid" class="name_invalid"></span>
+                            </h5>
+                            <p class="card-text">
+                                <input class="form-control" type="text" onkeyup="unique_english({{ word_english }}, this)" name="word_english" value="{{ words }}" required />
+                            </p>
+
+                            <h5 class="card-subtitle mb-2 text-muted">
+                                {{trans("Chinese")}}<span id="name_invalid" class="name_invalid"></span>
+                            </h5>
+                            <p class="card-text">
+                                <input class="form-control" type="text" onkeyup="unique_chinese({{ word_chinese }}, this)" name="word_chinese" value="{{ translations }}" required />
+                            </p>
+                           
+                            <div class="float-right">
+                                <button type="submit" class="btn btn-primary" id="submit">
+                                    {{trans("Update")}}
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}
+
+<!--edit 抓不到word list -->
