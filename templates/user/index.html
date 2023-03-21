@@ -19,12 +19,7 @@
             <div class="col-lg-12">
                 <!-- 搜尋 -->
                 <form class="form-inline md-form form-group-sm mt-0" method="get">
-                    <input class="form-control" type="text" name="name" {%
-            if
-            keywords.name
-            %}value="{{ keywords.name }}" {%
-            endif
-            %} placeholder="{{trans("Search")}}" aria-label="Search" />
+                    <input class="form-control" type="text" name="name" {%if keywords.name%} value="{{ keywords.name }}" {%endif%} placeholder="{{trans("Search")}}" aria-label="Search" />
 
                     <label class="mr-sm-2" for="inlineFormCustomSelect" style="padding-left: 10px">{{trans("Department")}}</label>
                     <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" name="department">

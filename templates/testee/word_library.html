@@ -34,7 +34,7 @@
                                 {{word.translations}}
                             <td class="text-center">
                                 <a href="{{ url('word_library_edit',args=[word.words,word.translations])}}"><i class="fa fa-pencil-square-o"></i></a>
-                                <a href="{{ url('word_library_del',args=[word.words])}}" onclick="return confirm('{{trans("Sure to delete this user?")}}')">
+                                <a href="{{ url('word_library_del',args=[word.words])}}" onclick="return confirm('{{trans("Sure to delete this word?")}}')">
                                     <i class="fa fa-trash" style="color:red"></i></a>
                             </td>
                         </tr>
