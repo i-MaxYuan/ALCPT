@@ -25,11 +25,11 @@
                         <div class="card-body">
                             {% if kind == 'listening' %}
                             <h5 class="card-subtitle mb-2 text-muted" style="font-size:25px;"><b> 
-                                {{trans("Listening Type")}}({{trans("Multiple Select")}})
+                                {{trans("Listening Type")}}({{trans("Multiple Select")}}) 
                             </b></h5>
                             <p class="card-text" style="font-size:20px;">
-                                <input type="checkbox" name="question_type" onclick="ChangeButton()" value="1" style="height: 24px;width: 24px;" />{{trans("QA")}} <br>
-                                <input type="checkbox" name="question_type" onclick="ChangeButton()" value="2" style="height: 24px;width: 24px;" />{{trans("ShortConversation")}}
+                                <input type="checkbox" name="question_type" onclick="ChangeButton()" value="1" style="height: 24px;width: 24px;" />{{trans("      QA")}} <br>
+                                <input type="checkbox" name="question_type" onclick="ChangeButton()" value="2" style="height: 24px;width: 24px;" />{{trans("  ShortConversation")}}
                             </p>
                             {% else %}
                             <h5 class="card-subtitle mb-2 text-muted" style="font-size:25px;"><b>
@@ -37,9 +37,9 @@
                             </b></h5>
                             
                             <p class="card-text" style="font-size:20px;">
-                                <input type="checkbox" name="question_type" onclick="ChangeButton()" value="3"  style="height: 24px;width: 24px;"/>{{trans("Grammar")}} <br>
-                                <input type="checkbox" name="question_type" onclick="ChangeButton()" value="4" style="height: 24px;width: 24px;"/>{{trans("Phrase")}} <br>
-                                <input type="checkbox" name="question_type" onclick="ChangeButton()" value="5" style="height: 24px;width: 24px;"/>{{trans("ParagraphUnderstanding")}}
+                                <input type="checkbox" name="question_type" onclick="ChangeButton()" value="3"  style="height: 24px;width: 24px;"/>{{trans("  Grammar")}} <br>
+                                <input type="checkbox" name="question_type" onclick="ChangeButton()" value="4" style="height: 24px;width: 24px;"/>{{trans(" Phrase")}} <br>
+                                <input type="checkbox" name="question_type" onclick="ChangeButton()" value="5" style="height: 24px;width: 24px;"/>{{trans("  SParagraphUnderstanding")}}
                             </p>
                             {% endif %}
                             <br>
@@ -52,6 +52,8 @@
                                     <option value="10">10</option>
                                     <option value="20">20</option>
                                     <option value="30">30</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
                                 </select>
                             </p>
                             <br>

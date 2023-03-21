@@ -62,7 +62,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+        </div>
 
                 <div class="col-lg-5">
                     <div class="card mb-3">
@@ -85,8 +85,7 @@
                   {{trans("Email")}}{% if user.email_is_verified %}<i class="fa fa-check-circle"></i>{% endif %}
                             </h5>
                             <p class="card-text">
-                                {% if user.email %} {{ user.email }} {% else %} {{trans("Unset")}} {% endif
-                %}
+                                {% if user.email %} {{ user.email }} {% else %} {{trans("Unset")}} {% endif%}
                             </p>
 
                             <h5 class="card-subtitle mb-2 text-muted">

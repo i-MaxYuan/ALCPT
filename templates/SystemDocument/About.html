@@ -18,7 +18,7 @@
         </div>
         <nav class="navbar navbar-expand-md bg-inverse fixed-top scrolling-navbar">
             <div class="container">
-                <a href="{{ url('Homepage') }}" class="navbar-brand"><img src="{{ static('/logo/nav-logo-white.png') }}" style="width:130px" alt="" /></a>
+                <a href="{{ url('Homepage') }}" class="navbar-brand"><img src="{{ static('/logo/nav-logo-white.png') }}" style="width:150px" alt="" /></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                     <i class="lni-menu"></i>
                 </button>
@@ -54,9 +54,9 @@
                 <a href="/en-us/accounts/profile">
                 {% if user.is_authenticated %}
                 <ul class="list-unstyled components">
-                    <img src="{{ user.photo.url }}" width="70px" style="border-radius: 50%; padding-right: 5px; margin-bottom:2px;  margin-left:20px" alt="">
+                    <img src="{{ user.photo.url }}" width="80px" style="border-radius: 50%; padding-right: 5px; margin-bottom:8px;  margin-left:20px" alt="">
                     {% if request.user.name != None %}
-                    <a class="list name" style="font-size:20px;"> {{ request.user.name }}</a>
+                    <a class="list name" style="font-size:18px;border-radius: 50%; padding-right: 5px; margin-bottom:8px;  margin-left:1px"> {{ request.user.name }}</a>
                     {% else %}
                     {{ request.user.reg_id }}
                     {% endif %}
@@ -91,7 +91,7 @@
                 </div>
                 <div class="col-lg-6 col-md-12 col-xs-12 p-0">
                     <div class="intro-img">
-                        <img src="{{ static('images/about/alcpt_intro.png') }}" style="padding-left: 50px " alt="" />
+                        <img src="{{ static('images/about/alcpt_intro.png') }}" style="padding-left: 120px " alt="" />
                     </div>
                 </div>
             </div>
