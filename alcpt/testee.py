@@ -1105,9 +1105,6 @@ def word_library_create(request):
             return redirect('word_library')
     else:    
         return render(request,'testee/word_library_create.html',locals())
-    
-def word_library_edit(request):
-    return render(request,'testee/word_library_edit.html')
 
 def word_library_del(request,words):
     try:
@@ -1118,3 +1115,22 @@ def word_library_del(request,words):
     except ObjectDoesNotExist:
         messages.error(request,'error')
         return redirect('word_library')
+    
+def word_library_edit(request,words,translations):
+    word = Word_library.objects.get(words=words)
+    translate = Word_library.objects.get(translations=translations) 
+    if request.method == 'POST':
+        try:
+            word_english=request.POST.get('word_english')
+            word_chinese=request.POST.get('word_chinese')
+            word.words = word_english
+            translate.translations = word_chinese
+            word.save()
+            translate.save()
+            return redirect('word_library')
+        except ObjectDoesNotExist:
+            messages.error(request,'error')
+            return redirect('word_library')
+            
+    else:
+        return render(request,'testee/word_library_edit.html',{'words':word,'translates':translate})        

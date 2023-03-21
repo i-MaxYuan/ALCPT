@@ -22,14 +22,14 @@
                                 {{trans("English")}}<span id="name_invalid" class="name_invalid"></span>
                             </h5>
                             <p class="card-text">
-                                <input class="form-control" type="text" onkeyup="unique_english({{ word_english }}, this)" name="word_english" value="{{ words }}" required />
+                                <input class="form-control" type="text" {%if words%}value="{{words.words}}"{%endif%}onkeyup="unique_english({{words}}, this)" name="word_english" value="{{ words }}" required />
                             </p>
 
                             <h5 class="card-subtitle mb-2 text-muted">
                                 {{trans("Chinese")}}<span id="name_invalid" class="name_invalid"></span>
                             </h5>
                             <p class="card-text">
-                                <input class="form-control" type="text" onkeyup="unique_chinese({{ word_chinese }}, this)" name="word_chinese" value="{{ translations }}" required />
+                                <input class="form-control" type="text" {%if translates%}value="{{translates.translations}}"{%endif%} onkeyup="unique_chinese({{translations}}, this)" name="word_chinese" value="{{ translations }}" required />
                             </p>
                            
                             <div class="float-right">
