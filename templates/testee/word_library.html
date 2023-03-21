@@ -1,0 +1,48 @@
+{% extends 'new_base.html' %} 
+{% block path %}
+<li class="breadcrumb-item active" aria-current="page">{{trans("Word Library")}}</li>
+{% endblock %} 
+{% block content %}
+<main class="Word Library">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-12 table-responsive-md">
+                <h2>{{trans("Word Library")}}</h2>
+
+                <table class="table table-hover table-striped table-bordered table-mc-light-blue">
+                    <thead class="thead-light">
+                        <tr>
+                            <th class="text-center">{{trans("English")}}</th>
+                            <th class="text-center">{{trans("Chinese")}}</th>
+                            <th>
+                                <div class="add">
+                                    <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ url('word_library_create') }}'">
+                                        <i class="fa fa-plus"></i>
+                                    </button>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for word in word_list %}
+                        <tr style="cursor: pointer" >
+                            <td class="text-center" data-title="English">
+                                {{ word.words}}
+                            </td>
+                            <td class="text-center" data-title="Chineses">
+                                {{ word.translations }}
+                            </td>
+                            <td class="text-center">
+                                <a href="{{ url('word_library')}}"><i class="fa fa-pencil-square-o"></i></a>
+                                <a href="{{ url('word_library')}}" onclick="return confirm('Sure to delete？');"><i class="fa fa-trash"></i></a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

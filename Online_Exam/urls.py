@@ -46,6 +46,7 @@ urlpatterns = [
     re_path(r'^download_OM_pdf$',
             views.downloadOperationManual,
             name='Download_OM_pdf'),
+<<<<<<< HEAD
 
     re_path(
         r'^about/',
@@ -148,6 +149,110 @@ urlpatterns = [
                     name='notification_delete'),
         ])),
 
+=======
+
+    re_path(
+        r'^about/',
+        include([
+            re_path(r'^project_history',
+                views.project_history,
+                name='project_history'),
+            re_path(r'^SystemManager',
+                    views.about_SystemManager,
+                    name='about_SystemManager'),
+            re_path(r'^TestManager',
+                    views.about_TestManager,
+                    name='about_TestManager'),
+            re_path(r'^TBManager',
+                    views.about_TBManager,
+                    name='about_TBManager'),
+            re_path(r'^TBOperator',
+                    views.about_TBOperator,
+                    name='about_TBOperator'),
+            re_path(r'^Viewer', views.about_Viewer, name='about_Viewer'),
+            re_path(r'^Testee', views.about_Testee, name='about_Testee'),
+            re_path(r'^developer',
+                    views.about_developer,
+                    name='about_developer'),
+        ])),
+    
+    # 系統使用手冊
+    re_path(
+        r'operation_manual/', 
+        include([
+            re_path(r'^System$', views.OM_System, name='OM_System'),
+            re_path(r'^Report$', views.OM_Report, name='OM_Report'),
+            re_path(r'^User$', views.OM_User, name='OM_User'),
+            re_path(r'^Sidebar$', views.OM_Sidebar, name='OM_Sidebar'),
+            re_path(r'^SystemManager$',
+                    views.OM_SystemManager,
+                    name='OM_SystemManager'),
+            re_path(r'^TestManager$',
+                    views.OM_TestManager,
+                    name='OM_TestManager'),
+            re_path(r'^TBManager$', views.OM_TBManager, name='OM_TBManager'),
+            re_path(r'^TBOperator$', views.OM_TBOperator,
+                    name='OM_TBOperator'),
+            re_path(r'^Viewer$', views.OM_Viewer, name='OM_Viewer'),
+            re_path(r'^Testee$', views.OM_Testee, name='OM_Testee'),
+        ])),
+    
+    # 問題回報
+    re_path(r'^report$', system.report, name='report'), 
+    re_path(
+        r'^report/',
+        include([
+            re_path(r'^(?P<question_id>[0-9]+)$',
+                    testee.report_question,
+                    name='report_question'),
+            re_path(r'^list$', registration.report_list, name='report_list'),
+            re_path(r'^(?P<report_id>[0-9]+)/detail$',
+                    registration.report_detail,
+                    name='report_detail'),
+            re_path(r'^(?P<report_id>[0-9]+)/view$',
+                    system.view_report_detail,
+                    name='view_report_detail'),
+            re_path(
+                r'^list/(?P<responsibility>(SystemManager|TestManager|TBManager))',
+                system.responsible_report_list,
+                name='responsible_report_list'),
+            re_path(r'^reply/(?P<report_id>[0-9]+)$',
+                    system.report_reply,
+                    name='report_reply'),
+            re_path(r'^(?P<report_id>[0-9]+)/done$',
+                    system.report_done,
+                    name='report_done'),
+        ])),
+
+    # 公告設定
+    re_path(r'^proclamation$', views.index, name='Homepage'),
+    re_path(
+        r'^proclamation/',
+        include([
+            re_path(r'^create$',
+                    proclamation.create,
+                    name='proclamation_create'),
+            re_path(r'^(?P<proclamation_id>[0-9]+)/detail$',
+                    proclamation.detail,
+                    name='proclamation_detail'),
+            re_path(r'^(?P<proclamation_id>[0-9]+)/delete$',
+                    proclamation.delete,
+                    name='proclamation_delete'),
+            re_path(r'^(?P<proclamation_id>[0-9]+)/edit$',
+                    proclamation.edit,
+                    name='proclamation_edit'),
+            re_path(r'^(?P<action>(read|delete))/toggle$',
+                    proclamation.toggle,
+                    name='proclamation_toggle'),
+            re_path(r'^notification_center$',
+                    proclamation.notification_center,
+                    name='notification_center'),
+            re_path(r'^(?P<proclamation_id>[0-9]+)/notification_delete$',
+                    proclamation.notification_delete,
+                    name='notification_delete'),
+        ])),
+
+>>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
     re_path(r'^email_verification$',
             registration.verification,
             name='email_verification'),
@@ -309,6 +414,7 @@ urlpatterns = [
                             name='testee_group_member_list'),
                 ])),
         ])),
+<<<<<<< HEAD
 
     # 題庫管理員
     re_path(r'^question$',
@@ -367,6 +473,66 @@ urlpatterns = [
                 name='view_testee_info'),
         ])),
 
+=======
+
+    # 題庫管理員
+    re_path(r'^question$',
+            question.manager_index,
+            name='tbmanager_question_list'),
+    re_path(
+        r'^question/',
+        include([
+            re_path(r'^review$', question.review, name='question_review'),
+            re_path(r'^(?P<question_id>[0-9]+)/pass$',
+                    question.question_pass,
+                    name='question_pass'),
+            re_path(r'^(?P<question_id>[0-9]+)/reject$',
+                    question.question_reject,
+                    name='question_reject'),
+            re_path(r'^(?P<question_id>[0-9]+)/edit$',
+                    question.question_edit,
+                    name='question_edit'),
+        ])),
+
+    # 題目操作員
+    re_path(r'^operator$',
+            question.operator_index,
+            name='tboperator_question_list'),
+    re_path(
+        r'^operator/',
+        include([
+            re_path(r'^question_multiCreate',
+                    question.question_multiCreate,
+                    name="question_multiCreate"),
+            re_path(r'^submit/(?P<question_id>[0-9]+)$',
+                    question.question_submit,
+                    name='question_submit'),
+            re_path(r'^(?P<kind>(listening|reading))/question_create$',
+                    question.question_create,
+                    name='question_create'),
+            re_path(r'^(?P<question_id>[0-9]+)/edit$',
+                    question.operator_edit,
+                    name='operator_edit'),
+            re_path(r'^(?P<question_id>[0-9]+)/delete$',
+                    question.question_delete,
+                    name='question_delete'),
+        ])),
+
+    # 成績檢閱者
+    re_path(r'^viewer$', viewer.index, name='exam_score_list'),
+    re_path(
+        r'^viewer/',
+        include([
+            re_path(r'^(?P<exam_id>[0-9]+)/detail$',
+                    viewer.exam_score_detail,
+                    name='exam_score_detail'),
+            re_path(
+                r'^(?P<exam_id>[0-9]+)/detail/(?P<reg_id>[a-zA-Z0-9]+)/info$',
+                viewer.view_testee_info,
+                name='view_testee_info'),
+        ])),
+
+>>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
     # 受測者部分
     re_path(r'^testee$', testee.score_list,
             name='testee_score_list'),  # 受測者主頁（顯示自我成績）
@@ -473,7 +639,10 @@ re_path(
                 name='about_developer'),
     ])),
 
+<<<<<<< HEAD
 # re_path(r'^en-us', views.set_language, name='set_language')
+=======
+>>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
 
 re_path(
     r'^operation_manual/',
@@ -586,6 +755,12 @@ re_path(
         re_path(r'^edit/(?P<reg_id>[a-zA-Z0-9]+)$',
                 system.user_edit,
                 name='user_edit'),
+<<<<<<< HEAD
+=======
+        re_path(r'^delete/(?P<reg_id>[a-zA-Z0-9]+)$',
+                system.user_del,
+                name='user_del'),
+>>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
         re_path(r'^unit_list/$', system.unit, name='unit_list'),
         re_path(
             r'^unit_list/',
@@ -618,6 +793,7 @@ re_path(
                 re_path(r'^(?P<category_id>[0-9]+)/edit$',
                         system.report_category_edit,
                         name='report_category_edit'),
+<<<<<<< HEAD
             ])),
         re_path(r'^view_profile/(?P<reg_id>[a-zA-Z0-9]+)$',
                 system.view_profile,
@@ -631,6 +807,21 @@ re_path(
                         system.achievement_create,
                         name='achievement_create'),
             ])),
+=======
+            ])),
+        re_path(r'^view_profile/(?P<reg_id>[a-zA-Z0-9]+)$',
+                system.view_profile,
+                name='view_profile'),
+        re_path(r'^achievement$', system.achievement_list,
+                name='achievement_list'),
+        re_path(
+            r'^achievement/',
+            include([
+                re_path(r'^create$',
+                        system.achievement_create,
+                        name='achievement_create'),
+            ])),
+>>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
     ])),
 
 # 考試管理員
@@ -826,7 +1017,35 @@ re_path(
                 re_path(r'^(?P<kind>(listening|reading))$',
                         testee.practice_create,
                         name='testee_practice_create'),
+<<<<<<< HEAD
             ]))
+=======
+            ])),
+        re_path(r'^forum$',
+                testee.forum,
+                name="forum"),
+        re_path(r'^forum_question/(?P<question_id>[0-9]+)/(?P<answersheet_id>[0-9]+)$',
+                testee.forum_question,
+                name="forum_question"),
+        re_path(r'^forum_question_add/(?P<question_id>[0-9]+)/(?P<answersheet_id>[0-9]+)$',
+                testee.forum_question_add,
+                name='forum_question_add'),
+        re_path(r'^forum_comment_add/(?P<question_id>[0-9]+)$',
+                testee.forum_comment_add,
+                name='forum_comment_add'),
+        re_path(r'^forum_comment_delete/(?P<forum_comment_id>[0-9]+)$',
+                testee.forum_comment_delete,
+                name='forum_comment_delete'),
+        re_path(r'^answersheet_comment_delete/(?P<forum_comment_id>[0-9]+)/(?P<answersheet_id>[0-9]+)$',
+                testee.answersheet_comment_delete,
+                name='answersheet_comment_delete'),
+        re_path(r'^word_library$',
+                testee.word_library,
+                name='word_library'),
+        re_path(r'^word_library_create$',
+                testee.word_library_create,
+                name='word_library_create'),
+>>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
     ])),
 )
 

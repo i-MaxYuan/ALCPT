@@ -24,7 +24,11 @@ def group_list(request):
     else:
         groups = Group.objects.all()
 
+<<<<<<< HEAD
     page = request.GET.get('page', 0)
+=======
+    page = request.GET.get('page', 1)
+>>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
     paginator = Paginator(groups, 10)
 
     try:

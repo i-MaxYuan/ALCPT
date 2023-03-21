@@ -11,10 +11,19 @@
                     <div class="card-body">
                         <h5 class="card-title">{{ proclamation.title }}</h5>
 
+<<<<<<< HEAD
                         <p class="card-text">{{ proclamation.text|linebreaksbr }}</p>
 
                         <footer class="blockquote-footer">
                             {{ proclamation.created_by }} in
+=======
+                        <!-- <p class="card-text">{{ proclamation.text|linebreaksbr }}</p> -->
+                        <p class="card-text">{{ trans("Start Time") }} : {{ time }}</p>
+                        <p class="card-text">{{ trans("Duration")}} : {{ duration }} {{ trans("minutes") }}</p>
+
+                        <footer class="blockquote-footer">
+                            {{ proclamation.created_by }} {{ trans("in") }}
+>>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
                             <cite title="Source Title">{{ proclamation.created_time }}</cite>
                         </footer>
                         {% if proclamation.exam_id != 0 %}

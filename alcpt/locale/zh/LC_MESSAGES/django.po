@@ -34,7 +34,11 @@ msgid "User List"
 msgstr "使用者列表"
 
 msgid "TestManager"
+<<<<<<< HEAD
 msgstr "考試管理員"
+=======
+msgstr "鑑測管理員"
+>>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
 
 msgid  "TBManager"
 msgstr "題庫管理員"
@@ -46,10 +50,17 @@ msgid  "TBO"
 msgstr "題庫操作員"
 
 msgid "Test Manager"
+<<<<<<< HEAD
 msgstr "考試管理員"
 
 msgid "TM"
 msgstr "考試管理員"
+=======
+msgstr "鑑測管理員"
+
+msgid "TM"
+msgstr "鑑測管理員"
+>>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
 
 msgid  "TB Manager"
 msgstr "題庫管理員"
@@ -76,7 +87,11 @@ msgid  "User Response Handling"
 msgstr "使用者問題處理進度"
 
 msgid  "Exam List"
+<<<<<<< HEAD
 msgstr "測驗列表"
+=======
+msgstr "模擬鑑測列表"
+>>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
 
 msgid  "TestPaper List"
 msgstr "試卷列表"
@@ -97,17 +112,31 @@ msgid  "Create Reading Question"
 msgstr "建立閱讀試題"
 
 msgid  "View Testee Score"
+<<<<<<< HEAD
 msgstr "測驗成績列表"
+=======
+msgstr "檢閱模擬鑑測成績"
+>>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
 
 msgid  "Favorite Question"
 msgstr "問題收藏本"
 
 msgid  "Exam Record"
+<<<<<<< HEAD
 msgstr "測驗紀錄"
+=======
+msgstr "模擬鑑測紀錄"
+>>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
 
 msgid  "Score Record"
 msgstr "成績紀錄"
 
+<<<<<<< HEAD
+=======
+msgid  "Test Record"
+msgstr "測驗紀錄"
+
+>>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
 msgid  "Listening Practice"
 msgstr "聽力練習"
 
@@ -487,7 +516,11 @@ msgid "Score"
 msgstr "成績"
 
 msgid "Exam Score List"
+<<<<<<< HEAD
 msgstr "考試成績列表"
+=======
+msgstr "模擬鑑測成績列表"
+>>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
 
 msgid "Start Time"
 msgstr "開始時間"
@@ -499,7 +532,11 @@ msgid "Finish Time"
 msgstr "結束時間"
 
 msgid "Duration"
+<<<<<<< HEAD
 msgstr "考試時間"
+=======
+msgstr "鑑測時間"
+>>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
 
 msgid "min"
 msgstr "分鐘"
@@ -508,6 +545,12 @@ msgid "View Testee Info"
 msgstr "查看測驗者資料"
 
 msgid "Exam Name"
+<<<<<<< HEAD
+=======
+msgstr "模擬鑑測名稱"
+
+msgid "Test Name"
+>>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
 msgstr "測驗名稱"
 
 msgid "Last Login"
@@ -517,37 +560,63 @@ msgid "Exam Content"
 msgstr "考試資訊"
 
 msgid "Test paper"
+<<<<<<< HEAD
 msgstr "測驗卷"
+=======
+msgstr "試卷"
+>>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
 
 msgid  "Created"
 msgstr "創建時間"
 
 msgid  "Testee List"
+<<<<<<< HEAD
 msgstr "測驗者名單"
+=======
+msgstr "鑑測者名單"
+>>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
 
 msgid  "Personnel"
 msgstr "人員"
 
 msgid  "Exam Create"
+<<<<<<< HEAD
 msgstr "建立考試"
 
 msgid  "Choose Test Paper"
 msgstr "選擇測驗卷"
+=======
+msgstr "建立模擬鑑測"
+
+msgid  "Choose Test Paper"
+msgstr "選擇試卷"
+>>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
 
 msgid  "Group"
 msgstr "群組"
 
 msgid  "Choose Testee Group"
+<<<<<<< HEAD
 msgstr "選擇測驗群組"
+=======
+msgstr "選擇受測者群組"
+>>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
 
 msgid  "Date"
 msgstr "日期"
 
 msgid  "Exam Edit"
+<<<<<<< HEAD
 msgstr "編輯測驗"
 
 msgid  "Test Paper"
 msgstr "測驗卷"
+=======
+msgstr "編輯鑑測"
+
+msgid  "Test Paper"
+msgstr "試卷"
+>>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
 
 msgid  "Creator"
 msgstr "創建人"
@@ -652,7 +721,11 @@ msgid  "Select"
 msgstr "選擇"
 
 msgid  "Practice Select"
+<<<<<<< HEAD
 msgstr "測驗練習選擇"
+=======
+msgstr "練習卷設定"
+>>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
 
 msgid  "Listening"
 msgstr "聽力"
@@ -692,10 +765,17 @@ msgid  "ParagraphUnderstanding"
 msgstr "段落理解"
 
 msgid  "Choose the number of your test paper"
+<<<<<<< HEAD
 msgstr "選擇測驗題數"
 
 msgid  "Question Number"
 msgstr "測驗卷題數"
+=======
+msgstr "選擇練習題數"
+
+msgid  "Question Number"
+msgstr "題數"
+>>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
 
 msgid  "You can start practice"
 msgstr "你可以開始測驗囉"
@@ -720,7 +800,11 @@ msgstr "選擇試題題型"
 
 msgid ""
 "Choose the difficulty of your test paper"
+<<<<<<< HEAD
 msgstr "選擇測驗難度"
+=======
+msgstr "選擇練習難度"
+>>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
 
 msgid  "Medium"
 msgstr "適中"
@@ -906,7 +990,11 @@ msgid  "ALCPT is short for American Language Course Placement Test."
 msgstr " "
 
 msgid  "ALCPT distinguishes multiple user permissions, and students can focus on their own permissions to practice."
+<<<<<<< HEAD
 msgstr "本系統區分為6個使用者權限，分別為「系統管理員」、「考試管理員」、「題庫管理員」、「題庫操作員」、「成績檢閱者」及「受測者」，使用者可以擁有多個使用者權限進行操作。"
+=======
+msgstr "本系統區分為6個使用者權限，分別為「系統管理員」、「鑑測管理員」、「題庫管理員」、「題庫操作員」、「成績檢閱者」及「受測者」，使用者可以擁有多個使用者權限進行操作。"
+>>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
 
 msgid  "This system will also generate some simple statistical graphs to make it easier for users to understand their practice status."
 msgstr " "
@@ -1018,7 +1106,11 @@ msgid  "Practice"
 msgstr "練習"
 
 msgid  "Exam"
+<<<<<<< HEAD
 msgstr "測驗"
+=======
+msgstr "鑑測"
+>>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
 
 msgid  "Practice Record List"
 msgstr "練習成績列表"
@@ -1030,9 +1122,15 @@ msgid  "Finished"
 msgstr "已完成"
 
 msgid  "Exam Record List"
+<<<<<<< HEAD
 msgstr "測驗成績列表"
 
 msgid  "You have no favorite question now"
+=======
+msgstr "模擬鑑測成績列表"
+
+msgid  "You have no favorite questions now"
+>>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
 msgstr "您目前沒有試題在問題收藏本中"
 
 msgid  "Sure to report?"
@@ -1068,7 +1166,11 @@ msgstr "團隊"
 msgid  "Contact"
 msgstr "聯絡"
 
+<<<<<<< HEAD
 msgid  "ALCPT is a website helps you improve your English Proficiency and evalute learning effectiveness."
+=======
+msgid  "ALCPT is a website that helps you improve your English Proficiency and evaluate learning effectiveness."
+>>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
 msgstr "本平台是一個可幫助您提高英語水平和評估學習效果的網站"
 
 msgid  "Commander"
@@ -1108,7 +1210,11 @@ msgid  "the TB manager for review."
 msgstr "題庫管理員進行審核"
 
 msgid  "Commander and Techer can check "
+<<<<<<< HEAD
 msgstr "檢閱各個模擬測驗及練習的"
+=======
+msgstr "檢閱各個模擬鑑測及練習的"
+>>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
 
 msgid  "student's score."
 msgstr "受測者成績分佈及分析"
@@ -1457,7 +1563,11 @@ msgid "You can start practice!"
 msgstr "您可以開始練習！"
 
 msgid "You had finished the exam."
+<<<<<<< HEAD
 msgstr "您已結束本測驗"
+=======
+msgstr "您已結束本鑑測"
+>>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
 
 msgid "Continue"
 msgstr "繼續"
@@ -1520,7 +1630,11 @@ msgid "You hadn't finish your test, please keep answering the exam"
 msgstr "您尚未完成您的測驗，請回至作答頁面完成作答"
 
 msgid "You hadn't take this exam!"
+<<<<<<< HEAD
 msgstr "您未參加該次測驗！"
+=======
+msgstr "您未參加該次鑑測！"
+>>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
 
 msgid "Thanks for your report, we will review this question as soon as possible."
 msgstr "感謝您的回報，我們將會儘速回覆您的問題！"
@@ -1537,7 +1651,53 @@ msgid "Listening Practice Score"
 msgstr "聽力練習成績"
 
 msgid "Exam Score"
+<<<<<<< HEAD
 msgstr "模擬考成績"
 
 msgid "Remaining Time"
 msgstr "剩餘作答時間"
+=======
+msgstr "模擬鑑測成績"
+
+msgid "Remaining Time"
+msgstr "剩餘作答時間"
+
+msgid "Forum"
+msgstr "討論區"
+
+msgid "Write down your questions"
+msgstr "請寫下你的疑問"
+
+msgid " means that the question has been discuessed, you can click it to see the forum."
+msgstr "代表此題已被討論，點擊即可查看討論區"
+
+msgid " means that the question doesn't have any comments."
+msgstr "代表此題尚未被任何人討論"
+
+msgid "If you want to delete your comments, please click "
+msgstr "如果你想刪除你的留言，請點擊"
+
+msgid "Exam Ranking"
+msgstr "模擬考排行"
+
+msgid "Level Ranking"
+msgstr "等級排行"
+
+msgid "There is no question in forum now"
+msgstr "目前沒有任何題目被討論"
+
+msgid "IM, Management College, NDU. Version"
+msgstr "國防大學—管理學院—資訊管理學系， 版本"
+
+msgid "No comments"
+msgstr "此題尚無任何討論"
+
+msgid "Start Exam"
+msgstr "開始鑑測"
+
+msgid "minutes"
+msgstr "分鐘"
+
+msgid "in"
+msgstr "建立於"
+>>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5

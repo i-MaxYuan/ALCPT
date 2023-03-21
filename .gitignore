@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+*.sql
+>>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
 *.swp
 
 # Byte-compiled / optimized / DLL files

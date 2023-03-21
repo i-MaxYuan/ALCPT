@@ -98,7 +98,13 @@
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="{{ url('testee_achievement_list') }}"><i class="fas fa-medal"></i>{{ trans("Achievement") }}</a>
                         <a class="dropdown-item" href="{{ url('favorite_question_list') }}"> <i class="fas fa-heart"></i>{{ trans("Favorite Question") }}</a>
+<<<<<<< HEAD
                         <a class="dropdown-item" href="{{ url('testee_exam_list') }}"><i class="fas fa-list"></i>{{ trans("Exam Record") }}</a>
+=======
+                        <a class="dropdown-item" href="{{url('forum')}}"><i class="fa-regular fa-comments" style="color: dodgerblue;" ></i> {{ trans("Forum") }}</a>
+                        <a class="dropdown-item" href="{{url('word_library')}}"><i class="fa-solid fa-file-word"></i> {{ trans("Word Library")}}</a>
+                        <a class="dropdown-item" href="{{ url('testee_exam_list') }}"><i class="fas fa-list"></i>{{ trans("Test Record") }}</a>
+>>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
                         <a class="dropdown-item" href="{{ url('testee_score_list') }}"><i class="fas fa-tasks"></i>{{ trans("Score Record") }}</a>
                         <a class="dropdown-item" href="{{ url('testee_practice_create', args=['listening']) }}"><i class="fas fa-headphones-alt"></i>{{ trans("Listening Practice") }}</a>
                         <a class="dropdown-item" href="{{ url('testee_practice_create', args=['reading']) }}"><i class="fas fa-book"></i>{{ trans("Reading Practice") }}</a>

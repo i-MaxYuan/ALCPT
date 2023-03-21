@@ -21,6 +21,7 @@
         <div class="row justify-content-center">
             <div class="col-md-12">
                 <div class="table-responsive">
+<<<<<<< HEAD
                     <table class="table table-hover">
                         <thead class="thead-light">
                             <tr>
@@ -28,6 +29,15 @@
                                 <th scope="col">{{trans("Serial")}}</th>
                                 <th scope="col">{{trans("Content")}}</th>
                                 <th scope="col" class="text-right">
+=======
+                    <table class="table table-hover table-bordered table-striped table-mc-light-blue">
+                        <thead class="thead-light">
+                            <tr>
+                                <th></th>
+                                <th scope="col" width="7%">{{trans("Serial")}}</th>
+                                <th scope="col">{{trans("Content")}}</th>
+                                <th scope="col" class="text-right" >
+>>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
                                     <button type="button" class="btn" data-toggle="modal" data-target="#promptContent">
                                         <i class="fa fa-question-circle"></i>
                                     </button>
@@ -35,7 +45,11 @@
                                         <div class="modal-dialog modal-dialog-centered" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header text-center">
+<<<<<<< HEAD
                                                     <h5 class="modal-title" id="ModalLongTitle">{{trans("Tips")}}</h5>
+=======
+                                                    <h5 class="modal-title" id="ModalLongTitle" >{{trans("Tips")}}</h5>
+>>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
                                                 </div>
 
                                                 <div class="modal-body">
@@ -57,7 +71,16 @@
                                                         
                                                         <li>
                                                             <p>
+<<<<<<< HEAD
                                                                 {{trans("If you want to discuss the question with other testees, you can click")}} <i class="fa fa-comments-o" style="color: dodgerblue"></i>{{trans(" to see the discussion forum.")}}
+=======
+                                                                <i class="fa-solid fa-comment" style="color: dodgerblue"></i>{{trans(" means that the question has been discuessed, you can click it to see the forum.")}}
+                                                            </p>
+                                                        </li>
+                                                        <li>
+                                                            <p>
+                                                                <i class="fa-regular fa-comment" style="color: dodgerblue"></i>{{trans(" means that the question doesn't have any comments.")}}
+>>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
                                                             </p>
                                                         </li>
                                                         <li>
@@ -81,6 +104,7 @@
                         </thead>
 
                         <tbody>
+<<<<<<< HEAD
 
 
                             {% for answer, question_correction, favorite in answers_correction_favorites %}
@@ -88,6 +112,14 @@
                                 <td id="angle_right_btn_{{ loop.index }}" onclick="toggle('{{ loop.index }}')" style="cursor: pointer;"><i class="fa fa-angle-right"></i></td>
                                 <td>{{ loop.index }}</td>
                                 <td class="text-left">
+=======
+                            {% for answer, question_correction, favorite, all_questions in answers_correction_favorites %}
+                            <tr id="mainData{{ loop.index }}">
+                                <td id="angle_right_btn_{{ loop.index }}" onclick="toggle('{{ loop.index }}')" style="cursor: pointer;"><i class="fa fa-angle-right"></i></td>
+                                <td>{{ loop.index }}</td>
+                                <!-- <td class="text-left"> -->
+                                <td class="col-10">
+>>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
                                     {% if answer.question.q_file %}
                                     <audio controls preload="none">
                                         <source src="{{ answer.question.q_file.url }}" type="audio/mpeg">
@@ -102,13 +134,19 @@
                                     </div>
                                     {% endif %}
                                 </td>
+<<<<<<< HEAD
                                 <td class="text-right">
+=======
+                                <!-- <td class="text-right"> -->
+                                <td class="col-2" style="text-align: right">
+>>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
                                     <!-- <p>{{ answer.question.difficulty | readable_question_difficulty }}</p> -->
                                     {% if answer.question.state == 5 %}
                                     <i class="fa fa-exclamation-circle"></i>
                                     {% elif answer.selected == -1 %}
                                     <i class="fa fa-question"></i>
                                     {% else %}
+<<<<<<< HEAD
                                     {% if question_correction %}
                                     <i class="fa fa-check" style="color: green; font-size: 25px; padding-right: 5px"></i>
                                     {% else %}
@@ -117,6 +155,15 @@
                                     {% endif %}
                                     <!--discussion area-->
                                     <i class="fa fa-comments-o" style="color: dodgerblue; font-size: 25px; padding-right: 5px"></i>
+=======
+                                        {% if question_correction %}
+                                        <i class="fa fa-check" style="color: green; font-size: 25px; padding-right: 5px"></i>
+                                        {% else %}
+                                        <i class="fa fa-times" style="color: red; font-size: 25px; padding-right: 10px"></i>
+                                        {% endif %}
+                                    {% endif %}
+
+>>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
 
                                     {% if favorite %}
                                     <a href="{{ url('favorite_question', args=[answer.question.id, answersheet.id]) }}"><i class="fas fa-heart" style="color: red; font-size: 25px; padding-right: 5px"></i></a>
@@ -124,6 +171,15 @@
                                     <a href="{{ url('favorite_question', args=[answer.question.id, answersheet.id]) }}"><i class="far fa-heart" style="color: red; font-size: 25px; padding-right: 5px"></i></a>
                                     {% endif %}
 
+<<<<<<< HEAD
+=======
+                                    <!--forum-->
+                                    {% if answer.question.in_forum %}
+                                        <a href="{{ url('forum_question', args=[answer.question.id, answersheet.id]) }}"><i class="fa-solid fa-comment" style="color: dodgerblue; font-size: 25px; padding-right: 5px"></i></a>
+                                    {% else %}
+                                        <a href="#"><i class="fa-regular fa-comment" style="color: dodgerblue; font-size: 25px; padding-right: 5px"></i></a>
+                                    {% endif %}
+>>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
                                 </td>
                             </tr>
 
@@ -149,6 +205,10 @@
                                         {% endif %} {% endfor %}
                                     </ol>
                                 </td>
+<<<<<<< HEAD
+=======
+                                
+>>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
                                 <td class="text-right">
                                     {% if answer.question.state == 5 %}
                                     <i class="btn btn-outline-success" style="cursor: pointer" onclick="alert('This question had been modified.')"></i>
@@ -157,7 +217,79 @@
                                     {% endif %}
                                 </td>
                             </tr>
+<<<<<<< HEAD
                             {% endfor %}
+=======
+
+                            <!-- <div id="best_reply{{ loop.index }}" style="display: none">
+                                <tr>
+                                    <th></th>
+                                    <th>Replier</th>
+                                    <th>Best Reply</th>
+                                    <th></th>
+                                </tr>
+                                <tr>
+                                    <td><i class="fa-regular fa-award"></i></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </div> -->
+
+                            <tbody id="forum_comment{{ loop.index }}" style="display: none">
+                                <!-- <tr>
+                                    <th></th>
+                                    <th>Replier</th>
+                                    <th>Best Reply</th>
+                                    <th></th>
+                                </tr>
+                                <tr>
+                                    <td><i class="fa-solid fa-award fa-3x" style="color:gold;" ></i></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr> -->
+
+                                <tr>
+                                    <th width="8%">{{trans("User")}}</th>
+                                    <th>{{trans("Date")}}</th>
+                                    <th>{{trans("Comment")}}</th>
+                                    <th></th>
+                                </tr>
+                                {% if answer.question.in_forum == 1 %}
+                                    {% for forum_comment in forum_comment_search %}
+                                        {% if forum_comment.f_question.id == answer.question.id %}
+                                        <tr>
+                                            <td>{{forum_comment.f_creator.name}}</td>
+                                            <td>{{forum_comment.data_time}}</td>
+                                            <td>{{forum_comment.f_content}}</td>
+                                            <td>
+                                            {% if forum_comment.f_creator.id == request.user.id %}
+                                                <a href="{{ url('answersheet_comment_delete', args=[forum_comment.id, answersheet.id]) }}"><i class="fa-solid fa-trash-can" style="color: darkgray; font-size: 25px; padding-right: 5px"></i></a>
+                                            {% endif %}
+                                            </td>
+                                        </tr>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        <td colspan=4 align="center">{{trans("No comments")}}...</td>
+                                    </tr>
+                                {% endif %}
+                            </tbody>
+                            <tr id="forum_table{{ loop.index }}" style="display: none">
+                                <td colspan="3" >
+                                    <form action="../../forum_question_add/{{answer.question.id}}/{{answersheet.id}}" method="POST"> 
+                                        <label for="forum_comment">{{trans("Write down your questions")}}:</label>
+                                        <textarea id="forum_comment" name="forum_comment" rows="5" cols="60"></textarea>
+                                        <input type="submit" value={{trans("Submit")}}>
+                                    </form>
+                                </td>
+                                <td></td>
+                            </tr>    
+                            {% endfor %}
+                            
+>>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
                         </tbody>
                     </table>
 
