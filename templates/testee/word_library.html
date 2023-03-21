@@ -33,12 +33,16 @@
                             <td class="text-center" data-title="Chineses">
                                 {{word.translations}}
                             <td class="text-center">
+<<<<<<< HEAD
                                 <a href="{{ url('word_library',args=[word.words,word.translations])}}"><i class="fa fa-pencil-square-o"></i></a>
+=======
+                                <a href="{{ url('word_library_edit',args=[word.words,word.translations])}}"><i class="fa fa-pencil-square-o"></i></a>
+>>>>>>> f6c5397
                                 <a href="{{ url('word_library_del',args=[word.words])}}" onclick="return confirm('{{trans("Sure to delete this user?")}}')">
-                                <i class="fa fa-trash" style="color:red"></i></a>
+                                    <i class="fa fa-trash" style="color:red"></i></a>
                             </td>
                         </tr>
-                        {% endfor %};
+                        {% endfor %}
                         </tr>
                     </tbody>
                 </table>
