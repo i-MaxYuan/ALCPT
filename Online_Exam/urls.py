@@ -46,8 +46,6 @@ urlpatterns = [
     re_path(r'^download_OM_pdf$',
             views.downloadOperationManual,
             name='Download_OM_pdf'),
-<<<<<<< HEAD
-
     re_path(
         r'^about/',
         include([
@@ -148,9 +146,6 @@ urlpatterns = [
                     proclamation.notification_delete,
                     name='notification_delete'),
         ])),
-
-=======
-
     re_path(
         r'^about/',
         include([
@@ -251,8 +246,6 @@ urlpatterns = [
                     proclamation.notification_delete,
                     name='notification_delete'),
         ])),
-
->>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
     re_path(r'^email_verification$',
             registration.verification,
             name='email_verification'),
@@ -414,7 +407,6 @@ urlpatterns = [
                             name='testee_group_member_list'),
                 ])),
         ])),
-<<<<<<< HEAD
 
     # 題庫管理員
     re_path(r'^question$',
@@ -473,7 +465,6 @@ urlpatterns = [
                 name='view_testee_info'),
         ])),
 
-=======
 
     # 題庫管理員
     re_path(r'^question$',
@@ -532,7 +523,7 @@ urlpatterns = [
                 name='view_testee_info'),
         ])),
 
->>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
+
     # 受測者部分
     re_path(r'^testee$', testee.score_list,
             name='testee_score_list'),  # 受測者主頁（顯示自我成績）
@@ -639,10 +630,9 @@ re_path(
                 name='about_developer'),
     ])),
 
-<<<<<<< HEAD
+
 # re_path(r'^en-us', views.set_language, name='set_language')
-=======
->>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
+
 
 re_path(
     r'^operation_manual/',
@@ -755,12 +745,9 @@ re_path(
         re_path(r'^edit/(?P<reg_id>[a-zA-Z0-9]+)$',
                 system.user_edit,
                 name='user_edit'),
-<<<<<<< HEAD
-=======
         re_path(r'^delete/(?P<reg_id>[a-zA-Z0-9]+)$',
                 system.user_del,
                 name='user_del'),
->>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
         re_path(r'^unit_list/$', system.unit, name='unit_list'),
         re_path(
             r'^unit_list/',
@@ -793,7 +780,6 @@ re_path(
                 re_path(r'^(?P<category_id>[0-9]+)/edit$',
                         system.report_category_edit,
                         name='report_category_edit'),
-<<<<<<< HEAD
             ])),
         re_path(r'^view_profile/(?P<reg_id>[a-zA-Z0-9]+)$',
                 system.view_profile,
@@ -807,7 +793,6 @@ re_path(
                         system.achievement_create,
                         name='achievement_create'),
             ])),
-=======
             ])),
         re_path(r'^view_profile/(?P<reg_id>[a-zA-Z0-9]+)$',
                 system.view_profile,
@@ -1017,9 +1002,7 @@ re_path(
                 re_path(r'^(?P<kind>(listening|reading))$',
                         testee.practice_create,
                         name='testee_practice_create'),
-<<<<<<< HEAD
             ]))
-=======
             ])),
         re_path(r'^forum$',
                 testee.forum,
@@ -1044,10 +1027,8 @@ re_path(
                 name='word_library'),
         re_path(r'^word_library_create$',
                 testee.word_library_create,
-                name='word_library_create'),
->>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
-    ])),
-)
+                name='word_library_create')
+        
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

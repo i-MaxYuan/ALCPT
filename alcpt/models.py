@@ -85,11 +85,6 @@ class User(AbstractBaseUser):
         #     return (self.privilege & require_privilege.value[0]) > 0
         return (self.privilege & require_privilege.value[0]) > 0
 
-
-<<<<<<< HEAD
-=======
-
-
 class Achievement(models.Model):
     """ These objects are what people are earning when contributing """
     trophy = models.ImageField(upload_to='photos', default="default_trophy/default_trophy.png")
@@ -104,8 +99,6 @@ class Achievement(models.Model):
     def __str__(self):
         return self.name
 
-
->>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
 
 class UserAchievement(models.Model):
     user = models.ForeignKey('User', on_delete=models.CASCADE)
@@ -197,11 +190,7 @@ class TestPaper(models.Model):
     name = models.CharField(max_length=100, unique=True)
     question_list = models.ManyToManyField('Question')
     created_time = models.DateTimeField(auto_now_add=True)
-<<<<<<< HEAD
-    created_by = models.ForeignKey("User", on_delete=models.PROTECT, related_name='testee_created')
-=======
     created_by = models.ForeignKey("User", on_delete=models.SET_NULL, null=True, related_name='testee_created')
->>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
     is_testpaper = models.BooleanField(default=False)
     is_used = models.BooleanField(default=False)
     update_time = models.DateTimeField(auto_now=True)
@@ -230,11 +219,7 @@ class Exam(models.Model):
     start_time = models.DateTimeField(blank=True, null=True)
     created_time = models.DateTimeField(auto_now_add=True)
     duration = models.PositiveSmallIntegerField(default=0)
-<<<<<<< HEAD
-    created_by = models.ForeignKey('User', on_delete=models.PROTECT, related_name='exam_created')
-=======
     created_by = models.ForeignKey('User', on_delete=models.SET_NULL, null=True, related_name='exam_created')
->>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
     finish_time = models.DateTimeField(blank=True, null=True)
     is_public = models.BooleanField(default=False)
     testeeList = models.ManyToManyField('User')
@@ -276,20 +261,13 @@ class Question(models.Model):
     q_time = models.IntegerField(default=0)
     q_correct_time = models.IntegerField(default=0)
     created_time = models.DateTimeField(auto_now_add=True)
-<<<<<<< HEAD
-    created_by = models.ForeignKey('User', on_delete=models.PROTECT, related_name='question_created')
-=======
     created_by = models.ForeignKey('User', on_delete=models.SET_NULL, blank=True, null=True, related_name='question_created')
->>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
     update_time = models.DateTimeField(auto_now=True)
     last_updated_by = models.ForeignKey('User', on_delete=models.SET_NULL, blank=True, null=True,
                                         related_name='last_updated')
     is_valid = models.BooleanField(default=False)       # 似乎沒用到
     favorite = models.ManyToManyField('User')
-<<<<<<< HEAD
-=======
     in_forum = models.BooleanField(default=False)
->>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
     faulted_reason = models.CharField(max_length=255, blank=True, null=True, default="")
     STATES_CHOICES = (
         (1, '審核通過'),
@@ -300,11 +278,8 @@ class Question(models.Model):
         (6, '暫存'),
     )
     state = models.SmallIntegerField(choices=STATES_CHOICES, default=6)
-<<<<<<< HEAD
-=======
     best_reply = models.TextField(blank = True, null = True)
     replier = models.OneToOneField('User', on_delete=models.CASCADE, related_name = "replier", null = True, blank = True)
->>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
 
     class Meta:
         ordering = ('-q_content',)
@@ -328,9 +303,6 @@ class Choice(models.Model):
 
     def __str__(self):
         return self.c_content
-<<<<<<< HEAD
-=======
-
 
 #討論區
 #f_question: the question needed to be discuss
@@ -342,8 +314,6 @@ class Forum(models.Model):
     f_content = models.TextField(blank=False, null=False)
     f_creator = models.ForeignKey('User', on_delete=models.CASCADE)
     data_time = models.DateTimeField(blank=True, null=True, default=datetime.datetime.now)
->>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
-
 
 # 答案卷
 # exam: this answer sheet is related to what exam
@@ -354,11 +324,7 @@ class Forum(models.Model):
 # score: score of the answer sheet
 class AnswerSheet(models.Model):
     exam = models.ForeignKey('Exam', on_delete=models.CASCADE, blank=True)
-<<<<<<< HEAD
-    user = models.ForeignKey('User', on_delete=models.CASCADE)      # Student -> User
-=======
     user = models.ForeignKey('User', on_delete=models.SET_NULL, null=True)      # Student -> User
->>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
     finish_time = models.DateTimeField(auto_now_add=True)
     is_tested = models.BooleanField(default=False)
     is_finished = models.BooleanField(default=False)
@@ -389,11 +355,7 @@ class Answer(models.Model):
 class Group(models.Model):
     name = models.CharField(max_length=255, unique=True)
     member = models.ManyToManyField('User', blank=True)     # Student -> User
-<<<<<<< HEAD
-    created_by = models.ForeignKey("User", on_delete=models.PROTECT, related_name='group_created')
-=======
     created_by = models.ForeignKey("User", on_delete=models.CASCADE, related_name='group_created')
->>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
     update_time = models.DateTimeField(auto_now=True)
     created_time = models.DateTimeField(auto_now_add=True)
 
@@ -459,15 +421,9 @@ class Report(models.Model):
         (4, '暫存')
     )
     state = models.SmallIntegerField(choices=STATES_CHOICES, default=0)
-<<<<<<< HEAD
-    created_by = models.ForeignKey('User', on_delete=models.PROTECT)
-    created_time = models.DateTimeField(auto_now_add=True, blank=True, null=True)
-    resolved_by = models.ForeignKey('User', on_delete=models.PROTECT, related_name='resolve_by', blank=True, null=True)
-=======
     created_by = models.ForeignKey('User', on_delete=models.CASCADE)
     created_time = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     resolved_by = models.ForeignKey('User', on_delete=models.CASCADE, related_name='resolve_by', blank=True, null=True)
->>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
     resolved_time = models.DateTimeField(auto_now=True, blank=True, null=True)
 
     def __str__(self):
@@ -485,10 +441,8 @@ class Reply(models.Model):
 
     def get_content(self):
         return json.loads(self.content)
-<<<<<<< HEAD
-=======
+
 
 class Word_library(models.Model):
     words = models.CharField(max_length=50)
     translations = models.CharField(max_length=50)
->>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
