@@ -10,7 +10,15 @@
 
 
 {% block path %}
+<<<<<<< HEAD
 <li class="breadcrumb-item active" aria-current="page">{{trans("Answering")}}...</li>
+=======
+<style>
+    li {}
+</style>
+
+<li class="breadcrumb-item active" aria-current="page" style="">{{trans("Answering")}}...</li>
+>>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
 {% endblock %}
 
 {% block content %}
@@ -73,7 +81,11 @@
             </div>
 
             <div class="col-lg-8 col-md-12 table-responsive">
+<<<<<<< HEAD
                 <h2>{{trans("Answering")}}</h2>
+=======
+                <h2 class = "badge badge-pill badge-warning" style = "color:white; font-size: 25px;">{{trans("Answering")}} <i class="fa-solid fa-pencil"></i></h2>
+>>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
                 <form action="{{ url('testee_answering', args=[exam.id, answer.id]) }}" method="post">
                     <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
 

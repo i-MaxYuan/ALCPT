@@ -105,6 +105,11 @@ def detail(request, proclamation_id):
         proclamation = Proclamation.objects.get(id=proclamation_id)
         proclamation.is_read = True
         proclamation.save()
+<<<<<<< HEAD
+=======
+        time = proclamation.text.split('\n')[0][12:]
+        duration = proclamation.text.split('\n')[1][10:-9]
+>>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
         return render(request, 'proclamation/proclamation_detail.html', locals())
     except ObjectDoesNotExist:
         return redirect('Homepage')

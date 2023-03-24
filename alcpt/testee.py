@@ -11,7 +11,11 @@ from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
+<<<<<<< HEAD
 from .models import Question, AnswerSheet, Student, User, Exam, TestPaper, Answer, ReportCategory, Report, Achievement, UserAchievement
+=======
+from .models import Question, AnswerSheet, Student, User, Exam, TestPaper, Answer, ReportCategory, Report, Achievement, UserAchievement, Forum, Word_library
+>>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
 from .exceptions import *
 from .decorators import permission_check
 from .definitions import UserType, QuestionType, ExamType, AchievementCategory
@@ -288,9 +292,15 @@ def score_list(request):
                 marker_color=df['color'])
     data=[trace]
     layout = go.Layout(
+<<<<<<< HEAD
         title='Exam考試總成績分佈',
         xaxis = dict(title = '成績'),
         yaxis = dict(title = '考試成績範圍次數')
+=======
+        title='模擬鑑測總成績分佈',
+        xaxis = dict(title = '成績'),
+        yaxis = dict(title = '鑑測成績範圍次數')
+>>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
     )
     fig = go.Figure(data=data, layout=layout)
     exam_bar_chart = pyo.plot(fig, output_type='div')
@@ -307,9 +317,15 @@ def score_list(request):
                 marker_color=df['color'])
     data=[trace]
     layout = go.Layout(
+<<<<<<< HEAD
         title='Reading練習總成績分佈',
         xaxis = dict(title = '成績'),
         yaxis = dict(title = '考試成績範圍次數')
+=======
+        title='閱讀練習總成績分佈',
+        xaxis = dict(title = '成績'),
+        yaxis = dict(title = '練習成績範圍次數')
+>>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
     )
     fig = go.Figure(data=data, layout=layout)
     reading_bar_chart = pyo.plot(fig, output_type='div')
@@ -326,9 +342,15 @@ def score_list(request):
                 marker_color=df['color'])
     data=[trace]
     layout = go.Layout(
+<<<<<<< HEAD
         title='Listening練習總成績分佈',
         xaxis = dict(title = '成績'),
         yaxis = dict(title = '考試成績範圍次數')
+=======
+        title='聽力練習總成績分佈',
+        xaxis = dict(title = '成績'),
+        yaxis = dict(title = '練習成績範圍次數')
+>>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
     )
     fig = go.Figure(data=data, layout=layout)
     listening_bar_chart = pyo.plot(fig, output_type='div')
@@ -344,7 +366,11 @@ def score_list(request):
 
     data = [trace]
     layout = go.Layout({
+<<<<<<< HEAD
         'title': 'Exam考試合格率分析',
+=======
+        'title': '模擬鑑測合格率分析',
+>>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
         'annotations': [
             {
                 'font': {
@@ -366,7 +392,11 @@ def score_list(request):
 
     data = [trace]
     layout = go.Layout({
+<<<<<<< HEAD
         'title': 'Reading練習合格率分析',
+=======
+        'title': '閱讀練習合格率分析',
+>>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
         'annotations': [
              {
                 'font': {
@@ -390,7 +420,11 @@ def score_list(request):
 
     data = [trace]
     layout = go.Layout({
+<<<<<<< HEAD
         'title': 'Listening練習合格率分析',
+=======
+        'title': '聽力練習合格率分析',
+>>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
         'annotations': [
              {
                 'font': {
@@ -516,10 +550,19 @@ def view_answersheet_content(request, answersheet_id):
             rank = testee_count - testee_surpassed
 
 
+<<<<<<< HEAD
         answers = answersheet.answer_set.all()
         questions = Question.objects.all().filter(favorite=request.user)
         question_correction_list, q_type_list= testee.question_correction(answersheet)
         is_favorite = []
+=======
+        all_questions = Question.objects.all()#.filter(forum=False)
+        answers = answersheet.answer_set.all() #QuerySet
+        questions = Question.objects.all().filter(favorite=request.user)
+        question_correction_list, q_type_list= testee.question_correction(answersheet)
+        is_favorite = []
+        forum_comment_search = Forum.objects.all()
+>>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
         #return 那題題目 is True or False 的 list
         for answer in answers:
             try:
@@ -528,7 +571,12 @@ def view_answersheet_content(request, answersheet_id):
 
             except ObjectDoesNotExist:
                 is_favorite.append(0)
+<<<<<<< HEAD
                 answers_correction_favorites = zip(answers, question_correction_list, is_favorite)
+=======
+                # answers_correction_favorites = zip(answers, question_correction_list, is_favorite)
+                answers_correction_favorites = zip(answers, question_correction_list, is_favorite, all_questions)
+>>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
 
         y_data = []
         x_data1 = []
@@ -620,7 +668,11 @@ def view_answersheet_content(request, answersheet_id):
 
             return render(request, 'testee/answersheet_content.html', locals())
     elif answersheet.is_finished  == False and now_time > answersheet.finish_time:
+<<<<<<< HEAD
         messages.success(request, {{trans("You hadn't finish your test, please keep answering the exam")}})
+=======
+        messages.success(request, {{trans("You hadn't finish your test, please keep answering the exam")}})   
+>>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
         return redirect('testee_exam_list')
     else:
         messages.warning(request, 'Does not finished this practice. Reject your request.')
@@ -642,6 +694,83 @@ def favorite_question(request, question_id, answersheet_id):
         messages.success(request, _('Question has added to your favorite!'))
     return redirect('view_answersheet_content', answersheet_id)
 
+<<<<<<< HEAD
+=======
+@permission_check(UserType.Testee)
+def forum_question(request, question_id, answersheet_id):
+    # question = Question.objects.all().filter(id=question_id)
+    question = Question.objects.get(id=question_id)
+    if question.in_forum:
+        return redirect('forum')
+    else:
+        messages.success(request, ('Add the question to the forum'))
+        return redirect('view_answersheet_content', answersheet_id)
+
+@permission_check(UserType.Testee)
+@require_http_methods(["POST"])
+def forum_question_add(request, question_id, answersheet_id):
+    if 'forum_comment' in request.POST and request.POST['forum_comment'] != "":
+        forum_comment = Forum.objects.create(
+            f_question = Question.objects.all().get(id = question_id),
+            f_content = request.POST['forum_comment'],
+            f_creator = request.user,
+            data_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+        if forum_comment.f_question.in_forum == 0:
+            Question.objects.all().filter(id=question_id).update(in_forum=1)
+        messages.success(request, ('Successfully add the question to the forum.'))
+    else:
+        messages.warning(request, ('Failure! This space cannot be left blank!'))
+    return redirect('view_answersheet_content', answersheet_id)
+
+@permission_check(UserType.Testee)
+@require_http_methods(["POST"])
+def forum_comment_add(request, question_id):
+    if 'forum_comment' in request.POST and request.POST['forum_comment'] != "":
+        forum_comment = Forum.objects.create(
+            f_question = Question.objects.all().get(id = question_id),
+            # f_content = tinymce.get("mytextarea").getContent()
+            f_content = request.POST['forum_comment'],
+            f_creator = request.user,
+            data_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+        messages.success(request, ('Successfully add the comment to the question.'))
+    else:
+        messages.warning(request, ('Failure! This space cannot be left blank!'))
+    return redirect('forum')
+
+@permission_check(UserType.Testee)
+def forum_comment_delete(request, forum_comment_id):
+    forum_comment = Forum.objects.get(id=forum_comment_id)
+    forum_comment.delete()
+    messages.warning(request, 'The comment has removed from the forum...')
+    if Forum.objects.filter(f_question=forum_comment.f_question.id).count()==0:
+        forum_question = Question.objects.filter(id=forum_comment.f_question.id).update(in_forum=0)
+    return redirect('forum')
+
+@permission_check(UserType.Testee)
+def answersheet_comment_delete(request, forum_comment_id, answersheet_id):
+    forum_comment = Forum.objects.get(id=forum_comment_id)
+    forum_comment.delete()
+    messages.warning(request, 'The comment has removed from the forum...')
+    if Forum.objects.filter(f_question=forum_comment.f_question.id).count()==0:
+        forum_question = Question.objects.filter(id=forum_comment.f_question.id).update(in_forum=0)
+    return redirect('view_answersheet_content', answersheet_id)
+
+@permission_check(UserType.Testee)
+def forum(request):
+    # forum_questions_search = Forum.objects.all()
+    forum_questions_search = Question.objects.all().filter(in_forum=1)
+    forum_comment_search = Forum.objects.all()
+    return render(request, 'testee/forum.html', locals())
+
+# @permission_check(UserType.TBManager)
+# def add_best_reply(request. question_id, q_reply):
+#     question = Question.objects.all().get(id=question_id)
+#     question.best_reply = q_reply
+#     question.replier = request.user
+#     return render(request, )
+
+
+>>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
 
 @permission_check(UserType.Testee)
 def favorite_question_list(request):
@@ -698,6 +827,10 @@ def favorite_question_delete(request, question_id):
     except ObjectDoesNotExist:
         return redirect('favorite_question_list')
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
 @permission_check(UserType.Testee)
 @require_http_methods(["GET"])
 def start_exam(request, exam_id):
@@ -1008,3 +1141,20 @@ def report_question(request, question_id):
                              "This question had been reported, thank you.")
             return redirect(request.META.get('HTTP_REFERER'))
         return render(request, 'testee/report_question.html', locals())
+<<<<<<< HEAD
+=======
+
+def word_library(request):
+        word_list = Word_library.objects.all()
+        return render(request,'testee/word_library.html',{'word_list':word_list})
+
+def word_library_create(request):
+    if request.method == 'POST':
+            word_english = request.POST.get('word_english')
+            word_chinese = request.POST.get('word_chinese')
+            Word = Word_library.objects.create(words = word_english,translations = word_chinese)
+            Word.save()
+            return redirect('word_library')
+    else:    
+        return render(request,'testee/word_library_create.html',locals())
+>>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5

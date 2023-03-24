@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
@@ -20,7 +19,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'yftv^g7w17v-vd96!=ad37dv@m$_gh^nn_&d*4@qzsoce5*pd3'
-
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -36,13 +35,30 @@ INSTALLED_APPS = (
     'alcpt',
     'captcha',
     'django_plotly_dash.apps.DjangoPlotlyDashConfig',
+<<<<<<< HEAD
 )
 
+=======
+    'django_crontab', #工作排程
+    'dbbackup',#資料庫備份
+)
+
+CRONJOBS = [
+    ('*/1 * * * *', 'alcpt.cron.backup','>>/home/ray/Desktop/crontab.log')  
+]
+
+#備份路徑,記得設定為自己的路徑
+DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
+DBBACKUP_STORAGE_OPTIONS = {'location': '/home/ray/Desktop/ALCPT/backup_files'}
+#備份主設定
+
+
+>>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
 MIDDLEWARE = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     # 'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -135,7 +151,11 @@ LANGUAGES = {
     ('en-us', 'English'),
     ('zh', '中文繁體'),
 }
+<<<<<<< HEAD
 LANGUAGE_CODE = 'zh'  # 'en-us'
+=======
+LANGUAGE_CODE = 'zh-Hant'  # 'en-us'
+>>>>>>> 262db3545c6e3c6b6eff66eef5c2fb72ee719cd5
 LOCALE_PATHS = [
     os.path.join(BASE_DIR, 'locale'),
 ]
