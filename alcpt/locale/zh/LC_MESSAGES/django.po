@@ -1586,3 +1586,15 @@ msgstr "分鐘"
 
 msgid "in"
 msgstr "建立於"
+
+msgid "English"
+msgstr "英文"
+
+msgid "Chinese"
+msgstr "中文"
+
+msgid "Word Library"
+msgstr "字典"
+
+msgid "ALCPT Homepage"
+msgstr "回到首頁"
