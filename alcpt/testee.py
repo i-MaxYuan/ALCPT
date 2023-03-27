@@ -1124,9 +1124,9 @@ def word_library_edit(request,words,translations):
             word_english=request.POST.get('word_english')
             word_chinese=request.POST.get('word_chinese')
             word.words = word_english
-            translate.translations = word_chinese
+            word.translations = word_chinese
             word.save()
-            translate.save()
+            
             return redirect('word_library')
         except ObjectDoesNotExist:
             messages.error(request,'error')
