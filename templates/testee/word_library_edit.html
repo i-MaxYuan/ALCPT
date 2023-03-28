@@ -6,7 +6,7 @@
 <li class="breadcrumb-item" aria-current="page">
     <a href="{{ url('word_library') }}">{{trans("Word Library")}}</a>
 </li>
-<li class="breadcrumb-item active" aria-current="page">{{trans("Word Library Edit")}}</li>
+<li class="breadcrumb-item active" aria-current="page">{{trans("Word Edit")}}</li>
 {% endblock %} {% block content %}
 <main class="exam-create-form">
     <div class="container">
@@ -15,7 +15,7 @@
                 <form method="post">
                     <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
                     <div class="card">
-                        <div class="card-header">{{trans("Word Library Edit")}}</div>
+                        <div class="card-header">{{trans("Word Edit")}}</div>
 
                         <div class="card-body">
                             <h5 class="card-subtitle mb-2 text-muted">
@@ -29,7 +29,7 @@
                                 {{trans("Chinese")}}<span id="name_invalid" class="name_invalid"></span>
                             </h5>
                             <p class="card-text">
-                                <input class="form-control" type="text" {%if translates%}value="{{translates.translations}}"{%endif%} onkeyup="unique_chinese({{translations}}, this)" name="word_chinese" value="{{ translations }}" required />
+                                <input class="form-control" type="text" {%if translations%}value="{{translations.translations}}"{%endif%} onkeyup="unique_chinese({{translations}}, this)" name="word_chinese" value="{{ translations }}" required />
                             </p>
                            
                             <div class="float-right">

@@ -1126,11 +1126,10 @@ def word_library_edit(request,words,translations):
             word.words = word_english
             word.translations = word_chinese
             word.save()
-            
             return redirect('word_library')
         except ObjectDoesNotExist:
             messages.error(request,'error')
             return redirect('word_library')
             
     else:
-        return render(request,'testee/word_library_edit.html',{'words':word,'translates':translate})           
+        return render(request,'testee/word_library_edit.html',{'words':word,'translations':translate})           
