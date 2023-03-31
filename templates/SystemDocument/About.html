@@ -50,24 +50,16 @@
                                 </li>
                             </ul>
                         </div>
-                </div>
-                <a href="/en-us/accounts/profile">
-                {% if user.is_authenticated %}
-                <ul class="list-unstyled components">
-                    <img src="{{ user.photo.url }}" width="80px" style="border-radius: 50%; padding-right: 5px; margin-bottom:8px;  margin-left:20px" alt="">
-                    {% if request.user.name != None %}
-                    <a class="list name" style="font-size:18px;border-radius: 50%; padding-right: 5px; margin-bottom:8px;  margin-left:1px"> {{ request.user.name }}</a>
+                </div>  
+
+                             
+                {% if user.is_authenticated %}   
+                    <a class="btn btn-singin" href="/en-us/proclamation">Start</a>  
+                    
                     {% else %}
-                    {{ request.user.reg_id }}
+                    <a class="btn btn-singin" href="/en-us/accounts/login">Start</a>  
                     {% endif %}
-                    <script>
-                        say_hello();
-                    </script></a>
-    
-                    {% else %}
-                    <a class="btn btn-singin" href="/en-us/accounts/login">Login</a>
-                    {% endif %}
-                    </ul>
+                
             </div>
         </nav>
 
