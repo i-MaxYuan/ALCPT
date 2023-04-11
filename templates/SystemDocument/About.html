@@ -36,7 +36,6 @@
 
                         
                         <div class="dropdown">
-                            
                             <button class="btn btn-singin dropdown-toggle" type="button" data-toggle="dropdown">
                                 {{trans("Language")}}
                             </button>
@@ -50,15 +49,17 @@
                                 </li>
                             </ul>
                         </div>
-                </div>  
+                        {% if user.is_authenticated %}   
+                            <a class="btn btn-singin" href="/en-us/proclamation">{{trans("Start")}}</a>  
+                        
+                        {% else %}
+                            <a class="btn btn-singin" href="/en-us/accounts/login">{{trans("Start")}}</a>  
+                        {% endif %}
 
+
+                </div>  
                              
-                {% if user.is_authenticated %}   
-                    <a class="btn btn-singin" href="/en-us/proclamation">Start</a>  
-                    
-                    {% else %}
-                    <a class="btn btn-singin" href="/en-us/accounts/login">Start</a>  
-                    {% endif %}
+                
                 
             </div>
         </nav>
