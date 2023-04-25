@@ -1594,7 +1594,16 @@ msgid "Chinese"
 msgstr "中文"
 
 msgid "Word Library"
-msgstr "字典"
+msgstr "單字庫"
 
 msgid "ALCPT Homepage"
 msgstr "回到首頁"
+
+msgid "Create Words"
+msgstr "建立單字"
+
+msgid "Word Edit"
+msgstr "編輯單字"
+
+msgid "Sure to delete this word?"
+msgstr "確定要刪除此單字嗎?"
