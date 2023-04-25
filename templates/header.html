@@ -108,7 +108,7 @@
                 {% endif %}
                 {% if user.is_authenticated %}
                 <li class="nav-item dropdown">
-                    <a class="nav-link " href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size:22px;">
+                    <a class="nav-link " href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size:27px;">
                         <i class="fa fa-bell"></i>
 
                         {% if request.user.proclamation_set.all()|unread_count != 0 %}

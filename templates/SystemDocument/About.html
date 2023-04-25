@@ -50,10 +50,10 @@
                             </ul>
                         </div>
                         {% if user.is_authenticated %}   
-                            <a class="btn btn-singin" href="/en-us/proclamation">{{trans("Start")}}</a>  
+                            <a class="btn btn-singin" href="{{url('Homepage')}}">{{trans("Start")}}</a>  
                         
                         {% else %}
-                            <a class="btn btn-singin" href="/en-us/accounts/login">{{trans("Start")}}</a>  
+                            <a class="btn btn-singin" href="{{url('login')}}">{{trans("Start")}}</a>  
                         {% endif %}
 
 

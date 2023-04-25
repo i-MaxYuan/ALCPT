@@ -35,7 +35,7 @@ html {
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item " aria-current="page">
-                            <a href="/en-us/">{{trans("Home")}}</a>
+                            <a href="{{ url('about') }}">{{ trans("home") }}</a>
                         </li>
                         {% block path %} {% endblock %}
                     </ol>
