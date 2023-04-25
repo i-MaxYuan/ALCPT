@@ -1,6 +1,6 @@
-<title>ALCPT - Homepage</title>
 <!DOCTYPE html>
 <html lang="en">
+    <title>ALCPT - Homepage</title>
 
 <head>
     {% include 'about_head.html' %}
@@ -9,7 +9,7 @@
 <!-- JS that disable right mouse click -->
 
 <body oncontextmenu=self.event.returnValue=false onselectstart="return false">
-
+    
     <!-- Header Section Start -->
     <header id="home" class="hero-area">
         <div class="overlay">
@@ -36,30 +36,8 @@
                         <li class="nav-item">
                             <a class="nav-link page-scroll" href="#features">{{trans("Manuallist")}}</a>
                         </li>
-                        <li>
-                            {% if user.is_authenticated %}
-                       
-                            <a class="nav-link page-scroll" href="{{ url('profile') }}">
-                            <img src="{{ user.photo.url }}" width="30px" style="border-radius: 10%; padding-right: 5px; margin-bottom:1px;  margin-left:1px" alt="">
-                            {% if request.user.name != None %}
-                            {{ request.user.name }}
-                            {% else %}
-                            {{ request.user.reg_id }}
-                            {% endif %}
-                            <script>
-                                say_hello();
-                            </script>
-        
-                            {% else %}
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link page-scroll"  href="{{ url('login') }}">{{trans("Login")}}</a>
-                        </li>
-        
-                        {% endif %}
                         
-                        </ul>
-                    </div>
+                        
                     
                 </div>
                 <div class="dropdown">
@@ -75,9 +53,16 @@
                             <a href="/zh/">繁體中文</a>
                         </li>
                     </ul>
-                    
                 </div>
-                
+                {% if user.is_authenticated %} 
+                             
+                    <a class="btn btn-singin" href="{{url('Homepage')}}">{{trans("Start")}}</a>  
+      
+                {% else %}
+            
+                    <a class="btn btn-singin" href="{{url('login')}}">{{trans("Start")}}</a>  
+            
+                {% endif %}
             </div>
         </nav>
         <div class="container">

@@ -16,19 +16,22 @@
         <div class="col-lg-4">
             <div class="card mb-3">
                 <div class=" card-header">{{trans("User Photo")}}</div>
+                    <div class="container">
+                        <div class="row justify-content-center" style="padding-top: 125px; padding-right: 10px; padding-left: 10px">
+                            {% if user.photo %}
+                            <img class="card-img-top" src="{{ user.photo.url }}" alt="{{ user.name }}" />
+                            {% else %}
+                            <img class="card-img-top" src="..." alt="{{ user.name }}" />
+                            {% endif %}
 
-                {% if user.photo %}
-                <img class="card-img-top" src="{{ user.photo.url }}" alt="{{ user.name }}" />
-                {% else %}
-                <img class="card-img-top" src="..." alt="{{ user.name }}" />
-                {% endif %}
-
-                <div class="card-body">
-                    <p class="card-text">
-                        {% if user.introduction %} {{ user.introduction|linebreaksbr }} {%
-            else %} {{trans("Unset")}} {% endif %}
-                    </p>
-                </div>
+                            <div class="card-body">
+                                <p class="card-text">
+                                    {% if user.introduction %} {{ user.introduction|linebreaksbr }} 
+                                    {%else %} {{trans("Unset")}} {% endif %}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
             </div>
         </div>
 

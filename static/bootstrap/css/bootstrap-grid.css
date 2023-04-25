@@ -21,7 +21,7 @@ html {
 .container-md,
 .container-lg,
 .container-xl {
-  width: 100%;
+  width: 150%;
   padding-right: 15px;
   padding-left: 15px;
   margin-right: auto;
