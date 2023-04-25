@@ -396,8 +396,8 @@ msgstr "尚未設定"
 msgid "Student Profile"
 msgstr "學生個人資料"
 
-msgid "Home"
-msgstr "首頁"
+msgid "Proclamation"
+msgstr "公佈欄"
 
 msgid "ReportCategory Create"
 msgstr "創建問題回報類別"
