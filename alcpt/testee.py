@@ -623,6 +623,7 @@ def view_answersheet_content(request, answersheet_id):
 
             return render(request, 'testee/answersheet_content.html', locals())
     elif answersheet.is_finished  == False and now_time > answersheet.finish_time:
+
         messages.success(request, {{trans("You hadn't finish your test, please keep answering the exam")}})   
         return redirect('testee_exam_list')
     else:
@@ -1132,4 +1133,4 @@ def word_library_edit(request,words,translations):
             return redirect('word_library')
             
     else:
-        return render(request,'testee/word_library_edit.html',{'words':word,'translations':translate})           
+        return render(request,'testee/word_library_edit.html',{'words':word,'translations':translate})          

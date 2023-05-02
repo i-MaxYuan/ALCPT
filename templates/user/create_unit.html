@@ -1,3 +1,6 @@
+
+<title>ALCPT - Create Unit</title>
+
 {% extends 'new_base.html' %}
 
 {% block scripts %}
@@ -17,12 +20,13 @@
                 <form method="post">
                     <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
                     <div class="card">
-                        <div class="card-header">{{trans("Create Unit")}}</div>
+                        <div class="card-header" style="font-size:30px;" >{{trans("Create Unit")}}</div>
 
                         <div class="card-body">
-                            <h5 class="card-subtitle mb-2 text-muted">{{trans("Unit")}}</h5>
+                            <h5 class="card-subtitle mb-2 text-muted" style="font-size:25px;">{{trans("Unit")}}</h5>
                             <p class="card-text">
-                                <select class="custom-select custom-select-sm" id="unit" name="unit" onchange="is_selected();" required>
+                                <select class="custom-select custom-select-sm" id="unit" name="unit" onchange="is_selected();" required style="font-size:18px;">
+
                                     <option value="" selected disabled hidden>
                                         {{trans("Choose the Unit")}}
                                     </option>
@@ -31,7 +35,8 @@
                                 </select>
                             </p>
 
-                            <h5 class="card-subtitle mb-2 text-muted">
+                            <h5 class="card-subtitle mb-2 text-muted" style="font-size:25px;">
+
                                 {{trans("Unit Name")}}<label id="invalid"></label>
                             </h5>
                             <p class="card-text">

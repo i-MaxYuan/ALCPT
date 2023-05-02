@@ -1,3 +1,6 @@
+
+<title>ALCPT - User Create</title>
+
 {% extends 'new_base.html' %}
 
 {% block scripts %}
@@ -19,21 +22,23 @@
             <div class="row justify-content-center">
                 <div class="col-md-6">
                     <div class="card">
-                        <div class="card-header">{{trans("User Create")}}</div>
+                        <div class="card-header" style="font-size:30px;">{{trans("User Create")}}</div>
                         <div class="card-body">
                             <div class="form-group row">
-                                <label for="reg_id" class="col-md-4 col-form-label text-md-right">{{trans("Reg ID")}}</label>
+                                <label for="reg_id" class="col-md-4 col-form-label text-md-right" style="font-size:20px;">{{trans("Reg ID")}}</label>
                                 <div class="col-md-6">
-                                    <input class="form-control" type="text" id="reg_id" name="reg_id" pattern='[[a-zA-Z0-9]*' placeholder="{{trans("Register ID")}}..." onkeyup="valid_ID(this)" required />
+                                    <input class="form-control" type="text" id="reg_id" name="reg_id" style="font-size:15px;" pattern='[[a-zA-Z0-9]*' placeholder="{{trans("Register ID")}}..." onkeyup="valid_ID(this)" required />
+
                                     <label class="unique_id" id="invalid_id" style="display: none"></label>
                                 </div>
                             </div>
 
                             <div class="form-group row">
-                                <label for="password" class="col-md-4 col-form-label text-md-right">{{trans("Identity")}}</label>
+                                <label for="password" class="col-md-4 col-form-label text-md-right" style="font-size:20px;">{{trans("Identity")}}</label>
                                 <div class="col-md-6">
-                                    <select class="custom-select custom-select-sm" id="identity" name="identity" onchange="is_student()" required>
-                                        <option value="" disabled selected>{{trans("Choose Identity")}}</option>
+                                    <select class="custom-select custom-select-sm" id="identity" name="identity" onchange="is_student()" required style="height: 40px;width: 235px;">
+                                        <option value="" disabled selected >{{trans("Choose Identity")}}</option>
+
                                         {% for identity in identities %}
                                         <option value="{{ identity.value.0 }}">
                                             {{ identity.value.1 }}
@@ -44,20 +49,24 @@
                             </div>
 
                             <div class="form-group row">
-                                <label for="verification" class="col-md-4 col-form-label text-md-right">{{trans("Privilege")}}</label>
+
+                                <label for="verification" class="col-md-4 col-form-label text-md-right" style="font-size:20px;">{{trans("Privilege")}}</label>
+
                                 <div class="col-md-6">
                                     <div class="container">
                                         <div class="row">
                                             <div class="col-lg-12">
                                                 <div class="button-group">
-                                                    <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+                                                    <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" style="font-size:25px">
+
                                                         <i class="fa fa-gears"></i>
                                                     </button>
                                                     <ul class="dropdown-menu">
                                                         <li>{{trans("Privilege Setting")}}</li>
                                                         {% for privilege in privileges %}
                                                         <li>
-                                                            <input type="checkbox" id="{{ privilege.value.1 }}" name="{{ privilege }}" onclick="privilege_not_empty()" {% if privilege == privilege.Testee %} checked
+                                                            <input type="checkbox" id="{{ privilege.value.1 }}" name="{{ privilege }}" onclick="privilege_not_empty()" style="height: 24px;width: 24px;" {% if privilege == privilege.Testee %} checked
+
                                                                 {% endif %}>&nbsp;{{ privilege.value.2 }}
                                                         </li>
                                                         {% endfor %}
@@ -81,20 +90,22 @@
 
                 <div class="col-md-6">
                     <div class="card">
-                        <div class="card-header">{{trans("Create Student")}}</div>
+                        <div class="card-header" style="font-size:30px;">{{trans("Create Student")}}</div>
                         <div class="card-body">
                             <div class="form-group row">
-                                <label for="reg_id" class="col-md-4 col-form-label text-md-right">{{trans("Student ID")}}</label>
+                                <label for="reg_id" class="col-md-4 col-form-label text-md-right"  style="font-size:20px;" >{{trans("Student ID")}}</label>
                                 <div class="col-md-6">
-                                    <input class="form-control" type="text" id="stu_id" name="stu_id" placeholder="{{trans("Student ID")}}..." onkeyup="valid_stuID(this)" disabled required />
+                                    <input class="form-control" type="text" id="stu_id" name="stu_id" placeholder="{{trans("Student ID")}}..." onkeyup="valid_stuID(this)" required />
+
                                     <label class="unique_stu_id" id="invalid_stu_id" style="display: none"></label>
                                 </div>
                             </div>
 
                             <div class="form-group row">
-                                <label for="password" class="col-md-4 col-form-label text-md-right">{{trans("Department")}}</label>
+                                <label for="password" class="col-md-4 col-form-label text-md-right" style="font-size:20px;" >{{trans("Department")}}</label>
                                 <div class="col-md-6">
-                                    <select class="custom-select custom-select-sm" name="department" id="department" disabled>
+                                    <select class="custom-select custom-select-sm" name="department" id="department" disabled style="height: 40px;width: 235px;">
+
                                         <option value="" disabled selected>
                                             {{trans("Choose Department")}}
                                         </option>
@@ -108,9 +119,10 @@
                             </div>
 
                             <div class="form-group row">
-                                <label for="verification" class="col-md-4 col-form-label text-md-right">{{trans("Squadron")}}</label>
+                                <label for="verification" class="col-md-4 col-form-label text-md-right"  style="font-size:20px;"  >{{trans("Squadron")}}</label>
                                 <div class="col-md-6">
-                                    <select class="custom-select custom-select-sm" name="squadron" id="squadron" disabled>
+                                    <select class="custom-select custom-select-sm" name="squadron" id="squadron" disabled style="height: 40px;width: 235px;">
+
                                         <option value="" disabled selected>{{trans("Choose Squadron")}}</option>
                                         {% for squadron in squadrons %}
                                         <option value="{{ squadron.id }}">{{ squadron }}</option>
@@ -120,7 +132,8 @@
                             </div>
 
                             <div class="form-group row">
-                                <label for="reg_id" class="col-md-4 col-form-label text-md-right">{{trans("Year Grade")}}</label>
+                                <label for="reg_id" class="col-md-4 col-form-label text-md-right"  style="font-size:20px;" >{{trans("Year Grade")}}</label>
+
                                 <div class="col-md-6">
                                     <input class="form-control" type="text" name="grade" id="grade" placeholder="{{trans("Year Grade")}}..." disabled required />
                                 </div>

@@ -35,6 +35,7 @@ INSTALLED_APPS = (
     'alcpt',
     'captcha',
     'django_plotly_dash.apps.DjangoPlotlyDashConfig',
+
     'django_crontab', #工作排程
     'dbbackup',#資料庫備份
 )
@@ -47,7 +48,6 @@ CRONJOBS = [
 DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
 DBBACKUP_STORAGE_OPTIONS = {'location': '/home/ray/ALCPT/backup_files'}
 #備份主設定
-
 
 MIDDLEWARE = (
     'django.contrib.sessions.middleware.SessionMiddleware',

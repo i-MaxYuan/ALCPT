@@ -5,10 +5,10 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
 from alcpt.definitions import UserType, Level
 
+
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.core.validators import RegexValidator
-
 
 
 class UserManager(BaseUserManager):
@@ -422,7 +422,9 @@ class Reply(models.Model):
         return json.loads(self.content)
 
 
+
 class Word_library(models.Model):
     words = models.TextField(max_length=30)
     translations = models.TextField(max_length=30)
+
 

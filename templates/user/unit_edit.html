@@ -1,3 +1,6 @@
+
+<title>ALCPT - Edit Unit</title>
+
 {% extends 'new_base.html' %}
 {% block scripts %}
 <script src="{{ static('/javascript/user/unit_edit.js') }}"></script>
@@ -15,10 +18,11 @@
                 <form method="post">
                     <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
                     <div class="card">
-                        <div class="card-header">{{trans("Edit Unit")}}</div>
+                        <div class="card-header" style=" color:blue; font-size:30px;">{{trans("Edit Unit")}}</div>
 
                         <div class="card-body">
-                            <h5 class="card-subtitle mb-2 text-muted">
+                            <h5 class="card-subtitle mb-2 text-muted" style="font-size:25px;">
+
                                 {{trans("Unit Name")}}<label id="invalid"></label>
                             </h5>
                             <p class="card-text">

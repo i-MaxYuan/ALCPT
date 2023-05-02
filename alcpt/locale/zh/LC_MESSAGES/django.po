@@ -1585,6 +1585,7 @@ msgid "minutes"
 msgstr "分鐘"
 
 msgid "in"
+
 msgstr "建立於"
 
 msgid "English"
@@ -1607,3 +1608,4 @@ msgstr "編輯單字"
 
 msgid "Sure to delete this word?"
 msgstr "確定要刪除此單字嗎?"
+

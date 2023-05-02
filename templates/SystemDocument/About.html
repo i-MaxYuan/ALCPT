@@ -1,11 +1,14 @@
+
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en">  
+    <title>ALCPT - Homepage</title>
 
 <head>
     {% include 'about_head.html' %}
-</head>
+</head> 
 
-<!-- JS that disable right mouse click -->
+<!-- JS that disable right mouse click -->    
 
 <body oncontextmenu=self.event.returnValue=false onselectstart="return false">
 
@@ -17,7 +20,8 @@
         </div>
         <nav class="navbar navbar-expand-md bg-inverse fixed-top scrolling-navbar">
             <div class="container">
-                <a href="{{ url('Homepage') }}" class="navbar-brand"><img src="{{ static('/logo/nav-logo-white.png') }}" style="width:130px" alt="" /></a>
+                <a href="{{ url('Homepage') }}" class="navbar-brand"><img src="{{ static('/logo/nav-logo-white.png') }}" style="width:150px" alt="" /></a>
+
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                     <i class="lni-menu"></i>
                 </button>
@@ -32,9 +36,9 @@
                         <li class="nav-item">
                             <a class="nav-link page-scroll" href="#features">{{trans("Manuallist")}}</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="btn btn-singin" href="{{ url('Homepage') }}">{{trans("Start")}}</a>
-                        </li>
+
+                        
+
                         <div class="dropdown">
                             <button class="btn btn-singin dropdown-toggle" type="button" data-toggle="dropdown">
                                 {{trans("Language")}}
@@ -48,10 +52,19 @@
                                 </li>
                             </ul>
                         </div>
-                    </ul>
-                </div>
+                        {% if user.is_authenticated %}   
+                            <a class="btn btn-singin" href="{{url('Homepage')}}">{{trans("Start")}}</a>  
+                        
+                        {% else %}
+                            <a class="btn btn-singin" href="{{url('login')}}">{{trans("Start")}}</a>  
+                        {% endif %}
+
+
+                </div>  
             </div>
         </nav>
+
+
         <div class="container">
             <div class="row space-100">
                 <div class="col-lg-6 col-md-12 col-xs-12">
@@ -72,7 +85,8 @@
                 </div>
                 <div class="col-lg-6 col-md-12 col-xs-12 p-0">
                     <div class="intro-img">
-                        <img src="{{ static('images/about/alcpt_intro.png') }}" style="padding-left: 50px " alt="" />
+                        <img src="{{ static('images/about/alcpt_intro.png') }}" style="padding-left: 120px " alt="" />
+
                     </div>
                 </div>
             </div>

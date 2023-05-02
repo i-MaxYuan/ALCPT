@@ -1,3 +1,6 @@
+
+<title>ALCPT - View Profile</title>
+
 {% extends 'new_base.html' %}
 
 {% block stylesheets %}
@@ -16,7 +19,8 @@
         <div class="row">
             <div class="col-lg-4">
                 <div class="card mb-3">
-                    <div class="card-header">{{trans("User Photo")}}</div>
+                    <div class="container">{{trans("User Photo")}}</div>
+
 
                     {% if viewed_user.photo %}
                     <img class="card-img-top" src="{{ viewed_user.photo.url }}" alt="{{ viewed_user.name }}" />
@@ -133,7 +137,11 @@
 
             <div class="col-lg-8">
                 <div class="card mb-3">
+<<<<<<< HEAD
+                    <div class="card-header" >{{trans("User Profile")}}</div>
+=======
                     <div class="card-header">{{trans("User Profile")}}</div>
+>>>>>>> master_server
 
                     <div class="card-body">
                         <h5 class="card-subtitle mb-2 text-muted">{{trans("Reg ID")}}</h5>
