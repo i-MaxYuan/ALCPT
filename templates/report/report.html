@@ -1,4 +1,6 @@
+
 <title>ALCPT - Report</title>
+
 {% extends 'new_base.html' %} {% block path %}
 <li class="breadcrumb-item active" aria-current="page">{{trans("Report")}}</li>
 {% endblock %} {% block content %}
@@ -9,6 +11,7 @@
                 <div class="card">
                     <div class="card-header" style=" color:blue; font-size:30px;">{{trans("Report")}}</div>
 
+
                     <div class="card-body">
                         <form method="post">
                             <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
@@ -18,6 +21,7 @@
                                 <div class="col-md-6">
                                     <select class="custom-select custom-select-sm" name="category" required style="height: 40px;width: 325px;">
                                         <option value="" disabled selected >
+
                                             {{trans("What is your problem")}}？
                                         </option>
                                         {% for category in categories %}
@@ -29,6 +33,7 @@
 
                             <div class="form-group row">
                                 <label for="p_text" class="col-md-4 col-form-label text-md-right" style="font-size:20px;">{{trans("Supplement Note")}}</label>
+
                                 <div class="col-md-6">
                                     <textarea class="form-control" name="supplement_note" cols="100" rows="8" placeholder="{{trans("Describe your situation what happened")}}..." required></textarea>
                                 </div>

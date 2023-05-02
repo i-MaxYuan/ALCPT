@@ -1,0 +1,15 @@
+user.email=i.max.yuan@gmail.com
+user.name=max yuan
+core.pager=less -F -X
+core.repositoryformatversion=0
+core.filemode=true
+core.bare=false
+core.logallrefupdates=true
+remote.origin.url=https://github.com/i-MaxYuan/ALCPT.git
+remote.origin.fetch=+refs/heads/*:refs/remotes/origin/*
+branch.master.remote=origin
+branch.master.merge=refs/heads/master
+branch.WordCollection.remote=origin
+branch.WordCollection.merge=refs/heads/WordCollection
+branch.Tim.remote=origin
+branch.Tim.merge=refs/heads/Tim

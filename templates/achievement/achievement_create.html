@@ -1,4 +1,5 @@
 <title>ALCPT - Create Achievement</title>
+
 {% extends 'new_base.html'%}
 
 {% block scripts %}
@@ -19,12 +20,15 @@
                     <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
 
                     <div class="card">
+
                         <div class="card-header" style="font-size:30px;">
+
                             {{trans("Create Achievement")}}
                         </div>
 
                         <div class="card-body">
                             <h5 class="card-subtitle mb-2 text-muted" style="font-size:25px;">{{trans("Trophy")}}</h5>
+
                             <div class="input-group">
                                 <div class="custom-file">
                                     <input type="file" class="custom-file-input" id="trophy" name="trophy" onchange="OpenButton('listening')" />
@@ -44,13 +48,16 @@
                             <p class="card-text"></p>
                             <br>
                             <h5 class="card-subtitle mb-2 text-muted" style="font-size:25px;">{{trans("Name")}}</h5>
+
                             <div class="input-group">
                                 <input class="form-control" type="text" name="name" id="name" onkeyup="OpenButton('{{ kind }}')" placeholder="{{trans("Achievement name")}}..." required />
                             </div>
 
                             <p class="card-text"></p>
+
                             <br>
                             <h5 class="card-subtitle mb-2 text-muted" style="font-size:25px;">{{trans("Key")}}</h5>
+
                             <div class="input-group">
                                 <input class="form-control" type="text" name="key" id="key" onkeyup="OpenButton('{{ kind }}')" placeholder="{{trans("提示")}}..." required />
                             </div>
@@ -58,13 +65,16 @@
                             <p class="card-text"></p>
                             <br>
                             <h5 class="card-subtitle mb-2 text-muted" style="font-size:25px;">{{trans("description")}}</h5>
+
                             <p class="card-text">
                                 <textarea class="form-control" cols="100" rows="5" name="description" id="description" onkeyup="OpenButton('reading')" placeholder="{{trans("描述")}}..." required></textarea>
                             </p>
 
                             <p class="card-text"></p>
+
                             <br>
                             <h5 class="card-subtitle mb-2 text-muted" style="font-size:25px;">{{trans("category")}}</h5>
+
                             <select class="custom-select custom-select-sm" id="category" name="category" required>
                                 <option value="" disabled selected>{{trans("成就類別")}}</option>
                                 {% for category in achievement_categories %}
@@ -77,6 +87,7 @@
                             <p class="card-text"></p>
                             <br>
                             <h5 class="card-subtitle mb-2 text-muted" style="font-size:25px;">{{trans("Point")}}</h5>
+
                             <select class="custom-select custom-select-sm" id="point" name="point" required>
                                 <option value="" disabled selected>{{trans("達成成就經驗值")}}</option>
                                 {% for point in range(0,5001,50) %}
@@ -89,6 +100,7 @@
                             <p class="card-text"></p>
                             <br>
                             <h5 class="card-subtitle mb-2 text-muted" style="font-size:25px;">{{trans("Level")}}</h5>
+
                             <select class="custom-select custom-select-sm" id="level" name="level" required>
                                 <option value="" disabled selected>{{trans("可接取任務之等級")}}</option>
                                 {% for level in range(1,50) %}
@@ -101,6 +113,7 @@
                             <p class="card-text"></p>
                             <br>
                             <h5 class="card-subtitle mb-2 text-muted" style="font-size:25px;">{{trans("Completion")}}</h5>
+
 
                             <select class="custom-select custom-select-sm" id="completion" name="completion" required>
                                 <option value="" disabled selected>{{trans("完成值/次數")}}</option>

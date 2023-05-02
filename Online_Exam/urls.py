@@ -847,6 +847,24 @@ re_path(
         re_path(r'^answersheet_comment_delete/(?P<forum_comment_id>[0-9]+)/(?P<answersheet_id>[0-9]+)$',
                 testee.answersheet_comment_delete,
                 name='answersheet_comment_delete'),
+        re_path(r'^word_library$',
+                testee.word_library,
+                name='word_library'),
+        re_path(r'^word_library_create$',
+                testee.word_library_create,
+                name='word_library_create'),
+        path('word_library_del/<str:words>',
+                testee.word_library_del,
+                name='word_library_del'),
+
+
+        path('word_library_edit/<str:words>/<str:translations>',
+                testee.word_library_edit,
+                name='word_library_edit'),
+        
+
+                
+
     ])),
 )
 

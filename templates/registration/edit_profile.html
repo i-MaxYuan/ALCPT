@@ -1,4 +1,6 @@
+
 <title>ALCPT - Edit Profile</title>
+
 {% extends 'new_base.html' %}
 
 {% block stylesheets %}
@@ -25,6 +27,7 @@
             <div class="row">
                 <div class="col-lg-4">
                     <div class="card mb-3">
+
                         <div class="card-header" style="font-size:28px;">{{trans("User Photo")}}</div>
                             <div class="container">
                                 <div class="row justify-content-center" style="padding-top:10px; padding-right: 10px; padding-left:10px">
@@ -43,6 +46,7 @@
                                     <label class="custom-file-label" for="photo_file">{{trans("Select image file")}}</label>
                                 </div>
                             </div>
+
                         <script>
                             // to change the label, the selected file name will display
                             $(".custom-file-input").on("change", function() {
@@ -53,6 +57,7 @@
                                     .html(fileName);
                             });
                         </script>
+
 
                             <div class="card-body">
                             <p class="card-text">
@@ -99,6 +104,7 @@
                                     <option value="3" {% if user.gender == 3 %}selected{% endif %}>{{trans("Privacy")}}</option>
                                 </select>
                             </p>
+
                             <br>
                             <h5 class="card-subtitle mb-2 text-muted" style="font-size:25px;">
                                 {{trans("Identity")}}<label id="identity_invalid" class="identity_invalid"></label>
@@ -141,6 +147,7 @@
 
                 <div class="col-lg-3">
                     <div class="card mb-3">
+
                         <div class="card-header" style="font-size:28px;">{{trans("Student Profile")}}</div>
 
                         <div class="card-body text-left">
@@ -151,6 +158,7 @@
                                 {{trans("Department")}}<label id="department_invalid" class="department_invalid"></label>
                             </h5>
                             <p class="card-text" style="font-size:22px;">
+
                                 <select class="custom-select custom-select-sm" name="department" id="department" onchange="department_valid('{{ user.student.department.id }}', document.getElementById('department'))" required>
                                     <option value="" disabled selected>
                                         {{trans("Choose your department")}}
@@ -160,11 +168,13 @@
                                     {% endfor %}
                                 </select>
                             </p>
+
                             <br>
                             <h5 class="card-subtitle mb-2 text-muted" style="font-size:25px;"> 
                                 {{trans("Squadron")}}<label id="squadron_invalid" class="squadron_invalid"></label>
                             </h5>
                             <p class="card-text" style="font-size:22px;">
+
                                 <select class="custom-select custom-select-sm" name="squadron" id="squadron" onchange="squadron_valid('{{ user.student.squadron.id }}', document.getElementById('squadron'))" required>
                                     <option value="" disabled selected>
                                         {{trans("Choose your squadron")}}
@@ -179,6 +189,7 @@
                                 {{trans("Year Grade")}}<label id="grade_invalid" class="grade_invalid"></label>
                             </h5>
                             <p class="card-text" style="font-size:22px;">
+
                                 <input class="form-control" type="text" name="grade" value="{{ user.student.grade }}" onkeyup="grade_valid('{{ user.student.grade }}', this)" required />
                             </p>
                         </div>

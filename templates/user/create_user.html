@@ -1,4 +1,6 @@
+
 <title>ALCPT - User Create</title>
+
 {% extends 'new_base.html' %}
 
 {% block scripts %}
@@ -26,6 +28,7 @@
                                 <label for="reg_id" class="col-md-4 col-form-label text-md-right" style="font-size:20px;">{{trans("Reg ID")}}</label>
                                 <div class="col-md-6">
                                     <input class="form-control" type="text" id="reg_id" name="reg_id" style="font-size:15px;" pattern='[[a-zA-Z0-9]*' placeholder="{{trans("Register ID")}}..." onkeyup="valid_ID(this)" required />
+
                                     <label class="unique_id" id="invalid_id" style="display: none"></label>
                                 </div>
                             </div>
@@ -35,6 +38,7 @@
                                 <div class="col-md-6">
                                     <select class="custom-select custom-select-sm" id="identity" name="identity" onchange="is_student()" required style="height: 40px;width: 235px;">
                                         <option value="" disabled selected >{{trans("Choose Identity")}}</option>
+
                                         {% for identity in identities %}
                                         <option value="{{ identity.value.0 }}">
                                             {{ identity.value.1 }}
@@ -45,13 +49,16 @@
                             </div>
 
                             <div class="form-group row">
+
                                 <label for="verification" class="col-md-4 col-form-label text-md-right" style="font-size:20px;">{{trans("Privilege")}}</label>
+
                                 <div class="col-md-6">
                                     <div class="container">
                                         <div class="row">
                                             <div class="col-lg-12">
                                                 <div class="button-group">
                                                     <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" style="font-size:25px">
+
                                                         <i class="fa fa-gears"></i>
                                                     </button>
                                                     <ul class="dropdown-menu">
@@ -59,6 +66,7 @@
                                                         {% for privilege in privileges %}
                                                         <li>
                                                             <input type="checkbox" id="{{ privilege.value.1 }}" name="{{ privilege }}" onclick="privilege_not_empty()" style="height: 24px;width: 24px;" {% if privilege == privilege.Testee %} checked
+
                                                                 {% endif %}>&nbsp;{{ privilege.value.2 }}
                                                         </li>
                                                         {% endfor %}
@@ -82,20 +90,35 @@
 
                 <div class="col-md-6">
                     <div class="card">
+<<<<<<< HEAD
                         <div class="card-header" style="font-size:30px;">{{trans("Create Student")}}</div>
                         <div class="card-body">
                             <div class="form-group row">
                                 <label for="reg_id" class="col-md-4 col-form-label text-md-right"  style="font-size:20px;" >{{trans("Student ID")}}</label>
                                 <div class="col-md-6">
                                     <input class="form-control" type="text" id="stu_id" name="stu_id" placeholder="{{trans("Student ID")}}..." onkeyup="valid_stuID(this)" required />
+=======
+                        <div class="card-header">{{trans("Create Student")}}</div>
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <label for="reg_id" class="col-md-4 col-form-label text-md-right">{{trans("Student ID")}}</label>
+                                <div class="col-md-6">
+                                    <input class="form-control" type="text" id="stu_id" name="stu_id" placeholder="{{trans("Student ID")}}..." onkeyup="valid_stuID(this)" disabled required />
+>>>>>>> master_server
                                     <label class="unique_stu_id" id="invalid_stu_id" style="display: none"></label>
                                 </div>
                             </div>
 
                             <div class="form-group row">
+<<<<<<< HEAD
                                 <label for="password" class="col-md-4 col-form-label text-md-right" style="font-size:20px;" >{{trans("Department")}}</label>
                                 <div class="col-md-6">
                                     <select class="custom-select custom-select-sm" name="department" id="department" disabled style="height: 40px;width: 235px;">
+=======
+                                <label for="password" class="col-md-4 col-form-label text-md-right">{{trans("Department")}}</label>
+                                <div class="col-md-6">
+                                    <select class="custom-select custom-select-sm" name="department" id="department" disabled>
+>>>>>>> master_server
                                         <option value="" disabled selected>
                                             {{trans("Choose Department")}}
                                         </option>
@@ -109,9 +132,15 @@
                             </div>
 
                             <div class="form-group row">
+<<<<<<< HEAD
                                 <label for="verification" class="col-md-4 col-form-label text-md-right"  style="font-size:20px;"  >{{trans("Squadron")}}</label>
                                 <div class="col-md-6">
                                     <select class="custom-select custom-select-sm" name="squadron" id="squadron" disabled style="height: 40px;width: 235px;">
+=======
+                                <label for="verification" class="col-md-4 col-form-label text-md-right">{{trans("Squadron")}}</label>
+                                <div class="col-md-6">
+                                    <select class="custom-select custom-select-sm" name="squadron" id="squadron" disabled>
+>>>>>>> master_server
                                         <option value="" disabled selected>{{trans("Choose Squadron")}}</option>
                                         {% for squadron in squadrons %}
                                         <option value="{{ squadron.id }}">{{ squadron }}</option>
@@ -121,7 +150,11 @@
                             </div>
 
                             <div class="form-group row">
+<<<<<<< HEAD
                                 <label for="reg_id" class="col-md-4 col-form-label text-md-right"  style="font-size:20px;" >{{trans("Year Grade")}}</label>
+=======
+                                <label for="reg_id" class="col-md-4 col-form-label text-md-right">{{trans("Year Grade")}}</label>
+>>>>>>> master_server
                                 <div class="col-md-6">
                                     <input class="form-control" type="text" name="grade" id="grade" placeholder="{{trans("Year Grade")}}..." disabled required />
                                 </div>

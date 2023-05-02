@@ -1,4 +1,6 @@
+
 <title>ALCPT - Report Question</title>
+
 {% extends 'new_base.html' %}
 {% block path %}
 <li class="breadcrumb-item active" aria-current="page">{{trans("Report Question")}}</li>
@@ -9,16 +11,20 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
+
                     <div class="card-header" style=" color:blue; font-size:30px;">{{trans("Report")}}</div>
+
 
                     <div class="card-body">
                         <form action="{{ url('report_question', args=[reported_question.id]) }}" method="post">
                             <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
 
                             <div class="form-group row">
+
                                 <label for="p_title" class="col-md-4 col-form-label text-md-right" style="font-size:23px;">{{trans("Report Category")}}</label>
                                 <div class="col-md-6">
                                     <select class="custom-select custom-select-sm" name="category" type="hidden" style="height: 50px;width: 330px;">
+
                                         {% for category in categories %}
                                         <option value="{{ category.id }}" {% if category.id == 3 %}selected{% else %} disabled{% endif %}>{{ category }}</option>
                                         {% endfor %}
@@ -27,7 +33,7 @@
                             </div>
 
                             <div class="form-group row">
-                                <label for="p_text" class="col-md-4 col-form-label text-md-right" style="font-size:23px;">{{trans("Supplement Note")}}</label>
+
                                 <div class="col-md-6">
                                     <textarea class="form-control" name="supplement_note" cols="100" rows="8" placeholder="{{trans("Describe your situation what happened")}}..." required></textarea>
                                 </div>
@@ -35,6 +41,7 @@
 
                             <div class="form-group row">
                                 <label for="p_text" class="col-md-4 col-form-label text-md-right" style="font-size:23px;">{{trans("Question Content")}}</label>
+
                                 {% if reported_question.q_file %}
                                 <audio controls preload="none">
                                     <source src="{{ reported_question.q_file.url }}" type="audio/mpeg" />
@@ -42,12 +49,15 @@
                                 </audio>
                                 {% else %}
                                 <div class="col-md-8" style="font-size:20px;">{{ reported_question.q_content }}</div>
+
                                 {% endif %}
                             </div>
 
                             <div class="form-group row">
+
                                 <label for="p_text" class="col-md-4 col-form-label text-md-right" style="font-size:23px;">{{trans("Question Choice")}}</label>
                                 <div class="col-md-8" style="font-size:20px;">
+
                                     <ol type="A">
                                         {% for choice in reported_question.choice_set.all() %}
                                         <li {% if choice.is_answer %}style="color: green" {% endif %}>

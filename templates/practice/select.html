@@ -1,4 +1,6 @@
+
 <title>ALCPT - Practice Select</title>
+
 {% extends 'new_base.html' %}
 
 {% block scripts %}
@@ -19,6 +21,7 @@
                     <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
 
                     <div class="card">
+
                         <div class="card-header" style="font-size:30px;">{{trans("Practice Select")}}</div>
                         
 
@@ -47,11 +50,13 @@
                             <p class="card-text">
                                 <select class="custom-select custom-select-sm" name="question_num" id="question_num"  style="font-size:18px;" onchange="ChangeButton()" required>
                                     <option value="" disabled selected hidden >
+
                                         {{trans("Choose the number of your test paper")}}
                                     </option>
                                     <option value="10">10</option>
                                     <option value="20">20</option>
                                     <option value="30">30</option>
+
                                     <option value="50">50</option>
                                     <option value="100">100</option>
                                 </select>
@@ -60,6 +65,7 @@
                             <h5 class="card-subtitle mb-2 text-muted" style="font-size:25px;"><b> {{trans("Difficulty")}}</b></h5>
                             <p class="card-text">
                                 <select class="custom-select custom-select-sm" name="question_level" id="question_level"  style="font-size:18px;"  onchange="ChangeButton()" required>
+
                                     <option value="" disabled selected hidden>
                                         {{trans("Choose the difficulty of your test paper")}}
                                     </option>
@@ -68,8 +74,10 @@
                                     <option value="30">{{trans("Hard")}}</option>
                                 </select>
                             </p>
+
                             <br>
                             <h5 class="card-subtitle mb-2 text-muted" style="font-size:25px;"><b>練習時間(分鐘)-不限時免填 最長999分鐘</b></h5>
+
                             <p class="card-text">
                                 <input type="text" id="duration" name="duration">
                                 <div id="hint" style="color:red;"></div>

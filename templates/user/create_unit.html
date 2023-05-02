@@ -1,4 +1,6 @@
+
 <title>ALCPT - Create Unit</title>
+
 {% extends 'new_base.html' %}
 
 {% block scripts %}
@@ -9,7 +11,7 @@
 <li class="breadcrumb-item" aria-current="page">
     <a href="{{ url('unit_list') }}">{{trans("Unit List")}}</a>
 </li>
-<li class="breadcrumb-item active" aria-current="page" >{{trans("Create Unit")}}</li>
+<li class="breadcrumb-item active" aria-current="page">{{trans("Create Unit")}}</li>
 {% endblock %} {% block content %}
 <main class="unit-create-form">
     <div class="container">
@@ -24,6 +26,7 @@
                             <h5 class="card-subtitle mb-2 text-muted" style="font-size:25px;">{{trans("Unit")}}</h5>
                             <p class="card-text">
                                 <select class="custom-select custom-select-sm" id="unit" name="unit" onchange="is_selected();" required style="font-size:18px;">
+
                                     <option value="" selected disabled hidden>
                                         {{trans("Choose the Unit")}}
                                     </option>
@@ -33,6 +36,7 @@
                             </p>
 
                             <h5 class="card-subtitle mb-2 text-muted" style="font-size:25px;">
+
                                 {{trans("Unit Name")}}<label id="invalid"></label>
                             </h5>
                             <p class="card-text">

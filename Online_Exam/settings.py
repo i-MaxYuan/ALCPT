@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
@@ -36,7 +35,19 @@ INSTALLED_APPS = (
     'alcpt',
     'captcha',
     'django_plotly_dash.apps.DjangoPlotlyDashConfig',
+
+    'django_crontab', #工作排程
+    'dbbackup',#資料庫備份
 )
+
+CRONJOBS = [
+    ('*/1 * * * *', 'alcpt.cron.backup','>>/home/alcptadm/crontab.log')  
+]
+
+#備份路徑,記得設定為自己的路徑
+DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
+DBBACKUP_STORAGE_OPTIONS = {'location': '/home/alcptadm/ALCPT/backup_files'}
+#備份主設定
 
 MIDDLEWARE = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -148,7 +159,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'alcpt/static')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
-LOGIN_REDIRECT_URL = '/proclamation' #
+
+LOGIN_REDIRECT_URL = '/proclamation'
 LOGOUT_REDIRECT_URL = '/'
 
 AUTH_USER_MODEL = 'alcpt.User'
