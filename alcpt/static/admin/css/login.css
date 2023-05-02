@@ -16,7 +16,11 @@
 }
 
 .login #header h1 a {
+<<<<<<< HEAD
     color: #fff(250, 245, 245);
+=======
+    color: #fff;
+>>>>>>> master_server
 }
 
 .login #content {

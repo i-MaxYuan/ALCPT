@@ -11,7 +11,9 @@ from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
-from .models import Question, AnswerSheet, Student, User, Exam, TestPaper, Answer, ReportCategory, Report, Achievement, UserAchievement, Forum
+
+from .models import Question, AnswerSheet, Student, User, Exam, TestPaper, Answer, ReportCategory, Report, Achievement, UserAchievement, Forum, Word_library
+
 from .exceptions import *
 from .decorators import permission_check
 from .definitions import UserType, QuestionType, ExamType, AchievementCategory
@@ -623,7 +625,8 @@ def view_answersheet_content(request, answersheet_id):
 
             return render(request, 'testee/answersheet_content.html', locals())
     elif answersheet.is_finished  == False and now_time > answersheet.finish_time:
-        messages.success(request, {{trans("You hadn't finish your test, please keep answering the exam")}})
+        messages.success(request, {{trans("You hadn't finish your test, please keep answering the exam")}})   
+
         return redirect('testee_exam_list')
     else:
         messages.warning(request, 'Does not finished this practice. Reject your request.')
@@ -1086,3 +1089,52 @@ def report_question(request, question_id):
                              "This question had been reported, thank you.")
             return redirect(request.META.get('HTTP_REFERER'))
         return render(request, 'testee/report_question.html', locals())
+
+
+def word_library(request):
+        word_list = Word_library.objects.all()
+        return render(request,'testee/word_library.html',{'word_list':word_list})
+
+def word_library_create(request):
+    if request.method == 'POST':
+        if Word_library.objects.all().filter(words=request.POST.get('word_english')):
+            messages.error(request,'exist word')
+            return redirect('word_library')
+        else:
+            word_english = request.POST.get('word_english')
+            word_chinese = request.POST.get('word_chinese')
+            Word = Word_library.objects.create(words = word_english,translations = word_chinese)
+            Word.save()
+            messages.success(request,'Word Added successful.')
+            return redirect('word_library')
+    else:    
+        return render(request,'testee/word_library_create.html',locals())
+
+def word_library_del(request,words):
+    try:
+        word = Word_library.objects.get(words=words)       
+        word.delete()
+        messages.success(request, ("Successfully deleted word"))
+        return redirect('word_library')
+    except ObjectDoesNotExist:
+        messages.error(request,'error')
+        return redirect('word_library')
+
+def word_library_edit(request,words,translations):
+    word = Word_library.objects.get(words=words)
+    translate = Word_library.objects.get(translations=translations) 
+    if request.method == 'POST':
+        try:
+            word_english=request.POST.get('word_english')
+            word_chinese=request.POST.get('word_chinese')
+            word.words = word_english
+            word.translations = word_chinese
+            word.save()
+            return redirect('word_library')
+        except ObjectDoesNotExist:
+            messages.error(request,'error')
+            return redirect('word_library')
+            
+    else:
+        return render(request,'testee/word_library_edit.html',{'words':word,'translations':translate})           
+

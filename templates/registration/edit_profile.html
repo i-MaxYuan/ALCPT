@@ -1,4 +1,6 @@
+
 <title>ALCPT - Edit Profile</title>
+
 {% extends 'new_base.html' %}
 
 {% block stylesheets %}
@@ -26,6 +28,7 @@
                 <div class="col-lg-4">
                     <div class="card mb-3">
                         <div class="card-header">{{trans("User Photo")}}</div>
+
                             <div class="container">
                                 <div class="row justify-content-center" style="padding-top: 10px; padding-right: 10px; padding-left: 10px">
                                     {% if user.photo %}
@@ -62,6 +65,7 @@
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
 
@@ -291,8 +295,6 @@
                                 {{trans("Status")}} - {% if user.is_active %} {{trans("active")}} {% elif user.is_staff %}
                                 {{trans("staff")}} {% elif user.is_superuser %} {{trans("superuser")}} {% endif %}
                             </span>
-                            
-                            
                             <div class="text-right">
                                 <button type="submit" id="submit" class="btn btn-primary">
                                     {{trans("Update")}}

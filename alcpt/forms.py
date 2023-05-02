@@ -38,4 +38,6 @@ class ExhibitionForm(forms.ModelForm):
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
             self.fields["started_time"].widget = DateTimeInput()
+
             self.fields["started_time"].input_formats = ["%Y-%m-%dT%H:%M", "%Y-%m-%d %H:%M"]
+

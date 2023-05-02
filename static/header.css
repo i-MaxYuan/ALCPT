@@ -24,7 +24,11 @@ a:focus {
 
 .navbar {
     padding: 15px 30px;
+<<<<<<< HEAD
     background: #fff(113, 155, 172);
+=======
+    background: #fff;
+>>>>>>> master_server
     border: none;
     border-radius: 0;
     margin-bottom: 10px;

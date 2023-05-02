@@ -245,7 +245,9 @@ def user_edit(request, reg_id):
     identities = Identity.__members__.values()
 
     if request.method == 'POST':
-        privilege_value = 0
+
+        privilege_value = 0 
+
         for privilege in privileges:
             if privilege and request.POST.get('{}'.format(privilege)):
                 privilege_value |= privilege.value[0]

@@ -1,4 +1,6 @@
+
 <title>ALCPT - Exam Score Detail</title>
+
 {% extends 'new_base.html' %}
 
 {% block path %}
@@ -60,9 +62,9 @@
                             {% endfor %}
                         </tbody>
                     </table>
-                    
+
                 </div>
-                
+
             </div>
 
             <div class="col-md-6">
@@ -91,17 +93,10 @@
                         </tr>
                     </tbody>
                 </table>
-            </div>
-                
-        </div>
-    </div>
-    <div  class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
+
+
                 {% autoescape off %}
                 {{ pie_chart }}
-            </div>
-            <div class="col-md-6">
                 {% endautoescape %}
                 {% autoescape off %}
                 {{ bar_chart }}

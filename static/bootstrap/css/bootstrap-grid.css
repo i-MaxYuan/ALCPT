@@ -21,7 +21,11 @@ html {
 .container-md,
 .container-lg,
 .container-xl {
+<<<<<<< HEAD
   width: 150%;
+=======
+  width: 100%;
+>>>>>>> master_server
   padding-right: 15px;
   padding-left: 15px;
   margin-right: auto;

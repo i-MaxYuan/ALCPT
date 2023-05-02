@@ -289,10 +289,12 @@ msgid  "Choose Gender"
 msgstr "選擇性別"
 
 msgid  "Grade"
-msgstr "等級"
+
+msgstr "年班"
 
 msgid  "grade"
-msgstr "年級"
+msgstr "年班"
+
 
 msgid  "Status"
 msgstr "狀態"
@@ -396,8 +398,10 @@ msgstr "尚未設定"
 msgid "Student Profile"
 msgstr "學生個人資料"
 
-msgid "Home"
-msgstr "首頁"
+
+msgid "Proclamation"
+msgstr "公佈欄"
+
 
 msgid "ReportCategory Create"
 msgstr "創建問題回報類別"
@@ -1027,7 +1031,9 @@ msgid  "Exam"
 msgstr "鑑測"
 
 msgid  "Practice Record List"
-msgstr "練習成績列表"
+
+msgstr "練習紀錄列表"
+
 
 msgid  "Settle"
 msgstr "結束"
@@ -1036,7 +1042,9 @@ msgid  "Finished"
 msgstr "已完成"
 
 msgid  "Exam Record List"
-msgstr "模擬鑑測成績列表"
+
+msgstr "模擬鑑測紀錄列表"
+
 
 msgid  "You have no favorite questions now"
 msgstr "您目前沒有試題在問題收藏本中"
@@ -1585,4 +1593,27 @@ msgid "minutes"
 msgstr "分鐘"
 
 msgid "in"
+
 msgstr "建立於"
+
+msgid "English"
+msgstr "英文"
+
+msgid "Chinese"
+msgstr "中文"
+
+msgid "Word Library"
+msgstr "單字庫"
+
+msgid "ALCPT Homepage"
+msgstr "回到首頁"
+
+msgid "Create Words"
+msgstr "建立單字"
+
+msgid "Word Edit"
+msgstr "編輯單字"
+
+msgid "Sure to delete this word?"
+msgstr "確定要刪除此單字嗎?"
+

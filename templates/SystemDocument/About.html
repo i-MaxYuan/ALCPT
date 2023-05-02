@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
+
     <title>ALCPT - Homepage</title>
+
 
 <head>
     {% include 'about_head.html' %}
@@ -9,7 +11,6 @@
 <!-- JS that disable right mouse click -->
 
 <body oncontextmenu=self.event.returnValue=false onselectstart="return false">
-    
     <!-- Header Section Start -->
     <header id="home" class="hero-area">
         <div class="overlay">
@@ -18,6 +19,7 @@
         </div>
         <nav class="navbar navbar-expand-md bg-inverse fixed-top scrolling-navbar">
             <div class="container">
+
                 <a href="{{ url('Homepage') }}" class="navbar-brand"><img src="{{ static('/logo/nav-logo-white.png') }}" style="width:200px" alt="" /></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                     <i class="lni-menu"></i>
@@ -27,6 +29,7 @@
                     
                     <ul class="navbar-nav mr-auto w-100 justify-content-end">  
                        
+
                         <li class="nav-item">
                             <a class="nav-link page-scroll" href="#home">{{trans("Home")}}</a>
                         </li>
@@ -36,6 +39,7 @@
                         <li class="nav-item">
                             <a class="nav-link page-scroll" href="#features">{{trans("Manuallist")}}</a>
                         </li>
+
                         
                         
                     
@@ -63,6 +67,8 @@
                     <a class="btn btn-singin" href="{{url('login')}}">{{trans("Start")}}</a>  
             
                 {% endif %}
+
+           
             </div>
         </nav>
         <div class="container">
