@@ -40,12 +40,12 @@ INSTALLED_APPS = (
 )
 
 CRONJOBS = [
-    ('*/1 * * * *', 'alcpt.cron.backup','>>/home/alcptadm/crontab.log')  
+    ('*/1 * * * *', 'alcpt.cron.backup','>>/home/ray/crontab.log')  
 ]
 
 #備份路徑,記得設定為自己的路徑
 DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
-DBBACKUP_STORAGE_OPTIONS = {'location': '/home/alcptadm/ALCPT/backup_files'}
+DBBACKUP_STORAGE_OPTIONS = {'location': '/home/ray/ALCPT/backup_files'}
 #備份主設定
 
 
@@ -159,7 +159,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'alcpt/static')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
-LOGIN_REDIRECT_URL = '/proclamation'
+LOGIN_REDIRECT_URL = '/zh/proclamation'   #夜面跳轉至公告(主葉面)完全中文化   zh改為en-us會變成完全英文化
 LOGOUT_REDIRECT_URL = '/'
 
 AUTH_USER_MODEL = 'alcpt.User'
