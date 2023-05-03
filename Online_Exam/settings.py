@@ -35,14 +35,13 @@ INSTALLED_APPS = (
     'alcpt',
     'captcha',
     'django_plotly_dash.apps.DjangoPlotlyDashConfig',
-
-    'django_crontab', #工作排程
-    'dbbackup',#資料庫備份
+    # 'django_crontab', #工作排程
+    # 'dbbackup',#資料庫備份
 )
 
-CRONJOBS = [
-    ('*/1 * * * *', 'alcpt.cron.backup','>>/home/ray/crontab.log')  
-]
+# CRONJOBS = [
+#     ('*/1 * * * *', 'alcpt.cron.backup','>>/home/ray/crontab.log')
+# ]
 
 #備份路徑,記得設定為自己的路徑
 DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
@@ -76,10 +75,8 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.i18n',
             ],
-            'autoescape':
-            True,
-            'environment':
-            'alcpt.jinja2.environment',
+            'autoescape': True,
+            'environment': 'alcpt.jinja2_env.environment',
         }
     },
     {
@@ -105,12 +102,12 @@ WSGI_APPLICATION = 'Online_Exam.wsgi.application'
 # mysql
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'alcpt',
-        'USER': 'root',
-        'PASSWORD': 'alcptalcpt',
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv("DB_NAME"),
+        'USER': os.getenv("DB_USER"),
+        'PASSWORD': os.getenv("DB_PASSWORD"),
+        'HOST': os.getenv("DB_HOST"),
+        'PORT': os.getenv("DB_PORT"),
     }
 }
 

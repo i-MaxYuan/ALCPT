@@ -9,13 +9,12 @@ from alcpt.exceptions import IllegalArgumentError, ObjectNotFoundError
 from alcpt.definitions import UserType, QuestionType, ExamType
 from django.utils.translation import gettext as _
 
- #translation
+#translation
 from jinja2 import evalcontextfilter, Markup, escape
 
 # jinja2 custom filters
 
 _paragraph_re = re.compile(r'(?:\r\n|\r|\n){2,}')
-
 
 @evalcontextfilter
 def linebreaksbr(eval_ctx, value):
