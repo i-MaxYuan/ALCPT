@@ -35,14 +35,13 @@ INSTALLED_APPS = (
     'alcpt',
     'captcha',
     'django_plotly_dash.apps.DjangoPlotlyDashConfig',
-
-    'django_crontab', #工作排程
-    'dbbackup',#資料庫備份
+    # 'django_crontab', #工作排程
+    # 'dbbackup',#資料庫備份
 )
 
-CRONJOBS = [
-    ('*/1 * * * *', 'alcpt.cron.backup','>>/home/ray/crontab.log')  
-]
+# CRONJOBS = [
+#     ('*/1 * * * *', 'alcpt.cron.backup','>>/home/ray/crontab.log')
+# ]
 
 #備份路徑,記得設定為自己的路徑
 DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
