@@ -76,10 +76,8 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.i18n',
             ],
-            'autoescape':
-            True,
-            'environment':
-            'alcpt.jinja2.environment',
+            'autoescape': True,
+            'environment': 'alcpt.jinja2_env.environment',
         }
     },
     {
