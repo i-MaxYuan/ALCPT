@@ -1,0 +1,39 @@
+version: "3.9"
+
+services:
+  app:
+    build: .
+    ports:
+      - "5000:8000"
+    volumes:
+      - .:/app
+    depends_on:
+      - database
+    environment:
+      - DB_HOST=database
+      - DB_PORT=5432
+      - DB_NAME=alcpt
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+  database:
+    image: postgres:13.3
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=alcpt
+    volumes:
+      - ./infra/postgres/pg_dump_20230503.sql:/docker-entrypoint-initdb.d/init.sql
+  nginx:
+    image: nginx:1.23.4
+    ports:
+      - "80:8000"
+    volumes:
+      - ./infra/nginx/ALCPT_nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./static:/static
+      - ./media:/media
+    depends_on:
+      - app
