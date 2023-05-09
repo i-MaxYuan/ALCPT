@@ -43,6 +43,15 @@ urlpatterns = [
     re_path(r'^download_system_pdf$',
             views.downloadSystemPDF,
             name='Download_system_pdf'),
+
+    re_path(r'^download_system_pdf111$',
+            views.downloadSystemPDF111,
+            name='Download_system_pdf111'),
+
+    re_path(r'^download_system_pdf112$',
+            views.downloadSystemPDF112,
+            name='Download_system_pdf112'),
+
     re_path(r'^download_OM_pdf$',
             views.downloadOperationManual,
             name='Download_OM_pdf'),

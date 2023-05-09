@@ -894,7 +894,7 @@ msgid  "Start"
 msgstr "開始"
 
 msgid  "About System"
-msgstr "關於系統(下載)"
+msgstr "關於系統"
 
 msgid  "Operation Manual"
 msgstr "使用手冊(下載)"
@@ -1119,10 +1119,10 @@ msgstr "檢閱各個模擬鑑測及練習的"
 msgid  "student's score."
 msgstr "受測者成績分佈及分析"
 
-msgid  "Users can practice listening "
-msgstr "可查看成就榜"
+msgid  "View the Achievement"
+msgstr "查看成就榜"
 
-msgid  "and reading exercises in English "
+msgid  "Listening and reading exercises"
 msgstr "進行聽力、閱讀練習"
 
 msgid  "through this system."
@@ -1551,8 +1551,8 @@ msgstr "剩餘作答時間"
 msgid "Forum"
 msgstr "討論區"
 
-msgid "Write down your questions"
-msgstr "請寫下你的疑問"
+msgid "Write down your comment"
+msgstr "請寫下你的評論"
 
 msgid " means that the question has been discuessed, you can click it to see the forum."
 msgstr "代表此題已被討論，點擊即可查看討論區"
@@ -1608,4 +1608,23 @@ msgstr "編輯單字"
 
 msgid "Sure to delete this word?"
 msgstr "確定要刪除此單字嗎?"
+
+msgid "Rehosting on server"
+msgstr "重新將專案部屬到機房"
+
+msgid "Creat Word Library"
+msgstr "新增單字庫"
+
+msgid "DB backup and restore"
+msgstr "資料庫備份與還原"
+
+msgid "Difficulty of practice questions"
+msgstr "練習題目難易度"
+
+msgid "Language switch button"
+msgstr "中英文切換按鈕"
+
+msgid "Below are the project reports for each grade and operation manual available for download."
+msgstr "下方有各年班專案報告及使用手冊可供下載"
+
 

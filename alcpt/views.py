@@ -87,6 +87,20 @@ def downloadSystemPDF(request):
     response['Content-Disposition'] = 'attachment;filename="project.pdf"'
     return response
 
+def downloadSystemPDF111(request):
+    file = open('./static/document/project111.pdf', 'rb')  # path have to start from root
+    response = FileResponse(file)
+    response['Content-Type'] = 'application/octet-stream'
+    response['Content-Disposition'] = 'attachment;filename="project111.pdf"'
+    return response
+
+def downloadSystemPDF112(request):
+    file = open('./static/document/project112.pdf', 'rb')  # path have to start from root
+    response = FileResponse(file)
+    response['Content-Type'] = 'application/octet-stream'
+    response['Content-Disposition'] = 'attachment;filename="project112.pdf"'
+    return response
+
 
 def downloadOperationManual(request):
     file = open('./static/document/ALCPT-Operation-Manual.pdf', 'rb')  # path have to start from root
