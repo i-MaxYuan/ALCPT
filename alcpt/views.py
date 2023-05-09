@@ -94,6 +94,7 @@ def downloadSystemPDF111(request):
     response['Content-Disposition'] = 'attachment;filename="project111.pdf"'
     return response
 
+
 def downloadSystemPDF112(request):
     file = open('./static/document/project112.pdf', 'rb')  # path have to start from root
     response = FileResponse(file)

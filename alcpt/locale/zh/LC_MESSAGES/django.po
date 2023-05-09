@@ -897,7 +897,7 @@ msgid  "About System"
 msgstr "關於系統"
 
 msgid  "Operation Manual"
-msgstr "使用手冊(下載)"
+msgstr "使用手冊"
 
 msgid  "System"
 msgstr "系統"
