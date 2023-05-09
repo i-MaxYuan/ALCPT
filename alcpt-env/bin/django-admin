@@ -1,4 +1,4 @@
-#!/home/ray/ALCPT/alcpt-venv/bin/python3
+#!/home/ray/ALCPT/alcpt-env/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys
