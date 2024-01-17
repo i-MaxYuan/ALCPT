@@ -7,9 +7,47 @@ import datetime
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 from .definitions import UserType
-from .models import Proclamation, User, Exam, AnswerSheet
+from .models import Proclamation, User, Exam, AnswerSheet, OnlineStatus, LocationUrl
 
+from django.views.generic import View
 # Create your views here.
+
+class FromWhere:
+
+    def location(self,class_name,url_name):         #儲存當下url
+
+        if LocationUrl.objects.filter(url_name=url_name).exists():    #如果url_name已存在資料庫,不做任何動作
+            pass
+
+        elif LocationUrl.objects.filter(from_class=class_name).exists():
+            now_location = LocationUrl.objects.get(from_class=class_name)
+            now_location.url_name = url_name
+            now_location.save()
+
+        else:
+            LocationUrl.objects.create(from_class=class_name,url_name=url_name)
+
+        return url_name
+ 
+
+    def from_where(self,class_name):            #取得指定class執行時的url
+
+        location_url = LocationUrl.objects.get(from_class=class_name)
+
+        return location_url.url_name
+
+
+class OnlineUserStat:
+    template_name = ''
+ 
+    def get(self,request,*args,**kwargs):
+        online_num = OnlineStatus.objects.filter(online_status=True).count()
+        contents = {'online_num':online_num}
+
+        contents_dict = self.do_content_works(request,*args,**kwargs) #do_content_works() return dict. if not do anything return {}.
+
+        contents.update(contents_dict)
+        return render(request, self.template_name, contents)
 
 
 def index(request):
@@ -41,8 +79,15 @@ def index(request):
     return render(request, 'proclamation/proclamation.html', locals())
 
 
-def about(request):
-    return render(request, 'SystemDocument/About.html', locals())
+# def about(request):
+#     return render(request, 'SystemDocument/About.html', locals())
+class About(View,OnlineUserStat):
+
+    template_name = 'SystemDocument/About.html'
+    
+    def do_content_works(self,request): #not do anything
+        return {}
+
 
 
 def project_history(request):

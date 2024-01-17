@@ -12,7 +12,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from Online_Exam.settings import LOGIN_REDIRECT_URL, LOGOUT_REDIRECT_URL
 from alcpt.definitions import UserType, Identity
 from alcpt.forms import CaptchaForm
-from alcpt.models import User, Department, Squadron, Report, Reply
+from alcpt.models import User, Department, Squadron, Report, Reply, OnlineStatus
 from alcpt.email import email_verified, reset_password_mail
 from alcpt.managerfuncs import systemmanager
 from django.utils.translation import ugettext as _
@@ -27,6 +27,9 @@ def login(request):
             reg_id = request.POST.get('reg_id', '')
             password = request.POST.get('password', '')
             next_page = request.GET.get('next', LOGIN_REDIRECT_URL)
+            login_user = OnlineStatus.objects.get(reg_id=reg_id)        #user login => online_status = True
+            login_user.online_status=True
+            login_user.save() 
 
             try:
                 user = auth.authenticate(reg_id=reg_id, password=password)
@@ -53,6 +56,7 @@ def login(request):
 
             return redirect(next_page)
         else:
+            online_num = OnlineStatus.objects.filter(online_status=True).count()
             messages.error(request, _('Verification code error'))
             return redirect('login')
 
@@ -71,6 +75,10 @@ def logout(request, relogin=False):
     if request.user.browser == request.COOKIES['sessionid']:
         request.user.browser = None
         request.user.save()
+        request.user.save()
+        logout_user = OnlineStatus.objects.get(reg_id=request.user.reg_id)      # find logout user & online_status = False
+        logout_user.online_status = False                                       
+        logout_user.save()
 
     auth.logout(request)
 

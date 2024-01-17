@@ -28,7 +28,7 @@ from alcpt import registration, system, views, exam, question, viewer, testee, g
 urlpatterns = [
     re_path(r'^favicon.ico$', RedirectView.as_view(url=r'static/favicon.ico')), 
     re_path(r'^admin/', admin.site.urls),
-    re_path(r'^$', views.about, name='about'), #首頁
+    re_path(r'^$', views.About.as_view(), name='about'), #首頁
     re_path(r'^1$', views.about1, name='about1'),
     # re_path(
     #     r'^/',
@@ -321,41 +321,48 @@ urlpatterns = [
 
     # 題庫管理員
     re_path(r'^question$',
-            question.manager_index,
+            question.ManagerIndex.as_view(),
+        #     question.manager_index,
             name='tbmanager_question_list'),
     re_path(
         r'^question/',
         include([
-            re_path(r'^review$', question.review, name='question_review'),
+            re_path(r'^review$', question.Review.as_view(), name='question_review'),
             re_path(r'^(?P<question_id>[0-9]+)/pass$',
                     question.question_pass,
                     name='question_pass'),
             re_path(r'^(?P<question_id>[0-9]+)/reject$',
-                    question.question_reject,
+                    question.QuestionReject.as_view(),
+                #     question.question_reject,
                     name='question_reject'),
             re_path(r'^(?P<question_id>[0-9]+)/edit$',
-                    question.question_edit,
+                    question.QuestionEdit.as_view(),
+                #     question.question_edit,
                     name='question_edit'),
         ])),
 
     # 題目操作員
     re_path(r'^operator$',
-            question.operator_index,
+            question.OperatorIndex.as_view(),
+        #     question.operator_index,
             name='tboperator_question_list'),
     re_path(
         r'^operator/',
         include([
             re_path(r'^question_multiCreate',
-                    question.question_multiCreate,
+                    question.QuestionMultiCreate.as_view(),
+                #     question.question_multiCreate,
                     name="question_multiCreate"),
             re_path(r'^submit/(?P<question_id>[0-9]+)$',
                     question.question_submit,
                     name='question_submit'),
             re_path(r'^(?P<kind>(listening|reading))/question_create$',
-                    question.question_create,
+                    question.QuestionCreate.as_view(),
+                #     question.question_create,
                     name='question_create'),
             re_path(r'^(?P<question_id>[0-9]+)/edit$',
-                    question.operator_edit,
+                    question.OperatorEdit.as_view(),
+                #     question.operator_edit,
                     name='operator_edit'),
             re_path(r'^(?P<question_id>[0-9]+)/delete$',
                     question.question_delete,
@@ -445,7 +452,7 @@ urlpatterns = [
 
 urlpatterns += i18n_patterns(
 re_path(r'^favicon.ico$', RedirectView.as_view(url=r'static/favicon.ico')),
-re_path(r'^$', views.about, name='about'),
+re_path(r'^$', views.About.as_view(), name='about'),
 re_path(r'^1$', views.about1, name='about1'),
 # re_path(
 #     r'^/',
@@ -719,41 +726,48 @@ re_path(
 
 # 題庫管理員
 re_path(r'^question$',
-        question.manager_index,
+        question.ManagerIndex.as_view(),
+        # question.manager_index,
         name='tbmanager_question_list'),
 re_path(
     r'^question/',
     include([
-        re_path(r'^review$', question.review, name='question_review'),
+        re_path(r'^review$', question.Review.as_view(), name='question_review'),
         re_path(r'^(?P<question_id>[0-9]+)/pass$',
                 question.question_pass,
                 name='question_pass'),
         re_path(r'^(?P<question_id>[0-9]+)/reject$',
-                question.question_reject,
+                question.QuestionReject.as_view(),
+                # question.question_reject,
                 name='question_reject'),
         re_path(r'^(?P<question_id>[0-9]+)/edit$',
-                question.question_edit,
+                question.QuestionEdit.as_view(),
+                # question.question_edit,
                 name='question_edit'),
     ])),
 
 # 題目操作員
 re_path(r'^operator$',
-        question.operator_index,
+        question.OperatorIndex.as_view(),
+        # question.operator_index,
         name='tboperator_question_list'),
 re_path(
     r'^operator/',
     include([
         re_path(r'^question_multiCreate',
-                question.question_multiCreate,
+                question.QuestionMultiCreate.as_view(),
+                # question.question_multiCreate,
                 name="question_multiCreate"),
         re_path(r'^submit/(?P<question_id>[0-9]+)$',
                 question.question_submit,
                 name='question_submit'),
         re_path(r'^(?P<kind>(listening|reading))/question_create$',
-                question.question_create,
+                question.QuestionCreate.as_view(),
+                # question.question_create,
                 name='question_create'),
         re_path(r'^(?P<question_id>[0-9]+)/edit$',
-                question.operator_edit,
+                question.OperatorEdit.as_view(),
+                # question.operator_edit,
                 name='operator_edit'),
         re_path(r'^(?P<question_id>[0-9]+)/delete$',
                 question.question_delete,

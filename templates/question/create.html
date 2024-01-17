@@ -121,7 +121,8 @@
                             <div class="text-center">
                                 <button type="submit" class="btn btn-primary">{{trans("Submit")}}</button>
                                 <button type="reset" class="btn btn-light">{{trans("Reset")}}</button>
-                                <button type="button" class="btn btn-secondary" onclick="history.go(-1);">
+                                <!--<button type="button" class="btn btn-secondary" onclick="history.go(-1);">-->
+                                <button type="button" class="btn btn-secondary" onclick="window.location.href='{{url('tboperator_question_list')}}'">
                                     {{trans("Cancel")}}
                                 </button>
                             </div>
