@@ -16,39 +16,67 @@ from alcpt.models import User, Department, Squadron, Report, Reply, OnlineStatus
 from alcpt.email import email_verified, reset_password_mail
 from alcpt.managerfuncs import systemmanager
 from django.utils.translation import ugettext as _
+
+from django.views.generic import View
+from alcpt.views import OnlineUserStat
+from django.utils.decorators import method_decorator
 # Create your views here.
 
-
 # 登入
-def login(request):
-    if request.method == 'POST':
+class Login(View,OnlineUserStat):
+    
+    template_name = 'registration/login.html'
+    
+    def do_content_works(self,request):  
+        captcha = CaptchaForm()
+        if request.user.is_authenticated:
+            return redirect('/')
+
+        else:
+            return dict(captcha=captcha)
+    
+    def post(self,request):
         captcha = CaptchaForm(request.POST)
         if captcha.is_valid():  # 驗證通過
             reg_id = request.POST.get('reg_id', '')
             password = request.POST.get('password', '')
             next_page = request.GET.get('next', LOGIN_REDIRECT_URL)
-            login_user = OnlineStatus.objects.get(reg_id=reg_id)        #user login => online_status = True
-            login_user.online_status=True
-            login_user.save() 
 
             try:
                 user = auth.authenticate(reg_id=reg_id, password=password)
 
                 if user is None or not user.is_active:
                     messages.error(request, _('Wrong Password or User unexist.'))
-                    return render(request, 'registration/login.html', locals())
-
-                auth.login(request, user)
-                user.browser = request.session.session_key
-                user.save()
-
+                    return render(request,self.template_name,dict(captcha=captcha))
+                
+                login_user = OnlineStatus.objects.get(reg_id=reg_id)        #user login => online_status = True
+                login_user.online_status=True
+                login_user.save()
+                
+                # auth.login(request, user)
+                # user.browser = request.session.session_key
+                # user.save()
+                
                 if user.last_login is None:
+                    auth.login(request, user)
+                    user.browser = request.session.session_key
+                    user.save()
+                    
                     departments = Department.objects.all()
                     squadrons = Squadron.objects.all()
                     messages.warning(request, _('Fist login, please edit your data'))
                     privileges = UserType.__members__
                     identities = Identity.__members__.values()
-                    return render(request, 'registration/edit_profile.html', locals())
+                    return render(request, 'registration/edit_profile.html',
+                                  dict(user=user,
+                                       privileges=privileges,
+                                       departments=departments,
+                                       squadrons=squadrons))
+                    
+                auth.login(request, user)
+                user.browser = request.session.session_key
+                user.save()
+                
                 messages.success(request, _('Login Success.'))
 
             except ObjectDoesNotExist:
@@ -56,17 +84,57 @@ def login(request):
 
             return redirect(next_page)
         else:
-            online_num = OnlineStatus.objects.filter(online_status=True).count()
+            # online_num = OnlineStatus.objects.filter(online_status=True).count()
             messages.error(request, _('Verification code error'))
             return redirect('login')
 
-    else:
-        captcha = CaptchaForm()
-        if request.user.is_authenticated:
-            return redirect('/')
+# def login(request):
+#     if request.method == 'POST':
+#         captcha = CaptchaForm(request.POST)
+#         if captcha.is_valid():  # 驗證通過
+#             reg_id = request.POST.get('reg_id', '')
+#             password = request.POST.get('password', '')
+#             next_page = request.GET.get('next', LOGIN_REDIRECT_URL)
+#             login_user = OnlineStatus.objects.get(reg_id=reg_id)        #user login => online_status = True
+#             login_user.online_status=True
+#             login_user.save() 
 
-        else:
-            return render(request, 'registration/login.html', locals())
+#             try:
+#                 user = auth.authenticate(reg_id=reg_id, password=password)
+
+#                 if user is None or not user.is_active:
+#                     messages.error(request, _('Wrong Password or User unexist.'))
+#                     return render(request, 'registration/login.html', locals())
+
+#                 auth.login(request, user)
+#                 user.browser = request.session.session_key
+#                 user.save()
+
+#                 if user.last_login is None:
+#                     departments = Department.objects.all()
+#                     squadrons = Squadron.objects.all()
+#                     messages.warning(request, _('Fist login, please edit your data'))
+#                     privileges = UserType.__members__
+#                     identities = Identity.__members__.values()
+#                     return render(request, 'registration/edit_profile.html', locals())
+#                 messages.success(request, _('Login Success.'))
+
+#             except ObjectDoesNotExist:
+#                 return redirect('login')
+
+#             return redirect(next_page)
+#         else:
+#             online_num = OnlineStatus.objects.filter(online_status=True).count()
+#             messages.error(request, _('Verification code error'))
+#             return redirect('login')
+
+#     else:
+#         captcha = CaptchaForm()
+#         if request.user.is_authenticated:
+#             return redirect('/')
+
+#         else:
+#             return render(request, 'registration/login.html', locals())
 
 
 # 登出
@@ -75,15 +143,14 @@ def logout(request, relogin=False):
     if request.user.browser == request.COOKIES['sessionid']:
         request.user.browser = None
         request.user.save()
-        request.user.save()
+        # request.user.save()
         logout_user = OnlineStatus.objects.get(reg_id=request.user.reg_id)      # find logout user & online_status = False
         logout_user.online_status = False                                       
         logout_user.save()
 
     auth.logout(request)
 
-    if relogin:
-        messages.error(request, 'You logged in elsewhere so you were forced to log out.')
+    if relogin:  
         return
     else:
         messages.success(request, _('Logout Success.'))
@@ -92,19 +159,42 @@ def logout(request, relogin=False):
 
 
 # 檢視個人資料
-@login_required
-def profile(request):
-    user = request.user
-    privileges = UserType.__members__
-    return render(request, 'registration/profile.html', locals())
+@method_decorator(login_required,name='get')
+class Profile(View,OnlineUserStat):
+    
+    template_name = 'registration/profile.html'
+    
+    def do_content_works(self,request):
+        user = request.user
+        privileges = UserType.__members__
+        
+        return dict(user=user,privileges=privileges)
+
+# @login_required
+# def profile(request):
+#     user = request.user
+#     privileges = UserType.__members__
+#     return render(request, 'registration/profile.html', locals())
 
 
 # 編輯個人資料
-@login_required
-def edit_profile(request):
-    user = request.user
+@method_decorator(login_required,name='get')
+class EditProfile(View,OnlineUserStat):
+    
+    template_name = 'registration/edit_profile.html'
+    
+    def do_content_works(self,request):
+        user = request.user
+        privileges = UserType.__members__
+        identities = Identity.__members__.values()
+        departments = Department.objects.all()
+        squadrons = Squadron.objects.all()
+        
+        return dict(user=user, privileges=privileges, departments=departments, squadrons=squadrons) 
 
-    if request.method == 'POST':
+    def post(self,request):
+        user = request.user
+        
         name = request.POST.get('name')
         gender = int(request.POST.get('gender'))
         introduction = request.POST.get('introduction')
@@ -124,18 +214,49 @@ def edit_profile(request):
         messages.success(request, _('Saved profile successfully.'))
         return redirect('profile')
 
-    else:
-        privileges = UserType.__members__
-        identities = Identity.__members__.values()
-        departments = Department.objects.all()
-        squadrons = Squadron.objects.all()
-        return render(request, 'registration/edit_profile.html', locals())
+    
+# @login_required
+# def edit_profile(request):
+#     user = request.user
+
+#     if request.method == 'POST':
+#         name = request.POST.get('name')
+#         gender = int(request.POST.get('gender'))
+#         introduction = request.POST.get('introduction')
+#         photo = request.FILES.get('photo_file')
+
+#         user = systemmanager.update_user(user=user, name=name, gender=gender, introduction=introduction, photo=photo)
+
+#         try:
+#             student = user.student
+#             student.grade = int(request.POST.get('grade',))
+#             student.department = Department.objects.get(id=int(request.POST.get('department',)))
+#             student.squadron = Squadron.objects.get(id=int(request.POST.get('squadron',)))
+#             student.save()
+#         except ObjectDoesNotExist:
+#             pass
+
+#         messages.success(request, _('Saved profile successfully.'))
+#         return redirect('profile')
+
+#     else:
+#         privileges = UserType.__members__
+#         identities = Identity.__members__.values()
+#         departments = Department.objects.all()
+#         squadrons = Squadron.objects.all()
+#         return render(request, 'registration/edit_profile.html', locals())
 
 
 # 更改密碼
-@login_required
-def change_password(request):
-    if request.method == 'POST':
+@method_decorator(login_required,name='get')
+class ChangePassword(View,OnlineUserStat):
+    
+    template_name = 'registration/password_change.html'
+    
+    def do_content_works(self,request):
+        return {}
+    
+    def post(self,request):
         user = request.user
         old_password = request.POST.get('old_password',)
 
@@ -161,9 +282,38 @@ def change_password(request):
 
             messages.success(request, _('Password change successfully. Please login again with new password.'))
             return redirect('profile')
-    else:
-        return render(request, 'registration/password_change.html', locals())
+        
+        
+# @login_required
+# def change_password(request):
+#     if request.method == 'POST':
+#         user = request.user
+#         old_password = request.POST.get('old_password',)
 
+#         if user.check_password(old_password):
+#             pass
+#         else:
+#             messages.error(request, _('Old password does not match.'))
+#             return redirect('password_change')
+
+#         new_password = request.POST.get('new_password',)
+#         verification_password = request.POST.get('verification_password',)
+
+#         if new_password == old_password:
+#             messages.error(request, _('New password and old password are the same.'))
+#             return redirect('password_change')
+#         elif new_password != verification_password:
+#             messages.error(request, _('Verification error.'))
+#             return redirect('password_change')
+#         else:
+#             user.set_password(new_password)
+#             user.update_time = timezone.now()
+#             user.save()
+
+#             messages.success(request, _('Password change successfully. Please login again with new password.'))
+#             return redirect('profile')
+#     else:
+#         return render(request, 'registration/password_change.html', locals())
 
 def reset_password(request, encode_reg_id):
     if request.method == 'POST':
@@ -227,42 +377,90 @@ def forget_password(request):
 
 
 # 取得個人所回報的所有問題
-@login_required
-def report_list(request):
-    reports = Report.objects.filter(created_by=request.user).order_by('-created_time')
-    return render(request, 'registration/report_list.html', locals())
+@method_decorator(login_required,name='get')
+class ReportList(View,OnlineUserStat):
+    
+    template_name = 'registration/report_list.html'
+    
+    def do_content_works(self,request):
+        reports = Report.objects.filter(created_by=request.user).order_by('-created_time')
+        return dict(reports=reports)
 
+# @login_required
+# def report_list(request):
+#     reports = Report.objects.filter(created_by=request.user).order_by('-created_time')
+#     return render(request, 'registration/report_list.html', locals())
 
-@login_required
-def report_detail(request, report_id):
-    try:
+@method_decorator(login_required,name='get')
+class ReportDetail(View,OnlineUserStat):
+    
+    template_name = 'registration/report_detail.html'
+    
+    def do_content_works(self,request,report_id):
+        try:
+            viewed_report = Report.objects.get(id=report_id)
+            if viewed_report.created_by == request.user:
+                pass
+            elif request.user.has_perm(UserType.SystemManager):
+                pass
+            else:
+                messages.warning(request, _('You have no permission'))
+                return redirect('Homepage')
+        except ObjectDoesNotExist:
+            messages.error(request, "Report doesn't exist, report id: {}".format(report_id))
+            return redirect('report_list')
+        
+        Report.objects.filter(id=report_id).update(user_notification=False)
+
+        replies = viewed_report.reply_set.all().order_by('created_time')
+        return dict(viewed_report=viewed_report,replies=replies)
+
+    def post(self,request,report_id):
         viewed_report = Report.objects.get(id=report_id)
-        if viewed_report.created_by == request.user:
-            pass
-        elif request.user.has_perm(UserType.SystemManager):
-            pass
-        else:
-            messages.warning(request, _('You have no permission'))
-            return redirect('Homepage')
-    except ObjectDoesNotExist:
-        messages.error(request, "Report doesn't exist, report id: {}".format(report_id))
-        return redirect('report_list')
-
-    if request.method == 'POST':
+        
         if viewed_report.state == 3 or viewed_report.resolved_by:
             messages.warning(request, _('This report had been resolved.'))
             return redirect('report_list')
+        
         reply = request.POST.get('reply')
         new_reply = Reply.objects.create(source=viewed_report, content=reply, created_by=request.user)
         viewed_report.user_notification = False
         viewed_report.staff_notification = True
         viewed_report.save()
         return redirect('report_list')
-    else:
-        Report.objects.filter(id=report_id).update(user_notification=False)
+    
+        
 
-        replies = viewed_report.reply_set.all().order_by('created_time')
-        return render(request, 'registration/report_detail.html', locals())
+# @login_required
+# def report_detail(request, report_id):
+#     try:
+#         viewed_report = Report.objects.get(id=report_id)
+#         if viewed_report.created_by == request.user:
+#             pass
+#         elif request.user.has_perm(UserType.SystemManager):
+#             pass
+#         else:
+#             messages.warning(request, _('You have no permission'))
+#             return redirect('Homepage')
+#     except ObjectDoesNotExist:
+#         messages.error(request, "Report doesn't exist, report id: {}".format(report_id))
+#         return redirect('report_list')
+
+#     if request.method == 'POST':
+#         if viewed_report.state == 3 or viewed_report.resolved_by:
+#             messages.warning(request, _('This report had been resolved.'))
+#             return redirect('report_list')
+#         reply = request.POST.get('reply')
+#         new_reply = Reply.objects.create(source=viewed_report, content=reply, created_by=request.user)
+#         viewed_report.user_notification = False
+#         viewed_report.staff_notification = True
+#         viewed_report.save()
+#         return redirect('report_list')
+#     else:
+#         Report.objects.filter(id=report_id).update(user_notification=False)
+
+#         replies = viewed_report.reply_set.all().order_by('created_time')
+#         return render(request, 'registration/report_detail.html', locals())
 
 
 @login_required

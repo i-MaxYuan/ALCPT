@@ -16,7 +16,7 @@ from django.db import IntegrityError
 from django.contrib import messages
 
 from alcpt.managerfuncs import systemmanager
-from alcpt.models import User, Student, Department, Squadron, ReportCategory, Report, Reply, UserAchievement, Achievement
+from alcpt.models import User, Student, Department, Squadron, ReportCategory, Report, Reply, UserAchievement, Achievement, OnlineStatus
 from alcpt.proclamation import notify
 from alcpt.definitions import UserType, Identity, AchievementCategory
 from alcpt.decorators import permission_check, login_required
@@ -557,7 +557,7 @@ class UserEdit(View,OnlineUserStat):
                 try:
                     edited_student = edited_user.student
                     edited_student.grade = request.POST.get('grade')
-        
+                
                     if request.POST.get('department'):
                         edited_student.department = Department.objects.get(id=request.POST.get('department'))
         
@@ -566,21 +566,28 @@ class UserEdit(View,OnlineUserStat):
                     edited_student.save()
         
                     try:
+                        edited_online = OnlineStatus.objects.get(reg_id=reg_id)
+                        
                         edited_user.reg_id = request.POST.get('reg_id')
                         edited_student.stu_id = request.POST.get('stu_id')
+                        edited_online.reg_id = request.POST.get('reg_id')
                         edited_user.save()
                         edited_student.save()
+                        edited_online.save()
 
                         messages.success(request, _("Successfully updated user."))
                         return redirect('user_list')
 
                     except IntegrityError:
                         messages.warning(request, _("This ID had been used."))
-                        return dict(departments = Department.objects.all(),
-                                    squadrons = Squadron.objects.all())
+                        contents = dict(departments = Department.objects.all(),
+                                        squadrons = Squadron.objects.all(),
+                                        edited_user = edited_user)
+                        return render(request, self.template_name, contents)
 
                 except ObjectDoesNotExist:
-                    Student.objects.create(stu_id=edited_user.reg_id, user=edited_user).save()
+                    Student.objects.create(stu_id=edited_user.reg_id, user=edited_user)
+                    # Student.objects.create(stu_id=edited_user.reg_id, user=edited_user).save()
                     messages.warning(request, _("Please update Student information."))
                     return redirect('user_list')
 
@@ -588,7 +595,9 @@ class UserEdit(View,OnlineUserStat):
                 try:
                     edited_user.reg_id = request.POST.get('reg_id')
                     edited_user.identity = request.POST.get('identity')
+                    edited_online.reg_id = request.POST.get('reg_id')
                     edited_user.save()
+                    edited_online.save()
 
                     if edited_user.student:
                         Student.objects.get(user=edited_user).delete()
@@ -601,10 +610,12 @@ class UserEdit(View,OnlineUserStat):
         
                     try:
                         edited_user.student
-                        return dict(departments = Department.objects.all(),
+                        contents = dict(departments = Department.objects.all(),
                                     squadrons = Squadron.objects.all())
                     except ObjectDoesNotExist:
                         pass
+                    
+                    return render(request, self.template_name, contents)
 
         except ObjectDoesNotExist:
             messages.error(request, "User doesn't exist, user register id - {}".format(reg_id))
@@ -709,13 +720,14 @@ class UserEdit(View,OnlineUserStat):
 # 刪除使用者
 def user_del(request,reg_id):
     try:
-        user = User.objects.get(reg_id=reg_id)
-        user.delete()
+        user = User.objects.get(reg_id=reg_id).delete()
+        # user.delete()
+        user_status = OnlineStatus.objects.get(reg_id=reg_id).delete()
         messages.success(request, _("Successfully deleted user."))
-        return redirect('user_list')
+        # return redirect('user_list')
     except ObjectDoesNotExist:
-        messages.error(request,_("ERROR!"))
-        return redirect('user_list')
+        messages.error(request,_("ERROR! user does not exist!"))
+        # return redirect('user_list')
     return redirect('user_list')
 
 # 單位列表

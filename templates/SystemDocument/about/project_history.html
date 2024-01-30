@@ -22,9 +22,13 @@
             <a href="{{ url('about') }}" class="navbar-brand"><img src="{{ static('/logo/nav-logo-white.png') }}" style="width:130px" alt="" /></a>
 
         </div>
+        </div class="col-2">
+            <h6><span class="badge bg-info text-light">上線人數:{{online_num}}</span></h6>
+        </div>
     </nav>
     <div class="container">
         <div class="row space-100" style="padding-top: 100px; font-size: 15px">
+
             <div class="container py-3">
                 <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
                     <h1 class="display-4 fw-normal" style="color: white">{{trans('Project History')}}</h1>

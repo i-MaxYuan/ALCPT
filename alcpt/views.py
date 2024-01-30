@@ -62,10 +62,6 @@ def index(request):
         latest_exam = exam[0]
         leaderboard = AnswerSheet.objects.all().filter(exam_id=latest_exam.id).order_by("-score")
 
-
-
-
-
     page = request.GET.get('page', 1)
     paginator = Paginator(proclamations, 10)  # the second parameter is used to display how many items. Now is display 5
 
@@ -89,9 +85,14 @@ class About(View,OnlineUserStat):
         return {}
 
 
+class ProjectHistory(View,OnlineUserStat):
+    template_name = 'SystemDocument/about/project_history.html'
+    
+    def do_content_works(self,request):
+        return {}
 
-def project_history(request):
-    return render(request, 'SystemDocument/about/project_history.html', locals())
+# def project_history(request):
+#     return render(request, 'SystemDocument/about/project_history.html', locals())
 
 
 
