@@ -429,8 +429,9 @@ class Word_library(models.Model):
 
 
 class OnlineStatus(models.Model):
-    online_status = models.BooleanField(default=True)
-    reg_id = models.CharField(max_length=50,default=True)
+    user = models.OneToOneField(User,on_delete=models.CASCADE)
+    online_status = models.BooleanField(default=False)
+    # reg_id = models.CharField(max_length=50,default=True)
 
     def __str__(self):
         return str(self.online_status)

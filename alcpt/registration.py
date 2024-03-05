@@ -44,12 +44,12 @@ class Login(View,OnlineUserStat):
 
             try:
                 user = auth.authenticate(reg_id=reg_id, password=password)
-
+                
                 if user is None or not user.is_active:
                     messages.error(request, _('Wrong Password or User unexist.'))
                     return render(request,self.template_name,dict(captcha=captcha))
                 
-                login_user = OnlineStatus.objects.get(reg_id=reg_id)        #user login => online_status = True
+                login_user = OnlineStatus.objects.get(user=user)        #user login => online_status = True
                 login_user.online_status=True
                 login_user.save()
                 
@@ -144,7 +144,7 @@ def logout(request, relogin=False):
         request.user.browser = None
         request.user.save()
         # request.user.save()
-        logout_user = OnlineStatus.objects.get(reg_id=request.user.reg_id)      # find logout user & online_status = False
+        logout_user = OnlineStatus.objects.get(user=request.user)      # find logout user & online_status = False
         logout_user.online_status = False                                       
         logout_user.save()
 

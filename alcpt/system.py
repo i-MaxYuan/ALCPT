@@ -259,7 +259,8 @@ class UserCreate(View,OnlineUserStat):
                         new_user = User.objects.create_user(reg_id=reg_id, privilege=privilege_value, password=reg_id)
                         new_user.identity = identity
                         new_user_stu = Student.objects.create(stu_id=stu_id, user=new_user)
-    
+                        OnlineStatus.objects.create(user=new_user)  #新增上線狀態欄位
+                         
                         if request.POST.get('department'):
                             new_user_stu.department = Department.objects.get(id=int(request.POST.get('department')))
     
@@ -272,7 +273,6 @@ class UserCreate(View,OnlineUserStat):
                         new_user.save()
                         new_user_stu.save()
 
-                        OnlineStatus.objects.create(reg_id=reg_id,online_status=False)  #新增上線狀態欄位
 
                         messages.success(request, _('Successfully Created - User, Student'))
                         return redirect('user_list')
@@ -290,6 +290,7 @@ class UserCreate(View,OnlineUserStat):
                 new_user = User.objects.create_user(reg_id=reg_id, privilege=privilege_value, password=reg_id)
                 new_user.identity = identity
                 new_user.save()
+                OnlineStatus.objects.create(user=new_user)
                 messages.success(request, _('Successfully Created - User'))
 
                 if stu_id:
@@ -722,7 +723,7 @@ def user_del(request,reg_id):
     try:
         user = User.objects.get(reg_id=reg_id).delete()
         # user.delete()
-        user_status = OnlineStatus.objects.get(reg_id=reg_id).delete()
+        # user_status = OnlineStatus.objects.get(reg_id=reg_id).delete()
         messages.success(request, _("Successfully deleted user."))
         # return redirect('user_list')
     except ObjectDoesNotExist:
