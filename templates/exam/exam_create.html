@@ -91,7 +91,7 @@
                             <br>
                             <h5 class="card-subtitle mb-2 text-muted" style="font-size:25px;"> 
 
-                                {{trans("Start Time")}}<span id="time_invalid" class="time_invalid" style="color: red; font-size: 14px">{{trans("Required")}}</span>
+                                {{trans("Start Time")}}<span id="time_invalid" class="time_invalid" style="color: red; font-size: 14px">{{trans("[Required]")}}</span>
                             </h5>
                             <p class="card-text">
                                 {{trans("Date")}}:
@@ -126,7 +126,7 @@
                                     {{trans("Submit")}}
                                 </button>
                                 <button type="reset" class="btn btn-light">{{trans("Reset")}}</button>
-                                <button type="button" class="btn btn-secondary" onclick="self.location=document.referrer;">
+                                <button type="button" class="btn btn-secondary" onclick="window.location.href='{{url('exam_list')}}'">
                                     {{trans("Cancel")}}
                                 </button>
                             </div>
@@ -134,7 +134,7 @@
                             {% endblock %}
 
                         </div>
-                    </div>
+                    </div>                                          
                 </form>
             </div>
         </div>

@@ -26,6 +26,8 @@ from django.db.models.signals import post_save
 from django.core.signals import request_finished
 from django.dispatch import receiver, Signal
 from .achievement.achievement import TestAchievement, achievement_create, new_user_achievement_create, old_user_achievement_update
+from django.views.generic import View
+from django.utils.decorators import method_decorator
 
 request_achievement_signal = Signal(providing_args=['user', 'score', 'exam_type'])
 
@@ -104,53 +106,61 @@ def accept_achievement(request, achievement_id, achievement_category):
 
 
 
-@permission_check(UserType.Testee)
-def achievement_list(request):
-    all_achievements = Achievement.objects.all()
-    #還沒接的成就
-    unreceived_achievements = Achievement.objects.all().exclude(userachievements__user=request.user).filter(level__lte=request.user.level)
+@method_decorator(permission_check(UserType.Testee),name='get')
+class AchievementListView(View):
+    def get(self,request):
+        all_achievements = Achievement.objects.all()
+        #還沒接的成就
+        unreceived_achievements = Achievement.objects.all().exclude(userachievements__user=request.user).filter(level__lte=request.user.level)
+        #已經接的成就
+        received_achievements = UserAchievement.objects.all().filter(user=request.user).filter(unlock=False)
+        #已完成成就
+        completed_achievements = UserAchievement.objects.all().filter(user=request.user).filter(unlock=True)
 
-    #已經接的成就
-    received_achievements = UserAchievement.objects.all().filter(user=request.user).filter(unlock=False)
-
-
-    #已完成成就
-    completed_achievements = UserAchievement.objects.all().filter(user=request.user).filter(unlock=True)
-
-    return render(request, 'testee/achievement.html', locals())
-
-def leaderboard(request):
-    now_time = datetime.now()
-
-    # 等級排名
-    user_level = User.objects.all().order_by('-level')
-
-    # 模擬考排名
-    exam = Exam.objects.all().filter(exam_type=1).order_by('-id')
-
-    if exam:
-        latest_exam = exam[0]
-        leaderboard = AnswerSheet.objects.all().filter(exam_id=latest_exam.id).order_by("-score")
-
-    return render(request, 'testee/leaderboard.html', locals())
+        context={'all_achievements':all_achievements,
+                'received_achievements':received_achievements,
+                'completed_achievements':completed_achievements}
+        return render(request, 'testee/achievement.html', context)
 
 
+class LeaderBoardView(View):
+    def get(self,request):
+        now_time = datetime.now()
+        # 等級排名
+        user_level = User.objects.all().order_by('-level')
+        # 模擬考排名
+        exam = Exam.objects.all().filter(exam_type=1).order_by('-id')
+        if exam:
+            latest_exam = exam[0]
+            leaderboard = AnswerSheet.objects.all().filter(exam_id=latest_exam.id).order_by("-score")
+
+        context={'now_time':now_time,
+                 'user_level':user_level,
+                 'exam':exam,
+                 'latest_exam':latest_exam,
+                 'leaderboard':leaderboard}
+        return render(request, 'testee/leaderboard.html', context)
 
 
-@permission_check(UserType.Testee)
-def exam_list(request):
-    examList = []
-    exams = Exam.objects.filter(is_public=True).filter(testeeList=request.user)
-    for exam in exams:
-        examList.append(exam)
+@method_decorator(permission_check(UserType.Testee),name='get')
+class ExamListView(View):
+    def get(self,request):
+        examList = []
+        exams = Exam.objects.filter(is_public=True).filter(testeeList=request.user)
+        for exam in exams:
+            examList.append(exam)
 
-    practiceList = []
-    practices = Exam.objects.filter(is_public=False).filter(
-        created_by=request.user)
-    for practice in practices:
-        practiceList.append(practice)
+        practiceList = []
+        practices = Exam.objects.filter(is_public=False).filter(created_by=request.user)
+        for practice in practices:
+            practiceList.append(practice)
 
-    return render(request, 'testee/exam_list.html', locals())
+        context={'examList':examList,
+                 'exams':exams,
+                 'practiceList':practiceList,
+                 'practices':practices}
+        return render(request, 'testee/exam_list.html', context)
+    
 
 @permission_check(UserType.Testee)
 def pending(request, exam_id):
@@ -419,16 +429,17 @@ def score_list(request):
     context = {'answer_sheets_exam':answer_sheets_exam, 'answer_sheets_reading':answer_sheets_reading, 'answer_sheets_listening': answer_sheets_listening,
                 'exam_bar_chart':exam_bar_chart, 'exam_pie_chart':exam_pie_chart,
                 'reading_bar_chart':reading_bar_chart, 'reading_pie_chart':reading_pie_chart,
-                'listening_bar_chart':listening_bar_chart, 'listening_pie_chart':listening_pie_chart,
-                }
+                'listening_bar_chart':listening_bar_chart, 'listening_pie_chart':listening_pie_chart,}
 
     return render(request, 'testee/score_list.html', context)
 
 
-@permission_check(UserType.Testee)
-@require_http_methods(["GET", "POST"])
-def practice_create(request, kind):
-    if request.method == 'POST':
+@method_decorator(permission_check(UserType.Testee),name='get')
+class PracticeCreateView(View):
+    def get(self,request,kind):
+        context={'kind':kind}
+        return render(request, 'practice/select.html',context)
+    def post (self,request,kind):
         user = User.objects.get(id=request.user.id)
 
         duration = request.POST.get('duration')
@@ -455,19 +466,15 @@ def practice_create(request, kind):
             if valid_type.value[0] in question_types:
                 q_types.append(valid_type)
 
-        practice_exam = practicemanager.create_practice(
-            user=user,
-            practice_type=practice_type,
-            question_types=selected_types,
-            question_num=question_num,
-            finish_time=finish_time,
-            remaining_time=remaining_time)
+        practice_exam = practicemanager.create_practice(user=user,
+                                                        practice_type=practice_type,
+                                                        question_types=selected_types,
+                                                        question_num=question_num,
+                                                        finish_time=finish_time,
+                                                        remaining_time=remaining_time)
 
-        messages.success(request,
-                         '創建成功, {}'.format(practice_exam))
-        return redirect('testee_exam_list')
-    else:
-        return render(request, 'practice/select.html', locals())
+        messages.success(request,'創建成功, {}'.format(practice_exam))
+        return redirect('testee_exam_list') 
 
 
 @permission_check(UserType.Testee)
@@ -475,7 +482,6 @@ def view_answersheet_content(request, answersheet_id):
     now_time = datetime.now()
     try:
         answersheet = AnswerSheet.objects.get(id=answersheet_id)
-
 
         if answersheet.exam.is_public:
             if answersheet.is_finished == False:
@@ -705,12 +711,15 @@ def answersheet_comment_delete(request, forum_comment_id, answersheet_id):
         forum_question = Question.objects.filter(id=forum_comment.f_question.id).update(in_forum=0)
     return redirect('view_answersheet_content', answersheet_id)
 
-@permission_check(UserType.Testee)
-def forum(request):
-    # forum_questions_search = Forum.objects.all()
-    forum_questions_search = Question.objects.all().filter(in_forum=1)
-    forum_comment_search = Forum.objects.all()
-    return render(request, 'testee/forum.html', locals())
+@method_decorator(permission_check(UserType.Testee),name='get')
+class ForumView(View):
+    def get(self,request):
+        forum_questions_search = Question.objects.all().filter(in_forum=1)
+        forum_comment_search = Forum.objects.all()
+        context={'forum_questions_search':forum_questions_search,
+                 'forum_comment_search':forum_comment_search}
+        return render(request, 'testee/forum.html', context)      
+
 
 # @permission_check(UserType.TBManager)
 # def add_best_reply(request. question_id, q_reply):
@@ -721,48 +730,52 @@ def forum(request):
 
 
 
-@permission_check(UserType.Testee)
-def favorite_question_list(request):
-    favorite_questions_search = Question.objects.all().filter(favorite=request.user)
-    question_types = [_ for _ in QuestionType]
+@method_decorator(permission_check(UserType.Testee),name='get')
+class FavoriteQuestionListView(View):
+    def get(self,request):
+        favorite_questions_search = Question.objects.all().filter(favorite=request.user)
+        question_types = [_ for _ in QuestionType]
 
-    difficulty_choices =[
-        (1, _('Easy')),
-        (2, _('Medium')),
-        (3, _('Hard'))
-    ]
+        difficulty_choices =[(1, _('Easy')),
+                             (2, _('Medium')),
+                             (3, _('Hard'))]
 
-    keywords = {
-        'testee': request.user,
-        'question_content': request.GET.get('question_content'),
-    }
+        keywords = {'testee': request.user,
+                    'question_content': request.GET.get('question_content'),}
 
-    for keyword in ['question_type', 'difficulty']:
-        try:
-            keywords[keyword] = int(request.GET.get(keyword))
-        except (KeyError, TypeError, ValueError):
-            keywords[keyword] = None
+        for keyword in ['question_type', 'difficulty']:
+            try:
+                keywords[keyword] = int(request.GET.get(keyword))
+            except (KeyError, TypeError, ValueError):
+                keywords[keyword] = None
 
-    if keywords['question_content'] and any(char in punctuation for char in keywords['question_content']):
-        keywords['question_content'] = None
-        messages.warning(request, "Name cannot contains any special character.")
+        if keywords['question_content'] and any(char in punctuation for char in keywords['question_content']):
+            keywords['question_content'] = None
+            messages.warning(request, "Name cannot contains any special character.")
 
         # 使用搜尋功能，系統會至後端資料庫filter出符合條件的題目。所以，頁面會有重新載入的效果。
         # 若是使用Javascript，因是使用cache檔案，所以不會有進入後端抓資料一樣的問題。
-    query_content, favorite_questions_search = testee.query_questions(**keywords)
+        query_content, favorite_questions_search = testee.query_questions(**keywords)
 
-    page = request.GET.get('page', 1)
-    paginator = Paginator(favorite_questions_search, 20)  # the second parameter is used to display how many items. Now is display 10
+        page = request.GET.get('page', 1)
+        paginator = Paginator(favorite_questions_search, 10)  # the second parameter is used to display how many items. Now is display 10
 
-    try:
-        questionList = paginator.page(page)
-    except PageNotAnInteger:
-        questionList = paginator.page(1)
-    except EmptyPage:
-        questionList = paginator.page(paginator.num_pages)
+        try:
+            questionList = paginator.page(page)
+        except PageNotAnInteger:
+            questionList = paginator.page(1)
+        except EmptyPage:
+            questionList = paginator.page(paginator.num_pages)
 
-    return render(request, 'testee/favorite_question_list.html', locals())
-
+        context={'question_types':question_types,
+                 'difficulty_choices':difficulty_choices,
+                 'favorite_questions_search':favorite_questions_search,
+                 'query_content':query_content,
+                 'questionList':questionList,
+                 'keywords':keywords}
+        return render(request, 'testee/favorite_question_list.html', context)
+        
+        
 @permission_check(UserType.Testee)
 def favorite_question_delete(request, question_id):
     user = User.objects.get(id=request.user.id)
@@ -876,55 +889,64 @@ def start_practice(request, exam_id):
                         exam_id=exam.id,
                         answer_id=Answer.objects.filter(answer_sheet=answer_sheet)[0].id)   # transfer the first question
 
-@permission_check(UserType.Testee)
-@require_http_methods(["GET", "POST"])
-def answering(request, exam_id, answer_id):
-    exam = Exam.objects.get(id=exam_id)
-    if exam.finish_time is None:
-        deadline = None
-    else:
-        deadline = exam.finish_time.strftime("%Y-%m-%dT%H:%M:%S")
-
-    if exam.exam_type == 1:
-        hour = exam.finish_time.hour
-        minute = exam.finish_time.minute
-    try:
+@method_decorator(permission_check(UserType.Testee),name='get')
+class AnsweringView(View):
+    def get(self,request,exam_id,answer_id):
         exam = Exam.objects.get(id=exam_id)
-        answer = Answer.objects.get(id=answer_id)
-        selected_answer = Answer.objects.get(id=answer_id)
-        answer_sheet = AnswerSheet.objects.get(exam=exam, user=request.user)
-        answers = answer_sheet.answer_set.all()
-        if answer_sheet.is_finished:
-            messages.warning(request, _("You had completed this exam"))
-            return redirect('testee_score_list')
-        if answer not in answer_sheet.answer_set.all():
-            messages.warning(request, 'Not your answer: {}'.format(answer_id))
-            return redirect('testee_answering',
+        if exam.finish_time is None:
+            deadline = None
+        else:
+            deadline = exam.finish_time.strftime("%Y-%m-%dT%H:%M:%S")
+
+        if exam.exam_type == 1:
+            hour = exam.finish_time.hour
+            minute = exam.finish_time.minute
+        try:
+            exam = Exam.objects.get(id=exam_id)
+            answer = Answer.objects.get(id=answer_id)
+            selected_answer = Answer.objects.get(id=answer_id)
+            answer_sheet = AnswerSheet.objects.get(exam=exam, user=request.user)
+            answers = answer_sheet.answer_set.all()
+            if answer_sheet.is_finished:
+                messages.warning(request, _("You had completed this exam"))
+                return redirect('testee_score_list')
+            if answer not in answer_sheet.answer_set.all():
+                messages.warning(request, 'Not your answer: {}'.format(answer_id))
+                return redirect('testee_answering',
                             exam_id=exam.id,
                             answer_id=list(answer_sheet.answer_set.all())[0].id)
 
-    except ObjectDoesNotExist:
-        messages.error(request,
-                       'Answer id error, answer id: {}'.format(answer_id))
-        return redirect('testee_exam_list')
-
-    answer_count  = len(Answer.objects.filter(answer_sheet=answer_sheet).filter(selected=-1))
-
-    if request.method == 'POST':
+        except ObjectDoesNotExist:
+            messages.error(request,'Answer id error, answer id: {}'.format(answer_id))
+            return redirect('testee_exam_list')
+        answer_count  = len(Answer.objects.filter(answer_sheet=answer_sheet).filter(selected=-1))
+        context={'exam':exam,
+                 'answer':answer,
+                 'selected_answer':selected_answer,
+                 'answer_sheet':answer_sheet,
+                 'answers':answers,
+                 'deadline':deadline}
+        return render(request, 'testee/answering.html', context)
+    
+    def post(self,request,exam_id,answer_id):
+        exam=Exam.objects.get(id=exam_id)
         answering_ans = Answer.objects.get(id=answer_id)
         selected_answer = request.POST.get('answer_{}'.format(answer_id))
-
+        answer_sheet=AnswerSheet.objects.get(exam=exam,user=request.user)
+    
         answering_ans.selected = selected_answer
         answering_ans.save()
 
         answer_count  = len(Answer.objects.filter(answer_sheet=answer_sheet).filter(selected=-1))
+        # context={'exam':exam,
+        #          'selected_answer':selected_answer,
+        #          'answer_sheet':answer_sheet}
 
         #還有題目尚未回答
         #answer_count == 0 : 所有題目已答題
-        #answer_count != 0 : 還有題目未答題
+        #answer_count != 0 : 還有題目未答題  
         if answer_count != 0:
-            the_next_question = list(
-                    Answer.objects.filter(answer_sheet=answer_sheet).filter(selected=-1)).pop(0)
+            the_next_question = list(Answer.objects.filter(answer_sheet=answer_sheet).filter(selected=-1)).pop(0)
             return redirect('testee_answering',
                             exam_id=exam_id,
                             answer_id=the_next_question.id)
@@ -933,9 +955,7 @@ def answering(request, exam_id, answer_id):
             return redirect('testee_answering',
                             exam_id=exam_id,
                             answer_id=answer_id)
-    else:
-        return render(request, 'testee/answering.html', locals())
-
+  
 
 # @permission_check(UserType.Testee)
 # @require_http_methods(["GET", "POST"])
@@ -1046,9 +1066,18 @@ def settle(request, exam_id):
         return redirect('testee_exam_list')
 
 
-@login_required
-def report_question(request, question_id):
-    if request.method == 'POST':
+@method_decorator(login_required,name='get')
+class ReportQuestionView(View):
+    def get(self,request,question_id):
+        categories = ReportCategory.objects.all()
+        reported_question = Question.objects.get(id=question_id)
+        if reported_question.state == 4:
+            messages.warning(request,
+                             "This question had been reported, thank you.")
+            return redirect(request.META.get('HTTP_REFERER'))
+        context={'categories':categories,'reported_question':reported_question}
+        return render(request, 'testee/report_question.html', context)
+    def post(self,request,question_id):
         try:
             category = ReportCategory.objects.get(
                 id=int(request.POST.get('category')))
@@ -1067,26 +1096,16 @@ def report_question(request, question_id):
 
             question_report.save()
 
-            messages.success(
-                request,
-                'Thanks for your report, we will review this question as soon as possible.'
-            )
+            messages.success(request,'Thanks for your report, we will review this question as soon as possible.')
 
             return redirect('testee_score_list')
 
         except ObjectDoesNotExist:
             messages.error(request, 'Category or Question does not exist.')
             categories = ReportCategory.objects.all()
-            return render(request, 'testee/report_question.html', locals())
-
-    else:
-        categories = ReportCategory.objects.all()
-        reported_question = Question.objects.get(id=question_id)
-        if reported_question.state == 4:
-            messages.warning(request,
-                             "This question had been reported, thank you.")
-            return redirect(request.META.get('HTTP_REFERER'))
-        return render(request, 'testee/report_question.html', locals())
+            context={'categories':categories,'reported_question':reported_question}
+            return render(request, 'testee/report_question.html', context)
+        
 
 def word_library(request):
         word_list = Word_library.objects.all()
@@ -1105,7 +1124,7 @@ def word_library_create(request):
             messages.success(request,'Word Added successful.')
             return redirect('word_library')
     else:    
-        return render(request,'testee/word_library_create.html',locals())
+        return render(request,'testee/word_library_create.html')
 
 def word_library_del(request,words):
     try:
@@ -1133,4 +1152,5 @@ def word_library_edit(request,words,translations):
             return redirect('word_library')
             
     else:
-        return render(request,'testee/word_library_edit.html',{'words':word,'translations':translate})          
+        context={'words':word,'translations':translate}
+        return render(request,'testee/word_library_edit.html',context)          
