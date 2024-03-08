@@ -428,3 +428,17 @@ class Word_library(models.Model):
     translations = models.TextField(max_length=30)
 
 
+class OnlineStatus(models.Model):
+    user = models.OneToOneField(User,on_delete=models.CASCADE)
+    online_status = models.BooleanField(default=False)
+    # reg_id = models.CharField(max_length=50,default=True)
+
+    def __str__(self):
+        return str(self.online_status)
+
+class LocationUrl(models.Model):
+    from_class = models.CharField(default='',max_length=30)
+    url_name = models.URLField(max_length=50)
+ 
+    def __str__(self):
+        return self.from_class,':',str(self.url_name)

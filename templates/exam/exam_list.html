@@ -76,7 +76,11 @@
         <a class="page-link" href="?page=1"><i class="fa fa-angle-double-left"></i></a>
     </li>
 
+<<<<<<< HEAD
     <li class="page-item {% if not examList.has_previous() %}disable{% endif %}">
+=======
+    <li class="page-item {% if not examList.has_previous %}disable{% endif %}">
+>>>>>>> a47bde62740e69168bc0b84fb1210511b401b990
         {% if examList.has_previous() %}
         <a class="page-link" href="?page={{ examList.previous_page_number() }}" tabindex="-1"><i class="fa fa-angle-left"></i></a>
         {% else %}
@@ -90,7 +94,11 @@
     </li>
     {% endfor %}
 
+<<<<<<< HEAD
     <li class="page-item {% if not examList.has_next() %}disable{% endif %}">
+=======
+    <li class="page-item {% if not examList.has_next %}disable{% endif %}">
+>>>>>>> a47bde62740e69168bc0b84fb1210511b401b990
         {% if examList.has_next() %}
         <a class="page-link" href="?page={{ examList.next_page_number() }}"><i class="fa fa-angle-right"></i></a>
         {% else %}

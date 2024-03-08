@@ -33,7 +33,7 @@
                     <a href="{{ url('profile_edit') }}"><i class="fas fa-user-edit"></i>{{ trans("Edit Profile") }}</a>
                 </li>
                 <li>
-                    <a href="{{ url('email') }}"><i class="fas fa-envelope"></i>{{trans("Email")}}</a>
+                    <div inert><a href="{{ url('email') }}"><i class="fas fa-envelope"></i>{{trans("Email")}}</a></div> <!-- inert 讓連結無法點選(因學校防火牆擋掉外部訊息，email驗證功能無法使用)-->
                 </li>
                 <li>
                     <a href="{{ url('password_change') }}"><i class="fas fa-key"></i>{{ trans("Password Change") }}</a>
