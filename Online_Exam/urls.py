@@ -267,11 +267,11 @@ urlpatterns = [
         ])),
 
     # 考試管理員
-    re_path(r'^exam$', exam.ExamList.as_view(), name='exam_list'),
+    re_path(r'^exam$', exam.ExamListView.as_view(), name='exam_list'),
     re_path(
         r'^exam/',
         include([
-            re_path(r'^create$', exam.ExamCreate.as_view(), name='exam_create'),
+            re_path(r'^create$', exam.ExamCreateView.as_view(), name='exam_create'),
             re_path(r'^(?P<exam_id>[0-9]+)/content$',
                     exam.ExamContentView.as_view(),
                     name='exam_content'),
@@ -693,11 +693,11 @@ re_path(
     ])),
 
 # 考試管理員
-re_path(r'^exam$', exam.ExamList.as_view(), name='exam_list'),
+re_path(r'^exam$', exam.ExamListView.as_view(), name='exam_list'),
 re_path(
     r'^exam/',
     include([
-        re_path(r'^create$', exam.ExamCreate.as_view(), name='exam_create'),
+        re_path(r'^create$', exam.ExamCreateView.as_view(), name='exam_create'),
         re_path(r'^(?P<exam_id>[0-9]+)/content$',
                 exam.ExamContentView.as_view(),
                 name='exam_content'),

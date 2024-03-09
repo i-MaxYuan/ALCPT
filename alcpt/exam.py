@@ -222,7 +222,7 @@ class ExamEditView(View):
 
 @method_decorator(permission_check(UserType.TestManager),name='get')
 class ExamDeleteView(View):
-    def exam_delete(request, exam_id):
+    def get(request, exam_id):
         try:
             exam = Exam.objects.get(id=exam_id)
             if datetime.now() > exam.start_time:
