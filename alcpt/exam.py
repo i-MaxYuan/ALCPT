@@ -17,86 +17,58 @@ from alcpt.definitions import UserType, QuestionType, QuestionTypeCounts, ExamTy
 from alcpt.models import User, Exam, TestPaper, Group, Question, Proclamation, AnswerSheet, Answer, Achievement
 from alcpt.email import notification_mail
 from alcpt.exceptions import *
-
 from django.views.generic import View
-from alcpt.views import OnlineUserStat
 from django.utils.decorators import method_decorator
 
-
 @method_decorator(permission_check(UserType.TestManager),name='get')
-@method_decorator(require_http_methods(["GET"]),name='get')
-class ExamList(OnlineUserStat,View):
-    template_name = 'exam/exam_list.html'
-    def do_content_works(self,request):
+class ExamListView(View):
+    def get(self,request):
         exams = Exam.objects.filter(is_public=True)
-
         page = request.GET.get('page', 1)
-        paginator = Paginator(exams, 10)  # the second parameter is used to display how many items. Now is display 10
-
+        paginator = Paginator(exams, 10)
         try:
             examList = paginator.page(page)
         except PageNotAnInteger:
             examList = paginator.page(1)
         except EmptyPage:
             examList = paginator.page(paginator.num_pages)
+        context={'exams':exams,
+                 'examList':examList,
+                 'paginator':paginator}
+        return render(request, 'exam/exam_list.html', context)
 
-        return dict(examList = examList,
-                    paginator = paginator,
-                    exams = exams)
-
-
-# @permission_check(UserType.TestManager)
-# @require_http_methods(["GET"])
-# def exam_list(request):
-#     exams = Exam.objects.filter(is_public=True)
-
-#     page = request.GET.get('page', 1)
-#     paginator = Paginator(exams, 10)  # the second parameter is used to display how many items. Now is display 10
-
-#     try:
-#         examList = paginator.page(page)
-#     except PageNotAnInteger:
-#         examList = paginator.page(1)
-#     except EmptyPage:
-#         examList = paginator.page(paginator.num_pages)
-
-#     return render(request, 'exam/exam_list.html', locals())
 
 @method_decorator(permission_check(UserType.TestManager),name='get')
-class ExamCreate(OnlineUserStat,View):
-    template_name = 'exam/exam_create.html'
-
-    def do_content_works(self,request):
+class ExamCreateView(View):
+    def get(self,request):
         special_exam_achievements = Achievement.objects.all().filter(category=0)
         exam_names = [_.name for _ in Exam.objects.all()]
         testpapers = TestPaper.objects.filter(is_testpaper=True, valid=True)
         groups = Group.objects.all()
-
         dateList = []
         now_date = datetime.now().strftime('%Y-%m-%d')
+        now_datetime=datetime.now()
         dateList.append(now_date)
         for i in range(20):
             now_date = datetime.strptime(now_date, '%Y-%m-%d')
             now_date = now_date + timedelta(days=1)
             now_date = now_date.strftime('%Y-%m-%d')
             dateList.append(now_date)
-
         hourList = []
         for i in range(24):
             hourList.append(str(i))
-
-        minuteList = [0]
-        for i in range(1, 60):
+        minuteList = []
+        for i in range(0, 60):
             if i % 5 == 0:
                 minuteList.append(str(i))
-        return dict(testpapers = testpapers,
-                    groups = groups,
-                    dateList = dateList,
-                    hourList = hourList,
-                    minuteList = minuteList,
-                    exam_names = exam_names)
-
-     
+        context={'exam_names':exam_names,
+                 'testpapers':testpapers,
+                 'groups':groups,
+                 'dateList':dateList,
+                 'hourList':hourList,
+                 'minuteList':minuteList}
+        return render(request, 'exam/exam_create.html', context)
+    
     def post(self,request):
         date = request.POST.get('start_time_date')
         hour = request.POST.get('start_time_hour')
@@ -163,114 +135,7 @@ class ExamCreate(OnlineUserStat,View):
                    users=list(User.objects.filter(exam__testeeList__exam=exam).distinct()))
             messages.success(request, "Successfully created a new exam - {}.".format(exam.name))
             return redirect('exam_list')
-  
 
-# @permission_check(UserType.TestManager)
-# def exam_create(request):
-#     if request.method == 'POST':
-#         date = request.POST.get('start_time_date')
-#         hour = request.POST.get('start_time_hour')
-#         minute = request.POST.get('start_time_minute')
-#         start_time = date + " " + hour + ":" + minute
-#         duration = request.POST.get('duration')
-#         started_time = datetime.strptime(str(start_time), '%Y-%m-%d %H:%M')
-#         finish_time = datetime.strptime(str(start_time), '%Y-%m-%d %H:%M') + timedelta(minutes=int(duration))
-
-#         testpaper = TestPaper.objects.get(id=int(request.POST.get('selected_testpaper')))
-#         selected_group = Group.objects.get(id=int(request.POST.get('selected_group')))
-
-#         # achievement = Achievement.objects.get(id=int(request.POST.get('achievement')))
-
-
-#         try:
-#             exam_name = request.POST.get('exam_name')
-#             Exam.objects.get(name = exam_name)
-#             messages.error(request, "Failed created, exam name had been used - {}".format(exam_name))
-#             return redirect('exam_create')
-#         #Exam 找不到同樣exam_name才建立
-#         except:
-
-#             exam_name = request.POST.get('exam_name')
-#             exam = Exam.objects.create(name=exam_name,
-#                                        exam_type=ExamType.Exam.value[0],
-#                                        start_time=start_time,
-#                                        created_time=datetime.now(),
-#                                        duration=duration,
-#                                        finish_time=finish_time,
-#                                        testpaper=testpaper,
-#                                        is_public=True,
-#                                        created_by=request.user)
-#             testpaper.is_used = True
-#             testpaper.save()
-
-#             notification_mail_content = "You will start " + exam.name + "\n" + \
-#                                         "Start Time: " + start_time + "\n" + \
-#                                         "Duration: " + duration + " minutes.\n" + \
-#                                         "Please notice the time, do not forget it.\n\n" + \
-#                                         "This is an automatic notification mail from system, " \
-#                                         "please do not reply directly.\n" + \
-#                                         "Thanks for your cooperation, hope you get good grades."
-
-#             for testee in selected_group.member.all():
-#                 # add the testee into the exam.
-#                 exam.testeeList.add(testee)
-#                 exam.save()
-
-#                 # create empty answersheet for each testee
-#                 AnswerSheet.objects.create(exam=exam, user=testee)
-#                 answer_sheet = AnswerSheet.objects.get(exam=exam, user=testee)
-#                 exams = Exam.objects.get(id=exam.id)
-#                 all_questions = list(exams.testpaper.question_list.all())
-#                 random.shuffle(all_questions)
-
-#                 for question in all_questions:
-#                     Answer.objects.create(answer_sheet=answer_sheet, question=question)
-
-#             # notification_mail(list(selected_group.member.all()), notification_mail_content)
-
-#             # create proclamation to notice all testees the exam start time.
-#             proclamation_content = "Start Time: " + start_time + "\n" + \
-#                                    "Duration: " + duration + " minutes.\n"
-
-#             notify(title=exam.name,
-#                    text=proclamation_content,
-#                    is_read=False,
-#                    is_public=False,
-#                    announcer=request.user,
-#                    exam_id=exam.id,
-#                    report_id=0,
-#                    users=list(User.objects.filter(exam__testeeList__exam=exam).distinct()))
-
-#             # exam_special_achievement(achievement=achievement, users=list(User.objects.filter(exam__testeeList__exam=exam).distinct()))
-
-#             messages.success(request, "Successfully created a new exam - {}.".format(exam.name))
-#             return redirect('exam_list')
-#         return redirect('exam_list')
-#     else:
-#         special_exam_achievements = Achievement.objects.all().filter(category=0)
-#         exam_names = [_.name for _ in Exam.objects.all()]
-#         testpapers = TestPaper.objects.filter(is_testpaper=True, valid=True)
-#         groups = Group.objects.all()
-
-#         dateList = []
-#         now_date = datetime.now().strftime('%Y-%m-%d')
-#         dateList.append(now_date)
-#         for i in range(20):
-#             now_date = datetime.strptime(now_date, '%Y-%m-%d')
-#             now_date = now_date + timedelta(days=1)
-#             now_date = now_date.strftime('%Y-%m-%d')
-#             dateList.append(now_date)
-
-#         hourList = []
-#         for i in range(24):
-#             hourList.append(str(i))
-
-#         minuteList = [0]
-#         for i in range(1, 60):
-#             if i % 5 == 0:
-#                 minuteList.append(str(i))
-
-#         return render(request, 'exam/exam_create.html', locals())
 
 @method_decorator(permission_check(UserType.TestManager),name='get')
 class ExamContentView(View):
@@ -357,7 +222,7 @@ class ExamEditView(View):
 
 @method_decorator(permission_check(UserType.TestManager),name='get')
 class ExamDeleteView(View):
-    def get(self,request, exam_id):
+    def exam_delete(request, exam_id):
         try:
             exam = Exam.objects.get(id=exam_id)
             if datetime.now() > exam.start_time:
