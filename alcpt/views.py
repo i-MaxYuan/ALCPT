@@ -42,7 +42,8 @@ class OnlineUserStat:
  
     def get(self,request,*args,**kwargs):
         online_num = OnlineStatus.objects.filter(online_status=True).count()
-        contents = {'online_num':online_num}
+        reg_num = len(User.objects.all())
+        contents = {'reg_num':reg_num, 'online_num':online_num}
 
         contents_dict = self.do_content_works(request,*args,**kwargs) #do_content_works() return dict. if not do anything return {}.
 

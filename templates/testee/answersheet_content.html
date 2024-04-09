@@ -13,7 +13,7 @@
 
 {% block path %}
 <li class="breadcrumb-item" aria-current="page">
-    <a href="{{ url('testee_score_list') }}">{{trans("Score List")}}</a>
+    <a href="{{ url('testee_score_list', args=[1]) }}">{{trans("Score List")}}</a>
 </li>
 <li class="breadcrumb-item active" aria-current="page">
     {{trans("View Test paper Content")}}
@@ -287,7 +287,7 @@
                 {% endif %}
             </div>
             <div class="text-center">
-                <button type="button" class="btn btn-primary" onclick="window.location.href='{{ url('testee_score_list') }}'">{{trans("OK")}}</button>
+                <button type="button" class="btn btn-primary" onclick="window.location.href='{{ url('testee_score_list', args=[1]) }}'">{{trans("OK")}}</button>
             </div>
         </div>
     </div>

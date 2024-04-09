@@ -307,8 +307,9 @@ class AnswerSheet(models.Model):
     finish_time = models.DateTimeField(auto_now_add=True)
     is_tested = models.BooleanField(default=False)
     is_finished = models.BooleanField(default=False)
-    score = models.PositiveSmallIntegerField(null=True)
-
+    score = models.PositiveSmallIntegerField(default=0)
+    
+    
     def __str__(self):
         return str(self.user) + '\'s' + str(self.exam)
 
@@ -431,7 +432,6 @@ class Word_library(models.Model):
 class OnlineStatus(models.Model):
     user = models.OneToOneField(User,on_delete=models.CASCADE)
     online_status = models.BooleanField(default=False)
-    # reg_id = models.CharField(max_length=50,default=True)
 
     def __str__(self):
         return str(self.online_status)
@@ -442,3 +442,13 @@ class LocationUrl(models.Model):
  
     def __str__(self):
         return self.from_class,':',str(self.url_name)
+
+class ScoreRecord(models.Model):
+    user = models.ForeignKey('User',on_delete=models.CASCADE)
+    exam_type = models.IntegerField(default=2)
+    qualified_times = models.PositiveIntegerField(default=0)
+    unqualified_times = models.PositiveIntegerField(default=0)
+    
+    
+    def __str__(self):
+        return str(self.qualified_times)
