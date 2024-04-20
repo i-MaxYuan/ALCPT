@@ -408,7 +408,7 @@ urlpatterns = [
         ])),
 
     # 受測者部分
-        re_path(r'^testee/(?P<exam_type>(1|3|4))', testee.score_list,
+        re_path(r'^testee/(?P<exam_type>(1|3|4))', testee.ScoreList.as_view(),
 #     re_path(r'^testee', testee.score_list,
             name='testee_score_list'),  # 受測者主頁（顯示自我成績）
     re_path(
@@ -835,7 +835,7 @@ re_path(
     ])),
 
 # 受測者部分
-re_path(r'^testee/(?P<exam_type>(1|3|4))', testee.score_list,
+re_path(r'^testee/(?P<exam_type>(1|3|4))', testee.ScoreList.as_view(),
 # re_path(r'^testee', testee.score_list,
         name='testee_score_list'),  # 受測者主頁（顯示自我成績）
 re_path(

@@ -158,13 +158,14 @@ class ExamScoreDetail(View):
         try:
             exam = Exam.objects.get(id=exam_id)
             testees = exam.testeeList.all()
+            print(testees)
             testee_number = len(testees)
             qualified = 0
             unqualified = 0
             not_tested = 0
             testee_not_tested = 0
             testee_scores = []
-            answer_sheets = []
+            answer_sheets = [] 
             testee_grade = []
             SCORE_RANGE = {'one': 0,'two': 0,'three': 0,'four': 0,'five': 0,'six': 0,'seven': 0,'eight': 0,'nine': 0,'ten': 0}
             for testee in testees:
@@ -255,6 +256,7 @@ class ExamScoreDetail(View):
                      'unqualified':unqualified,
                      'pie_chart':pie_chart,
                      'bar_chart':bar_chart}
+            print(testeeData,'line:258')
             return render(request, 'viewer/exam_score_detail.html', context)
         except ObjectDoesNotExist:
             messages.error(request, 'Exam does not exist, exam id - {}'.format(exam_id))

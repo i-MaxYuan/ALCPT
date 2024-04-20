@@ -28,6 +28,7 @@ from django.dispatch import receiver, Signal
 from .achievement.achievement import TestAchievement, achievement_create, new_user_achievement_create, old_user_achievement_update
 from django.views.generic import View
 from django.utils.decorators import method_decorator
+from alcpt.views import OnlineUserStat
 
 request_achievement_signal = Signal(providing_args=['user', 'score', 'exam_type'])
 
@@ -152,7 +153,7 @@ class ExamListView(View):
 
         practiceList = []
         practices = Exam.objects.filter(is_public=False).filter(created_by=request.user)
-        print(practices.values_list('remaining_time'))
+        
         for practice in practices:
             practiceList.append(practice)
             
@@ -168,62 +169,66 @@ class ExamListView(View):
 def pending(request, exam_id):
     exam = Exam.objects.get(id=exam_id)
 
-    # if exam.remaining_time is not None:    #remaining_time != 0 時才可按save按鈕，考試結束時會直接顯示彈跳視窗離開頁面，if 永遠都會成立
-    now_time = datetime.now()
-    exam.remaining_time = exam.remaining_time - timedelta.total_seconds(now_time - exam.modified_time)
-    exam.save()
+    if exam.remaining_time is not None:    #remaining_time != 0 時才可按save按鈕，考試結束時會直接顯示彈跳視窗離開頁面(有限制考試時間時，if永遠成立; )
+        now_time = datetime.now()          #可不限制考試時間，所以if不可省略
+        exam.remaining_time = exam.remaining_time - timedelta.total_seconds(now_time - exam.modified_time)
+        exam.save()
     return redirect('testee_exam_list')
 
-@permission_check(UserType.Testee)
-@require_http_methods(["GET"])
-def score_list(request,exam_type):
-    answer_sheets = AnswerSheet.objects.all().filter(user=request.user,exam__exam_type=exam_type).order_by('exam__created_time')
-    tests_score = [i.name for i in list(ExamType) if int(exam_type) == i.value[0]]
+@method_decorator(permission_check(UserType.Testee),name='get')
+@method_decorator(require_http_methods(["GET"]),name='get')
+class ScoreList(View,OnlineUserStat):
     
-# Line chart
-    layouts = go.Layout(title={'text':'成績分布圖(僅顯示近8次成績)'}, yaxis={'title':'score','range':[0,101]},
-                        xaxis_title='finished_time', font=dict(size=10,color='Black')) 
+    template_name = 'testee/score_list.html'
     
-    x_finish_time = list(x[0].strftime('%Y%m%d%R') for x in answer_sheets.values_list('finish_time'))[-8:]
-    # y_score_data = [str(num) for num in range(0,101,10)]
-    traces = go.Scatter(x=x_finish_time, y=list(i[0] for i in answer_sheets.values_list('score')),
-                        mode='lines+markers', marker={'color':'#FF5B00'})
+    def do_content_works(self,request,exam_type):
+        answer_sheets = AnswerSheet.objects.all().filter(user=request.user,exam__exam_type=exam_type).order_by('exam__created_time')
+        tests_score = [i.name for i in list(ExamType) if int(exam_type) == i.value[0]]
     
-    exam_fig = go.Figure(data=traces,layout=layouts)
-    exam_line_chart = pyo.plot(exam_fig,output_type='div')
+    # Line chart
+        layouts = go.Layout(title={'text':'成績分布圖(僅顯示近8次成績)'}, yaxis={'title':'score','range':[0,101]},
+                            xaxis_title='finished_time', font=dict(size=10,color='Black')) 
     
-# Pie chart
-    qualify = ['合格', '不合格']
-    colors = ['green', 'red']
-    layout = go.Layout({
-        'title': '模擬鑑測合格率分析',
-        'annotations': [
-            {
+        x_finish_time = list(x[0].strftime('%Y%m%d%R') for x in answer_sheets.values_list('finish_time'))[-8:]
+        # y_score_data = [str(num) for num in range(0,101,10)]
+        traces = go.Scatter(x=x_finish_time, y=list(i[0] for i in answer_sheets.values_list('score')),
+                            mode='lines+markers', marker={'color':'#FF5B00'})
+    
+        exam_fig = go.Figure(data=traces,layout=layouts)
+        exam_line_chart = pyo.plot(exam_fig,output_type='div')
+    
+    # Pie chart
+        qualify = ['合格', '不合格']
+        colors = ['green', 'red']
+        layout = go.Layout({
+            'title': '模擬鑑測合格率分析',
+            'annotations': [
+                {
                 'font': {'size': 20},
                 'showarrow': False,
                 'text': '合格率',
-            },
-        ]
-    })
+                },
+            ]
+        })
 
-    is_qualify = ScoreRecord.objects.get(user=request.user,exam_type=exam_type)
-    trace = go.Pie(labels = qualify,
-                   values = [is_qualify.qualified_times,is_qualify.unqualified_times],
-                   hole = .4,
-                   type= 'pie',
-                   marker=dict(colors=colors))
+        is_qualify = ScoreRecord.objects.get(user=request.user,exam_type=exam_type)
+        trace = go.Pie(labels = qualify,
+                       values = [is_qualify.qualified_times,is_qualify.unqualified_times],
+                       hole = .4,
+                       type= 'pie',
+                       marker=dict(colors=colors))
 
-    data = [trace]
+        data = [trace]
     
-    fig = go.Figure(data=data, layout=layout)
-    exam_pie_chart = pyo.plot(fig, output_type='div')
+        fig = go.Figure(data=data, layout=layout)
+        exam_pie_chart = pyo.plot(fig, output_type='div')
         
-    context = {'tests_score':tests_score[0],
-                'answer_sheets_exam':answer_sheets,
-                'exam_line_chart':exam_line_chart, 'exam_pie_chart':exam_pie_chart,}
+        context = {'tests_score':tests_score[0],
+                    'answer_sheets_exam':answer_sheets,
+                    'exam_line_chart':exam_line_chart, 'exam_pie_chart':exam_pie_chart,}
 
-    return render(request, 'testee/score_list.html', context)
-    
+        return context
+
     #==========================================================================================
     # answer_sheets = AnswerSheet.objects.all().filter(user=request.user)
     # answer_sheets_all = answer_sheets.order_by('-exam__created_time')
@@ -534,7 +539,6 @@ def view_answersheet_content(request, answersheet_id):
 
         if answersheet.exam.is_public:
             if answersheet.is_finished == False:
-                print(answersheet.finish_time,'###')
                 messages.warning(request, _("You hadn't finish your test, please keep answering the exam"))
                 return redirect('testee_exam_list')
             elif datetime.now() < answersheet.exam.finish_time:
@@ -679,7 +683,6 @@ def view_answersheet_content(request, answersheet_id):
 
             return render(request, 'testee/answersheet_content.html', locals())
     elif answersheet.is_finished  == False and now_time > answersheet.finish_time:
-        print('line:681')
         messages.success(request, "You hadn't finish your test, please keep answering the exam")   
         return redirect('testee_exam_list')
     else:
@@ -877,7 +880,7 @@ def start_exam(request, exam_id):
 
     answer_sheet = AnswerSheet.objects.get(exam=exam, user=request.user)
     if answer_sheet.is_finished:
-        print('line:879')
+        print(answer_sheet.exam,'line:883')
         messages.warning(request, 'You had done this exam.')
         return redirect('testee_exam_list')
     else:
@@ -893,7 +896,6 @@ def start_exam(request, exam_id):
 def start_practice(request, exam_id):
     try:
         exam = Exam.objects.get(id=exam_id)
-
         now_time = datetime.now()
         
         if not exam.is_public:
@@ -921,9 +923,7 @@ def start_practice(request, exam_id):
 
     try:
         answer_sheet = AnswerSheet.objects.get(exam=exam, user=request.user)
-
         if answer_sheet.is_finished:
-            print('line:925')
             messages.warning(request, 'You had done this exam.')
             return redirect('testee_exam_list')
     except ObjectDoesNotExist:
@@ -960,7 +960,6 @@ class AnsweringView(View):
             answer_sheet = AnswerSheet.objects.get(exam=exam, user=request.user)
             answers = answer_sheet.answer_set.all()
             if answer_sheet.is_finished:
-                print(exam.remaining_time,'line:964')
                 messages.warning(request, _("You had completed this exam"))
                 return redirect('testee_score_list', exam=exam.exam_type)
             if answer not in answer_sheet.answer_set.all():
@@ -979,6 +978,7 @@ class AnsweringView(View):
                  'answer_sheet':answer_sheet,
                  'answers':answers,
                  'deadline':deadline}
+        print(exam,'line:980')
         return render(request, 'testee/answering.html', context)
     
     def post(self,request,exam_id,answer_id):
@@ -1000,13 +1000,11 @@ class AnsweringView(View):
         #answer_count != 0 : 還有題目未答題  
         if answer_count != 0:
             the_next_question = list(Answer.objects.filter(answer_sheet=answer_sheet).filter(selected=-1)).pop(0)
-            print(exam.remaining_time,'line:1004')
             return redirect('testee_answering',
                             exam_id=exam_id,
                             answer_id=the_next_question.id)
 
         else:
-            print(exam.remaining_time,'line:1010')
             return redirect('testee_answering',
                             exam_id=exam_id,
                             answer_id=answer_id)
@@ -1092,15 +1090,16 @@ def submit_answersheet(request, exam_id):
     exam = Exam.objects.get(id=exam_id)
     answer_sheet = AnswerSheet.objects.get(exam=exam, user=request.user)
     score = testmanager.calculate_score(exam.id, answer_sheet)
-    print(exam.remaining_time,'1096')
+    
+    #更新user在某類型(exam_type)考試中合格次數 
     if ScoreRecord.objects.filter(user=request.user.id, exam_type=exam.exam_type).exists() == False:
         ScoreRecord.objects.create(user=request.user.id, exam_type=exam.exam_type)
-                
+                 
     score_record = ScoreRecord.objects.get(user=request.user.id, exam_type=exam.exam_type)
     score_record.qualified_times = len(AnswerSheet.objects.all().filter(user=request.user, exam__exam_type=exam.exam_type, score__gte=60))   #score >= 60 data
     score_record.unqualified_times = len(AnswerSheet.objects.all().filter(user=request.user, exam__exam_type=exam.exam_type, score__lt=60))   #score < 60 data
     score_record.save()
-    print(exam.remaining_time,'1104')
+    
     messages.success(request, _('You had finished the exam.'))
     request_achievement_signal.send(sender='AnswerSheet', user = request.user.id, score = score, exam_type = exam.exam_type)
     return redirect('testee_score_list', exam_type = exam.exam_type)

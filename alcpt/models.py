@@ -307,9 +307,9 @@ class AnswerSheet(models.Model):
     finish_time = models.DateTimeField(auto_now_add=True)
     is_tested = models.BooleanField(default=False)
     is_finished = models.BooleanField(default=False)
-    score = models.PositiveSmallIntegerField(default=0)
+    score = models.PositiveSmallIntegerField(null=True)
     
-    
+
     def __str__(self):
         return str(self.user) + '\'s' + str(self.exam)
 
@@ -451,4 +451,4 @@ class ScoreRecord(models.Model):
     
     
     def __str__(self):
-        return str(self.qualified_times)
+        return str(self.qualified_times)  
