@@ -63,14 +63,14 @@
                                 </td>
                                 <td class="text-center">{{ testee.name }}</td>
 
-                                {% if answer_sheet.is_tested == False %}
+                                {% if answer_sheet == None %}
                                 <td class="text-center" data-title="Type" style="color: #c12e2a">未進行測驗</td>
                                 <td class="text-center" data-title="Type" style="color: #00A600"></td>
-                                {% elif answer_sheet.score < 60 %}
-                                <td class="text-center" data-title="Type" style="color: #c12e2a">{{ answer_sheet.score }}</td>
+                                {% elif answer_sheet  < 60 %}
+                                <td class="text-center" data-title="Type" style="color: #c12e2a">{{ answer_sheet }}</td>
                                 <td class="text-center" data-title="Type" style="color: #c12e2a">{{ grade }}</td>
                                 {% else %}
-                                <td class="text-center" data-title="Type" style="color: #00A600">{{ answer_sheet.score }}</td>
+                                <td class="text-center" data-title="Type" style="color: #00A600">{{ answer_sheet }}</td>
                                 <td class="text-center" data-title="Type" style="color: #00A600">{{ grade }}</td>
                                 {% endif %}
 

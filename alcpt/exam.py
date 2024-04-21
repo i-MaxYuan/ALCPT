@@ -14,7 +14,7 @@ from alcpt.decorators import permission_check
 from alcpt.proclamation import notify
 from alcpt.achievement.achievement import exam_special_achievement
 from alcpt.definitions import UserType, QuestionType, QuestionTypeCounts, ExamType
-from alcpt.models import User, Exam, TestPaper, Group, Question, Proclamation, AnswerSheet, Answer, Achievement
+from alcpt.models import User, Exam, TestPaper, Group, Question, Proclamation, AnswerSheet, Answer, Achievement, ExamResult
 from alcpt.email import notification_mail
 from alcpt.exceptions import *
 from django.views.generic import View
@@ -138,6 +138,10 @@ class ExamCreateView(View,OnlineUserStat):
                    exam_id=exam.id,
                    report_id=0,
                    users=list(User.objects.filter(exam__testeeList__exam=exam).distinct()))
+            
+            if ExamResult.objects.filter(exam=exam.id).exists() == False:
+                ExamResult.objects.create(exam=exam,testee_num=len(exam.testeeList.all()))
+            
             messages.success(request, "Successfully created a new exam.")
             return redirect('exam_list')
 
@@ -242,7 +246,7 @@ class ExamEditView(View,OnlineUserStat):
 
 @method_decorator(permission_check(UserType.TestManager),name='get')
 class ExamDeleteView(View):
-    def get(self,request, exam_id):
+    def get(self, request, exam_id):
         try:
             exam = Exam.objects.get(id=exam_id)
             if datetime.now() > exam.start_time:

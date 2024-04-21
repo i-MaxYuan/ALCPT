@@ -412,7 +412,8 @@ urlpatterns = [
         ])),
 
     # 受測者部分
-    re_path(r'^testee$', testee.score_list,
+        re_path(r'^testee/(?P<exam_type>(1|3|4))', testee.ScoreList.as_view(),
+#     re_path(r'^testee', testee.score_list,
             name='testee_score_list'),  # 受測者主頁（顯示自我成績）
     re_path(
         r'^testee/',
@@ -423,7 +424,7 @@ urlpatterns = [
                     re_path(r'^pending/(?P<exam_id>[0-9]+)$',
                             testee.pending,
                             name='pending'),
-                    re_path(r'^list$',
+                    re_path(r'^list/(?P<exam_type>(1|3|4))',
                             testee.ExamListView.as_view(),
                             name='testee_exam_list'),
                     re_path(r'^favorite_question_list$',
@@ -434,7 +435,8 @@ urlpatterns = [
                         testee.favorite_question_delete,
                         name='favorite_question_delete'),
                     re_path(r'^start_exam/(?P<exam_id>[0-9]+)$',
-                            testee.start_exam,
+                            testee.StartExam.as_view(),
+                        #     testee.start_exam,
                             name='testee_start_exam'),
                     re_path(r'^start_practice/(?P<exam_id>[0-9]+)$',
                             testee.start_practice,
@@ -449,10 +451,11 @@ urlpatterns = [
                         name='testee_answering'),
                     re_path(
                         r'^submit_answersheet/(?P<exam_id>[0-9]+)$',
-                        testee.submit_answersheet,
+                        testee.SubmitAnswersheet.as_view(),
+                        # testee.submit_answersheet,
                         name='submit_answersheet'),
                     re_path(r'^(?P<exam_id>[0-9]+)/settle$',
-                            testee.settle,
+                            testee.Settle.as_view(),
                             name='testee_settle_exam'),
                 ])),
             re_path(r'^answer_sheet/content/(?P<answersheet_id>[0-9]+)$',
@@ -838,7 +841,8 @@ re_path(
     ])),
 
 # 受測者部分
-re_path(r'^testee$', testee.score_list,
+re_path(r'^testee/(?P<exam_type>(1|3|4))', testee.ScoreList.as_view(),
+# re_path(r'^testee', testee.score_list,
         name='testee_score_list'),  # 受測者主頁（顯示自我成績）
 re_path(
     r'^testee/',
@@ -849,7 +853,7 @@ re_path(
                 re_path(r'^pending/(?P<exam_id>[0-9]+)$',
                         testee.pending,
                         name='pending'),
-                re_path(r'^list$',
+                re_path(r'^list/(?P<exam_type>(1|3|4))',
                         testee.ExamListView.as_view(),
                         name='testee_exam_list'),
                 re_path(r'^favorite_question_list$',
@@ -860,7 +864,8 @@ re_path(
                     testee.favorite_question_delete,
                     name='favorite_question_delete'),
                 re_path(r'^start_exam/(?P<exam_id>[0-9]+)$',
-                        testee.start_exam,
+                        # testee.start_exam,
+                        testee.StartExam.as_view(  ),
                         name='testee_start_exam'),
                 re_path(r'^start_practice/(?P<exam_id>[0-9]+)$',
                         testee.start_practice,
@@ -875,10 +880,11 @@ re_path(
                     name='testee_answering'),
                 re_path(
                     r'^submit_answersheet/(?P<exam_id>[0-9]+)$',
-                    testee.submit_answersheet,
+                    testee.SubmitAnswersheet.as_view(),
+                #     testee.submit_answersheet,
                     name='submit_answersheet'),
                 re_path(r'^(?P<exam_id>[0-9]+)/settle$',
-                        testee.settle,
+                        testee.Settle.as_view(),
                         name='testee_settle_exam'),
             ])),
         re_path(r'^answer_sheet/content/(?P<answersheet_id>[0-9]+)$',

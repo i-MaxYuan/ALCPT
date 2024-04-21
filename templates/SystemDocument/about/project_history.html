@@ -20,11 +20,14 @@
     <nav class="navbar navbar-expand-md bg-inverse fixed-top scrolling-navbar">
         <div class="container">
             <a href="{{ url('about') }}" class="navbar-brand"><img src="{{ static('/logo/nav-logo-white.png') }}" style="width:130px" alt="" /></a>
+
         </div>
+        
         <i class="fas fa-user" style="color: white;"></i>
-        <div class="nav-item">
-            <a class="nav-link page-scroll" style="font-size: 16px; text-align: right;">上線人數:{{online_num}}</a>
-       </div>
+            <div class="nav-item">
+                <a class="nav-link page-scroll" style="font-size: 16px; text-align: right;">{{online_num}}/{{reg_num}}</a>
+            </div>
+        
     </nav>
     <div class="container">
         <div class="row space-100" style="padding-top: 100px; font-size: 15px">
