@@ -20,6 +20,7 @@ from alcpt.exceptions import IllegalArgumentError
 from alcpt.views import OnlineUserStat
 
 from django.views.generic import View
+from alcpt.views import OnlineUserStat
 from django.utils.decorators import method_decorator
 
 import plotly.offline as pyo
@@ -27,12 +28,15 @@ import plotly.graph_objs as go
 import pandas as pd
 import numpy as np
 
-@permission_check(UserType.Viewer)
-def index(request):
-    exams = Exam.objects.filter(is_public=True)
-    now_time = datetime.now()
-    context={'exams':exams}
-    return render(request, 'viewer/exam_score_list.html', context)
+@method_decorator(permission_check(UserType.Viewer),name='get')
+class IndexView(View,OnlineUserStat):
+    
+    template_name='viewer/exam_score_list.html'
+    
+    def do_content_works(self,request):
+        exams = Exam.objects.filter(is_public=True)
+        now_time = datetime.now()
+        return dict(exams=exams)
 
 
 # @method_decorator(permission_check(UserType.Viewer),name='get')
@@ -249,8 +253,11 @@ class ExamScoreDetail(View,OnlineUserStat):
 #     except ObjectDoesNotExist:
 #         messages.error(request, "Exam does not exist, exam id - {}".format(exam_id))
 #         return redirect('exam_score_list')
-class ViewTesteeInfo(View):
-    def get(self,request,exam_id,reg_id):
+class ViewTesteeInfo(View,OnlineUserStat):
+    
+    template_name='viewer/view_testee_info.html'
+    
+    def do_content_works(self,request,exam_id,reg_id):
         try:
             exam = Exam.objects.get(id=exam_id)
             try:
@@ -260,10 +267,7 @@ class ViewTesteeInfo(View):
                     messages.error(request, "User hasn't login before, user register id - {}".format(reg_id))
                     return redirect('exam_score_detail', exam_id=exam.id)
                 else:
-                    context={'viewed_testee':viewed_testee,
-                             'answer_sheets':answer_sheets,
-                             'exam':exam}
-                    return render(request, 'viewer/view_testee_info.html', context)
+                    return dict(exam=exam,viewed_testee=viewed_testee,answer_sheets=answer_sheets)
             except ObjectDoesNotExist:
                 messages.error(request, "User does not exist, user register id - {}".format(reg_id))
                 return redirect('exam_score_detail', exam_id=exam.id)

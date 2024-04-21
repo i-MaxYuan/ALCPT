@@ -36,8 +36,7 @@
                         <li class="nav-item">
                             <a class="nav-link page-scroll" href="#features">{{trans("Manuallist")}}</a>
                         </li>
-
-                        
+      
 
                         <div class="dropdown">
                             <button class="btn btn-singin dropdown-toggle" type="button" data-toggle="dropdown">
@@ -58,13 +57,17 @@
                         {% else %}
                             <a class="btn btn-singin" href="{{url('login')}}">{{trans("Start")}}</a>  
                         {% endif %}
-
-                        <li class="nav-item">
-                            <a class="nav-link page-scroll" href="#list">{{online_num}}/{{reg_num}}</a>
-                        </li>
                 </div>  
             </div>
+
+            <i class="fas fa-user" style="color: white;"></i>
+            <div class="nav-item">
+                <a class="nav-link page-scroll" style="font-size: 16px; text-align: right;">{{online_num}}/{{reg_num}}</a>
+            </div>
         </nav>
+        
+
+        
 
 
         <div class="container">
@@ -112,8 +115,7 @@
                             <i class="fas fa-user-shield"></i>
                         </div>
                         <h4>{{trans("Commander")}}</h4>
-                        <p>{{trans("Commanders can check every students record to assure the effectiveness of learning of all the students.")}}</p><br /><br />
-
+                        <p>{{trans("Commanders can check every students record to assure the effectiveness of learning of all the students.")}}</p>
                     </div>
                 </div>
                 <!-- End Col -->

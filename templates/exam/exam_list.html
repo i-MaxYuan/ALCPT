@@ -18,11 +18,53 @@
                             <th class="text-center">{{trans("Finish Time")}}</th>
                             <th class="text-center">{{trans("Duration")}}({{trans("min")}})</th>
                             <th class="text-center">{{trans("Creator")}}</th>
-                            <th>
+                            <th class="text-center">
                                 <div class="add">
-                                    <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ url('exam_create') }}'">
-                                        <i class="fa fa-plus"></i>
-                                    </button>
+                                    <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ url('exam_create') }}'"><i class="fa fa-plus"></i></button>
+                                    <button type="button" class="btn" data-toggle="modal" data-target="#promptContent"><i class="fa fa-question-circle"></i></button>
+                                </div>
+                                <div class="modal fade text-left" id="promptContent" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header text-center">
+                                                <h5 class="modal-title" id="ModalLongTitle">{{trans("Tips")}}</h5>
+                                            </div>
+
+                                            <div class="modal-body">
+                                                <ul>
+                                                    <li>
+                                                        <p>
+                                                            {{trans("Exam List can look up all the exam records.")}}
+                                                        </p>
+                                                    </li>
+                                                    <li>
+                                                        <p>
+                                                            {{trans("Click one can look up every exam detail.")}}
+                                                        </p>
+                                                    </li>
+                                                    <li>
+                                                        <p>
+                                                            {{trans("Click ")}}<i class="fa fa-plus btn btn-secondary"></i>{{trans(" can create a exam.")}}
+                                                        </p>
+                                                    </li>
+                                                    <li>
+                                                        <p>
+                                                            {{trans("Before the exam, if you want to edit content, click ")}}<i class="fa fa-pencil-square-o"></i>
+                                                        </p>
+                                                    </li>
+                                                    <li>
+                                                        <p>
+                                                            {{trans("Before the exam, if you do not want, click ")}}<i class="fa-solid fa-trash-can"></i>
+                                                        </p>
+                                                    </li>
+                                                </ul>
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-primary" data-dismiss="modal">{{trans("OK")}}</button>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </th>
                         </tr>
@@ -85,11 +127,15 @@
         {% endif %}
     </li>
 
-    {% for page in paginator.page_range %}
+    {% for page in paginator.page_range %} {% if page == examList.number %}
+    <li class="page-item active">
+        <a class="page-link" href="?page={{ page }}">{{ page }}</a>
+    </li>
+    {% else %}
     <li class="page-item">
         <a class="page-link" href="?page={{ page }}">{{ page }}</a>
     </li>
-    {% endfor %}
+    {% endif %} {% endfor %}
 
     <li class="page-item {% if not examList.has_next() %}disable{% endif %}">
         {% if examList.has_next() %}

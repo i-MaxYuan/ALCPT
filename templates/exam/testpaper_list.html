@@ -24,9 +24,56 @@
                             <th class="text-center">{{trans("Creator")}}</th>
                             <th class="text-center">
                                 <div class="add">
-                                    <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ url('testpaper_create') }}'">
-                                        <i class="fa fa-plus"></i>
-                                    </button>
+                                    <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ url('testpaper_create') }}'"><i class="fa fa-plus"></i></button>
+                                    <button type="button" class="btn" data-toggle="modal" data-target="#promptContent"><i class="fa fa-question-circle"></i></button>
+                                </div>
+                                <div class="modal fade text-left" id="promptContent" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header text-center">
+                                                <h5 class="modal-title" id="ModalLongTitle">{{trans("Tips")}}</h5>
+                                            </div>
+
+                                            <div class="modal-body">
+                                                <ul>
+                                                    <li>
+                                                        <p>
+                                                            {{trans("Select one can look up each testpaper detail and exam questions.")}}
+                                                        </p>
+                                                    </li>
+                                                    <li>
+                                                        <p>
+                                                            {{trans("Click ")}}<i class="fa fa-plus btn btn-secondary"></i>{{trans(" can create a testpaper and select exam questions.")}}
+                                                        </p>
+                                                    </li>
+                                                    <li>
+                                                        <p>
+                                                            {{trans("Click ")}}<i class="fa fa-check-circle"></i>{{trans(" represents this testpaper is valid and can be used as an exam question.")}}
+                                                        </p>
+                                                    </li>
+                                                    <li>
+                                                        <p>
+                                                            {{trans("Before using this testpaper, click ")}}<i class="fa fa-times"></i>{{trans(" represents this testpaper is not valid and you can edit it again.")}}
+                                                        </p>
+                                                    </li>
+                                                    <li>
+                                                        <p>
+                                                            {{trans("If this testpaper has not already used, you can click ")}}<i class="fa fa-pencil-square-o"></i>{{trans(" and edit testpaper contents.")}}
+                                                        </p>
+                                                    </li>
+                                                    <li>
+                                                        <p>
+                                                            {{trans("If this testpaper has not already used, you can click ")}}<i class="fa-solid fa-trash-can"></i>{{trans(" and delete at the same time.")}}
+                                                        </p>
+                                                    </li>
+                                                </ul>
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-primary" data-dismiss="modal">{{trans("OK")}}</button>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </th>
                         </tr>
@@ -89,11 +136,15 @@
         {% endif %}
     </li>
 
-    {% for page in paginator.page_range %}
+    {% for page in paginator.page_range %} {% if page == testpaperList.number %}
+    <li class="page-item active">
+        <a class="page-link" href="?page={{ page }}">{{ page }}</a>
+    </li>
+    {% else %}
     <li class="page-item">
         <a class="page-link" href="?page={{ page }}">{{ page }}</a>
     </li>
-    {% endfor %}
+    {% endif %} {% endfor %}
 
     <li class="page-item {% if not testpaperList.has_next() %}disable{% endif %}">
         {% if testpaperList.has_next() %}

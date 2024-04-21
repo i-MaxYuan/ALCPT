@@ -12,15 +12,47 @@
                 <table class="table table-hover table-striped table-bordered table-mc-light-blue">
                     <thead class="thead-light">
                         <tr>
-                            <th class="text-center">{{trans("English")}}</th>
-                            <th class="text-center">{{trans("Chinese")}}</th>
-                            <th>
+                            <th scope="col" class="text-center">{{trans("English")}}</th>
+                            <th scope="col" class="text-center">{{trans("Chinese")}}</th>
+                            <th scope="col" class="text-center" >
                                 <div class="add">
-                                    <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ url('word_library_create') }}'">
-                                        <i class="fa fa-plus"></i>
-                                    </button>
+                                    <button type="button" class="btn btn-secondary " onclick="window.location.href='{{ url('word_library_create') }}'"><i class="fa fa-plus"></i></button>
+                                    <button type="button" class="btn" data-toggle="modal" data-target="#promptContent" ><i class="fa fa-question-circle"></i></button>
                                 </div>
-                            </th>
+                                <div class="modal fade text-left" id="promptContent" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header text-center">
+                                                <h5 class="modal-title" id="ModalLongTitle">{{trans("Tips")}}</h5>
+                                            </div>
+
+                                            <div class="modal-body">
+                                                <ul>
+                                                    <li>
+                                                        <p>
+                                                            {{trans("If you want to add the word, please click ")}}<i class="fa fa-plus btn btn-secondary"></i>
+                                                        </p>
+                                                    </li>
+                                                    <li>
+                                                        <p>
+                                                            {{trans("If the word have any errors, you can click ")}}<i class="fa fa-pencil-square-o"></i>
+                                                        </p>
+                                                    </li>
+                                                    <li>
+                                                        <p>
+                                                            {{trans("If you want to delete the word, please click ")}}<i class="fa-solid fa-trash-can" style="color:red;"></i>
+                                                        </p>
+                                                    </li>
+                                                </ul>
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-primary" data-dismiss="modal">{{trans("OK")}}</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </th> 
                         </tr>
                     </thead>
 
@@ -33,9 +65,9 @@
                             <td class="text-center" data-title="Chineses">
                                 {{word.translations}}
                             <td class="text-center">
-                                <a href="{{ url('word_library_edit',args=[word.words,word.translations])}}"><i class="fa fa-pencil-square-o"></i></a>
-                                <a href="{{ url('word_library_del',args=[word.words])}}" onclick="return confirm('{{trans("Sure to delete this word?")}}')">
-                                    <i class="fa fa-trash" style="color:red"></i></a>
+                                    <a href="{{ url('word_library_edit',args=[word.words,word.translations])}}"><i class="fa fa-pencil-square-o"></i></a>
+                                    <a href="{{ url('word_library_del',args=[word.words])}}" onclick="return confirm('{{trans("Sure to delete this word?")}}')">
+                                        <i class="fa fa-trash" style="color:red"></i></a>
                             </td>
                         </tr>
                         {% endfor %}

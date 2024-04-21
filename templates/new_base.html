@@ -42,8 +42,8 @@ html {
                 </nav>
             </div>
 
-            <div align="right" style="font-size:22px">
-                {{online_num}}/{{reg_num}}
+            <div class="nav-item">
+                <a class="nav-link page-scroll" style="font-size: 16px; text-align: right;"><i class="fas fa-user" style="color: black;"></i>{{online_num}}/{{reg_num}}</a>
             </div>
 
             {% block content %} {% endblock %}

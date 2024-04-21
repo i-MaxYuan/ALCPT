@@ -30,16 +30,16 @@ urlpatterns = [
     re_path(r'^admin/', admin.site.urls),
     re_path(r'^$', views.About.as_view(), name='about'), #首頁
     re_path(r'^1$', views.about1, name='about1'),
-    # re_path(
-    #     r'^/',
-    #     include([
-    #         re_path(r'^download_system_pdf$',
-    #                 views.downloadSystemPDF,
-    #                 name='Download_system_pdf'),
-    #         re_path(r'^download_OM_pdf$',
-    #                 views.downloadOperationManual,
-    #                 name='Download_OM_pdf'),
-    #     ])),
+    re_path(
+        r'^/',
+        include([
+            re_path(r'^download_system_pdf$',
+                    views.downloadSystemPDF,
+                    name='Download_system_pdf'),
+            re_path(r'^download_OM_pdf$',
+                    views.downloadOperationManual,
+                    name='Download_OM_pdf'),
+        ])),
     re_path(r'^download_system_pdf$',
             views.downloadSystemPDF,
             name='Download_system_pdf'),
@@ -51,6 +51,10 @@ urlpatterns = [
     re_path(r'^download_system_pdf112$',
             views.downloadSystemPDF112,
             name='Download_system_pdf112'),
+    
+    re_path(r'^download_system_pdf113$',
+            views.downloadSystemPDF113,
+            name='Download_system_pdf113'),
 
     re_path(r'^download_OM_pdf$',
             views.downloadOperationManual,
@@ -135,7 +139,7 @@ urlpatterns = [
         ])),
 
     # 公告設定
-    re_path(r'^proclamation$', views.index, name='Homepage'),
+    re_path(r'^proclamation$', views.ProclamationCenter.as_view(), name='Homepage'),
     re_path(
         r'^proclamation/',
         include([
@@ -149,7 +153,7 @@ urlpatterns = [
                     proclamation.ProclamationDetailView.as_view(),
                     name='proclamation_detail'),
             re_path(r'^(?P<proclamation_id>[0-9]+)/delete$',
-                    proclamation.ProclamationDeleteView.as_view(),
+                    proclamation.delete,
                     name='proclamation_delete'),
             re_path(r'^(?P<proclamation_id>[0-9]+)/edit$',
                     proclamation.ProclamationEditView.as_view(),
@@ -394,7 +398,7 @@ urlpatterns = [
         ])),
 
     # 成績檢閱者
-    re_path(r'^viewer$', viewer.index, name='exam_score_list'),
+    re_path(r'^viewer$', viewer.IndexView.as_view(), name='exam_score_list'),
     re_path(
         r'^viewer/',
         include([
@@ -455,7 +459,7 @@ urlpatterns = [
                             name='testee_settle_exam'),
                 ])),
             re_path(r'^answer_sheet/content/(?P<answersheet_id>[0-9]+)$',
-                    testee.view_answersheet_content,
+                    testee.ViewAnswersheetContent.as_view(),
                     name='view_answersheet_content'),
             re_path(r'^leaderboard$',
                     testee.LeaderBoardView.as_view(),
@@ -481,16 +485,16 @@ urlpatterns += i18n_patterns(
 re_path(r'^favicon.ico$', RedirectView.as_view(url=r'static/favicon.ico')),
 re_path(r'^$', views.About.as_view(), name='about'),
 re_path(r'^1$', views.about1, name='about1'),
-# re_path(
-#     r'^/',
-#     include([
-#         re_path(r'^download_system_pdf$',
-#                 views.downloadSystemPDF,
-#                 name='Download_system_pdf'),
-#         re_path(r'^download_OM_pdf$',
-#                 views.downloadOperationManual,
-#                 name='Download_OM_pdf'),
-#     ])),
+re_path(
+    r'^/',
+    include([
+        re_path(r'^download_system_pdf$',
+                views.downloadSystemPDF,
+                name='Download_system_pdf'),
+        re_path(r'^download_OM_pdf$',
+                views.downloadOperationManual,
+                name='Download_OM_pdf'),
+    ])),
 re_path(
     r'^about/',
     include([
@@ -566,7 +570,7 @@ re_path(
                 system.report_done,
                 name='report_done'),
     ])),
-re_path(r'^proclamation$', views.index, name='Homepage'),
+re_path(r'^proclamation$', views.ProclamationCenter.as_view(), name='Homepage'),
 re_path(
     r'^proclamation/',
     include([
@@ -577,7 +581,7 @@ re_path(
                 proclamation.ProclamationDetailView.as_view(),
                 name='proclamation_detail'),
         re_path(r'^(?P<proclamation_id>[0-9]+)/delete$',
-                proclamation.ProclamationDeleteView.as_view(),
+                proclamation.delete,
                 name='proclamation_delete'),
         re_path(r'^(?P<proclamation_id>[0-9]+)/edit$',
                 proclamation.ProclamationEditView.as_view(),
@@ -823,7 +827,7 @@ re_path(
     ])),
 
 # 成績檢閱者
-re_path(r'^viewer$', viewer.index, name='exam_score_list'),
+re_path(r'^viewer$', viewer.IndexView.as_view(), name='exam_score_list'),
 re_path(
     r'^viewer/',
     include([
@@ -884,7 +888,7 @@ re_path(
                         name='testee_settle_exam'),
             ])),
         re_path(r'^answer_sheet/content/(?P<answersheet_id>[0-9]+)$',
-                testee.view_answersheet_content,
+                testee.ViewAnswersheetContent.as_view(),
                 name='view_answersheet_content'),
         re_path(r'^leaderboard$',
                 testee.LeaderBoardView.as_view(),
@@ -922,10 +926,10 @@ re_path(
                 testee.answersheet_comment_delete,
                 name='answersheet_comment_delete'),
         re_path(r'^word_library$',
-                testee.word_library,
+                testee.WorldLibrary.as_view(),
                 name='word_library'),
         re_path(r'^word_library_create$',
-                testee.word_library_create,
+                testee.WorldLibraryCreate.as_view(),
                 name='word_library_create'),
         path('word_library_del/<str:words>',
                 testee.word_library_del,
@@ -933,7 +937,7 @@ re_path(
 
 
         path('word_library_edit/<str:words>/<str:translations>',
-                testee.word_library_edit,
+                testee.WorldLibraryEdit.as_view(),
                 name='word_library_edit'),
         
 

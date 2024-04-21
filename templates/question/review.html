@@ -29,7 +29,45 @@
                                 <th scope="col">{{trans("Content")}}</th>
                                 <th scope="col">{{trans("Type")}}</th>
                                 <th scope="col">{{trans("State")}}</th>
-                                <th scope="col">{{trans("Other")}}</th>
+                                <th scope="col">{{trans("Other")}}<button type="button" class="btn" data-toggle="modal" data-target="#promptContent"><i class="fa fa-question-circle"></i></button></th>
+                                <div class="modal fade text-left" id="promptContent" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header text-center">
+                                                <h5 class="modal-title" id="ModalLongTitle">{{trans("Tips")}}</h5>
+                                            </div>
+
+                                            <div class="modal-body">
+                                                <ul>
+                                                    <li>
+                                                        <p>
+                                                            {{trans("These questions are await review.")}}
+                                                        </p>
+                                                    </li>
+                                                    <li>
+                                                        <p>
+                                                            {{trans("Click ")}}<i class="btn btn-success">{{trans("Pass")}}</i>{{trans(" means that this question has been passed. ")}}
+                                                        </p>
+                                                    </li>
+                                                    <li>
+                                                        <p>
+                                                            {{trans("Click ")}}<i class="btn btn-warning">{{trans("Edit")}}</i>{{trans(" can edit this question. ")}}
+                                                        </p>
+                                                    </li>
+                                                    <li>
+                                                        <p>
+                                                            {{trans("Click ")}}<i class="btn btn-danger">{{trans("Reject")}}</i>{{trans(" means that this question has been rejected and will be deleted. ")}}
+                                                        </p>
+                                                    </li>
+                                                </ul>
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-primary" data-dismiss="modal">{{trans("OK")}}</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </tr>
                         </thead>
 
@@ -127,7 +165,7 @@
         <a class="page-link" href="?page=1"><i class="fa fa-angle-double-left"></i></a>
     </li>
 
-    <li class="page-item {% if not questionList.has_previous %}disable{% endif %}">
+    <li class="page-item {% if not questionList.has_previous() %}disable{% endif %}">
         {% if questionList.has_previous() %}
         <a class="page-link" href="?page={{ questionList.previous_page_number() }}" tabindex="-1"><i class="fa fa-angle-left"></i></a>
         {% else %}
@@ -145,7 +183,7 @@
     </li>
     {% endif %} {% endfor %}
 
-    <li class="page-item {% if not questionList.has_next %}disable{% endif %}">
+    <li class="page-item {% if not questionList.has_next() %}disable{% endif %}">
         {% if questionList.has_next() %}
         <a class="page-link" href="?page={{ questionList.next_page_number() }}"><i class="fa fa-angle-right"></i></a>
         {% else %}

@@ -88,9 +88,41 @@
                                 <table class="table table-hover table-bordered table-striped table-mc-light-blue">
                                     <thead class="thead-light">
                                         <tr>
-                                            <th class="text-center">{{trans("Name")}}</th>
-                                            <th class="text-center">{{trans("Type")}}</th>
-                                            <th class="text-center">{{trans("Other")}}</th>
+                                            <th scope="col" class="text-center">{{trans("Name")}}</th>
+                                            <th scope="col" class="text-center">{{trans("Type")}}</th>
+                                            <th scope="col" class="text-center">{{trans("Other")}}
+                                                <button type="button" class="btn" data-toggle="modal" data-target="#promptContent"><i class="fa fa-question-circle"></i></button>
+                                                <div class="modal fade text-left" id="promptContent" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header text-center">
+                                                                <h5 class="modal-title" id="ModalLongTitle">{{trans("Tips")}}</h5>
+                                                            </div>
+            
+                                                            <div class="modal-body">
+                                                                <ul>
+                                                                    <li>
+                                                                        <p>{{trans("Click the start button, practice will start.")}}</p>
+                                                                    </li>
+                                                                    <li>
+                                                                        <p>{{trans("If finish this practice, you can choose 'continue' or 'settle'.")}}</p>
+                                                                    </li>
+                                                                    <li>
+                                                                        <p>{{trans("Choose 'continue', you can modify answers.")}}</p>
+                                                                    </li>
+                                                                    <li>
+                                                                        <p>{{trans("Choose 'settle', this practice end and get a score.")}}</p>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+            
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-primary" data-dismiss="modal">{{trans("OK")}}</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </th>
                                         </tr>
                                     </thead>
 
@@ -145,11 +177,39 @@
                                 <table class="table table-hover table-striped table-bordered table-mc-light-blue">
                                     <thead class="thead-light">
                                         <tr>
-                                            <th class="text-center">{{trans("Name")}}</th>
-                                            <th class="text-center">{{trans("Type")}}</th>
-                                            <th class="text-center">{{trans("Start Time")}}</th>
-                                            <th class="text-center">{{trans("Duration")}}</th>
-                                            <th class="text-center">{{trans("Other")}}</th>
+                                            <th scope="col" class="text-center">{{trans("Name")}}</th>
+                                            <th scope="col" class="text-center">{{trans("Type")}}</th>
+                                            <th scope="col" class="text-center">{{trans("Start Time")}}</th>
+                                            <th scope="col" class="text-center">{{trans("Duration")}}</th>
+                                            <th scope="col" class="text-center">{{trans("Other")}}
+                                                <button type="button" class="btn" data-toggle="modal" data-target="#promptContent"><i class="fa fa-question-circle"></i></button>
+                                                <div class="modal fade text-left" id="promptContent" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header text-center">
+                                                                <h5 class="modal-title" id="ModalLongTitle">{{trans("Tips")}}</h5>
+                                                            </div>
+            
+                                                            <div class="modal-footer">
+                                                                <ul>
+                                                                    <li>
+                                                                        <p>{{trans("Push the start button, exam will start.")}}</p>
+                                                                    </li>
+                                                                    <li>
+                                                                        <p>{{trans("If the exam time is not up, you can push the 'continue' button, continue the exam.")}}</p>
+                                                                    </li>
+                                                                    <li>
+                                                                        <p>{{trans("If the exam time is up, you can get a score.")}}</p>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-primary" data-dismiss="modal">{{trans("OK")}}</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </th>
                                         </tr>
                                     </thead>
 

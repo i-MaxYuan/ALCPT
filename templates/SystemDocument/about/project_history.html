@@ -22,9 +22,12 @@
             <a href="{{ url('about') }}" class="navbar-brand"><img src="{{ static('/logo/nav-logo-white.png') }}" style="width:130px" alt="" /></a>
 
         </div>
-        </div class="col-2">
-            <h6><span class="badge bg-info text-light">{{online_num}}/ {{reg_num}}</span></h6>
-        </div>
+        
+        <i class="fas fa-user" style="color: white;"></i>
+            <div class="nav-item">
+                <a class="nav-link page-scroll" style="font-size: 16px; text-align: right;">{{online_num}}/{{reg_num}}</a>
+            </div>
+        
     </nav>
     <div class="container">
         <div class="row space-100" style="padding-top: 100px; font-size: 15px">
@@ -36,9 +39,9 @@
                 </div>
 
                 <main>
-                    <div class="row row-cols-1 row-cols-md-3 mb-6 text-center" style="padding-top: 50px">
-                        <div class="col">
-                            <div class="card mb-4 rounded-3 shadow-sm">
+                    <div class="row row-cols-1 row-cols-md-3 mb-6 text-center" style="padding-top: 30px">
+                        <div class="col col-6">
+                            <div class="card mb-4 rounded-3 shadow-sm" style="height: 90%;">
                                 <div class="card-header py-3">
                                     <h4 class="my-0 fw-normal">2019</h4>
                                 </div>
@@ -54,8 +57,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col">
-                            <div class="card mb-4 rounded-3 shadow-sm">
+                        <div class="col col-6">
+                            <div class="card mb-4 rounded-3 shadow-sm" style="height: 90%;">
                                 <div class="card-header py-3">
                                     <h4 class="my-0 fw-normal">2020</h4>
                                 </div>
@@ -72,8 +75,8 @@
                             </div>
                         </div>
 
-                        <div class="col">
-                            <div class="card mb-4 rounded-3 shadow-sm">
+                        <div class="col col-6">
+                            <div class="card mb-4 rounded-3 shadow-sm" style="height: 90%;">
                                 <div class="card-header py-3">
                                     <h4 class="my-0 fw-normal">2021</h4>
                                 </div>
@@ -90,14 +93,14 @@
                             </div>
                         </div>
 
-                        <div class="col">
-                            <div class="card mb-4 rounded-3 shadow-sm">
+                        <div class="col col-6">
+                            <div class="card mb-4 rounded-3 shadow-sm" style="height: 90%;">
                                 <div class="card-header py-3">
                                     <h4 class="my-0 fw-normal">2022</h4>
                                 </div>
                                 <div class="card-body">
                                     <h1 class="card-title pricing-card-title">111<small class="text-muted fw-light">年班</small></h1>
-                                    <ul class="list-unstyled mt-3 mb-4">
+                                    <ul class="list-unstyled mt-3 mb-5">
                                         <li>{{trans('Forum')}}</li>
                                         <li>{{trans('Difficulty of practice questions')}}</li>
                                         <li>{{trans('Language switch button')}}</li>
@@ -107,9 +110,9 @@
                             </div>
                         </div>
 
-                        <div class="col">
-                            <div class="card mb-4 rounded-3 shadow-sm border-primary">
-                                <div class="card-header py-3 text-white bg-primary border-primary">
+                        <div class="col col-6">
+                            <div class="card mb-4 rounded-3 shadow-sm" style="height: 90%;">
+                                <div class="card-header py-3">
                                     <h4 class="my-0 fw-normal">2023</h4>
                                 </div>
                                 <div class="card-body">
@@ -120,7 +123,24 @@
                                         <li>{{trans('Word Library')}}</li>
                                         <li>{{trans('DB backup and restore')}}</li>
                                     </ul>
-                                    <button type="button" class="w-100 btn btn-lg btn-primary" onclick="window.location.href='{{ url('Download_system_pdf112') }}'">{{trans('Download')}}</button>
+                                    <button type="button" class="w-100 btn btn-lg btn-info" onclick="window.location.href='{{ url('Download_system_pdf112') }}'">{{trans('Download')}}</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col col-6">
+                            <div class="card mb-4 rounded-3 shadow-sm border-primary" style="height: 90%;">
+                                <div class="card-header py-3 text-white bg-primary border-primary">
+                                    <h4 class="my-0 fw-normal">2024</h4>
+                                </div>
+                                <div class="card-body">
+                                    <h1 class="card-title pricing-card-title">113<small class="text-muted fw-light">年班</small></h1>
+                                    <ul class="list-unstyled mt-3 mb-5">
+                                        <li>{{trans('Class-based View')}}</li>
+                                        <li>{{trans('Register number and Online number')}}</li>
+                                        <li>{{trans('Instruction button')}}</li>
+                                    </ul>
+                                    <button type="button" class="w-100 btn btn-lg btn-primary" onclick="window.location.href='{{ url('Download_system_pdf113') }}'">{{trans('Download')}}</button>
                                 </div>
                             </div>
                         </div>
