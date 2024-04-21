@@ -11,7 +11,7 @@ from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
-from .models import Question, AnswerSheet, Student, User, Exam, TestPaper, Answer, ReportCategory, Report, Achievement, UserAchievement, Forum, Word_library, ScoreRecord
+from .models import Question, AnswerSheet, Student, User, Exam, TestPaper, Answer, ReportCategory, Report, Achievement, UserAchievement, Forum, Word_library, ScoreRecord, ExamResult
 from .exceptions import *
 from .decorators import permission_check
 from .definitions import UserType, QuestionType, ExamType, AchievementCategory
@@ -21,6 +21,7 @@ from django.utils.translation import gettext as _
 import plotly.offline as pyo
 import plotly.graph_objs as go
 import pandas as pd
+import bisect
 
 from django.db.models.signals import post_save
 from django.core.signals import request_finished
@@ -31,6 +32,50 @@ from django.utils.decorators import method_decorator
 from alcpt.views import OnlineUserStat
 
 request_achievement_signal = Signal(providing_args=['user', 'score', 'exam_type'])
+
+#統整user practices/all testees exam的結果
+class IntegrateTestResults:
+    
+    #更新user在某類型(exam_type)考試中合格次數
+    def score_records(self, user, exam_type):                 
+        score_record = ScoreRecord.objects.get(user=user, exam_type=exam_type)
+        score_record.qualified_times = len(AnswerSheet.objects.all().filter(user=user, exam__exam_type=exam_type, score__gte=60))   #score >= 60 data
+        score_record.unqualified_times = len(AnswerSheet.objects.all().filter(user=user, exam__exam_type=exam_type, score__lt=60))   #score < 60 data
+        score_record.save()
+    
+    #record Exam qualified_num
+    def exam_results(self, exam, score):
+        exam_result =  ExamResult.objects.get(exam=exam)
+        testee_scores = exam_result.testee_score
+        testee_grades = exam_result.testee_grade
+        exam_result.tested += 1
+        exam_result.not_tested_num = len(exam.testeeList.all())-exam_result.tested
+        exam_result.range_times[score//10-1] += 1
+        
+        def grade(score, breakpoints=[60,70,80,90], grades='FDCBA'):
+            i = bisect.bisect(breakpoints, score)
+            return grades[i]
+        
+        testees = exam.testeeList.all()
+        for testee in testees:
+            answer_sheet = AnswerSheet.objects.get(exam=exam, user_id=testee.id)
+        
+            if answer_sheet.is_tested:
+                
+                if score >= 60:
+                    exam_result.qualified_num += 1
+                    testee_scores.append(score)
+                    testee_grades.append(grade(score))
+                    
+                elif score < 60:
+                    exam_result.unqualified_num += 1
+                    testee_scores.append(score)
+                    testee_grades.append(grade(score))
+            
+            else:
+                testee_scores.append(None)
+                testee_grades.append(grade(0))
+        exam_result.save()
 
 @receiver(post_save, sender=Achievement)
 def achievement_create_receiver(sender, instance, **kwargs):
@@ -145,24 +190,41 @@ class LeaderBoardView(View):
 
 @method_decorator(permission_check(UserType.Testee),name='get')
 class ExamListView(View):
-    def get(self,request):  
+    def get(self,request,exam_type):  
         examList = []
-        exams = Exam.objects.filter(is_public=True).filter(testeeList=request.user)
+        
+        if exam_type == '1':
+            exams = Exam.objects.filter(is_public=True).filter(testeeList=request.user)
+        else:
+            exams = Exam.objects.filter(is_public=False).filter(created_by=request.user)
+        
         for exam in exams:
             examList.append(exam)
-
-        practiceList = []
-        practices = Exam.objects.filter(is_public=False).filter(created_by=request.user)
         
-        for practice in practices:
-            practiceList.append(practice)
-            
         context={'examList':examList,
-                 'exams':exams,
-                 'practiceList': practiceList,
-                 'practices':practices,}
+                 'exam_type':exam_type,}
+                #  'practiceList': practiceList,
+                #  'practices':practices,}
         
         return render(request, 'testee/exam_list.html', context)
+    # def get(self,request):  
+    #     examList = []
+    #     exams = Exam.objects.filter(is_public=True).filter(testeeList=request.user)
+    #     for exam in exams:
+    #         examList.append(exam)
+       
+    #     practiceList = []
+    #     practices = Exam.objects.filter(is_public=False).filter(created_by=request.user)
+        
+    #     for practice in practices:
+    #         practiceList.append(practice)
+        
+    #     context={'examList':examList,
+    #              'exams':exams,
+    #              'practiceList': practiceList,
+    #              'practices':practices,}
+        
+    #     return render(request, 'testee/exam_list.html', context)
     
 
 @permission_check(UserType.Testee)
@@ -173,7 +235,7 @@ def pending(request, exam_id):
         now_time = datetime.now()          #可不限制考試時間，所以if不可省略
         exam.remaining_time = exam.remaining_time - timedelta.total_seconds(now_time - exam.modified_time)
         exam.save()
-    return redirect('testee_exam_list')
+    return redirect('testee_exam_list', exam_type=exam.exam_type)
 
 @method_decorator(permission_check(UserType.Testee),name='get')
 @method_decorator(require_http_methods(["GET"]),name='get')
@@ -184,22 +246,23 @@ class ScoreList(View,OnlineUserStat):
     def do_content_works(self,request,exam_type):
         answer_sheets = AnswerSheet.objects.all().filter(user=request.user,exam__exam_type=exam_type).order_by('exam__created_time')
         tests_score = [i.name for i in list(ExamType) if int(exam_type) == i.value[0]]
-    
+      
     # Line chart
         layouts = go.Layout(title={'text':'成績分布圖(僅顯示近8次成績)'}, yaxis={'title':'score','range':[0,101]},
                             xaxis_title='finished_time', font=dict(size=10,color='Black')) 
     
         x_finish_time = list(x[0].strftime('%Y%m%d%R') for x in answer_sheets.values_list('finish_time'))[-8:]
-        # y_score_data = [str(num) for num in range(0,101,10)]
-        traces = go.Scatter(x=x_finish_time, y=list(i[0] for i in answer_sheets.values_list('score')),
+        traces = go.Scatter(x=x_finish_time, y=list(i[0] for i in answer_sheets.values_list('score'))[-8:],
                             mode='lines+markers', marker={'color':'#FF5B00'})
     
         exam_fig = go.Figure(data=traces,layout=layouts)
+        
         exam_line_chart = pyo.plot(exam_fig,output_type='div')
     
     # Pie chart
         qualify = ['合格', '不合格']
         colors = ['green', 'red']
+        
         layout = go.Layout({
             'title': '模擬鑑測合格率分析',
             'annotations': [
@@ -217,10 +280,10 @@ class ScoreList(View,OnlineUserStat):
                        hole = .4,
                        type= 'pie',
                        marker=dict(colors=colors))
-
         data = [trace]
     
         fig = go.Figure(data=data, layout=layout)
+        
         exam_pie_chart = pyo.plot(fig, output_type='div')
         
         context = {'tests_score':tests_score[0],
@@ -508,6 +571,9 @@ class PracticeCreateView(View):
         question_num = int(request.POST.get('question_num', ))
 
         practice_type = ExamType.Listening if kind == 'listening' else ExamType.Reading
+        
+        if ScoreRecord.objects.filter(user=user,exam_type=practice_type.value[0]).exists() == False: 
+            ScoreRecord.objects.create(user=user,exam_type=practice_type.value[0])
 
         # getlist's element type is str.
         selected_types = request.POST.getlist('question_type', )
@@ -528,7 +594,7 @@ class PracticeCreateView(View):
                                                         remaining_time=remaining_time)
 
         messages.success(request,'創建成功, {}'.format(practice_exam))
-        return redirect('testee_exam_list') 
+        return redirect('testee_exam_list', exam_type=practice_type.value[0]) 
 
 
 @permission_check(UserType.Testee)
@@ -540,7 +606,7 @@ def view_answersheet_content(request, answersheet_id):
         if answersheet.exam.is_public:
             if answersheet.is_finished == False:
                 messages.warning(request, _("You hadn't finish your test, please keep answering the exam"))
-                return redirect('testee_exam_list')
+                return redirect('testee_exam_list', exam_type=exam.exam_type)
             elif datetime.now() < answersheet.exam.finish_time:
                 messages.warning(request, 'This exam does not finish.')
                 return redirect('testee_score_list', exam_type=answersheet.exam__exam_type)
@@ -684,7 +750,7 @@ def view_answersheet_content(request, answersheet_id):
             return render(request, 'testee/answersheet_content.html', locals())
     elif answersheet.is_finished  == False and now_time > answersheet.finish_time:
         messages.success(request, "You hadn't finish your test, please keep answering the exam")   
-        return redirect('testee_exam_list')
+        return redirect('testee_exam_list', exam_type=exam.exam_type)
     else:
         messages.warning(request, 'Does not finished this practice. Reject your request.')
         return redirect('testee_score_list', exam_type=answersheet.exam__exam_type)
@@ -843,53 +909,101 @@ def favorite_question_delete(request, question_id):
         return redirect('favorite_question_list')
 
 
-@permission_check(UserType.Testee)
-@require_http_methods(["GET"])
-def start_exam(request, exam_id):
-    try:
-        exam = Exam.objects.get(id=exam_id)
+# @permission_check(UserType.Testee)
+# @require_http_methods(["GET"])
+# def start_exam(request, exam_id):
+#     try:
+#         exam = Exam.objects.get(id=exam_id)
+#         answer_sheet = AnswerSheet.objects.get(exam=exam, user=request.user)
+
+#         now_time = datetime.now()
+#         if not exam.is_public:
+#             pass
+#         elif exam.start_time < now_time < exam.finish_time:
+#             pass
+#         elif now_time < exam.start_time:
+#             messages.warning(request, 'Exam does not start.')
+#             return redirect('testee_exam_list')
+
+#         elif now_time > exam.finish_time and answer_sheet.is_tested == False:
+#             answer_sheet.is_finished = True
+#             answer_sheet.save()
+#             messages.warning(request, _("You hadn't take this exam!"))
+#             return redirect('testee_score_list', exam_type=exam.exam_type)
+
+#         elif now_time > exam.finish_time and answer_sheet.is_tested == True:
+#             score = testmanager.calculate_score(exam_id, answer_sheet)
+#             messages.warning(request, 'You had not complete this exam. Your score is {}'.format(score))
+#             return redirect('testee_score_list', exam_type=exam.exam_type)
+
+#         exam.is_started = True
+#         exam.save()
+
+#     except ObjectDoesNotExist:
+#         messages.error(request,
+#                        'Exam does not exist, Exam id: {}'.format(exam_id))
+#         return redirect('testee_exam_list')
+
+#     answer_sheet = AnswerSheet.objects.get(exam=exam, user=request.user)
+#     if answer_sheet.is_finished:
+#         messages.warning(request, 'You had done this exam.')
+#         return redirect('testee_exam_list')
+#     else:
+#         exam = Exam.objects.get(id=exam_id)
+#         answer_sheet.is_tested = True
+#         answer_sheet.save()
+#         return redirect('testee_answering',
+#                     exam_id=exam.id,
+#                     answer_id=Answer.objects.filter(answer_sheet=answer_sheet)[0].id)   # transfer the first question
+@method_decorator(permission_check(UserType.Testee),name='get')
+@method_decorator(require_http_methods(["GET"]),name='get')
+class StartExam(View, IntegrateTestResults):
+    
+    def get(self,request,exam_id):
+        try:
+            exam = Exam.objects.get(id=exam_id)
+            answer_sheet = AnswerSheet.objects.get(exam=exam, user=request.user)
+
+            now_time = datetime.now()
+            if not exam.is_public:
+                pass
+            elif exam.start_time < now_time < exam.finish_time:
+                pass
+            elif now_time < exam.start_time:
+                messages.warning(request, 'Exam does not start.')
+                return redirect('testee_exam_list', exam_type=exam.exam_type)
+
+            elif now_time > exam.finish_time and answer_sheet.is_tested == False:
+                answer_sheet.is_finished = True
+                answer_sheet.save()
+                messages.warning(request, _("You hadn't take this exam!"))
+                return redirect('testee_score_list', exam_type=exam.exam_type)
+
+            elif now_time > exam.finish_time and answer_sheet.is_tested == True:
+                score = testmanager.calculate_score(exam_id, answer_sheet)
+                super().exam_results(exam,score)
+                messages.warning(request, 'You had not complete this exam. Your score is {}'.format(score))
+                return redirect('testee_score_list', exam_type=exam.exam_type)
+
+            exam.is_started = True
+            exam.save()
+
+        except ObjectDoesNotExist:
+            messages.error(request,
+                           'Exam does not exist, Exam id: {}'.format(exam_id))
+            return redirect('testee_exam_list', exam_type=exam.exam_type)
+
         answer_sheet = AnswerSheet.objects.get(exam=exam, user=request.user)
-
-        now_time = datetime.now()
-        if not exam.is_public:
-            pass
-        elif exam.start_time < now_time < exam.finish_time:
-            pass
-        elif now_time < exam.start_time:
-            messages.warning(request, 'Exam does not start.')
-            return redirect('testee_exam_list')
-
-        elif now_time > exam.finish_time and answer_sheet.is_tested == False:
-            answer_sheet.is_finished = True
+        if answer_sheet.is_finished:
+            messages.warning(request, 'You had done this exam.')
+            return redirect('testee_exam_list', exam_type=exam.exam_type)
+        else:
+            exam = Exam.objects.get(id=exam_id)
+            answer_sheet.is_tested = True
             answer_sheet.save()
-            messages.warning(request, _("You hadn't take this exam!"))
-            return redirect('testee_score_list', exam_type=exam.exam_type)
-
-        elif now_time > exam.finish_time and answer_sheet.is_tested == True:
-            score = testmanager.calculate_score(exam_id, answer_sheet)
-            messages.warning(request, 'You had not complete this exam. Your score is {}'.format(score))
-            return redirect('testee_score_list', exam_type=exam.exam_type)
-
-        exam.is_started = True
-        exam.save()
-
-    except ObjectDoesNotExist:
-        messages.error(request,
-                       'Exam does not exist, Exam id: {}'.format(exam_id))
-        return redirect('testee_exam_list')
-
-    answer_sheet = AnswerSheet.objects.get(exam=exam, user=request.user)
-    if answer_sheet.is_finished:
-        print(answer_sheet.exam,'line:883')
-        messages.warning(request, 'You had done this exam.')
-        return redirect('testee_exam_list')
-    else:
-        exam = Exam.objects.get(id=exam_id)
-        answer_sheet.is_tested = True
-        answer_sheet.save()
-        return redirect('testee_answering',
-                    exam_id=exam.id,
-                    answer_id=Answer.objects.filter(answer_sheet=answer_sheet)[0].id)   # transfer the first question
+            return redirect('testee_answering',
+                        exam_id=exam.id,
+                        answer_id=Answer.objects.filter(answer_sheet=answer_sheet)[0].id)   # transfer the first question
 
 @permission_check(UserType.Testee)
 @require_http_methods(["GET"])
@@ -904,10 +1018,10 @@ def start_practice(request, exam_id):
             pass
         elif now_time < exam.start_time:
             messages.warning(request, 'Exam does not start.')
-            return redirect('testee_exam_list')
+            return redirect('testee_exam_list', exam_type=exam.exam_type)
         elif now_time > exam.finish_time:
             messages.warning(request, 'Exam had finished.')
-            return redirect('testee_exam_list')
+            return redirect('testee_exam_list', exam_type=exam.exam_type)
         
         exam.is_started = True
         
@@ -919,13 +1033,13 @@ def start_practice(request, exam_id):
 
     except ObjectDoesNotExist:
         messages.error(request, 'Exam does not exist, Exam id: {}'.format(exam_id))
-        return redirect('testee_exam_list')
+        return redirect('testee_exam_list', exam_type=exam.exam_type)
 
     try:
         answer_sheet = AnswerSheet.objects.get(exam=exam, user=request.user)
         if answer_sheet.is_finished:
             messages.warning(request, 'You had done this exam.')
-            return redirect('testee_exam_list')
+            return redirect('testee_exam_list', exam_type=exam.exam_type)
     except ObjectDoesNotExist:
         answer_sheet = AnswerSheet.objects.create(exam=exam, user=request.user)
         answer_sheet.is_tested = True
@@ -961,7 +1075,7 @@ class AnsweringView(View):
             answers = answer_sheet.answer_set.all()
             if answer_sheet.is_finished:
                 messages.warning(request, _("You had completed this exam"))
-                return redirect('testee_score_list', exam=exam.exam_type)
+                return redirect('testee_score_list', exam_type=exam.exam_type)
             if answer not in answer_sheet.answer_set.all():
                 messages.warning(request, 'Not your answer: {}'.format(answer_id))
                 return redirect('testee_answering',
@@ -970,15 +1084,15 @@ class AnsweringView(View):
 
         except ObjectDoesNotExist:
             messages.error(request,'Answer id error, answer id: {}'.format(answer_id))
-            return redirect('testee_exam_list')
+            return redirect('testee_exam_list', exam_type=exam.exam_type)
         answer_count  = len(Answer.objects.filter(answer_sheet=answer_sheet).filter(selected=-1))
+        
         context={'exam':exam,
                  'answer':answer,
                  'selected_answer':selected_answer,
                  'answer_sheet':answer_sheet,
                  'answers':answers,
                  'deadline':deadline}
-        print(exam,'line:980')
         return render(request, 'testee/answering.html', context)
     
     def post(self,request,exam_id,answer_id):
@@ -1084,60 +1198,173 @@ class AnsweringView(View):
 #         return render(request, 'testee/answering.html', locals())
 
 
-@permission_check(UserType.Testee)
-@require_http_methods(["GET", "POST"])
-def submit_answersheet(request, exam_id):
-    exam = Exam.objects.get(id=exam_id)
-    answer_sheet = AnswerSheet.objects.get(exam=exam, user=request.user)
-    score = testmanager.calculate_score(exam.id, answer_sheet)
+# @permission_check(UserType.Testee)
+# @require_http_methods(["GET", "POST"])
+# def submit_answersheet(request, exam_id):
+#     exam = Exam.objects.get(id=exam_id)
+#     answer_sheet = AnswerSheet.objects.get(exam=exam, user=request.user)
+#     score = testmanager.calculate_score(exam.id, answer_sheet)
     
-    #更新user在某類型(exam_type)考試中合格次數 
-    if ScoreRecord.objects.filter(user=request.user.id, exam_type=exam.exam_type).exists() == False:
-        ScoreRecord.objects.create(user=request.user.id, exam_type=exam.exam_type)
-                 
-    score_record = ScoreRecord.objects.get(user=request.user.id, exam_type=exam.exam_type)
-    score_record.qualified_times = len(AnswerSheet.objects.all().filter(user=request.user, exam__exam_type=exam.exam_type, score__gte=60))   #score >= 60 data
-    score_record.unqualified_times = len(AnswerSheet.objects.all().filter(user=request.user, exam__exam_type=exam.exam_type, score__lt=60))   #score < 60 data
-    score_record.save()
+#     #更新user在某類型(exam_type)考試中合格次數             
+#     score_record = ScoreRecord.objects.get(user=request.user.id, exam_type=exam.exam_type)
+#     score_record.qualified_times = len(AnswerSheet.objects.all().filter(user=request.user, exam__exam_type=exam.exam_type, score__gte=60))   #score >= 60 data
+#     score_record.unqualified_times = len(AnswerSheet.objects.all().filter(user=request.user, exam__exam_type=exam.exam_type, score__lt=60))   #score < 60 data
+#     score_record.save()
+
+#     #record Exam qualified_num
+#     if exam.exam_type == 1:
+
+#         # if ExamResult.objects.filter(exam=exam_id).exists() == False:
+#         #     ExamResult.objects.create(exam=exam,testee_num=len(exam.testeeList.all()))
+#             # print(ExamResult.objects.all())
+#         exam_result =  ExamResult.objects.get(exam=exam_id)
+#         print(exam_result)
+#         testee_scores = exam_result.testee_score
+#         testee_grades = exam_result.testee_grade
+#         exam_result.tested += 1
+#         exam_result.not_tested_num = len(exam.testeeList.all())-exam_result.tested
+#         exam_result.range_times[score//10-1] += 1
+        
+#         def grade(score, breakpoints=[60,70,80,90], grades='FDCBA'):
+#             i = bisect.bisect(breakpoints, score)
+#             return grades[i]
+        
+#         testees = exam.testeeList.all()
+#         for testee in testees:
+#             try:
+#                 answer_sheet = AnswerSheet.objects.get(exam=exam, user_id=testee.id)
+#                 if answer_sheet.score >= 60:
+#                     exam_result.qualified_num += 1
+#                     testee_scores.append(answer_sheet.score)
+#                     testee_grades.append(grade(score))
+#                 elif answer_sheet.score < 60:
+#                     exam_result.unqualified_num += 1
+#                     testee_scores.append(answer_sheet.score)
+#                     testee_grades.append(grade(score))
+#             except ObjectDoesNotExist:
+#                 testee_scores.append(None)
+#                 testee_grades.append(grade(0))
+#             except TypeError:
+#                 messages.warning(request, 'The test is finished, but not all testee had submitted test paper.')
+#                 return redirect('exam_score_list')
+#         exam_result.save()
     
-    messages.success(request, _('You had finished the exam.'))
-    request_achievement_signal.send(sender='AnswerSheet', user = request.user.id, score = score, exam_type = exam.exam_type)
-    return redirect('testee_score_list', exam_type = exam.exam_type)
+#     messages.success(request, _('You had finished the exam.'))
+#     request_achievement_signal.send(sender='AnswerSheet', user = request.user.id, score = score, exam_type = exam.exam_type)
+#     return redirect('testee_score_list', exam_type = exam.exam_type)
+@method_decorator(permission_check(UserType.Testee),name='get')
+@method_decorator(require_http_methods(["GET", "POST"]),name='get')
+class SubmitAnswersheet(View,IntegrateTestResults):
+    
+    def get(self,request,exam_id):
+        exam = Exam.objects.get(id=exam_id)
+        answer_sheet = AnswerSheet.objects.get(exam=exam, user=request.user)
+        score = testmanager.calculate_score(exam.id, answer_sheet)
+        
+    #更新user在某類型(exam_type)考試中合格次數             
+        super().score_records(request.user,exam.exam_type)
+        
+    # #record Exam qualified_num
+        if exam.exam_type == 1:
+            super().exam_results(exam,score)
+    #     # if ExamResult.objects.filter(exam=exam_id).exists() == False:
+    #     #     ExamResult.objects.create(exam=exam,testee_num=len(exam.testeeList.all()))
+    #         # print(ExamResult.objects.all())
+    #     exam_result =  ExamResult.objects.get(exam=exam_id)
+    #     print(exam_result)
+    #     testee_scores = exam_result.testee_score
+    #     testee_grades = exam_result.testee_grade
+    #     exam_result.tested += 1
+    #     exam_result.not_tested_num = len(exam.testeeList.all())-exam_result.tested
+    #     exam_result.range_times[score//10-1] += 1
+        
+    #     def grade(score, breakpoints=[60,70,80,90], grades='FDCBA'):
+    #         i = bisect.bisect(breakpoints, score)
+    #         return grades[i]
+        
+    #     testees = exam.testeeList.all()
+    #     for testee in testees:
+    #         try:
+    #             answer_sheet = AnswerSheet.objects.get(exam=exam, user_id=testee.id)
+    #             if answer_sheet.score >= 60:
+    #                 exam_result.qualified_num += 1
+    #                 testee_scores.append(answer_sheet.score)
+    #                 testee_grades.append(grade(score))
+    #             elif answer_sheet.score < 60:
+    #                 exam_result.unqualified_num += 1
+    #                 testee_scores.append(answer_sheet.score)
+    #                 testee_grades.append(grade(score))
+    #         except ObjectDoesNotExist:
+    #             testee_scores.append(None)
+    #             testee_grades.append(grade(0))
+    #         except TypeError:
+    #             messages.warning(request, 'The test is finished, but not all testee had submitted test paper.')
+    #             return redirect('exam_score_list')
+    #     exam_result.save()
+    
+        messages.success(request, _('You had finished the exam.'))
+        request_achievement_signal.send(sender='AnswerSheet', user = request.user.id, score = score, exam_type = exam.exam_type)
+        return redirect('testee_score_list', exam_type = exam.exam_type)
 
 # Settle exam score directly.
-@permission_check(UserType.Testee)
-def settle(request, exam_id):
-    try:
-        exam = Exam.objects.get(id=exam_id)
-        try:
-            answer_sheet = AnswerSheet.objects.get(exam=exam,
-                                                   user=request.user)
-            score = testmanager.calculate_score(exam.id, answer_sheet)
-            request_achievement_signal.send(sender='AnswerSheet', user = request.user.id, score = score, exam_type = exam.exam_type)
+# @permission_check(UserType.Testee)
+# def settle(request, exam_id):
+#     try:
+#         exam = Exam.objects.get(id=exam_id)
+#         try:
+#             answer_sheet = AnswerSheet.objects.get(exam=exam,
+#                                                    user=request.user)
+#             score = testmanager.calculate_score(exam.id, answer_sheet)
+#             request_achievement_signal.send(sender='AnswerSheet', user = request.user.id, score = score, exam_type = exam.exam_type)
             
-            if ScoreRecord.objects.filter(user=request.user.id, exam_type=exam.exam_type).exists() == False:
-                ScoreRecord.objects.create(user=request.user.id, exam_type=exam.exam_type)
-                
-            score_record = ScoreRecord.objects.get(user=request.user.id, exam_type=exam.exam_type)
-            score_record.qualified_times = len(AnswerSheet.objects.all().filter(user=request.user, exam__exam_type=exam.exam_type, score__gte=60))   #score >= 60 data
-            score_record.unqualified_times = len(AnswerSheet.objects.all().filter(user=request.user, exam__exam_type=exam.exam_type, score__lt=60))   #score < 60 data
-            score_record.save()
+#             score_record = ScoreRecord.objects.get(user=request.user.id, exam_type=exam.exam_type)
+#             score_record.qualified_times = len(AnswerSheet.objects.all().filter(user=request.user, exam__exam_type=exam.exam_type, score__gte=60))   #score >= 60 data
+#             score_record.unqualified_times = len(AnswerSheet.objects.all().filter(user=request.user, exam__exam_type=exam.exam_type, score__lt=60))   #score < 60 data
+#             score_record.save()
             
-            messages.success(
-                request,
-                "You have settled this exam score directly. You got {} point in this exam."
-                .format(score))
+#             messages.success(
+#                 request,
+#                 "You have settled this exam score directly. You got {} point in this exam."
+#                 .format(score))
             
-            return redirect('testee_score_list', exam_type=exam.exam_type)  
+#             return redirect('testee_score_list', exam_type=exam.exam_type)  
         
-        except ObjectDoesNotExist:
-            messages.error(request,
-                           "Query failed, you may not start this exam.")
-            return redirect('testee_exam_list')
+#         except ObjectDoesNotExist:
+#             messages.error(request,
+#                            "Query failed, you may not start this exam.")
+#             return redirect('testee_exam_list')
 
-    except ObjectDoesNotExist:
-        messages.error(request, "Query failed, Exam doesn't exist.")
-        return redirect('testee_exam_list')
+#     except ObjectDoesNotExist:
+#         messages.error(request, "Query failed, Exam doesn't exist.")
+#         return redirect('testee_exam_list')
+    
+@method_decorator(permission_check(UserType.Testee),name='get')
+class Settle(View,IntegrateTestResults):
+    
+    def get(self,request,exam_id):
+        try:
+            exam = Exam.objects.get(id=exam_id)
+            
+            try:
+                answer_sheet = AnswerSheet.objects.get(exam=exam,
+                                                       user=request.user)
+                score = testmanager.calculate_score(exam.id, answer_sheet)
+                request_achievement_signal.send(sender='AnswerSheet', user = request.user.id, score = score, exam_type = exam.exam_type)
+            
+                super().score_records(request.user,exam.exam_type)
+            
+                messages.success(request,
+                                "You have settled this exam score directly. You got {} point in this exam.".format(score))
+                return redirect('testee_score_list', exam_type=exam.exam_type)  
+        
+            except ObjectDoesNotExist:
+                messages.error(request,
+                               "Query failed, you may not start this exam.")
+                return redirect('testee_exam_list',exam_type=exam.exam_type)
+
+        except ObjectDoesNotExist:
+            messages.error(request, "Query failed, Exam doesn't exist.")
+            return redirect('testee_exam_list',exam_type=exam.exam_type)
 
 
 @method_decorator(login_required,name='get')
@@ -1227,4 +1454,6 @@ def word_library_edit(request,words,translations):
             
     else:
         context={'words':word,'translations':translate}
-        return render(request,'testee/word_library_edit.html',context)          
+        return render(request,'testee/word_library_edit.html',context)     
+    
+

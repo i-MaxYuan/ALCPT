@@ -1,4 +1,4 @@
-import time, datetime, json
+import time, datetime, json, ast
 
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
@@ -10,6 +10,30 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.core.validators import RegexValidator
 
+
+class ListField(models.TextField):
+
+    def __init__(self, *args, **kwargs):
+        super(ListField, self).__init__(*args, **kwargs)
+
+    def from_db_value(self, value, expression, connection):
+        if not value:
+            value = []
+
+        if isinstance(value, list):
+            return value
+
+        return ast.literal_eval(value)
+
+    def get_prep_value(self, value):
+        if value is None:
+            return value
+
+        return str(value)
+
+    def value_to_string(self, obj):
+        value = self._get_val_from_obj(obj)
+        return self.get_db_prep_value(value)
 
 class UserManager(BaseUserManager):
     def create_user(self, reg_id, privilege, password=None):
@@ -449,6 +473,19 @@ class ScoreRecord(models.Model):
     qualified_times = models.PositiveIntegerField(default=0)
     unqualified_times = models.PositiveIntegerField(default=0)
     
-    
     def __str__(self):
         return str(self.qualified_times)  
+    
+class ExamResult(models.Model):
+    exam = models.OneToOneField('Exam',on_delete=models.DO_NOTHING)
+    range_times = ListField(default=[0,0,0,0,0,0,0,0,0,0])
+    testee_num = models.PositiveIntegerField(default=0)   
+    tested = models.PositiveIntegerField(default=0)
+    not_tested_num = models.PositiveIntegerField(default=0)
+    testee_score = ListField(null=True)
+    testee_grade = ListField(null=True)
+    qualified_num = models.PositiveIntegerField(default=0)
+    unqualified_num = models.PositiveIntegerField(default=0)
+    
+    def __str__(self):
+        return str(self.exam)
