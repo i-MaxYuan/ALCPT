@@ -214,6 +214,7 @@ class Exam(models.Model):
         return self.modified_times / self.use_freq * 100
 
 
+
 # 題目
 # q_type: type of the question be defined in alcpt/definitions.py
 # q_file: question path of the english listening
@@ -318,7 +319,7 @@ class AnswerSheet(models.Model):
 # question: this answer is related to what question
 # selected: selected option id this question
 class Answer(models.Model):
-    answer_sheet = models.ForeignKey('AnswerSheet', on_delete=models.PROTECT)
+    answer_sheet = models.ForeignKey('AnswerSheet', on_delete=models.CASCADE)
     question = models.ForeignKey('Question', on_delete=models.PROTECT)
     selected = models.SmallIntegerField(default=-1)
 

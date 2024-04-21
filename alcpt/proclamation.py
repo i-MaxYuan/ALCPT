@@ -9,6 +9,7 @@ from alcpt.definitions import UserType
 from django.utils.translation import gettext as _ #translation
 from django.views.generic import View
 from django.utils.decorators import method_decorator
+from alcpt.views import OnlineUserStat
 
 
 @login_required
@@ -28,9 +29,12 @@ def index(request):
 #         return redirect('Homepage')
 #     else:
 #         return render(request, 'proclamation/proclamation_create.html', locals())
-class ProclamationCreateView(View):
-    def get(self, request):
-        return render(request, 'proclamation/proclamation_create.html')
+class ProclamationCreateView(View,OnlineUserStat):
+    
+    template_name = 'proclamation/proclamation_create.html'
+    
+    def do_content_works(self, request):
+        return {}
     
     def post(self, request):
         title = request.POST.get('p_title')
@@ -60,11 +64,14 @@ class ProclamationCreateView(View):
 #         return redirect('Homepage')
 #     else:
 #         return render(request, 'proclamation/proclamation_edit.html', locals())
-class ProclamationEditView(View):
-    def get(self,request,proclamation_id):
+class ProclamationEditView(View,OnlineUserStat):
+    
+    template_name = 'proclamation/proclamation_edit.html'
+    
+    def do_content_works(self,request,proclamation_id):
         proclamation = Proclamation.objects.get(id=proclamation_id)
-        context={'proclamation':proclamation}
-        return render(request, 'proclamation/proclamation_edit.html',context)
+        return dict(proclamation=proclamation)
+    
     def post(self,request,proclamation_id):
         try:
             proclamation = Proclamation.objects.get(id=proclamation_id)
@@ -98,32 +105,19 @@ def notify(title: str, text: str, is_read: bool, is_public: bool, exam_id: int, 
 
 
 
-@method_decorator(permission_check(UserType.SystemManager),name='get')
-# def delete(request, proclamation_id):
-#     try:
-#         proclamation = Proclamation.objects.get(id=proclamation_id)
-#         if proclamation.is_public:
-#             proclamation.delete()
-#             messages.success(request, _("Successfully deleted"))
-#         else:
-#             messages.warning(request, _("Failed deleted"))
-#     except ObjectDoesNotExist:
-#         messages.error(request, _("Proclamation doesn't exist, proclamation id: ")+proclamation_id)
-#         return redirect('Homepage')
-#     return redirect('Homepage')
-class ProclamationDeleteView(View):
-    def get(self,request,proclamation_id):
-        try:
-            proclamation = Proclamation.objects.get(id=proclamation_id)
-            if proclamation.is_public:
-                proclamation.delete()
-                messages.success(request, _("Successfully deleted"))
-            else:
-                messages.warning(request, _("Failed deleted"))
-        except ObjectDoesNotExist:
-            messages.error(request, _("Proclamation doesn't exist, proclamation id: ")+proclamation_id)
-            return redirect('Homepage')
+@permission_check(UserType.SystemManager)
+def delete(request, proclamation_id):
+    try:
+        proclamation = Proclamation.objects.get(id=proclamation_id)
+        if proclamation.is_public:
+            proclamation.delete()
+            messages.success(request, _("Successfully deleted"))
+        else:
+            messages.warning(request, _("Failed deleted"))
+    except ObjectDoesNotExist:
+        messages.error(request, _("Proclamation doesn't exist, proclamation id: ")+proclamation_id)
         return redirect('Homepage')
+    return redirect('Homepage')
 
 
 @login_required
@@ -158,18 +152,18 @@ def toggle(request, action):
 #         return render(request, 'proclamation/proclamation_detail.html', locals())
 #     except ObjectDoesNotExist:
 #         return redirect('Homepage')
-class ProclamationDetailView(View):
-    def get(self,request,proclamation_id):
+class ProclamationDetailView(View,OnlineUserStat):
+    
+    template_name='proclamation/proclamation_detail.html'
+    
+    def do_content_works(self,request,proclamation_id):
         try:
             proclamation = Proclamation.objects.get(id=proclamation_id)
             proclamation.is_read=True
             proclamation.save()
             time = proclamation.text.split('\n')[0][12:]
             duration = proclamation.text.split('\n')[1][10:-9]
-            context={'time':time,
-                     'duration':duration,
-                     'proclamation':proclamation}
-            return render(request, 'proclamation/proclamation_detail.html',context)
+            return dict(proclamation=proclamation,time=time,duration=duration)
         except ObjectDoesNotExist:
             return redirect('Homepage')
 
@@ -188,11 +182,14 @@ class ProclamationDetailView(View):
     
 #         messages.success(request, _("Successfully deleted"))
 #     return render(request,'proclamation/notification_center.html',locals())
-class NotificationCenterView(View):
-    def get(self,request):
+class NotificationCenterView(View,OnlineUserStat):
+    
+    template_name= 'proclamation/notification_center.html'
+    
+    def do_content_works(self,request):
         notifications=request.user.proclamation_set.all()
-        context={'notifications':notifications}
-        return render(request,'proclamation/notification_center.html',context)   
+        return dict(notifications=notifications)
+     
     def post(self,request):
         proclamations=request.POST.getlist('proclamation')
         for proclamation_id in proclamations:

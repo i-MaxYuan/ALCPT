@@ -18,10 +18,43 @@
                             <th class="text-center">{{trans("Number")}}</th>
                             <th>
                                 <div class="add text-center">
-                                    <button class="btn btn-secondary" type="button" onclick="window.location.href='{{ url('report_category_create') }}'">
-                                        <i class="fa fa-plus"></i>
-                                    </button>
+                                    <button class="btn btn-secondary" type="button" onclick="window.location.href='{{ url('report_category_create') }}'"><i class="fa fa-plus"></i></button>
+                                    <button type="button" class="btn" data-toggle="modal" data-target="#promptContent"><i class="fa fa-question-circle"></i></button>
                                 </div>
+                                <div class="modal fade text-left" id="promptContent" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header text-center">
+                                                <h5 class="modal-title" id="ModalLongTitle">{{trans("Tips")}}</h5>
+                                            </div>
+
+                                            <div class="modal-body">
+                                                <ul>
+                                                    <li>
+                                                        <p>
+                                                            {{trans("ReportCategory List can look up all the reactions to the problems.")}}
+                                                        </p>
+                                                    </li>
+                                                    <li>
+                                                        <p>
+                                                            {{trans("Click ")}}<i class="fa fa-plus btn btn-secondary"></i>{{trans(" can create a category and define what kind of privilege.")}}
+                                                        </p>
+                                                    </li>
+                                                    <li>
+                                                        <p>
+                                                            {{trans("Click ")}}<i class="fa fa-pencil-square-o"></i>{{trans(" can edit the category name and privilege.")}}
+                                                        </p>
+                                                    </li>
+                                                </ul>
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-primary" data-dismiss="modal">{{trans("OK")}}</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </th>
                         </tr>
                     </thead>

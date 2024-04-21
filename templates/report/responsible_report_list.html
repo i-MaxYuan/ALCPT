@@ -25,7 +25,30 @@
                                 <th class="text-center">{{trans("Category")}}</th>
                                 <th class="text-center">{{trans("Content")}}</th>
                                 <th class="text-center">{{trans("State")}}</th>
-                                <th class="text-center">{{trans("Time")}}</th>
+                                <th class="text-center">{{trans("Time")}}<button type="button" class="btn" data-toggle="modal" data-target="#promptContent"><i class="fa fa-question-circle"></i></button></th>
+                                <div class="modal fade text-left" id="promptContent" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header text-center">
+                                                <h5 class="modal-title" id="ModalLongTitle">{{trans("Tips")}}</h5>
+                                            </div>
+
+                                            <div class="modal-body">
+                                                <ul>
+                                                    <li>
+                                                        <p>
+                                                            {{trans("Click one can respond to user questions and know if it is resolved.")}}
+                                                        </p>
+                                                    </li>
+                                                </ul>
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-primary" data-dismiss="modal">{{trans("OK")}}</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </tr>
                         </thead>
 
@@ -42,7 +65,7 @@
                                     {{ report.state|readable_report_state }}
                                 </td>
                                 <td class="text-center" data-title="Time">
-                                    {{ report.created_time.strftime('%Y年%m月%d日, %H時%M分') }}
+                                    {{ report.created_time.strftime('%Y/%m/%d  %H:%M') }}
                                 </td>
                             </tr>
                             {% endfor %} {% else %}

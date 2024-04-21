@@ -82,9 +82,37 @@
                                 </div>
                             </th>
                              <th class="text-center">
-                                <button type="button" class="btn btn-link" disabled>
-                                    <i class="fa fa-user-minus"></i>
-                                </button>
+                                <button type="button" class="btn" data-toggle="modal" data-target="#promptContent"><i class="fa fa-question-circle"></i></button>
+                                <div class="modal fade text-left" id="promptContent" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header text-center">
+                                                <h5 class="modal-title" id="ModalLongTitle">{{trans("Tips")}}</h5>
+                                            </div>
+
+                                            <div class="modal-body">
+                                                <ul>
+                                                    <li>
+                                                        <p>{{trans("User List can look up each person's profile. ")}}</p>
+                                                    </li>
+                                                    <li>
+                                                        <p>{{trans("Click ")}}<i class="fa fa-user-plus"></i>{{trans(" , SystemManager can add user.")}}</p>
+                                                    </li>
+                                                    <li>
+                                                        <p>{{trans("If you want to edit the profile, please click ")}}<i class="fa fa-pencil-square-o"></i></p>
+                                                    </li>
+                                                    <li>
+                                                        <p>{{trans("If you want to delete the account, please click ")}}<i class="fa-solid fa-trash-can" style="color:red;"></i>
+                                                    </li>
+                                                </ul>
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-primary" data-dismiss="modal">{{trans("OK")}}</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </th>
 
                         </tr>
@@ -175,7 +203,7 @@
         <a class="page-link" href="?page=1{{ query_content }}"><i class="fa fa-angle-double-left"></i></a>
     </li>
 
-    <li class="page-item {% if not userList.has_previous %}disable{% endif %}">
+    <li class="page-item {% if not userList.has_previous() %}disable{% endif %}">
         {% if userList.has_previous() %}
         <a class="page-link" href="?page={{ userList.previous_page_number() }}{{ query_content }}" tabindex="-1"><i class="fa fa-angle-left"></i></a>
         {% else %}
@@ -193,7 +221,7 @@
     </li>
     {% endif %} {% endfor %}
 
-    <li class="page-item {% if not userList.has_next %}disable{% endif %}">
+    <li class="page-item {% if not userList.has_next() %}disable{% endif %}">
         {% if userList.has_next() %}
         <a class="page-link" href="?page={{ userList.next_page_number() }}{{ query_content }}"><i class="fa fa-angle-right"></i></a>
         {% else %}

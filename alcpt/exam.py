@@ -18,11 +18,15 @@ from alcpt.models import User, Exam, TestPaper, Group, Question, Proclamation, A
 from alcpt.email import notification_mail
 from alcpt.exceptions import *
 from django.views.generic import View
+from alcpt.views import OnlineUserStat
 from django.utils.decorators import method_decorator
 
 @method_decorator(permission_check(UserType.TestManager),name='get')
-class ExamListView(View):
-    def get(self,request):
+class ExamListView(View,OnlineUserStat):
+    
+    template_name='exam/exam_list.html'
+    
+    def do_content_works(self,request):
         exams = Exam.objects.filter(is_public=True)
         page = request.GET.get('page', 1)
         paginator = Paginator(exams, 10)
@@ -32,15 +36,17 @@ class ExamListView(View):
             examList = paginator.page(1)
         except EmptyPage:
             examList = paginator.page(paginator.num_pages)
-        context={'exams':exams,
-                 'examList':examList,
-                 'paginator':paginator}
-        return render(request, 'exam/exam_list.html', context)
+        return dict(exams=exams,
+                    examList=examList,
+                    paginator=paginator)
 
 
 @method_decorator(permission_check(UserType.TestManager),name='get')
-class ExamCreateView(View):
-    def get(self,request):
+class ExamCreateView(View,OnlineUserStat):
+
+    template_name='exam/exam_create.html'
+
+    def do_content_works(self,request):
         special_exam_achievements = Achievement.objects.all().filter(category=0)
         exam_names = [_.name for _ in Exam.objects.all()]
         testpapers = TestPaper.objects.filter(is_testpaper=True, valid=True)
@@ -61,13 +67,12 @@ class ExamCreateView(View):
         for i in range(0, 60):
             if i % 5 == 0:
                 minuteList.append(str(i))
-        context={'exam_names':exam_names,
-                 'testpapers':testpapers,
-                 'groups':groups,
-                 'dateList':dateList,
-                 'hourList':hourList,
-                 'minuteList':minuteList}
-        return render(request, 'exam/exam_create.html', context)
+        return dict(exam_names=exam_names,
+                    testpapers=testpapers,
+                    groups=groups,
+                    dateList=dateList,
+                    hourList=hourList,
+                    minuteList=minuteList)
     
     def post(self,request):
         date = request.POST.get('start_time_date')
@@ -91,7 +96,7 @@ class ExamCreateView(View):
         try:
             exam_name = request.POST.get('exam_name')
             Exam.objects.get(name = exam_name)
-            messages.error(request, "Failed created, exam name had been used - {}".format(exam_name))
+            messages.error(request, "Failed created, exam name had been used.")
             return redirect('exam_create')
         except:
             exam_name = request.POST.get('exam_name')
@@ -133,24 +138,29 @@ class ExamCreateView(View):
                    exam_id=exam.id,
                    report_id=0,
                    users=list(User.objects.filter(exam__testeeList__exam=exam).distinct()))
-            messages.success(request, "Successfully created a new exam - {}.".format(exam.name))
+            messages.success(request, "Successfully created a new exam.")
             return redirect('exam_list')
 
 
 @method_decorator(permission_check(UserType.TestManager),name='get')
-class ExamContentView(View):
-    def get(self,request,exam_id):
+class ExamContentView(View,OnlineUserStat):
+    
+    template_name='exam/exam_content.html'
+    
+    def do_content_works(self,request,exam_id):
         try:
             exam = Exam.objects.get(id=exam_id)
         except ObjectDoesNotExist:
-            messages.error(request, "Exam does not exist, exam id - {}".format(exam_id))
-        context={'exam':exam}
-        return render(request, 'exam/exam_content.html', context)
+            messages.error(request, "Exam does not exist.")
+        return dict(exam=exam)
 
 
 @method_decorator(permission_check(UserType.TestManager),name='get')
-class ExamEditView(View):
-    def get(self,request,exam_id):
+class ExamEditView(View,OnlineUserStat):
+    
+    template_name='exam/exam_edit.html'
+    
+    def do_content_works(self,request,exam_id):
         try:
             exam = Exam.objects.get(id=exam_id)
             if exam.start_time < datetime.now():
@@ -180,16 +190,22 @@ class ExamEditView(View):
             for i in range(1, 60):
                 if i % 5 == 0:
                     minuteList.append(str(i))
-            context={'exam':exam,
-                     'testpapers':testpapers,
-                     'groups':groups,
-                     'dateList':dateList,
-                     'hourList':hourList,
-                     'minuteList':minuteList}
-            return render(request, 'exam/exam_edit.html', context)
+            
+            return  dict(exam=exam,
+                        testpapers=testpapers,
+                        groups=groups,
+                        original_date=original_date,
+                        original_hour=original_hour,
+                        original_minute=original_minute,
+                        dateList=dateList,
+                        now_date=now_date,
+                        hourList=hourList,
+                        minuteList=minuteList)
+            
         except ObjectDoesNotExist:
-            messages.error(request, "Exam does not exist, exam id - {}".format(exam_id))
+            messages.error(request, "Exam does not exist.")
             return redirect('exam_list')
+        
     def post(self,request,exam_id):
         try:
             exam = Exam.objects.get(id=exam_id)
@@ -205,6 +221,10 @@ class ExamEditView(View):
 
             testpaper = TestPaper.objects.get(id=int(request.POST.get('selected_testpaper')))
             TestPaper.objects.filter(id=int(request.POST.get('selected_testpaper'))).update(is_used=True)
+            selected_group = Group.objects.get(id=int(request.POST.get('selected_group')))
+            exam.testeeList.clear()
+            for member in selected_group.member.all():
+                exam.testeeList.add(member)
             
             exam.name = exam_name
             exam.start_time = start_time
@@ -213,16 +233,16 @@ class ExamEditView(View):
             exam.testpaper = testpaper
             exam.save()
             
-            messages.success(request, "Successfully updated exam - {}".format(exam.name))
+            messages.success(request, "Successfully updated exam.")
             return redirect('exam_list')
         except ObjectDoesNotExist:
-            messages.error(request, "Exam does not exist, exam id - {}".format(exam_id))
+            messages.error(request, "Exam does not exist.")
             return redirect('exam_list')
 
 
 @method_decorator(permission_check(UserType.TestManager),name='get')
 class ExamDeleteView(View):
-    def get(request, exam_id):
+    def get(self,request, exam_id):
         try:
             exam = Exam.objects.get(id=exam_id)
             if datetime.now() > exam.start_time:
@@ -237,13 +257,14 @@ class ExamDeleteView(View):
         #        is_public=False,
         #        announcer=request.user,
         #        users=list(User.objects.filter(exam__testeeList__exam=exam).distinct()))
-            exam.testeeList.clear()
-            exam.delete()
-            messages.success(request, "Successfully deleted, exam id - {}".format(exam_id))
-            return redirect('exam_list')
+            else:
+                exam.testeeList.clear()
+                exam.delete()
+                messages.success(request, "Successfully deleted.")
+                return redirect('exam_list')
 
         except ObjectDoesNotExist:
-            messages.error(request, "Exam does not exist, exam id - {}".format(exam_id))
+            messages.error(request, "Exam does not exist.")
             return redirect('exam_list')
 
 
@@ -270,8 +291,11 @@ class ExamDeleteView(View):
 #              'testpaperList':testpaperList,
 #              'paginator':paginator}
 #     return render(request, 'exam/testpaper_list.html', context)
-class TestpaperListView(View):
-    def get(self,request):
+class TestpaperListView(View,OnlineUserStat):
+    
+    template_name='exam/testpaper_list.html'
+    
+    def do_content_works(self,request):
         testpaper_name = request.GET.get('testpaper_name')
         if testpaper_name:
             testpapers = TestPaper.objects.filter(is_testpaper=True).filter(name__contains=testpaper_name).order_by("-created_time")
@@ -287,51 +311,55 @@ class TestpaperListView(View):
             testpaperList = paginator.page(1)
         except EmptyPage:
             testpaperList = paginator.page(paginator.num_pages)
+            
 
-        context={'testpapers':testpapers,
-                 'testpaperList':testpaperList,
-                 'paginator':paginator}
-        return render(request, 'exam/testpaper_list.html', context)
+        return dict(testpapers=testpapers,
+                    testpaperList=testpaperList,
+                    paginator=paginator)
 
 
 @method_decorator(permission_check(UserType.TestManager),name='get')
-class TestpaperContentView(View):
-    def get(self,request,testpaper_id):
+class TestpaperContentView(View,OnlineUserStat):
+    
+    template_name='exam/testpaper_content.html'
+    
+    def do_content_works(self,request,testpaper_id):
         try:
             testpaper = TestPaper.objects.get(id=testpaper_id)
         except ObjectDoesNotExist:
-            messages.error(request, 'Test paper does not exist, test paper id: {}'.format(testpaper_id))
+            messages.error(request, 'Test paper does not exist.')
             return redirect('testpaper_list')
 
         questions = testpaper.question_list.all().order_by('q_type')
-        context={'questions':questions}
-        return render(request, 'exam/testpaper_content.html', context)
+        return dict(questions=questions)
 
 
 @method_decorator(permission_check(UserType.TestManager),name='get')
-class TestpaperCreateView(View):
-    def get(self,request):
+class TestpaperCreateView(View,OnlineUserStat):
+    
+    template_name='exam/testpaper_create.html'
+    
+    def do_content_works(self,request):
         testpaper_names = [_.name for _ in TestPaper.objects.all()]
-        context={'testpaper_names':testpaper_names}
-        return render(request, 'exam/testpaper_create.html', context)
+        return dict(testpaper_names=testpaper_names)
+        
     def post(self,request):
         testpaper_name = request.POST.get('testpaper_name')
         try:
             testpaper = testmanager.create_testpaper(name=testpaper_name, created_by=request.user, is_testpaper=1)
-            messages.success(request, 'Successfully created test paper - {}'.format(testpaper.name))
+            messages.success(request, 'Successfully created test paper.')
             return redirect('testpaper_edit', testpaper_id=testpaper.id)
         except:
             messages.error(request, "This name had existed.")
             testpaper_names = [_.name for _ in TestPaper.objects.all()]
-            context={'testpaper_names':testpaper_names}
-            return render(request, 'exam/testpaper_create.html', context)
+            return dict(testpaper_names=testpaper_names)
 
 
 @permission_check(UserType.TestManager)
 def testpaper_valid(request, testpaper_id):
     testpaper = TestPaper.objects.get(id=testpaper_id)
     testpaper.valid = True
-    messages.success(request, 'Successfully valid test paper - {}'.format(testpaper.id))
+    messages.success(request, 'Successfully valid test paper.')
     testpaper.save()
     return redirect('testpaper_list')
 
@@ -341,7 +369,7 @@ def testpaper_unvalid(request, testpaper_id):
         messages.warning(request, "This test paper already used, cannot change valid status.")
         return redirect('testpaper_list')
     testpaper.valid = False
-    messages.success(request, 'Successfully valid test paper - {}'.format(testpaper.id))
+    messages.success(request, 'Successfully unvalid test paper.')
     testpaper.save()
     return redirect('testpaper_list')
 
@@ -352,11 +380,11 @@ class TestpaperEditView(View):
             testpaper = TestPaper.objects.get(id=testpaper_id)
 
             if testpaper.valid and testpaper.is_used:
-                messages.warning(request, "This test paper is valid, cannot edit again.")
+                messages.warning(request, "This test paper already used, cannot edit again.")
                 return redirect('testpaper_list')
-            elif testpaper.valid==False and testpaper.is_used:
-                messages.warning(request,"It is unvalid.")
-                return redirect('testpaper_list')
+            # elif testpaper.valid==False and testpaper.is_used:
+            #     messages.warning(request,"It is unvalid.")
+            #     return redirect('testpaper_list')
             else:
                 question_types = list(QuestionType.__members__.values())  # 5 types of question in definition
                 question_type_counts = list(QuestionTypeCounts.Exam.value[0])  # Each type has been defined its question amount
@@ -371,14 +399,12 @@ class TestpaperEditView(View):
 
                 testpaper_data = zip(question_types, question_type_counts, selected_question_type_nums)
                 context={'testpaper':testpaper,
-                         'question_types':question_types,
-                         'question_type_counts':question_type_counts,
-                         'selected_question_type_nums':selected_question_type_nums,
                          'testpaper_data':testpaper_data}
                 return render(request, 'exam/testpaper_edit.html', context)
         except ObjectDoesNotExist:
-            messages.error(request, 'Test paper does not exist, test paper id: {}'.format(testpaper_id))
+            messages.error(request, 'Test paper does not exist.')
             return redirect('testpaper_list')
+        
     def post(self,request,testpaper_id):
         try:
             testpaper = TestPaper.objects.get(id=testpaper_id)
@@ -401,23 +427,26 @@ def testpaper_delete(request, testpaper_id):
     try:
         testpaper = TestPaper.objects.get(id=testpaper_id)
         if testpaper.is_testpaper and testpaper.is_used:
-            messages.warning(request, 'Failed deleted test paper - {}.'.format(testpaper.id))
+            messages.warning(request, 'This test paper already used, cannot delete.')
         else:
             for question in testpaper.question_list.all():
                 testpaper.question_list.remove(question)
 
-            messages.success(request, 'Successfully deleted test paper - {}.'.format(testpaper.id))
+            messages.success(request, 'Successfully deleted test paper.')
             testpaper.delete()
         return redirect('testpaper_list')
 
     except ObjectDoesNotExist:
-        messages.error(request, 'Test paper does not exist, test paper id - {}'.format(testpaper_id))
+        messages.error(request, 'Test paper does not exist.')
         return redirect('testpaper_list')
 
 
 @method_decorator(permission_check(UserType.TestManager),name='get')
-class ManualPickView(View):
-    def get(self,request,testpaper_id,question_type):
+class ManualPickView(View,OnlineUserStat):
+    
+    template_name='exam/manual_pick.html'
+    
+    def do_content_works(self,request,testpaper_id,question_type):
         try:
             testpaper = TestPaper.objects.get(id=testpaper_id)
             for q_type in QuestionType.__members__.values():
@@ -428,14 +457,14 @@ class ManualPickView(View):
             all_questions = Question.objects.filter(state=1).filter(q_type=question_type.value[0]).order_by('id')
             selected_questions = testpaper.question_list.filter(q_type=question_type.value[0])
             limit_number = QuestionTypeCounts.Exam.value[0][question_type.value[0]-1]
-            context={'testpaper':testpaper,
-                     'question_type':question_type,
-                     'selected_questions':selected_questions,
-                     'limit_number':limit_number,
-                     'all_questions':all_questions}
-            return render(request, 'exam/manual_pick.html', context)
+            return dict(testpaper=testpaper,
+                        question_type=question_type,
+                        selected_questions=selected_questions,
+                        limit_number=limit_number,
+                        all_questions=all_questions)
         except ObjectDoesNotExist:
-            messages.error(request, 'Test paper does not exist, test paper id - {}'.format(testpaper_id))      
+            messages.error(request, 'Test paper does not exist.') 
+                 
     def post(self,request,testpaper_id,question_type):
         testpaper = TestPaper.objects.get(id=testpaper_id)
         selected_question_ids = request.POST.getlist('question')
@@ -467,7 +496,7 @@ def auto_pick(request, testpaper_id, question_type, difficulty):
 
         messages.success(request, selected_num)
     except ObjectDoesNotExist:
-        messages.error(request, 'Test paper does not exist, test paper id - {}'.format(testpaper_id))
+        messages.error(request, 'Test paper does not exist.')
 
     return redirect('/exam/testpaper/{}/edit'.format(testpaper_id))
 
@@ -486,6 +515,6 @@ def reset_pick(request, testpaper_id, question_type):
             testpaper.question_list.remove(question)
         messages.success(request, "{} has been reset".format(QUESTION_TYPE[question_type]))
     except ObjectDoesNotExist:
-        messages.error(request, 'Test paper does not exist, test paper id - {}'.format(testpaper_id))
+        messages.error(request, 'Test paper does not exist.')
 
     return redirect('/exam/testpaper/{}/edit'.format(testpaper_id))

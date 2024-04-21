@@ -33,9 +33,41 @@
                                             <th class="text-center"><i class="fa fa-users"></i></th>
                                             <th class="text-center">
                                                 <div class="add">
-                                                    <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ url('unit_create') }}'">
-                                                        <i class="fa fa-plus"></i>
-                                                    </button>
+                                                    <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ url('unit_create') }}'"><i class="fa fa-plus"></i></button>
+                                                    <button type="button" class="btn" data-toggle="modal" data-target="#promptContent"><i class="fa fa-question-circle"></i></button>
+                                                </div>
+                                                <div class="modal fade text-left" id="promptContent" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header text-center">
+                                                                <h5 class="modal-title" id="ModalLongTitle">{{trans("Tips")}}</h5>
+                                                            </div>
+                
+                                                            <div class="modal-body">
+                                                                <ul>
+                                                                    <li>
+                                                                        <p>
+                                                                            {{trans("Department List can look up the number of people in each department.")}}
+                                                                        </p>
+                                                                    </li>
+                                                                    <li>
+                                                                        <p>
+                                                                            {{trans("Click ")}}<i class="fa fa-plus btn btn-secondary"></i>{{trans(" can add a department.")}}
+                                                                        </p>
+                                                                    </li>
+                                                                    <li>
+                                                                        <p>
+                                                                            {{trans("Click ")}}<i class="fa fa-pencil-square-o"></i>{{trans(" can edit the department name.")}}
+                                                                        </p>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-primary" data-dismiss="modal">{{trans("OK")}}</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </th>
                                         </tr>
@@ -90,9 +122,41 @@
                                             <th class="text-center"><i class="fa fa-users"></i></th>
                                             <th class="text-center">
                                                 <div class="add">
-                                                    <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ url('unit_create') }}'">
-                                                        <i class="fa fa-plus"></i>
-                                                    </button>
+                                                    <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ url('unit_create') }}'"><i class="fa fa-plus"></i></button>
+                                                    <button type="button" class="btn" data-toggle="modal" data-target="#promptContent"><i class="fa fa-question-circle"></i></button>
+                                                </div>
+                                                <div class="modal fade text-left" id="promptContent" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header text-center">
+                                                                <h5 class="modal-title" id="ModalLongTitle">{{trans("Tips")}}</h5>
+                                                            </div>
+                
+                                                            <div class="modal-body">
+                                                                <ul>
+                                                                    <li>
+                                                                        <p>
+                                                                            {{trans("Squadron List can look up the number of people in each squadron.")}}
+                                                                        </p>
+                                                                    </li>
+                                                                    <li>
+                                                                        <p>
+                                                                            {{trans("Click ")}}<i class="fa fa-plus btn btn-secondary"></i>{{trans(" can add a squadron.")}}
+                                                                        </p>
+                                                                    </li>
+                                                                    <li>
+                                                                        <p>
+                                                                            {{trans("Click ")}}<i class="fa fa-pencil-square-o"></i>{{trans(" can edit the Squadron name.")}}
+                                                                        </p>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-primary" data-dismiss="modal">{{trans("OK")}}</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </th>
                                         </tr>

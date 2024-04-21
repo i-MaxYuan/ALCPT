@@ -28,6 +28,7 @@ from django.dispatch import receiver, Signal
 from .achievement.achievement import TestAchievement, achievement_create, new_user_achievement_create, old_user_achievement_update
 from django.views.generic import View
 from django.utils.decorators import method_decorator
+from alcpt.views import OnlineUserStat
 
 request_achievement_signal = Signal(providing_args=['user', 'score', 'exam_type'])
 
@@ -107,8 +108,11 @@ def accept_achievement(request, achievement_id, achievement_category):
 
 
 @method_decorator(permission_check(UserType.Testee),name='get')
-class AchievementListView(View):
-    def get(self,request):
+class AchievementListView(View,OnlineUserStat):
+    
+    template_name='testee/achievement.html'
+    
+    def do_content_works(self,request):
         all_achievements = Achievement.objects.all()
         #還沒接的成就
         unreceived_achievements = Achievement.objects.all().exclude(userachievements__user=request.user).filter(level__lte=request.user.level)
@@ -117,14 +121,16 @@ class AchievementListView(View):
         #已完成成就
         completed_achievements = UserAchievement.objects.all().filter(user=request.user).filter(unlock=True)
 
-        context={'all_achievements':all_achievements,
-                'received_achievements':received_achievements,
-                'completed_achievements':completed_achievements}
-        return render(request, 'testee/achievement.html', context)
+        return dict(all_achievements=all_achievements,
+                    received_achievements=received_achievements,
+                    completed_achievements=completed_achievements)
 
 
-class LeaderBoardView(View):
-    def get(self,request):
+class LeaderBoardView(View,OnlineUserStat):
+    
+    template_name='testee/leaderboard.html'
+    
+    def do_content_works(self,request):
         now_time = datetime.now()
         # 等級排名
         user_level = User.objects.all().order_by('-level')
@@ -134,17 +140,19 @@ class LeaderBoardView(View):
             latest_exam = exam[0]
             leaderboard = AnswerSheet.objects.all().filter(exam_id=latest_exam.id).order_by("-score")
 
-        context={'now_time':now_time,
-                 'user_level':user_level,
-                 'exam':exam,
-                 'latest_exam':latest_exam,
-                 'leaderboard':leaderboard}
-        return render(request, 'testee/leaderboard.html', context)
+        return dict(now_time=now_time,
+                    user_level=user_level,
+                    exam=exam,
+                    latest_exam=latest_exam,
+                    leaderboard=leaderboard)
 
 
 @method_decorator(permission_check(UserType.Testee),name='get')
-class ExamListView(View):
-    def get(self,request):
+class ExamListView(View,OnlineUserStat):
+    
+    template_name='testee/exam_list.html'
+    
+    def do_content_works(self,request):
         examList = []
         exams = Exam.objects.filter(is_public=True).filter(testeeList=request.user)
         for exam in exams:
@@ -155,11 +163,10 @@ class ExamListView(View):
         for practice in practices:
             practiceList.append(practice)
 
-        context={'examList':examList,
-                 'exams':exams,
-                 'practiceList':practiceList,
-                 'practices':practices}
-        return render(request, 'testee/exam_list.html', context)
+        return dict(examList=examList,
+                    exams=exams,
+                    practiceList=practiceList,
+                    practices=practices)
     
 
 @permission_check(UserType.Testee)
@@ -170,7 +177,6 @@ def pending(request, exam_id):
         now_time = datetime.now()
         exam.remaining_time = exam.remaining_time - timedelta.total_seconds(now_time - exam.modified_time)
         exam.save()
-
     return redirect('testee_exam_list')
 
 @permission_check(UserType.Testee)
@@ -435,10 +441,12 @@ def score_list(request):
 
 
 @method_decorator(permission_check(UserType.Testee),name='get')
-class PracticeCreateView(View):
-    def get(self,request,kind):
-        context={'kind':kind}
-        return render(request, 'practice/select.html',context)
+class PracticeCreateView(View,OnlineUserStat):
+    
+    template_name='practice/select.html'
+    
+    def do_content_works(self,request,kind):
+        return dict(kind=kind)
     def post (self,request,kind):
         user = User.objects.get(id=request.user.id)
 
@@ -477,164 +485,176 @@ class PracticeCreateView(View):
         return redirect('testee_exam_list') 
 
 
-@permission_check(UserType.Testee)
-def view_answersheet_content(request, answersheet_id):
-    now_time = datetime.now()
-    try:
-        answersheet = AnswerSheet.objects.get(id=answersheet_id)
+@method_decorator(permission_check(UserType.Testee),name='get')
+class ViewAnswersheetContent(View,OnlineUserStat):
+    
+    template_name='testee/answersheet_content.html'
+    
+    def do_content_works(self,request, answersheet_id):
+        now_time = datetime.now()
+        try:
+            answersheet = AnswerSheet.objects.get(id=answersheet_id)
 
-        if answersheet.exam.is_public:
-            if answersheet.is_finished == False:
-                messages.warning(request, _("You hadn't finish your test, please keep answering the exam"))
-                return redirect('testee_exam_list')
-            elif datetime.now() < answersheet.exam.finish_time:
-                messages.warning(request, 'This exam does not finish.')
-                return redirect('testee_score_list')
-            elif answersheet.is_tested == False:
-                messages.warning(request, _("You hadn't take this exam!"))
-                return redirect('testee_score_list')
+            if answersheet.exam.is_public:
+                if answersheet.is_finished == False:
+                    messages.warning(request, _("You hadn't finish your test, please keep answering the exam"))
+                    return redirect('testee_exam_list')
+                elif datetime.now() < answersheet.exam.finish_time:
+                    messages.warning(request, 'This exam does not finish.')
+                    return redirect('testee_score_list')
+                elif answersheet.is_tested == False:
+                    messages.warning(request, _("You hadn't take this exam!"))
+                    return redirect('testee_score_list')
+
+        except ObjectDoesNotExist:
+            messages.error(request, 'Answer sheet does not exist, answersheet_id: {}'.format(answersheet_id))
+            return redirect('testee_score_list')
+
+        testee_count=0
+        if answersheet.is_finished:
+            if answersheet.exam.exam_type == 1:
+                exam_average_score = answersheet.exam.average_score #平均成績
+                #PR = (100/有考試成績的人數*贏過的人數)+(100/有考試成績的人數*1/2)
+                exam_score_list = list(AnswerSheet.objects.filter(exam = answersheet.exam.id).order_by("score").exclude(score=None))
+                testee_count = len(exam_score_list) #有考試成績的人數
 
 
-    except ObjectDoesNotExist:
-        messages.error(
-            request, 'Answer sheet does not exist, answersheet_id: {}'.format(
-                answersheet_id))
-        return redirect('testee_score_list')
+                testee_surpassed = 0
+                for exam_score in exam_score_list:
+                    if request.user.id != exam_score.user_id:
+                        testee_surpassed+=1
+                    else:
+                        break
+
+                PR = int((100/testee_count*testee_surpassed)+(100/testee_count*1/2))
+                rank = testee_count - testee_surpassed
 
 
+            all_questions = Question.objects.all()#.filter(forum=False)
+            answers = answersheet.answer_set.all() #QuerySet
+            questions = Question.objects.all().filter(favorite=request.user)
+            question_correction_list, q_type_list= testee.question_correction(answersheet)
+            is_favorite = []
+            forum_comment_search = Forum.objects.all()
+            #return 那題題目 is True or False 的 list
+            for answer in answers:
+                try:
+                    questions.get(id=answer.question.id)
+                    is_favorite.append(1)
 
-    if answersheet.is_finished:
-        if answersheet.exam.exam_type == 1:
-            exam_average_score = answersheet.exam.average_score #平均成績
-            #PR = (100/有考試成績的人數*贏過的人數)+(100/有考試成績的人數*1/2)
-            exam_score_list = list(AnswerSheet.objects.filter(exam = answersheet.exam.id).order_by("score").exclude(score=None))
-            testee_count = len(exam_score_list) #有考試成績的人數
+                except ObjectDoesNotExist:
+                    is_favorite.append(0)
+                    # answers_correction_favorites = zip(answers, question_correction_list, is_favorite)
+                    answers_correction_favorites = zip(answers, question_correction_list, is_favorite, all_questions)
 
+            y_data = []
+            x_data1 = []
+            x_data2 = []
+            listening, listening_correct = 0, 0
+            reading, reading_correct = 0, 0
+            listening_correct_percentage, listening_wrong_percentage = 0, 0
+            reading_correct_percentage, reading_wrong_percentage = 0, 0
 
-            testee_surpassed = 0
-            for exam_score in exam_score_list:
-                if request.user.id != exam_score.user_id:
-                    testee_surpassed+=1
+            for question_correction, q_type in zip(question_correction_list, q_type_list):
+                if question_correction:
+                    if q_type == 1 or q_type == 2:
+                        listening += 1
+                        listening_correct += 1
+                    else:
+                        reading += 1
+                        reading_correct += 1
                 else:
-                    break
+                    if q_type == 1 or q_type == 2:
+                        listening += 1
+                    else:
+                        reading += 1
+            #沒聽力也沒閱讀
+            if listening == 0 and reading == 0:
+                return dict(answers_correction_favorites=answers_correction_favorites,
+                            answersheet=answersheet,
+                            exam_average_score=exam_average_score,
+                            PR=PR,
+                            rank=rank,
+                            forum_comment_search=forum_comment_search,
+                            testee_count=testee_count,
+                            all_questions=all_questions,
+                            answers=answers,
+                            questions=questions,
+                            question_correction_list=question_correction_list,
+                            q_type_list=q_type_list,
+                            is_favorite=is_favorite)
 
-            PR = int((100/testee_count*testee_surpassed)+(100/testee_count*1/2))
-            rank = testee_count - testee_surpassed
-
-
-        all_questions = Question.objects.all()#.filter(forum=False)
-        answers = answersheet.answer_set.all() #QuerySet
-        questions = Question.objects.all().filter(favorite=request.user)
-        question_correction_list, q_type_list= testee.question_correction(answersheet)
-        is_favorite = []
-        forum_comment_search = Forum.objects.all()
-        #return 那題題目 is True or False 的 list
-        for answer in answers:
-            try:
-                questions.get(id=answer.question.id)
-                is_favorite.append(1)
-
-            except ObjectDoesNotExist:
-                is_favorite.append(0)
-                # answers_correction_favorites = zip(answers, question_correction_list, is_favorite)
-                answers_correction_favorites = zip(answers, question_correction_list, is_favorite, all_questions)
-
-        y_data = []
-        x_data1 = []
-        x_data2 = []
-        listening, listening_correct = 0, 0
-        reading, reading_correct = 0, 0
-        listening_correct_percentage, listening_wrong_percentage = 0, 0
-        reading_correct_percentage, reading_wrong_percentage = 0, 0
-
-        for question_correction, q_type in zip(question_correction_list, q_type_list):
-            if question_correction:
-                if q_type == 1 or q_type == 2:
-                    listening += 1
-                    listening_correct += 1
-                else:
-                    reading += 1
-                    reading_correct += 1
             else:
-                if q_type == 1 or q_type == 2:
-                    listening += 1
-                else:
-                    reading += 1
-        #沒聽力也沒閱讀
-        if listening == 0 and reading == 0:
-            return render(request, 'testee/answersheet_content.html', locals())
+                #有聽力有閱讀
+                if listening != 0 and reading != 0:
+                    listening_correct_percentage  = int(listening_correct/ listening * 100)
+                    listening_wrong_percentage = 100 - listening_correct_percentage
+                    reading_correct_percentage = int(reading_correct/ reading * 100)
+                    reading_wrong_percentage = 100 - reading_correct_percentage
+                    y_data = ['Listening', 'Reading']
+                    x_data1 = [listening_correct_percentage, reading_correct_percentage]
+                    x_data2 = [listening_wrong_percentage, reading_wrong_percentage]
+                    width=[0.5, 0.5]
 
+                #沒有閱讀題，代表只有聽力
+                elif reading == 0:
+                    listening_correct_percentage  = int(listening_correct/ listening * 100)
+                    listening_wrong_percentage = 100 - listening_correct_percentage
+                    y_data = ['Listening']
+                    x_data1 = [listening_correct_percentage]
+                    x_data2 = [listening_wrong_percentage]
+                    width=[0.25, 0.25]
+
+                #沒有聽力題，代表只有閱讀
+                if listening == 0:
+                    reading_correct_percentage = int(reading_correct/ reading * 100)
+                    reading_wrong_percentage = 100 - reading_correct_percentage
+                    y_data = ['Reading']
+                    x_data1 = [reading_correct_percentage]
+                    x_data2 = [reading_wrong_percentage]
+                    width=[0.25, 0.25]
+
+                #x_axis: category of Listening or READING
+                #y_axis: correction percentage
+                trace1 = go.Bar(
+                    y = y_data,
+                    x = x_data1,
+                    width=width,
+                    name = '正確率',
+                    orientation = 'h',
+                    marker=dict(color='#44E18F',
+                            line=dict(width=1)))
+
+                trace2 = go.Bar(
+                    y = y_data,
+                    x = x_data2,
+                    width=width,
+                    name = '錯誤率',
+                    orientation = 'h',
+                    marker=dict(color='#FA483C',
+                            line=dict(width=1)))
+                data = [trace1, trace2]
+
+                layout = go.Layout(title="本次答題正確率",barmode = 'stack')
+                fig = go.Figure(data=data, layout=layout)
+                correction_bar_chart = pyo.plot(fig, output_type='div')
+
+                return dict(correction_bar_chart=correction_bar_chart,
+                            answersheet=answersheet,
+                            testee_count=testee_count,
+                            all_questions=all_questions,
+                            answers=answers,
+                            questions=questions,
+                            is_favorite=is_favorite,
+                            forum_comment_search=forum_comment_search,
+                            answers_correction_favorites=answers_correction_favorites)
+        elif answersheet.is_finished  == False and now_time > answersheet.finish_time:
+
+            messages.success(request, {{trans("You hadn't finish your test, please keep answering the exam")}})   
+            return redirect('testee_exam_list')
         else:
-            #有聽力有閱讀
-            if listening != 0 and reading != 0:
-                listening_correct_percentage  = int(listening_correct/ listening * 100)
-                listening_wrong_percentage = 100 - listening_correct_percentage
-                reading_correct_percentage = int(reading_correct/ reading * 100)
-                reading_wrong_percentage = 100 - reading_correct_percentage
-                y_data = ['Listening', 'Reading']
-                x_data1 = [listening_correct_percentage, reading_correct_percentage]
-                x_data2 = [listening_wrong_percentage, reading_wrong_percentage]
-                width=[0.5, 0.5]
-
-            #沒有閱讀題，代表只有聽力
-            elif reading == 0:
-                listening_correct_percentage  = int(listening_correct/ listening * 100)
-                listening_wrong_percentage = 100 - listening_correct_percentage
-                y_data = ['Listening']
-                x_data1 = [listening_correct_percentage]
-                x_data2 = [listening_wrong_percentage]
-                width=[0.25, 0.25]
-
-            #沒有聽力題，代表只有閱讀
-            if listening == 0:
-                reading_correct_percentage = int(reading_correct/ reading * 100)
-                reading_wrong_percentage = 100 - reading_correct_percentage
-                y_data = ['Reading']
-                x_data1 = [reading_correct_percentage]
-                x_data2 = [reading_wrong_percentage]
-                width=[0.25, 0.25]
-
-
-            #x_axis: category of Listening or READING
-            #y_axis: correction percentage
-            trace1 = go.Bar(
-                y = y_data,
-                x = x_data1,
-                width=width,
-                name = '正確率',
-                orientation = 'h',
-                marker=dict(color='#44E18F',
-                            line=dict(width=1)
-                            )
-            )
-
-            trace2 = go.Bar(
-                y = y_data,
-                x = x_data2,
-                width=width,
-                name = '錯誤率',
-                orientation = 'h',
-                marker=dict(color='#FA483C',
-                            line=dict(width=1)
-                            )
-                            )
-            data = [trace1, trace2]
-
-            layout = go.Layout(
-                title="本次答題正確率",
-                barmode = 'stack'
-            )
-            fig = go.Figure(data=data, layout=layout)
-            correction_bar_chart = pyo.plot(fig, output_type='div')
-
-            return render(request, 'testee/answersheet_content.html', locals())
-    elif answersheet.is_finished  == False and now_time > answersheet.finish_time:
-
-        messages.success(request, {{trans("You hadn't finish your test, please keep answering the exam")}})   
-        return redirect('testee_exam_list')
-    else:
-        messages.warning(request, 'Does not finished this practice. Reject your request.')
-        return redirect('testee_score_list')
+            messages.warning(request, 'Does not finished this practice. Reject your request.')
+            return redirect('testee_score_list')
 
 @permission_check(UserType.Testee)
 def favorite_question(request, question_id, answersheet_id):
@@ -712,13 +732,15 @@ def answersheet_comment_delete(request, forum_comment_id, answersheet_id):
     return redirect('view_answersheet_content', answersheet_id)
 
 @method_decorator(permission_check(UserType.Testee),name='get')
-class ForumView(View):
-    def get(self,request):
+class ForumView(View,OnlineUserStat):
+    
+    template_name='testee/forum.html'
+    
+    def do_content_works(self,request):
         forum_questions_search = Question.objects.all().filter(in_forum=1)
         forum_comment_search = Forum.objects.all()
-        context={'forum_questions_search':forum_questions_search,
-                 'forum_comment_search':forum_comment_search}
-        return render(request, 'testee/forum.html', context)      
+        return dict(forum_questions_search=forum_questions_search,
+                    forum_comment_search=forum_comment_search)      
 
 
 # @permission_check(UserType.TBManager)
@@ -731,8 +753,11 @@ class ForumView(View):
 
 
 @method_decorator(permission_check(UserType.Testee),name='get')
-class FavoriteQuestionListView(View):
-    def get(self,request):
+class FavoriteQuestionListView(View,OnlineUserStat):
+    
+    template_name='testee/favorite_question_list.html'
+    
+    def do_content_works(self,request):
         favorite_questions_search = Question.objects.all().filter(favorite=request.user)
         question_types = [_ for _ in QuestionType]
 
@@ -767,13 +792,12 @@ class FavoriteQuestionListView(View):
         except EmptyPage:
             questionList = paginator.page(paginator.num_pages)
 
-        context={'question_types':question_types,
-                 'difficulty_choices':difficulty_choices,
-                 'favorite_questions_search':favorite_questions_search,
-                 'query_content':query_content,
-                 'questionList':questionList,
-                 'keywords':keywords}
-        return render(request, 'testee/favorite_question_list.html', context)
+        return dict(question_types=question_types,
+                    difficulty_choices=difficulty_choices,
+                    favorite_questions_search=favorite_questions_search,
+                    query_content=query_content,
+                    questionList=questionList,
+                    keywords=keywords)
         
         
 @permission_check(UserType.Testee)
@@ -890,8 +914,11 @@ def start_practice(request, exam_id):
                         answer_id=Answer.objects.filter(answer_sheet=answer_sheet)[0].id)   # transfer the first question
 
 @method_decorator(permission_check(UserType.Testee),name='get')
-class AnsweringView(View):
-    def get(self,request,exam_id,answer_id):
+class AnsweringView(View,OnlineUserStat):
+    
+    template_name='testee/answering.html'
+    
+    def do_content_works(self,request,exam_id,answer_id):
         exam = Exam.objects.get(id=exam_id)
         if exam.finish_time is None:
             deadline = None
@@ -920,13 +947,12 @@ class AnsweringView(View):
             messages.error(request,'Answer id error, answer id: {}'.format(answer_id))
             return redirect('testee_exam_list')
         answer_count  = len(Answer.objects.filter(answer_sheet=answer_sheet).filter(selected=-1))
-        context={'exam':exam,
-                 'answer':answer,
-                 'selected_answer':selected_answer,
-                 'answer_sheet':answer_sheet,
-                 'answers':answers,
-                 'deadline':deadline}
-        return render(request, 'testee/answering.html', context)
+        return dict(exam=exam,
+                    answer=answer,
+                    selected_answer=selected_answer,
+                    answer_sheet=answer_sheet,
+                    answers=answers,
+                    deadline=deadline)
     
     def post(self,request,exam_id,answer_id):
         exam=Exam.objects.get(id=exam_id)
@@ -1067,16 +1093,18 @@ def settle(request, exam_id):
 
 
 @method_decorator(login_required,name='get')
-class ReportQuestionView(View):
-    def get(self,request,question_id):
+class ReportQuestionView(View,OnlineUserStat):
+    
+    template_name='testee/report_question.html'
+    
+    def do_content_works(self,request,question_id):
         categories = ReportCategory.objects.all()
         reported_question = Question.objects.get(id=question_id)
         if reported_question.state == 4:
             messages.warning(request,
                              "This question had been reported, thank you.")
             return redirect(request.META.get('HTTP_REFERER'))
-        context={'categories':categories,'reported_question':reported_question}
-        return render(request, 'testee/report_question.html', context)
+        return dict(categories=categories,reported_question=reported_question)
     def post(self,request,question_id):
         try:
             category = ReportCategory.objects.get(
@@ -1106,13 +1134,21 @@ class ReportQuestionView(View):
             context={'categories':categories,'reported_question':reported_question}
             return render(request, 'testee/report_question.html', context)
         
-
-def word_library(request):
+class WorldLibrary(View,OnlineUserStat):
+    
+    template_name='testee/word_library.html'
+    
+    def do_content_works(self,request):
         word_list = Word_library.objects.all()
-        return render(request,'testee/word_library.html',{'word_list':word_list})
+        return dict(word_list=word_list)
 
-def word_library_create(request):
-    if request.method == 'POST':
+class WorldLibraryCreate(View,OnlineUserStat):
+    
+    template_name='testee/word_library_create.html'
+    
+    def do_content_works(self,request):
+        return {}
+    def post(self,request):
         if Word_library.objects.all().filter(words=request.POST.get('word_english')):
             messages.error(request,'exist word')
             return redirect('word_library')
@@ -1123,8 +1159,7 @@ def word_library_create(request):
             Word.save()
             messages.success(request,'Word Added successful.')
             return redirect('word_library')
-    else:    
-        return render(request,'testee/word_library_create.html')
+        
 
 def word_library_del(request,words):
     try:
@@ -1136,10 +1171,17 @@ def word_library_del(request,words):
         messages.error(request,'error')
         return redirect('word_library')
 
-def word_library_edit(request,words,translations):
-    word = Word_library.objects.get(words=words)
-    translate = Word_library.objects.get(translations=translations) 
-    if request.method == 'POST':
+class WorldLibraryEdit(View,OnlineUserStat):
+    
+    template_name='testee/word_library_edit.html'
+    
+    def do_content_works(self,request,words,translations):
+        word = Word_library.objects.get(words=words)
+        translate = Word_library.objects.get(translations=translations) 
+        return dict(words=word,translations=translate)
+    def post(self,request,words,translations):
+        word = Word_library.objects.get(words=words)
+        translate = Word_library.objects.get(translations=translations) 
         try:
             word_english=request.POST.get('word_english')
             word_chinese=request.POST.get('word_chinese')
@@ -1150,7 +1192,4 @@ def word_library_edit(request,words,translations):
         except ObjectDoesNotExist:
             messages.error(request,'error')
             return redirect('word_library')
-            
-    else:
-        context={'words':word,'translations':translate}
-        return render(request,'testee/word_library_edit.html',context)          
+                   

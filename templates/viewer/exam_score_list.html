@@ -19,7 +19,30 @@
                             <th class="text-center"><i class="fa fa-users"></i></th>
                             <th class="text-center">{{trans("Start Time")}}</th>
                             <th class="text-center">{{trans("Finish Time")}}</th>
-                            <th class="text-center">{{trans("Duration")}}({{trans("min")}})</th>
+                            <th class="text-center">{{trans("Duration")}}({{trans("min")}})
+                                <button type="button" class="btn" data-toggle="modal" data-target="#promptContent"><i class="fa fa-question-circle"></i></button>
+                                <div class="modal fade text-left" id="promptContent" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header text-center">
+                                                <h5 class="modal-title" id="ModalLongTitle">{{trans("Tips")}}</h5>
+                                            </div>
+
+                                            <div class="modal-body">
+                                                <ul>
+                                                    <li>
+                                                        <p>{{trans("Select one exam, and you can look up the score detail.")}}</p>
+                                                    </li>
+                                                </ul>
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-primary" data-dismiss="modal">{{trans("OK")}}</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </th>
                         </tr>
                     </thead>
                     <tbody>

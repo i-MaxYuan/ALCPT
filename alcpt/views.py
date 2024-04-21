@@ -50,29 +50,33 @@ class OnlineUserStat:
         return render(request, self.template_name, contents)
 
 
-def index(request):
-    privileges = UserType.__members__,
-    proclamations = Proclamation.objects.filter(is_public=True)
 
-    now_time = datetime.datetime.now()
+class ProclamationCenter(View,OnlineUserStat):
+    
+    template_name='proclamation/proclamation.html'
+    
+    def do_content_works(self,request):
+        privileges = UserType.__members__,
+        proclamations = Proclamation.objects.filter(is_public=True)
 
-    exam = Exam.objects.all().filter(exam_type=1).order_by('-id')
+        now_time = datetime.datetime.now()
 
-    if exam:
-        latest_exam = exam[0]
-        leaderboard = AnswerSheet.objects.all().filter(exam_id=latest_exam.id).order_by("-score")
+        exam = Exam.objects.all().filter(exam_type=1).order_by('-id')
 
-    page = request.GET.get('page', 1)
-    paginator = Paginator(proclamations, 10)  # the second parameter is used to display how many items. Now is display 5
+        if exam:
+            latest_exam = exam[0]
+            leaderboard = AnswerSheet.objects.all().filter(exam_id=latest_exam.id).order_by("-score")
 
-    try:
-        pros = paginator.page(page)
-    except PageNotAnInteger:
-        pros = paginator.page(1)
-    except EmptyPage:
-        pros = paginator.page(paginator.num_pages)
+        page = request.GET.get('page', 1)
+        paginator = Paginator(proclamations, 10)  # the second parameter is used to display how many items. Now is display 5
 
-    return render(request, 'proclamation/proclamation.html', locals())
+        try:
+            pros = paginator.page(page)
+        except PageNotAnInteger:
+            pros = paginator.page(1)
+        except EmptyPage:
+            pros = paginator.page(paginator.num_pages)
+        return dict(pros=pros,paginator=paginator)
 
 
 # def about(request):
@@ -146,6 +150,14 @@ def downloadSystemPDF112(request):
     response = FileResponse(file)
     response['Content-Type'] = 'application/octet-stream'
     response['Content-Disposition'] = 'attachment;filename="project112.pdf"'
+    return response
+
+
+def downloadSystemPDF113(request):
+    file = open('./static/document/project113.pdf', 'rb')  # path have to start from root
+    response = FileResponse(file)
+    response['Content-Type'] = 'application/octet-stream'
+    response['Content-Disposition'] = 'attachment;filename="project113.pdf"'
     return response
 
 

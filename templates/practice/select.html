@@ -22,8 +22,33 @@
 
                     <div class="card">
 
-                        <div class="card-header" style="font-size:30px;">{{trans("Practice Select")}}</div>
-                        
+                        <div class="card-header" style="font-size:30px;">{{trans("Practice Select")}} <button type="button" class="btn" data-toggle="modal" data-target="#promptContent" style="margin-left:600px;"><i class="fa fa-question-circle"></i></button></div>
+                        <div class="modal fade text-left" id="promptContent" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header text-center">
+                                        <h5 class="modal-title" id="ModalLongTitle">{{trans("Tips")}}</h5>
+                                    </div>
+
+                                    <div class="modal-body">
+                                        <ul>
+                                            {% if kind == 'listening' %}
+                                                <p>{{trans("1. Choose one Listening type. (QA / ShortConversation) ")}}</p>
+                                            {% else %}
+                                                <p>{{trans("1. Choose one Reading type. (Grammar / Phrase / Understanding) ")}}</p>
+                                            {% endif %}
+                                            <p>{{trans("2. Deside on the number of questions in this test paper.")}}</p>
+                                            <p>{{trans("3. Determine the difficulty of this test paper.")}}</p>
+                                            <p>{{trans("4. Enter the duration of this test paper. (Optional)")}}</p>
+                                        </ul>
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary" data-dismiss="modal">{{trans("OK")}}</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                         <div class="card-body">
                             {% if kind == 'listening' %}

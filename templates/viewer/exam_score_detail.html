@@ -25,7 +25,30 @@
                             <th class="text-center">{{trans("Name")}}</th>
                             <th class="text-center">{{trans("Score")}}</th>
                             <th class="text-center">{{trans("Grade")}}</th>
-                            <th class="text-right"></th>
+                            <th class="text-right">
+                                <button type="button" class="btn" data-toggle="modal" data-target="#promptContent"><i class="fa fa-question-circle"></i></button>
+                                <div class="modal fade text-left" id="promptContent" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header text-center">
+                                                <h5 class="modal-title" id="ModalLongTitle">{{trans("Tips")}}</h5>
+                                            </div>
+
+                                            <div class="modal-body">
+                                                <ul>
+                                                    <li>
+                                                        <p>{{trans("Look up this exam all information.")}}</p>
+                                                    </li>
+                                                </ul>
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-primary" data-dismiss="modal">{{trans("OK")}}</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </th>
                         </thead>
 
                         <tbody>
@@ -43,7 +66,7 @@
                                 {% if answer_sheet.is_tested == False %}
                                 <td class="text-center" data-title="Type" style="color: #c12e2a">未進行測驗</td>
                                 <td class="text-center" data-title="Type" style="color: #00A600"></td>
-                                {% elif answer_sheet.score  < 60 %}
+                                {% elif answer_sheet.score < 60 %}
                                 <td class="text-center" data-title="Type" style="color: #c12e2a">{{ answer_sheet.score }}</td>
                                 <td class="text-center" data-title="Type" style="color: #c12e2a">{{ grade }}</td>
                                 {% else %}
@@ -78,7 +101,7 @@
                             <td class="text-left" data-title="Type">{{ testee_number }}</td>
                         </tr>
                         <tr>
-                            <td class="text-center" data-title="Type"">未考試人數 : </td>
+                            <td class="text-center" data-title="Type">未考試人數 : </td>
                             <td class=" text-left" data-title="Type" style="color: #c12e2a">{{ testee_not_tested }}</td>
                         </tr>
                         <tr>
