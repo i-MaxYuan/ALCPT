@@ -75,25 +75,24 @@
                             </button>
                         </div>
                         {% if groupList %} {% for group in groupList %}
-                        <tr style="cursor: pointer" onclick="window.location.href='{{ url('testee_group_member_list', args=[group.id]) }}'">
-                            <td class="text-center" data-title="Name">{{ group.name }}</td>
-                            <td class="text-center" data-title="People">
+                        <tr style="cursor: pointer" >
+                            <td class="text-center" data-title="Name" onclick="window.location.href='{{ url('testee_group_member_list', args=[group.id]) }}'">{{ group.name }}</td>
+                            <td class="text-center" data-title="People" onclick="window.location.href='{{ url('testee_group_member_list', args=[group.id]) }}'">
                                 {{ group.member.count() }}
                             </td>
-                            <td class="text-center" data-title="Created Time">
+                            <td class="text-center" data-title="Created Time" onclick="window.location.href='{{ url('testee_group_member_list', args=[group.id]) }}'">
                                 {{ group.created_time.strftime('%Y/%m/%d %H:%M') }}
                             </td>
-                            <td class="text-center" data-title="Last Update">
+                            <td class="text-center" data-title="Last Update" onclick="window.location.href='{{ url('testee_group_member_list', args=[group.id]) }}'">
                                 {{ group.update_time.strftime('%Y/%m/%d %H:%M') }}
                             </td>
-                            <td class="text-center" data-title="Creator">
+                            <td class="text-center" data-title="Creator" onclick="window.location.href='{{ url('testee_group_member_list', args=[group.id]) }}'">
                                 {{ group.created_by.name }}
                             </td>
                             <td class="text-center">
                                 <a href="{{ url('testee_group_edit', args=[group.id]) }}"><i class="fa fa-pencil-square-o fa-fw mb-2"></i></a>
                                 <a href="{{ url('testee_group_delete', args=[group.id]) }}" onclick="return confirm('{{trans("Sure to delete")}}？')"><i class="fa fa-trash fa-fw mb-2"></i></a>
-                            </td>
-                        </tr>
+                            </td>                       </tr>
                         {% endfor %} {% else %}
                         <tr>
                             <td class="text-center" colspan="6">{{trans("No Data")}}</td>

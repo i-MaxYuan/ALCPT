@@ -125,52 +125,51 @@
                             </button>
                         </div>
                         {% if userList %} {% for user in userList %}
-                        <tr class="align-center" style="cursor: pointer" onclick="window.location.href='{{ url('view_profile', args=[user.reg_id]) }}'">
-                            <td class="text-center" data-title="Account：">
+                        <tr class="align-center" style="cursor: pointer">
+                            <td class="text-center" data-title="Account：" onclick="window.location.href='{{ url('view_profile', args=[user.reg_id]) }}'">
                                 {{ user.reg_id }}
                             </td>
 
-                            <td class="text-center" data-title="Name：">{{ user.name }}</td>
+                            <td class="text-center" data-title="Name：" onclick="window.location.href='{{ url('view_profile', args=[user.reg_id]) }}'">{{ user.name }}</td>
 
-                            <td class="text-center" data-title="Identity：">
+                            <td class="text-center" data-title="Identity：" onclick="window.location.href='{{ url('view_profile', args=[user.reg_id]) }}'">
                                 {% if user.identity %} {{ user.identity|readableIdentity }} {% else %} 尚未設定 {% endif %}
                             </td>
 
 
-                            <td class="text-center" data-title="SYS">
+                            <td class="text-center" data-title="SYS" onclick="window.location.href='{{ url('view_profile', args=[user.reg_id]) }}'">
                                 {% if user|has_perms(privileges.SystemManager) %}
                                 <i class="fas fa-check" style="color: red;"></i>
                                 {% endif %}
                             </td>
 
-                            <td class="text-center" data-title="TM">
+                            <td class="text-center" data-title="TM" onclick="window.location.href='{{ url('view_profile', args=[user.reg_id]) }}'">
                                 {% if user|has_perms(privileges.TestManager) %}
                                 <i class="fas fa-check" style="color: orange;"></i>
                                 {% endif %}
                             </td>
-                            <td class="text-center" data-title="TBM">
+                            <td class="text-center" data-title="TBM" onclick="window.location.href='{{ url('view_profile', args=[user.reg_id]) }}'">
                                 {% if user|has_perms(privileges.TBManager) %}
                                 <i class="fas fa-check" style="color: blue;"></i>
                                 {% endif %}
                             </td>
-                            <td class="text-center" data-title="TBO">
+                            <td class="text-center" data-title="TBO" onclick="window.location.href='{{ url('view_profile', args=[user.reg_id]) }}'">
                                 {% if user|has_perms(privileges.TBOperator) %}
                                 <i class="fas fa-check" style="color: green;"></i>
                                 {% endif %}
                             </td>
-                            <td class="text-center" data-title="Viewer">
-
+                            <td class="text-center" data-title="Viewer" onclick="window.location.href='{{ url('view_profile', args=[user.reg_id]) }}'">
                                 {% if user|has_perms(privileges.Viewer) %}
                                 <i class="fas fa-check" style="color: darkblue;"></i>
                                 {% endif %}
 
                             </td>
-                            <td class="text-center" data-title="Testee">
+                            <td class="text-center" data-title="Testee" onclick="window.location.href='{{ url('view_profile', args=[user.reg_id]) }}'">
                                 {% if user|has_perms(privileges.Testee) %}
                                 <i class="fas fa-check" style="color: gray;"></i>
                                 {% endif %}
                             </td>
-                            <td class="text-center" data-title="Last Login：">
+                            <td class="text-center" data-title="Last Login：" onclick="window.location.href='{{ url('view_profile', args=[user.reg_id]) }}'">
                                 {% if user.last_login %} {{ user.last_login.strftime('%Y/%m/%d %H:%M') }} {% else %}{{trans(" Not logged in ")}}{% endif %}
                             </td>
                             <td class="text-center">

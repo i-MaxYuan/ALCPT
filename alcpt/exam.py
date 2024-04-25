@@ -30,6 +30,7 @@ class ExamListView(View,OnlineUserStat):
         exams = Exam.objects.filter(is_public=True)
         page = request.GET.get('page', 1)
         paginator = Paginator(exams, 10)
+        now=datetime.now()
         try:
             examList = paginator.page(page)
         except PageNotAnInteger:
@@ -38,7 +39,8 @@ class ExamListView(View,OnlineUserStat):
             examList = paginator.page(paginator.num_pages)
         return dict(exams=exams,
                     examList=examList,
-                    paginator=paginator)
+                    paginator=paginator,
+                    now=now)
 
 
 @method_decorator(permission_check(UserType.TestManager),name='get')
@@ -167,11 +169,12 @@ class ExamEditView(View,OnlineUserStat):
     def do_content_works(self,request,exam_id):
         try:
             exam = Exam.objects.get(id=exam_id)
-            if exam.start_time < datetime.now():
-                messages.error(request, "Exam has started, cannot be edited.")
-                return redirect('exam_list')
+            # if exam.start_time < datetime.now():
+            #     messages.error(request,"Exam has started, cannot be edited.")
+            #     return redirect('exam_list')
             testpapers = TestPaper.objects.filter(is_testpaper=True, valid=True)
             groups = Group.objects.all()
+            now=datetime.now()
             
             original_date = exam.start_time.strftime('%Y-%m-%d')
             original_hour = exam.start_time.strftime('%H')
@@ -378,33 +381,34 @@ def testpaper_unvalid(request, testpaper_id):
     return redirect('testpaper_list')
 
 @method_decorator(permission_check(UserType.TestManager),name='get')
-class TestpaperEditView(View):
-    def get(self,request,testpaper_id):
+class TestpaperEditView(View,OnlineUserStat):
+    
+    template_name='exam/testpaper_edit.html'
+    
+    def do_content_works(self,request,testpaper_id):
         try:
             testpaper = TestPaper.objects.get(id=testpaper_id)
 
-            if testpaper.valid and testpaper.is_used:
-                messages.warning(request, "This test paper already used, cannot edit again.")
-                return redirect('testpaper_list')
+            # if testpaper.valid and testpaper.is_used:
+            #     messages.warning(request, "This test paper already used, cannot edit again.")
+            #     return redirect('testpaper_list')
             # elif testpaper.valid==False and testpaper.is_used:
             #     messages.warning(request,"It is unvalid.")
             #     return redirect('testpaper_list')
-            else:
-                question_types = list(QuestionType.__members__.values())  # 5 types of question in definition
-                question_type_counts = list(QuestionTypeCounts.Exam.value[0])  # Each type has been defined its question amount
+            # else:
+            question_types = list(QuestionType.__members__.values())  # 5 types of question in definition
+            question_type_counts = list(QuestionTypeCounts.Exam.value[0])  # Each type has been defined its question amount
 
-                all_selected_questions = testpaper.question_list.all()  # Had been selected questions in this test paper.
-                selected_question_type_nums = [len(all_selected_questions.filter(q_type=1)),
+            all_selected_questions = testpaper.question_list.all()  # Had been selected questions in this test paper.
+            selected_question_type_nums = [len(all_selected_questions.filter(q_type=1)),
                                            # The number that had been selected for each type.
                                            len(all_selected_questions.filter(q_type=2)),
                                            len(all_selected_questions.filter(q_type=3)),
                                            len(all_selected_questions.filter(q_type=4)),
                                            len(all_selected_questions.filter(q_type=5))]
 
-                testpaper_data = zip(question_types, question_type_counts, selected_question_type_nums)
-                context={'testpaper':testpaper,
-                         'testpaper_data':testpaper_data}
-                return render(request, 'exam/testpaper_edit.html', context)
+            testpaper_data = zip(question_types, question_type_counts, selected_question_type_nums)
+            return dict(testpaper=testpaper,testpaper_data=testpaper_data)
         except ObjectDoesNotExist:
             messages.error(request, 'Test paper does not exist.')
             return redirect('testpaper_list')

@@ -199,6 +199,7 @@ class ExamListView(View,OnlineUserStat):
     
     def do_content_works(self,request,exam_type):
         examList = []
+        now=datetime.now()
         
         if exam_type == '1':
             exams = Exam.objects.filter(is_public=True).filter(testeeList=request.user)
@@ -209,9 +210,10 @@ class ExamListView(View,OnlineUserStat):
             examList.append(exam)
         
         context={'examList':examList,
-                 'exam_type':exam_type,}
+                 'exam_type':exam_type,
+                 'now':now}
         
-        return render(request, 'testee/exam_list.html', context)
+        return context
     # def get(self,request):  
     #     examList = []
     #     exams = Exam.objects.filter(is_public=True).filter(testeeList=request.user)
