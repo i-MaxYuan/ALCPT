@@ -50,18 +50,19 @@ class IntegrateTestResults:
         testee_grades = exam_result.testee_grade
         exam_result.tested += 1
         exam_result.not_tested_num = len(exam.testeeList.all())-exam_result.tested
-        exam_result.range_times[score//10-1] += 1
         
         def grade(score, breakpoints=[60,70,80,90], grades='FDCBA'):
             i = bisect.bisect(breakpoints, score)
             return grades[i]
-        
+                       
+        exam_result.range_times[score//10] += 1
+
         testees = exam.testeeList.all()
         for testee in testees:
             answer_sheet = AnswerSheet.objects.get(exam=exam, user_id=testee.id)
         
             if answer_sheet.is_tested:
-                
+        
                 if score >= 60:
                     exam_result.qualified_num += 1
                     testee_scores.append(score)
@@ -71,11 +72,12 @@ class IntegrateTestResults:
                     exam_result.unqualified_num += 1
                     testee_scores.append(score)
                     testee_grades.append(grade(score))
-            
+                
             else:
                 testee_scores.append(None)
                 testee_grades.append(grade(0))
-        exam_result.save()
+            exam_result.save()
+        
 
 @receiver(post_save, sender=Achievement)
 def achievement_create_receiver(sender, instance, **kwargs):
@@ -199,6 +201,7 @@ class ExamListView(View,OnlineUserStat):
     
     def do_content_works(self,request,exam_type):
         examList = []
+        now = datetime.now()
         
         if exam_type == '1':
             exams = Exam.objects.filter(is_public=True).filter(testeeList=request.user)
@@ -209,9 +212,10 @@ class ExamListView(View,OnlineUserStat):
             examList.append(exam)
         
         context={'examList':examList,
-                 'exam_type':exam_type,}
+                 'exam_type':exam_type,
+                 'now':now}
         
-        return render(request, 'testee/exam_list.html', context)
+        return context
     # def get(self,request):  
     #     examList = []
     #     exams = Exam.objects.filter(is_public=True).filter(testeeList=request.user)
@@ -250,15 +254,20 @@ class ScoreList(View,OnlineUserStat):
     
     def do_content_works(self,request,exam_type):
         answer_sheets = AnswerSheet.objects.all().filter(user=request.user,exam__exam_type=exam_type).order_by('exam__created_time')
-        tests_score = [i.name for i in list(ExamType) if int(exam_type) == i.value[0]]
-      
+        for i in list(ExamType):
+            if int(exam_type) == i.value[0]:
+                tests_score = [i.name,i.value[1]]
+
     # Line chart
-        layouts = go.Layout(title={'text':'成績分布圖(僅顯示近8次成績)'}, yaxis={'title':'score','range':[0,101]},
-                            xaxis_title='finished_time', font=dict(size=10,color='Black')) 
+        layouts = go.Layout(title={'text':tests_score[1]+'成績分布圖(僅顯示近8次成績)'}, yaxis={'title':'分數','range':[0,101]},
+                            xaxis_title='結束時間', font=dict(size=10,color='Black')) 
     
         x_finish_time = list(x[0].strftime('%Y%m%d%R') for x in answer_sheets.values_list('finish_time'))[-8:]
-        traces = go.Scatter(x=x_finish_time, y=list(i[0] for i in answer_sheets.values_list('score'))[-8:],
-                            mode='lines+markers', marker={'color':'#FF5B00'})
+        traces = go.Scatter(x=x_finish_time, 
+                            y=list(i[0] for i in answer_sheets.values_list('score'))[-8:],
+                            mode='lines+markers+text',
+                            marker={'color':'#FF5B00', 'symbol': 104, 'size': 20},
+                            text=list(i[0] for i in answer_sheets.values_list('score'))[-8:])
     
         exam_fig = go.Figure(data=traces,layout=layouts)
         
@@ -286,7 +295,7 @@ class ScoreList(View,OnlineUserStat):
                        type= 'pie',
                        marker=dict(colors=colors))
         data = [trace]
-    
+       
         fig = go.Figure(data=data, layout=layout)
         
         exam_pie_chart = pyo.plot(fig, output_type='div')
@@ -1103,6 +1112,7 @@ class AnsweringView(View,OnlineUserStat):
             if answer_sheet.is_finished:
                 messages.warning(request, _("You had completed this exam"))
                 return redirect('testee_score_list', exam_type=exam.exam_type)
+            
             if answer not in answer_sheet.answer_set.all():
                 messages.warning(request, 'Not your answer: {}'.format(answer_id))
                 return redirect('testee_answering',
@@ -1112,6 +1122,7 @@ class AnsweringView(View,OnlineUserStat):
         except ObjectDoesNotExist:
             messages.error(request,'Answer id error, answer id: {}'.format(answer_id))
             return redirect('testee_exam_list', exam_type=exam.exam_type)
+        
         answer_count  = len(Answer.objects.filter(answer_sheet=answer_sheet).filter(selected=-1))
         return dict(exam=exam,
                     answer=answer,

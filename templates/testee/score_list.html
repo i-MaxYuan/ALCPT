@@ -30,9 +30,9 @@
             <div class="tab-pane fade show active" id="exam-data-list" role="tabpanel" aria-labelledby="exam-list-tab">
                 <div class="container">
                     <div class="row justify-content-center" style="padding-top: 40px">
-                        <div class="col-md-6">
+                        <div class="col-md-8">
                             <h3>{{tests_score}} Score</h3>
-                            <!--<h3>{{trans("Exam Score")}}</h3>-->
+                        
                             <div class="table-responsive-md">
                                 <table class="table table-hover table-bordered table-striped table-mc-light-blue">
                                     <thead class="thead-light">
@@ -67,7 +67,7 @@
                                 </table>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-8">
                             {% autoescape off %}
                             {{ exam_line_chart }}
                             {% endautoescape %}

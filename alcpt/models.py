@@ -483,8 +483,8 @@ class ExamResult(models.Model):
     testee_num = models.PositiveIntegerField(default=0)   
     tested = models.PositiveIntegerField(default=0)
     not_tested_num = models.PositiveIntegerField(default=0)
-    testee_score = ListField(null=True)
-    testee_grade = ListField(null=True)
+    testee_score = ListField(null=True,blank=True)
+    testee_grade = ListField(null=True,blank=True)
     qualified_num = models.PositiveIntegerField(default=0)
     unqualified_num = models.PositiveIntegerField(default=0)
     

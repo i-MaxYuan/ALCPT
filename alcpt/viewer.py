@@ -17,7 +17,7 @@ from alcpt.models import User, Student, Department, Squadron, Proclamation, Answ
 from alcpt.definitions import UserType
 from alcpt.decorators import permission_check
 from alcpt.exceptions import IllegalArgumentError
-from alcpt.views import OnlineUserStat
+from alcpt.testee import IntegrateTestResults
 
 from django.views.generic import View
 from alcpt.views import OnlineUserStat
@@ -33,7 +33,7 @@ class IndexView(View,OnlineUserStat):
     
     template_name='viewer/exam_score_list.html'
     
-    def do_content_works(self,request):
+    def do_content_works(self,request):        
         exams = Exam.objects.filter(is_public=True)
         now_time = datetime.now()
         return dict(exams=exams)
@@ -162,20 +162,30 @@ class IndexView(View,OnlineUserStat):
 class ExamScoreDetail(View,OnlineUserStat):
     
     template_name = 'viewer/exam_score_detail.html'
-    
+    # def get(self,request,exam_id):
     def do_content_works(self,request,exam_id):
         try:
             exam = Exam.objects.get(id=exam_id)
             exam_result = ExamResult.objects.get(exam=exam)
             testees = exam.testeeList.all()
-            testeeData = list(zip(testees, exam_result.testee_score, exam_result.testee_grade))
+                
+            if exam.is_started == False:
+                exam_result.testee_score = [None]*len(testees)
+                exam_result.testee_grade = [None]*len(testees)
+                exam_result.not_tested_num = len(testees)
+                exam_result.save()
             
+                testeeData = list(zip(testees, exam_result.testee_score, exam_result.testee_grade))
+            else:
+                testeeData = list(zip(testees, exam_result.testee_score, exam_result.testee_grade))
+            d = []
             #Bar Chart
             #xaxis: score
             #yaxis: the number of different range's score
-            x_data = [str(num) for num in range(10, 101, 10)]
+            x_data = ['0-10','11-20','21-30','31-40','41-50','51-60','61-70','71-80','81-90','91-100'] #[str(num) for num in range(10, 101, 10)]
             y_data = exam_result.range_times
             color = ['#FF0000','#FF5B00','#FF7900','#FFB600','#FFE700','#E1FF00','#B6FF00','#86FF00','#55FF00','#18FF00']
+            
             df = pd.DataFrame(list(zip(x_data, y_data)))
             df['color'] = color
             df = df.rename(columns={0: 'score', 1: 'student number'})

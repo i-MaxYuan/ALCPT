@@ -57,7 +57,7 @@
                                             </td>
                                             <td class="text-center">{{ exam.duration }} min.</td>
                                             <td class="text-center">
-                                                {% if not exam|is_finished(request.user) %}
+                                                {% if exam.finish_time >= now %}
                                                 <button type="button" class="btn btn-primary" onclick="window.location.href='{{ url('testee_start_exam', args=[exam.id]) }}'">
                                                     {% if exam.is_started %}
                                                     {{trans("Continue")}}
@@ -65,7 +65,7 @@
                                                     {{trans("Start")}}
                                                     {% endif %}
                                                 </button>
-                                                {% else %}
+                                                {% elif exam.finish_time < now %}
                                                 <button type="button" class="btn btn-success" disabled>
                                                     {{trans("Finished")}}
                                                 </button>
