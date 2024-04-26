@@ -196,7 +196,7 @@ class NotificationCenterView(View,OnlineUserStat):
             proclamation = Proclamation.objects.get(id=proclamation_id)
             proclamation.delete()
         messages.success(request, _("Successfully deleted"))
-        return render(request,'proclamation/notification_center.html')
+        return render(request,self.template_name)
 
 
 @login_required

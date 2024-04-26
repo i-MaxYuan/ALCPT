@@ -48,7 +48,7 @@
                                                     </li>
                                                     <li>
                                                         <p>
-                                                            {{trans("Click ")}}<i class="fa fa-check-circle"></i>{{trans(" represents this testpaper is valid and can be used as an exam question.")}}
+                                                            {{trans("Click ")}}<i class="fa fa-check-circle"></i>{{trans(" represents this testpaper is valid and can be used as an testpaper.")}}
                                                         </p>
                                                     </li>
                                                     <li>
@@ -86,27 +86,39 @@
                             </button>
                         </div>
                         {% if testpapers %} {% for testpaper in testpaperList %}
-                        <tr style="cursor: pointer" onclick="window.location.href=('{{ url('view_testpaper_content', args=[testpaper.id]) }}')">
-                            <td class="text-center" data-title="Name">
+                        <tr style="cursor: pointer">
+                            <td class="text-center" data-title="Name" onclick="window.location.href='{{ url('view_testpaper_content', args=[testpaper.id]) }}'">
                                 {{ testpaper.name }}
                             </td>
-                            <td class="text-center" data-title="Valid">
-                                {{ testpaper.valid }}
+                            <td class="text-center" data-title="Valid" onclick="window.location.href='{{ url('view_testpaper_content', args=[testpaper.id]) }}'">
+                                {% if testpaper.valid %}
+                                    valid
+                                {% else %}
+                                    unvalid
+                                {% endif %}
                             </td>
-                            <td class="text-center" data-title="Used">
-                                {{ testpaper.is_used }}
+                            <td class="text-center" data-title="Used" onclick="window.location.href='{{ url('view_testpaper_content', args=[testpaper.id]) }}'">
+                                {% if testpaper.is_used %}
+                                    used
+                                {% else %}
+                                    unused
+                                {% endif %}
                             </td>
-                            <td class="text-center" data-title="Last Update">
+                            <td class="text-center" data-title="Last Update" onclick="window.location.href='{{ url('view_testpaper_content', args=[testpaper.id]) }}'">
                                 {{ testpaper.update_time.strftime('%Y/%m/%d %H:%M') }}
                             </td>
-                            <td class="text-center" data-title="Creator">
+                            <td class="text-center" data-title="Creator" onclick="window.location.href='{{ url('view_testpaper_content', args=[testpaper.id]) }}'">
                                 {{ testpaper.created_by.name }}
                             </td>
                             <td class="text-center">
                                 {% if testpaper.is_testpaper %}
                                 <a href="{{ url('testpaper_valid', args=[testpaper.id]) }}"><i class="fa fa-check-circle"></i></a>
                                 <a href="{{ url('testpaper_unvalid', args=[testpaper.id]) }}"><i class="fa fa-times"></i></a>
-                                <a href="{{ url('testpaper_edit', args=[testpaper.id]) }}"><i class="fa fa-pencil-square-o fa-fw mb-2"></i></a>
+                                {% if testpaper.valid and testpaper.is_used %}
+                                <a href='' onclick="alert('{{trans("This test paper already used, cannot edit again.")}}');"><i class="fa fa-pencil-square-o fa-fw mb-2"></i></a>
+                                {% else %}
+                                <a href="{{ url('testpaper_edit', args=[testpaper.id]) }}">
+                                {% endif %}
                                 <a href="{{ url('testpaper_delete', args=[testpaper.id]) }}" onclick="return confirm('{{trans("Sure to delete")}}？');"><i class="fa fa-trash" aria-hidden="true"></i></a>
                                 {% endif %}
                             </td>

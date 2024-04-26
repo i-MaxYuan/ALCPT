@@ -39,7 +39,7 @@
                                                     </li>
                                                     <li>
                                                         <p>
-                                                            {{trans("Click one can look up every exam detail.")}}
+                                                            {{trans("Click one can look up each exam detail.")}}
                                                         </p>
                                                     </li>
                                                     <li>
@@ -78,24 +78,25 @@
                         </div>
                         {% if exams %}
                         {% for exam in examList %}
-                        <tr style="cursor: pointer" onclick="window.location.href='{{ url('exam_content', args=[exam.id]) }}'">
-                            <td class="text-center" data-title="Exam Name">
+                        <tr style="cursor: pointer">
+                            <td class="text-center" data-title="Exam Name" onclick="window.location.href='{{ url('exam_content', args=[exam.id]) }}'">
                                 {{ exam.name }}
                             </td>
-                            <td class="text-center" data-title="Start">
+                            <td class="text-center" data-title="Start" onclick="window.location.href='{{ url('exam_content', args=[exam.id]) }}'">
                                 {{ exam.start_time.strftime('%Y/%m/%d %H:%M') }}
                             </td>
-                            <td class="text-center" data-title="Finish">
+                            <td class="text-center" data-title="Finish" onclick="window.location.href='{{ url('exam_content', args=[exam.id]) }}'">
                                 {{ exam.finish_time.strftime('%Y/%m/%d %H:%M') }}
                             </td>
-                            <td class="text-center" data-title="Duration">
+                            <td class="text-center" data-title="Duration" onclick="window.location.href='{{ url('exam_content', args=[exam.id]) }}'">
 
                                 {{ exam.duration }} 
                             </td>
-                            <td class="text-center" data-title="Creator">
+                            <td class="text-center" data-title="Creator" onclick="window.location.href='{{ url('exam_content', args=[exam.id]) }}'">
                                 {{ exam.created_by.name }}
                             </td>
                             <td class="text-center">
+<<<<<<< HEAD
                                 {% if exam.start_time < now %}
                                 <a href='' onclick="return confirm('Exam has started, cannot be edited.');">
                                 {% else %}
@@ -103,6 +104,14 @@
                                 {% endif %}    
                                 <i class="fa fa-pencil-square-o"></i></a>
                                 <a href="{{ url('exam_delete', args=[exam.id]) }}" onclick="return confirm('Sure to delete？');"><i class="fa fa-trash"></i></a>
+=======
+                                {% if exam.start_time < now %} 
+                                <a href='' onclick="alert('{{trans("Exam has started, cannot be edited.")}}')"><i class="fa fa-pencil-square-o"></i></a> </a>
+                                {% else %}
+                                <a href="{{ url('exam_edit', args=[exam.id]) }}">
+                                {% endif %}
+                                <a href="{{ url('exam_delete', args=[exam.id]) }}" onclick="return confirm('{{trans("Sure to delete")}}?')"><i class="fa fa-trash"></i></a>
+>>>>>>> origin/master
                             </td>
                         </tr>
                         {% endfor %}
@@ -161,3 +170,5 @@
     navbarFocused("TestManager_navbar");
 </script>
 {% endblock %}
+
+
