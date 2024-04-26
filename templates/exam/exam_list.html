@@ -96,22 +96,12 @@
                                 {{ exam.created_by.name }}
                             </td>
                             <td class="text-center">
-<<<<<<< HEAD
-                                {% if exam.start_time < now %}
-                                <a href='' onclick="return confirm('Exam has started, cannot be edited.');">
-                                {% else %}
-                                <a href="{{ url('exam_edit', args=[exam.id]) }}">
-                                {% endif %}    
-                                <i class="fa fa-pencil-square-o"></i></a>
-                                <a href="{{ url('exam_delete', args=[exam.id]) }}" onclick="return confirm('Sure to delete？');"><i class="fa fa-trash"></i></a>
-=======
                                 {% if exam.start_time < now %} 
                                 <a href='' onclick="alert('{{trans("Exam has started, cannot be edited.")}}')"><i class="fa fa-pencil-square-o"></i></a> </a>
                                 {% else %}
                                 <a href="{{ url('exam_edit', args=[exam.id]) }}">
                                 {% endif %}
                                 <a href="{{ url('exam_delete', args=[exam.id]) }}" onclick="return confirm('{{trans("Sure to delete")}}?')"><i class="fa fa-trash"></i></a>
->>>>>>> origin/master
                             </td>
                         </tr>
                         {% endfor %}

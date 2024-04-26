@@ -170,21 +170,12 @@ class ExamEditView(View, OnlineUserStat):
         try:
             exam = Exam.objects.get(id=exam_id)
             # if exam.start_time < datetime.now():
-<<<<<<< HEAD
-            #     messages.error(request, "Exam has started, cannot be edited.")
-            #     return redirect('exam_list')
-            
-            testpapers = TestPaper.objects.filter(is_testpaper=True, valid=True)
-            groups = Group.objects.all()
-
-=======
             #     messages.error(request,"Exam has started, cannot be edited.")
             #     return redirect('exam_list')
             testpapers = TestPaper.objects.filter(is_testpaper=True, valid=True)
             groups = Group.objects.all()
             now=datetime.now()
             
->>>>>>> origin/master
             original_date = exam.start_time.strftime('%Y-%m-%d')
             original_hour = exam.start_time.strftime('%H')
             original_minute = exam.start_time.strftime('%M')
