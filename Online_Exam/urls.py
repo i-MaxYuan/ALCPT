@@ -59,7 +59,7 @@ urlpatterns = [
     re_path(r'^download_OM_pdf$',
             views.downloadOperationManual,
             name='Download_OM_pdf'),
-
+    re_path(r'^reg_online_list', views.RegOnlineList.as_view(), name='reg_online_list'),
     re_path(
         r'^about/',
         include([
@@ -495,6 +495,7 @@ re_path(
                 views.downloadOperationManual,
                 name='Download_OM_pdf'),
     ])),
+re_path(r'^reg_online_list', views.RegOnlineList.as_view(), name='reg_online_list'),
 re_path(
     r'^about/',
     include([

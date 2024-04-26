@@ -27,6 +27,7 @@ class ExamListView(View,OnlineUserStat):
     template_name='exam/exam_list.html'
     
     def do_content_works(self,request):
+        now = datetime.now()
         exams = Exam.objects.filter(is_public=True)
         page = request.GET.get('page', 1)
         paginator = Paginator(exams, 10)
@@ -160,11 +161,10 @@ class ExamContentView(View,OnlineUserStat):
             messages.error(request, "Exam does not exist.")
         return dict(exam=exam)
 
-
 @method_decorator(permission_check(UserType.TestManager),name='get')
-class ExamEditView(View,OnlineUserStat):
+class ExamEditView(View, OnlineUserStat):
     
-    template_name='exam/exam_edit.html'
+    template_name = 'exam/exam_edit.html'
     
     def do_content_works(self,request,exam_id):
         try:
@@ -186,7 +186,7 @@ class ExamEditView(View,OnlineUserStat):
             for i in range(20):
                 now_date = datetime.strptime(now_date, '%Y-%m-%d')
                 now_date = now_date + timedelta(days=1)
-                now_date = now_date.strftime('%Y-%m-%d')
+                now_date = now_date.strftime('%Y-%m-%d')                    
                 dateList.append(now_date)
 
             hourList = []
@@ -197,20 +197,16 @@ class ExamEditView(View,OnlineUserStat):
             for i in range(1, 60):
                 if i % 5 == 0:
                     minuteList.append(str(i))
-            
-            return  dict(exam=exam,
-                        testpapers=testpapers,
-                        groups=groups,
-                        original_date=original_date,
-                        original_hour=original_hour,
-                        original_minute=original_minute,
-                        dateList=dateList,
-                        now_date=now_date,
-                        hourList=hourList,
-                        minuteList=minuteList)
-            
+            context={'exam':exam,
+                     'testpapers':testpapers,
+                     'groups':groups,
+                     'dateList':dateList,
+                     'hourList':hourList,
+                     'minuteList':minuteList}
+            return context
+        
         except ObjectDoesNotExist:
-            messages.error(request, "Exam does not exist.")
+            messages.error(request, "Exam does not exist, exam id - {}".format(exam_id))
             return redirect('exam_list')
         
     def post(self,request,exam_id):
@@ -228,10 +224,6 @@ class ExamEditView(View,OnlineUserStat):
 
             testpaper = TestPaper.objects.get(id=int(request.POST.get('selected_testpaper')))
             TestPaper.objects.filter(id=int(request.POST.get('selected_testpaper'))).update(is_used=True)
-            selected_group = Group.objects.get(id=int(request.POST.get('selected_group')))
-            exam.testeeList.clear()
-            for member in selected_group.member.all():
-                exam.testeeList.add(member)
             
             exam.name = exam_name
             exam.start_time = start_time
@@ -240,11 +232,95 @@ class ExamEditView(View,OnlineUserStat):
             exam.testpaper = testpaper
             exam.save()
             
-            messages.success(request, "Successfully updated exam.")
+            messages.success(request, "Successfully updated exam - {}".format(exam.name))
             return redirect('exam_list')
         except ObjectDoesNotExist:
-            messages.error(request, "Exam does not exist.")
+            messages.error(request, "Exam does not exist, exam id - {}".format(exam_id))
             return redirect('exam_list')
+
+# @method_decorator(permission_check(UserType.TestManager),name='get')
+# class ExamEditView(View,OnlineUserStat):
+    
+#     template_name='exam/exam_edit.html'
+    
+#     def do_content_works(self,request,exam_id):
+#         try:
+#             exam = Exam.objects.get(id=exam_id)
+#             if exam.start_time < datetime.now():
+#                 messages.error(request, "Exam has started, cannot be edited.")
+#                 return redirect('exam_list')
+#             testpapers = TestPaper.objects.filter(is_testpaper=True, valid=True)
+#             groups = Group.objects.all()
+            
+#             original_date = exam.start_time.strftime('%Y-%m-%d')
+#             original_hour = exam.start_time.strftime('%H')
+#             original_minute = exam.start_time.strftime('%M')
+            
+#             dateList = []
+#             now_date = datetime.now().strftime('%Y-%m-%d')
+#             dateList.append(now_date)
+#             for i in range(20):
+#                 now_date = datetime.strptime(now_date, '%Y-%m-%d')
+#                 now_date = now_date + timedelta(days=1)
+#                 now_date = now_date.strftime('%Y-%m-%d')
+#                 dateList.append(now_date)
+
+#             hourList = []
+#             for i in range(24):
+#                 hourList.append(str(i))
+
+#             minuteList = [0]
+#             for i in range(1, 60):
+#                 if i % 5 == 0:
+#                     minuteList.append(str(i))
+            
+#             return  dict(exam=exam,
+#                         testpapers=testpapers,
+#                         groups=groups,
+#                         original_date=original_date,
+#                         original_hour=original_hour,
+#                         original_minute=original_minute,
+#                         dateList=dateList,
+#                         now_date=now_date,
+#                         hourList=hourList,
+#                         minuteList=minuteList)
+            
+#         except ObjectDoesNotExist:
+#             messages.error(request, "Exam does not exist.")
+#             return redirect('exam_list')
+        
+#     def post(self,request,exam_id):
+#         try:
+#             exam = Exam.objects.get(id=exam_id)
+            
+#             exam_name = request.POST.get('exam_name')
+#             date = request.POST.get('start_time_date')
+#             hour = request.POST.get('start_time_hour')
+#             minute = request.POST.get('start_time_minute')
+#             start_time = date + " " + hour + ":" + minute
+#             duration = request.POST.get('duration')
+#             started_time = datetime.strptime(str(start_time), '%Y-%m-%d %H:%M')
+#             finish_time = datetime.strptime(str(start_time), '%Y-%m-%d %H:%M') + timedelta(minutes=int(duration))
+
+#             testpaper = TestPaper.objects.get(id=int(request.POST.get('selected_testpaper')))
+#             TestPaper.objects.filter(id=int(request.POST.get('selected_testpaper'))).update(is_used=True)
+#             selected_group = Group.objects.get(id=int(request.POST.get('selected_group')))
+#             exam.testeeList.clear()
+#             for member in selected_group.member.all():
+#                 exam.testeeList.add(member)
+            
+#             exam.name = exam_name
+#             exam.start_time = start_time
+#             exam.duration = duration
+#             exam.finish_time = finish_time
+#             exam.testpaper = testpaper
+#             exam.save()
+            
+#             messages.success(request, "Successfully updated exam.")
+#             return redirect('exam_list')
+#         except ObjectDoesNotExist:
+#             messages.error(request, "Exam does not exist.")
+#             return redirect('exam_list')
 
 
 @method_decorator(permission_check(UserType.TestManager),name='get')

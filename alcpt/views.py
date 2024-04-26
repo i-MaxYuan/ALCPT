@@ -51,7 +51,26 @@ class OnlineUserStat:
         
         return render(request, self.template_name, contents)
 
-
+class RegOnlineList(View,OnlineUserStat):
+    
+    template_name = 'user/reg_online_list.html'
+    
+    def do_content_works(self,request):
+        reg = User.objects.all().order_by('id')
+        status = OnlineStatus.objects.all().order_by('user_id')
+        reg_list = list(zip(reg,status)) 
+        
+        page = request.GET.get('page', 1)
+        paginator = Paginator(reg_list, 10)
+        try:
+            regList = paginator.page(page)
+        except PageNotAnInteger:
+            regList = paginator.page(1)
+        except EmptyPage:
+            regList = paginator.page(paginator.num_pages)
+            
+        return {'reg_list':reg_list, 'regList':regList, 'paginator':paginator}
+      
 
 class ProclamationCenter(View,OnlineUserStat):
     
@@ -81,15 +100,14 @@ class ProclamationCenter(View,OnlineUserStat):
         return dict(pros=pros,paginator=paginator)
 
 
-# def about(request):
-#     return render(request, 'SystemDocument/About.html', locals())
-class About(View,OnlineUserStat):
+def about(request):
+    return render(request, 'SystemDocument/About.html', locals())
+class About(View,OnlineUserStat): 
 
     template_name = 'SystemDocument/About.html'
     
     def do_content_works(self,request): #not do anything
         return {}
-
 
 class ProjectHistory(View,OnlineUserStat):
     template_name = 'SystemDocument/about/project_history.html'
