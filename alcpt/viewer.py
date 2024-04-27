@@ -162,7 +162,7 @@ class IndexView(View,OnlineUserStat):
 class ExamScoreDetail(View,OnlineUserStat):
     
     template_name = 'viewer/exam_score_detail.html'
-    # def get(self,request,exam_id):
+    
     def do_content_works(self,request,exam_id):
         try:
             exam = Exam.objects.get(id=exam_id)

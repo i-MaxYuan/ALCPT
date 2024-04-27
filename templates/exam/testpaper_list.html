@@ -117,13 +117,13 @@
                                 {% if testpaper.valid and testpaper.is_used %}
                                 <a href='' onclick="alert('{{trans("This test paper already used, cannot edit again.")}}');"><i class="fa fa-pencil-square-o fa-fw mb-2"></i></a>
                                 {% else %}
-                                <a href="{{ url('testpaper_edit', args=[testpaper.id]) }}">
+                                <a href="{{ url('testpaper_edit', args=[testpaper.id]) }}"><i class="fa fa-pencil-square-o fa-fw mb-2"></i></a>
                                 {% endif %}
                                 <a href="{{ url('testpaper_delete', args=[testpaper.id]) }}" onclick="return confirm('{{trans("Sure to delete")}}？');"><i class="fa fa-trash" aria-hidden="true"></i></a>
                                 {% endif %}
                             </td>
                         </tr>
-                        {% endfor %} {% else %}
+                        {% endfor %}
                         <tr>
                             <td class="text-center" colspan="6">{{trans("No Data")}}</td>
                         </tr>
