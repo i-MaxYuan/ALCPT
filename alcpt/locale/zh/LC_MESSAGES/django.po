@@ -1627,4 +1627,21 @@ msgstr "中英文切換按鈕"
 msgid "Below are the project reports for each grade and operation manual available for download."
 msgstr "下方有各年班專案報告及使用手冊可供下載"
 
+msgid  "Effective"
+msgstr "有效"
+
+msgid  "Ineffective"
+msgstr "無效"
+
+msgid  "Use"
+msgstr "使用"
+
+msgid  "Unuse"
+msgstr "未使用"
+
+msgid  "Registration List & Online Status"
+msgstr "註冊名單 & 上線狀態"
+
+msgid  "Online Status"
+msgstr "上線狀態"
 
