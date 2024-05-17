@@ -99,7 +99,7 @@
                                 {% if exam.start_time < now %} 
                                 <a href='' onclick="alert('{{trans("Exam has started, cannot be edited.")}}')"><i class="fa fa-pencil-square-o"></i></a> </a>
                                 {% else %}
-                                <a href="{{ url('exam_edit', args=[exam.id]) }}">
+                                <a href="{{ url('exam_edit', args=[exam.id]) }}"><i class="fa fa-pencil-square-o"></i></a>
                                 {% endif %}
                                 <a href="{{ url('exam_delete', args=[exam.id]) }}" onclick="return confirm('{{trans("Sure to delete")}}?')"><i class="fa fa-trash"></i></a>
                             </td>
