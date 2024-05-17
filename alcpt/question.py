@@ -539,7 +539,7 @@ def question_submit(request, question_id):
 class QuestionCreate(View,OnlineUserStat):
 
     template_name = 'question/create.html'
-
+    
     def do_content_works(self,request,kind):
         return dict(kind=kind)
 

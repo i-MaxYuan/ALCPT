@@ -92,16 +92,16 @@
                             </td>
                             <td class="text-center" data-title="Valid" onclick="window.location.href='{{ url('view_testpaper_content', args=[testpaper.id]) }}'">
                                 {% if testpaper.valid %}
-                                    valid
+                                {{trans("Effective")}}
                                 {% else %}
-                                    unvalid
+                                {{trans("Ineffective")}}
                                 {% endif %}
                             </td>
                             <td class="text-center" data-title="Used" onclick="window.location.href='{{ url('view_testpaper_content', args=[testpaper.id]) }}'">
                                 {% if testpaper.is_used %}
-                                    used
+                                {{trans("Use")}}
                                 {% else %}
-                                    unused
+                                {{trans("Unuse")}}
                                 {% endif %}
                             </td>
                             <td class="text-center" data-title="Last Update" onclick="window.location.href='{{ url('view_testpaper_content', args=[testpaper.id]) }}'">

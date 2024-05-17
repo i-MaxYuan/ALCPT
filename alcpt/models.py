@@ -263,9 +263,9 @@ class Question(models.Model):
     q_time = models.IntegerField(default=0)
     q_correct_time = models.IntegerField(default=0)
     created_time = models.DateTimeField(auto_now_add=True)
-    created_by = models.ForeignKey('User', on_delete=models.SET_NULL, blank=True, null=True, related_name='question_created')
+    created_by = models.ForeignKey('User', on_delete=models.CASCADE, blank=True, null=True, related_name='question_created')
     update_time = models.DateTimeField(auto_now=True)
-    last_updated_by = models.ForeignKey('User', on_delete=models.SET_NULL, blank=True, null=True,
+    last_updated_by = models.ForeignKey('User', on_delete=models.CASCADE, blank=True, null=True,
                                         related_name='last_updated')
     is_valid = models.BooleanField(default=False)       # 似乎沒用到
     favorite = models.ManyToManyField('User')
@@ -300,7 +300,7 @@ class Question(models.Model):
 # is_answer: if value is False that this option can't answer; True is the opposite
 class Choice(models.Model):
     c_content = models.CharField(max_length=255)
-    question = models.ForeignKey('Question', on_delete=models.PROTECT)
+    question = models.ForeignKey('Question', on_delete=models.CASCADE)
     is_answer = models.BooleanField(default=False)
 
     def __str__(self):
@@ -345,7 +345,7 @@ class AnswerSheet(models.Model):
 # selected: selected option id this question
 class Answer(models.Model):
     answer_sheet = models.ForeignKey('AnswerSheet', on_delete=models.CASCADE)
-    question = models.ForeignKey('Question', on_delete=models.PROTECT)
+    question = models.ForeignKey('Question', on_delete=models.CASCADE)
     selected = models.SmallIntegerField(default=-1)
 
     def __str__(self):
@@ -417,7 +417,7 @@ class Report(models.Model):
     user_notification = models.BooleanField(default=False)       # use to notify user the report had been change.
     staff_notification = models.BooleanField(default=False)
     category = models.ForeignKey('ReportCategory', on_delete=models.PROTECT)
-    question = models.ForeignKey('Question', on_delete=models.PROTECT, blank=True, null=True)
+    question = models.ForeignKey('Question', on_delete=models.CASCADE, blank=True, null=True)
     supplement_note = models.TextField()
     STATES_CHOICES = (
         (1, '待處理'),
