@@ -113,18 +113,25 @@ class GroupEdit(View, OnlineUserStat):
         try:
             group = Group.objects.get(id=group_id)
             group_members = group.member.all()
+            page = request.GET.get('page', 1)
+            paginator = Paginator(group_members, 10)
+            groupList = paginator.page(page)
             testees = []
             for user in User.objects.all().filter(name__contains=''):
                 if user.has_perm(UserType.Testee):
                     testees.append(user)
                 else:
                     pass
-
+            
+        except PageNotAnInteger:
+            groupList = paginator.page(1)
+        except EmptyPage:
+            groupList = paginator.page(paginator.num_pages)
         except ObjectDoesNotExist:
             messages.error(request, 'Group does not exist, group id: {}'.format(group_id))
             return redirect('testee_group_list')
         
-        return dict(group=group, testees=testees)
+        return dict(group=group, testees=testees,groupList=groupList,paginator=paginator)
 
     def post(self,request,group_id):
         selected_testees = request.POST.getlist('testee',)
@@ -203,8 +210,15 @@ class GroupContent(View,OnlineUserStat):
         try:
             group = Group.objects.get(id=group_id)
             group_members = group.member.all()
-            return dict(group_members=group_members)
-
+            
+            page = request.GET.get('page', 1)
+            paginator = Paginator(group_members, 10)
+            groupList = paginator.page(page)
+            return dict(group_members=group_members,groupList=groupList,paginator=paginator)
+        except PageNotAnInteger:
+            groupList = paginator.page(1)
+        except EmptyPage:
+            groupList = paginator.page(paginator.num_pages)
         except ObjectDoesNotExist:
             messages.error(request, 'Group does not exist, group id: {}'.format(group_id))
             return redirect('testee_group_list') 

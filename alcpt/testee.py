@@ -1020,6 +1020,9 @@ class StartExam(View, IntegrateTestResults):
 
             exam.is_started = True
             exam.save()
+            testpaper = TestPaper.objects.get(id=exam_id)
+            testpaper.is_used = True
+            testpaper.save()
 
         except ObjectDoesNotExist:
             messages.error(request,

@@ -112,8 +112,8 @@ class ExamCreateView(View,OnlineUserStat):
                                        testpaper=testpaper,
                                        is_public=True,
                                        created_by=request.user)
-            testpaper.is_used = True
-            testpaper.save()
+            #testpaper.is_used = True
+            #testpaper.save()
             notification_mail_content = "You will start " + exam.name + "\n" + \
                                         "Start Time: " + start_time + "\n" + \
                                         "Duration: " + duration + " minutes.\n" + \

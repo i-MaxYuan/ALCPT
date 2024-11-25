@@ -47,7 +47,7 @@ class Login(View,OnlineUserStat):
                 
                 if user is None or not user.is_active:
                     messages.error(request, _('Wrong Password or User unexist.'))
-                    return render(request,self.template_name,dict(captcha=captcha))
+                    return redirect('login')#return render(request,self.template_name,dict(captcha=captcha))
                 
                 login_user = OnlineStatus.objects.get(user=user)        #user login => online_status = True
                 login_user.online_status=True

@@ -12,6 +12,7 @@ def email_verified(verified_user, verified_email, request_user):
     # 主機
     strAccount = "mis.alcpt.109@gmail.com"      # 備援信箱：tryitnotareal1997@gmail.com
     strPassword = "eji6z;6284vm,6"
+    
 
     # encode the verified email
     email = verified_email
@@ -60,8 +61,10 @@ def email_verified(verified_user, verified_email, request_user):
 
 
 def reset_password_mail(reg_id, email):
-    strAccount = "mis.alcpt.109@gmail.com"
-    strPassword = "eji6z;6284vm,6"
+    #strAccount = "mis.alcpt.109@gmail.com"
+    #strPassword = "eji6z;6284vm,6"
+    strAccount = "ek920101@gmail.com"
+    strPassword = "dvlh rael xjcp ezsa"
 
     reg_id = reg_id
     reg_id_bytes = reg_id.encode('ascii')
@@ -84,14 +87,14 @@ def reset_password_mail(reg_id, email):
     server.ehlo()
     server.starttls()
 
-    try:
-        server.login(strAccount, strPassword)
-        server.sendmail(strAccount, mail_to, msg.as_string())
-        hint = "郵件已發送"
-    except SMTPAuthenticationError:
-        hint = "無法登入"
-    except:
-        hint = "郵件發送產生錯誤"
+    server.login(strAccount, strPassword)
+    server.sendmail(strAccount, mail_to, msg.as_string())
+    hint = "郵件已發送"
+    
+    
+    hint = "無法登入"   
+    
+    hint = "郵件發送產生錯誤"
     server.quit()
 
 

@@ -33,6 +33,7 @@
                                     
                                 <td class="text-center" data-title="Status">
                                     {% if status.online_status %}  ✅ {% endif %}
+                                    {% if not status.online_status %}  ❌ {% endif %}
                                 </td>
                             </tr>
                             {% endfor %}{% endif %}            
