@@ -11,7 +11,15 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-12 table-responsive-md">
-                <h2>{{trans("Achievement List")}}</h2>
+                <h2>{{trans("Acheivement List")}}</h2>
+                <div class="text-right">
+                    <div class="add">
+                        <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ url('achievement_create') }}'">
+                            <i class="fa fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+
 
                 <table class="table table-hover table-bordered table-striped table-mc-light-blue">
                     <thead class="thead-light">
@@ -23,13 +31,8 @@
                             <th class="text-center">{{trans("Point")}}</th>
                             <th class="text-center">{{trans("Level")}}</th>
                             <th class="text-center">{{trans("completion")}}</th>
-                            <th class="text-center">
-                                <div class="add">
-                                    <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ url('achievement_create') }}'">
-                                        <i class="fa fa-plus"></i>
-                                    </button>
-                                </div>
-                            </th>
+                            <th class="text-center">{{trans("Edit")}}</th>
+                            
                         </tr>
                     </thead>
 
@@ -62,8 +65,8 @@
                             <td class="text-center" data-title="completion">
                                 {{ achievement.completion }}
                             </td>
-                            <td class="text-center" data-title="">
-
+                            <td class="text-center" data-title="Edit">
+                                                             
                             </td>
                         </tr>
                         {% endfor %} {% else %}
@@ -83,4 +86,40 @@
 <script>
     navbarFocused("SystemManager_navbar");
 </script>
+
+<style>
+body {
+    font-family: 'DFKai-SB','BiauKai','標楷體', serif;
+    background: linear-gradient(135deg, #9eadf0);
+    min-height: 100vh;
+}
+
+/* 讓主要內容更像卡片，與背景做出區隔 */
+.achievement-list .container {
+    background: #ffffffee;           /* 半透明白，更柔和 */
+    backdrop-filter: blur(4px);      /* 好看的玻璃模糊效果 */
+    border-radius: 15px;
+    padding: 30px 40px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+/* 表格標題置中＆字體更清楚 */
+.achievement-list h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    font-weight: bold;
+    color: #2a3f8a;
+}
+
+/* 讓表格更乾淨 */
+.table {
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+</style>
+
 {% endblock %}

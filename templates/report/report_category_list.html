@@ -120,4 +120,39 @@
 <script>
     navbarFocused("SystemManager_navbar");
 </script>
+
+<style>
+    body {
+        font-family: 'DFKai-SB','BiauKai','標楷體', serif;
+        background: linear-gradient(135deg, #9eadf0);
+        min-height: 100vh;
+    }
+
+    /* ---- 讓表單與背景明顯區分 ---- */
+    .report-category-list .container {
+        background: #ffffff;              /* 白底 */
+        padding: 30px;
+        border-radius: 12px;             /* 圓角 */
+        box-shadow: 0 4px 15px rgba(0,0,0,0.15); /* 陰影 */
+        margin-top: 30px;
+        margin-bottom: 30px;
+    }
+
+    /* 表格標題更突出 */
+    .report-category-list h2 {
+        font-weight: bold;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #dee2e6;
+        margin-bottom: 20px;
+        color: #2563eb;
+    }
+
+    /* 表格更有層次 */
+    .table {
+        background: #fff;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+</style>
+
 {% endblock %}

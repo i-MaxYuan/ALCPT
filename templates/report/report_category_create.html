@@ -24,7 +24,7 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header" style="font-size:25px;">{{trans("ReportCategory Create")}}</div>
+                    <div class="card-header" style="font-size:25px; color: #2563eb; font-size:30px;">{{trans("ReportCategory Create")}}</div>
 
 
                     <div class="card-body">
@@ -41,38 +41,56 @@
                             </div>
 
                             <div class="form-group row">
-
-                                <div class="col-md-6">
-                                    <div class="container">
-                                        <div class="row">
-                                            <div class="col-lg-4">
-                                                <div class="button-group">
-
-                                                    <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" style=" font-size:20px;">
-
-                                                        <i class="fa fa-gears align-middle"></i>
-                                                    </button>
-                                                    <ul class="dropdown-menu">
-                                                        <li class="dropdown-header">{{trans("Privilege Setting")}}</li>
-                                                        {% for privilege in privileges %} {% if loop.index <= 3 %}
-                                                        <li>
-                                                            <input type="checkbox" id="{{ privilege.value.1 }}" name="{{ privilege }}" onclick="privilege_not_empty()"  style="height: 24px;width: 24px;" {% if privilege == privilege.SystemManager %} checked
-
-                                                                {% endif %}>&nbsp;&nbsp;{{ privilege.value.1 }}
-                                                        </li>
-                                                        {% else %}
-                                                        <li>
-                                                            <strike><input type="checkbox" id="{{ privilege.value.1 }}" name="{{ privilege }}" onclick="this.checked=!this.checked;" />&nbsp;&nbsp;{{ privilege.value.1 }}</strike>
-                                                        </li>
-                                                        {% endif %} {% endfor %}
-                                                    </ul>
-                                                    <label class="privilege_invalid" id="privilege_invalid"></label>
-                                                </div>
-                                            </div>
+                                <label class="col-md-5 col-form-label text-md-center" style="font-size:20px;">
+                                    {{ trans("Privilege Setting") }}
+                                </label>
+                            
+                                <div class="col-md-7">
+                            
+                                    <!-- Chips + 按鈕外框 -->
+                                    <div class="privilege-container">
+                            
+                                        <!-- 按鈕（打開權限選單） -->
+                                        <button type="button" class="privilege-btn" onclick="togglePrivilegeList()">
+                                            <i class="fa fa-gears"></i> {{ trans("Select Privilege") }}
+                                        </button>
+                            
+                                        <!-- 已選取的 chips -->
+                                        <div id="privilege_chips" class="mt-2"></div>
+                            
+                                        <!-- 展開的選單 -->
+                                        <div id="privilege_list" class="privilege-list">
+                                            {% for privilege in privileges %}
+                                                {% if loop.index <= 3 %}
+                                                <label>
+                                                    <input 
+                                                        type="checkbox" 
+                                                        name="{{ privilege }}" 
+                                                        id="{{ privilege.value.1 }}"
+                                                        onclick="updateChips()"
+                                                        {% if privilege == privilege.SystemManager %}
+                                                            checked
+                                                        {% endif %}
+                                                    >
+                                                    {{ privilege.value.1 }}
+                                                </label>
+                                                {% else %}
+                                                <label style="opacity:0.4;">
+                                                    <input 
+                                                        type="checkbox" 
+                                                        onclick="this.checked=!this.checked;"
+                                                    >
+                                                    <strike>{{ privilege.value.1 }}</strike>
+                                                </label>
+                                                {% endif %}
+                                            {% endfor %}
                                         </div>
+                            
+                                        <label class="privilege_invalid" id="privilege_invalid"></label>
                                     </div>
+                            
                                 </div>
-                            </div>
+                            </div>                            
 
                             <div class="col-md-6 offset-md-4">
                                 <button type="submit" id="submit" class="btn btn-primary" onclick="return confirm('{{trans("Sure to create")}}？')" disabled>
@@ -95,6 +113,99 @@
 
 {% block navbarFocused %}
 <script>
-    navbarFocused("SystemManager_navbar");
+navbarFocused("SystemManager_navbar");
+
+function togglePrivilegeList() {
+    let list = document.getElementById("privilege_list");
+    list.style.display = list.style.display === "block" ? "none" : "block";
+}
+
+
+function updateChips() {
+    let chips = document.getElementById("privilege_chips");
+    chips.innerHTML = "";
+
+    document.querySelectorAll("#privilege_list input[type=checkbox]").forEach(cb => {
+        if (cb.checked) {
+            let chip = document.createElement("div");
+            chip.className = "privilege-chip";
+            chip.innerText = cb.id;
+            chips.appendChild(chip);
+        }
+    });
+
+    privilege_not_empty(); // 你原本的驗證
+}
+
 </script>
+
+<style>
+/* === 頁面背景 === */
+body {
+    font-family: 'DFKai-SB','BiauKai','標楷體', serif;
+    background: linear-gradient(135deg, #6b8dd6);
+    min-height: 100vh;
+}
+
+
+/* === 移除：外面白框 === */
+/* 直接讓 container 透明、不加邊框、不加陰影 */
+.report-category-create-form .container {
+    background: transparent !important;
+    padding: 0;       /* 去除內距 */
+    border: none !important;
+    box-shadow: none !important;
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+
+/* === 卡片保持（必要時可移除）=== */
+.report-category-create-form .card {
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid #c8ccd3;
+}
+
+
+/* === Privilege UI：移除外框與背景 === */
+.privilege-container {
+    border: none !important;        /* 去除邊框 */
+    padding: 0 !important;          /* 去除padding */
+    background: transparent !important; /* 移除背景色 */
+    cursor: default;                /* 不再像按鈕 */
+}
+
+/* 展開選單維持即可 */
+.privilege-list {
+    display: none;
+    margin-top: 10px;
+}
+
+/* 下拉按鈕保持 Material 樣式 */
+.privilege-btn {
+    background: #1d3875;
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 6px;
+    font-size: 18px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.25);
+}
+.privilege-btn:hover {
+    background: #2b4c9a;
+}
+
+/* 權限設定區塊與下方按鈕區塊的距離 */
+.privilege-container {
+    margin-bottom: 25px;   /* 你可以改成 20~40 都很自然 */
+}
+
+/* 也可以讓整個那行更透氣 */
+.form-group.row:last-of-type {
+    margin-bottom: 35px;   /* 專門給最後一個 form-group 用 */
+}
+
+</style>
 {% endblock %}

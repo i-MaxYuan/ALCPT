@@ -43,10 +43,14 @@ html {
                 </nav>
             </div>
         
+            {% if request.resolver_match.url_name == 'login' %}
             <div class="nav-item">
-                <a href="{{ url ('reg_online_list') }}" class="nav-link page-scroll" style="font-size: 16px; text-align: right;"><i class="fas fa-user" style="color: black;"></i>{{online_num}}/{{reg_num}}</a>
+                <a href="{{ url('reg_online_list') }}" class="nav-link page-scroll" style="font-size: 16px; text-align: right;">
+                    <i class="fas fa-user" style="color: black;"></i>
+                      {{ online_num }}/{{ reg_num }}
+                </a>
             </div>
-            
+            {% endif %}
 
             {% block content %} {% endblock %}
             <div id="pagination">
@@ -57,6 +61,7 @@ html {
                 </div>
                 <h5 class="featurette-divider"></h5>
             </div>
+        </div>
         </div>
     </div>
 
@@ -69,7 +74,6 @@ html {
 {% include "footer.html" %}
 
 </html>
-
 
 
 

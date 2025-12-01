@@ -1,0 +1,39 @@
+<title>ALCPT - Email Setting</title>
+
+{% extends "new_base.html" %}
+
+{% block path %}
+<li class="breadcrumb-item" aria-current="page">
+    <a href="{{ url('profile') }}">{{trans("Profile")}}</a>
+</li>
+<li class="breadcrumb-item active" aria-current="page">{{ _("Email Settings") }}</li>
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-primary text-white fw-semibold">
+            <i class="fa fa-envelope me-2"></i>{{ _("Email Settings") }}
+        </div>
+        <div class="card-body">
+            <p class="mb-3">
+                {{ _("Your current email address:") }}
+                <strong>{{ current_email }}</strong>
+            </p>
+
+            <form method="POST" class="row g-3">
+                <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+                <div class="col-md-8">
+                    <label for="new_email" class="form-label">{{ _("Enter new email") }}</label>
+                    <input type="email" id="new_email" name="new_email" class="form-control" required>
+                </div>
+                <div class="col-md-4 d-flex align-items-end">
+                    <button type="submit" class="btn btn-success w-100">
+                        <i class="fa fa-paper-plane me-2"></i>{{ _("Send Verification Email") }}
+                    </button>
+                </div>
+            </form>            
+        </div>
+    </div>
+</div>
+{% endblock %}

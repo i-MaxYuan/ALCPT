@@ -1,0 +1,396 @@
+<title>ALCPT - Register</title>
+
+{% extends 'new_base.html' %}
+{% block content %}
+<main class="login-page">
+  <div class="login-container">
+    <h2 class="login-title">{{ trans("ALCPT Register an account") }}</h2>
+
+    <form action="{{ url('register') }}" method="post" class="login-form">
+      <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
+
+      <!-- 帳號 -->
+      <div class="input-group">
+        <label for="username" class="input-label">
+          <i class="bi bi-person-fill"></i> {{ trans("Account") }}
+        </label>
+        <input
+          type="text"
+          id="username"
+          name="username"
+          class="input-field"
+          placeholder="{{ trans('Please enter account name') }}"
+          required
+        />
+      </div>
+
+      <!-- 電子郵件 -->
+      <div class="input-group">
+        <label for="email" class="input-label">
+          <i class="bi bi-envelope-fill"></i> {{ trans("Email") }}
+        </label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          class="input-field"
+          placeholder="{{ trans('Please enter email') }}"
+          required
+        />
+      </div>
+
+      <!-- 身分選擇 -->
+      <div class="input-group">
+        <label for="identity" class="input-label">
+          <i class="bi bi-person-badge-fill"></i> {{ trans("Identity") }}
+        </label>
+        <select id="identity" name="identity" class="input-field" required>
+           <option value="" disabled selected>{{ trans("Please select your role") }}</option>
+           <option value="1">{{ trans("Visitor") }}</option>
+           <option value="2">{{ trans("Student") }}</option>
+           <option value="3">{{ trans("Teacher") }}</option>
+        </select>
+      </div>
+
+
+      <!-- 密碼 -->
+      <div class="input-group">
+        <label for="password" class="input-label">
+          <i class="bi bi-key-fill"></i> {{ trans("Password") }}
+        </label>
+        <div class="password-wrapper">
+         <input
+          type="password"
+          id="password"
+          name="password"
+          class="input-field"
+          placeholder="{{ trans('Please enter password') }}"
+          required
+         />
+         <i class="bi bi-eye-slash toggle-password" data-target="password"></i>
+        </div>
+      </div>
+
+      <!-- 密碼規則 -->
+      <div class="password-rules">
+        <div class="rule-item" id="rule-length">
+            <span class="checkmark"></span> {{ trans("At least 10 characters") }}
+        </div>
+        <div class="rule-item" id="rule-upper">
+            <span class="checkmark"></span> {{ trans("At least one uppercase letter") }}
+        </div>
+        <div class="rule-item" id="rule-lower">
+            <span class="checkmark"></span> {{ trans("At least one lowercase letter") }}
+        </div>
+        <div class="rule-item" id="rule-number">
+            <span class="checkmark"></span> {{ trans("At least one number") }}
+        </div>
+        <div class="rule-item" id="rule-special">
+            <span class="checkmark"></span> {{ trans("At least one special character (!@#$%^&*)") }}
+        </div>
+      </div>
+      <!-- 確認密碼 -->
+      <div class="input-group">
+        <label for="confirm" class="input-label">
+          <i class="bi bi-shield-check"></i> {{ trans("Confirm Password") }}
+        </label>
+        <div class="password-wrapper">
+         <input
+          type="password"
+          id="confirm"
+          name="confirm"
+          class="input-field"
+          placeholder="{{ trans('Please confirm your password') }}"
+          required
+         />
+         <i class="bi bi-eye-slash toggle-password" data-target="confirm"></i>
+        </div>
+        <small id="match-status" class="match-status"></small>
+      </div>
+
+      <!-- 註冊按鈕 -->
+      <button type="submit" class="btn-login">{{ trans("Register") }}</button>
+
+      <!-- 返回登入 -->
+      <div class="link-row">
+        <a href="{{ url('login') }}">{{ trans("Back to Login") }}</a>
+      </div>
+    </form>
+  </div>
+</main>
+
+<style>
+  body {
+    font-family: 'DFKai-SB','BiauKai','標楷體', serif;
+    background: linear-gradient(135deg, #6b8dd6);
+    min-height: 100vh;
+    }
+    body, p, label, input, select, h5, h6 {
+        font-family: "標楷體", "Microsoft JhengHei", sans-serif;
+    }
+  /* 背景與整體排版 */
+  .login-page {
+    background:  #6b8dd6;
+    height: 110vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .login-container {
+    background: #bde3f0;
+    padding: 40px 60px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    width: 450px;
+    text-align: center;
+  }
+  
+  .login-title {
+    font-size: 26px;
+    font-weight: bold;
+    margin-bottom: 30px;
+    color: #1e3a8a;
+  }
+  
+  /* 輸入框組 */
+  .input-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 20px;
+  }
+  
+  .input-label {
+    font-size: 18px;
+    color: #1e3a8a;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  
+  /* 密碼輸入框與眼睛 */
+  .password-wrapper {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+  }
+  
+  .input-field {
+    width: 100%;
+    height: 45px;
+    border: 1.5px solid #ccc;
+    border-radius: 10px;
+    padding: 0 12px;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.2s;
+    flex: 1;
+    padding-right: 40px; /* 為眼睛圖示留空間 */
+  }
+  
+  .input-field:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 4px rgba(37, 99, 235, 0.4);
+  }
+  
+  .toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+    cursor: pointer;
+    color: #555;
+    z-index: 2;
+  }
+  
+  .toggle-password:hover {
+    color: #1e40af;
+  }
+  
+  /* 登入／註冊按鈕 */
+  .btn-login {
+    width: 100%;
+    background-color: #2563eb;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    padding: 12px;
+    transition: background-color 0.2s;
+  }
+  
+  .btn-login:hover {
+    background-color: #1e40af;
+  }
+  
+  /* 底部連結 */
+  .link-row {
+    margin-top: 25px;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .link-row a {
+    color: #1e3a8a;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 15px;
+  }
+  
+  .link-row a:hover {
+    color: #2563eb;
+  }
+  
+  /* 密碼規則 */
+  .rule-item .checkmark {
+    width: 16px;
+    height: 16px;
+    margin-right: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 1px solid #6c757d;
+    font-size: 12px;
+    font-weight: bold;
+    color: red;
+  }
+  
+  .rule-item.pass .checkmark {
+    background-color: green;
+    border-color: green;
+    color: white;
+  }
+  
+  .password-rules {
+    text-align: left;
+  }
+  
+  .match-status {
+    margin-top: 5px;
+    font-size: 14px;
+  }
+  
+  .match-status.ok {
+    color: green;
+  }
+  
+  .match-status.error {
+    color: red;
+  }
+  
+  /* select 下拉 */
+  .input-field select {
+    appearance: none;
+    background-color: white;
+    background-image: url("data:image/svg+xml;charset=US-ASCII,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'><path fill='%23333' d='M2 0L0 2h4zm0 5L0 3h4z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 10px;
+    cursor: pointer;
+  }
+  </style>
+  
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const newPassword = document.getElementById('password');
+    const strengthText = document.getElementById('password-strength');
+
+    const rules = {
+        length: document.getElementById('rule-length'),
+        upper: document.getElementById('rule-upper'),
+        lower: document.getElementById('rule-lower'),
+        number: document.getElementById('rule-number'),
+        special: document.getElementById('rule-special'),
+    };
+
+    function checkPasswordRules(pwd) {
+        const lengthCheck = pwd.length >= 10;
+        const upperCheck = /[A-Z]/.test(pwd);
+        const lowerCheck = /[a-z]/.test(pwd);
+        const numberCheck = /\d/.test(pwd);
+        const specialCheck = /[!@#$%^&*]/.test(pwd);
+
+        // 更新規則項目
+        updateRule(rules.length, lengthCheck);
+        updateRule(rules.upper, upperCheck);
+        updateRule(rules.lower, lowerCheck);
+        updateRule(rules.number, numberCheck);
+        updateRule(rules.special, specialCheck);
+
+        const passed = [lengthCheck, upperCheck, lowerCheck, numberCheck, specialCheck].filter(Boolean).length;
+
+        if (passed <= 2) return 'weak';
+        else if (passed <= 4) return 'medium';
+        else return 'strong';
+    }
+
+    function updateRule(element, passed) {
+        const checkmark = element.querySelector(".checkmark");
+        if (passed) {
+            element.classList.add("pass");
+            checkmark.textContent = "✓";
+        } else {
+            element.classList.remove("pass");
+            checkmark.textContent = "";
+        }
+    }
+
+    newPassword.addEventListener('input', () => {
+        const pwd = newPassword.value;
+        const strength = checkPasswordRules(pwd);
+
+        const strengthMap = {
+            weak: '<span class="weak">{{ trans("Weak") }}</span>',
+            medium: '<span class="medium">{{ trans("Medium") }}</span>',
+            strong: '<span class="strong">{{ trans("Strong") }}</span>'
+        };
+
+        strengthText.innerHTML = '{{ trans("Strength") }}: ' + strengthMap[strength];
+    });
+});
+
+// 顯示 / 隱藏密碼
+document.querySelectorAll('.toggle-password').forEach(icon => {
+    icon.addEventListener('click', () => {
+        const target = document.getElementById(icon.dataset.target);
+        const isHidden = target.getAttribute('type') === 'password';
+
+        target.setAttribute('type', isHidden ? 'text' : 'password');
+        icon.classList.toggle('bi-eye');
+        icon.classList.toggle('bi-eye-slash');
+    });
+});
+
+// 即時檢查密碼是否一致
+const pwd = document.getElementById('password');
+const confirmPwd = document.getElementById('confirm');
+const matchStatus = document.getElementById('match-status');
+
+function checkMatch() {
+    if (confirmPwd.value === '') {
+        matchStatus.textContent = '';
+        return;
+    }
+    if (pwd.value === confirmPwd.value) {
+        matchStatus.textContent = "{{ trans('Password match') }} ✓";
+        matchStatus.classList.add("ok");
+        matchStatus.classList.remove("error");
+    } else {
+        matchStatus.textContent = "{{ trans('Passwords do not match') }} ✗";
+        matchStatus.classList.add("error");
+        matchStatus.classList.remove("ok");
+    }
+}
+
+pwd.addEventListener('input', checkMatch);
+confirmPwd.addEventListener('input', checkMatch);
+
+</script>
+{% endblock %}

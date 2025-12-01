@@ -1,49 +1,144 @@
-
 <title>ALCPT - Proclamation Create</title>
 
-{% extends 'new_base.html' %} {% block path %}
-<li class="breadcrumb-item active" aria-current="page">{{trans("Proclamation Create")}}</li>
-{% endblock %} {% block content %}
-<main class="proclamation-create-form">
+{% extends 'new_base.html' %}
+
+{% block stylesheets %}
+<link rel="stylesheet" type="text/css" href="{{ static('/css/registration/password_change.css') }}" />
+{% endblock %}
+
+
+{% block content %}
+<main class="password-change-form">
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header" style=" color:blue; font-size:30px;">{{ trans("Proclamation Create") }}</div>
-
-
-                    <div class="card-body">
-                        <form method="post">
-                            <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
-
-                            <div class="form-group row">
-                                <label for="p_title" class="col-md-4 col-form-label text-md-right" style="font-size:25px;">{{ trans("Title") }}</label>
-
-                                <div class="col-md-6">
-                                    <input type="text" id="p_title" class="form-control" name="p_title" placeholder="{{trans("Proclamation Title")}}..." required autofocus />
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
-                                <label for="p_text" class="col-md-4 col-form-label text-md-right" style="font-size:25px;">{{ trans("Content") }}</label>
-
-                                <div class="col-md-6">
-                                    <textarea class="form-control" name="p_text" cols="100" rows="8" placeholder="{{trans("Proclamation Content")}}..." required></textarea>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-primary">{{ trans("Submit") }}</button>
-                                <button type="reset" class="btn btn-light">{{ trans("Reset" )}}</button>
-                                <button type="button" class="btn btn-secondary" onclick="history.go(-1)">
-                                    {{ trans("Cancel") }}
-                                </button>
-                            </div>
-                        </form>
+            <div class="col-md-7 col-lg-6">
+                <div class="password-card">
+                    
+                    <div class="card-header">
+                        {{ trans("Create Proclamation") }}
                     </div>
+
+                    <form method="post">
+                        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
+
+                        <!-- Title -->
+                        <label class="form-label">{{ trans("Title") }}</label>
+                        <input class="form-control" 
+                            type="text" 
+                            id="p_title" 
+                            name="p_title" 
+                            placeholder="{{ trans('Proclamation Title') }}..." 
+                            required />
+
+                        <!-- Content -->
+                        <label class="form-label">{{ trans("Content") }}</label>
+                        <textarea class="form-control" 
+                                  id="p_text"
+                                  name="p_text"
+                                  rows="6"
+                                  placeholder="{{ trans('Proclamation Content') }}..."
+                                  required></textarea>
+
+                        <!-- Buttons -->
+                        <button type="submit" class="btn btn-primary mt-3">{{ trans("Submit") }}</button>
+
+                        <div class="d-flex justify-content-between mt-3">
+                            <button type="reset" class="btn btn-outline-secondary">{{ trans("Reset") }}</button>
+                            <button type="button" class="btn btn-outline-danger" onclick="history.go(-1)">
+                                {{ trans("Cancel") }}
+                            </button>
+                        </div>
+                    </form>
+
                 </div>
             </div>
         </div>
     </div>
 </main>
+
+<style>
+    body {
+        font-family: 'DFKai-SB','BiauKai','標楷體', serif;
+        background: linear-gradient(135deg, #6b8dd6);
+        min-height: 100vh;
+    }
+    
+    /* 垂直置中整個表單 */
+    .password-change-form {
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem 0;
+    }
+    
+    /* 卡片 */
+    .password-card {
+        border-radius: 15px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        padding: 2rem;
+        color: #000;                 /* 文字黑色 */
+        background-color: #ffffff;   /* 卡片白色 */
+    }
+    
+    /* 卡片標題 */
+    .password-card .card-header {
+        font-size: 1.8rem;
+        font-weight: 600;
+        color: #000;                 /* 標題黑色 */
+        text-align: center;
+        margin-bottom: 1.2rem;
+    }
+    
+    /* 表單標籤 */
+    .password-card .form-label {
+        font-weight: 500;
+        margin-top: 1rem;
+        color: #000;                 /* label 黑色 */
+    }
+    
+    /* 輸入框 */
+    .password-card .form-control {
+        border-radius: 8px;
+        padding: 0.7rem 1rem;
+        margin-top: 0.3rem;
+    }
+    
+    /* 按鈕 */
+    .password-card .btn-primary {
+        width: 100%;
+        border-radius: 8px;
+        padding: 0.6rem;
+        font-size: 1rem;
+        background-color: #2563eb;   /* 深藍色 */
+        border-color: #2563eb;
+        color: #fff;                 /* 文字白色 */
+    }
+    
+    .password-card .btn-primary:hover {
+        background-color: #1d4ed8;
+        border-color: #1d4ed8;
+    }
+    
+    /* Reset / Cancel 按鈕 */
+    .password-card .btn-outline-secondary,
+    .password-card .btn-outline-danger {
+        border-radius: 8px;
+        padding: 0.5rem 1rem;
+    }
+    
+    .password-card .btn-outline-secondary:hover {
+        background-color: #e2e8f0;  /* 淺灰 hover */
+        color: #000;
+    }
+    
+    .password-card .btn-outline-danger:hover {
+        background-color: #f87171;  /* 紅色 hover */
+        color: #fff;
+    }
+    </style>
+    
+    
+    
+
 {% endblock %}

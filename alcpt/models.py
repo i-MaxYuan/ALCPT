@@ -1,14 +1,17 @@
 import time, datetime, json, ast
 
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager,User
 
-from alcpt.definitions import UserType, Level
+from alcpt.definitions import UserType, Level,ExamType
 
 
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.core.validators import RegexValidator
+
+
+#from alcpt.managerfuncs import ListField  # 假設你有自定義 ListField
 
 
 class ListField(models.TextField):
@@ -36,34 +39,37 @@ class ListField(models.TextField):
         return self.get_db_prep_value(value)
 
 class UserManager(BaseUserManager):
-    def create_user(self, reg_id, privilege, password=None):
+    def create_user(self, reg_id, email=None, password=None, privilege=1, **extra_fields):
         """
-        Creates and saves a user with the given serial number.
+        Creates and saves a User.
         """
+        if not reg_id:
+            raise ValueError("The registration ID must be set")
+
+        email = self.normalize_email(email) if email else None
 
         user = self.model(
             reg_id=reg_id,
-            privilege=privilege
+            email=email,
+            privilege=privilege,
+            **extra_fields
         )
-
         user.set_password(password)
         user.save(using=self._db)
-
         return user
 
-    def create_superuser(self, reg_id, password):
-        """
-        Creates and saves a superuser with the given serial number, password.
-        """
-
-        user = self.model(
+    def create_superuser(self, reg_id, password, email=None, **extra_fields):
+        user = self.create_user(
             reg_id=reg_id,
+            email=email,
+            password=password,
+            privilege=99,  # 假設 99 是管理員
+            **extra_fields
         )
-        user.set_password(password)
         user.is_admin = True
         user.save(using=self._db)
-
         return user
+
 
 
 # 使用者
@@ -226,6 +232,7 @@ class Exam(models.Model):
     testeeList = models.ManyToManyField('User')
     remaining_time = models.BigIntegerField(default=None, null=True)
     is_started = models.BooleanField(default=False)
+    
     
     class Meta:
         ordering = ('-created_time',)
@@ -450,9 +457,11 @@ class Reply(models.Model):
 
 
 class Word_library(models.Model):
-    words = models.TextField(max_length=30)
-    translations = models.TextField(max_length=30)
+    words = models.CharField(max_length=255, unique=True)
+    translations = models.CharField(max_length=255)
 
+    def __str__(self):
+        return self.words
 
 class OnlineStatus(models.Model):
     user = models.OneToOneField(User,on_delete=models.CASCADE)
@@ -470,15 +479,15 @@ class LocationUrl(models.Model):
 
 class ScoreRecord(models.Model):
     user = models.ForeignKey('User',on_delete=models.CASCADE)
-    exam_type = models.IntegerField(default=2)
+    exam_type = models.IntegerField(choices=[(et.value[0], et.name) for et in ExamType])
     qualified_times = models.PositiveIntegerField(default=0)
     unqualified_times = models.PositiveIntegerField(default=0)
     
     def __str__(self):
-        return str(self.qualified_times)  
+        return f"{self.user.username} - {self.get_exam_type_display()}" 
     
 class ExamResult(models.Model):
-    exam = models.OneToOneField('Exam',on_delete=models.DO_NOTHING)
+    exam = models.OneToOneField('Exam', on_delete=models.DO_NOTHING, null=True)
     range_times = ListField(default=[0,0,0,0,0,0,0,0,0,0])
     testee_num = models.PositiveIntegerField(default=0)   
     tested = models.PositiveIntegerField(default=0)

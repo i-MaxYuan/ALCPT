@@ -1,71 +1,108 @@
-
 <title>ALCPT - Exam Score List</title>
 
-{% extends 'new_base.html' %} {% block path %}
-<li class="breadcrumb-item active" aria-current="page">{{trans("View Testee Score")}}</li>
-{% endblock %} {% block content %}
+{% extends 'new_base.html' %}
+
+{% block path %}
+<li class="breadcrumb-item active" aria-current="page">{{ trans("View Testee Score") }}</li>
+{% endblock %}
+
+{% block content %}
 <main class="exam-score-list">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-12 table-responsive-md">
-                <h2>{{trans("Exam Score List")}}</h2>
 
+                <!-- Title + Export buttons -->
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h2>{{ trans("Exam Score List") }}</h2>
+                    <div>
+                        <a href="{{ url('export_exam_list_excel') }}" class="btn btn-success btn-sm">
+                            <i class="fa fa-file-excel-o"></i> {{ trans("Export Excel") }}
+                        </a>
+                        <a href="{{ url('export_exam_list_pdf') }}" class="btn btn-danger btn-sm">
+                            <i class="fa fa-file-pdf-o"></i> {{ trans("Export PDF") }}
+                        </a>
+                    </div>
+                </div>
 
+                <!-- Search / Filter form -->
+                <form method="get" class="form-inline mb-3">
+                    <input type="text" name="q" value="{{ request.GET.q|default('') }}"
+                           class="form-control mr-2" placeholder="{{ trans('Search by Name') }}">
+                    <input type="date" name="date" value="{{ request.GET.date|default('') }}"
+                           class="form-control mr-2">
+                    <button type="submit" class="btn btn-primary">{{ trans("Search") }}</button>
+                    {% if request.GET.q or request.GET.date %}
+                        <a href="{{ url('exam_score_list') }}" class="btn btn-secondary ml-2">
+                            {{ trans("Clear") }}
+                        </a>
+                    {% endif %}
+                </form>
+
+                <!-- Main Table -->
                 <table class="table table-hover table-striped table-bordered table-mc-light-blue">
                     <thead class="thead-light">
                         <tr>
-                            <th class="text-center">{{trans("Name")}}</th>
-                            <th class="text-center">{{trans("Average")}}</th>
+                            <th class="text-center">{{ trans("Name") }}</th>
+                            <th class="text-center">{{ trans("Average") }}</th>
                             <th class="text-center"><i class="fa fa-users"></i></th>
-                            <th class="text-center">{{trans("Start Time")}}</th>
-                            <th class="text-center">{{trans("Finish Time")}}</th>
-                            <th class="text-center">{{trans("Duration")}}({{trans("min")}})
-                                <button type="button" class="btn" data-toggle="modal" data-target="#promptContent"><i class="fa fa-question-circle"></i></button>
-                                <div class="modal fade text-left" id="promptContent" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header text-center">
-                                                <h5 class="modal-title" id="ModalLongTitle">{{trans("Tips")}}</h5>
-                                            </div>
-
-                                            <div class="modal-body">
-                                                <ul>
-                                                    <li>
-                                                        <p>{{trans("Select one exam, and you can look up the score detail.")}}</p>
-                                                    </li>
-                                                </ul>
-                                            </div>
-
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-primary" data-dismiss="modal">{{trans("OK")}}</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </th>
+                            <th class="text-center">{{ trans("Start Time") }}</th>
+                            <th class="text-center">{{ trans("Finish Time") }}</th>
+                            <th class="text-center">{{ trans("Duration") }}({{ trans("min") }})</th>
+                            <th class="text-center">{{ trans("Status") }}</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for exam in exams %}
-                        <tr style="cursor: pointer" onclick="window.location.href='{{ url('exam_score_detail', args=[exam.id]) }}'">
-                            <td class="text-center" data-title="Name">{{ exam.name }}</td>
-                            <td class="text-center" data-title="Average">{{ exam.average_score }}</td>
-                            <td class="text-center" data-title="users">{{ exam.testeeList.count() }}</td>
-                            <td class="text-center" data-title="Start Time">
-                                {{ exam.start_time.strftime('%Y/%m/%d %H:%M') }}
+                        <tr style="cursor: pointer"
+                            onclick="window.location.href='{{ url('exam_score_detail', args=[exam.id]) }}'">
+                            <td class="text-center">{{ exam.name }}</td>
+                            <td class="text-center">{{ exam.average_score }}</td>
+                            <td class="text-center">{{ exam.testeeList.count() }}</td>
+                            <td class="text-center">{{ exam.start_time.strftime('%Y/%m/%d %H:%M') }}</td>
+                            <td class="text-center">{{ exam.finish_time.strftime('%Y/%m/%d %H:%M') }}</td>
+                            <td class="text-center">{{ exam.duration }}</td>
+                            <td class="text-center">
+                                {% if exam.testee_not_tested == 0 %}
+                                    <span style="color: green">✔</span>
+                                {% else %}
+                                    <span style="color: red">{{ trans("Unfinished") }}</span>
+                                {% endif %}
                             </td>
-                            <td class="text-center" data-title="Finish Time">
-                                {{ exam.finish_time.strftime('%Y/%m/%d %H:%M') }}
-                            </td>
-                            <td class="text-center" data-title="Duration">{{ exam.duration }}</td>
                         </tr>
                         {% else %}
                         <tr>
-                            <td colspan="6" class="text-center">{{trans("No Data")}}</td>
+                            <td colspan="7" class="text-center">{{ trans("No Data") }}</td>
                         </tr>
                         {% endfor %}
                     </tbody>
                 </table>
+
+                <!-- Pagination -->
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center">
+                        {% if exams.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ exams.previous_page_number }}&q={{ request.GET.q|default('') }}&date={{ request.GET.date|default('') }}">&laquo;</a>
+                        </li>
+                        {% endif %}
+
+                        {% for num in exams.paginator.page_range %}
+                        <li class="page-item {% if exams.number == num %}active{% endif %}">
+                            <a class="page-link" href="?page={{ num }}&q={{ request.GET.q|default('') }}&date={{ request.GET.date|default('') }}">
+                                {{ num }}
+                            </a>
+                        </li>
+                        {% endfor %}
+
+                        {% if exams.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ exams.next_page_number }}&q={{ request.GET.q|default('') }}&date={{ request.GET.date|default('') }}">&raquo;</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+
             </div>
         </div>
     </div>

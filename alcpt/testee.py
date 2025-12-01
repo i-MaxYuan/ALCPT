@@ -11,7 +11,7 @@ from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
-from .models import Question, AnswerSheet, Student, User, Exam, TestPaper, Answer, ReportCategory, Report, Achievement, UserAchievement, Forum, Word_library, ScoreRecord, ExamResult
+from .models import Question, AnswerSheet, Student, User, Exam, TestPaper, Answer, ReportCategory, Report, Achievement, UserAchievement, Forum, Word_library, ScoreRecord, ExamResult, Word_library
 from .exceptions import *
 from .decorators import permission_check
 from .definitions import UserType, QuestionType, ExamType, AchievementCategory
@@ -35,49 +35,94 @@ request_achievement_signal = Signal(providing_args=['user', 'score', 'exam_type'
 
 #統整user practices/all testees exam的結果
 class IntegrateTestResults:
-    
-    #更新user在某類型(exam_type)考試中合格次數
-    def score_records(self, user, exam_type):                 
-        score_record = ScoreRecord.objects.get(user=user, exam_type=exam_type)
-        score_record.qualified_times = len(AnswerSheet.objects.all().filter(user=user, exam__exam_type=exam_type, score__gte=60))   #score >= 60 data
-        score_record.unqualified_times = len(AnswerSheet.objects.all().filter(user=user, exam__exam_type=exam_type, score__lt=60))   #score < 60 data
+
+    # 更新 user 在某類型 (exam_type) 考試中合格次數
+    def score_records(self, user, exam_type):
+        # 如果沒有 ScoreRecord，會自動建立
+        score_record, created = ScoreRecord.objects.get_or_create(
+            user=user,
+            exam_type=exam_type,
+            defaults={'qualified_times': 0, 'unqualified_times': 0}
+        )
+
+        # 計算合格與不合格次數
+        score_record.qualified_times = AnswerSheet.objects.filter(
+            user=user,
+            exam__exam_type=exam_type,
+            score__gte=60
+        ).count()
+
+        score_record.unqualified_times = AnswerSheet.objects.filter(
+            user=user,
+            exam__exam_type=exam_type,
+            score__lt=60
+        ).count()
+
         score_record.save()
-    
-    #record Exam qualified_num
+
+
+    # 記錄 Exam 成績與統計
     def exam_results(self, exam, score):
-        exam_result =  ExamResult.objects.get(exam=exam)
-        testee_scores = exam_result.testee_score
-        testee_grades = exam_result.testee_grade
+        # 如果沒有 ExamResult，會自動建立
+        exam_result, created = ExamResult.objects.get_or_create(
+            exam=exam,
+            defaults={
+                'tested': 0,
+                'not_tested_num': 0,
+                'qualified_num': 0,
+                'unqualified_num': 0,
+                'testee_score': [],
+                'testee_grade': [],
+                'range_times': [0]*10
+            }
+        )
+
+        # 計算範圍統計
+        exam_result.range_times[score // 10] += 1
         exam_result.tested += 1
-        exam_result.not_tested_num = len(exam.testeeList.all())-exam_result.tested
-        
-        def grade(score, breakpoints=[60,70,80,90], grades='FDCBA'):
+        exam_result.not_tested_num = max(len(exam.testeeList.all()) - exam_result.tested, 0)
+
+        # 定義分數對應等級
+        def grade(score, breakpoints=[60, 70, 80, 90], grades='FDCBA'):
             i = bisect.bisect(breakpoints, score)
             return grades[i]
-                       
-        exam_result.range_times[score//10] += 1
 
+        # 遍歷所有考生
         testees = exam.testeeList.all()
         for testee in testees:
-            answer_sheet = AnswerSheet.objects.get(exam=exam, user_id=testee.id)
-        
-            if answer_sheet.is_tested:
-        
-                if score >= 60:
-                    exam_result.qualified_num += 1
-                    testee_scores.append(score)
-                    testee_grades.append(grade(score))
-                    
-                elif score < 60:
-                    exam_result.unqualified_num += 1
-                    testee_scores.append(score)
-                    testee_grades.append(grade(score))
-                
+            answer_sheet = AnswerSheet.objects.filter(exam=exam, user_id=testee.id).first()
+
+        if answer_sheet and answer_sheet.is_tested:
+            s = answer_sheet.score if answer_sheet.score is not None else 0
+            exam_result.testee_score.append(s)
+            exam_result.testee_grade.append(grade(s))
+
+            if s >= 60:
+                exam_result.qualified_num += 1
             else:
-                testee_scores.append(None)
-                testee_grades.append(grade(0))
-            exam_result.save()
-        
+                exam_result.unqualified_num += 1
+        else:
+            exam_result.testee_score.append(None)
+            exam_result.testee_grade.append(grade(0))
+
+        #for testee in testees:
+         #   # 安全獲取 AnswerSheet
+          #  answer_sheet = AnswerSheet.objects.filter(exam=exam, user_id=testee.id).first()
+#
+ #           if answer_sheet and answer_sheet.is_tested:
+  #              exam_result.testee_score.append(score)
+   #             exam_result.testee_grade.append(grade(score))
+#
+ #               if score >= 60:
+  #                  exam_result.qualified_num += 1
+   #             else:
+    #                exam_result.unqualified_num += 1
+     #       else:
+      #          exam_result.testee_score.append(None)
+       #         exam_result.testee_grade.append(grade(0))
+
+        exam_result.save()
+
 
 @receiver(post_save, sender=Achievement)
 def achievement_create_receiver(sender, instance, **kwargs):
@@ -122,6 +167,8 @@ def post_achievement_receiver(sender, **kwargs):
             elif value == 4:
                 achievement_cal = TestAchievement(user, score, value, 7) #建立物件 reading
                 achievement_cal.test_achievement()
+            else:
+                pass
 
 
 
@@ -186,7 +233,8 @@ class LeaderBoardView(View,OnlineUserStat):
         if exam:
             latest_exam = exam[0]
             leaderboard = AnswerSheet.objects.all().filter(exam_id=latest_exam.id).order_by("-score")
-
+        else:
+            pass
         return dict(now_time=now_time,
                     user_level=user_level,
                     exam=exam,
@@ -288,12 +336,28 @@ class ScoreList(View,OnlineUserStat):
             ]
         })
 
-        is_qualify = ScoreRecord.objects.get(user=request.user,exam_type=exam_type)
-        trace = go.Pie(labels = qualify,
-                       values = [is_qualify.qualified_times,is_qualify.unqualified_times],
-                       hole = .4,
-                       type= 'pie',
-                       marker=dict(colors=colors))
+        #is_qualify = ScoreRecord.objects.get(user=request.user,exam_type=exam_type)
+        is_qualify = ScoreRecord.objects.filter(user=request.user, exam_type=exam_type).first()
+
+        qualified_times = is_qualify.qualified_times if is_qualify else 0
+        unqualified_times = is_qualify.unqualified_times if is_qualify else 0
+
+        # 如果兩個都是 0，顯示提示文字或空圖
+        if qualified_times == 0 and unqualified_times == 0:
+            qualify = ['No Data']
+            values = [1]
+            colors = ['#d3d3d3']
+        else:
+            qualify = ['Qualified', 'Unqualified']
+            values = [qualified_times, unqualified_times]
+            colors = ['#4CAF50', '#F44336']
+
+        trace = go.Pie(labels=qualify,
+               values=values,
+               hole=.4,
+               type='pie',
+               marker=dict(colors=colors))
+
         data = [trace]
        
         fig = go.Figure(data=data, layout=layout)
@@ -633,12 +697,17 @@ class ViewAnswersheetContent(View,OnlineUserStat):
                 elif answersheet.is_tested == False:
                     messages.warning(request, _("You hadn't take this exam!"))
                     return redirect('testee_score_list', exam_type=answersheet.exam__exam_type)
+                else:
+                    pass
 
         except ObjectDoesNotExist:
             messages.error(request, 'Answer sheet does not exist, answersheet_id: {}'.format(answersheet_id))
             return redirect('testee_score_list', exam_type=answersheet.exam__exam_type)
 
         testee_count=0
+        exam_average_score = 0
+        PR = 0
+        rank = 0
         if answersheet.is_finished:
             if answersheet.exam.exam_type == 1:
                 exam_average_score = answersheet.exam.average_score #平均成績
@@ -782,7 +851,7 @@ class ViewAnswersheetContent(View,OnlineUserStat):
             return redirect('testee_exam_list')
         else:
             messages.warning(request, 'Does not finished this practice. Reject your request.')
-            return redirect('testee_score_list', exam_type=answersheet.exam__exam_type)
+            return redirect('testee_score_list', exam_type=answersheet.exam.exam_type)
 
 @permission_check(UserType.Testee)
 def favorite_question(request, question_id, answersheet_id):
@@ -1017,6 +1086,8 @@ class StartExam(View, IntegrateTestResults):
                 super().exam_results(exam,score)
                 messages.warning(request, 'You had not complete this exam. Your score is {}'.format(score))
                 return redirect('testee_score_list', exam_type=exam.exam_type)
+            else:
+                pass
 
             exam.is_started = True
             exam.save()
@@ -1490,20 +1561,45 @@ class WorldLibraryEdit(View,OnlineUserStat):
     template_name='testee/word_library_edit.html'
     
     def do_content_works(self,request,words,translations):
-        word = Word_library.objects.get(words=words)
-        translate = Word_library.objects.get(translations=translations) 
-        return dict(words=word,translations=translate)
-    def post(self,request,words,translations):
-        word = Word_library.objects.get(words=words)
-        translate = Word_library.objects.get(translations=translations) 
+        word = Word_library.objects.filter(words=words).first()
+        if not word:
+            messages.error(request, 'Word not found.')
+            return redirect('word_library')
+        return dict(word=word)
+
+        #word = Word_library.objects.get(words=words)
+        #translate = Word_library.objects.get(translations=translations) 
+        #return dict(words=word,translations=translate)
+    def post(self, request, words, translations):
         try:
-            word_english=request.POST.get('word_english')
-            word_chinese=request.POST.get('word_chinese')
+            word = Word_library.objects.get(words=words)
+            translate = Word_library.objects.get(translations=translations) 
+
+            word_english = request.POST.get('word_english')
+            word_chinese = request.POST.get('word_chinese')
+
+            if not word_english or not word_chinese:
+                messages.error(request, 'Word or translation cannot be empty.')
+                return redirect('word_library')
+
             word.words = word_english
             word.translations = word_chinese
             word.save()
+            messages.success(request, 'Word updated successfully.')
             return redirect('word_library')
-        except ObjectDoesNotExist:
-            messages.error(request,'error')
+
+        except Word_library.DoesNotExist:
+            messages.error(request, 'Word not found.')
             return redirect('word_library')
+
+
+
+
+
+            #word_english=request.POST.get('word_english')
+            #word_chinese=request.POST.get('word_chinese')
+            #word.words = word_english
+            #word.translations = word_chinese
+            #word.save()
+            
                    

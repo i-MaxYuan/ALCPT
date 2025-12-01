@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ALCPT - Testee Proclamation</title>
+
+  <!-- SDKs -->
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+
+  <!-- Styles -->
+  <style>
+    body {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'DFKai-SB', 'BiauKai', '標楷體', serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100%;
+      height: 100%;
+    }
+
+    html { height: 100%; }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      min-height: 100%;
+    }
+
+    .header { text-align: left; margin-bottom: 40px; }
+
+    .main-title {
+      font-size: 48px;
+      font-weight: bold;
+      color: #ffffff;
+      margin: 0;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .content-wrapper {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      align-items: start;
+    }
+
+    /* 公告欄 */
+    .announcement-panel {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      height: 100%;
+    }
+
+    .announcement-title {
+      font-size: 28px;
+      font-weight: bold;
+      color: #667eea;
+      margin: 0 0 20px 0;
+      padding-bottom: 15px;
+      border-bottom: 3px solid #667eea;
+    }
+
+    .announcement-content { color: #4a5568; line-height: 1.8; font-size: 16px; }
+
+    .announcement-item {
+      padding: 15px;
+      margin-bottom: 15px;
+      background: #f7fafc;
+      border-radius: 8px;
+      border-left: 4px solid #667eea;
+    }
+
+    .announcement-date { font-size: 14px; color: #718096; margin-bottom: 5px; }
+    .announcement-text { font-size: 16px; color: #2d3748; }
+
+    /* 功能面板 */
+    .function-panel { display: flex; flex-direction: column; gap: 20px; }
+
+    .button-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .function-button {
+      background: #ffffff;
+      color: #667eea;
+      border: 2px solid #667eea;
+      border-radius: 12px;
+      padding: 25px 20px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
+      font-family: 'DFKai-SB', 'BiauKai', '標楷體', serif;
+      white-space: nowrap;
+    }
+
+    .function-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(255, 255, 255, 0.5);
+      background: #f0f4ff;
+    }
+
+    .function-button:active { transform: translateY(-1px); }
+
+    /* 成就面板 */
+    .achievement-panel {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 30px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .achievement-title {
+      font-size: 24px;
+      font-weight: bold;
+      color: #764ba2;
+      margin: 0 0 20px 0;
+      padding-bottom: 15px;
+      border-bottom: 3px solid #764ba2;
+    }
+
+    .achievement-content {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .achievement-item {
+      display: flex;
+      align-items: center;
+      padding: 15px;
+      background: #f7fafc;
+      border-radius: 8px;
+      border-left: 4px solid #764ba2;
+      transition: all 0.3s ease;
+    }
+
+    .achievement-item:hover {
+      background: #edf2f7;
+      transform: translateX(5px);
+    }
+
+    .achievement-icon { font-size: 36px; margin-right: 15px; }
+
+    .achievement-info { flex: 1; }
+
+    .achievement-name {
+      font-size: 18px;
+      font-weight: bold;
+      color: #2d3748;
+      margin-bottom: 5px;
+    }
+
+    .achievement-desc { font-size: 14px; color: #718096; }
+
+    /* RWD */
+    @media (max-width: 768px) {
+      .content-wrapper { grid-template-columns: 1fr; }
+      .main-title { font-size: 32px; }
+      .button-grid { grid-template-columns: 1fr; }
+    }
+
+    @view-transition { navigation: auto; }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <header class="header">
+      <h1 class="main-title" id="mainTitle">歡迎使用考試系統</h1>
+    </header>
+
+    <div class="content-wrapper">
+      <!-- 公告欄 -->
+      <div class="announcement-panel">
+        <h2 class="announcement-title" id="announcementTitle">📢 公佈欄</h2>
+        <div class="announcement-content">
+          <div class="announcement-item">
+            <div class="announcement-date">2024年1月15日</div>
+            <div class="announcement-text">期末考試時間已公布，請同學們準時參加考試。</div>
+          </div>
+          <div class="announcement-item">
+            <div class="announcement-date">2024年1月10日</div>
+            <div class="announcement-text">考試系統將於本週進行維護，請注意相關通知。</div>
+          </div>
+          <div class="announcement-item">
+            <div class="announcement-date">2024年1月5日</div>
+            <div class="announcement-text">新增線上模擬考試功能，歡迎同學們多加練習。</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 功能與成就面板 -->
+      <div class="function-panel">
+        <div class="button-grid">
+          <button class="function-button" id="button1" onclick="handleButtonClick('開始考試')">📝 開始考試</button>
+          <button class="function-button" id="button2" onclick="handleButtonClick('查看成績')">📊 查看成績</button>
+          <button class="function-button" id="button3" onclick="handleButtonClick('考試記錄')">📋 考試記錄</button>
+          <button class="function-button" id="button4" onclick="handleButtonClick('模擬測驗')">🎯 模擬測驗</button>
+          <button class="function-button" id="button5" onclick="handleButtonClick('個人資料')">👤 個人資料</button>
+          <button class="function-button" id="button6" onclick="handleButtonClick('系統設定')">⚙️ 系統設定</button>
+        </div>
+
+        <div class="achievement-panel">
+          <h2 class="achievement-title" id="achievementTitle">🏆 成就榜</h2>
+          <div class="achievement-content">
+            <div class="achievement-item">
+              <div class="achievement-icon">🥇</div>
+              <div class="achievement-info">
+                <div class="achievement-name">考試達人</div>
+                <div class="achievement-desc">完成 10 次考試</div>
+              </div>
+            </div>
+            <div class="achievement-item">
+              <div class="achievement-icon">⭐</div>
+              <div class="achievement-info">
+                <div class="achievement-name">滿分王者</div>
+                <div class="achievement-desc">獲得 5 次滿分成績</div>
+              </div>
+            </div>
+            <div class="achievement-item">
+              <div class="achievement-icon">🎯</div>
+              <div class="achievement-info">
+                <div class="achievement-name">練習之星</div>
+                <div class="achievement-desc">完成 20 次模擬測驗</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JS -->
+  <script>
+    const defaultConfig = {
+      main_title: '歡迎使用考試系統',
+      announcement_title: '📢 公佈欄',
+      achievement_title: '🏆 成就榜',
+      button_1: '📝 開始考試',
+      button_2: '📊 查看成績',
+      button_3: '📋 考試記錄',
+      button_4: '🎯 模擬測驗',
+      button_5: '👤 個人資料',
+      button_6: '⚙️ 系統設定',
+      background_color: '#667eea',
+      surface_color: '#ffffff',
+      text_color: '#2d3748',
+      primary_action_color: '#667eea',
+      secondary_action_color: '#764ba2'
+    };
+
+    async function onConfigChange(config) {
+      document.getElementById('mainTitle').textContent = config.main_title || defaultConfig.main_title;
+      document.getElementById('announcementTitle').textContent = config.announcement_title || defaultConfig.announcement_title;
+      document.getElementById('achievementTitle').textContent = config.achievement_title || defaultConfig.achievement_title;
+      document.getElementById('button1').textContent = config.button_1 || defaultConfig.button_1;
+      document.getElementById('button2').textContent = config.button_2 || defaultConfig.button_2;
+      document.getElementById('button3').textContent = config.button_3 || defaultConfig.button_3;
+      document.getElementById('button4').textContent = config.button_4 || defaultConfig.button_4;
+      document.getElementById('button5').textContent = config.button_5 || defaultConfig.button_5;
+      document.getElementById('button6').textContent = config.button_6 || defaultConfig.button_6;
+
+      const backgroundColor = config.background_color || defaultConfig.background_color;
+      const surfaceColor = config.surface_color || defaultConfig.surface_color;
+      const textColor = config.text_color || defaultConfig.text_color;
+      const primaryActionColor = config.primary_action_color || defaultConfig.primary_action_color;
+      const secondaryActionColor = config.secondary_action_color || defaultConfig.secondary_action_color;
+
+      document.body.style.background = `linear-gradient(135deg, ${primaryActionColor} 0%, ${secondaryActionColor} 100%)`;
+      
+      const panel = document.querySelector('.announcement-panel');
+      if (panel) panel.style.background = surfaceColor;
+
+      document.querySelectorAll('.announcement-text').forEach(text => text.style.color = textColor);
+
+      const announcementTitleEl = document.querySelector('.announcement-title');
+      if (announcementTitleEl) {
+        announcementTitleEl.style.color = primaryActionColor;
+        announcementTitleEl.style.borderBottomColor = primaryActionColor;
+      }
+
+      document.querySelectorAll('.function-button').forEach(button => {
+        button.style.background = surfaceColor;
+        button.style.color = primaryActionColor;
+        button.style.borderColor = primaryActionColor;
+      });
+
+      const achievementTitleEl = document.querySelector('.achievement-title');
+      if (achievementTitleEl) {
+        achievementTitleEl.style.color = secondaryActionColor;
+        achievementTitleEl.style.borderBottomColor = secondaryActionColor;
+      }
+
+      document.querySelectorAll('.achievement-item').forEach(item => {
+        item.style.borderLeftColor = secondaryActionColor;
+      });
+
+      document.querySelectorAll('.announcement-item').forEach(item => {
+        item.style.borderLeftColor = primaryActionColor;
+      });
+    }
+
+    function handleButtonClick(buttonName) {
+      const message = document.createElement('div');
+      message.textContent = `已點擊：${buttonName}`;
+      Object.assign(message.style, {
+        position: 'fixed',
+        top: '20px',
+        right: '20px',
+        background: '#48bb78',
+        color: 'white',
+        padding: '15px 25px',
+        borderRadius: '8px',
+        boxShadow: '0 4px 15px rgba(0,0,0,0.2)',
+        zIndex: 1000,
+        fontWeight: 'bold',
+      });
+      document.body.appendChild(message);
+
+      setTimeout(() => {
+        message.style.transition = 'opacity 0.3s ease';
+        message.style.opacity = '0';
+        setTimeout(() => message.remove(), 300);
+      }, 2000);
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({ defaultConfig, onConfigChange });
+    }
+  </script>
+
+</body>
+</html>

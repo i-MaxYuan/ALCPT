@@ -1,179 +1,200 @@
-
 <title>ALCPT - TestPaper List</title>
 
-{% extends 'new_base.html' %} 
+{% extends 'new_base.html'%}
 
 {% block path %}
-<li class="breadcrumb-item active" aria-current="page">{{trans("TestPaper List")}}</li>
-{% endblock %} 
+<li class="breadcrumb-item active" aria-current="page">{{ trans("TestPaper List") }}</li>
+{% endblock %}
 
 {% block content %}
 <main class="testpaper-list">
-    <div class="container">
+    <div class="container exam-card">
         <div class="row justify-content-center">
-            <div class="col-lg-12 table-responsive-md">
-                <h2>{{trans("TestPaper List")}}</h2>
+            <div class="col-md-12" style="color: #2563eb;">
+                <h2><b><u>{{ trans("TestPaper List") }}</u></b></h2>
 
-                <table class="table table-hover table-bordered table-striped table-mc-light-blue">
-                    <thead class="thead-light">
-                        <tr>
-                            <th class="text-center">{{trans("Testpaper Name")}}</th>
-                            <th class="text-center">{{trans("Valid")}}</th>
-                            <th class="text-center">{{trans("Used")}}</th>
-                            <th class="text-center">{{trans("Last Update")}}</th>
-                            <th class="text-center">{{trans("Creator")}}</th>
-                            <th class="text-center">
-                                <div class="add">
-                                    <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ url('testpaper_create') }}'"><i class="fa fa-plus"></i></button>
-                                    <button type="button" class="btn" data-toggle="modal" data-target="#promptContent"><i class="fa fa-question-circle"></i></button>
-                                </div>
-                                <div class="modal fade text-left" id="promptContent" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header text-center">
-                                                <h5 class="modal-title" id="ModalLongTitle">{{trans("Tips")}}</h5>
-                                            </div>
+                <!-- 搜尋與排序 -->
+                <div class="d-flex justify-content-between mb-3">
+                    <input type="text" id="searchInput" class="form-control w-50" placeholder="{{ trans('Search TestPaper Name') }}...">
+                    <select id="sortSelect" class="form-control w-25">
+                        <option value="name_asc">{{ trans("Name ↑") }}</option>
+                        <option value="name_desc">{{ trans("Name ↓") }}</option>
+                        <option value="update_asc">{{ trans("Last Update ↑") }}</option>
+                        <option value="update_desc">{{ trans("Last Update ↓") }}</option>
+                    </select>
+                </div>
 
-                                            <div class="modal-body">
-                                                <ul>
-                                                    <li>
-                                                        <p>
-                                                            {{trans("Select one can look up each testpaper detail and exam questions.")}}
-                                                        </p>
-                                                    </li>
-                                                    <li>
-                                                        <p>
-                                                            {{trans("Click ")}}<i class="fa fa-plus btn btn-secondary"></i>{{trans(" can create a testpaper and select exam questions.")}}
-                                                        </p>
-                                                    </li>
-                                                    <li>
-                                                        <p>
-                                                            {{trans("Click ")}}<i class="fa fa-check-circle"></i>{{trans(" represents this testpaper is valid and can be used as an testpaper.")}}
-                                                        </p>
-                                                    </li>
-                                                    <li>
-                                                        <p>
-                                                            {{trans("Before using this testpaper, click ")}}<i class="fa fa-times"></i>{{trans(" represents this testpaper is not valid and you can edit it again.")}}
-                                                        </p>
-                                                    </li>
-                                                    <li>
-                                                        <p>
-                                                            {{trans("If this testpaper has not already used, you can click ")}}<i class="fa fa-pencil-square-o"></i>{{trans(" and edit testpaper contents.")}}
-                                                        </p>
-                                                    </li>
-                                                    <li>
-                                                        <p>
-                                                            {{trans("If this testpaper has not already used, you can click ")}}<i class="fa-solid fa-trash-can"></i>{{trans(" and delete at the same time.")}}
-                                                        </p>
-                                                    </li>
-                                                </ul>
-                                            </div>
-
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-primary" data-dismiss="modal">{{trans("OK")}}</button>
-                                            </div>
-                                        </div>
+                <div class="table-responsive-md">
+                    <table class="table table-bordered table-striped table-hover table-mc-light-blue" id="testpaperTable">
+                        <thead class="thead-light">
+                            <tr>
+                                <th class="text-center">{{ trans("TestPaper Name") }}</th>
+                                <th class="text-center">{{ trans("Valid") }}</th>
+                                <th class="text-center">{{ trans("Used") }}</th>
+                                <th class="text-center">{{ trans("Last Update") }}</th>
+                                <th class="text-center">{{ trans("Creator") }}</th>
+                                <th class="text-center">
+                                    <div class="d-flex justify-content-center">
+                                        <button type="button" class="btn btn-secondary mr-2" onclick="window.location.href='{{ url('testpaper_create') }}'">
+                                            <i class="fa fa-plus"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#promptContent">
+                                            <i class="fa fa-question-circle"></i>
+                                        </button>
                                     </div>
-                                </div>
-                            </th>
-                        </tr>
-                    </thead>
+                                </th>
+                            </tr>
+                        </thead>
 
-                    <tbody>
-                        <div class="add-secret">
-                            <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ url('testpaper_create') }}'">
-                                <i class="fa fa-plus"></i>
-                            </button>
+                        <tbody>
+                            {% if testpapers %}
+                                {% for testpaper in testpaperList %}
+                                <tr class="testpaper-row" data-url="{{ url('view_testpaper_content', args=[testpaper.id]) }}">
+                                    <td class="text-center testpaper-name">{{ testpaper.name }}</td>
+                                    <td class="text-center">
+                                        {% if testpaper.valid %}
+                                            {{ trans("Effective") }}
+                                        {% else %}
+                                            {{ trans("Ineffective") }}
+                                        {% endif %}
+                                    </td>
+                                    <td class="text-center">
+                                        {% if testpaper.is_used %}
+                                            {{ trans("Used") }}
+                                        {% else %}
+                                            {{ trans("Unused") }}
+                                        {% endif %}
+                                    </td>
+                                    <td class="text-center testpaper-update">{{ testpaper.update_time.strftime('%Y/%m/%d %H:%M') }}</td>
+                                    <td class="text-center">{{ testpaper.created_by.name }}</td>
+                                    <td class="text-center d-flex justify-content-center align-items-center">
+                                        {% if testpaper.is_testpaper %}
+                                            <a href="{{ url('testpaper_valid', args=[testpaper.id]) }}" class="btn btn-outline-success btn-sm mr-2" onclick="event.stopPropagation();">
+                                                <i class="fa fa-check-circle"></i>
+                                            </a>
+                                            <a href="{{ url('testpaper_unvalid', args=[testpaper.id]) }}" class="btn btn-outline-danger btn-sm mr-2" onclick="event.stopPropagation();">
+                                                <i class="fa fa-times"></i>
+                                            </a>
+                                            {% if testpaper.valid and testpaper.is_used %}
+                                            <a href="#" class="btn btn-outline-secondary btn-sm mr-2" onclick="event.stopPropagation(); alert('{{ trans("This test paper already used, cannot edit again.") }}');">
+                                                <i class="fa fa-pencil-square-o"></i>
+                                            </a>
+                                            {% else %}
+                                            <a href="{{ url('testpaper_edit', args=[testpaper.id]) }}" class="btn btn-outline-secondary btn-sm mr-2" onclick="event.stopPropagation();">
+                                                <i class="fa fa-pencil-square-o"></i>
+                                            </a>
+                                            {% endif %}
+                                            <a href="{{ url('testpaper_delete', args=[testpaper.id]) }}" class="btn btn-outline-danger btn-sm" onclick="event.stopPropagation(); return confirm('{{ trans("Sure to delete") }}?');">
+                                                <i class="fa fa-trash"></i>
+                                            </a>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td class="text-center" colspan="6">{{ trans("No Data") }}</td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Tips Modal -->
+                <div class="modal fade text-left" id="promptContent" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header text-center">
+                                <h5 class="modal-title">{{ trans("Tips") }}</h5>
+                            </div>
+                            <div class="modal-body">
+                                <ul>
+                                    <li>{{ trans("Select one can look up each testpaper detail and exam questions.") }}</li>
+                                    <li>{{ trans("Click plus icon can create a testpaper and select exam questions.") }}</li>
+                                    <li>{{ trans("Check icon represents valid testpaper.") }}</li>
+                                    <li>{{ trans("Cross icon represents invalid testpaper and you can edit it.") }}</li>
+                                    <li>{{ trans("If this testpaper has not been used, you can click pencil icon to edit.") }}</li>
+                                    <li>{{ trans("If unused, you can delete via trash icon.") }}</li>
+                                </ul>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" data-dismiss="modal">{{ trans("OK") }}</button>
+                            </div>
                         </div>
-                        {% if testpapers %} {% for testpaper in testpaperList %}
-                        <tr style="cursor: pointer">
-                            <td class="text-center" data-title="Name" onclick="window.location.href='{{ url('view_testpaper_content', args=[testpaper.id]) }}'">
-                                {{ testpaper.name }}
-                            </td>
-                            <td class="text-center" data-title="Valid" onclick="window.location.href='{{ url('view_testpaper_content', args=[testpaper.id]) }}'">
-                                {% if testpaper.valid %}
-                                {{trans("Effective")}}
-                                {% else %}
-                                {{trans("Ineffective")}}
-                                {% endif %}
-                            </td>
-                            <td class="text-center" data-title="Used" onclick="window.location.href='{{ url('view_testpaper_content', args=[testpaper.id]) }}'">
-                                {% if testpaper.is_used %}
-                                {{trans("Use")}}
-                                {% else %}
-                                {{trans("Unuse")}}
-                                {% endif %}
-                            </td>
-                            <td class="text-center" data-title="Last Update" onclick="window.location.href='{{ url('view_testpaper_content', args=[testpaper.id]) }}'">
-                                {{ testpaper.update_time.strftime('%Y/%m/%d %H:%M') }}
-                            </td>
-                            <td class="text-center" data-title="Creator" onclick="window.location.href='{{ url('view_testpaper_content', args=[testpaper.id]) }}'">
-                                {{ testpaper.created_by.name }}
-                            </td>
-                            <td class="text-center">
-                                {% if testpaper.is_testpaper %}
-                                <a href="{{ url('testpaper_valid', args=[testpaper.id]) }}"><i class="fa fa-check-circle"></i></a>
-                                <a href="{{ url('testpaper_unvalid', args=[testpaper.id]) }}"><i class="fa fa-times"></i></a>
-                                {% if testpaper.valid and testpaper.is_used %}
-                                <a href='' onclick="alert('{{trans("This test paper already used, cannot edit again.")}}');"><i class="fa fa-pencil-square-o fa-fw mb-2"></i></a>
-                                {% else %}
-                                <a href="{{ url('testpaper_edit', args=[testpaper.id]) }}"><i class="fa fa-pencil-square-o fa-fw mb-2"></i></a>
-                                {% endif %}
-                                <a href="{{ url('testpaper_delete', args=[testpaper.id]) }}" onclick="return confirm('{{trans("Sure to delete")}}？');"><i class="fa fa-trash" aria-hidden="true"></i></a>
-                                {% endif %}
-                            </td>
-                        </tr>
-                        {% endfor %}
-                        <tr>
-                            <td class="text-center" colspan="6">{{trans("No Data")}}</td>
-                        </tr>
-                        {% endif %}
-                    </tbody>
-                </table>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
 </main>
-{% endblock %} {% block pagination %}
-<ul class="pagination justify-content-center">
-    <li class="page-item">
-        <a class="page-link" href="?page=1"><i class="fa fa-angle-double-left"></i></a>
-    </li>
-
-    <li class="page-item {% if not testpaperList.has_previous() %}disable{% endif %}">
-        {% if testpaperList.has_previous() %}
-        <a class="page-link" href="?page={{ testpaperList.previous_page_number() }}" tabindex="-1"><i class="fa fa-angle-left"></i></a>
-        {% else %}
-        <a class="page-link" href="javascript:void(0);"><i class="fa fa-angle-left"></i></a>
-        {% endif %}
-    </li>
-
-    {% for page in paginator.page_range %} {% if page == testpaperList.number %}
-    <li class="page-item active">
-        <a class="page-link" href="?page={{ page }}">{{ page }}</a>
-    </li>
-    {% else %}
-    <li class="page-item">
-        <a class="page-link" href="?page={{ page }}">{{ page }}</a>
-    </li>
-    {% endif %} {% endfor %}
-
-    <li class="page-item {% if not testpaperList.has_next() %}disable{% endif %}">
-        {% if testpaperList.has_next() %}
-        <a class="page-link" href="?page={{ testpaperList.next_page_number() }}"><i class="fa fa-angle-right"></i></a>
-        {% else %}
-        <a class="page-link" href="javascript:void(0);"><i class="fa fa-angle-right"></i></a>
-        {% endif %}
-    </li>
-
-    <li class="page-item">
-        <a class="page-link" href="?page={{ testpaperList.paginator.num_pages }}"><i class="fa fa-angle-double-right"></i></a>
-    </li>
-</ul>
 {% endblock %}
 
 {% block navbarFocused %}
 <script>
     navbarFocused("TestManager_navbar");
+    
+    document.addEventListener("DOMContentLoaded", function() {
+        const tbody = document.querySelector("#testpaperTable tbody");
+        const searchInput = document.getElementById("searchInput");
+        const sortSelect = document.getElementById("sortSelect");
+
+        // 搜尋功能
+        searchInput.addEventListener("keyup", function() {
+            const filter = this.value.toLowerCase();
+            tbody.querySelectorAll("tr").forEach(function(row) {
+                const nameCell = row.querySelector(".testpaper-name");
+                if (!nameCell) return;
+                const text = nameCell.textContent.toLowerCase();
+                row.style.display = text.includes(filter) ? "" : "none";
+            });
+        });
+
+        // 排序功能
+        sortSelect.addEventListener("change", function() {
+            const sortValue = this.value;
+            const rows = Array.from(tbody.querySelectorAll("tr")).filter(r => r.style.display !== "none");
+            rows.sort(function(a, b) {
+                if(sortValue.includes("name")) {
+                    const aVal = a.querySelector(".testpaper-name").textContent;
+                    const bVal = b.querySelector(".testpaper-name").textContent;
+                    return sortValue.endsWith("asc") ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
+                } else if(sortValue.includes("update")) {
+                    const aVal = new Date(a.querySelector(".testpaper-update").textContent);
+                    const bVal = new Date(b.querySelector(".testpaper-update").textContent);
+                    return sortValue.endsWith("asc") ? aVal-bVal : bVal-aVal;
+                }
+                return 0;
+            });
+            rows.forEach(r => tbody.appendChild(r));
+        });
+
+        // 點擊整行導向詳情
+        tbody.querySelectorAll("tr").forEach(function(row) {
+            row.addEventListener("click", function(e) {
+                if(e.target.tagName.toLowerCase() !== 'i' && e.target.tagName.toLowerCase() !== 'a') {
+                    window.location.href = this.dataset.url;
+                }
+            });
+        });
+    });
 </script>
+
+<style>
+body { font-family: 'DFKai-SB','BiauKai','標楷體', serif; background: linear-gradient(135deg, #9eadf0); min-height:100vh; }
+
+.exam-card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 25px;
+    margin-top: 25px;
+    margin-bottom: 40px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+}
+
+.testpaper-row:hover {
+    background-color: rgba(108, 122, 224, 0.15);
+    cursor: pointer;
+}
+</style>
 {% endblock %}

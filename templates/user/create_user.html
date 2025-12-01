@@ -1,4 +1,3 @@
-
 <title>ALCPT - User Create</title>
 
 {% extends 'new_base.html' %}
@@ -9,158 +8,191 @@
 
 {% block path %}
 <li class="breadcrumb-item" aria-current="page">
-    <a href="{{ url('user_list') }}">{{trans("User List")}}</a>
+    <a href="{{ url('user_list') }}">{{ trans("User List") }}</a>
 </li>
 <li class="breadcrumb-item active" aria-current="page">
-    {{trans("User Create")}}（{{trans("Single")}}）
+    {{ trans("User Create") }} ({{ trans("Single") }})
 </li>
-{% endblock %} {% block content %}
-<main class="create-user-form">
+{% endblock %}
+
+{% block content %}
+<main class="create-user-form py-5">
     <form method="post">
         <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
         <div class="container">
-            <div class="row justify-content-center">
+            <div class="row justify-content-center g-4">
+                
+                <!-- Left Column: User Info -->
                 <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-header" style="font-size:30px;">{{trans("User Create")}}</div>
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <span>{{ trans("User Create") }}</span>
+                            <a href="{{ url('user_multiCreate') }}" class="btn btn-info btn-sm">
+                                {{ trans("Multiple Creation") }}？
+                            </a>
+                        </div>
                         <div class="card-body">
-                            <div class="form-group row">
-                                <label for="reg_id" class="col-md-4 col-form-label text-md-right" style="font-size:20px;">{{trans("Reg ID")}}</label>
-                                <div class="col-md-6">
-                                    <input class="form-control" type="text" id="reg_id" name="reg_id" style="font-size:15px;" pattern='[[a-zA-Z0-9]*' placeholder="{{trans("Register ID")}}..." onkeyup="valid_ID(this)" required />
 
-                                    <label class="unique_id" id="invalid_id" style="display: none"></label>
+                            <!-- Reg ID -->
+                            <div class="mb-3 row">
+                                <label for="reg_id" class="col-md-4 col-form-label text-md-right">{{ trans("Reg ID") }}</label>
+                                <div class="col-md-6">
+                                    <input class="form-control" type="text" id="reg_id" name="reg_id"
+                                           placeholder="{{ trans("Register ID") }}..."
+                                           pattern="[a-zA-Z0-9]*"
+                                           onkeyup="valid_ID(this)" required>
+                                    <label class="unique_id text-danger" id="invalid_id" style="display: none"></label>
                                 </div>
                             </div>
 
-                            <div class="form-group row">
-                                <label for="password" class="col-md-4 col-form-label text-md-right" style="font-size:20px;">{{trans("Identity")}}</label>
+                            <!-- Identity -->
+                            <div class="mb-3 row">
+                                <label for="identity" class="col-md-4 col-form-label text-md-right">{{ trans("Identity") }}</label>
                                 <div class="col-md-6">
-                                    <select class="custom-select custom-select-sm" id="identity" name="identity" onchange="is_student()" required style="height: 40px;width: 235px;">
-                                        <option value="" disabled selected >{{trans("Choose Identity")}}</option>
-
+                                    <select class="custom-select custom-select-sm" id="identity" name="identity"
+                                            onchange="is_student()" required>
+                                        <option value="" disabled selected>{{ trans("Choose Identity") }}</option>
                                         {% for identity in identities %}
-                                        <option value="{{ identity.value.0 }}">
-                                            {{ identity.value.1 }}
-                                        </option>
+                                            <option value="{{ identity.value.0 }}">{{ identity.value.1 }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
                             </div>
 
-                            <div class="form-group row">
-
-                                <label for="verification" class="col-md-4 col-form-label text-md-right" style="font-size:20px;">{{trans("Privilege")}}</label>
-
+                            <!-- Privileges -->
+                            <div class="mb-3 row">
+                                <label class="col-md-4 col-form-label text-md-right">{{ trans("Privilege") }}</label>
                                 <div class="col-md-6">
-                                    <div class="container">
-                                        <div class="row">
-                                            <div class="col-lg-12">
-                                                <div class="button-group">
-                                                    <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" style="font-size:25px">
-
-                                                        <i class="fa fa-gears"></i>
-                                                    </button>
-                                                    <ul class="dropdown-menu">
-                                                        <li>{{trans("Privilege Setting")}}</li>
-                                                        {% for privilege in privileges %}
-                                                        <li>
-                                                            <input type="checkbox" id="{{ privilege.value.1 }}" name="{{ privilege }}" onclick="privilege_not_empty()" style="height: 24px;width: 24px;" {% if privilege == privilege.Testee %} checked
-
-                                                                {% endif %}>&nbsp;{{ privilege.value.2 }}
-                                                        </li>
-                                                        {% endfor %}
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
+                                    <div class="dropdown">
+                                        <button type="button" class="btn btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown">
+                                            <i class="fa fa-gears"></i> {{ trans("Set Privileges") }}
+                                        </button>
+                                        <ul class="dropdown-menu p-2">
+                                            {% for privilege in privileges %}
+                                                <li class="dropdown-item">
+                                                    <input type="checkbox"
+                                                           id="privilege_{{ loop.index }}"
+                                                           name="privileges"
+                                                           value="{{ privilege.value.0 }}"
+                                                           onclick="privilege_not_empty()"
+                                                           {% if privilege == privilege.Testee %} checked {% endif %}
+                                                           style="height: 20px; width: 20px;">
+                                                    &nbsp;{{ privilege.value.2 }}
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
                                     </div>
-                                    <label class="privilege_invalid" id="privilege_invalid" style="display: none"></label>
+                                    <label class="privilege_invalid text-danger" id="privilege_invalid" style="display: none"></label>
                                 </div>
                             </div>
 
-                            <div class="dropdown-divider"></div>
-
-                            <div class="float-right align-bottom">
-                                <a href="{{ url('user_multiCreate') }}">{{trans("Multiple Creation")}}？</a>
-                            </div>
                         </div>
                     </div>
                 </div>
 
+                <!-- Right Column: Student Info -->
                 <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-header" style="font-size:30px;">{{trans("Create Student")}}</div>
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-header">{{ trans("Create Student") }}</div>
                         <div class="card-body">
-                            <div class="form-group row">
-                                <label for="reg_id" class="col-md-4 col-form-label text-md-right"  style="font-size:20px;" >{{trans("Student ID")}}</label>
-                                <div class="col-md-6">
-                                    <input class="form-control" type="text" id="stu_id" name="stu_id" placeholder="{{trans("Student ID")}}..." onkeyup="valid_stuID(this)" required />
 
-                                    <label class="unique_stu_id" id="invalid_stu_id" style="display: none"></label>
+                            <!-- Student ID -->
+                            <div class="mb-3 row">
+                                <label for="stu_id" class="col-md-4 col-form-label text-md-right">{{ trans("Student ID") }}</label>
+                                <div class="col-md-6">
+                                    <input class="form-control" type="text" id="stu_id" name="stu_id"
+                                           placeholder="{{ trans("Student ID") }}..."
+                                           onkeyup="valid_stuID(this)" disabled required>
+                                    <label class="unique_stu_id text-danger" id="invalid_stu_id" style="display: none"></label>
                                 </div>
                             </div>
 
-                            <div class="form-group row">
-                                <label for="password" class="col-md-4 col-form-label text-md-right" style="font-size:20px;" >{{trans("Department")}}</label>
+                            <!-- Department -->
+                            <div class="mb-3 row">
+                                <label for="department" class="col-md-4 col-form-label text-md-right">{{ trans("Department") }}</label>
                                 <div class="col-md-6">
-                                    <select class="custom-select custom-select-sm" name="department" id="department" disabled style="height: 40px;width: 235px;">
-
-                                        <option value="" disabled selected>
-                                            {{trans("Choose Department")}}
-                                        </option>
+                                    <select class="custom-select custom-select-sm" name="department" id="department" disabled required>
+                                        <option value="" disabled selected>{{ trans("Choose Department") }}</option>
                                         {% for department in departments %}
-                                        <option value="{{ department.id }}">
-                                            {{ department }}
-                                        </option>
+                                            <option value="{{ department.id }}">{{ department }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
                             </div>
 
-                            <div class="form-group row">
-                                <label for="verification" class="col-md-4 col-form-label text-md-right"  style="font-size:20px;"  >{{trans("Squadron")}}</label>
+                            <!-- Squadron -->
+                            <div class="mb-3 row">
+                                <label for="squadron" class="col-md-4 col-form-label text-md-right">{{ trans("Squadron") }}</label>
                                 <div class="col-md-6">
-                                    <select class="custom-select custom-select-sm" name="squadron" id="squadron" disabled style="height: 40px;width: 235px;">
-
-                                        <option value="" disabled selected>{{trans("Choose Squadron")}}</option>
+                                    <select class="custom-select custom-select-sm" name="squadron" id="squadron" disabled required>
+                                        <option value="" disabled selected>{{ trans("Choose Squadron") }}</option>
                                         {% for squadron in squadrons %}
-                                        <option value="{{ squadron.id }}">{{ squadron }}</option>
+                                            <option value="{{ squadron.id }}">{{ squadron }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
                             </div>
 
-                            <div class="form-group row">
-                                <label for="reg_id" class="col-md-4 col-form-label text-md-right"  style="font-size:20px;" >{{trans("Year Grade")}}</label>
-
+                            <!-- Year Grade -->
+                            <div class="mb-3 row">
+                                <label for="grade" class="col-md-4 col-form-label text-md-right">{{ trans("Year Grade") }}</label>
                                 <div class="col-md-6">
-                                    <input class="form-control" type="text" name="grade" id="grade" placeholder="{{trans("Year Grade")}}..." disabled required />
+                                    <input class="form-control" type="text" name="grade" id="grade"
+                                           placeholder="{{ trans("Year Grade") }}..." disabled required>
                                 </div>
                             </div>
 
-                            <div class="dropdown-divider"></div>
-
-                            <div class="col-md-12 text-right">
-                                <button type="submit" id="submit" class="btn btn-primary" disabled>
-                                    {{trans("Submit")}}
-                                </button>
-                                <button type="reset" class="btn btn-light">{{trans("Reset")}}</button>
-                                <button type="button" class="btn btn-secondary" onclick="history.back()">
-                                    {{trans("Cancel")}}
-                                </button>
-                            </div>
                         </div>
                     </div>
                 </div>
+
+                <!-- Form Buttons -->
+                <div class="col-md-12 text-center mt-4">
+                    <button type="submit" id="submit" class="btn btn-primary me-2" >{{ trans("Submit") }}</button>
+                    <button type="reset" class="btn btn-light me-2">{{ trans("Reset") }}</button>
+                    <button type="button" class="btn btn-secondary" onclick="history.back()">{{ trans("Cancel") }}</button>
+                </div>
+
             </div>
         </div>
     </form>
 </main>
+
 <style>
-    .create-user-form .container .card .card-body .button-group ul {
-        padding-left: 10px;
-    }
+body {
+    font-family: 'DFKai-SB','BiauKai','標楷體', serif;
+    background: linear-gradient(135deg, #6b8dd6);
+    min-height: 100vh;
+}
+.create-user-form label {
+    font-size: 18px;
+}
+.create-user-form .card-header {
+    font-size: 24px;
+    font-weight: 600;
+}
+.create-user-form .button-group ul {
+    padding-left: 10px;
+}
+
+/* 卡片圓角與陰影 */
+.create-user-form .card {
+    border-radius: 15px; /* 調整成想要的弧度 */
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+/* 按鈕圓角 */
+.create-user-form .btn {
+    border-radius: 8px;
+}
+
+/* Input 與 Select 圓角 */
+.create-user-form .form-control,
+.create-user-form .custom-select {
+    border-radius: 8px;
+}
+
+
 </style>
 {% endblock %}
 

@@ -1,76 +1,309 @@
-
-<title>ALCPT- Login</title>
+<title>ALCPT - Login</title>
 
 {% extends 'new_base.html' %}
-{% block stylesheets %}
-<!-- <link rel="stylesheet" type="text/css" href="{{ static('/css/registration/login.css') }}" /> -->
-<!-- <style>
-    .card-header {
-        background: #5533ff;
-        background: linear-gradient(95deg, #5533ff 40%, #25ddf5 100%) !important;
-        box-shadow: 0 0 7px 1px rgba(0, 0, 0, 0.1);
-        z-index: 9999;
-        padding: 10px;
-        -webkit-transition: all 0.5s ease-in-out;
-        transition: all 0.5s ease-in-out;
-        color: white;
-    }
-</style> -->
-{% endblock %}
 {% block content %}
+<main class="login-page">
+  <div class="login-container">
+    <h2 class="login-title">{{ trans("ALCPT account login") }}</h2>
 
-<main class="login-form">
-    <div class="cotainer">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="card">
-                    
-                    <div class="card-header" style="text-align: center; color:blue; font-size: 30px">{{trans("Login")}}</div> 
+    <form action="{{ url('login') }}" method="post" class="login-form">
+      <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
+      <input type="hidden" name="next" value="{{ request.GET.next | default('/zh/user/list') }}">
 
-                    <div class="card-body">
-                        <form action="{{ url('login') }}" method="post">
-                            <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
-                            <div class="form-group row">
 
-                                <label for="reg_id" class="col-md-4 col-form-label text-md-right" style="font-size:25px;">{{trans("Account")}}：</label>
-                                <div class="col-md-6">
-                                    <input type="text" id="reg_id" class="form-control" name="reg_id" style="height: 42px;width: 320px;"placeholder="{{trans("Reg ID")}}" required autofocus />
+      <!-- 帳號 -->
+      <div class="input-group">
+        <label for="reg_id" class="input-label">
+          <i class="bi bi-person-fill"></i> {{ trans("Account number") }}
+        </label>
+        <input
+          type="text"
+          id="reg_id"
+          name="reg_id"
+          class="input-field"
+          placeholder="{{ trans('Please enter account number') }}"
+          required
+          autofocus
+        />
+      </div>
 
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
-
-                                <label for="password" class="col-md-4 col-form-label text-md-right" style="font-size:25px;">{{trans("Password")}}：</label>
-                                <div class="col-md-6">
-                                    <input type="password" id="password" class="form-control" name="password" style="height: 42px;width: 320px;"placeholder="{{trans("Enter your Password")}}..." required />
-
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
-                                <label for="verification" class="col-md-4 col-form-label text-md-right" style="font-size:25px;">{{trans("Verification")}}：</label>
-                                <div class="col-md-6" >{{ captcha.captcha }}</div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="verification" class="col-md-4 col-form-label text-md-right" >&nbsp;</label>
-
-                                <div class="col-md-6">
-                                    <span style="color: red">{{trans("Ignore upper or lowercase")}}</span>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-primary">{{trans("Login")}}</button>
-                                <a href="{{ url('password_forget') }}" class="btn btn-link">
-                                    {{trans("Forgot Your Password")}}?
-                                </a>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
+      <!-- 密碼 -->
+      <div class="input-group">
+        <label for="password" class="input-label">
+          <i class="bi bi-key-fill"></i> {{ trans("Password") }}
+        </label>
+        <div class="password-wrapper">
+         <input
+          type="password"
+          id="password"
+          name="password"
+          class="input-field"
+          placeholder="{{ trans('Please enter password') }}"
+          required
+         />
+         <i class="bi bi-eye-slash toggle-password" data-target="password"></i>
         </div>
+      </div>
+
+      <!-- 驗證碼 -->
+    <div class="captcha-group">
+        <label for="id_captcha_1" class="input-label">
+            {{ trans("Verification code") }}
+        </label>
+        <div class="captcha-wrapper">
+           {{ captcha.captcha }}
+        </div>
+        <small class="hint-text" style="color: red;">{{ trans("Ignore case") }}</small>
     </div>
+  
+      
+
+      <!-- 記住帳號 -->
+      <div class="remember-box">
+        <input type="checkbox" id="remember" name="remember" />
+        <label for="remember">{{ trans("Remember account") }}</label>
+      </div>
+
+      <!-- 登入按鈕 -->
+      <button type="submit" class="btn-login">{{ trans("Account login") }}</button>
+
+      <!-- 其他連結 -->
+      <div class="link-row">
+        <a href="{{ url('password_forget') }}">{{ trans("Forget the password") }}</a>
+        <a href="{{ url('register') }}">{{ trans("Register an account") }}</a>
+      </div>
+    </form>
+  </div>
 </main>
+
+<style> 
+body { 
+  font-family: 'DFKai-SB','BiauKai','標楷體', serif; 
+  background: linear-gradient(135deg, #6b8dd6); 
+  min-height: 100vh; 
+}
+
+body, p, label, input, select, h5, h6 { 
+  font-family: "標楷體", "Microsoft JhengHei", sans-serif; 
+}
+
+/* 背景與整體排版 */ 
+.login-page { 
+  background: #6b8dd6; 
+  height: 100vh; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+}
+
+.login-container { 
+  background: #bde3f0; 
+  padding: 40px 60px; 
+  border-radius: 15px; 
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); 
+  width: 450px; 
+  text-align: center; 
+}
+
+.login-title { 
+  font-size: 26px; 
+  font-weight: bold; 
+  margin-bottom: 30px; 
+  color: #1e3a8a; 
+}
+
+/* 輸入框組 */ 
+.input-group { 
+  display: flex; 
+  flex-direction: column; 
+  align-items: flex-start; 
+  margin-bottom: 20px; 
+}
+
+.input-label { 
+  font-size: 18px; 
+  color: #1e3a8a; 
+  margin-bottom: 8px; 
+  display: flex; 
+  align-items: center; 
+  gap: 6px; 
+}
+
+.input-field { 
+  width: 100%; 
+  height: 60px; 
+  border: 1.5px solid #ccc; 
+  border-radius: 15px; 
+  padding: 0 12px; 
+  font-size: 20px; 
+  outline: none; 
+  transition: border-color 0.2s; 
+}
+
+.input-field:focus { 
+  border-color: #2563eb; 
+  box-shadow: 0 0 4px rgba(37, 99, 235, 0.4); 
+}
+
+/* 驗證碼區塊 */ 
+.captcha-group { 
+  margin-bottom: 20px; 
+  text-align: left; 
+}
+
+.captcha-wrapper { 
+  display: flex; 
+  align-items: center; 
+  border: 1.5px solid #ccc; 
+  border-radius: 10px; 
+  height: 45px; 
+  overflow: hidden; 
+}
+
+.captcha-wrapper .captcha { 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  background: #f9fafb; 
+  padding: 0 8px; 
+  height: 100%; 
+}
+
+.captcha-wrapper img { 
+  height: 100%; 
+  border-radius: 0; 
+  cursor: pointer; 
+}
+
+.captcha-wrapper input { 
+  flex: 1; 
+  border: none; 
+  outline: none; 
+  height: 100%; 
+  padding: 0 12px; 
+  font-size: 16px; 
+}
+
+.captcha-wrapper input::placeholder { 
+  color: #999; 
+}
+
+/* 記住帳號 */ 
+.remember-box { 
+  display: flex; 
+  align-items: center; 
+  margin-bottom: 20px; 
+  justify-content: flex-start; 
+  gap: 6px; 
+  color: #1e3a8a; 
+}
+/* 登入按鈕 */ 
+.btn-login { 
+  width: 100%; 
+  background-color: #2563eb; 
+  color: white; 
+  font-size: 18px; 
+  font-weight: bold; 
+  border: none; 
+  border-radius: 10px; 
+  padding: 12px; 
+  transition: background-color 0.2s; 
+} 
+
+.btn-login:hover { 
+  background-color: #1e40af; 
+}
+
+/* 底部連結 */ 
+.link-row { 
+  margin-top: 25px; 
+  display: flex; 
+  justify-content: space-around; 
+}
+
+.link-row a { 
+  color: #1e3a8a; 
+  text-decoration: none; 
+  font-weight: bold; 
+  font-size: 15px; 
+}
+
+.link-row a:hover { 
+  color: #2563eb; 
+} 
+
+/* 密碼輸入框與眼睛 */ 
+.password-wrapper { 
+  position: relative; 
+  width: 100%; 
+  display: flex; 
+  align-items: center; 
+} 
+
+.input-field { 
+  width: 100%; 
+  height: 45px; 
+  border: 1.5px solid #ccc; 
+  border-radius: 10px; 
+  padding: 0 12px; 
+  font-size: 16px; 
+  outline: none; 
+  transition: border-color 0.2s; 
+  flex: 1; 
+  padding-right: 40px; /* 為眼睛圖示留空間 */ 
+} 
+
+.input-field:focus { 
+  border-color: #2563eb; 
+  box-shadow: 0 0 4px rgba(37, 99, 235, 0.4); 
+}
+
+.toggle-password { 
+  position: absolute; 
+  right: 12px; 
+  top: 50%; 
+  transform: translateY(-50%); 
+  font-size: 18px; 
+  cursor: pointer; 
+  color: #555; 
+  z-index: 2; 
+} 
+
+.toggle-password:hover { 
+  color: #1e40af; 
+} 
+</style>
+  
+
+<!-- JS: 加上 placeholder -->
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+      const captchaInput = document.getElementById("id_captcha_1");
+      if (captchaInput) {
+        captchaInput.classList.add("input-field"); // 套用一致樣式
+        captchaInput.placeholder = "{{ trans('Please enter the verification code') }}";
+      }
+    
+      // 點擊圖片可重新載入驗證碼
+      const captchaImg = document.querySelector(".captcha-box img");
+      if (captchaImg) {
+        captchaImg.addEventListener("click", function() {
+          this.src = this.src.split("?")[0] + "?t=" + new Date().getTime();
+        });
+      }
+});
+
+    // 顯示 / 隱藏密碼
+document.querySelectorAll('.toggle-password').forEach(icon => {
+    icon.addEventListener('click', () => {
+        const target = document.getElementById(icon.dataset.target);
+        const isHidden = target.getAttribute('type') === 'password';
+
+        target.setAttribute('type', isHidden ? 'text' : 'password');
+        icon.classList.toggle('bi-eye');
+        icon.classList.toggle('bi-eye-slash');
+    });
+});
+</script>
+
 {% endblock %}

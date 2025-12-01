@@ -14,3 +14,10 @@ function valid_name(origin, input) {
 		submit.disabled = false;
 	}
 }
+
+
+
+}
+
+
+

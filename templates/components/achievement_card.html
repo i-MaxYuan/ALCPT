@@ -1,0 +1,32 @@
+{% macro card(item, status_class="unreceived", img_class="", badge_class="", badge_text="", allow_accept=False, progress=0) %}
+<div class="col">
+    <div class="card shadow-sm achievement-card {{ status_class }}">
+        {% if item.trophy.url %}
+            <img class="achievement-img {{ img_class }}" src="{{ item.trophy.url }}" alt="{{ item.name }}">
+        {% else %}
+            <div class="achievement-placeholder">{{ item.name }}</div>
+        {% endif %}
+
+        <div class="card-body text-center">
+            <span class="badge {{ badge_class }}">{{ badge_text }}</span>
+
+            <p class="achievement-title">{{ item.name }}</p>
+            <p class="achievement-key">{{ item.key }}</p>
+
+            {% if status_class == "unreceived" %}
+            <div class="progress mt-2">
+                <div class="progress-bar" style="width: {{ progress }}%;">{{ progress }}%</div>
+            </div>
+            {% endif %}
+
+            <div class="d-flex justify-content-center gap-2 mt-2">
+                <button type="button" class="btn btn-outline-secondary btn-sm">View</button>
+                {% if allow_accept and progress >= 70 %}
+                <button type="button" class="btn btn-outline-primary btn-sm"
+                    onclick="window.location.href='{{ url('accept_achievement', args=[item.id, item.category]) }}'">Accept</button>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endmacro %}

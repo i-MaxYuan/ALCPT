@@ -11,11 +11,36 @@ from django.views.generic import View
 from django.utils.decorators import method_decorator
 from alcpt.views import OnlineUserStat
 
+from django.db.models import Q
 
 @login_required
 def index(request):
-    notifications = Proclamation.objects.filter(recipient=request.user)
-    pass
+    all_pros = Proclamation.objects.filter(
+        Q(is_public=True) | Q(recipient=request.user)
+    ).order_by('-created_time')
+
+    paginator = Paginator(all_pros, 4)  # 每頁 4 筆
+    page_number = request.GET.get('page')
+
+    try:
+        page_number = int(page_number) if page_number else 1
+        pros = paginator.page(page_number)
+    except (PageNotAnInteger, ValueError):
+        pros = paginator.page(1)
+    except EmptyPage:
+        pros = paginator.page(paginator.num_pages)
+
+    # 預計算上下頁
+    prev_page = pros.previous_page_number() if pros.has_previous() else None
+    next_page = pros.next_page_number() if pros.has_next() else None
+
+    return render(request, 'proclamation/index.html', {
+        'pros': pros,
+        'prev_page': prev_page,
+        'next_page': next_page,
+    })
+
+
 
 
 @method_decorator(permission_check(UserType.SystemManager),name='get')

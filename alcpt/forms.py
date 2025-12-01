@@ -40,3 +40,12 @@ class ExhibitionForm(forms.ModelForm):
             self.fields["started_time"].widget = DateTimeInput()
 
             self.fields["started_time"].input_formats = ["%Y-%m-%dT%H:%M", "%Y-%m-%d %H:%M"]
+
+
+from alcpt.models import Achievement
+
+class AchievementForm(forms.ModelForm):
+    class Meta:
+        model = Achievement
+        fields = ['trophy', 'name', 'key', 'description', 'category', 'point', 'level', 'completion'] # 依照你的 model 欄位
+

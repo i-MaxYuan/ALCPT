@@ -1,106 +1,52 @@
+<title>ALCPT - Achievement List Testee</title>
 
-<title>ALCPT - Achievement List</title>
+{% extends 'new_base.html' %}
 
-{% extends 'new_base.html' %} {% block path %}
-<li class="breadcrumb-item active" aria-current="page">{{trans("Achievement List")}}</li>
-{% endblock %} {% block content %}
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ static('/css/achievement_list.css') }}">
+{% endblock %}
+
+{% block content %}
 <main class="achievement-list">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-12 table-responsive-md">
+    <div class="container py-5">
+        <h2 class="mb-4">{{ trans("Achievement List") }}</h2>
 
+        {% import "components/achievement_card.html" as cards %}
 
-                <div class="album py-5 bg-light">
-                    <h4>{{trans("Achievement List")}}</h4>
-                    <div class="container">
+        {# === Completed === #}
+        <h4 class="mt-4">{{ trans("Completed Achievements") }}</h4>
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+            {% for achievement in completed_achievements %}
+                {{ cards.card(
+                    achievement.achievement,
+                    "completed",
+                    "",
+                    "badge-success completed-badge",
+                    trans("Completed"),
+                    False,
+                    achievement.completion
+                ) }}
+            {% else %}
+                <p class="text-muted">{{ trans("No completed achievements yet.") }}</p>
+            {% endfor %}
+        </div>
 
-
-                        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-                            {% for achievement in completed_achievements %}
-
-                            <div class="col">
-                                <div class="card shadow-sm" style="border-radius: 20%; max-width: 100%; display: flex; align-items: center; justify-content: center; margin-bottom:20px; padding-top: 20px;">
-
-                                    {% if achievement.achievement.trophy.url %}
-                                    <img width="200px" height="200px" src=" {{ achievement.achievement.trophy.url }}" alt="{{ achievement.achievement.name }}" />
-                                    {% else %}
-                                    <rect width="100%" height="100%" fill="green" /><text x="50%" y="50%" fill="#eceeef" dy=".3em">{{ achievement.achievement.name }}</text>
-                                    {% endif %}
-
-                                    <div class="card-body">
-                                        <p class="card-text">《 {{ achievement.achievement.name }} 》</p>
-                                        <p class="card-text">{{ achievement.achievement.key }}</p>
-                                        <div class="d-flex justify-content-between align-items-center">
-
-                                            <button type="button" class="btn btn-sm btn-outline-secondary">{{trans("view")}}</button>
-
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {% endfor %}
-
-                            {% for achievement in received_achievements %}
-
-                            <div class="col">
-                                <div class="card shadow-sm" style="border-radius: 20%; max-width: 100%; display: flex; align-items: center; justify-content: center; margin-bottom:20px; padding-top: 20px;">
-
-                                    {% if achievement.achievement.trophy.url %}
-                                    <img width="200px" height="200px" style="opacity: 50%" src=" {{ achievement.achievement.trophy.url }}" alt="{{ achievement.achievement.name }}" />
-                                    {% else %}
-                                    <rect width="100%" height="100%" fill="green" /><text x="50%" y="50%" fill="#eceeef" dy=".3em">{{ achievement.achievement.name }}</text>
-                                    {% endif %}
-
-                                    <div class="card-body">
-                                        <p class="card-text">《 {{ achievement.achievement.name }} 》</p>
-                                        <p class="card-text">{{ achievement.achievement.key }}</p>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div class="btn-group">
-                                                <button type="button" class="btn btn-sm btn-outline-secondary">{{trans("view")}}</button>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {% endfor %}
-
-                            {% for achievement in unreceived_achievements %}
-
-                            <div class="col">
-                                <div class="card shadow-sm" style="border-radius: 20%; max-width: 100%; display: flex; align-items: center; justify-content: center; margin-bottom:20px; padding-top: 20px;">
-
-                                    {% if achievement.trophy.url %}
-                                    <img width="200px" height="200px" style=" -webkit-filter:blur(2px)grayscale(1); opacity: 50%" src=" {{ achievement.trophy.url }}" alt="{{ achievement.name }}" />
-                                    {% else %}
-                                    <rect width="100%" height="100%" fill="green" /><text x="50%" y="50%" fill="#eceeef" dy=".3em">{{ achievement.name }}</text>
-                                    {% endif %}
-
-                                    <div class="card-body">
-                                        <p class="card-text">《 {{ achievement.name }} 》</p>
-                                        <p class="card-text"> {{ achievement.key }}</p>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div class="btn-group">
-                                                <button type="button" class="btn btn-sm btn-outline-secondary">{{trans("view")}}</button>
-                                                <button type="button" class="btn btn-sm btn-outline-primary" onclick="window.location.href='{{ url('accept_achievement', args=[achievement.id, achievement.category]) }}'">{{trans("Accept")}}</button>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {% endfor %}
-
-                        </div>
-                    </div>
-                </div>
-
-
-            </div>
+        {# === Unfinished === #}
+        <h4 class="mt-5">{{ trans("Unfinished achievements") }}</h4>
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+            {% for achievement in received_achievements %}
+                {{ cards.card(
+                    achievement.achievement,
+                    "received",
+                    "dim",
+                    "badge-secondary",
+                    trans("Unfinished"),
+                    False,
+                    achievement.completion
+                ) }}
+            {% else %}
+                <p class="text-muted">{{ trans("No unfinished achievements yet.") }}</p>
+            {% endfor %}
         </div>
     </div>
 </main>
@@ -108,6 +54,108 @@
 
 {% block navbarFocused %}
 <script>
-    navbarFocused("Testee_navbar");
+navbarFocused("Testee_navbar");
 </script>
+{% endblock %}
+
+{% block styles %}
+<style>
+body {
+    font-family: 'DFKai-SB','BiauKai','標楷體', serif;
+    background: linear-gradient(135deg, #9eadf0);
+    min-height: 100vh;
+}
+
+/* === Achievement Card === */
+.achievement-card {
+    border-radius: 16px;
+    padding-top: 20px;
+    transition: 0.25s;
+    text-align: center;
+    position: relative;
+}
+
+.achievement-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 18px rgba(0,0,0,0.15);
+}
+
+.achievement-img {
+    width: 200px;
+    height: 200px;
+    object-fit: contain;
+    border-radius: 12px;
+}
+
+.achievement-img.blur {
+    filter: blur(2px) grayscale(1);
+    opacity: 0.45;
+}
+
+.achievement-img.dim {
+    opacity: 0.5;
+}
+
+.achievement-title {
+    font-weight: bold;
+    margin: 5px 0;
+    font-size: 18px;
+}
+
+.achievement-key {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+/* === Badge Animation === */
+.badge {
+    font-size: 14px;
+    padding: 6px 12px;
+    border-radius: 20px;
+}
+
+.completed-badge {
+    animation: sparkle 1s ease-in-out infinite alternate;
+}
+
+@keyframes sparkle {
+    0% { box-shadow: 0 0 5px #ffd700; }
+    50% { box-shadow: 0 0 15px #ffd700; }
+    100% { box-shadow: 0 0 5px #ffd700; }
+}
+
+/* === Progress bar === */
+.progress {
+    height: 12px;
+    border-radius: 10px;
+    margin-top: 6px;
+    background: #e0e0e0;
+    overflow: hidden;
+}
+
+.progress-bar {
+    background-color: #2563eb;
+    text-align: center;
+    font-size: 12px;
+    color: #fff;
+    line-height: 12px;
+}
+
+/* === Buttons === */
+.btn-outline-secondary {
+    font-size: 13px;
+    padding: 4px 10px;
+}
+
+.btn-outline-primary {
+    font-size: 13px;
+    padding: 4px 10px;
+}
+
+/* spacing */
+h4 {
+    color: #1d3875;
+}
+</style>
 {% endblock %}

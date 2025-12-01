@@ -1,5 +1,5 @@
 #edit_profile {
-    color: rgb(150, 150, 150);
+    color: rgb(250, 250, 250);
     opacity: 0.3;
 }
 
@@ -20,3 +20,76 @@
     font-size: 12px;
     margin: 5px;
 }
+
+/* === Profile Page Redesign === */
+body {
+  background-color: #f5f7fa;
+}
+
+.edit-user-form .container {
+  margin-top: 20px;
+}
+
+.card {
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.card-header {
+  background-color: #ffffff;
+  font-size: 22px;
+  font-weight: 600;
+  border-bottom: 2px solid #007bff20;
+  color: #007bff;
+}
+
+.card-body {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #333;
+}
+
+.card-text input,
+.card-text select,
+.card-text textarea {
+  border-radius: 10px;
+}
+
+.card-footer {
+  background-color: #f8f9fa;
+  border-top: 1px solid #e0e0e0;
+}
+
+.custom-file-label {
+  border-radius: 10px;
+}
+
+img.card-img-top {
+  border-radius: 50%;
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  margin: 15px auto;
+  display: block;
+  border: 3px solid #e0e0e0;
+}
+
+.badge {
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+.btn {
+  border-radius: 8px;
+  padding: 8px 16px;
+}
+
+@media (max-width: 992px) {
+  .col-lg-4, .col-lg-5, .col-lg-3 {
+    flex: 100%;
+    max-width: 100%;
+  }
+}
+

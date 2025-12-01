@@ -1,4 +1,3 @@
-
 <title>ALCPT - ReportCategory Edit</title>
 
 {% extends 'new_base.html' %}
@@ -12,79 +11,270 @@
 {% endblock %}
 
 {% block path %}
-<li class="breadcrumb-item" aria-current="page">
+<li class="breadcrumb-item">
     <a href="{{ url('report_category_list') }}">{{trans("ReportCategory List")}}</a>
 </li>
-<li class="breadcrumb-item active" aria-current="page">{{trans("ReportCategory Edit")}}</li>
-{% endblock %} {% block content %}
+<li class="breadcrumb-item active">{{trans("ReportCategory Edit")}}</li>
+{% endblock %}
+
+{% block content %}
 <main class="report-category-edit-form">
+
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-6">
-                <form method="post">
-                    <div class="card">
-                        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
-                        <div class="card-body">
-                            <div class="card-header">{{trans("ReportCategory Edit")}}</div>
-                            
-                            <br>
+            <div class="col-md-8">
 
-                            <div class="form-group row align-rcn">
-                                <label for="p_title" class="col-md-5 col-form-label text-md-right">{{trans("ReportCategory Name")}}</label>
-                                <div class="col-md-5">
-                                    <input class="form-control form-control-sm" type="text" name="category_name" value="{{ category }}" onkeyup="name_change('{{ category }}', this)" placeholder="ReportCategory Name..." required />
+                <div class="card">
+                    <div class="card-header" style="font-size:30px; color:#2563eb;">
+                        {{ trans("ReportCategory Edit") }}
+                    </div>
+
+                    <div class="card-body">
+
+                        <form method="post">
+                            <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
+
+                            <!-- Name -->
+                            <div class="form-group row">
+                                <label class="col-md-5 col-form-label text-md-center" style="font-size:20px;">
+                                    {{trans("ReportCategory Name")}}
+                                </label>
+                                <div class="col-md-6">
+                                    <input class="form-control"
+                                           type="text"
+                                           name="category_name"
+                                           value="{{ category }}"
+                                           onkeyup="name_change('{{ category }}', this)"
+                                           style="height: 40px;width: 300px;"
+                                           placeholder="{{trans('ReportCategory Name')}}..."
+                                           required />
                                     <label id="name_invalid" class="name_invalid"></label>
                                 </div>
                             </div>
-                            
 
-                            <div class="col-md-4 align-privilege">
-                                <label for="p_title" class="col-form-label ">{{trans("Privilege")}}</label>
-                                <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
-                                    <i class="fa fa-gears align-middle"></i>
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li class="dropdown-header">{{trans("Privilege Setting")}}</li>
-                                    {% for privilege in privileges %} {% if loop.index<= 3 %}
-                                    <li>
-                                        <input type="checkbox" id="{{ privilege.value.1 }}" name="{{ privilege }}" onclick="privilege_change()" {%
-                                if
-                                category|belongs_to(privilege)
-                                %} checked {%
-                                endif
-                                %} />&nbsp;&nbsp;{{ privilege.value.2 }}
-                                    </li>
-                                    {% else %}
-                                    <li>
-                                        <strike><input type="checkbox" id="{{ privilege.value.1 }}" name="{{ privilege }}" onclick="this.checked=!this.checked;" />&nbsp;&nbsp;{{ privilege.value.2 }}</strike>
-                                    </li>
-                                    {% endif %} {% endfor %}
-                                </ul>
-                                <label class="privilege_invalid" id="privilege_invalid"></label>
+                            <!-- Privileges -->
+                            <div class="form-group row">
+                                <label class="col-md-5 col-form-label text-md-center" style="font-size:20px;">
+                                    {{ trans("Privilege Setting") }}
+                                </label>
 
+                                <div class="col-md-7">
+
+                                    <div class="privilege-container">
+
+                                        <!-- Material 按鈕 -->
+                                        <button type="button"
+                                                class="privilege-btn"
+                                                onclick="togglePrivilegeList()">
+                                            <i class="fa fa-gears"></i> {{ trans("Select Privilege") }}
+                                        </button>
+
+                                        <!-- Chips -->
+                                        <div id="privilege_chips" class="mt-2"></div>
+
+                                        <!-- 下拉選單 -->
+                                        <div id="privilege_list" class="privilege-list">
+                                            {% for privilege in privileges %}
+                                                {% if loop.index <= 3 %}
+                                                <label>
+                                                    <input type="checkbox"
+                                                           id="{{ privilege.value.1 }}"
+                                                           name="{{ privilege }}"
+                                                           onclick="updateChipsEdit()"
+                                                           {% if category|belongs_to(privilege) %} checked {% endif %}>
+                                                    {{ privilege.value.1 }}
+                                                </label>
+                                                {% else %}
+                                                <label style="opacity:0.4;">
+                                                    <input type="checkbox"
+                                                           onclick="this.checked=!this.checked;">
+                                                    <strike>{{ privilege.value.1 }}</strike>
+                                                </label>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </div>
+
+                                        <label id="privilege_invalid" class="privilege_invalid"></label>
+                                    </div>
+
+                                </div>
                             </div>
-                            <div class="offset-md-4 float-right">
+
+                            <!-- Buttons -->
+                            <div class="col-md-6 offset-md-4">
                                 <button type="submit" id="submit" class="btn btn-primary">
                                     {{trans("Update")}}
                                 </button>
+
                                 <button type="button" class="btn btn-secondary" onclick="history.go(-1)">
                                     {{trans("Cancel")}}
                                 </button>
                             </div>
-                        </div>
-                    </div>
 
-                </form>
+                        </form>
+
+                    </div>
+                </div>
+
             </div>
         </div>
-
     </div>
-</main>
 
+</main>
 {% endblock %}
+
 
 {% block navbarFocused %}
 <script>
-    navbarFocused("SystemManager_navbar");
+navbarFocused("SystemManager_navbar");
+
+/* --- 共用 JS --- */
+function togglePrivilegeList() {
+    let list = document.getElementById("privilege_list");
+    list.style.display = list.style.display === "block" ? "none" : "block";
+}
+
+function updateChipsEdit() {
+    let chips = document.getElementById("privilege_chips");
+    chips.innerHTML = "";
+
+    document.querySelectorAll("#privilege_list input[type=checkbox]").forEach(cb => {
+        if (cb.checked) {
+            let chip = document.createElement("div");
+            chip.className = "privilege-chip";
+            chip.innerText = cb.id;
+            chips.appendChild(chip);
+        }
+    });
+
+    privilege_change(); // 原本的驗證
+}
 </script>
+
+<style>
+
+/* 背景 */
+body {
+    font-family: 'DFKai-SB','BiauKai','標楷體', serif;
+    background: linear-gradient(135deg, #6b8dd6);
+    min-height: 100vh;
+}
+
+/* 移除 container 外框與白底 */
+.report-category-edit-form .container {
+    background: transparent !important;
+    padding: 0;
+    border: none !important;
+    box-shadow: none !important;
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+/* Card */
+.report-category-edit-form .card {
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid #c8ccd3;
+}
+
+/* 標題 */
+.report-category-edit-form .card-header {
+    background: #e8eef9;
+    border-bottom: 2px solid #c1c7d6;
+    color: #1d3875;
+    font-weight: bold;
+}
+
+/* Labels */
+.report-category-edit-form label.col-form-label {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1c2d4a;
+}
+
+/* Input */
+.report-category-edit-form input.form-control {
+    border: 1px solid #bfc5d1;
+    border-radius: 6px;
+}
+.report-category-edit-form input.form-control:focus {
+    border-color: #1d3875;
+    box-shadow: 0 0 5px rgba(29,56,117,.3);
+}
+
+/* Material 主按鈕 */
+.btn-primary {
+    background: #1d3875;
+    border-radius: 6px;
+    padding: 10px 22px;
+    font-size: 18px;
+}
+.btn-primary:hover {
+    background: #2b4c9a;
+}
+
+/* Cancel */
+.btn-secondary {
+    border-radius: 6px;
+    padding: 10px 22px;
+    font-size: 18px;
+}
+
+/* Privilege區塊無白框 */
+.privilege-container {
+    border: none !important;
+    padding: 0 !important;
+    background: transparent !important;
+}
+
+/* 展開區 */
+.privilege-list {
+    display: none;
+    margin-top: 10px;
+}
+
+/* 按鈕 */
+.privilege-btn {
+    background: #1d3875;
+    color: white;
+    padding: 10px 18px;
+    border-radius: 6px;
+    font-size: 18px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.25);
+}
+.privilege-btn:hover {
+    background: #2b4c9a;
+}
+
+/* Chips */
+.privilege-chip {
+    display: inline-block;
+    background: #1d3875;
+    color: white;
+    padding: 6px 14px;
+    border-radius: 20px;
+    margin: 6px 6px 0 0;
+    font-size: 15px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.25);
+}
+
+/* checkbox 文字 */
+.privilege-list label {
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+}
+.privilege-list input[type=checkbox] {
+    transform: scale(1.3);
+    margin-right: 8px;
+}
+
+/* 錯誤訊息 */
+.name_invalid, .privilege_invalid {
+    color: #c0392b;
+    font-weight: bold;
+}
+
+</style>
 {% endblock %}

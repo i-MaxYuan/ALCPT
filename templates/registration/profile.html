@@ -1,214 +1,267 @@
-
 <title>ALCPT - Profile</title>
 
 {% extends 'new_base.html' %}
 
-{% block stylesheets %}
-<link rel="stylesheet" type="text/css" href="{{ static('/css/registration/profile.css') }}" />
+{% block scripts %}
+<script src="{{ static('/javascript/user/edit_user.js') }}"></script>
 {% endblock %}
 
 {% block path %}
-<li class="breadcrumb-item active" aria-current="page">{{trans("Profile")}}</li>
-{% endblock %} {% block content %}
+<li class="breadcrumb-item active" aria-current="page">{{ trans("Profile") }}</li>
+{% endblock %}
 
-
-<div class="container">
-    {% if user.student %}
-    <div class="row">
-        <div class="col-lg-4">
-            <div class="card mb-3">
-                <div class=" card-header" style="font-size:28px;">{{trans("User Photo")}}</div>
-
-            <div class="container">
-                    <div class="row justify-content-flex" style="padding-top:100px; padding-right:10px; padding-left:10px">
-
-                {% if user.photo %}
-                <img class="card-img-top" src="{{ user.photo.url }}" alt="{{ user.name }}" />
-                {% else %}
-                <img class="card-img-top" src="..." alt="{{ user.name }}" />
-                {% endif %}
-
-                <div class="card-body">
-                    <p class="card-text">
-                        {% if user.introduction %} {{ user.introduction|linebreaksbr }}
-                         {%else %} {{trans("Unset")}} {% endif %}
-                    </p>
-                </div>
-                </div>
-            </div>
-        </div>
-    </div>
-        <div class="col-lg-5">
-            <div class="card mb-3">
-                <div class=" card-header" style="font-size:28px;">{{trans("User Profile")}}</div>
-
-                <div class="card-body text-left">
-                    <h5 class="card-subtitle mb-2 text-muted" style="font-size:25px;">{{trans("Register ID")}}</h5>
-                    <p class="card-text" style="font-size:22px;">{{ user.reg_id }}</p>
-                    <br>
-                    <h5 class="card-subtitle mb-2 text-muted"style="font-size:25px;">{{trans("Name")}}</h5>
-                    <p class="card-text" style="font-size:22px;">
-                        {% if user.name %} {{ user.name }} {% else %} {{trans("Unset")}} {% endif %}
-                    </p>
-                    <br>
-                    <h5 class="card-subtitle mb-2 text-muted" style="font-size:25px;">
-                    {{trans("Email")}}{% if user.email_is_verified %}<i class="fa fa-check-circle"></i>{% endif %}
-                    </h5>
-                    <p class="card-text" style="font-size:22px;">
-                        {% if user.email %} {{ user.email }} {% else %} {{trans("Unset")}}{% endif %}
-                    </p>
-                    <br>
-                    <h5 class="card-subtitle mb-2 text-muted" style="font-size:25px;">{{trans("Gender")}}</h5>
-                    <p class="card-text" style="font-size:22px;">
-                        {% if user.gender == 1 %}{{trans("Male")}} {% elif user.gender == 2 %}{{trans("Female")}} {% elif user.gender == 3 %}{{trans("Privacy")}} {% else %}{{trans("Unset")}} {% endif %}
-                    </p>
-                    <br>
-                    <h5 class="card-subtitle mb-2 text-muted" style="font-size:25px;">{{trans("Identity")}}</h5>
-                    <p class="card-text" style="font-size:22px;">
-                        {% if user.identity %} {{ user.identity|readableIdentity }} {% else %} {{trans("Unset")}} {% endif %}
-                    </p>
-                    <br>
-                    <h5 class="card-subtitle mb-2 text-muted" style="font-size:25px;">{{trans("Privilege")}}</h5>
-                    <p class="card-text" style="font-size:20px;">
-                        {% if user|has_perms(privileges.SystemManager) %}
-                        <span class="badge alert-danger">{{ privileges.SystemManager.value.2 }}</span>
-                        {% endif %} {% if user|has_perms(privileges.TestManager) %}
-                        <span class="badge alert-warning">{{ privileges.TestManager.value.2 }}</span>
-                        {% endif %} {% if user|has_perms(privileges.TBManager) %}
-                        <span class="badge badge-primary">{{ privileges.TBManager.value.2 }}</span>
-                        {% endif %} {% if user|has_perms(privileges.TBOperator) %}
-                        <span class="badge alert-success">{{ privileges.TBOperator.value.2 }}</span>
-                        {% endif %} {% if user|has_perms(privileges.Viewer) %}
-                        <span class="badge alert-info">{{ privileges.Viewer.value.2 }}</span>
-                        {% endif %} {% if user|has_perms(privileges.Testee) %}
-                        <span class="badge alert-dark">{{ privileges.Testee.value.2 }}</span>
-                        {% endif %}
-                    </p>
-                </div>
-
-                <div class="card-footer text-muted">
-                    <span>{{trans("Last login")}} - {{ user.last_login }}<br /></span>
-                    <span>{{trans("Create time")}} - {{ user.created_time }}<br /></span>
-                    <span>
-                        {{trans("Status")}} - {% if user.is_active %} {{trans("active")}} {% elif user.is_staff %}
-                        {{trans("staff")}} {% elif user.is_superuser %} {{trans("superuser")}} {% endif %}
-                    </span>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-lg-3">
-            <div class="card mb-3">
-                <div class="card-header" style="font-size:28px;">{{trans("Student Profile")}}</div>
-
-                <div class="card-body text-left">
-                    <h5 class="card-subtitle mb-2 text-muted" style="font-size:25px;">{{trans("Student ID")}}</h5>
-                    <p class="card-text" style="font-size:22px;">{{ user.student.stu_id }}</p>
-                    <br>
-                    <h5 class="card-subtitle mb-2 text-muted" style="font-size:25px;">{{trans("Department")}}</h5>
-                    <p class="card-text" style="font-size:22px;">{{ user.student.department }}</p>
-                    <br>
-                    <h5 class="card-subtitle mb-2 text-muted" style="font-size:25px;">{{trans("Squadron")}}</h5>
-                    <p class="card-text" style="font-size:22px;">{{ user.student.squadron }}</p>
-                    <br>
-                    <h5 class="card-subtitle mb-2 text-muted" style="font-size:25px;">{{trans("Year Grade")}}</h5>
-                    <p class="card-text" style="font-size:22px;">{{ user.student.grade }}</p>
-
-                </div>
-
-                <!-- <div class="card-footer text-right">
-                    <button onclick="self.location=document.referrer;" class="btn btn-primary btn-block">
-                        {{trans("OK")}}
-                    </button>
-                </div> -->
-            </div>
-        </div>
-    </div>
-    {% else %}
-    <div class="row">
-        <div class="col-lg-4">
-            <div class="card mb-3">
-                <div class="card-header">{{trans("User Photo")}}</div>
-
-                {% if user.photo %}
-                <img class="card-img-top" src="{{ user.photo.url }}" alt="{{ user.name }}" />
-                {% else %}
-                <img class="card-img-top" src="..." alt="{{ user.name }}" />
-                {% endif %}
-
-                <div class="card-body">
-                    <p class="card-text">
-                        {% if user.introduction %} {{ user.introduction }} {% else %} {{trans("Unset")}}
-                        {% endif %}
-                    </p>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-lg-8">
-            <div class="card mb-3">
-                <div class="card-header">{{trans("User Profile")}}</div>
-
-                <div class="card-body">
-                    <h5 class="card-subtitle mb-2 text-muted">{{trans("Reg ID")}}</h5>
-                    <h4 class="card-text">{{ user.reg_id }}</h4>
-
-                    <h5 class="card-subtitle mb-2 text-muted">{{trans("Name")}}</h5>
-                    <p class="card-text">
-                        {% if user.name %} {{ user.name }} {% else %} {{trans("Unset")}}{% endif %}
-                    </p>
-
-                    <h5 class="card-subtitle mb-2 text-muted">{{trans("Email")}}{% if user.email_is_verified %}<i class="fa fa-check-circle"></i>{% endif %}</h5>
-
-                    <p class="card-text">
-                        {% if user.email %} {{ user.email }} {% else %} {{trans("Unset")}} {% endif %}
-                    </p>
-
-                    <h5 class="card-subtitle mb-2 text-muted">{{trans("Gender")}}</h5>
-                    <p class="card-text">
-                        {% if user.gender == 1 %}{{trans("Male")}} {% elif user.gender == 2 %}{{trans("Female")}} {% elif user.gender == 3 %}{{trans("Privacy")}} {% else %}{{trans("Unset")}} {% endif %}
-                    </p>
-
-                    <h5 class="card-subtitle mb-2 text-muted">{{trans("Identity")}}</h5>
-                    <p class="card-text">
-                        {% if user.identity %} {{ user.identity|readableIdentity }} {% else %} {{trans("Unset")}} {% endif %}
-                    </p>
-
-                    <h5 class="card-subtitle mb-2 text-muted">{{trans("Privilege")}}</h5>
-                    <p class="card-text">
-                        {% if user|has_perms(privileges.SystemManager) %}
-                        <span class="badge alert-danger">{{ privileges.SystemManager.value.2 }}</span>
-                        {% endif %} {% if user|has_perms(privileges.TestManager) %}
-                        <span class="badge alert-warning">{{ privileges.TestManager.value.2 }}</span>
-                        {% endif %} {% if user|has_perms(privileges.TBManager) %}
-                        <span class="badge badge-primary">{{ privileges.TBManager.value.2 }}</span>
-                        {% endif %} {% if user|has_perms(privileges.TBOperator) %}
-                        <span class="badge alert-success">{{ privileges.TBOperator.value.2 }}</span>
-                        {% endif %} {% if user|has_perms(privileges.Viewer) %}
-                        <span class="badge alert-info">{{ privileges.Viewer.value.2 }}</span>
-                        {% endif %} {% if user|has_perms(privileges.Testee) %}
-                        <span class="badge alert-dark">{{ privileges.Testee.value.2 }}</span>
-                        {% endif %}
-                    </p>
-                </div>
-
-                <div class="card-footer text-muted">
-                    <span>{{trans("Last login")}} - {{ user.last_login }}<br /></span>
-                    <span>{{trans("Create time")}} - {{ user.created_time }}<br /></span>
-                    <span>
-                        {{trans("Status")}} - {% if user.is_active %} {{trans("active")}} {% elif user.is_staff %}
-                        {{trans("staff")}} {% elif user.is_superuser %} {{trans("superuser")}} {% endif %}
-                    </span>
-
-                    <!-- <div class="text-right">
-                        <button onclick="self.location=document.referrer;" class="btn btn-primary">
-                            {{trans("OK")}}
-                        </button>
-                    </div> -->
-                </div>
-            </div>
-        </div>
-    </div>
-    {% endif %}
+{% block content %}
+<div class="page-header mb-4">
+    <h2 class="fw-bold mb-1" style="color: white;">
+        <i class="fa fa-user me-2" style="color: white;"></i>
+        {{ trans("Profile") }}
+    </h2>
+    <p class="small" style="color: white;">
+        {{ trans("View your profile information.") }}
+    </p>
+    <hr style="border-color: white;">
 </div>
+
+<main class="user-edit-dashboard">
+    <div class="container py-4">
+        <div class="row justify-content-center g-4">
+
+            <!-- 左側：使用者頭像 -->
+            <div class="col-lg-3 col-md-6">
+                <div class="card user-card border-0 shadow-sm text-center">
+                    <div class="card-header text-white fw-semibold" style="background-color: #3b82f6;">
+                        <i class="fa fa-user-circle me-2"></i> {{ trans("User Photo") }}
+                    </div>
+                    <div class="card-body">
+                        {% if user.photo %}
+                        <img src="{{ user.photo.url }}" class="img-fluid rounded shadow-sm border"
+                             style="width: 100%; object-fit: cover; height: 260px;" alt="{{ user.name }}">
+                        {% else %}
+                        <img src="https://via.placeholder.com/300x300?text=No+Photo" class="img-fluid rounded shadow-sm border"
+                             style="width: 100%; object-fit: cover; height: 260px;" alt="no photo">
+                        {% endif %}
+                        <h5 class="fw-bold mb-1 mt-3">{{ user.name if user.name else trans("Unset") }}</h5>
+                        <p class="text-muted small mb-2">{{ user.email if user.email else trans("Unset") }}</p>
+                        <hr>
+                        <p class="small text-muted mb-0">
+                            {% if user.introduction %}
+                                {{ user.introduction|linebreaksbr }}
+                            {% else %}
+                                {{ trans("Unset") }}
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 中間：使用者資料 -->
+            {# 如果是學生(user.identity==2 且有 student)，col-lg-6 保持原本寬度 #}
+            {# 如果不是學生，col-lg-6 改成 col-lg-9 mx-auto 置中 #}
+            <div class="{% if user.identity == 2 and user.student %}col-lg-6{% else %}col-lg-9 mx-auto{% endif %} col-md-12">
+                <div class="card user-card border-0 shadow-sm">
+                    <div class="card-header text-center text-white fw-semibold" style="background-color: #2563eb;">
+                        <i class="fa fa-id-card me-2"></i> {{ trans("User Profile") }}
+                    </div>
+                    <div class="card-body text-start">
+                        <!-- 第一列：Register ID、Identity -->
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6 mb-3">
+                                <h5 class="card-title">{{ trans("Register ID") }}</h5>
+                                <p class="card-text" style="font-size: 18px;">{{ user.reg_id if user.reg_id else trans("Unset") }}</p>
+                            </div>
+                            <div class="col-md-6 col-sm-6 mb-3">
+                                <h5 class="card-title">{{ trans("Identity") }}</h5>
+                                <p class="card-text" style="font-size: 18px;">{{ user.identity|readableIdentity if user.identity else trans("Unset") }}</p>
+                            </div>
+                        </div>
+
+                        <!-- 第二列：Name、Gender -->
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6 mb-3">
+                                <h5 class="card-title">{{ trans("Name") }}</h5>
+                                <p class="card-text" style="font-size: 18px;">{{ user.name if user.name else trans("Unset") }}</p>
+                            </div>
+                            <div class="col-md-6 col-sm-6 mb-3">
+                                <h5 class="card-title">{{ trans("Gender") }}</h5>
+                                <p class="card-text" style="font-size: 18px;">
+                                    {% if user.gender == 1 %}{{ trans("Male") }}
+                                    {% elif user.gender == 2 %}{{ trans("Female") }}
+                                    {% elif user.gender == 3 %}{{ trans("Privacy") }}
+                                    {% else %}{{ trans("Unset") }}{% endif %}
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- 第三列：Email、Privilege -->
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6 mb-3">
+                                <h5 class="card-title">{{ trans("Email") }}
+                                {% if user.email_is_verified %}
+                                <i class="fa fa-check-circle text-success"></i>
+                                {% endif %}
+                                </h5>
+                                <p class="card-text" style="font-size: 18px;">{{ user.email if user.email else trans("Unset") }}</p>
+                            </div>
+                            <div class="col-md-6 col-sm-6 mb-3">
+                                <h5 class="card-title">{{ trans("Privilege") }}</h5>
+                                <p>
+                                    {% if user|has_perms(privileges.SystemManager) %}
+                                    <span class="badge alert-danger">{{ privileges.SystemManager.value.2 }}</span>{% endif %}
+                                    {% if user|has_perms(privileges.TestManager) %}
+                                    <span class="badge alert-warning">{{ privileges.TestManager.value.2 }}</span>{% endif %}
+                                    {% if user|has_perms(privileges.TBManager) %}
+                                    <span class="badge badge-primary">{{ privileges.TBManager.value.2 }}</span>{% endif %}
+                                    {% if user|has_perms(privileges.TBOperator) %}
+                                    <span class="badge alert-success">{{ privileges.TBOperator.value.2 }}</span>{% endif %}
+                                    {% if user|has_perms(privileges.Viewer) %}
+                                    <span class="badge alert-info">{{ privileges.Viewer.value.2 }}</span>{% endif %}
+                                    {% if user|has_perms(privileges.Testee) %}
+                                    <span class="badge alert-dark">{{ privileges.Testee.value.2 }}</span>{% endif %}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-footer bg-light small text-end">
+                        <div>{{ trans("Last login") }}: {{ user.last_login }}</div>
+                        <div>{{ trans("Create time") }}: {{ user.created_time }}</div>
+                        <div>{{ trans("Status") }}:
+                            {% if user.is_active %}{{ trans("active") }}
+                            {% elif user.is_staff %}{{ trans("staff") }}
+                            {% elif user.is_superuser %}{{ trans("superuser") }}{% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 右側：學生資料（僅學生顯示） -->
+            {% if user.identity == 2 and user.student %}
+            <div class="col-lg-3 col-md-6">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header text-white fw-semibold text-center" style="background-color: #0ea5e9;">
+                        <i class="fa fa-graduation-cap"></i>{{ trans("Student Profile") }}
+                    </div>
+                    <div class="card-body text-start">
+                        <div class="d-flex justify-content-between">
+                            <h5 class="fw-bold">{{ trans("Student ID") }}</h5>
+                            <p class="card-text" style="font-size: 18px;">
+                                {{ user.student.stu_id if user.student.stu_id else trans("Unset") }}
+                            </p>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <h5 class="fw-bold">{{ trans("Department") }}系</h5>
+                            <p class="card-text" style="font-size: 18px;">
+                                {{ user.student.department if user.student.department else trans("Unset") }}
+                            </p>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <h5 class="fw-bold">{{ trans("Squadron") }}</h5>
+                            <p class="card-text" style="font-size: 18px;">
+                                {{ user.student.squadron if user.student.squadron else trans("Unset") }}
+                            </p>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <h5 class="fw-bold">{{ trans("Year Grade") }}</h5>
+                            <p class="card-text" style="font-size: 18px;">
+                                {{ user.student.grade if user.student.grade else trans("Unset") }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+        </div> <!-- row end -->
+    </div> <!-- container end -->
+</main>
+
+
+
+
+<style>
+/* 全站字型改成標楷體 */
+body { background: linear-gradient(135deg, #9eadf0); min-height:100vh; }
+body, p, label, input, select, h5, h6 {
+    font-family: "標楷體", "Microsoft JhengHei", sans-serif;
+}
+
+/* 整體卡片風格升級 */
+.user-edit-dashboard .card {
+    border-radius: 16px;
+    overflow: hidden;
+    background-color: #ffffff;
+    border: 1px solid #c0c4c8;
+    /* 漸層陰影，增加立體感 */
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1), 0 10px 20px rgba(0,0,0,0.08);
+    margin-bottom: 2rem;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+/* 滑鼠 hover 時卡片浮起來 */
+.user-edit-dashboard .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.15), 0 18px 40px rgba(0,0,0,0.12);
+}
+
+/* 卡片 header */
+.user-edit-dashboard .card-header {
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+    letter-spacing: 0.8px;
+    padding: 1rem 1.2rem;
+    border-bottom: 1px solid #b0b4b8;
+}
+
+/* 卡片內容區塊 */
+.user-edit-dashboard .card-body {
+    padding: 1.5rem 1.8rem;
+    background-color: #f9fafb;
+}
+
+/* 卡片底部 */
+.user-edit-dashboard .card-footer {
+    background-color: #f1f3f5;
+    border-top: 1px solid #d1d5d9;
+    padding: 1rem 1.4rem;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+/* 標題文字 */
+h5, h6 {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #2f4f4f;
+}
+
+/* 卡片文字 */
+p.card-text {
+    font-size: 14px;
+    color: #1e3a8a;
+    letter-spacing: 0.3px;
+}
+
+/* 響應式：小螢幕自動堆疊 */
+@media (max-width: 992px) {
+    .col-lg-3, .col-lg-6 {
+        width: 100%;
+        margin-bottom: 1.5rem;
+    }
+}
+
+/* 分隔線美化 */
+.page-header hr {
+    border-top: 2px solid #e3e6ea;
+    margin-top: 0.6rem;
+    margin-bottom: 1rem;
+}
+
+/* 圖片置中 */
+.user-card.text-center .card-body {
+    text-align: center;
+}
+
+</style>
+    
 {% endblock %}

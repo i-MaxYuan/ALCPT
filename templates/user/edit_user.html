@@ -1,327 +1,319 @@
-
 <title>ALCPT - User Edit</title>
 
 {% extends 'new_base.html' %}
+
 {% block scripts %}
 <script src="{{ static('/javascript/user/edit_user.js') }}"></script>
 {% endblock %}
+
 {% block path %}
 <li class="breadcrumb-item" aria-current="page">
-    <a href="{{ url('user_list') }}">{{trans("User List")}}</a>
+    <a href="{{ user_list_url }}">{{ trans("User list") }}</a>
 </li>
-<li class="breadcrumb-item active" aria-current="page">{{trans("User Edit")}}</li>
-{% endblock %} {% block content %}
-<main class="edit-user-form">
-    <form method="post">
-        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
-
-        <div class="container">
-            {% if edited_user.student %}
-            <div class="row">
-                <div class="col-lg-3">
-                    <div class="card mb-3">
-                        <div class="card-header">{{trans("User")}}{{trans("Photo")}}</div>
-
-
-                        {% if edited_user.photo %}
-                        <img class="card-img-top" src="{{ edited_user.photo.url }}" alt="{{ edited_user.name }}" />
-                        {% else %}
-                        <img class="card-img-top" src="..." alt="{{ edited_user.name }}" />
-                        {% endif %}
-
-                        <div class="card-body">
-                            <p class="card-text">
-                                {{ edited_user.introduction|linebreaksbr }}
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-6">
-                    <div class="card mb-3">
-                        <div class="card-header">{{trans("User Profile")}}</div>
-
-                        <div class="card-body text-left">
-                            <h5 class="card-subtitle mb-2 text-muted">
-                                {{trans("Register ID")}}<label id="reg_id_invalid" class="reg_id_invalid"></label>
-                            </h5>
-                            <p>
-                                <input class="form-control" type="text" name="reg_id" id="reg_id" value="{{ edited_user.reg_id }}" onkeyup="reg_id_valid('{{ edited_user.reg_id }}', this)" required />
-                            </p>
-
-                            <h5 class="card-subtitle mb-2 text-muted">
-                                {{trans("Name")}}<label id="name_invalid" class="name_invalid"></label>
-                            </h5>
-                            <p class="card-text">
-                                <input class="form-control" type="text" name="name" {% if edited_user.name %}value="{{ edited_user.name }}" {% endif %} onkeyup="name_valid('{{ edited_user.name }}', this)" placeholder="{{trans("Name")}}..."
-                                    required />
-                            </p>
-
-                            <h5 class="card-subtitle mb-2 text-muted">
-                                {{trans("Email")}}<label id="email_invalid" class="email_invalid"></label>
-                            </h5>
-                            <p class="card-text">
-                                <input class="form-control" type="text" name="email" {% if edited_user.email %}value="{{ edited_user.email }}" {% endif %} onkeyup="email_valid('{{ edited_user.email }}', this)" placeholder="{{trans("Email")}}..."
-                                    required />
-                            </p>
-
-                            <h5 class="card-subtitle mb-2 text-muted">
-                                {{trans("Gender")}}<label id="gender_invalid" class="gender_invalid"></label>
-                            </h5>
-                            <p class="card-text">
-                                <select class="custom-select custom-select-sm" name="gender" id="gender" onchange="gender_valid('{{ edited_user.gender }}', document.getElementById('gender'))" required>
-                                    <option value="" disabled selected>{{trans("Choose")}}{{trans("Gender")}}</option>
-                                    <option value="1" {% if edited_user.gender == 1 %}selected{% endif %}>{{trans("Male")}}</option>
-                                    <option value="2" {% if edited_user.gender == 2 %}selected{% endif %}>{{trans("Female")}}</option>
-                                    <option value="3" {% if edited_user.gender == 3 %}selected{% endif %}>{{trans("Privacy")}}</option>
-                                </select>
-                            </p>
-
-                            <h5 class="card-subtitle mb-2 text-muted">
-                                {{trans("Identity")}}<label id="identity_invalid" class="identity_invalid"></label>
-                            </h5>
-                            <p class="card-text">
-                                <select class="custom-select custom-select-sm" name="identity" id="identity" onchange="identity_valid('{{ edited_user.identity }}', document.getElementById('identity'))" required>
-                                    <option value="" disabled selected>{{trans("Choose Identity")}}</option>
-                                    {% for identity in identities %}
-                                    <option value="{{ identity.value.0 }}" {% if edited_user.identity == identity.value.0 %}selected{% endif %}>{{ identity.value.1 }}</option>
-                                    {% endfor %}
-                                </select>
-                            </p>
-
-                            <h5 class="card-subtitle mb-2 text-muted">
-                                {{trans("Privilege")}}<label id="privilege_invalid" class="privilege_invalid"></label>
-                            </h5>
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col-lg-12">
-                                        <div class="button-group">
-                                            <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
-                                                <i class="fa fa-gears"></i>
-                                            </button>
-                                            <ul class="dropdown-menu">
-                                                <p class="card-text">
-                                                    <li class="dropdown-header">{{trans("Privilege Setting")}}</li>
-                                                    {% for privilege in privileges %}
-                                                    <li data-value="{{ privilege.value.0 }}">
-                                                        <input type="checkbox" id="{{ privilege.value.1 }}" name="{{ privilege }}" onclick="privilege_valid()" {% if edited_user|has_permission(privilege) %} checked
-                                                            {% endif %} />&nbsp;{{ privilege.value.2 }}
-                                                    </li>
-                                                    {% endfor %}
-                                                </p>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="card-footer text-muted">
-                            <span>{{trans("Last login")}} - {{ user.last_login }}<br /></span>
-                            <span>{{trans("Create time")}} - {{ user.created_time }}<br /></span>
-                            <span>
-                                {{trans("Status")}} - {% if user.is_active %} {{trans("active")}}{% elif user.is_staff %}
-                                {{trans("staff")}} {% elif user.is_superuser %} {{trans("superuser")}} {% endif %}
-                            </span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-3">
-                    <div class="card lg-3">
-                        <div class="card-header">{{trans("Student Profile")}}</div>
-
-                        <div class="card-body text-left">
-                            <h5 class="card-subtitle mb-2 text-muted">
-                                {{trans("Student ID")}}<span id="stu_id_invalid" class="stu_id_invalid"></span>
-                            </h5>
-                            <h3 class="card-title">
-                                <input class="form-control" type="text" name="stu_id" value="{{ edited_user.student.stu_id }}" onkeyup="stu_id_valid('{{ edited_user.student.stu_id }}', {{ stu_ids }}, this)" required />
-                            </h3>
-
-                            <h5 class="card-subtitle mb-2 text-muted">
-                                {{trans("Department")}}<label id="department_invalid" class="department_invalid"></label>
-                            </h5>
-                            <p class="card-text">
-                                <select class="custom-select custom-select-sm" name="department" id="department" onchange="department_valid('{{ edited_user.student.department.id }}', document.getElementById('department'))">
-                                    <option value="" disabled selected>{{trans("Choose Department")}}</option>
-                                    {% for department in departments %}
-                                    <option value="{{ department.id }}" {% if department == edited_user.student.department %}selected{% endif %}>{{ department }}</option>
-                                    {% endfor %}
-                                </select>
-                            </p>
-
-                            <h5 class="card-subtitle mb-2 text-muted">
-                                {{trans("Squadron")}}<label id="squadron_invalid" class="squadron_invalid"></label>
-                            </h5>
-                            <p class="card-text">
-                                <select class="custom-select custom-select-sm" name="squadron" id="squadron" onchange="squadron_valid('{{ edited_user.student.squadron.id }}', document.getElementById('squadron'))">
-                                    <option value="" disabled selected>{{trans("Choose Squadron")}}</option>
-                                    {% for squadron in squadrons %}
-                                    <option value="{{ squadron.id }}" {% if squadron == edited_user.student.squadron %}selected{% endif %}>{{ squadron }}</option>
-                                    {% endfor %}
-                                </select>
-                            </p>
-
-                            <h5 class="card-subtitle mb-2 text-muted">
-                                {{trans("Year Grade")}}<label id="grade_invalid" class="grade_invalid"></label>
-                            </h5>
-                            <p class="card-text">
-                                <input class="form-control" type="text" name="grade" value="{{ edited_user.student.grade }}" onkeyup="grade_valid('{{ edited_user.student.grade }}', this)" required />
-                            </p>
-                        </div>
-
-                        <div class="card-footer text-right">
-                            <button type="submit" class="btn btn-primary" id="submit" disabled>
-                                {{trans("Update")}}
-                            </button>
-                            <button type="button" class="btn btn-secondary" onclick="history.back()">
-                                {{trans("Cancel")}}
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% else %}
-            <div class="row">
-                <div class="col-lg-4">
-                    <div class="card mb-3">
-                        <div class="card-header">{{trans("User Photo")}}</div>
-
-                        {% if edited_user.photo %}
-                        <img class="card-img-top" src="{{ edited_user.photo.url }}" alt="{{ edited_user.name }}" />
-                        {% else %}
-                        <img class="card-img-top" src="..." alt="{{ edited_user.name }}" />
-                        {% endif %}
-
-                        <div class="card-body">
-                            <p class="card-text">
-                                {{ edited_user.introduction|linebreaksbr }}
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-8">
-                    <div class="card mb-3">
-                        <div class="card-header">{{trans("User Profile")}}</div>
-
-                        <div class="card-body text-left">
-                            <h5 class="card-subtitle mb-2 text-muted">
-                                {{trans("Register ID")}}<label id="reg_id_invalid" class="reg_id_invalid"></label>
-                            </h5>
-                            <p>
-                                <input class="form-control" type="text" name="reg_id" id="reg_id" value="{{ edited_user.reg_id }}" onkeyup="reg_id_valid('{{ edited_user.reg_id }}', this)" required />
-                            </p>
-
-                            <h5 class="card-subtitle mb-2 text-muted">
-                                {{trans("Name")}}<label id="name_invalid" class="name_invalid"></label>
-                            </h5>
-                            <p class="card-text">
-                                <input class="form-control" type="text" name="name" {%
-                  if
-                  edited_user.name
-                  %}value="{{ edited_user.name }}" {%
-                  endif
-                  %} onkeyup="name_valid('{{ edited_user.name }}', this)" placeholder="Name..." required />
-                            </p>
-
-                            <h5 class="card-subtitle mb-2 text-muted">
-                                {{trans("Email")}}<label id="email_invalid" class="email_invalid"></label>
-                            </h5>
-                            <p class="card-text">
-                                <input class="form-control" type="text" name="email" {% if edited_user.email %}value="{{ edited_user.email }}" {% endif %} onkeyup="email_valid('{{ edited_user.email }}', this)" placeholder="{{trans("Email")}}..."
-                                    required />
-                            </p>
-
-                            <h5 class="card-subtitle mb-2 text-muted">
-                                {{trans("Gender")}}<label id="gender_invalid" class="gender_invalid"></label>
-                            </h5>
-                            <p class="card-text">
-                                <select class="custom-select custom-select-sm" name="gender" id="gender" onchange="gender_valid('{{ edited_user.gender }}', document.getElementById('gender'))" required>
-                                    <option value="" disabled selected>{{trans("Choose Gender")}}</option>
-                                    <option value="1" {% if edited_user.gender == 1 %}selected{% endif %}>{{trans("Male")}}</option>
-                                    <option value="2" {% if edited_user.gender == 2 %}selected{% endif %}>{{trans("Female")}}</option>
-                                    <option value="3" {% if edited_user.gender == 3 %}selected{% endif %}>{{trans("Privacy")}}</option>
-                                </select>
-                            </p>
-
-                            <h5 class="card-subtitle mb-2 text-muted">
-                                {{trans("Identity")}}<label id="identity_invalid" class="identity_invalid"></label>
-                            </h5>
-                            <p class="card-text">
-                                <select class="custom-select custom-select-sm" name="identity" id="identity" onchange="identity_valid('{{ edited_user.identity }}', document.getElementById('identity'))" required>
-                                    <option value="" disabled selected>Choose Identity.</option>
-                                    {% for identity in identities %}
-                                    <option value="{{ identity.value.0 }}" {% if edited_user.identity == identity.value.0 %}selected{% endif %}>{{ identity.value.1 }}</option>
-                                    {% endfor %}
-                                </select>
-                            </p>
-
-                            <h5 class="card-subtitle mb-2 text-muted">
-                                {{trans("Privilege")}}<label id="privilege_invalid" class="privilege_invalid"></label>
-                            </h5>
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col-lg-12">
-                                        <div class="button-group">
-                                            <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
-                                                <i class="fa fa-gears"></i>
-                                            </button>
-                                            <ul class="dropdown-menu">
-                                                <p class="card-text">
-                                                    <li class="dropdown-header">{{trans("Privilege Setting")}}</li>
-                                                    {% for privilege in privileges %}
-                                                    <li data-value="{{ privilege.value.0 }}">
-                                                        <input type="checkbox" id="{{ privilege.value.1 }}" name="{{ privilege }}" onclick="privilege_valid()" {% if edited_user|has_permission(privilege) %} checked
-                                                            {% endif %} />&nbsp;{{ privilege.value.2 }}
-                                                    </li>
-                                                    {% endfor %}
-                                                </p>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="card-footer text-muted">
-                            <span>{{trans("Last login")}} - {{ user.last_login }}<br /></span>
-                            <span>{{trans("Create time")}} - {{ user.created_time }}<br /></span>
-                            <span>
-                                Status - {% if user.is_active %} active {% elif user.is_staff %}
-                                staff {% elif user.is_superuser %} superuser {% endif %}
-                            </span>
-
-                            <div class="text-right">
-                                <button type="submit" id="submit" class="btn btn-primary" disabled>
-                                    {{trans("Update")}}
-                                </button>
-                                <button type="button" onclick="history.go(-1)" class="btn btn-secondary">
-                                    {{trans("Cancel")}}
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% endif %}
-        </div>
-    </form>
-</main>
-<style>
-    .edit-user-form .container .card .card-body .button-group ul {
-        padding-left: 10px;
-    }
-
-    .card-footer.text-muted span {
-        font-size: 12px;
-    }
-</style>
+<li class="breadcrumb-item active" aria-current="page">{{ trans("Edit user") }}</li>
 {% endblock %}
 
-{% block navbarFocused %}
+{% block content %}
+<div class="page-header mb-4">
+    <h2 class="fw-bold mb-1" style="color: white;">
+        <i class="fa fa-user-edit me-2" style="color: white;"></i>
+        {{ trans("Edit user") }}
+    </h2>
+    <p class="small" style="color: white;">
+        {{ trans("Here you can update the user's basic information, permissions, and student data.") }}
+    </p>
+    <hr style="border-color: white;">
+</div>
+
+<main class="user-edit-dashboard">
+    <form method="post" enctype="multipart/form-data" action="{{ user_edit_url }}">
+        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
+        <div class="container py-4">
+            <div class="row g-4">
+
+                <!-- 左側：使用者照片 -->
+                <div class="{% if edited_user.identity == 2 %}col-lg-3 col-md-6{% else %}col-lg-4 col-md-6{% endif %} user-photo-card">
+                    <div class="card border-0 shadow-sm text-center">
+                        <div class="card-header text-white fw-semibold" style="background-color: #3b82f6;">
+                           <i class="fa fa-user-circle me-2"></i>{{ trans("User Photo") }}
+                        </div>
+                        <div class="card-body">
+                            {% if edited_user.photo %}
+                            <img src="{{ edited_user.photo.url }}" class="img-fluid rounded shadow-sm border"
+                             style="width:100%; object-fit:cover; height:260px;" alt="{{ edited_user.name }}">
+                            {% else %}
+                            <img src="https://via.placeholder.com/300x300?text=No+Photo" class="img-fluid rounded shadow-sm border"
+                             style="width:100%; object-fit:cover; height:260px;" alt="no photo">
+                            {% endif %}
+
+                            <div class="input-group mt-3 justify-content-center">
+                                <input type="file" class="d-none" id="photo_file" name="photo_file" accept="image/*" />
+                                <label class="btn btn-primary d-block mx-auto" for="photo_file" id="fileLabel">
+                                  {{ trans("Select image file") }}
+                                </label>
+                            </div>
+
+                            <script>
+                                $("#photo_file").on("change", function() {
+                                  var fileName = $(this).val().split("\\").pop();
+                                  $("#fileLabel").text(fileName || "{{ trans('Select image file') }}");
+                                });
+                            </script>
+
+                            <textarea class="form-control mt-2" rows="4" name="introduction"
+                               placeholder="{{ trans('Introduce yourself') }}...">{{ edited_user.introduction|default('') }}</textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 中間：個人資料 + 權限 -->
+                <div class="{% if edited_user.identity == 2 %}col-lg-6 col-md-12{% else %}col-lg-8 col-md-12 mx-auto{% endif %} user-profile-card">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header text-center text-white fw-semibold" style="background-color: #2563eb;">
+                            <i class="fa fa-id-card me-2"></i>{{ trans("User Profile") }}
+                        </div>
+                        <div class="card-body text-start">
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <h5>{{ trans("Register ID") }}</h5>
+                                    <input type="text" class="form-control" name="reg_id" value="{{ edited_user.reg_id }}" readonly>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <h5>{{ trans("Identity") }}</h5>
+                                    <select class="form-select" name="identity" required>
+                                        <option value="">{{ trans("Select identity") }}</option>
+                                        {% for identity in identities %}
+                                           <option value="{{ identity.code }}" {% if edited_user.identity == identity.code %}selected{% endif %}>
+                                             {{ identity.label }}
+                                           </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <h5>{{ trans("Name") }}</h5>
+                                    <input type="text" class="form-control" name="name" value="{{ edited_user.name }}" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <h5>{{ trans("Gender") }}</h5>
+                                    <select class="form-select" name="gender">
+                                        <option value="">{{ trans("Select gender") }}</option>
+                                        <option value="1" {% if edited_user.gender == 1 %}selected{% endif %}>{{ trans("Male") }}</option>
+                                        <option value="2" {% if edited_user.gender == 2 %}selected{% endif %}>{{ trans("Female") }}</option>
+                                        <option value="3" {% if edited_user.gender == 3 %}selected{% endif %}>{{ trans("Private") }}</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <h5>{{ trans("Email") }}</h5>
+                                    <input type="email" class="form-control" name="email" value="{{ edited_user.email }}" required>
+                                </div>
+
+                                <!-- 權限勾選 -->
+                                <div class="col-md-6 mb-3">
+                                    <h5>{{ trans("Privilege") }}</h5>
+                                        <div class="d-flex flex-wrap gap-2">
+                                          {% for privilege in privileges %}
+                                          <div class="form-check" style="width: 150px;">
+                                             <input class="form-check-input" type="checkbox" name="privileges" value="{{ privilege.name }}"
+                                                id="privilege_{{ privilege.name }}" {% if privilege.checked %}checked{% endif %}>
+                                                <label class="form-check-label" for="privilege_{{ privilege.name }}">
+                                                    {{ privilege.label }}
+                                                </label>
+                                          </div>
+                                          {% endfor %}
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-footer bg-light small text-end">
+                            <div>{{ trans("Last login") }}: {{ edited_user.last_login }}</div>
+                            <div>{{ trans("Create time") }}: {{ edited_user.created_time }}</div>
+                            <div>{{ trans("Status") }}:
+                                {% if edited_user.is_active %}{{ trans("active") }}
+                                {% elif edited_user.is_staff %}{{ trans("staff") }}
+                                {% elif edited_user.is_superuser %}{{ trans("superuser") }}{% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 右側：學生資料 -->
+                <div class="col-lg-3 col-md-6 student-card" {% if edited_user.identity != 2 %}style="display:none;"{% endif %}>
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header text-white fw-semibold text-center" style="background-color: #0ea5e9;">
+                            <i class="fa fa-graduation-cap me-2"></i>{{ trans("Student Profile") }}
+                        </div>
+                        <div class="card-body text-start">
+                            <div class="mb-3">
+                                <h5>{{ trans("Student ID") }}</h5>
+                                <input type="text" class="form-control" name="stu_id" value="{{ student.stu_id|default('') }}" placeholder="{{ trans('Enter student ID') }}">
+                            </div>
+                            <div class="mb-3">
+                                <h5>{{ trans("Department") }}</h5>
+                                <select class="form-select" name="department">
+                                    <option value="">{{ trans("Choose your department") }}</option>
+                                    {% for dept in departments %}
+                                    <option value="{{ dept.id }}" {% if student.department and dept.id == student.department.id %}selected{% endif %}>
+                                        {{ dept }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <h5>{{ trans("Squadron") }}</h5>
+                                <select class="form-select" name="squadron">
+                                    <option value="">{{ trans("Choose your squadron") }}</option>
+                                    {% for sq in squadrons %}
+                                    <option value="{{ sq.id }}" {% if student.squadron and sq.id == student.squadron.id %}selected{% endif %}>
+                                        {{ sq }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <h5>{{ trans("Year Grade") }}</h5>
+                                <input class="form-control" type="number" name="grade" value="{{ student.grade|default('') }}" placeholder="{{ trans('Enter your year grade') }}" min="1" max="200">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-buttons">
+                <button type="submit" class="btn btn-primary">{{ trans("Update") }}</button>
+                <button type="button" class="btn btn-secondary" onclick="self.location=document.referrer;">{{ trans("Cancel") }}</button>
+            </div>
+        </div>
+    </form>
+
+    <!-- Toast -->
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index:1080;">
+        {% for message in messages %}
+        <div class="toast align-items-center text-white bg-success border-0 mb-2" role="alert">
+            <div class="d-flex">
+                <div class="toast-body">{{ message }}</div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</main>
+
+
 <script>
-    navbarFocused("SystemManager_navbar");
+    document.addEventListener('DOMContentLoaded', () => {
+        const identitySelect = document.querySelector('select[name="identity"]');
+        const studentCard = document.querySelector('.student-card');
+        const leftCol = document.querySelector('.user-photo-card');
+        const middleCol = document.querySelector('.user-profile-card');
+    
+        function toggleStudentCard() {
+            if (!studentCard) return;
+            if (String(identitySelect.value) === "2") {
+                studentCard.style.display = "block";
+                leftCol.classList.replace('col-lg-4', 'col-lg-3');
+                middleCol.classList.replace('col-lg-8', 'col-lg-6');
+                middleCol.classList.remove('mx-auto');
+            } else {
+                studentCard.style.display = "none";
+                leftCol.classList.replace('col-lg-3', 'col-lg-4');
+                middleCol.classList.replace('col-lg-6', 'col-lg-8');
+                middleCol.classList.add('mx-auto');
+            }
+        }
+    
+        identitySelect.addEventListener('change', toggleStudentCard);
+        toggleStudentCard();
+    
+        // ==== 保證選單送值 ====
+        const form = document.querySelector('form');
+        form.addEventListener('submit', (e) => {
+            // 如果 identity 沒選，強制清空 value（後端可判斷 None）
+            if (identitySelect.value === "") {
+                identitySelect.value = "";
+            }
+    
+            // department 和 squadron 空值處理
+            const deptSelect = form.querySelector('select[name="department"]');
+            if (deptSelect && deptSelect.value === "") deptSelect.value = "";
+    
+            const squadSelect = form.querySelector('select[name="squadron"]');
+            if (squadSelect && squadSelect.value === "") squadSelect.value = "";
+        });
+    });
 </script>
+    
+
+<style>
+body { 
+        font-family: 'DFKai-SB','BiauKai','標楷體', serif; 
+        background: linear-gradient(135deg, #9eadf0); 
+        min-height:100vh;
+    }
+body, p, label, input, select, h5, h6 {
+    font-family: "標楷體", "Microsoft JhengHei", sans-serif;
+}
+.user-edit-dashboard .card {
+    border-radius: 16px;
+    overflow: hidden;
+    background-color: #ffffff;
+    border: 1px solid #c0c4c8;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1), 0 10px 20px rgba(0,0,0,0.08);
+    margin-bottom: 2rem;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+.user-edit-dashboard .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.15), 0 18px 40px rgba(0,0,0,0.12);
+}
+.user-edit-dashboard .card-header {
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+    padding: 1rem 1.2rem;
+}
+.user-edit-dashboard .card-body {
+    padding: 1.5rem 1.8rem;
+    background-color: #f9fafb;
+}
+.user-edit-dashboard .card-footer {
+    background-color: #f1f3f5;
+    border-top: 1px solid #d1d5d9;
+    padding: 1rem 1.4rem;
+    font-size: 0.9rem;
+    color: #555;
+}
+h5, h6 {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #2f4f4f;
+}
+.page-header hr {
+    border-top: 2px solid #e3e6ea;
+    margin-top: 0.6rem;
+    margin-bottom: 1rem;
+}
+
+/* 讓最下面的按鈕區和白色區塊分開 */
+.user-edit-dashboard .form-buttons {
+    background: transparent !important;
+    padding: 20px 0;
+    text-align: center;
+}
+
+/* 按鈕區的按鈕排版更好看 */
+.user-edit-dashboard .form-buttons .btn {
+    min-width: 120px;
+    margin: 0 10px;
+}
+
+</style>
 {% endblock %}

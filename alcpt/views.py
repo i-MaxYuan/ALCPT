@@ -6,10 +6,15 @@ import datetime
 
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
-from .definitions import UserType
+from .definitions import Identity
 from .models import Proclamation, User, Exam, AnswerSheet, OnlineStatus, LocationUrl
 
 from django.views.generic import View
+
+from django.utils import timezone
+from django.db.models.functions import Coalesce
+import datetime
+
 # Create your views here.
 
 class FromWhere:
@@ -40,16 +45,31 @@ class FromWhere:
 class OnlineUserStat:
     template_name = ''
  
-    def get(self,request,*args,**kwargs):
+    def get(self, request, *args, **kwargs):
+    # 基本統計
         online_num = OnlineStatus.objects.filter(online_status=True).count()
-        reg_num = len(User.objects.all())
-        contents = {'reg_num':reg_num, 'online_num':online_num}
-        
-        contents_dict = self.do_content_works(request,*args,**kwargs) #do_content_works() return dict. if not do anything return {}.
+        reg_num = User.objects.count()  # 用 count() 比 len(QuerySet) 更有效率
 
+        contents = {
+            'reg_num': reg_num,
+            'online_num': online_num
+        }
+
+    # 取得額外內容
+        contents_dict = self.do_content_works(request, *args, **kwargs)
+
+    # 保證 contents_dict 是 dict，如果不是就轉為空 dict
+        if not isinstance(contents_dict, dict):
+            try:
+                contents_dict = dict(contents_dict)
+            except (TypeError, ValueError):
+                contents_dict = {}
+
+    # 更新 contents
         contents.update(contents_dict)
-        
+
         return render(request, self.template_name, contents)
+
 
 class RegOnlineList(View,OnlineUserStat):
     
@@ -70,6 +90,7 @@ class RegOnlineList(View,OnlineUserStat):
             regList = paginator.page(paginator.num_pages)
             
         return {'reg_list':reg_list, 'regList':regList, 'paginator':paginator}
+
       
 
 class ProclamationCenter(View,OnlineUserStat):
@@ -77,7 +98,7 @@ class ProclamationCenter(View,OnlineUserStat):
     template_name='proclamation/proclamation.html'
     
     def do_content_works(self,request):
-        privileges = UserType.__members__,
+        privileges = Identity.__members__
         proclamations = Proclamation.objects.filter(is_public=True)
 
         now_time = datetime.datetime.now()
@@ -118,7 +139,49 @@ class ProjectHistory(View,OnlineUserStat):
 # def project_history(request):
 #     return render(request, 'SystemDocument/about/project_history.html', locals())
 
+# Email 設定頁面
+from django.contrib import messages
+from django.shortcuts import redirect
+from django.middleware.csrf import get_token
 
+
+class EmailSettingView(View):
+    template_name = "registration/email_setting.html"
+
+    def get(self, request):
+        return render(request, self.template_name, {
+            "current_email": request.user.email,
+            "csrf_token": get_token(request),
+            "_": _,  # 傳入模板，模板就可以用 _() 翻譯
+        })
+
+    def post(self, request):
+        # 延遲 import 避免循環引用
+        from alcpt.email import email_verified
+
+        new_email = request.POST.get("new_email", "").strip()
+        user = request.user
+
+        if not new_email:
+            messages.error(request, _("Email cannot be empty."))
+            return redirect("email_setting")
+
+        if new_email == user.email:
+            messages.warning(request, _("You entered the same email as before."))
+            return redirect("email_setting")
+
+        # 更新使用者信箱，標記為未驗證
+        user.email = new_email
+        user.email_is_verified = False
+        user.save()
+
+        try:
+            email_verified(user, new_email, request.user)
+            messages.success(request, _("Verification email sent to ") + new_email)
+        except Exception as e:
+            messages.error(request, _("Failed to send email: ") + str(e))
+
+        return redirect("email_setting")
 
 def about1(request):
     users = list(User.objects.all())
@@ -254,4 +317,8 @@ def OM_Viewer(request):
 
 def OM_Testee(request):
     return render(request, 'SystemDocument/OperationManual/OM_Testee.html')
+
+
+
+    
 

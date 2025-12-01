@@ -1,4 +1,3 @@
-
 <title>ALCPT - Create Unit</title>
 
 {% extends 'new_base.html' %}
@@ -12,43 +11,40 @@
     <a href="{{ url('unit_list') }}">{{trans("Unit List")}}</a>
 </li>
 <li class="breadcrumb-item active" aria-current="page">{{trans("Create Unit")}}</li>
-{% endblock %} {% block content %}
-<main class="unit-create-form">
+{% endblock %}
+
+{% block content %}
+<main class="unit-create-form py-5">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-8">
                 <form method="post">
                     <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
-                    <div class="card">
-                        <div class="card-header" style="font-size:30px;" >{{trans("Create Unit")}}</div>
+                    <div class="card h-100 shadow-sm rounded-3">
+                        <div class="card-header" style="font-size:30px;color: #2563eb; font-size:30px;">
+                            {{trans("Create Unit")}}
+                        </div>
 
-                        <div class="card-body">
+                        <div class="card-body" style="font-family:'標楷體';">
+                            <!-- Unit Selection -->
                             <h5 class="card-subtitle mb-2 text-muted" style="font-size:25px;">{{trans("Unit")}}</h5>
-                            <p class="card-text">
-                                <select class="custom-select custom-select-sm" id="unit" name="unit" onchange="is_selected();" required style="font-size:18px;">
+                            <select class="custom-select custom-select-sm form-control mb-3" id="unit" name="unit" onchange="is_selected();" required style="font-size:18px; border-radius:8px;">
+                                <option value="" selected disabled hidden>{{trans("Choose the Unit")}}</option>
+                                <option value="department">{{trans("Department")}}</option>
+                                <option value="squadron">{{trans("Squadron")}}</option>
+                            </select>
 
-                                    <option value="" selected disabled hidden>
-                                        {{trans("Choose the Unit")}}
-                                    </option>
-                                    <option value="department">{{trans("Department")}}</option>
-                                    <option value="squadron">{{trans("Squadron")}}</option>
-                                </select>
-                            </p>
+                            <!-- Unit Name -->
+                            <h5 class="card-subtitle mb-2 text-muted" style="font-size:25px;">{{trans("Unit Name")}}<label id="invalid" class="text-danger ms-2"></label></h5>
+                            <input class="form-control mb-3" type="text" id="unit_name" name="unit_name" onkeyup="valid_name(this)" placeholder="{{trans("Enter the name of the unit")}}..." required disabled style="border-radius:8px; font-size:18px;">
 
-                            <h5 class="card-subtitle mb-2 text-muted" style="font-size:25px;">
-
-                                {{trans("Unit Name")}}<label id="invalid"></label>
-                            </h5>
-                            <p class="card-text">
-                                <input class="form-control" type="text" id="unit_name" name="unit_name" onkeyup="valid_name(this)" placeholder="{{trans("Enter the name of the unit")}}..." required disabled />
-                            </p>
-
-                            <div class="float-right">
-                                <button class="btn btn-primary" type="submit" id="submit" disabled>
-                                    {{trans("Submit")}}
+                            <!-- Buttons -->
+                            <div class="d-flex justify-content-end gap-2">
+                                <button class="btn btn-primary" type="submit" id="submit" disabled style="border-radius:8px;">
+                                    {{ trans("Submit") }}
                                 </button>
-                                <button class="btn btn-secondary" type="button" onclick="self.location=document.referrer;">
-                                    {{trans("Cancel")}}
+                                <button class="btn btn-secondary" type="button" onclick="self.location=document.referrer;" style="border-radius:8px;">
+                                    {{ trans("Cancel") }}
                                 </button>
                             </div>
                         </div>
@@ -64,4 +60,29 @@
 <script>
     navbarFocused("SystemManager_navbar");
 </script>
+
+<style>
+body {
+    font-family: 'DFKai-SB','BiauKai','標楷體', serif;
+    background: linear-gradient(135deg, #9eadf0, #6b8dd6);
+    min-height: 100vh;
+}
+
+/* 卡片圓角與陰影 */
+.unit-create-form .card {
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+/* 按鈕圓角 */
+.unit-create-form .btn {
+    border-radius: 8px;
+}
+
+/* Input 與 Select 圓角 */
+.unit-create-form .form-control,
+.unit-create-form .custom-select {
+    border-radius: 8px;
+}
+</style>
 {% endblock %}

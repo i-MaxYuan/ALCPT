@@ -1,207 +1,292 @@
-
 <title>ALCPT - Unit List</title>
 
-{% extends 'new_base.html' %} {% block path %}
-<li class="breadcrumb-item active" aria-current="page">{{trans("Unit List")}}</li>
-{% endblock %} 
+{% extends 'new_base.html' %}
+
+{% block path %}
+<li class="breadcrumb-item active" aria-current="page">{{ trans("Unit List") }}</li>
+{% endblock %}
 
 {% block content %}
 <main class="user-list">
-    <div class="container">
+    <div class="container unit-card">
+
+        <!-- Tabs -->
         <ul class="nav nav-tabs" id="newTab" role="tablist">
             <li class="nav-item">
-                <a class="nav-link active" id="department-tab" data-toggle="tab" href="#department" role="tab" aria-controls="department" aria-selected="true">{{trans("Department")}}</a>
+                <a class="nav-link active" id="department-tab" data-toggle="tab" href="#department" role="tab" aria-controls="department" aria-selected="true">{{ trans("Department") }}</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" id="squadron-tab" data-toggle="tab" href="#squadron" role="tab" aria-controls="squadron" aria-selected="false">{{trans("Squadron")}}</a>
+                <a class="nav-link" id="squadron-tab" data-toggle="tab" href="#squadron" role="tab" aria-controls="squadron" aria-selected="false">{{ trans("Squadron") }}</a>
             </li>
         </ul>
 
-        <div class="tab-content" id="tabContent">
+        <div class="tab-content mt-3" id="tabContent">
+
+            <!-- Department Tab -->
             <div class="tab-pane fade show active" id="department" role="tabpanel" aria-labelledby="department-tab">
-                <div class="container">
-                    <div class="row justify-content-center">
-                        <div class="col-md-12">
-                            <h2>{{trans("Department List")}}</h2>
+                <div class="row justify-content-center">
+                    <div class="col-md-12 mb-3 d-flex align-items-center justify-content-between" style="color: #2563eb;">
+                        <h2 class="mb-0"><b><u>{{ trans("Department List") }}</u></b></h2>
+                        <div class="d-flex gap-2">
+                            <a href="?dept_order={% if dept_order == 'desc' %}asc{% else %}desc{% endif %}&squad_order={{ squad_order }}&active_tab=department" class="btn btn-sm btn-outline-primary">
+                                {% if dept_order == 'desc' %}{{ trans("Sort: Few → Many") }}{% else %}{{ trans("Sort: Many → Few") }}{% endif %}
+                            </a>
+                            <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ url('unit_create') }}'">
+                                <i class="fa fa-plus"></i> {{ trans("Add") }}
+                            </button>
+                            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#deleteTipModal">
+                                <i class="fa fa-question-circle"></i> {{ trans("Tips") }}
+                            </button>
+                        </div>
+                    </div>
 
-                            <div class="table-responsive-md">
-                                <table class="table table-bordered table-striped table-hover table-mc-light-blue">
-                                    <thead class="thead-light">
-                                        <tr>
-                                            <th class="text-center">{{trans("Serial")}}</th>
-                                            <th class="text-center">{{trans("Name")}}</th>
-                                            <th class="text-center"><i class="fa fa-users"></i></th>
-                                            <th class="text-center">
-                                                <div class="add">
-                                                    <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ url('unit_create') }}'"><i class="fa fa-plus"></i></button>
-                                                    <button type="button" class="btn" data-toggle="modal" data-target="#promptContent"><i class="fa fa-question-circle"></i></button>
-                                                </div>
-                                                <div class="modal fade text-left" id="promptContent" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
-                                                    <div class="modal-dialog modal-dialog-centered" role="document">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header text-center">
-                                                                <h5 class="modal-title" id="ModalLongTitle">{{trans("Tips")}}</h5>
-                                                            </div>
-                
-                                                            <div class="modal-body">
-                                                                <ul>
-                                                                    <li>
-                                                                        <p>
-                                                                            {{trans("Department List can look up the number of people in each department.")}}
-                                                                        </p>
-                                                                    </li>
-                                                                    <li>
-                                                                        <p>
-                                                                            {{trans("Add a department, please click ")}}<i class="fa fa-plus btn btn-secondary"></i>
-                                                                        </p>
-                                                                    </li>
-                                                                    <li>
-                                                                        <p>
-                                                                            {{trans("Edit the department name, please click ")}}<i class="fa fa-pencil-square-o"></i>
-                                                                        </p>
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-                
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="btn btn-primary" data-dismiss="modal">{{trans("OK")}}</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </th>
-                                        </tr>
-                                    </thead>
-
-                                    <tbody>
-                                        <div class="add-secret">
-                                            <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ url('unit_create') }}'">
-                                                <i class="fa fa-plus"></i>
-                                            </button>
-                                        </div>
+                    <div class="col-md-12">
+                        <div class="table-responsive-md">
+                            <table class="table table-bordered table-striped table-hover user-table">
+                                <thead>
+                                    <tr>
+                                        <th>{{ trans("Order") }}</th>
+                                        <th>{{ trans("Department") }}</th>
+                                        <th>{{ trans("Members") }}</th>
+                                        <th>{{ trans("Edit") }}</th>
+                                        <th>{{ trans("Delete") }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% if departments|length > 0 %}
                                         {% for department in departments %}
-                                        <tr style="cursor: pointer" onclick="window.location.href='{{ url('unit_member_list', args=['department', department.name]) }}'">
-                                            <td class="text-center" data-title="Serial">
-                                                {{ department.id }}
+                                        <tr style="cursor: pointer">
+                                            <td>{{ loop.index }}</td>
+                                            <td>{{ department.name }}</td>
+                                            <td>{{ department.student_count }}</td>
+                                            <td>
+                                                <a href="{{ url('unit_edit', args=['department', department.name]) }}" class="btn btn-outline-primary">
+                                                    <i class="fa fa-pencil-square-o"></i>
+                                                </a>
                                             </td>
-                                            <td class="text-center" data-title="Name">
-                                                {{ department.name }}
+                                            <td>
+                                                <a href="javascript:void(0);" onclick="confirmDelete({{ department.id }}, 'department')" class="btn btn-outline-danger">
+                                                    <i class="fa fa-trash"></i> 
+                                                </a>
                                             </td>
-                                            <td class="text-center" data-title="People">
-                                                {{ department.student_set.all().count() }}
-                                            </td>
-                                            <td class="text-center">
-                                                <a href="{{ url('unit_edit', args=['department', department.name]) }}"><i class="fa fa-pencil-square-o fa-fw mb-2"></i></a>
-                                            </td>
-                                        </tr>
-                                        {% else %}
-                                        <tr>
-                                            <td class="text-center" colspan="4">{{trans("No Data")}}</td>
                                         </tr>
                                         {% endfor %}
-                                    </tbody>
-                                </table>
-                            </div>
+                                    {% else %}
+                                        <tr><td colspan="5">{{ trans("No Data") }}</td></tr>
+                                    {% endif %}
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
             </div>
 
+            <!-- Squadron Tab -->
             <div class="tab-pane fade" id="squadron" role="tabpanel" aria-labelledby="squadron-tab">
-                <div class="container">
-                    <div class="row justify-content-center">
-                        <div class="col-md-12">
-                            <h2>{{trans("Squadron List")}}</h2>
+                <div class="row justify-content-center">
+                    <div class="col-md-12 mb-3 d-flex align-items-center justify-content-between" style="color: #2563eb;">
+                        <h2 class="mb-0"><b><u>{{ trans("Squadron List") }}</u></b></h2>
+                        <div class="d-flex gap-2">
+                            <a href="?squad_order={% if squad_order == 'desc' %}asc{% else %}desc{% endif %}&dept_order={{ dept_order }}&active_tab=squadron" class="btn btn-sm btn-outline-primary">
+                                {% if squad_order == 'desc' %}{{ trans("Sort: Few → Many") }}{% else %}{{ trans("Sort: Many → Few") }}{% endif %}
+                            </a>
+                            <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ url('unit_create') }}'">
+                                <i class="fa fa-plus"></i> {{ trans("Add") }}
+                            </button>
+                            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#deleteTipModal">
+                                <i class="fa fa-question-circle"></i> {{ trans("Tips") }}
+                            </button>
+                        </div>
+                    </div>
 
-                            <div class="table-responsive-md">
-                                <table class="table table-bordered table-striped table-hover table-mc-light-blue">
-                                    <thead class="thead-light">
-                                        <tr>
-                                            <th class="text-center">{{trans("Serial")}}</th>
-                                            <th class="text-center">{{trans("Name")}}</th>
-                                            <th class="text-center"><i class="fa fa-users"></i></th>
-                                            <th class="text-center">
-                                                <div class="add">
-                                                    <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ url('unit_create') }}'"><i class="fa fa-plus"></i></button>
-                                                    <button type="button" class="btn" data-toggle="modal" data-target="#promptContentSquadron"><i class="fa fa-question-circle"></i></button>
-                                                </div>
-                                                <div class="modal fade text-left" id="promptContentSquadron" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
-                                                    <div class="modal-dialog modal-dialog-centered" role="document">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header text-center">
-                                                                <h5 class="modal-title" id="ModalLongTitle">{{trans("Tips")}}</h5>
-                                                            </div>
-                
-                                                            <div class="modal-body">
-                                                                <ul>
-                                                                    <li>
-                                                                        <p>
-                                                                            {{trans("Squadron List can look up the number of people in each squadron.")}}
-                                                                        </p>
-                                                                    </li>
-                                                                    <li>
-                                                                        <p>
-                                                                            {{trans("Click ")}}<i class="fa fa-plus btn btn-secondary"></i>{{trans(" can add a squadron.")}}
-                                                                        </p>
-                                                                    </li>
-                                                                    <li>
-                                                                        <p>
-                                                                            {{trans("Click ")}}<i class="fa fa-pencil-square-o"></i>{{trans(" can edit the Squadron name.")}}
-                                                                        </p>
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-                
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="btn btn-primary" data-dismiss="modal">{{trans("OK")}}</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </th>
-                                        </tr>
-                                    </thead>
-
-                                    <tbody>
-                                        <div class="add-secret">
-                                            <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ url('testee_group_create') }}'">
-                                                <i class="fa fa-plus"></i>
-                                            </button>
-                                        </div>
+                    <div class="col-md-12">
+                        <div class="table-responsive-md">
+                            <table class="table table-bordered table-striped table-hover user-table">
+                                <thead>
+                                    <tr>
+                                        <th>{{ trans("Order") }}</th>
+                                        <th>{{ trans("Squadron") }}</th>
+                                        <th>{{ trans("Members") }}</th>
+                                        <th>{{ trans("Edit") }}</th>
+                                        <th>{{ trans("Delete") }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% if squadrons|length > 0 %}
                                         {% for squadron in squadrons %}
-                                        <tr style="cursor: pointer" onclick="window.location.href='{{ url('unit_member_list', args=['squadron', squadron.name]) }}'">
-                                            <td class="text-center" data-title="Serial : ">
-                                                {{ squadron.id }}
+                                        <tr style="cursor: pointer">
+                                            <td>{{ loop.index }}</td>
+                                            <td>{{ squadron.name }}</td>
+                                            <td>{{ squadron.student_count }}</td>
+                                            <td>
+                                                <a href="{{ url('unit_edit', args=['squadron', squadron.name]) }}" class="btn btn-outline-primary">
+                                                    <i class="fa fa-pencil-square-o"></i> 
+                                                </a>
                                             </td>
-                                            <td class="text-center" data-title="Name : ">
-                                                {{ squadron.name }}
+                                            <td>
+                                                <a href="javascript:void(0);" onclick="confirmDelete({{ squadron.id }}, 'squadron')" class="btn btn-outline-danger">
+                                                    <i class="fa fa-trash"></i> 
+                                                </a>
                                             </td>
-                                            <td class="text-center" data-title="People : ">
-                                                {{ squadron.student_set.all().count() }}
-                                            </td>
-                                            <td class="text-center">
-                                                <a href="{{ url('unit_edit', args=['squadron', squadron.name]) }}"><i class="fa fa-pencil-square-o fa-fw mb-2"></i></a>
-                                            </td>
-                                        </tr>
-                                        {% else %}
-                                        <tr>
-                                            <td class="text-center" colspan="4">{{trans("No Data")}}</td>
                                         </tr>
                                         {% endfor %}
-                                    </tbody>
-                                </table>
-                            </div>
+                                    {% else %}
+                                        <tr><td colspan="5">{{ trans("No Data") }}</td></tr>
+                                    {% endif %}
+                                </tbody>
+                            </table>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Delete Tips Modal -->
+        <div class="modal fade text-left" id="deleteTipModal" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header text-center">
+                        <h5 class="modal-title">{{ trans("Delete Tips") }}</h5>
+                    </div>
+                    <div class="modal-body">
+                        <ul>
+                            <li><i class="fa fa-trash text-danger"></i> {{ trans("Click the trash icon to delete a unit.") }}</li>
+                            <li>{{ trans("Only administrators can delete departments or squadrons.") }}</li>
+                            <li>{{ trans("Deleting a department or squadron is permanent and cannot be undone.") }}</li>
+                            <li>{{ trans("Ensure the unit has no important members or data before deleting.") }}</li>
+                        </ul>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">{{ trans("OK") }}</button>
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
 </main>
 {% endblock %}
 
 {% block navbarFocused %}
 <script>
-    navbarFocused("SystemManager_navbar");
+navbarFocused("SystemManager_navbar");
+
+function confirmDelete(unitId, unitKind) {
+    var isAdmin = {{ 'true' if user.is_superuser else 'false' }};
+    isAdmin = (isAdmin === 'true');
+
+    if (!isAdmin) {
+        alert("您不是管理員，無權刪除！");
+        return false;
+    }
+
+    var password = prompt("請輸入管理員密碼以確認刪除：");
+    if (password === null) return false;
+
+    fetch("/zh/user/verify_admin_password/", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": "{{ csrf_token }}"
+        },
+        body: JSON.stringify({password: password})
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.valid) {
+            window.location.href = "/zh/user/unit_list/" + unitKind + "/" + unitId + "/delete/";
+        } else {
+            alert("密碼錯誤，無法刪除！");
+        }
+    })
+    .catch(err => {
+        console.error(err);
+        alert("驗證失敗！");
+    });
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    var activeTab = "{{ active_tab }}";
+    if(activeTab) {
+        var tabEl = document.querySelector('#' + activeTab + '-tab');
+        if(tabEl) {
+            var tab = new bootstrap.Tab(tabEl);
+            tab.show();
+        }
+    }
+});
 </script>
+<style>
+    body {
+        font-family: 'DFKai-SB','BiauKai','標楷體', serif;
+        background: linear-gradient(135deg, #9eadf0);
+        min-height: 100vh;
+    }
+    
+    .unit-card {
+        background: #ffffff;
+        border-radius: 16px;
+        padding: 25px;
+        margin-top: 25px;
+        margin-bottom: 40px;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    }
+    
+    /* 表格文字置中 */
+    .user-table th, .user-table td {
+        vertical-align: middle;
+        text-align: center;
+        white-space: normal;
+        word-break: break-word;
+        min-width: 90px;
+        max-width: 120px;
+        padding: 8px 10px;
+    }
+    
+    .user-table th {
+        background-color: #f8f9fa;
+        font-weight: 600;
+    }
+    
+    .user-table td a.btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 4px 8px;
+    }
+    
+    @media (max-width: 992px) {
+        .user-table th, .user-table td {
+            min-width: 70px;
+            font-size: 0.9rem;
+        }
+    }
+    
+    /* 分頁 */
+    .pagination .page-item .page-link {
+        min-width: 40px;
+        height: 40px;
+        line-height: 38px;
+        padding: 0;
+        text-align: center;
+        font-size: 0.9rem;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .pagination .page-item.disabled .page-link {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+    
+    .pagination .page-item.active .page-link {
+        background-color: #2563eb;
+        color: white;
+        border-color: #2563eb;
+    }
+</style>
+    
 {% endblock %}

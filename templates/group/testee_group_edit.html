@@ -1,4 +1,3 @@
-
 <title>ALCPT - Testee Group Edit</title>
 
 {% extends 'new_base.html' %}
@@ -44,9 +43,27 @@
                                     <input type="checkbox" name="testee" value="{{ testee.id }}" {% if testee in group_members %}checked{% endif %} />
                                 </td>
                                 <td class="text-center">{{ testee.name }}</td>
-                                <td class="text-center">{{ testee.student.department }}</td>
-                                <td class="text-center">{{ testee.student.squadron }}</td>
-                                <td class="text-center">{{ testee.student.grade }}</td>
+                                <td class="text-center">
+                                    {% if testee.identity == 2 %}
+                                        {{ testee.department or "N/A" }}
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </td>
+                                <td class="text-center">
+                                    {% if testee.identity == 2 %}
+                                        {{ testee.squadron or "N/A" }}
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </td>
+                                <td class="text-center">
+                                    {% if testee.identity == 2 %}
+                                        {{ testee.level or "N/A" }}
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </td>
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -63,7 +80,9 @@
         </div>
     </div>
 </main>
-{% endblock %}{% block pagination %}
+{% endblock %}
+
+{% block pagination %}
 <ul class="pagination justify-content-center">
     <li class="page-item">
         <a class="page-link" href="?page=1"><i class="fa fa-angle-double-left"></i></a>
@@ -77,15 +96,17 @@
         {% endif %}
     </li>
 
-    {% for page in paginator.page_range %} {% if page == groupList.number %}
-    <li class="page-item active">
-        <a class="page-link" href="?page={{ page }}">{{ page }}</a>
-    </li>
-    {% else %}
-    <li class="page-item">
-        <a class="page-link" href="?page={{ page }}">{{ page }}</a>
-    </li>
-    {% endif %} {% endfor %}
+    {% for page in paginator.page_range %} 
+        {% if page == groupList.number %}
+            <li class="page-item active">
+                <a class="page-link" href="?page={{ page }}">{{ page }}</a>
+            </li>
+        {% else %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page }}">{{ page }}</a>
+            </li>
+        {% endif %}
+    {% endfor %}
 
     <li class="page-item {% if not groupList.has_next() %}disable{% endif %}">
         {% if groupList.has_next() %}

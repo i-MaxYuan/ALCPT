@@ -1,164 +1,186 @@
-
 <title>ALCPT - Exam List</title>
 
-{% extends 'new_base.html' %} {% block path %}
-<li class="breadcrumb-item active" aria-current="page">{{trans("Exam List")}}</li>
-{% endblock %} {% block content %}
+{% extends 'new_base.html'%}
+
+{% block path %}
+<li class="breadcrumb-item active" aria-current="page">{{ trans("Exam List") }}</li>
+{% endblock %}
+
+{% block content %}
 <main class="exam-list">
-    <div class="container">
+    <div class="container exam-card">
         <div class="row justify-content-center">
-            <div class="col-lg-12 table-responsive-md">
-                <h2>{{trans("Exam List")}}</h2>
+            <div class="col-md-12" style="color: #2563eb;"><font face="標楷體">
+                <h2><b><u>{{ trans("Exam List") }}</u></b></h2>
 
-                <table class="table table-hover table-striped table-bordered table-mc-light-blue">
-                    <thead class="thead-light">
-                        <tr>
-                            <th class="text-center">{{trans("Exam Name")}}</th>
-                            <th class="text-center">{{trans("Start Time")}}</th>
-                            <th class="text-center">{{trans("Finish Time")}}</th>
-                            <th class="text-center">{{trans("Duration")}}({{trans("min")}})</th>
-                            <th class="text-center">{{trans("Creator")}}</th>
-                            <th class="text-center">
-                                <div class="add">
-                                    <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ url('exam_create') }}'"><i class="fa fa-plus"></i></button>
-                                    <button type="button" class="btn" data-toggle="modal" data-target="#promptContent"><i class="fa fa-question-circle"></i></button>
-                                </div>
-                                <div class="modal fade text-left" id="promptContent" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header text-center">
-                                                <h5 class="modal-title" id="ModalLongTitle">{{trans("Tips")}}</h5>
-                                            </div>
+                <!-- 搜尋與排序 -->
+                <div class="d-flex justify-content-between mb-3">
+                    <input type="text" id="searchInput" class="form-control w-50" placeholder="{{ trans('Search Exam Name') }}...">
+                    <select id="sortSelect" class="form-control w-25">
+                        <option value="name_asc">{{ trans("Name ↑") }}</option>
+                        <option value="name_desc">{{ trans("Name ↓") }}</option>
+                        <option value="start_asc">{{ trans("Start Time ↑") }}</option>
+                        <option value="start_desc">{{ trans("Start Time ↓") }}</option>
+                        <option value="duration_asc">{{ trans("Duration ↑") }}</option>
+                        <option value="duration_desc">{{ trans("Duration ↓") }}</option>
+                    </select>
+                </div>
 
-                                            <div class="modal-body">
-                                                <ul>
-                                                    <li>
-                                                        <p>
-                                                            {{trans("Exam List can look up all the exam records.")}}
-                                                        </p>
-                                                    </li>
-                                                    <li>
-                                                        <p>
-                                                            {{trans("Click one can look up each exam detail.")}}
-                                                        </p>
-                                                    </li>
-                                                    <li>
-                                                        <p>
-                                                            {{trans("Click ")}}<i class="fa fa-plus btn btn-secondary"></i>{{trans(" can create a exam.")}}
-                                                        </p>
-                                                    </li>
-                                                    <li>
-                                                        <p>
-                                                            {{trans("Before the exam, if you want to edit content, click ")}}<i class="fa fa-pencil-square-o"></i>
-                                                        </p>
-                                                    </li>
-                                                    <li>
-                                                        <p>
-                                                            {{trans("Before the exam, if you do not want, click ")}}<i class="fa-solid fa-trash-can"></i>
-                                                        </p>
-                                                    </li>
-                                                </ul>
-                                            </div>
-
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-primary" data-dismiss="modal">{{trans("OK")}}</button>
-                                            </div>
-                                        </div>
+                <div class="table-responsive-md">
+                    <table class="table table-bordered table-striped table-hover table-mc-light-blue" id="examTable">
+                        <thead class="thead-light">
+                            <tr>
+                                <th class="text-center">{{ trans("Exam Name") }}</th>
+                                <th class="text-center">{{ trans("Start Time") }}</th>
+                                <th class="text-center">{{ trans("Finish Time") }}</th>
+                                <th class="text-center">{{ trans("Duration") }}({{ trans("min") }})</th>
+                                <th class="text-center">{{ trans("Creator") }}</th>
+                                <th class="text-center">
+                                    <div class="add">
+                                        <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ url('exam_create') }}'"><i class="fa fa-plus"></i></button>
+                                        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#promptContent"><i class="fa fa-question-circle"></i></button>
                                     </div>
-                                </div>
-                            </th>
-                        </tr>
-                    </thead>
+                                </th>
+                            </tr>
+                        </thead>
 
-                    <tbody>
-                        <div class="add-secret">
-                            <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ url('exam_create') }}'">
-                                <i class="fa fa-plus"></i>
-                            </button>
+                        <tbody>
+                            {% if exams %}
+                                {% for exam in examList %}
+                                <tr style="cursor: pointer" onclick="window.location.href='{{ url('exam_content', args=[exam.id]) }}'">
+                                    <td class="text-center">{{ exam.name }}</td>
+                                    <td class="text-center">{{ exam.start_time.strftime('%Y/%m/%d %H:%M') }}</td>
+                                    <td class="text-center">{{ exam.finish_time.strftime('%Y/%m/%d %H:%M') }}</td>
+                                    <td class="text-center">{{ exam.duration }}</td>
+                                    <td class="text-center">{{ exam.created_by.name }}</td>
+                                    <td class="text-center d-flex justify-content-center align-items-center">
+                                        {% if exam.start_time < now %}
+                                            <a href="#"
+                                               onclick="event.stopPropagation(); alert('{{ trans('Exam has started, cannot be edited.') }}')"
+                                               class="btn btn-outline-secondary btn-sm mr-2">
+                                                <i class="fa fa-pencil-square-o"></i>
+                                            </a>
+                                        {% else %}
+                                            <a href="{{ url('exam_edit', args=[exam.id]) }}"
+                                               onclick="event.stopPropagation();"
+                                               class="btn btn-outline-secondary btn-sm mr-2">
+                                                <i class="fa fa-pencil-square-o"></i>
+                                            </a>
+                                        {% endif %}
+                                        <a href="{{ url('exam_delete', args=[exam.id]) }}"
+                                           onclick="event.stopPropagation(); return confirm('{{ trans('Sure to delete') }}?')"
+                                           class="btn btn-outline-danger btn-sm">
+                                            <i class="fa fa-trash"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td class="text-center" colspan="6">{{ trans("No Data") }}</td>
+                                </tr>
+                            {% endif %}
+                        </tbody>                        
+                    </table>
+                </div>
+
+                <!-- Tips Modal -->
+                <div class="modal fade text-left" id="promptContent" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header text-center">
+                                <h5 class="modal-title">{{ trans("Tips") }}</h5>
+                            </div>
+                            <div class="modal-body">
+                                <ul>
+                                    <li>{{ trans("Exam List can look up all the exam records.") }}</li>
+                                    <li>{{ trans("Click one can look up each exam detail.") }}</li>
+                                    <li>{{ trans("Click the plus icon can create an exam.") }}</li>
+                                    <li>{{ trans("Before the exam, if you want to edit content, click the pencil icon.") }}</li>
+                                    <li>{{ trans("Before the exam, if you do not want, click the trash icon.") }}</li>
+                                </ul>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" data-dismiss="modal">{{ trans("OK") }}</button>
+                            </div>
                         </div>
-                        {% if exams %}
-                        {% for exam in examList %}
-                        <tr style="cursor: pointer">
-                            <td class="text-center" data-title="Exam Name" onclick="window.location.href='{{ url('exam_content', args=[exam.id]) }}'">
-                                {{ exam.name }}
-                            </td>
-                            <td class="text-center" data-title="Start" onclick="window.location.href='{{ url('exam_content', args=[exam.id]) }}'">
-                                {{ exam.start_time.strftime('%Y/%m/%d %H:%M') }}
-                            </td>
-                            <td class="text-center" data-title="Finish" onclick="window.location.href='{{ url('exam_content', args=[exam.id]) }}'">
-                                {{ exam.finish_time.strftime('%Y/%m/%d %H:%M') }}
-                            </td>
-                            <td class="text-center" data-title="Duration" onclick="window.location.href='{{ url('exam_content', args=[exam.id]) }}'">
+                    </div>
+                </div>
 
-                                {{ exam.duration }} 
-                            </td>
-                            <td class="text-center" data-title="Creator" onclick="window.location.href='{{ url('exam_content', args=[exam.id]) }}'">
-                                {{ exam.created_by.name }}
-                            </td>
-                            <td class="text-center">
-                                {% if exam.start_time < now %} 
-                                <a href='' onclick="alert('{{trans("Exam has started, cannot be edited.")}}')"><i class="fa fa-pencil-square-o"></i></a> </a>
-                                {% else %}
-                                <a href="{{ url('exam_edit', args=[exam.id]) }}"><i class="fa fa-pencil-square-o"></i></a>
-                                {% endif %}
-                                <a href="{{ url('exam_delete', args=[exam.id]) }}" onclick="return confirm('{{trans("Sure to delete")}}?')"><i class="fa fa-trash"></i></a>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                        {% else %}
-                        <tr>
-                            <td class="text-center" colspan="6">{{trans("No Data")}}</td>
-                        </tr>
-                        {% endif %}
-                    </tbody>
-                </table>
-            </div>
+            </font></div>
         </div>
     </div>
 </main>
-{% endblock %} {% block pagination %}
-<ul class="pagination justify-content-center">
-    <li class="page-item">
-        <a class="page-link" href="?page=1"><i class="fa fa-angle-double-left"></i></a>
-    </li>
-
-    <li class="page-item {% if not examList.has_previous() %}disable{% endif %}">
-
-        {% if examList.has_previous() %}
-        <a class="page-link" href="?page={{ examList.previous_page_number() }}" tabindex="-1"><i class="fa fa-angle-left"></i></a>
-        {% else %}
-        <a class="page-link" href="javascript:void(0);"><i class="fa fa-angle-left"></i></a>
-        {% endif %}
-    </li>
-
-    {% for page in paginator.page_range %} {% if page == examList.number %}
-    <li class="page-item active">
-        <a class="page-link" href="?page={{ page }}">{{ page }}</a>
-    </li>
-    {% else %}
-    <li class="page-item">
-        <a class="page-link" href="?page={{ page }}">{{ page }}</a>
-    </li>
-    {% endif %} {% endfor %}
-
-    <li class="page-item {% if not examList.has_next() %}disable{% endif %}">
-        {% if examList.has_next() %}
-        <a class="page-link" href="?page={{ examList.next_page_number() }}"><i class="fa fa-angle-right"></i></a>
-        {% else %}
-        <a class="page-link" href="javascript:void(0);"><i class="fa fa-angle-right"></i></a>
-        {% endif %}
-    </li>
-
-    <li class="page-item">
-        <a class="page-link" href="?page={{ examList.paginator.num_pages }}"><i class="fa fa-angle-double-right"></i></a>
-    </li>
-</ul>
 {% endblock %}
 
 {% block navbarFocused %}
 <script>
     navbarFocused("TestManager_navbar");
+
+    document.addEventListener("DOMContentLoaded", function() {
+        // 點擊整行導向詳情
+        document.querySelectorAll(".exam-row").forEach(function(row) {
+            row.addEventListener("click", function() {
+                window.location.href = this.dataset.url;
+            });
+        });
+
+        // 搜尋功能
+        document.getElementById("searchInput").addEventListener("keyup", function() {
+            let filter = this.value.toLowerCase();
+            document.querySelectorAll("#examTableBody tr").forEach(function(row) {
+                let name = row.querySelector(".exam-name").textContent.toLowerCase();
+                row.style.display = name.includes(filter) ? "" : "none";
+            });
+        });
+
+        // 簡易排序功能
+        document.getElementById("sortSelect").addEventListener("change", function() {
+            let rows = Array.from(document.querySelectorAll("#examTableBody tr"));
+            let sortValue = this.value;
+            let tbody = document.getElementById("examTableBody");
+
+            rows.sort(function(a,b){
+                if(sortValue.includes("name")) {
+                    let aVal = a.querySelector(".exam-name").textContent;
+                    let bVal = b.querySelector(".exam-name").textContent;
+                    return sortValue.endsWith("asc") ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
+                } else if(sortValue.includes("start")) {
+                    let aVal = new Date(a.querySelector(".exam-start").textContent);
+                    let bVal = new Date(b.querySelector(".exam-start").textContent);
+                    return sortValue.endsWith("asc") ? aVal-bVal : bVal-aVal;
+                } else if(sortValue.includes("duration")) {
+                    let aVal = parseInt(a.querySelector(".exam-duration").textContent);
+                    let bVal = parseInt(b.querySelector(".exam-duration").textContent);
+                    return sortValue.endsWith("asc") ? aVal-bVal : bVal-aVal;
+                }
+                return 0;
+            });
+
+            rows.forEach(r => tbody.appendChild(r));
+        });
+    });
 </script>
+
+<style>
+body { 
+    font-family: 'DFKai-SB','BiauKai','標楷體', serif; 
+    background: linear-gradient(135deg, #9eadf0); 
+    min-height:100vh; 
+}
+
+.exam-card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 25px;
+    margin-top: 25px;
+    margin-bottom: 40px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+}
+
+.exam-row:hover {
+    background-color: rgba(108, 122, 224, 0.15);
+    cursor: pointer;
+}
+</style>
 {% endblock %}
-
-

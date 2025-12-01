@@ -1,39 +1,52 @@
-
 <title>ALCPT - Edit Unit</title>
-
 {% extends 'new_base.html' %}
+
 {% block scripts %}
 <script src="{{ static('/javascript/user/unit_edit.js') }}"></script>
 {% endblock %}
+
 {% block path %}
 <li class="breadcrumb-item" aria-current="page">
     <a href="{{ url('unit_list') }}">{{trans("Unit List")}}</a>
 </li>
 <li class="breadcrumb-item active" aria-current="page">{{trans("Edit Unit")}}</li>
-{% endblock %} {% block content %}
+{% endblock %}
+
+{% block content %}
 <main class="unit-edit-form">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-8">
-                <form method="post">
+                <form method="post" onsubmit="return validateForm();">
                     <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
-                    <div class="card">
-                        <div class="card-header" style=" color:blue; font-size:30px;">{{trans("Edit Unit")}}</div>
+
+                    <div class="card shadow-sm rounded-3">
+                        <div class="card-header" style="color:#2563eb; font-size:30px;">
+                            {{trans("Edit Unit")}}
+                        </div>
 
                         <div class="card-body">
-                            <h5 class="card-subtitle mb-2 text-muted" style="font-size:25px;">
+                            <div class="form-group mb-3">
+                                <div style="display:flex; align-items:center; justify-content:space-between;">
+                                    <label for="unit-name" style="font-size:25px; color:darkslategray">
+                                        {{trans("Unit Name")}}
+                                    </label>
+                                    <!--  一開始隱藏，未填才顯示 -->
+                                    <span id="required-text" class="required-text" style="color:red; display:none;">
+                                        *{{trans("Required")}}
+                                    </span>                                    
+                                </div>
 
-                                {{trans("Unit Name")}}<label id="invalid"></label>
-                            </h5>
-                            <p class="card-text">
-                                <input class="form-control" type="text" name="name" value="{{ edited_unit.name }}" onkeyup="valid_name('{{ edited_unit.name }}', this)" required />
-                            </p>
+                                <input class="form-control mt-2" id="unit-name" type="text" name="name"
+                                       value="{{ edited_unit.name }}" required onkeyup="checkInput();" />
+                            </div>
 
                             <div class="float-right">
-                                <button type="submit" id="submit" class="btn btn-primary" disabled>
+                                <button type="submit" id="submit" class="btn btn-primary px-4 me-2">
                                     {{trans("Update")}}
                                 </button>
-                                <button type="button" class="btn btn-secondary" onclick="self.location=document.referrer;">
+                                <button type="button" class="btn btn-secondary px-4 me-2"
+                                        onclick="self.location=document.referrer;">
                                     {{trans("Cancel")}}
                                 </button>
                             </div>
@@ -44,10 +57,88 @@
         </div>
     </div>
 </main>
+
+<style>
+
+body {
+    font-family: 'DFKai-SB','BiauKai','標楷體', serif;
+    background: linear-gradient(135deg, #6b8dd6);
+    min-height: 100vh;
+    }
+
+.required-text {
+    color: red;
+    font-size: 14px;
+    font-weight: 600;
+    margin-left: 10px;
+}
+
+/* 卡片圓角與陰影 */
+.unit-edit-form .card {
+    border-radius: 15px;        /* 圓角 */
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1); /* 陰影 */
+}
+
+/* 按鈕圓角 */
+.unit-edit-form .btn {
+    border-radius: 8px;
+}
+
+/* Input 圓角 */
+.unit-edit-form .form-control {
+    border-radius: 8px;
+}
+
+/* Required 提示文字 */
+.required-text {
+    color: red;
+    font-size: 14px;
+    font-weight: 600;
+    margin-left: 10px;
+}
+
+/* Card header 樣式 */
+.unit-edit-form .card-header {
+    font-size: 30px;
+    color: #2563eb;
+    font-weight: 600;
+}
+</style>
+
+
+
+<script>
+function validateForm() {
+    console.log("validateForm() triggered");
+    const nameField = document.getElementById("unit-name");
+    const requiredText = document.getElementById("required-text");
+
+    if (nameField.value.trim() === "") {
+        requiredText.style.display = "inline";
+        nameField.focus();
+        return false; // 阻止表單送出
+    } else {
+        requiredText.style.display = "none";
+        return true;
+    }
+}
+
+function checkInput() {
+    const nameField = document.getElementById("unit-name");
+    const requiredText = document.getElementById("required-text");
+
+    // 若輸入為空 → 顯示提示；若有內容 → 隱藏提示
+    if (nameField.value.trim() === "") {
+        requiredText.style.display = "inline";
+    } else {
+        requiredText.style.display = "none";
+    }
+}
+</script>
 {% endblock %}
 
 {% block navbarFocused %}
 <script>
-    navbarFocused("SystemManager_navbar");
+navbarFocused("SystemManager_navbar");
 </script>
 {% endblock %}

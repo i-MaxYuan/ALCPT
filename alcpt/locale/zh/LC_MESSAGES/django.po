@@ -28,7 +28,7 @@ msgid  "System Manager"
 msgstr "系統管理員"
 
 msgid "SYS"
-msgstr "系統管理員"
+msgstr "系統管理"
 
 msgid "User List"
 msgstr "使用者列表"
@@ -43,25 +43,25 @@ msgid  "TBOperator"
 msgstr "題庫操作員"
 
 msgid  "TBO"
-msgstr "題庫操作員"
+msgstr "題庫操作"
 
 msgid "Test Manager"
 msgstr "鑑測管理員"
 
 msgid "TM"
-msgstr "鑑測管理員"
+msgstr "鑑測管理"
 
 msgid  "TB Manager"
 msgstr "題庫管理員"
 
 msgid  "TBM"
-msgstr "題庫管理員"
+msgstr "題庫管理"
 
 msgid  "TB Operator"
 msgstr "題庫操作員"
 
 msgid  "Viewer"
-msgstr "成績檢閱者"
+msgstr "成績檢閱"
 
 msgid  "Testee"
 msgstr "受測者"
@@ -366,6 +366,9 @@ msgstr "科系列表"
 msgid "Serial"
 msgstr "題號"
 
+msgid "Order"
+msgstr "順序"
+
 msgid "No Data"
 msgstr "沒有資料"
 
@@ -388,7 +391,7 @@ msgid "Enter the name of the unit"
 msgstr "輸入單位名稱"
 
 msgid "View Profile"
-msgstr "觀看個人資料 "
+msgstr "觀看使用者資料 "
 
 msgid "Unset"
 msgstr "尚未設定"
@@ -1644,4 +1647,136 @@ msgstr "註冊名單 & 上線狀態"
 
 msgid  "Online Status"
 msgstr "上線狀態"
+
+msgid "Update your profile information below."
+msgstr "請在下方更新您的個人資料。"
+
+msgid "View your profile information."
+msgstr "查看您的個人資料資訊。"
+
+msgid "Enter old password"
+msgstr "輸入舊密碼"
+
+msgid "Confirm new password"
+msgstr "確認新密碼"
+
+msgid "At least 10 characters"
+msgstr "至少 10 個字符"
+
+msgid "At least one uppercase letter"
+msgstr "至少一個大寫字母"
+
+msgid "At least one lowercase letter"
+msgstr "至少一個小寫字母"
+
+msgid "At least one number"
+msgstr "至少一個數字"
+
+msgid "At least one special character (!@#$%^&*)"
+msgstr "至少一個特殊字元 (!@#$%^&*)"
+
+msgid "Register"
+msgstr "註冊"
+
+msgid "Confirm New Password"
+msgstr "確認新密碼"
+
+msgid "Account number"
+msgstr "帳號"
+
+msgid "Please enter account number"
+msgstr "請輸入帳號"
+
+msgid "Please enter password"
+msgstr "請輸入密碼"
+
+msgid "Verification code"
+msgstr "驗證碼"
+
+msgid "Remember account"
+msgstr "記住帳號"
+
+msgid "Account login"
+msgstr "帳號登入"
+
+msgid "Forget the password"
+msgstr "忘記密碼"
+
+msgid "ALCPT Register an account"
+msgstr "ALCPT 註冊帳戶"
+
+msgid "Register an account"
+msgstr "註冊帳戶"
+
+msgid "Please enter the verification code"
+msgstr "請輸入驗證碼"
+
+msgid "ALCPT account login"
+msgstr "ALCPT帳號登入"
+
+msgid "Ignore case"
+msgstr "忽略大小寫"
+
+msgid "Please enter account name"
+msgstr "請輸入帳戶名"
+
+msgid "Please enter email"
+msgstr "請輸入電子郵件"
+
+msgid "Please confirm your password"
+msgstr "請確認您的密碼"
+
+msgid "Back to Login"
+msgstr "返回登入"
+
+msgid "Confirm Password"
+msgstr "確認密碼"
+
+msgid "User Type"
+msgstr "身分選擇"
+
+msgid "Please select your role"
+msgstr "請選擇您的角色"
+ 
+msgid "Edit user"
+msgstr "編輯使用者"
+
+msgid "Here you can update the user's basic information, permissions, and student data."
+msgstr "您可以在這裡更新使用者的基本資訊、權限和學生資料。"
+
+msgid "View user profile information."
+msgstr "查看使用者個人資料資訊。"
+
+msgid "Create Proclamation"
+msgstr "創建公告"
+
+msgid "Fill in the details below"
+msgstr "請在下方填寫詳細信息"
+
+msgid "Set Privileges"
+msgstr "設定權限"
+
+msgid "Sort: Few → Many"
+msgstr "排序：少 → 多"
+
+msgid "Sort: Many → Few"
+msgstr "排序：多 → 少"
+
+msgid "Members"
+msgstr "成員"
+
+msgid "Click the trash icon to delete a unit."
+msgstr "點擊垃圾桶圖示即可刪除單位。"
+
+msgid "Deleting a department or squadron is permanent and cannot be undone."
+msgstr "刪除部門或中隊是永久性的，無法撤銷。"
+
+msgid "Ensure the unit has no important members or data before deleting."
+msgstr "刪除前請確保單位中沒有重要成員或資料。"
+
+msgid "Only administrators can delete departments or squadrons."
+msgstr "只有管理員才能刪除部門或中隊。"
+
+
+
 

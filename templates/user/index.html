@@ -1,7 +1,6 @@
+<title>ALCPT - User List(index)</title>
 
-<title>ALCPT - User List</title>
-
-{% extends 'new_base.html' %} 
+{% extends 'new_base.html' %}
 
 {% block scripts %}
 <script>
@@ -9,230 +8,334 @@
         $(".mdb-select").materialSelect();
     });
 </script>
-{% endblock %} 
+{% endblock %}
 
 {% block path %}
-<li class="breadcrumb-item active" aria-current="page">{{trans("User List")}}</li>
-{% endblock %} 
+<li class="breadcrumb-item active" aria-current="page">{{ trans("User List") }}</li>
+{% endblock %}
 
 {% block content %}
 <main class="user-list">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-12">
-                <!-- 搜尋 -->
-                <form class="form-inline md-form form-group-sm mt-0" method="get">
+    <div class="container unit-card">
 
-                    <input class="form-control" type="text" name="name" {%if keywords.name%} value="{{ keywords.name }}" {%endif%} placeholder="{{trans("Search")}}" aria-label="Search" />
+        <!-- 搜尋工具列 -->
+        <div class="col-md-12 mb-3">
+            <form class="search-bar d-flex flex-wrap align-items-end gap-3" method="get">
 
-                    <label class="mr-sm-2" for="inlineFormCustomSelect" style="padding-left: 10px">{{trans("Department")}}</label>
-                    <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" name="department">
-                        <option value="" selected>{{trans("All")}}</option>
+                <!-- Name -->
+                <div class="search-item">
+                    <label for="nameInput" class="form-label mb-1 text-center">{{ trans("Name") }}</label>
+                    <input class="form-control form-control-sm" type="text" id="nameInput" name="name"
+                           {% if keywords.name %} value="{{ keywords.name }}" {% endif %}
+                           placeholder="{{ trans("Search") }}">
+                </div>
+
+                <!-- Department -->
+                <div class="search-item">
+                    <label for="departmentSelect" class="form-label mb-1 text-center">{{ trans("Department") }}</label>
+                    <select class="form-control form-control-sm" id="departmentSelect" name="department">
+                        <option value="">{{ trans("All") }}</option>
                         {% for department in departments %}
-                        <option value="{{ department.id }}" {% if department.id == keywords.department.id %} selected {% endif %}>{{ department.name }}</option>
+                        <option value="{{ department.id }}" {% if keywords.department and department.id == keywords.department.id %} selected {% endif %}>
+                            {{ department.name }}
+                        </option>
                         {% endfor %}
                     </select>
+                </div>
 
-                    <label class="mr-sm-2" for="inlineFormCustomSelect">{{trans("Squadron")}}</label>
-                    <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" name="squadron">
-                        <option value="" selected>{{trans("All")}}</option>
+                <!-- Squadron -->
+                <div class="search-item">
+                    <label for="squadronSelect" class="form-label mb-1 text-center">{{ trans("Squadron") }}</label>
+                    <select class="form-control form-control-sm" id="squadronSelect" name="squadron">
+                        <option value="">{{ trans("All") }}</option>
                         {% for squadron in squadrons %}
-                        <option value="{{ squadron.id }}" {% if squadron.id == keywords.squadron.id %} selected {% endif %}>{{ squadron.name }}</option>
+                        <option value="{{ squadron.id }}" {% if keywords.squadron and squadron.id == keywords.squadron.id %} selected {% endif %}>
+                            {{ squadron.name }}
+                        </option>
                         {% endfor %}
                     </select>
+                </div>
 
-                    <label class="mr-sm-2" for="inlineFormCustomSelect">{{trans("Grade")}}</label>
-                    <input class="form-control" type="number" name="grade" {%
-            if
-            keywords.grade
-            %}value="{{ keywords.grade }}" {%
-            endif
-            %} placeholder="{{trans("grade")}}..." />
+                <!-- Grade -->
+                <div class="search-item">
+                    <label for="gradeInput" class="form-label mb-1 text-center">{{ trans("Grade") }}</label>
+                    <input class="form-control form-control-sm" type="number" id="gradeInput" name="grade"
+                           {% if keywords.grade %} value="{{ keywords.grade }}" {% endif %}
+                           placeholder="{{ trans("Grade") }}">
+                </div>
 
-                    <button class="btn btn-primary btn-group-justified" type="submit">
-                        <i class="fa fa-search"></i>
+                <!-- 搜尋按鈕 -->
+                <div class="search-button">
+                    <button class="btn btn-primary btn-sm" type="submit">
+                        <i class="fa fa-search"></i> {{ trans("Search") }}
                     </button>
-                </form>
+                </div>
+            </form>
+        </div>
+
+        <!-- 標題與按鈕 -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 style="color: #2563eb;">
+                <b>{{ trans("User List") }}（{{ trans("Total") }}: {{ userList.paginator.count }}）</b>
+            </h2>
+            <div class="d-flex gap-2">
+                <button type="button" class="btn btn-secondary btn-lg" onclick="window.location.href='{{ url('user_create') }}'">
+                    <i class="fa fa-user-plus"></i>
+                </button>
             </div>
         </div>
 
-        <div class="row">
-            <!--資料區塊-->
-            <div class="col-md-12 table-responsive-md">
-                <h2>{{trans("User List")}}（{{trans("Total")}}: {{ users.count() }}）</h2>
-                <table class="table table-bordered table-striped table-hover table-mc-light-blue">
-                    <thead class="thead-light">
+        <!-- 使用者表格 -->
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped table-hover align-middle text-center user-table">
+                <thead class="thead-light">
+                    <tr>
+                        <th rowspan="2">{{ trans("Account") }}</th>
+                        <th rowspan="2">{{ trans("Name") }}</th>
+                        <th rowspan="2">{{ trans("Identity") }}</th>
+                        <th colspan="6">{{ trans("Privilege") }}</th>
+                        <th rowspan="2">{{ trans("Last login") }}</th>
+                        <th rowspan="2">{{ trans("Edit") }}</th>
+                        <th rowspan="2">{{ trans("Delete") }}</th>
+                    </tr>
+                    <tr>
+                        <th>{{ trans("SYS") }}</th>
+                        <th>{{ trans("TM") }}</th>
+                        <th>{{ trans("TBM") }}</th>
+                        <th>{{ trans("TBO") }}</th>
+                        <th>{{ trans("Viewer") }}</th>
+                        <th>{{ trans("Testee") }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if userList %}
+                        {% for user in userList %}
+                        <tr onclick="window.location.href='{{ url('view_profile', args=[user.reg_id]) }}'" style="cursor: pointer;">
+                            <td>{{ user.reg_id }}</td>
+                            <td>{{ user.name }}</td>
+                            <td>{% if user.identity %}{{ user.identity|readableIdentity }}{% else %}{{ trans("Not set") }}{% endif %}</td>
+                            <td>{% if user|has_perms(privileges.SystemManager) %}<i class="fas fa-check text-danger"></i>{% endif %}</td>
+                            <td>{% if user|has_perms(privileges.TestManager) %}<i class="fas fa-check text-warning"></i>{% endif %}</td>
+                            <td>{% if user|has_perms(privileges.TBManager) %}<i class="fas fa-check text-primary"></i>{% endif %}</td>
+                            <td>{% if user|has_perms(privileges.TBOperator) %}<i class="fas fa-check text-success"></i>{% endif %}</td>
+                            <td>{% if user|has_perms(privileges.Viewer) %}<i class="fas fa-check" style="color:darkblue;"></i>{% endif %}</td>
+                            <td>{% if user|has_perms(privileges.Testee) %}<i class="fas fa-check text-secondary"></i>{% endif %}</td>
+                            <td>{% if user.last_login %}{{ user.last_login.strftime('%Y/%m/%d %H:%M') }}{% else %}{{ trans("Not logged in") }}{% endif %}</td>
+                            <td>
+                                <a href="{{ url('user_edit', args=[user.reg_id]) }}" class="btn btn-sm btn-outline-primary">
+                                    <i class="fa fa-pencil-square-o"></i>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{{ url('user_del', args=[user.reg_id]) }}" onclick="return confirm('{{ trans("Sure to delete this user") }}?')" 
+                                   class="btn btn-sm btn-outline-danger">
+                                   <i class="fa fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
                         <tr>
-                            <th class="text-center">{{trans("Account")}}</th>
-                            <th class="text-center">{{trans("Name")}}</th>
-                            <th class="text-center">{{trans("Identity")}}</th>
-                            <th class="text-center">{{trans("SYS")}}</th>
-                            <th class="text-center">{{trans("TM")}}</th>
-                            <th class="text-center">{{trans("TBM")}}</th>
-                            <th class="text-center">{{trans("TBO")}}</th>
-                            <th class="text-center">{{trans("Viewer")}}</th>
-                            <th class="text-center">{{trans("Testee")}}</th>
-                            <th class="text-center">{{trans("Last login")}}</th>
-
-                            <th class="text-center">
-                                <div class="add">
-                                    <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ url('user_create') }}'">
-                                        <i class="fa fa-user-plus"></i>
-                                    </button>
-                                </div>
-                            </th>
-                             <th class="text-center">
-                                <button type="button" class="btn" data-toggle="modal" data-target="#promptContent"><i class="fa fa-question-circle"></i></button>
-                                <div class="modal fade text-left" id="promptContent" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header text-center">
-                                                <h5 class="modal-title" id="ModalLongTitle">{{trans("Tips")}}</h5>
-                                            </div>
-
-                                            <div class="modal-body">
-                                                <ul>
-                                                    <li>
-                                                        <p>{{trans("User List can look up each person's profile. ")}}</p>
-                                                    </li>
-                                                    <li>
-                                                        <p>{{trans("SystemManager add user, please click ")}}<i class="fa fa-user-plus"></i></p>
-                                                    </li>
-                                                    <li>
-                                                        <p>{{trans("If you want to edit the profile, please click ")}}<i class="fa fa-pencil-square-o"></i></p>
-                                                    </li>
-                                                    <li>
-                                                        <p>{{trans("If you want to delete the account, please click ")}}<i class="fa-solid fa-trash-can" style="color:red;"></i>
-                                                    </li>
-                                                </ul>
-                                            </div>
-
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-primary" data-dismiss="modal">{{trans("OK")}}</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </th>
-
+                            <td colspan="12" class="text-center">{{ trans("No matching users found.") }}</td>
                         </tr>
-                    </thead>
-
-                    <tbody>
-                        <div class="add-secret">
-                            <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ url('user_create') }}'">
-                                <i class="fa fa-plus"></i>
-                            </button>
-                        </div>
-                        {% if userList %} {% for user in userList %}
-                        <tr class="align-center" style="cursor: pointer">
-                            <td class="text-center" data-title="Account：" onclick="window.location.href='{{ url('view_profile', args=[user.reg_id]) }}'">
-                                {{ user.reg_id }}
-                            </td>
-
-                            <td class="text-center" data-title="Name：" onclick="window.location.href='{{ url('view_profile', args=[user.reg_id]) }}'">{{ user.name }}</td>
-
-                            <td class="text-center" data-title="Identity：" onclick="window.location.href='{{ url('view_profile', args=[user.reg_id]) }}'">
-                                {% if user.identity %} {{ user.identity|readableIdentity }} {% else %} 尚未設定 {% endif %}
-                            </td>
-
-
-                            <td class="text-center" data-title="SYS" onclick="window.location.href='{{ url('view_profile', args=[user.reg_id]) }}'">
-                                {% if user|has_perms(privileges.SystemManager) %}
-                                <i class="fas fa-check" style="color: red;"></i>
-                                {% endif %}
-                            </td>
-
-                            <td class="text-center" data-title="TM" onclick="window.location.href='{{ url('view_profile', args=[user.reg_id]) }}'">
-                                {% if user|has_perms(privileges.TestManager) %}
-                                <i class="fas fa-check" style="color: orange;"></i>
-                                {% endif %}
-                            </td>
-                            <td class="text-center" data-title="TBM" onclick="window.location.href='{{ url('view_profile', args=[user.reg_id]) }}'">
-                                {% if user|has_perms(privileges.TBManager) %}
-                                <i class="fas fa-check" style="color: blue;"></i>
-                                {% endif %}
-                            </td>
-                            <td class="text-center" data-title="TBO" onclick="window.location.href='{{ url('view_profile', args=[user.reg_id]) }}'">
-                                {% if user|has_perms(privileges.TBOperator) %}
-                                <i class="fas fa-check" style="color: green;"></i>
-                                {% endif %}
-                            </td>
-                            <td class="text-center" data-title="Viewer" onclick="window.location.href='{{ url('view_profile', args=[user.reg_id]) }}'">
-                                {% if user|has_perms(privileges.Viewer) %}
-                                <i class="fas fa-check" style="color: darkblue;"></i>
-                                {% endif %}
-
-                            </td>
-                            <td class="text-center" data-title="Testee" onclick="window.location.href='{{ url('view_profile', args=[user.reg_id]) }}'">
-                                {% if user|has_perms(privileges.Testee) %}
-                                <i class="fas fa-check" style="color: gray;"></i>
-                                {% endif %}
-                            </td>
-                            <td class="text-center" data-title="Last Login：" onclick="window.location.href='{{ url('view_profile', args=[user.reg_id]) }}'">
-                                {% if user.last_login %} {{ user.last_login.strftime('%Y/%m/%d %H:%M') }} {% else %}{{trans(" Not logged in ")}}{% endif %}
-                            </td>
-                            <td class="text-center">
-                                <a href="{{ url('user_edit', args=[user.reg_id]) }}"><i class="fa fa-pencil-square-o"></i></a>
-                            </td>
-                            <td class="text-center">
-                                    <a href="{{ url('user_del', args=[user.reg_id]) }}" onclick="return confirm('{{trans("Sure to delete this user")}}?')">
-                                    <i class="fa fa-trash" style="color:red"></i></a>
-                            </td>
-                        </tr>
-                        {% endfor %} {% else %}
-                        <tr>
-                            <td class="text-center" colspan="15">
-                                {% if query_content and not users %} 
-                                    查無符合條件之使用者。 
-                                {% endif %}
-                            </td>
-                        </tr>
-                        {% endif %}
-                    </tbody>
-                </table>
-            </div>
+                    {% endif %}
+                </tbody>
+            </table>
         </div>
+
+        <!-- 分頁 -->
+        <ul class="pagination justify-content-center">
+
+            <!-- 第一頁 -->
+            <li class="page-item {% if not userList.has_previous %}disabled{% endif %}">
+                {% if userList.has_previous %}
+                    <a class="page-link" href="?page=1{% if query_content %}&{{ query_content }}{% endif %}">
+                        <i class="fa fa-angle-double-left"></i>
+                    </a>
+                {% else %}
+                    <span class="page-link"><i class="fa fa-angle-double-left"></i></span>
+                {% endif %}
+            </li>
+
+            <!-- 上一頁 -->
+            <li class="page-item {% if not userList.has_previous %}disabled{% endif %}">
+                {% set prev_page = userList.number - 1 if userList.has_previous else 1 %}
+                {% if userList.has_previous %}
+                    <a class="page-link" href="?page={{ prev_page }}{% if query_content %}&{{ query_content }}{% endif %}">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                {% else %}
+                    <span class="page-link"><i class="fa fa-angle-left"></i></span>
+                {% endif %}
+            </li>
+
+            <!-- 動態頁碼（當前頁前後各 2 頁） -->
+            {% set start = userList.number - 2 if userList.number > 2 else 1 %}
+            {% set end = userList.number + 2 if userList.number + 2 <= userList.paginator.num_pages else userList.paginator.num_pages %}
+            {% for page in range(start, end + 1) %}
+                <li class="page-item {% if page == userList.number %}active{% endif %}">
+                    {% if page == userList.number %}
+                        <span class="page-link">{{ page }}</span>
+                    {% else %}
+                        <a class="page-link" href="?page={{ page }}{% if query_content %}&{{ query_content }}{% endif %}">{{ page }}</a>
+                    {% endif %}
+               </li>
+            {% endfor %}
+
+            <!-- 下一頁 -->
+            <li class="page-item {% if not userList.has_next %}disabled{% endif %}">
+                {% set next_page = userList.number + 1 if userList.has_next else userList.paginator.num_pages %}
+                {% if userList.has_next %}
+                    <a class="page-link" href="?page={{ next_page }}{% if query_content %}&{{ query_content }}{% endif %}">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                {% else %}
+                    <span class="page-link"><i class="fa fa-angle-right"></i></span>
+                {% endif %}
+            </li>
+
+            <!-- 最後一頁 -->
+            <li class="page-item {% if not userList.has_next %}disabled{% endif %}">
+                {% if userList.has_next %}
+                    <a class="page-link" href="?page={{ userList.paginator.num_pages }}{% if query_content %}&{{ query_content }}{% endif %}">
+                        <i class="fa fa-angle-double-right"></i>
+                    </a>
+                {% else %}
+                    <span class="page-link"><i class="fa fa-angle-double-right"></i></span>
+                {% endif %}
+            </li>
+
+        </ul>
     </div>
 </main>
 
-{% endblock %} {% block pagination %}
-<ul class="pagination justify-content-center">
-    <li class="page-item">
-        <a class="page-link" href="?page=1{{ query_content }}"><i class="fa fa-angle-double-left"></i></a>
-    </li>
+<style>
+body {
+    font-family: 'DFKai-SB','BiauKai','標楷體', serif;
+    background: linear-gradient(135deg, #9eadf0);
+    min-height: 100vh;
+}
 
-    <li class="page-item {% if not userList.has_previous() %}disable{% endif %}">
-        {% if userList.has_previous() %}
-        <a class="page-link" href="?page={{ userList.previous_page_number() }}{{ query_content }}" tabindex="-1"><i class="fa fa-angle-left"></i></a>
-        {% else %}
-        <a class="page-link" href="javascript:void(0);"><i class="fa fa-angle-left"></i></a>
-        {% endif %}
-    </li>
+.unit-card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 25px;
+    margin-top: 25px;
+    margin-bottom: 40px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+}
 
-    {% for page in paginator.page_range %} {% if page == userList.number %}
-    <li class="page-item active">
-        <a class="page-link" href="?page={{ page }}{{ query_content }}">{{ page }}</a>
-    </li>
-    {% else %}
-    <li class="page-item">
-        <a class="page-link" href="?page={{ page }}{{ query_content }}">{{ page }}</a>
-    </li>
-    {% endif %} {% endfor %}
+/* 搜尋工具列 */
+.search-bar {
+    background-color: #f9f9f9;
+    border: 1px solid #dee2e6;
+    border-radius: 0.5rem;
+    padding: 10px 15px;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
 
-    <li class="page-item {% if not userList.has_next() %}disable{% endif %}">
-        {% if userList.has_next() %}
-        <a class="page-link" href="?page={{ userList.next_page_number() }}{{ query_content }}"><i class="fa fa-angle-right"></i></a>
-        {% else %}
-        <a class="page-link" href="javascript:void(0);"><i class="fa fa-angle-right"></i></a>
-        {% endif %}
-    </li>
+.search-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex: 1 1 110px;
+    min-width: 110px;
+    max-width: 245px;
+}
 
-    <li class="page-item">
-        <a class="page-link" href="?page={{ userList.paginator.num_pages }}{{ query_content }}"><i class="fa fa-angle-double-right"></i></a>
-    </li>
-</ul>
+.search-item label {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #333;
+    text-align: center;
+    white-space: normal;
+    word-break: break-word;
+}
+
+.search-item select, .search-item input {
+    font-size: 0.9rem;
+    padding: 4px 6px;
+}
+
+.search-button {
+    display: flex;
+    align-items: flex-end;
+    flex: 0 0 auto;
+}
+
+.search-button button i {
+    margin-right: 5px;
+}
+
+@media (max-width: 992px) {
+    .search-item {
+        flex: 1 1 150px;
+        min-width: 130px;
+    }
+    .search-bar {
+        gap: 0.75rem;
+    }
+}
+
+/* 表格 */
+.user-table th, .user-table td {
+    vertical-align: middle;
+    white-space: normal;
+    word-break: break-word;
+    min-width: 90px;
+    max-width: 120px;
+    padding: 8px 10px;
+}
+
+.user-table th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+}
+
+.user-table td a.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 8px;
+}
+
+@media (max-width: 992px) {
+    .user-table th, .user-table td {
+        min-width: 70px;
+        font-size: 0.9rem;
+    }
+}
+
+/* 統一分頁按鈕大小 */
+.pagination .page-item .page-link {
+    min-width: 40px;       /* 所有按鈕最小寬度相同 */
+    height: 40px;          /* 統一高度 */
+    line-height: 38px;     /* 文字垂直置中 */
+    padding: 0;            /* 移除內距，避免 icon 擠大小 */
+    text-align: center;    /* 文字與 icon 水平置中 */
+    font-size: 0.9rem;     /* 統一字型大小 */
+    border-radius: 6px;    /* 微圓角 */
+    display: flex;
+    align-items: center;   /* flex 垂直置中 */
+    justify-content: center; /* flex 水平置中 */
+}
+
+.pagination .page-item.disabled .page-link {
+    opacity: 0.5;          /* 禁用按鈕半透明 */
+    cursor: not-allowed;
+}
+
+/* 當前頁高亮 */
+.pagination .page-item.active .page-link {
+    background-color: #2563eb;
+    color: white;
+    border-color: #2563eb;
+}
+
+</style>
 {% endblock %}
+
 
 {% block navbarFocused %}
 <script>

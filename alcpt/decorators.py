@@ -11,12 +11,16 @@ def permission_check(required_privilege):
         @login_required
         def check(request, *args, **kwargs):
             if not required_privilege:
-                raise ValueError("Loss argument 'required_privilege'")
+                raise ValueError("Missing required_privilege")
 
-            if not request.user.has_perm(required_privilege):
-                raise PermissionWrongError()
-            
-            if request.COOKIES['sessionid'] != request.user.browser:
+            # 使用自訂 bit 權限檢查
+            user_privilege = getattr(request.user, 'privilege', 0)
+            if user_privilege & required_privilege.value[0] == 0:
+                # 直接重導向到權限不足提示頁，而不是報 500
+                return redirect('/')  
+
+            # 檢查 session
+            if request.COOKIES.get('sessionid') != getattr(request.user, 'browser', None):
                 relogin = True
                 registration.logout(request, relogin)
                 return redirect('login')
@@ -24,6 +28,7 @@ def permission_check(required_privilege):
             return view(request, *args, **kwargs)
         return check
     return decorator
+
 
 
 # customized redirect

@@ -24,6 +24,10 @@ from django.conf.urls.i18n import i18n_patterns # traslation
 
 from alcpt import registration, system, views, exam, question, viewer, testee, group, proclamation
 
+from alcpt.views import EmailSettingView
+
+
+
 # ^ means beginning of the line, $ means end of the line
 urlpatterns = [
     re_path(r'^favicon.ico$', RedirectView.as_view(url=r'static/favicon.ico')), 
@@ -138,6 +142,7 @@ urlpatterns = [
                     name='report_done'),
         ])),
 
+
     # 公告設定
     re_path(r'^proclamation$', views.ProclamationCenter.as_view(), name='Homepage'),
     re_path(
@@ -168,20 +173,21 @@ urlpatterns = [
                     proclamation.notification_delete,
                     name='notification_delete'),
         ])),
+        # Email 設定頁面
+    re_path(r'^email_setting$', views.EmailSettingView.as_view(), name='email_setting'),
 
-    re_path(r'^email_verification$',
-            registration.verification,
-            name='email_verification'),
-    re_path(
-        r'^email_verification_done/(?P<encode_email>[\w\=\!\@\#\$\%\^\&\*\(\)\s]+)',
-        registration.verify_done,
-        name='verify_done'),
+    # 信件驗證
+    re_path(r'^email_verification$', registration.verification, name='email_verification'),
+    re_path(r'^email_verification_done/(?P<encode_email>[\w\=\!\@\#\$\%\^\&\*\(\)\s]+)$', registration.verify_done, name='verify_done'),
+
+    # 驗證碼
     re_path(r'^captcha/', include('captcha.urls')),
 
     # 使用者帳號設定
     re_path(
         r'^accounts/', 
         include([
+            re_path(r'^register/', registration.Register.as_view(), name='register'),  # ✅ 加這行
             re_path(r'^login/', registration.Login.as_view(), name='login'),
             re_path(r'^logout/', registration.logout, name='logout'),
             re_path(r'^profile$', registration.Profile.as_view(), name='profile'),
@@ -233,6 +239,17 @@ urlpatterns = [
                         system.UnitEdit.as_view(),
                         # system.unit_edit,
                         name='unit_edit'),
+                    re_path(
+                        r'^(?P<unit_kind>(squadron|department))/(?P<unit_id>[0-9]+)/delete$',
+                        system.UnitDelete.as_view(),
+                        # system.unit_delete,
+                        name='unit_delete'),
+                    # 新增管理員密碼驗證 API
+                    re_path(
+                        r'^verify_admin_password$',  # POST 用於 AJAX 驗證密碼
+                        system.VerifyAdminPassword.as_view(),
+                        name='verify_admin_password'),
+
                 ])),
             re_path(
                 r'^report_category/',
@@ -267,6 +284,7 @@ urlpatterns = [
                             system.AchievementCreate.as_view(),
                         #     system.achievement_create,
                             name='achievement_create'),
+
                 ])),
         ])),
 
@@ -399,12 +417,22 @@ urlpatterns = [
 
     # 成績檢閱者
     re_path(r'^viewer$', viewer.IndexView.as_view(), name='exam_score_list'),
+    #re_path(r'^viewer/export$', viewer.export_exam_list, name='export_exam_list'),
     re_path(
         r'^viewer/',
         include([
+        # 匯出 Excel
+            re_path(r'^export-excel$', viewer.export_exam_list, name='export_exam_list_excel'),
+
+        # 匯出 PDF
+            re_path(r'^export-pdf$', viewer.export_exam_list_pdf, name='export_exam_list_pdf'),
+
+        # 成績明細
             re_path(r'^(?P<exam_id>[0-9]+)/detail$',
                     viewer.ExamScoreDetail.as_view(),
                     name='exam_score_detail'),
+
+        # 查看考生
             re_path(
                 r'^(?P<exam_id>[0-9]+)/detail/(?P<reg_id>[a-zA-Z0-9]+)/info$',
                 viewer.ViewTesteeInfo.as_view(),
@@ -612,7 +640,7 @@ re_path(
         re_path(r'^login/', registration.Login.as_view(), name='login'),
         re_path(r'^logout/', registration.logout, name='logout'),
         re_path(r'^profile$', registration.Profile.as_view(), name='profile'),
-        re_path(r'^edit$', registration.EditProfile.as_view(), name='profile_edit'),
+        re_path(r'^edit$', registration.EditProfile.as_view(), name='edit_profile'),
         re_path(r'^password/change$',
                 registration.ChangePassword.as_view(),
                 # registration.change_password,
@@ -637,7 +665,7 @@ re_path(
                 system.UserMultiCreate.as_view(),
                 # system.user_multiCreate,
                 name='user_multiCreate'),
-        re_path(r'^edit/(?P<reg_id>[a-zA-Z0-9]+)$',
+        re_path(r'^edit/(?P<reg_id>[0-9a-zA-Z]+)/$',
                 system.UserEdit.as_view(),
                 # system.user_edit,
                 name='user_edit'),
@@ -684,7 +712,7 @@ re_path(
                         # system.report_category_edit,
                         name='report_category_edit'),
             ])),
-        re_path(r'^view_profile/(?P<reg_id>[a-zA-Z0-9]+)$',
+        re_path(r'^view_profile/(?P<reg_id>[a-zA-Z0-9]+)/$',
                 system.ViewProfile.as_view(),
                 # system.view_profile,
                 name='view_profile'),
@@ -945,6 +973,8 @@ re_path(
                 
     ])),
 )
+
+
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

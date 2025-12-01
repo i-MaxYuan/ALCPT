@@ -1,4 +1,3 @@
-
 <title>ALCPT - Multi Create User</title>
 
 {% extends 'new_base.html' %}
@@ -12,110 +11,160 @@
     <a href="{{ url('user_list') }}">{{trans("User List")}}</a>
 </li>
 <li class="breadcrumb-item active" aria-current="page">
-    {{trans("User Create")}}（{{trans("Multiple")}}）
+    {{trans("User Create")}} ({{trans("Multiple")}})
 </li>
-{% endblock %} {% block content %}
-<main class="multi-create-user-form">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-10">
-                <form method="post" enctype="multipart/form-data">
-                    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
+{% endblock %}
 
-                    <div class="card">
-                        <div class="card-header">{{trans("Multiple Create User")}}</div>
-
+{% block content %}
+<main class="multi-create-user-form py-5">
+    <form method="post" enctype="multipart/form-data">
+        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
+        <div class="container">
+            <div class="row justify-content-center g-4">
+                
+                <!-- Card: Multi Create User -->
+                <div class="col-md-8">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <span>{{trans("Multiple Create User")}}</span>
+                            <a href="{{ url('user_list') }}" class="btn btn-info btn-sm">{{ trans("Back") }}</a>
+                        </div>
                         <div class="card-body">
-                            <h5 class="subtitle mb-2 text-muted">{{trans("Upload File")}}</h5>
-                            <div class="input-group">
-                                <div class="custom-file">
-                                    <input type="file" class="custom-file-input" id="users_file" name="users_file" accept=".xls, .xlsx" onchange="file_not_empty()" />
-                                    <label class="custom-file-label" for="users_file">{{trans("Select .xls and .xlsx file")}}</label>
-                                </div>
-                                <div class="input-group-append">
-                                    <button type="submit" id="submit" class="btn btn-outline-secondary" disabled>
+
+                            <!-- File Upload -->
+                            <div class="mb-3">
+                                <label class="form-label">{{trans("Upload File")}}</label>
+                                <div class="input-group">
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="users_file" name="users_file" accept=".xls,.xlsx" onchange="file_not_empty()">
+                                        <label class="custom-file-label" for="users_file">{{trans("Select .xls and .xlsx file")}}</label>
+                                    </div>
+                                    <button type="submit" id="submit" class="btn btn-primary" disabled>
                                         <i class="fa fa-upload"></i>
                                     </button>
                                 </div>
                             </div>
-                            <script>
-                                // to change the label, the selected file name will display
-                                $(".custom-file-input").on("change", function() {
-                                    var fileName = $(this).val().split("\\").pop();
-                                    $(this)
-                                        .siblings(".custom-file-label")
-                                        .addClass("selected")
-                                        .html(fileName);
-                                });
-                            </script>
 
-                            <h5 class="subtitle mb-2 text-muted">
-                                {{trans("Privilege")}}<span id="privilege_invalid" class="privilege_invalid"></span>
-                            </h5>
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col-lg-12">
-                                        <div class="button-group">
-                                            <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
-                                                <i class="fa fa-gears"></i>
-                                            </button>
-                                            <ul class="dropdown-menu">
-                                                <li>{{trans("Privilege Setting")}}</li>
-                                                {% for privilege in privileges.values() %}
-                                                <li>
-                                                    <input type="checkbox" id="{{ privilege.value.0 }}" name="{{ privilege }}" onchange="privilege_not_empty()" {% if privilege == privilege.Testee %} checked {% endif %}>&nbsp;{{ privilege.value.1 }}
-                                                </li>
-                                                {% endfor %}
-                                            </ul>
-                                        </div>
-                                    </div>
+                            <!-- Privileges -->
+                            <div class="mb-3">
+                                <label>{{trans("Privilege")}}</label>
+                                <div class="dropdown">
+                                    <button type="button" class="btn btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown">
+                                        <i class="fa fa-gears"></i> {{ trans("Set Privileges") }}
+                                    </button>
+                                    <ul class="dropdown-menu p-2">
+                                        {% for privilege in privileges.values() %}
+                                        <li>
+                                            <input type="checkbox" id="{{ privilege.value.0 }}" name="{{ privilege }}" onchange="privilege_not_empty()" {% if privilege == privilege.Testee %} checked {% endif %}>
+                                            &nbsp;{{ privilege.value.1 }}
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
                                 </div>
+                                <label class="privilege_invalid text-danger" id="privilege_invalid" style="display: none"></label>
                             </div>
 
-                            <h5 class="card-subtitle mb-2 text-muted">{{trans("File Criteria")}}</h5>
-                            <p class="card-text" style="color: red">
-                                &ast;{{trans("Field Order")}} : {{trans("Account")}}／{{trans("Name")}}／{{trans("Identity")}}
-                            </p>
-                            <p class="card-text" style="color: red">
-                                &ast;{{trans("Account do not accept these specific characters")}} : ' {{trans("or")}} " {{trans("or")}} ; {{trans("or")}} \ {{trans("or")}} / {{trans("or")}} , {{trans("or")}} # {{trans("or")}} *
-                            </p>
-
-                            <h5 class="card-subtitle mb-2 text-muted">{{trans("Tips")}}</h5>
-                            <p class="card-text mark">
-                                <strong>{{trans("Identity")}}</strong><br />
-                                1 -> {{trans("Visitor")}}<br />
-                                2 -> {{trans("Student")}}<br />
-                                3 -> {{trans("Teacher")}}<br />
-                            </p>
-
-                            <div class="dropdown-divider"></div>
-
-                            <div class="text-center">
-                                <button type="button" class="btn btn-secondary" onclick="history.go(-1)">
-                                    {{trans("Cancel")}}
-                                </button>
+                            <!-- File Criteria -->
+                            <div class="mb-3 mark">
+                                <strong>{{trans("Field Order")}}</strong>: {{trans("Account")}} / {{trans("Name")}} / {{trans("Identity")}}<br>
+                                <strong>{{trans("Account do not accept these specific characters")}}</strong>: ' " ; \ / , # *
                             </div>
+
+                            <!-- Identity Tips -->
+                            <div class="mb-3 mark">
+                                <strong>{{trans("Identity")}}</strong><br>
+                                1 -> {{trans("Visitor")}}<br>
+                                2 -> {{trans("Student")}}<br>
+                                3 -> {{trans("Teacher")}}
+                            </div>
+
+                            <!-- Buttons -->
+                            <div class="text-center mt-3">
+                                <button type="submit" id="submit" class="btn btn-primary me-2" >{{ trans("Submit") }}</button>
+                                <button type="button" class="btn btn-secondary" onclick="history.back()">{{trans("Cancel")}}</button>
+                            </div>
+
                         </div>
                     </div>
-                </form>
+                </div>
+
             </div>
         </div>
-    </div>
+    </form>
 </main>
+
 <style>
-    .multi-create-user-form .container .card .card-body .button-group ul {
-        padding-left: 10px;
-    }
-
-    .mark {
-        background-color: rgb(248, 248, 248);
-
-        border-left-style: solid;
-        border-left-width: 4px;
-        border-left-color: rgb(200, 200, 200);
-        opacity: 0.6;
-
-        padding-left: 10px;
-    }
+body {
+    font-family: 'DFKai-SB','BiauKai','標楷體', serif;
+    background: linear-gradient(135deg, #9eadf0, #6b8dd6);
+    min-height: 100vh;
+}
+.multi-create-user-form label {
+    font-size: 18px;
+}
+.multi-create-user-form .card-header {
+    font-size: 24px;
+    font-weight: 600;
+}
+.multi-create-user-form .button-group ul {
+    padding-left: 10px;
+}
+.multi-create-user-form .card {
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+.multi-create-user-form .btn {
+    border-radius: 8px;
+}
+.multi-create-user-form .form-control,
+.multi-create-user-form .custom-select {
+    border-radius: 8px;
+}
+.mark {
+    background-color: rgb(248, 248, 248);
+    border-left: 4px solid rgb(200,200,200);
+    opacity: 0.6;
+    padding-left: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
 </style>
+
+<script>
+    // 更新選中文件名稱並啟用 Submit
+    $(".custom-file-input").on("change", function() {
+        var fileName = $(this).val().split("\\").pop();
+        $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+        $("#submit").prop("disabled", !fileName);
+    });
+
+    // 初始化 Submit 狀態
+    $(document).ready(function(){
+        $("#submit").prop("disabled", !$("#users_file").val());
+    });
+
+    // Privilege 選擇檢查
+    function privilege_not_empty() {
+        let checked = $('input[type=checkbox][name^="privilege"]:checked').length;
+        if (checked > 0) {
+            $("#privilege_invalid").hide();
+            return true;
+        } else {
+            $("#privilege_invalid").show().text("{{trans('Please select at least one privilege')}}");
+            return false;
+        }
+    }
+
+    // 檢查檔案是否選擇
+    function file_not_empty() {
+        let fileInput = $("#users_file").val();
+        $("#submit").prop("disabled", !fileInput);
+    }
+</script>
+{% endblock %}
+
+{% block navbarFocused %}
+<script>
+    navbarFocused("SystemManager_navbar");
+</script>
 {% endblock %}

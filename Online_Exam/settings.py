@@ -35,6 +35,7 @@ INSTALLED_APPS = (
     'alcpt',
     'captcha',
     'django_plotly_dash.apps.DjangoPlotlyDashConfig',
+    'django_extensions',
 
     'django_crontab', #工作排程
     'dbbackup',#資料庫備份
@@ -108,7 +109,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'alcpt',
         'USER': 'root',
-        'PASSWORD': 'alcptalcpt',
+        #'PASSWORD': 'alcptalcpt',(舊密碼)
+        'PASSWORD': 'Peishan1121@', #(新密碼)
         'HOST': '127.0.0.1',
         'PORT': '3306',
     }
@@ -158,6 +160,7 @@ STATICFILES_DIRS = [
 STATIC_ROOT = os.path.join(BASE_DIR, 'alcpt/static')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+
 
 LOGIN_REDIRECT_URL = '/zh/proclamation'   #夜面跳轉至公告(主葉面)完全中文化   zh改為en-us會變成完全英文化
 LOGOUT_REDIRECT_URL = '/'

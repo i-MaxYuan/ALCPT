@@ -50,8 +50,13 @@ def has_perms(user: User, required_privilege: UserType):
 
 
 @register.filter(name='has_permission')
-def has_permission(user: User, privilege: UserType):
-    return user.privilege & privilege.value[0] > 0
+def has_permission(user: User, privilege):
+    try:
+        if isinstance(privilege, str):
+            privilege = UserType[privilege]
+        return user.privilege & privilege.value[0] > 0
+    except Exception:
+        return False
 
 
 @register.filter(name='readable_question_type')

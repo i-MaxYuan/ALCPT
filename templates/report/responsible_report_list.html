@@ -1,80 +1,70 @@
-
 <title>ALCPT - User Response Handling</title>
 
-{% extends 'new_base.html' %}
-
-{% block stylesheets %}
-<link rel="stylesheet" type="text/css" href="{{ static('/css/report/report_category_list.css') }}" />
-{% endblock %}
+{% extends 'new_base.html' %} 
 
 {% block path %}
-<li class="breadcrumb-item active" aria-current="page">
-    {{trans("User Response Handling")}}
-</li>
-{% endblock %} {% block content %}
+<li class="breadcrumb-item active" aria-current="page">{{trans("User Response Handling")}}</li>
+{% endblock %} 
+
+{% block content %}
 <main class="responsible-report-list">
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-lg-12 col-md-8 col-sm-5 col-xs-2">
+            <div class="col-lg-12 table-responsive-md">
                 <h2>{{trans("User Response Handling")}}</h2>
 
-                <div class="table-responsive-md">
-                    <table class="table table-hover table-bordered table-striped table-mc-light-blue">
-                        <thead class="thead-light">
-                            <tr>
-                                <th class="text-center">{{trans("Category")}}</th>
-                                <th class="text-center">{{trans("Content")}}</th>
-                                <th class="text-center">{{trans("State")}}</th>
-                                <th class="text-center">{{trans("Time")}}<button type="button" class="btn" data-toggle="modal" data-target="#promptContent"><i class="fa fa-question-circle"></i></button></th>
-                                <div class="modal fade text-left" id="promptContent" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header text-center">
-                                                <h5 class="modal-title" id="ModalLongTitle">{{trans("Tips")}}</h5>
-                                            </div>
-
-                                            <div class="modal-body">
-                                                <ul>
-                                                    <li>
-                                                        <p>
-                                                            {{trans("Click one can respond to user questions and know if it is resolved.")}}
-                                                        </p>
-                                                    </li>
-                                                </ul>
-                                            </div>
-
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-primary" data-dismiss="modal">{{trans("OK")}}</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                <table class="table table-hover table-bordered table-striped table-mc-light-blue">
+                    <thead class="thead-light">
+                        <tr>
+                            <th class="text-center">{{trans("Category")}}</th>
+                            <th class="text-center">{{trans("Content")}}</th>
+                            <th class="text-center">{{trans("State")}}</th>
+                            <th class="text-center">
+                                {{trans("Time")}}
+                                <button type="button" class="btn btn-sm" data-toggle="modal" data-target="#promptContent">
+                                    <i class="fa fa-question-circle"></i>
+                                </button>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if reports %}
+                            {% for report in reports %}
+                            <tr style="cursor:pointer" onclick="window.location.href='{{ url('report_reply', args=[report.id]) }}'">
+                                <td class="text-center">{{ report.category }}</td>
+                                <td class="text-center">{{ report.supplement_note|safe|summary(51) }}</td>
+                                <td class="text-center">{{ report.state|readable_report_state }}</td>
+                                <td class="text-center">{{ report.created_time.strftime('%Y/%m/%d  %H:%M') }}</td>
                             </tr>
-                        </thead>
+                            {% endfor %}
+                        {% else %}
+                        <tr>
+                            <td class="text-center" colspan="4">{{trans("No Data")}}</td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
-                        <tbody>
-                            {% if reports %} {% for report in reports %}
-                            <tr {% if report.staff_notification %}style="opacity: 1" {% endif %} onclick="window.location.href='{{ url('report_reply', args=[report.id]) }}'">
-                                <td class="text-center" data-title="Category">
-                                    {{ report.category }}
-                                </td>
-                                <td class="text-center" data-title="Content">
-                                    {{ report.supplement_note|safe|summary(51) }}
-                                </td>
-                                <td class="text-center" data-title="State">
-                                    {{ report.state|readable_report_state }}
-                                </td>
-                                <td class="text-center" data-title="Time">
-                                    {{ report.created_time.strftime('%Y/%m/%d  %H:%M') }}
-                                </td>
-                            </tr>
-                            {% endfor %} {% else %}
-                            <tr>
-                                <td colspan="4" class="text-center">{{trans("No Data")}}</td>
-                            </tr>
-                            {% endif %}
-                        </tbody>
-                    </table>
+    <!-- Modal -->
+    <div class="modal fade text-left" id="promptContent" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">{{trans("Tips")}}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <ul>
+                        <li>{{trans("Click one can respond to user questions and know if it is resolved.")}}</li>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn">{{trans("OK")}}</button>
                 </div>
             </div>
         </div>
@@ -84,8 +74,69 @@
 
 {% block navbarFocused %}
 <script>
-    const responsibilitys = {"SystemManager":0, "TestManager":1, "TBManager":2};
-    const focus = ["SystemManager_navbar", "TestManager_navbar", "TBManager_navbar"];
-    navbarFocused(focus[responsibilitys["{{ responsibility }}"]]);
+    navbarFocused("SystemManager_navbar");
 </script>
+
+<style>
+body {
+    font-family: 'DFKai-SB','BiauKai','標楷體', serif;
+    background: linear-gradient(135deg, #9eadf0);
+    min-height: 100vh;
+}
+
+/* 容器卡片化 */
+.responsible-report-list .container {
+    background: #ffffffee;
+    backdrop-filter: blur(4px);
+    border-radius: 15px;
+    padding: 30px 40px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+/* 標題置中 */
+.responsible-report-list h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    font-weight: bold;
+    color: #2a3f8a;
+}
+
+/* 表格美化 */
+.table-mc-light-blue {
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.table-mc-light-blue th {
+    background-color: #6c7ae0;
+    color: #fff;
+    font-weight: 600;
+    text-align: center;
+}
+
+.table-mc-light-blue td {
+    vertical-align: middle;
+}
+
+.table-mc-light-blue tr:hover {
+    background-color: rgba(108, 122, 224, 0.1);
+    transition: 0.2s;
+}
+
+/* 按鈕小圖示 */
+.btn i.fa-question-circle {
+    font-size: 1.2rem;
+    color: #fff;
+}
+
+/* 表格無資料提示 */
+.table td.text-center {
+    font-style: italic;
+    color: #7f8c8d;
+}
+</style>
 {% endblock %}

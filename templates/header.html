@@ -21,6 +21,7 @@
                         {{ trans("SystemManager") }}
                     </a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{{ url('proclamation_create') }}"><i class="fas fa-bullhorn"></i>{{ trans("Proclamation Create") }}</a>
                         <a class="dropdown-item" href="{{ url('user_list') }}"><i class="fas fa-users"></i>{{ trans("User List") }}</a>
                         <a class="dropdown-item" href="{{ url('unit_list') }}"><i class="fas fa-school"></i>{{ trans("Unit List") }}</a>
                         <a class="dropdown-item" href="{{ url('report_category_list') }}"><i class="fas fa-question"></i>{{ trans("ReportCategory List") }}</a>
@@ -194,8 +195,35 @@
 </nav>
 
 <script>
-    function navbarFocused(id) {
+function navbarFocused(id) {
         const focus = document.getElementById(id);
         focus.style.color = 'rgb(255, 130, 0)';
-    }
+}
 </script>
+
+<style>
+    /* 導航列主要連結 hover */
+.navbar-light .navbar-nav .nav-link:hover {
+    color: #ff8200; /* 橘黃 */
+}
+
+/* 下拉選單連結 hover */
+.dropdown-menu .dropdown-item:hover {
+    color: white;             /* 文字顏色，如果想保持橘黃可以改成 #ff8200 */
+    background-color: #ff8200; /* 背景橘黃 */
+}
+
+/* 下拉選單圖示固定寬度，文字靠左 */
+.dropdown-menu .dropdown-item i {
+    width: 25px;      /* 固定圖示寬度 */
+    text-align: center; /* 圖示置中 */
+    margin-right: 8px;  /* 圖示與文字間距 */
+}
+
+/* 避免 hover 影響排列 */
+.dropdown-menu .dropdown-item {
+    display: flex;
+    align-items: center;  /* 圖示文字垂直置中 */
+}
+
+</style>
