@@ -10,14 +10,15 @@ from alcpt.definitions import UserType, QuestionType, ExamType
 from django.utils.translation import gettext as _
 
  #translation
-from jinja2 import evalcontextfilter, Markup, escape
+from jinja2 import pass_eval_context
+from markupsafe import Markup, escape
 
 # jinja2 custom filters
 
 _paragraph_re = re.compile(r'(?:\r\n|\r|\n){2,}')
 
 
-@evalcontextfilter
+@pass_eval_context
 def linebreaksbr(eval_ctx, value):
     result = u'\n\n'.join(u'<p>%s</p>' % p.replace('\n', Markup('<br>\n'))
                           for p in _paragraph_re.split(escape(value)))
