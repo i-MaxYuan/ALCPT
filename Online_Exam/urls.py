@@ -347,7 +347,7 @@ urlpatterns = [
             re_path(
                 r'^testee_group/',
                 include([
-                    url(r'^create$',
+                    re_path(r'^create$',
                         group.GroupCreate.as_view(),
                         # group.group_create,
                         name='testee_group_create'),
