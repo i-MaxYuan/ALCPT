@@ -31,7 +31,7 @@ from django.views.generic import View
 from django.utils.decorators import method_decorator
 from alcpt.views import OnlineUserStat
 
-request_achievement_signal = Signal(providing_args=['user', 'score', 'exam_type'])
+request_achievement_signal = Signal()
 
 #統整user practices/all testees exam的結果
 class IntegrateTestResults:
