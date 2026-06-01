@@ -33,8 +33,8 @@ def permission_check(required_privilege):
 
 # customized redirect
 def custom_redirect(url_name, *args, **kwargs):
-    from django.core.urlresolvers import reverse
-    import urllib
+    from django.urls import reverse
+    from urllib.parse import urlencode
     url = reverse(url_name, args=args)
-    params = urllib.urlencode(kwargs)
+    params = urlencode(kwargs)
     return HttpResponseRedirect(url + "?%s" % params)

@@ -106,12 +106,11 @@ WSGI_APPLICATION = 'Online_Exam.wsgi.application'
 # mysql
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'mysql.connector.django',
         'NAME': 'alcpt',
         'USER': 'root',
-        #'PASSWORD': 'alcptalcpt',(舊密碼)
-        'PASSWORD': 'Peishan1121@', #(新密碼)
-        'HOST': '127.0.0.1',
+        'PASSWORD': 'alcptalcpt',
+        'HOST': 'localhost',  # 改這裡
         'PORT': '3306',
     }
 }

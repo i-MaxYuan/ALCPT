@@ -22,7 +22,7 @@ from alcpt.proclamation import notify
 from alcpt.definitions import UserType, Identity, AchievementCategory
 from alcpt.decorators import permission_check, login_required
 from alcpt.exceptions import IllegalArgumentError
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from django.apps import apps
 from django.db import models
 
@@ -432,7 +432,7 @@ class UserMultiCreate(View,OnlineUserStat):
 
                     if isinstance(row[0], str):
 
-                        if re.findall("[#*'”;/\\\ ,|+=-]", row[0]):
+                        if re.findall(r"[#*'”;/\\ ,|+=-]", row[0]):
                             continue
 
                     if not isinstance(row[2], float) or row[2] == '':   # identity
