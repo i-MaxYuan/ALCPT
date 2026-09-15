@@ -188,9 +188,14 @@ urlpatterns = [
         include([
             re_path(r'^register/', registration.Register.as_view(), name='register'),  # ✅ 加這行
             re_path(r'^login/', registration.Login.as_view(), name='login'),
+            re_path(r'^mfa/verify$', registration.MfaVerify.as_view(), name='mfa_verify'),
             re_path(r'^logout/', registration.logout, name='logout'),
             re_path(r'^profile$', registration.Profile.as_view(), name='profile'),
             re_path(r'^edit$', registration.EditProfile.as_view(), name='profile_edit'),
+            re_path(r'^security$', registration.MfaSecurity.as_view(), name='account_security'),
+            re_path(r'^mfa/setup$', registration.MfaSetup.as_view(), name='mfa_setup'),
+            re_path(r'^mfa/backup-codes$', registration.MfaBackupCodes.as_view(), name='mfa_backup_codes'),
+            re_path(r'^mfa/disable$', registration.mfa_disable, name='mfa_disable'),
             re_path(r'^password/change$',
                     registration.ChangePassword.as_view(),
                 #     registration.change_password,

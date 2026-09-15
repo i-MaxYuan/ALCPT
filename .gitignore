@@ -87,6 +87,10 @@ celerybeat-schedule
 
 # Environments
 .env
+.env.*
+!.env.example
+credentials.json
+token.json
 .venv
 env/
 venv/

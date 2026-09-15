@@ -1,0 +1,58 @@
+<title>ALCPT - MFA Verify</title>
+
+{% extends 'new_base.html' %}
+
+{% block content %}
+<main class="verify-page">
+  <section class="verify-panel">
+    <h2>{{ trans("Verification code") }}</h2>
+    <form action="{{ url('mfa_verify') }}" method="post">
+      <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
+      <label for="code">{{ trans("Verification code") }}</label>
+      <input id="code" name="code" type="text" inputmode="numeric" autocomplete="one-time-code" class="form-control" required autofocus>
+      <label class="remember-row" for="remember_device">
+        <input id="remember_device" name="remember_device" type="checkbox">
+        <span>{{ trans("Remember this device") }}</span>
+      </label>
+      <button type="submit" class="btn btn-primary">{{ trans("Verify") }}</button>
+    </form>
+  </section>
+</main>
+
+<style>
+.verify-page {
+  min-height: 100vh;
+  background: #6b8dd6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+.verify-panel {
+  width: min(420px, 100%);
+  background: #fff;
+  border-radius: 8px;
+  padding: 28px;
+  box-shadow: 0 8px 24px rgba(18, 58, 99, 0.18);
+}
+.verify-panel h2 {
+  color: #123a63;
+  font-size: 24px;
+  margin-bottom: 18px;
+  text-align: center;
+}
+.verify-panel label {
+  color: #123a63;
+  font-weight: 700;
+}
+.remember-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 14px 0;
+}
+.verify-panel .btn {
+  width: 100%;
+}
+</style>
+{% endblock %}

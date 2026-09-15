@@ -8,6 +8,7 @@ from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db import IntegrityError
+from django.utils import timezone
 
 from alcpt.managerfuncs import testmanager
 from alcpt.decorators import permission_check
@@ -27,11 +28,10 @@ class ExamListView(View,OnlineUserStat):
     template_name='exam/exam_list.html'
     
     def do_content_works(self,request):
-        now = datetime.now()
+        now = timezone.now()
         exams = Exam.objects.filter(is_public=True)
         page = request.GET.get('page', 1)
         paginator = Paginator(exams, 10)
-        now=datetime.now()
         try:
             examList = paginator.page(page)
         except PageNotAnInteger:
@@ -55,8 +55,7 @@ class ExamCreateView(View,OnlineUserStat):
         testpapers = TestPaper.objects.filter(is_testpaper=True, valid=True)
         groups = Group.objects.all()
         dateList = []
-        now_date = datetime.now().strftime('%Y-%m-%d')
-        now_datetime=datetime.now()
+        now_date = timezone.localdate().strftime('%Y-%m-%d')
         dateList.append(now_date)
         for i in range(20):
             now_date = datetime.strptime(now_date, '%Y-%m-%d')
@@ -83,15 +82,18 @@ class ExamCreateView(View,OnlineUserStat):
         minute = request.POST.get('start_time_minute')
         start_time = date + " " + hour + ":" + minute
         
-        now_datetime=datetime.now()
-        selected_datetime = datetime.strptime(start_time, '%Y-%m-%d %H:%M')
+        now_datetime = timezone.now()
+        selected_datetime = timezone.make_aware(
+            datetime.strptime(start_time, '%Y-%m-%d %H:%M'),
+            timezone.get_current_timezone(),
+        )
         if selected_datetime < now_datetime:
             messages.error(request, "Unvalid time.")
             return redirect('exam_create')
         
         duration = request.POST.get('duration')
-        started_time = datetime.strptime(str(start_time), '%Y-%m-%d %H:%M')
-        finish_time = datetime.strptime(str(start_time), '%Y-%m-%d %H:%M') + timedelta(minutes=int(duration))
+        started_time = selected_datetime
+        finish_time = selected_datetime + timedelta(minutes=int(duration))
 
         testpaper = TestPaper.objects.get(id=int(request.POST.get('selected_testpaper')))
         selected_group = Group.objects.get(id=int(request.POST.get('selected_group')))
@@ -105,8 +107,8 @@ class ExamCreateView(View,OnlineUserStat):
             exam_name = request.POST.get('exam_name')
             exam = Exam.objects.create(name=exam_name,
                                        exam_type=ExamType.Exam.value[0],
-                                       start_time=start_time,
-                                       created_time=datetime.now(),
+                                       start_time=started_time,
+                                       created_time=timezone.now(),
                                        duration=duration,
                                        finish_time=finish_time,
                                        testpaper=testpaper,
@@ -174,14 +176,13 @@ class ExamEditView(View, OnlineUserStat):
             #     return redirect('exam_list')
             testpapers = TestPaper.objects.filter(is_testpaper=True, valid=True)
             groups = Group.objects.all()
-            now=datetime.now()
             
             original_date = exam.start_time.strftime('%Y-%m-%d')
             original_hour = exam.start_time.strftime('%H')
             original_minute = exam.start_time.strftime('%M')
             
             dateList = []
-            now_date = datetime.now().strftime('%Y-%m-%d')
+            now_date = timezone.localdate().strftime('%Y-%m-%d')
             dateList.append(now_date)
             for i in range(20):
                 now_date = datetime.strptime(now_date, '%Y-%m-%d')
@@ -219,14 +220,17 @@ class ExamEditView(View, OnlineUserStat):
             minute = request.POST.get('start_time_minute')
             start_time = date + " " + hour + ":" + minute
             duration = request.POST.get('duration')
-            started_time = datetime.strptime(str(start_time), '%Y-%m-%d %H:%M')
-            finish_time = datetime.strptime(str(start_time), '%Y-%m-%d %H:%M') + timedelta(minutes=int(duration))
+            started_time = timezone.make_aware(
+                datetime.strptime(str(start_time), '%Y-%m-%d %H:%M'),
+                timezone.get_current_timezone(),
+            )
+            finish_time = started_time + timedelta(minutes=int(duration))
 
             testpaper = TestPaper.objects.get(id=int(request.POST.get('selected_testpaper')))
             TestPaper.objects.filter(id=int(request.POST.get('selected_testpaper'))).update(is_used=True)
             
             exam.name = exam_name
-            exam.start_time = start_time
+            exam.start_time = started_time
             exam.duration = duration
             exam.finish_time = finish_time
             exam.testpaper = testpaper
@@ -328,7 +332,7 @@ class ExamDeleteView(View):
     def get(self, request, exam_id):
         try:
             exam = Exam.objects.get(id=exam_id)
-            if datetime.now() > exam.start_time:
+            if timezone.now() > exam.start_time:
                 messages.error(request, "Failed deleted, this Exam had started.")
                 return redirect('exam_list')
         # proclamation_title = "Cancel " + exam.name + "."

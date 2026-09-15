@@ -1,0 +1,81 @@
+<title>ALCPT - MFA Setup</title>
+
+{% extends 'new_base.html' %}
+
+{% block path %}
+<li class="breadcrumb-item active" aria-current="page">{{ trans("MFA Setup") }}</li>
+{% endblock %}
+
+{% block content %}
+<main class="mfa-page">
+  <section class="mfa-panel">
+    <h2>{{ trans("MFA Setup") }}</h2>
+    <div class="setup-layout">
+      <div class="qr-box">
+        <img src="{{ qr_data_uri }}" alt="MFA QR code">
+      </div>
+      <form action="{{ url('mfa_setup') }}" method="post" class="mfa-form">
+        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
+        <label for="manual_secret">{{ trans("Manual key") }}</label>
+        <input id="manual_secret" type="text" class="form-control" value="{{ manual_secret }}" readonly>
+        <label for="code">{{ trans("Verification code") }}</label>
+        <input id="code" name="code" type="text" inputmode="numeric" autocomplete="one-time-code" class="form-control" required autofocus>
+        <div class="button-row">
+          <button type="submit" class="btn btn-primary">{{ trans("Enable") }}</button>
+          <a class="btn btn-outline-secondary" href="{{ url('account_security') }}">{{ trans("Cancel") }}</a>
+        </div>
+      </form>
+    </div>
+  </section>
+</main>
+
+<style>
+.mfa-page {
+  min-height: 70vh;
+  background: #eef5fb;
+  padding: 32px 24px;
+}
+.mfa-panel {
+  max-width: 900px;
+  margin: 0 auto;
+}
+.mfa-panel h2 {
+  color: #123a63;
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+.setup-layout {
+  display: grid;
+  grid-template-columns: 260px minmax(280px, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+.qr-box,
+.mfa-form {
+  background: #fff;
+  border: 1px solid #c9d8e7;
+  border-radius: 8px;
+  padding: 20px;
+}
+.qr-box img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.mfa-form label {
+  color: #123a63;
+  font-weight: 700;
+  margin-top: 12px;
+}
+.button-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+@media (max-width: 720px) {
+  .setup-layout {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+{% endblock %}

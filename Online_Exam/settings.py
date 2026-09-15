@@ -14,11 +14,29 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+
+def load_env_file(env_path):
+    if not os.path.exists(env_path):
+        return
+
+    with open(env_path) as env_file:
+        for line in env_file:
+            line = line.strip()
+            if not line or line.startswith('#') or '=' not in line:
+                continue
+
+            key, value = line.split('=', 1)
+            value = value.strip().strip('"').strip("'")
+            os.environ.setdefault(key.strip(), value)
+
+
+load_env_file(os.path.join(BASE_DIR, '.env'))
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'yftv^g7w17v-vd96!=ad37dv@m$_gh^nn_&d*4@qzsoce5*pd3'
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'unsafe-development-secret-key')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -106,14 +124,35 @@ WSGI_APPLICATION = 'Online_Exam.wsgi.application'
 # mysql
 DATABASES = {
     'default': {
-        'ENGINE': 'mysql.connector.django',
-        'NAME': 'alcpt',
-        'USER': 'root',
-        'PASSWORD': 'alcptalcpt',
-        'HOST': 'localhost',  # 改這裡
-        'PORT': '3306',
+        'ENGINE': os.environ.get('DB_ENGINE', 'mysql.connector.django'),
+        'NAME': os.environ.get('DB_NAME', 'alcpt'),
+        'USER': os.environ.get('DB_USER', 'root'),
+        'PASSWORD': os.environ.get('DB_PASSWORD', ''),
+        'HOST': os.environ.get('DB_HOST', 'localhost'),  # 改這裡
+        'PORT': os.environ.get('DB_PORT', '3306'),
     }
 }
+
+EMAIL_BACKEND = os.environ.get(
+    'EMAIL_BACKEND',
+    'django.core.mail.backends.smtp.EmailBackend',
+)
+EMAIL_HOST = os.environ.get('EMAIL_HOST', 'smtp.gmail.com')
+EMAIL_PORT = int(os.environ.get('EMAIL_PORT', '587'))
+EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS', 'True').lower() in (
+    '1',
+    'true',
+    'yes',
+    'on',
+)
+EMAIL_HOST_USER = os.environ.get('GMAIL_USER', '')
+EMAIL_HOST_PASSWORD = os.environ.get('GMAIL_APP_PASSWORD', '').replace(' ', '')
+DEFAULT_FROM_EMAIL = os.environ.get(
+    'DEFAULT_FROM_EMAIL',
+    'ALCPT <{}>'.format(EMAIL_HOST_USER) if EMAIL_HOST_USER else 'ALCPT <no-reply@example.com>',
+)
+EMAIL_TIMEOUT = int(os.environ.get('EMAIL_TIMEOUT', '10'))
+SITE_URL = os.environ.get('SITE_URL', 'http://127.0.0.1:8000').rstrip('/')
 
 CAPTCHA_NOISE_FUNCTIONS = (
     'captcha.helpers.noise_null',  # 沒有樣式

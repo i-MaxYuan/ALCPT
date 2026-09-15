@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.http import HttpResponseBase
 from django.http import FileResponse
 from django.utils.translation import gettext as _ #translation
 import datetime
@@ -57,6 +58,8 @@ class OnlineUserStat:
 
     # 取得額外內容
         contents_dict = self.do_content_works(request, *args, **kwargs)
+        if isinstance(contents_dict, HttpResponseBase):
+            return contents_dict
 
     # 保證 contents_dict 是 dict，如果不是就轉為空 dict
         if not isinstance(contents_dict, dict):
@@ -321,4 +324,3 @@ def OM_Testee(request):
 
 
     
-

@@ -98,6 +98,10 @@ class User(AbstractBaseUser):
     level = models.PositiveSmallIntegerField(default=1)
     experience = models.IntegerField(default=0)
     browser = models.TextField(null=True)
+    mfa_enabled = models.BooleanField(default=False)
+    mfa_totp_secret = models.CharField(max_length=64, blank=True, null=True)
+    mfa_backup_codes = models.TextField(default='[]', blank=True)
+    mfa_confirmed_at = models.DateTimeField(blank=True, null=True)
 
     objects = UserManager()
 
@@ -116,6 +120,18 @@ class User(AbstractBaseUser):
         # else:
         #     return (self.privilege & require_privilege.value[0]) > 0
         return (self.privilege & require_privilege.value[0]) > 0
+
+
+class MfaRememberedDevice(models.Model):
+    user = models.ForeignKey('User', on_delete=models.CASCADE, related_name='mfa_remembered_devices', db_constraint=False)
+    selector = models.CharField(max_length=64, unique=True)
+    token_hash = models.CharField(max_length=255)
+    user_agent = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    expires_at = models.DateTimeField()
+
+    class Meta:
+        ordering = ('-created_at',)
 
 
 

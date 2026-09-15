@@ -1,0 +1,97 @@
+<title>ALCPT - Backup Codes</title>
+
+{% extends 'new_base.html' %}
+
+{% block path %}
+<li class="breadcrumb-item active" aria-current="page">{{ trans("Backup codes") }}</li>
+{% endblock %}
+
+{% block content %}
+<main class="backup-page">
+  <section class="backup-panel">
+    <div class="backup-header">
+      <h2>{{ trans("Backup codes") }}</h2>
+      <a class="btn btn-outline-secondary" href="{{ url('account_security') }}">{{ trans("Security") }}</a>
+    </div>
+
+    {% if backup_codes %}
+      <div class="codes-grid">
+        {% for code in backup_codes %}
+          <code>{{ code }}</code>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="empty-box">
+        {{ trans("Remaining") }}: {{ backup_code_count }}
+      </div>
+    {% endif %}
+
+    {% if user.mfa_enabled %}
+    <form action="{{ url('mfa_backup_codes') }}" method="post" class="regen-form">
+      <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
+      <label for="code">{{ trans("Verification code") }}</label>
+      <input id="code" name="code" type="text" inputmode="numeric" autocomplete="one-time-code" class="form-control" required>
+      <button type="submit" class="btn btn-primary">{{ trans("Regenerate") }}</button>
+    </form>
+    {% endif %}
+  </section>
+</main>
+
+<style>
+.backup-page {
+  min-height: 70vh;
+  background: #eef5fb;
+  padding: 32px 24px;
+}
+.backup-panel {
+  max-width: 760px;
+  margin: 0 auto;
+}
+.backup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+.backup-header h2 {
+  color: #123a63;
+  font-size: 28px;
+  margin: 0;
+}
+.codes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+  background: #fff;
+  border: 1px solid #c9d8e7;
+  border-radius: 8px;
+  padding: 18px;
+}
+.codes-grid code {
+  background: #edf3f8;
+  color: #123a63;
+  border-radius: 4px;
+  display: block;
+  font-size: 16px;
+  padding: 10px;
+  text-align: center;
+}
+.empty-box,
+.regen-form {
+  background: #fff;
+  border: 1px solid #c9d8e7;
+  border-radius: 8px;
+  padding: 18px;
+}
+.regen-form {
+  margin-top: 16px;
+}
+.regen-form label {
+  color: #123a63;
+  font-weight: 700;
+}
+.regen-form .btn {
+  margin-top: 14px;
+}
+</style>
+{% endblock %}

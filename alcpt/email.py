@@ -1,19 +1,25 @@
-import random
 import base64
 
-from email.mime.text import MIMEText
-from smtplib import SMTP, SMTPAuthenticationError, SMTPException
-from alcpt.models import User
+from django.conf import settings
+from django.core.mail import EmailMessage
 from alcpt.proclamation import *
 from django.utils.translation import gettext as _ #translation
 
-def email_verified(verified_user, verified_email, request_user):
-    # strSmtp = "smtp.gmail.com:587"
-    # 主機
-    strAccount = "mis.alcpt.109@gmail.com"      # 備援信箱：tryitnotareal1997@gmail.com
-    strPassword = "eji6z;6284vm,6"
-    
 
+def send_alcpt_mail(subject, message, recipients):
+    if isinstance(recipients, str):
+        recipients = [recipients]
+
+    email = EmailMessage(
+        subject=subject,
+        body=message,
+        from_email=settings.DEFAULT_FROM_EMAIL,
+        to=recipients,
+    )
+    return email.send(fail_silently=False)
+
+
+def email_verified(verified_user, verified_email, request_user):
     # encode the verified email
     email = verified_email
     email_bytes = email.encode('ascii')
@@ -23,7 +29,7 @@ def email_verified(verified_user, verified_email, request_user):
     content = "Hey, " + verified_user.reg_id + "！\n\n" + \
               "Welcome to use ALCPT Online-Practice Platform. You had modified your email.\n" + \
               "Please click on the following URL to complete the email verification process: \n\n" + \
-              "http://127.0.0.1:8000/email_verification_done/" + base64_email + "\n\n" + \
+              settings.SITE_URL + "/email_verification_done/" + base64_email + "\n\n" + \
               "This is an automatic notification mail from the system. Please did not reply directly.\n" + \
               "Thank you for your cooperation."
 
@@ -35,37 +41,10 @@ def email_verified(verified_user, verified_email, request_user):
                                 created_by=request_user,
                                 recipient=verified_user)
 
-    msg = MIMEText(content)
-    msg["Subject"] = "ALCPT Email Verification"
-    # 郵件標題
-    mail_to = verified_email
-
-    server = SMTP("smtp.gmail.com:587")
-    # server = SMTP(strSmtp)
-    # 建立連線
-    server.ehlo()
-    # 跟主機溝通
-    server.starttls()
-    # TTLS安全驗證
-
-    try:
-        server.login(strAccount, strPassword)
-        server.sendmail(strAccount, mail_to, msg.as_string())
-        hint = "郵件已發送"
-    except SMTPAuthenticationError:
-        hint = "無法登入"
-    except:
-        hint = "郵件發送產生錯誤"
-    server.quit()
-    # 關閉連線
+    return send_alcpt_mail("ALCPT Email Verification", content, verified_email)
 
 
 def reset_password_mail(reg_id, email):
-    #strAccount = "mis.alcpt.109@gmail.com"
-    #strPassword = "eji6z;6284vm,6"
-    strAccount = "ek920101@gmail.com"
-    strPassword = "dvlh rael xjcp ezsa"
-
     reg_id = reg_id
     reg_id_bytes = reg_id.encode('ascii')
     base64_bytes = base64.b64encode(reg_id_bytes)
@@ -74,50 +53,17 @@ def reset_password_mail(reg_id, email):
     content = "Hey, " + reg_id + ", We had received your request to reset your password." + \
               "Don't worry, we will help you complete this.\n\n" + \
               "Please click on the following link, and step by step to complete the reset password process:\n\n" + \
-              "http://127.0.0.1:8000/accounts/password/reset/" + base64_reg_id + "\n\n" + \
+              settings.SITE_URL + "/accounts/password/reset/" + base64_reg_id + "\n\n" + \
               "This is an automatic notification mail from the system. Please did not reply directly.\n" + \
               "Thank you for your cooperation.\n" + \
               "Hope you will have a better experience at this platform."
 
-    msg = MIMEText(content)
-    msg["Subject"] = "ALCPT Reset Password"
-    mail_to = email
-
-    server = SMTP("smtp.gmail.com:587")
-    server.ehlo()
-    server.starttls()
-
-    server.login(strAccount, strPassword)
-    server.sendmail(strAccount, mail_to, msg.as_string())
-    hint = "郵件已發送"
-    
-    
-    hint = "無法登入"   
-    
-    hint = "郵件發送產生錯誤"
-    server.quit()
+    return send_alcpt_mail("ALCPT Reset Password", content, email)
 
 
 def notification_mail(recipients: list, content: str):
-    strAccount = "mis.alcpt.109@gmail.com"  # 備援信箱：tryitnotareal1997@gmail.com
-    strPassword = "eji6z;6284vm,6"
+    recipient_emails = [recipient.email for recipient in recipients if recipient.email]
+    if not recipient_emails:
+        return 0
 
-    for recipient in recipients:
-        msg = MIMEText(content)
-        msg["Subject"] = "ALCPT Notification"
-        mail_to = recipient.email
-
-        server = SMTP("smtp.gmail.com:587")
-        server.ehlo()
-        server.starttls()
-
-        try:
-            server.login(strAccount, strPassword)
-            server.sendmail(strAccount, mail_to, msg.as_string())
-            hint = "郵件已發送"
-        except SMTPAuthenticationError:
-            hint = "無法登入"
-        except:
-            hint = "郵件發送產生錯誤"
-
-    server.quit()
+    return send_alcpt_mail("ALCPT Notification", content, recipient_emails)

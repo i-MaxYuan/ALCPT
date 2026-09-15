@@ -19,6 +19,24 @@ from django.views.generic import View
 from alcpt.views import OnlineUserStat
 from django.utils.decorators import method_decorator
 from django.contrib.auth import login, authenticate
+from alcpt.mfa import (
+    MFA_NEW_BACKUP_CODES,
+    MFA_PENDING_NEXT,
+    MFA_PENDING_USER_ID,
+    MFA_REMEMBER_COOKIE,
+    MFA_SETUP_SECRET,
+    backup_code_count,
+    clear_remembered_devices,
+    encode_backup_codes,
+    generate_backup_codes,
+    generate_totp_secret,
+    get_provisioning_uri,
+    get_qr_data_uri,
+    is_remembered_device,
+    remember_device_cookie_value,
+    set_remembered_device_cookie,
+    verify_mfa_code,
+)
 
 # 註冊
 class Register(View):
@@ -105,6 +123,51 @@ class Register(View):
 
 
 
+def complete_login(request, user, next_page=LOGIN_REDIRECT_URL):
+    login_user, created = OnlineStatus.objects.get_or_create(user=user)
+    login_user.online_status = True
+    login_user.save()
+
+    if user.last_login is None:
+        auth.login(request, user)
+        user.browser = request.session.session_key
+        user.save()
+
+        departments = Department.objects.all()
+        squadrons = Squadron.objects.all()
+        messages.warning(request, _('Fist login, please edit your data'))
+        privileges = UserType.__members__
+        identities = Identity.__members__.values()
+        return render(request, 'registration/edit_profile.html',
+                      dict(user=user,
+                           privileges=privileges,
+                           identities=identities,
+                           departments=departments,
+                           squadrons=squadrons))
+
+    auth.login(request, user)
+    user.browser = request.session.session_key
+    user.save()
+    messages.success(request, _('Login Success.'))
+    return redirect(next_page)
+
+
+def user_is_active(user):
+    return getattr(user, 'is_active', True)
+
+
+def clear_pending_mfa(request):
+    for key in (MFA_PENDING_USER_ID, MFA_PENDING_NEXT):
+        request.session.pop(key, None)
+
+
+def start_mfa_challenge(request, user, next_page):
+    request.session[MFA_PENDING_USER_ID] = user.id
+    request.session[MFA_PENDING_NEXT] = next_page
+    request.session.modified = True
+    return redirect('mfa_verify')
+
+
 # 登入
 class Login(View,OnlineUserStat):
     
@@ -123,57 +186,202 @@ class Login(View,OnlineUserStat):
         if captcha.is_valid():  # 驗證通過
             reg_id = request.POST.get('reg_id', '')
             password = request.POST.get('password', '')
-            next_page = request.GET.get('next', LOGIN_REDIRECT_URL)
+            next_page = request.POST.get('next') or request.GET.get('next') or LOGIN_REDIRECT_URL
 
             try:
-                user = auth.authenticate(request, reg_id=reg_id, password=password)
-                #確保自定義 backend 支援 reg_id 驗證，並加上錯誤訊息更明確
-                #user = auth.authenticate(reg_id=reg_id, password=password)
+                user = auth.authenticate(request, username=reg_id, password=password)
                 
-                if user is None or not user.is_active:
+                if user is None or not user_is_active(user):
                     messages.error(request, _('Wrong Password or User unexist.'))
                     return redirect('login')
                     #return render(request,self.template_name,dict(captcha=captcha))
-                
-                # 設定線上狀態
-                login_user, created = OnlineStatus.objects.get_or_create(user=user)
-                login_user.online_status = True
-                login_user.save()
-                
-                # auth.login(request, user)
-                # user.browser = request.session.session_key
-                # user.save()
-                
-                if user.last_login is None:
-                    auth.login(request, user)
-                    user.browser = request.session.session_key
-                    user.save()
-                    
-                    departments = Department.objects.all()
-                    squadrons = Squadron.objects.all()
-                    messages.warning(request, _('Fist login, please edit your data'))
-                    privileges = UserType.__members__
-                    identities = Identity.__members__.values()
-                    return render(request, 'registration/edit_profile.html',
-                                  dict(user=user,
-                                       privileges=privileges,
-                                       departments=departments,
-                                       squadrons=squadrons))
-                    
-                auth.login(request, user)
-                user.browser = request.session.session_key
-                user.save()
-                
-                messages.success(request, _('Login Success.'))
+
+                if user.mfa_enabled and not is_remembered_device(user, request):
+                    return start_mfa_challenge(request, user, next_page)
+
+                clear_pending_mfa(request)
+                return complete_login(request, user, next_page)
 
             except ObjectDoesNotExist:
                 return redirect('login')
-
-            return redirect(next_page)
         else:
             # online_num = OnlineStatus.objects.filter(online_status=True).count()
             messages.error(request, _('Verification code error'))
             return redirect('login')
+
+
+class MfaVerify(View):
+    template_name = 'registration/mfa_verify.html'
+
+    def get_pending_user(self, request):
+        user_id = request.session.get(MFA_PENDING_USER_ID)
+        if not user_id:
+            return None
+        try:
+            user = User.objects.get(id=user_id, mfa_enabled=True)
+        except User.DoesNotExist:
+            clear_pending_mfa(request)
+            return None
+        if not user_is_active(user):
+            clear_pending_mfa(request)
+            return None
+        return user
+
+    def get(self, request):
+        if request.user.is_authenticated:
+            return redirect('/')
+
+        user = self.get_pending_user(request)
+        if user is None:
+            messages.error(request, _('Please login first.'))
+            return redirect('login')
+
+        return render(request, self.template_name)
+
+    def post(self, request):
+        user = self.get_pending_user(request)
+        if user is None:
+            messages.error(request, _('Please login first.'))
+            return redirect('login')
+
+        if verify_mfa_code(user, request.POST.get('code')):
+            next_page = request.session.get(MFA_PENDING_NEXT, LOGIN_REDIRECT_URL)
+            clear_pending_mfa(request)
+            response = complete_login(request, user, next_page)
+            if request.POST.get('remember_device'):
+                cookie_value = remember_device_cookie_value(user, request)
+                set_remembered_device_cookie(response, cookie_value)
+            return response
+
+        messages.error(request, _('Verification code error'))
+        return redirect('mfa_verify')
+
+
+@method_decorator(login_required, name='dispatch')
+class MfaSecurity(View, OnlineUserStat):
+    template_name = 'registration/security.html'
+
+    def do_content_works(self, request):
+        return {
+            'backup_code_count': backup_code_count(request.user),
+            'remembered_device_count': request.user.mfa_remembered_devices.filter(expires_at__gt=timezone.now()).count(),
+        }
+
+
+@method_decorator(login_required, name='dispatch')
+class MfaSetup(View, OnlineUserStat):
+    template_name = 'registration/mfa_setup.html'
+
+    def do_content_works(self, request):
+        if request.user.mfa_enabled:
+            messages.info(request, _('Multi-factor authentication is already enabled.'))
+            return redirect('account_security')
+
+        secret = request.session.get(MFA_SETUP_SECRET)
+        if not secret:
+            secret = generate_totp_secret()
+            request.session[MFA_SETUP_SECRET] = secret
+            request.session.modified = True
+
+        uri = get_provisioning_uri(request.user, secret)
+        return {
+            'qr_data_uri': get_qr_data_uri(uri),
+            'manual_secret': secret,
+        }
+
+    def post(self, request):
+        if request.user.mfa_enabled:
+            return redirect('account_security')
+
+        secret = request.session.get(MFA_SETUP_SECRET)
+        if not secret:
+            messages.error(request, _('Verification code error'))
+            return redirect('mfa_setup')
+
+        temp_user = request.user
+        original_secret = temp_user.mfa_totp_secret
+        temp_user.mfa_totp_secret = secret
+        verified = verify_mfa_code(temp_user, request.POST.get('code')) == 'totp'
+        temp_user.mfa_totp_secret = original_secret
+
+        if not verified:
+            messages.error(request, _('Verification code error'))
+            return redirect('mfa_setup')
+
+        backup_codes = generate_backup_codes()
+        request.user.mfa_enabled = True
+        request.user.mfa_totp_secret = secret
+        request.user.mfa_backup_codes = encode_backup_codes(backup_codes)
+        request.user.mfa_confirmed_at = timezone.now()
+        request.user.save(update_fields=[
+            'mfa_enabled',
+            'mfa_totp_secret',
+            'mfa_backup_codes',
+            'mfa_confirmed_at',
+        ])
+        request.session.pop(MFA_SETUP_SECRET, None)
+        request.session[MFA_NEW_BACKUP_CODES] = backup_codes
+        request.session.modified = True
+        messages.success(request, _('Multi-factor authentication enabled.'))
+        return redirect('mfa_backup_codes')
+
+
+@method_decorator(login_required, name='dispatch')
+class MfaBackupCodes(View, OnlineUserStat):
+    template_name = 'registration/mfa_backup_codes.html'
+
+    def do_content_works(self, request):
+        return {
+            'backup_codes': request.session.pop(MFA_NEW_BACKUP_CODES, []),
+            'backup_code_count': backup_code_count(request.user),
+        }
+
+    def post(self, request):
+        if not request.user.mfa_enabled:
+            return redirect('account_security')
+
+        if not verify_mfa_code(request.user, request.POST.get('code')):
+            messages.error(request, _('Verification code error'))
+            return redirect('mfa_backup_codes')
+
+        backup_codes = generate_backup_codes()
+        request.user.mfa_backup_codes = encode_backup_codes(backup_codes)
+        request.user.save(update_fields=['mfa_backup_codes'])
+        request.session[MFA_NEW_BACKUP_CODES] = backup_codes
+        request.session.modified = True
+        messages.success(request, _('Backup codes regenerated.'))
+        return redirect('mfa_backup_codes')
+
+
+@login_required
+def mfa_disable(request):
+    if request.method != 'POST':
+        return redirect('account_security')
+
+    if not request.user.mfa_enabled:
+        return redirect('account_security')
+
+    password = request.POST.get('password')
+    code = request.POST.get('code')
+    if not request.user.check_password(password) or not verify_mfa_code(request.user, code):
+        messages.error(request, _('Wrong Password or User unexist.'))
+        return redirect('account_security')
+
+    clear_remembered_devices(request.user)
+    request.user.mfa_enabled = False
+    request.user.mfa_totp_secret = None
+    request.user.mfa_backup_codes = '[]'
+    request.user.mfa_confirmed_at = None
+    request.user.save(update_fields=[
+        'mfa_enabled',
+        'mfa_totp_secret',
+        'mfa_backup_codes',
+        'mfa_confirmed_at',
+    ])
+    response = redirect('account_security')
+    response.delete_cookie(MFA_REMEMBER_COOKIE)
+    messages.success(request, _('Multi-factor authentication disabled.'))
+    return response
 
 
 # 登出
@@ -514,4 +722,3 @@ class ReportDetail(View, OnlineUserStat):
 def email(request):
     user = request.user
     return render(request, 'registration/email.html', locals())
-
