@@ -111,24 +111,23 @@ class Register(View):
         # ---------- 建立在線狀態紀錄 ----------
         OnlineStatus.objects.create(user=user, online_status=False)
 
-        # ---------- 自動登入 ----------
+        # ---------- 自動登入並強制設定 MFA ----------
         auth_user = auth.authenticate(username=reg_id, password=password)
         if auth_user is not None:
-            login(request, auth_user)
-            messages.success(request, _('Welcome! Please complete your profile.'))
-            return redirect('edit_profile')
+            messages.success(request, _('Welcome! Please enable multi-factor authentication.'))
+            return complete_login(request, auth_user, 'mfa_setup', force_next=True)
 
         messages.success(request, _('Register success, please login.'))
         return redirect('login')
 
 
 
-def complete_login(request, user, next_page=LOGIN_REDIRECT_URL):
+def complete_login(request, user, next_page=LOGIN_REDIRECT_URL, force_next=False):
     login_user, created = OnlineStatus.objects.get_or_create(user=user)
     login_user.online_status = True
     login_user.save()
 
-    if user.last_login is None:
+    if user.last_login is None and not force_next:
         auth.login(request, user)
         user.browser = request.session.session_key
         user.save()
@@ -198,6 +197,11 @@ class Login(View,OnlineUserStat):
 
                 if user.mfa_enabled and not is_remembered_device(user, request):
                     return start_mfa_challenge(request, user, next_page)
+
+                if not user.mfa_enabled:
+                    clear_pending_mfa(request)
+                    messages.warning(request, _('Please enable multi-factor authentication.'))
+                    return complete_login(request, user, 'mfa_setup', force_next=True)
 
                 clear_pending_mfa(request)
                 return complete_login(request, user, next_page)
